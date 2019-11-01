@@ -6,32 +6,79 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import RealmSwift
 import UIKit
 
-private let reuseIdentifier = "Cell"
+class PatientsCollectionViewCell: UICollectionViewCell {
+    @IBOutlet weak var portraitImageView: UIImageView!
+    
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        portraitImageView.layer.cornerRadius = portraitImageView.frame.width / 2;
+    }
+
+    func configure(from patient: Patient) {
+        if let priority = patient.priority.value {
+            portraitImageView.backgroundColor = PRIORITY_COLORS[priority]
+        }
+    }
+}
 
 class PatientsCollectionViewController: UICollectionViewController, LoginViewControllerDelegate {
     @IBOutlet weak var logoutItem: UIBarButtonItem!
     weak var refreshControl: UIRefreshControl!
 
+    var notificationToken: NotificationToken?
+    var results: Results<Patient>?
+
+    // MARK: -
+    
+    deinit {
+        notificationToken?.invalidate()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        //// set up pull-to-refresh control
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.addSubview(refreshControl)
         collectionView.alwaysBounceVertical = true
         self.refreshControl = refreshControl
 
-        // Register cell classes
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        //// set up Realm query and observer
+        let realm = AppRealm.open()
+        results = realm.objects(Patient.self).sorted(by: [
+            SortDescriptor(keyPath: "priority", ascending: true),
+            SortDescriptor(keyPath: "updatedAt", ascending: true)
+        ])
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+        
+        //// trigger initial refresh
         refresh()
+    }
+    
+    private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
+        switch changes {
+        case .initial(_):
+            collectionView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            collectionView.performBatchUpdates({
+                collectionView.deleteItems(at: deletions.map{ IndexPath(row: $0, section: 0)})
+                collectionView.insertItems(at: insertions.map{ IndexPath(row: $0, section: 0)})
+                collectionView.reloadItems(at: modifications.map{ IndexPath(row: $0, section: 0)})
+            }, completion: nil)
+        case .error(let error):
+            presentAlert(error: error)
+        }
     }
     
     @IBAction func logoutPressed(_ sender: Any) {
         ApiClient.shared.logout { [weak self] in
+            AppRealm.deleteAll()
             DispatchQueue.main.async { [weak self] in
                 self?.presentLogin()
             }
@@ -41,7 +88,7 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     @objc func refresh() {
         if !refreshControl.isRefreshing {
             refreshControl.beginRefreshing()
-            let task = ApiClient.shared.listPatients { [weak self] (results, error) in
+            let task = ApiClient.shared.listPatients { [weak self] (records, error) in
                 if let error = error {
                     DispatchQueue.main.async { [weak self] in
                         self?.refreshControl.endRefreshing()
@@ -51,10 +98,14 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
                             self?.presentAlert(error: error)
                         }
                     }
-                } else if let results = results {
+                } else if let records = records {
+                    let patients = records.map({ Patient.instantiate(from: $0) })
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(patients, update: .modified)
+                    }
                     DispatchQueue.main.async { [weak self] in
                         self?.refreshControl.endRefreshing()
-                        print(results)
                     }
                 }
             }
@@ -87,28 +138,27 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     }
     */
 
-    // MARK: UICollectionViewDataSource
+    // MARK: - UICollectionViewDataSource
 
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 0
+        return results?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath)
-    
-        // Configure the cell
-    
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "patient", for: indexPath)
+        if let cell = cell as? PatientsCollectionViewCell,
+            let patient = results?[indexPath.row] {
+            cell.configure(from: patient)
+        }
         return cell
     }
 
-    // MARK: UICollectionViewDelegate
+    // MARK: - UICollectionViewDelegate
 
     /*
     // Uncomment this method to specify if the specified item should be highlighted during tracking
