@@ -114,23 +114,14 @@
                                     <constraint firstAttribute="width" constant="240" id="acm-bH-Lek"/>
                                 </constraints>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sYN-ab-wec">
-                                <rect key="frame" x="165.5" y="670" width="83" height="30"/>
-                                <state key="normal" title="New Patient"/>
-                                <connections>
-                                    <action selector="newPressed:" destination="sEU-cw-0rZ" eventType="touchUpInside" id="qMO-dX-ryX"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="bhH-fc-BYe" firstAttribute="centerX" secondItem="QRP-AI-ska" secondAttribute="centerX" id="6OQ-x2-vwF"/>
-                            <constraint firstItem="sYN-ab-wec" firstAttribute="top" secondItem="bhH-fc-BYe" secondAttribute="bottom" constant="20" id="7b1-wJ-u52"/>
                             <constraint firstItem="bhH-fc-BYe" firstAttribute="top" secondItem="MwG-jL-v9A" secondAttribute="bottom" constant="20" id="ALu-Hu-g7y"/>
                             <constraint firstItem="MwG-jL-v9A" firstAttribute="leading" secondItem="QRP-AI-ska" secondAttribute="leading" id="OSX-ek-1gS"/>
                             <constraint firstItem="MwG-jL-v9A" firstAttribute="top" secondItem="QRP-AI-ska" secondAttribute="top" id="U2D-zn-VFD"/>
                             <constraint firstItem="QRP-AI-ska" firstAttribute="trailing" secondItem="MwG-jL-v9A" secondAttribute="trailing" id="dST-kT-Ro6"/>
-                            <constraint firstItem="sYN-ab-wec" firstAttribute="centerX" secondItem="QRP-AI-ska" secondAttribute="centerX" id="xRF-mX-hnh"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="QRP-AI-ska"/>
                     </view>
@@ -143,7 +134,6 @@
                     </navigationItem>
                     <connections>
                         <outlet property="cameraView" destination="MwG-jL-v9A" id="KQH-EA-OXk"/>
-                        <outlet property="newButton" destination="sYN-ab-wec" id="uNC-cN-jgg"/>
                         <outlet property="pinField" destination="bhH-fc-BYe" id="tdH-G6-vYM"/>
                         <outlet property="pinFieldHeightConstraint" destination="6TJ-SP-CDo" id="ARe-Y5-c6u"/>
                         <outlet property="pinFieldWidthConstraint" destination="acm-bH-Lek" id="ZL0-fi-kXg"/>
@@ -161,107 +151,77 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Attribute" id="8ZP-em-Ux0" customClass="PatientAttributeTableViewCell" customModule="Triage" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="28" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8ZP-em-Ux0" id="Urj-av-rJQ">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fbG-sm-dQu">
-                                            <rect key="frame" x="20" y="12" width="33.5" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kTR-9r-OIU">
-                                            <rect key="frame" x="350" y="12" width="44" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fXM-7b-mHf" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                                            <rect key="frame" x="20" y="43" width="394" height="1"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="height" constant="1" id="0Tt-1o-kfT"/>
-                                            </constraints>
-                                            <userDefinedRuntimeAttributes>
-                                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                                    <color key="value" name="separatorColor" catalog="System" colorSpace="catalog"/>
-                                                </userDefinedRuntimeAttribute>
-                                            </userDefinedRuntimeAttributes>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="fbG-sm-dQu" firstAttribute="top" secondItem="Urj-av-rJQ" secondAttribute="top" constant="12" id="4ca-GZ-Ar7"/>
-                                        <constraint firstItem="kTR-9r-OIU" firstAttribute="top" secondItem="Urj-av-rJQ" secondAttribute="top" constant="12" id="JP2-43-ZzO"/>
-                                        <constraint firstAttribute="trailing" secondItem="kTR-9r-OIU" secondAttribute="trailing" constant="20" id="b0v-Ua-UDW"/>
-                                        <constraint firstItem="fXM-7b-mHf" firstAttribute="leading" secondItem="Urj-av-rJQ" secondAttribute="leading" constant="20" id="frK-Me-SJj"/>
-                                        <constraint firstAttribute="trailing" secondItem="fXM-7b-mHf" secondAttribute="trailing" id="gl3-GR-bx6"/>
-                                        <constraint firstItem="fbG-sm-dQu" firstAttribute="leading" secondItem="Urj-av-rJQ" secondAttribute="leading" constant="20" id="sog-cc-hE1"/>
-                                        <constraint firstAttribute="bottom" secondItem="fXM-7b-mHf" secondAttribute="bottom" id="yuk-Rq-cnK"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="attributeLabel" destination="fbG-sm-dQu" id="UJE-23-i6T"/>
-                                    <outlet property="valueLabel" destination="kTR-9r-OIU" id="Hut-bS-og7"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Portrait" rowHeight="200" id="ydU-9y-0W6" customClass="PatientPortraitTableViewCell" customModule="Triage" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="72" width="414" height="200"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ydU-9y-0W6" id="NoJ-5h-DI3">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VXF-0c-d1N" customClass="PatientView" customModule="Triage" customModuleProvider="target">
-                                            <rect key="frame" x="117" y="22" width="180" height="180"/>
-                                            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <constraints>
-                                                <constraint firstAttribute="width" constant="180" id="7Tj-sn-xlS"/>
-                                                <constraint firstAttribute="width" secondItem="VXF-0c-d1N" secondAttribute="height" multiplier="1:1" id="bix-cx-CqV"/>
-                                            </constraints>
-                                        </view>
-                                    </subviews>
-                                    <constraints>
-                                        <constraint firstItem="VXF-0c-d1N" firstAttribute="top" secondItem="NoJ-5h-DI3" secondAttribute="top" constant="22" id="4xJ-ss-a3L"/>
-                                        <constraint firstItem="VXF-0c-d1N" firstAttribute="centerX" secondItem="NoJ-5h-DI3" secondAttribute="centerX" id="VYe-QS-Suz"/>
-                                    </constraints>
-                                </tableViewCellContentView>
-                                <connections>
-                                    <outlet property="patientView" destination="VXF-0c-d1N" id="oRu-sz-uoW"/>
-                                </connections>
-                            </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Priority" textLabel="d30-UN-wG8" style="IBUITableViewCellStyleDefault" id="kD7-LV-foT" customClass="PatientPriorityTableViewCell" customModule="Triage" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="272" width="414" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="kD7-LV-foT" id="tA3-Zi-zgd">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                    <subviews>
-                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="d30-UN-wG8">
-                                            <rect key="frame" x="20" y="0.0" width="374" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleTitle2"/>
-                                            <nil key="textColor"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
-                                    </subviews>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="fQO-aB-kJV" id="WhU-yH-6Z8"/>
                             <outlet property="delegate" destination="fQO-aB-kJV" id="gvK-eT-3rN"/>
                         </connections>
                     </tableView>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="SSI-Lm-QI9">
+                        <barButtonItem key="rightBarButtonItem" title="Update" id="G5D-vi-asa">
+                            <connections>
+                                <segue destination="PEo-mx-QpJ" kind="presentation" id="INJ-no-6Eq"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX5-bE-AB6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1434.7826086956522" y="122.54464285714285"/>
+        </scene>
+        <!--Observation Table View Controller-->
+        <scene sceneID="CgH-TG-1XM">
+            <objects>
+                <tableViewController id="Yqp-3N-bUQ" customClass="ObservationTableViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WLo-rc-a2I">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <connections>
+                            <outlet property="dataSource" destination="Yqp-3N-bUQ" id="95b-kZ-0bf"/>
+                            <outlet property="delegate" destination="Yqp-3N-bUQ" id="HJZ-AD-zm0"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="IsM-LS-GkA">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="RzU-Np-lag">
+                            <connections>
+                                <action selector="cancelPressed:" destination="Yqp-3N-bUQ" id="XL6-q9-S7w"/>
+                            </connections>
+                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="save" id="v5E-1L-yJ2">
+                                <connections>
+                                    <action selector="savePressed:" destination="Yqp-3N-bUQ" id="hb9-t0-13i"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Record" id="aGD-wl-b6u">
+                                <connections>
+                                    <action selector="recordPressed:" destination="Yqp-3N-bUQ" id="edO-Tr-z3I"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jY0-Wg-v03" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1435" y="-585"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="kbP-5r-1ud">
+            <objects>
+                <navigationController storyboardIdentifier="Observation" id="PEo-mx-QpJ" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="r3p-2A-m86">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="Yqp-3N-bUQ" kind="relationship" relationship="rootViewController" id="8jD-I0-ur5"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ufQ-Ra-4FG" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="622" y="-585"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="MqV-95-mv9">

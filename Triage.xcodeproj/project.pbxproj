@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */; };
 		4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F01F236CCC5500A04C75 /* AppDelegate.swift */; };
-		4566F022236CCC5500A04C75 /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F021236CCC5500A04C75 /* FirstViewController.swift */; };
-		4566F024236CCC5500A04C75 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F023236CCC5500A04C75 /* SecondViewController.swift */; };
 		4566F027236CCC5500A04C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F025236CCC5500A04C75 /* Main.storyboard */; };
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
 		4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */; };
@@ -38,6 +36,17 @@
 		4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F081236DE94400A04C75 /* ScanViewController.swift */; };
 		4566F084236DF5C000A04C75 /* PinField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F083236DF5C000A04C75 /* PinField.swift */; };
 		4566F086236DF5CA00A04C75 /* PinField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F085236DF5CA00A04C75 /* PinField.xib */; };
+		4566F088236E0A5800A04C75 /* ObservationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F087236E0A5800A04C75 /* ObservationTableViewController.swift */; };
+		4566F08A236E0C8200A04C75 /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F089236E0C8200A04C75 /* Observation.swift */; };
+		4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */; };
+		4566F08F236E117300A04C75 /* AttributeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F08D236E117300A04C75 /* AttributeTableViewCell.xib */; };
+		4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F090236E119500A04C75 /* PriorityTableViewCell.swift */; };
+		4566F093236E119500A04C75 /* PriorityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F091236E119500A04C75 /* PriorityTableViewCell.xib */; };
+		4566F096236E11B000A04C75 /* PortraitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */; };
+		4566F097236E11B000A04C75 /* PortraitTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */; };
+		4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F098236E12A600A04C75 /* PatientTableViewCell.swift */; };
+		4566F09C236E1C4800A04C75 /* LatLngTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F09A236E1C4800A04C75 /* LatLngTableViewCell.swift */; };
+		4566F09D236E1C4800A04C75 /* LatLngTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F09B236E1C4800A04C75 /* LatLngTableViewCell.xib */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
 		6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */; };
 /* End PBXBuildFile section */
@@ -63,8 +72,6 @@
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		4566F01C236CCC5500A04C75 /* Triage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		4566F021236CCC5500A04C75 /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
-		4566F023236CCC5500A04C75 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4566F028236CCC5700A04C75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4566F02B236CCC5700A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -97,6 +104,17 @@
 		4566F081236DE94400A04C75 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		4566F083236DF5C000A04C75 /* PinField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinField.swift; sourceTree = "<group>"; };
 		4566F085236DF5CA00A04C75 /* PinField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PinField.xib; sourceTree = "<group>"; };
+		4566F087236E0A5800A04C75 /* ObservationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewController.swift; sourceTree = "<group>"; };
+		4566F089236E0C8200A04C75 /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
+		4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributeTableViewCell.swift; sourceTree = "<group>"; };
+		4566F08D236E117300A04C75 /* AttributeTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributeTableViewCell.xib; sourceTree = "<group>"; };
+		4566F090236E119500A04C75 /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
+		4566F091236E119500A04C75 /* PriorityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriorityTableViewCell.xib; sourceTree = "<group>"; };
+		4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitTableViewCell.swift; sourceTree = "<group>"; };
+		4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PortraitTableViewCell.xib; sourceTree = "<group>"; };
+		4566F098236E12A600A04C75 /* PatientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTableViewCell.swift; sourceTree = "<group>"; };
+		4566F09A236E1C4800A04C75 /* LatLngTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatLngTableViewCell.swift; sourceTree = "<group>"; };
+		4566F09B236E1C4800A04C75 /* LatLngTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LatLngTableViewCell.xib; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TriageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A608A45BFFA66C538FB6DCB4 /* Pods-TriageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.debug.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -181,8 +199,6 @@
 				4566F05B236CD2DB00A04C75 /* ApiClient.swift */,
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
-				4566F021236CCC5500A04C75 /* FirstViewController.swift */,
-				4566F023236CCC5500A04C75 /* SecondViewController.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
 				4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */,
@@ -222,6 +238,8 @@
 		4566F056236CD1E000A04C75 /* Patients */ = {
 			isa = PBXGroup;
 			children = (
+				4566F08B236E110300A04C75 /* Table View Cells */,
+				4566F087236E0A5800A04C75 /* ObservationTableViewController.swift */,
 				4566F057236CD1EE00A04C75 /* Patients.storyboard */,
 				4566F059236CD26900A04C75 /* PatientsCollectionViewController.swift */,
 				4566F074236D3B9E00A04C75 /* PatientTableViewController.swift */,
@@ -243,8 +261,9 @@
 		4566F061236CE17900A04C75 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				4566F062236CE18E00A04C75 /* Patient.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
+				4566F089236E0C8200A04C75 /* Observation.swift */,
+				4566F062236CE18E00A04C75 /* Patient.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -262,6 +281,22 @@
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		4566F08B236E110300A04C75 /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */,
+				4566F08D236E117300A04C75 /* AttributeTableViewCell.xib */,
+				4566F09A236E1C4800A04C75 /* LatLngTableViewCell.swift */,
+				4566F09B236E1C4800A04C75 /* LatLngTableViewCell.xib */,
+				4566F098236E12A600A04C75 /* PatientTableViewCell.swift */,
+				4566F090236E119500A04C75 /* PriorityTableViewCell.swift */,
+				4566F091236E119500A04C75 /* PriorityTableViewCell.xib */,
+				4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */,
+				4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */,
+			);
+			path = "Table View Cells";
 			sourceTree = "<group>";
 		};
 		90CCACB3DC232FDED43273D4 /* Frameworks */ = {
@@ -384,13 +419,17 @@
 			files = (
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
 				4566F053236CD05200A04C75 /* Login.storyboard in Resources */,
+				4566F09D236E1C4800A04C75 /* LatLngTableViewCell.xib in Resources */,
 				4566F071236D2F1B00A04C75 /* PatientView.xib in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F086236DF5CA00A04C75 /* PinField.xib in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
+				4566F08F236E117300A04C75 /* AttributeTableViewCell.xib in Resources */,
 				4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */,
 				4566F080236D581400A04C75 /* PriorityView.xib in Resources */,
 				4566F027236CCC5500A04C75 /* Main.storyboard in Resources */,
+				4566F097236E11B000A04C75 /* PortraitTableViewCell.xib in Resources */,
+				4566F093236E119500A04C75 /* PriorityTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -509,23 +548,28 @@
 			buildActionMask = 2147483647;
 			files = (
 				4566F075236D3B9E00A04C75 /* PatientTableViewController.swift in Sources */,
+				4566F09C236E1C4800A04C75 /* LatLngTableViewCell.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
+				4566F088236E0A5800A04C75 /* ObservationTableViewController.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PatientView.swift in Sources */,
 				4566F05A236CD26900A04C75 /* PatientsCollectionViewController.swift in Sources */,
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
-				4566F024236CCC5500A04C75 /* SecondViewController.swift in Sources */,
+				4566F096236E11B000A04C75 /* PortraitTableViewCell.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				4566F084236DF5C000A04C75 /* PinField.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
+				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
+				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				4566F055236CD0C100A04C75 /* LoginViewController.swift in Sources */,
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
+				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
-				4566F022236CCC5500A04C75 /* FirstViewController.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
+				4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

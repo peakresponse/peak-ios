@@ -136,10 +136,20 @@ class ApiClient {
     func logout(completionHandler: @escaping () -> Void) {
         session.reset(completionHandler: completionHandler)
     }
+ 
+    // MARK: - Observations
+
+    func createObservation(_ data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/observations", body: data, completionHandler: completionHandler)
+    }
     
     // MARK: - Patients
     
     func listPatients(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients", completionHandler: completionHandler)
+    }
+
+    func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
     }
 }

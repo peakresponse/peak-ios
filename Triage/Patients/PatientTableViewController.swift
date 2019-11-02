@@ -6,57 +6,37 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import RealmSwift
 import UIKit
 
 let INFO = ["location", "firstName", "lastName", "age"]
+let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .string, .number]
 let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
+let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
 
-class PatientTableViewCell: UITableViewCell {
-    func configure(from patient: Patient) {
-    }
-}
-
-class PatientAttributeTableViewCell: PatientTableViewCell {
-    @IBOutlet weak var attributeLabel: UILabel!
-    @IBOutlet weak var valueLabel: UILabel!
-
-    var attribute: String!
-    
-    override func configure(from patient: Patient) {
-        attributeLabel.text = NSLocalizedString("Patient.\(attribute ?? "")", comment: "")
-        if let value = patient.value(forKey: attribute) {
-            valueLabel.text = String(describing: value)
-        } else {
-            valueLabel.text = nil
-        }
-    }
-}
-
-class PatientPortraitTableViewCell: PatientTableViewCell {
-    @IBOutlet weak var patientView: PatientView!
-    
-    override func configure(from patient: Patient) {
-        selectionStyle = .none
-        patientView.configure(from: patient)
-    }
-}
-
-class PatientPriorityTableViewCell: PatientTableViewCell {
-    override func configure(from patient: Patient) {
-        contentView.backgroundColor = PRIORITY_COLORS[patient.priority.value ?? 5]
-        textLabel?.text = NSLocalizedString("Patient.priority.\(patient.priority.value ?? 5)", comment: "")
-        textLabel?.textColor = PRIORITY_LABEL_COLORS[patient.priority.value ?? 5]
-    }
-}
-
-class PatientTableViewController: UITableViewController, PriorityViewDelegate {
+class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate {
     var patient: Patient!
+    var notificationToken: NotificationToken?
+    
+    deinit {
+        notificationToken?.invalidate()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.register(UINib(nibName: "AttributeTableViewCell", bundle: nil), forCellReuseIdentifier: "Attribute")
+        tableView.register(UINib(nibName: "PortraitTableViewCell", bundle: nil), forCellReuseIdentifier: "Portrait")
+        tableView.register(UINib(nibName: "PriorityTableViewCell", bundle: nil), forCellReuseIdentifier: "Priority")
         tableView.tableFooterView = UIView()
+
         title = "\(patient.firstName ?? "") \(patient.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        
+        if patient.id != nil {
+            notificationToken = patient.observe { [weak self] (change) in
+                self?.didObserveChange(change)
+            }
+        }
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -65,6 +45,17 @@ class PatientTableViewController: UITableViewController, PriorityViewDelegate {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    func didObserveChange(_ change: ObjectChange) {
+        switch change {
+        case .change(_):
+            tableView.reloadData()
+        case .error(let error):
+            presentAlert(error: error)
+        case .deleted:
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
     func showPriorityView(at cell: UITableViewCell?) {
         if let cell = cell {
             var rect = cell.convert(cell.bounds, to: tableView)
@@ -76,11 +67,90 @@ class PatientTableViewController: UITableViewController, PriorityViewDelegate {
         }
     }
 
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if let navVC = segue.destination as? UINavigationController,
+            let vc = navVC.topViewController as? ObservationTableViewController {
+            vc.delegate = self
+            vc.patient = patient
+        }
+    }
+
+    // MARK: - AttributeTableViewCellDelegate
+
+    func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell) {
+        var next: UITableViewCell?
+        if let indexPath = tableView.indexPath(for: cell) {
+            if indexPath.row < tableView.numberOfRows(inSection: indexPath.section) - 1 {
+                if let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row + 1, section: indexPath.section)) {
+                    next = cell
+                }
+            }
+        }
+        if let cell = next, cell.becomeFirstResponder() {
+            return
+        }
+        _ = resignFirstResponder()
+    }
+    
+    // MARK: - ObservationTableViewControllerDelegate
+    
+    func observationTableViewControllerDidDismiss(_ vc: ObservationTableViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
+        if let id = patient.id {
+            let task = ApiClient.shared.getPatient(idOrPin: id) { (record, error) in
+                if let record = record {
+                    if let patient = Patient.instantiate(from: record) as? Patient {
+                        let realm = AppRealm.open()
+                        try! realm.write {
+                            realm.add(patient, update: .modified)
+                        }
+                    }
+                }
+                DispatchQueue.main.async { [weak self] in
+                    if let error = error {
+                        self?.presentAlert(error: error)
+                    }
+                }
+            }
+            task.resume()
+        }
+        dismiss(animated: true, completion: nil)
+    }
+
     // MARK: - PriorityViewDelegate
 
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
-        //// TODO save a new Observation
-        tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
+        let patientId = patient.id
+        let observation = Observation()
+        observation.pin = patient.pin
+        observation.priority.value = priority
+        let task = ApiClient.shared.createObservation(observation.asJSON()) { [weak self] (record, error) in
+            if let record = record {
+                if let observation = Observation.instantiate(from: record) as? Observation {
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(observation, update: .modified)
+                        if let patient = realm.object(ofType: Patient.self, forPrimaryKey: patientId) {
+                            patient.priority.value = priority
+                        }
+                    }
+                }
+            }
+            DispatchQueue.main.async { [weak self] in
+                if let error = error {
+                    self?.presentAlert(error: error)
+                }
+            }
+        }
+        task.resume()
         view.removeFromSuperview()
     }
     
@@ -147,12 +217,15 @@ class PatientTableViewController: UITableViewController, PriorityViewDelegate {
             cell = tableView.dequeueReusableCell(withIdentifier: "Priority", for: indexPath)
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
-            if let cell = cell as? PatientAttributeTableViewCell {
+            if let cell = cell as? AttributeTableViewCell {
+                cell.delegate = self
                 switch indexPath.section {
                 case 2:
                     cell.attribute = INFO[indexPath.row]
+                    cell.attributeType = INFO_TYPES[indexPath.row]
                 case 3:
                     cell.attribute = VITALS[indexPath.row]
+                    cell.attributeType = VITALS_TYPES[indexPath.row]
                 default:
                     break
                 }
@@ -198,15 +271,4 @@ class PatientTableViewController: UITableViewController, PriorityViewDelegate {
         return true
     }
     */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -10,10 +10,12 @@ import UIKit
 
 extension UIViewController {
     func presentAlert(error: Error) {
-        let alert = UIAlertController(title: NSLocalizedString("Error", comment: ""), message: error.localizedDescription, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: { [weak self] (action) in
-            self?.dismiss(animated: true, completion: nil)
-        }))
+        presentAlert(title: NSLocalizedString("Error", comment: ""), message: error.localizedDescription)
+    }
+
+    func presentAlert(title: String, message: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 }

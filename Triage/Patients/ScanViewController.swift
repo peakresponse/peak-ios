@@ -11,15 +11,14 @@ import UIKit
 
 @objc protocol ScanViewControllerDelegate {
     @objc optional func scanViewControllerDidDismiss(_ vc: ScanViewController)
-    @objc optional func scanViewController(_ vc: ScanViewController, didScan pin: String)
+    @objc optional func scanViewController(_ vc: ScanViewController, didScan patient: Patient)
 }
 
-class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, PinFieldDelegate {
+class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, ObservationTableViewControllerDelegate, PinFieldDelegate {
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var pinField: PinField!
     @IBOutlet weak var pinFieldWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var pinFieldHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var newButton: UIButton!
     
     weak var delegate: ScanViewControllerDelegate?
 
@@ -39,9 +38,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         ])
         pinFieldWidthConstraint.constant = round(pinFieldSize.width) + 1
         pinFieldHeightConstraint.constant = pinFieldSize.height
-        
-        //// hide new button to start
-        newButton.isHidden = true
         
         setupCamera()
     }
@@ -80,12 +76,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         delegate?.scanViewControllerDidDismiss?(self)
     }
     
-    @IBAction func newPressed(_ sender: Any) {
-        if let pin = pinField.text {
-            delegate?.scanViewController?(self, didScan: pin)
-        }
-    }
-    
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
 
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
@@ -119,11 +109,28 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             let realm = AppRealm.open()
             let results = realm.objects(Patient.self).filter("pin=%@", pin)
             if results.count > 0 {
-                newButton.isHidden = true
-                delegate?.scanViewController?(self, didScan: pin)
+                delegate?.scanViewController?(self, didScan: results[0])
             } else {
-                newButton.isHidden = false
+                let patient = Patient()
+                patient.pin = pin
+                if let navVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation") as? UINavigationController,
+                    let vc = navVC.topViewController as? ObservationTableViewController {
+                    vc.delegate = self
+                    vc.patient = patient
+                    present(navVC, animated: true, completion: nil)
+                }
             }
+            pinField.text = nil
         }
+    }
+
+    // MARK: - ObservationTableViewControllerDelegate
+    
+    func observationTableViewControllerDidDismiss(_ vc: ObservationTableViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
+        dismiss(animated: true, completion: nil)
     }
 }

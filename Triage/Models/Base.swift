@@ -30,6 +30,14 @@ class Base: Object {
         updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt])
     }
 
+    func asJSON() -> [String: Any] {
+        var data: [String: Any] = [:]
+        if let id = id {
+            data[Keys.id] = id
+        }
+        return data
+    }
+
     static func instantiate(from data: [String: Any]) -> Base {
         let obj = self.init()
         obj.update(from: data)

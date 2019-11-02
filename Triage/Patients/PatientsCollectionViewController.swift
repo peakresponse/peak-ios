@@ -135,26 +135,18 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             self?.refresh()
         }
     }
-
+    
     // MARK: - ScanViewControllerDelegate
 
     func scanViewControllerDidDismiss(_ vc: ScanViewController) {
         dismiss(animated: true, completion: nil)
     }
 
-    func scanViewController(_ vc: ScanViewController, didScan pin: String) {
+    func scanViewController(_ vc: ScanViewController, didScan patient: Patient) {
         dismiss(animated: true) { [weak self] in
-            let realm = AppRealm.open()
-            let results = realm.objects(Patient.self).filter("pin=%@", pin)
-            var patient: Patient?
-            if results.count > 0 {
-                patient = results[0]
-            }
-            if let patient = patient {
-                if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
-                    vc.patient = patient
-                    self?.navigationController?.pushViewController(vc, animated: true)
-                }
+            if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
+                vc.patient = patient
+                self?.navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
