@@ -79,31 +79,29 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     }
     
     @objc func refresh() {
-        if !refreshControl.isRefreshing {
-            refreshControl.beginRefreshing()
-            let task = ApiClient.shared.listPatients { [weak self] (records, error) in
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.refreshControl.endRefreshing()
-                        if let error = error as? ApiClientError, error == .unauthorized {
-                            self?.presentLogin()
-                        } else {
-                            self?.presentAlert(error: error)
-                        }
-                    }
-                } else if let records = records {
-                    let patients = records.map({ Patient.instantiate(from: $0) })
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(patients, update: .modified)
-                    }
-                    DispatchQueue.main.async { [weak self] in
-                        self?.refreshControl.endRefreshing()
+        refreshControl.beginRefreshing()
+        let task = ApiClient.shared.listPatients { [weak self] (records, error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.refreshControl.endRefreshing()
+                    if let error = error as? ApiClientError, error == .unauthorized {
+                        self?.presentLogin()
+                    } else {
+                        self?.presentAlert(error: error)
                     }
                 }
+            } else if let records = records {
+                let patients = records.map({ Patient.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(patients, update: .modified)
+                }
+                DispatchQueue.main.async { [weak self] in
+                    self?.refreshControl.endRefreshing()
+                }
             }
-            task.resume()
         }
+        task.resume()
     }
 
     private func presentLogin() {
