@@ -36,6 +36,7 @@ class PatientPortraitTableViewCell: PatientTableViewCell {
     @IBOutlet weak var patientView: PatientView!
     
     override func configure(from patient: Patient) {
+        selectionStyle = .none
         patientView.configure(from: patient)
     }
 }
@@ -48,7 +49,7 @@ class PatientPriorityTableViewCell: PatientTableViewCell {
     }
 }
 
-class PatientTableViewController: UITableViewController {
+class PatientTableViewController: UITableViewController, PriorityViewDelegate {
     var patient: Patient!
     
     override func viewDidLoad() {
@@ -64,18 +65,47 @@ class PatientTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    func showPriorityView(at cell: UITableViewCell?) {
+        if let cell = cell {
+            var rect = cell.convert(cell.bounds, to: tableView)
+            rect.origin.y = rect.origin.y - CGFloat(patient.priority.value ?? 0) * rect.size.height
+            rect.size.height = rect.size.height * 5
+            let priorityView = PriorityView(frame: rect)
+            priorityView.delegate = self
+            tableView.addSubview(priorityView)
+        }
+    }
+
+    // MARK: - PriorityViewDelegate
+
+    func priorityView(_ view: PriorityView, didSelect priority: Int) {
+        //// TODO save a new Observation
+        tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
+        view.removeFromSuperview()
+    }
+    
     // MARK: - UITableViewDelegate
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case 0:
-            return 200
+            return 224
         default:
             break
         }
         return super.tableView(tableView, heightForRowAt: indexPath)
     }
     
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case 1:
+            showPriorityView(at: tableView.cellForRow(at: indexPath))
+            tableView.deselectRow(at: indexPath, animated: false)
+        default:
+            break
+        }
+    }
+
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
