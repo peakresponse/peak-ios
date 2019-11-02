@@ -170,6 +170,35 @@
             </objects>
             <point key="canvasLocation" x="1434.7826086956522" y="122.54464285714285"/>
         </scene>
+        <!--Map-->
+        <scene sceneID="mcs-BV-hYe">
+            <objects>
+                <viewController storyboardIdentifier="Map" title="Map" id="X9V-sR-ffC" customClass="MapViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="uyb-uj-IJz">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="QKl-m8-8WG">
+                                <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Mhm-eX-XDM" firstAttribute="bottom" secondItem="QKl-m8-8WG" secondAttribute="bottom" id="30B-ci-u12"/>
+                            <constraint firstItem="QKl-m8-8WG" firstAttribute="top" secondItem="Mhm-eX-XDM" secondAttribute="top" id="3m7-WO-Knj"/>
+                            <constraint firstItem="Mhm-eX-XDM" firstAttribute="trailing" secondItem="QKl-m8-8WG" secondAttribute="trailing" id="V4R-Lx-73l"/>
+                            <constraint firstItem="QKl-m8-8WG" firstAttribute="leading" secondItem="Mhm-eX-XDM" secondAttribute="leading" id="wV8-3A-gcC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Mhm-eX-XDM"/>
+                    </view>
+                    <connections>
+                        <outlet property="mapView" destination="QKl-m8-8WG" id="9Mw-CJ-dsk"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cWK-o4-sgz" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2345" y="123"/>
+        </scene>
         <!--Observation Table View Controller-->
         <scene sceneID="CgH-TG-1XM">
             <objects>

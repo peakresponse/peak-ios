@@ -9,12 +9,23 @@
 import RealmSwift
 import UIKit
 
-let INFO = ["location", "firstName", "lastName", "age"]
-let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .string, .number]
+let INFO = ["firstName", "lastName", "age"]
+let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .number]
+
 let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
 let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
 
-class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate {
+
+class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate {
+    enum Section: Int {
+        case portrait = 0
+        case priority
+        case location
+        case info
+        case vitals
+        case observations
+    }
+    
     var patient: Patient!
     var notificationToken: NotificationToken?
     
@@ -26,6 +37,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         super.viewDidLoad()
 
         tableView.register(UINib(nibName: "AttributeTableViewCell", bundle: nil), forCellReuseIdentifier: "Attribute")
+        tableView.register(UINib(nibName: "LatLngTableViewCell", bundle: nil), forCellReuseIdentifier: "LatLng")
         tableView.register(UINib(nibName: "PortraitTableViewCell", bundle: nil), forCellReuseIdentifier: "Portrait")
         tableView.register(UINib(nibName: "PriorityTableViewCell", bundle: nil), forCellReuseIdentifier: "Priority")
         tableView.tableFooterView = UIView()
@@ -158,7 +170,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
-        case 0:
+        case Section.portrait.rawValue:
             return 224
         default:
             break
@@ -168,9 +180,18 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 1:
+        case Section.priority.rawValue:
             showPriorityView(at: tableView.cellForRow(at: indexPath))
             tableView.deselectRow(at: indexPath, animated: false)
+        case Section.location.rawValue:
+            if indexPath.row == 1 {
+                if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? MapViewController {
+                        vc.patient = patient
+                        navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
         default:
             break
         }
@@ -179,14 +200,16 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     // MARK: - UITableViewDataSource
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 6
     }
 
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case 2:
+        case Section.location.rawValue:
+            return NSLocalizedString("Location", comment: "")
+        case Section.info.rawValue:
             return NSLocalizedString("Info", comment: "")
-        case 3:
+        case Section.vitals.rawValue:
             return NSLocalizedString("Vitals", comment: "")
         default:
             return nil
@@ -195,13 +218,15 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: //// portrait
+        case Section.portrait.rawValue:
             return 1
-        case 1: //// priority
+        case Section.priority.rawValue:
             return 1
-        case 2: //// info
+        case Section.location.rawValue:
+            return 2
+        case Section.info.rawValue:
             return INFO.count
-        case 3: //// vitals
+        case Section.vitals.rawValue:
             return VITALS.count
         default: //// observations
             return 0
@@ -211,19 +236,34 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         switch indexPath.section {
-        case 0:
+        case Section.portrait.rawValue:
             cell = tableView.dequeueReusableCell(withIdentifier: "Portrait", for: indexPath)
-        case 1:
+        case Section.priority.rawValue:
             cell = tableView.dequeueReusableCell(withIdentifier: "Priority", for: indexPath)
+        case Section.location.rawValue:
+            switch indexPath.row {
+            case 0:
+                cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                if let cell = cell as? AttributeTableViewCell {
+                    cell.delegate = self
+                    cell.attribute = Patient.Keys.location
+                    cell.attributeType = .string
+                }
+            default:
+                cell = tableView.dequeueReusableCell(withIdentifier: "LatLng", for: indexPath)
+                if let cell = cell as? LatLngTableViewCell {
+                    cell.delegate = self
+                }
+            }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
             if let cell = cell as? AttributeTableViewCell {
                 cell.delegate = self
                 switch indexPath.section {
-                case 2:
+                case Section.info.rawValue:
                     cell.attribute = INFO[indexPath.row]
                     cell.attributeType = INFO_TYPES[indexPath.row]
-                case 3:
+                case Section.vitals.rawValue:
                     cell.attribute = VITALS[indexPath.row]
                     cell.attributeType = VITALS_TYPES[indexPath.row]
                 default:
@@ -236,39 +276,4 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         }
         return cell
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
 }

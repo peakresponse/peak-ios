@@ -63,6 +63,12 @@ class Patient: Base {
     @objc dynamic var location: String?
     @objc dynamic var lat: String?
     @objc dynamic var lng: String?
+    var hasLatLng: Bool {
+        if let lat = lat, let lng = lng, lat != "", lng != "" {
+            return true
+        }
+        return false
+    }
     @objc dynamic var portraitUrl: String?
     @objc dynamic var photoUrl: String?
     @objc dynamic var audioUrl: String?

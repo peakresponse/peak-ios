@@ -22,20 +22,20 @@ class ObservationTableViewController: PatientTableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        observation = patient.asObservation()
-        
-        tableView.register(UINib(nibName: "AttributeTableViewCell", bundle: nil), forCellReuseIdentifier: "Attribute")
-        tableView.register(UINib(nibName: "PortraitTableViewCell", bundle: nil), forCellReuseIdentifier: "Portrait")
-        tableView.register(UINib(nibName: "PriorityTableViewCell", bundle: nil), forCellReuseIdentifier: "Priority")
-        tableView.tableFooterView = UIView()
-
         if title == "" {
             title = NSLocalizedString("New Patient", comment: "")
         }
-        
+        observation = patient.asObservation()
         rightBarButtonItems = navigationItem.rightBarButtonItems
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !patient.hasLatLng, let cell = tableView.cellForRow(at: IndexPath(row: 1, section: Section.location.rawValue)) as? LatLngTableViewCell {
+            cell.captureLocation()
+        }
+    }
+    
     @IBAction func cancelPressed(_ sender: Any) {
         delegate?.observationTableViewControllerDidDismiss?(self)
     }
@@ -81,12 +81,42 @@ class ObservationTableViewController: PatientTableViewController {
         observation.setValue(text, forKey: cell.attribute)
     }
     
+    // MARK: - LatLngTableViewCellDelegate
+    
+    func latLngTableViewCellDidClear(_ cell: LatLngTableViewCell) {
+        observation.lat = ""
+        observation.lng = ""
+    }
+    
+    func latLngTableViewCell(_ cell: LatLngTableViewCell, didCapture lat: String, lng: String) {
+        observation.lat = lat
+        observation.lng = lng
+    }
+
     // MARK: - PriorityViewDelegate
     
     override func priorityView(_ view: PriorityView, didSelect priority: Int) {
         observation.priority.value = priority
         tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
         view.removeFromSuperview()
+    }
+
+    // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch indexPath.section {
+        case Section.location.rawValue:
+            if indexPath.row == 1 {
+                if let lat = observation.lat, let lng = observation.lng, lat != "", lng != "" {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? MapViewController {
+                        vc.patient = observation
+                        navigationController?.pushViewController(vc, animated: true)
+                    }
+                }
+            }
+        default:
+            super.tableView(tableView, didSelectRowAt: indexPath)
+        }
     }
 
     // MARK: - UITableViewDataSource
