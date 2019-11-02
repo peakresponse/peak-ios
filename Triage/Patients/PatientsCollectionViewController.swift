@@ -113,6 +113,20 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
         }
     }
     
+    // MARK: - Navigation
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using [segue destinationViewController].
+        // Pass the selected object to the new view controller.
+        if let vc = segue.destination as? PatientTableViewController,
+            let cell = sender as? PatientsCollectionViewCell,
+            let indexPath = collectionView.indexPath(for: cell),
+            let patient = results?[indexPath.row] {
+            vc.patient = patient
+        }
+    }
+
     // MARK: - LoginViewControllerDelegate
     
     func loginViewControllerDidLogin(_ vc: LoginViewController) {
@@ -120,16 +134,6 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             self?.refresh()
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: - UICollectionViewDataSource
 

@@ -1,0 +1,23 @@
+/* 
+  Localizable.strings
+  Triage
+
+  Created by Francis Li on 11/1/19.
+  Copyright © 2019 Francis Li. All rights reserved.
+*/
+
+"Patient.firstName" = "First name";
+"Patient.lastName" = "Last name";
+"Patient.age" = "Age";
+"Patient.location" = "Location";
+"Patient.respiratoryRate" = "Respiratory Rate";
+"Patient.pulse" = "Pulse";
+"Patient.capillaryRefill" = "Capillary Refill";
+"Patient.bloodPressure" = "Blood Pressure";
+
+"Patient.priority.0" = "Immediate";
+"Patient.priority.1" = "Delayed";
+"Patient.priority.2" = "Minimal";
+"Patient.priority.3" = "Expectant";
+"Patient.priority.4" = "Dead";
+"Patient.priority.5" = "Unknown";

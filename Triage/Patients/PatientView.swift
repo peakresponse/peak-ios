@@ -28,7 +28,6 @@ class PatientView: UIView {
 
     func configure(from patient: Patient) {
         if let priority = patient.priority.value {
-            imageView.layer.cornerRadius = imageView.frame.width / 2
             imageView.layer.borderColor = PRIORITY_COLORS[priority].cgColor
             imageView.layer.borderWidth = 4
         }

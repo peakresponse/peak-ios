@@ -13,6 +13,16 @@ let PRIORITY_COLORS = [
     UIColor.yellow,
     UIColor.green,
     UIColor.gray,
+    UIColor.black,
+    UIColor.white
+]
+
+let PRIORITY_LABEL_COLORS = [
+    UIColor.white,
+    UIColor.black,
+    UIColor.black,
+    UIColor.black,
+    UIColor.white,
     UIColor.black
 ]
 
