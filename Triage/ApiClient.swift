@@ -8,29 +8,29 @@
 
 import Foundation
 
-public enum ApiClientError: Error {
+enum ApiClientError: Error {
     case csrf
     case unauthorized
     case forbidden
     case unexpected
 }
 
-open class ApiClient {
-    public static var shared: ApiClient = ApiClient(baseURL: "http://localhost:3000/api/")! {
+class ApiClient {
+    static var shared: ApiClient = ApiClient(baseURL: "http://localhost:3000/api/")! {
         willSet {
             shared.invalidate()
         }
     }
     
-    open var session: URLSession
-    public let baseURL: URL
+    var session: URLSession
+    let baseURL: URL
     
     public required init?(baseURL: String) {
-        let config = URLSessionConfiguration.ephemeral
+        let config = URLSessionConfiguration.default
         config.httpCookieStorage = HTTPCookieStorage.shared
         config.httpShouldSetCookies = true
         config.httpCookieAcceptPolicy = .always
-        self.session = URLSession(configuration: config)
+        session = URLSession(configuration: config)
         if let baseURL = URL(string: baseURL) {
             self.baseURL = baseURL
         } else {

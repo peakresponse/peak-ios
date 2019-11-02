@@ -10,17 +10,10 @@ import RealmSwift
 import UIKit
 
 class PatientsCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var portraitImageView: UIImageView!
+    @IBOutlet weak var patientView: PatientView!
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        portraitImageView.layer.cornerRadius = portraitImageView.frame.width / 2;
-    }
-
     func configure(from patient: Patient) {
-        if let priority = patient.priority.value {
-            portraitImageView.backgroundColor = PRIORITY_COLORS[priority]
-        }
+        patientView.configure(from: patient)
     }
 }
 
@@ -150,7 +143,7 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "patient", for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Patient", for: indexPath)
         if let cell = cell as? PatientsCollectionViewCell,
             let patient = results?[indexPath.row] {
             cell.configure(from: patient)
