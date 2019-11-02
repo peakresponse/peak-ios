@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,6 +61,11 @@
                                 <action selector="logoutPressed:" destination="y4N-h3-iwZ" id="4R4-T3-LzQ"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Scan" id="vZi-Pn-nRm">
+                            <connections>
+                                <segue destination="MJz-ca-iKT" kind="presentation" id="i36-VS-GTr"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="logoutItem" destination="BQg-tt-oBo" id="yug-Jd-iE2"/>
@@ -69,10 +75,88 @@
             </objects>
             <point key="canvasLocation" x="622" y="123"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="MjU-hG-8iF">
+            <objects>
+                <navigationController id="MJz-ca-iKT" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kGy-za-yFk">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="sEU-cw-0rZ" kind="relationship" relationship="rootViewController" id="OPC-OI-3lg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="82H-Md-dKk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="622" y="805"/>
+        </scene>
+        <!--Scan-->
+        <scene sceneID="hpx-iK-7pX">
+            <objects>
+                <viewController title="Scan" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="eVf-ID-a8b">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MwG-jL-v9A">
+                                <rect key="frame" x="0.0" y="88" width="414" height="414"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="MwG-jL-v9A" secondAttribute="height" multiplier="1:1" id="Lsy-ey-gbQ"/>
+                                </constraints>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhH-fc-BYe" customClass="PinField" customModule="Triage" customModuleProvider="target">
+                                <rect key="frame" x="87" y="522" width="240" height="128"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="128" id="6TJ-SP-CDo"/>
+                                    <constraint firstAttribute="width" constant="240" id="acm-bH-Lek"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sYN-ab-wec">
+                                <rect key="frame" x="165.5" y="670" width="83" height="30"/>
+                                <state key="normal" title="New Patient"/>
+                                <connections>
+                                    <action selector="newPressed:" destination="sEU-cw-0rZ" eventType="touchUpInside" id="qMO-dX-ryX"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="bhH-fc-BYe" firstAttribute="centerX" secondItem="QRP-AI-ska" secondAttribute="centerX" id="6OQ-x2-vwF"/>
+                            <constraint firstItem="sYN-ab-wec" firstAttribute="top" secondItem="bhH-fc-BYe" secondAttribute="bottom" constant="20" id="7b1-wJ-u52"/>
+                            <constraint firstItem="bhH-fc-BYe" firstAttribute="top" secondItem="MwG-jL-v9A" secondAttribute="bottom" constant="20" id="ALu-Hu-g7y"/>
+                            <constraint firstItem="MwG-jL-v9A" firstAttribute="leading" secondItem="QRP-AI-ska" secondAttribute="leading" id="OSX-ek-1gS"/>
+                            <constraint firstItem="MwG-jL-v9A" firstAttribute="top" secondItem="QRP-AI-ska" secondAttribute="top" id="U2D-zn-VFD"/>
+                            <constraint firstItem="QRP-AI-ska" firstAttribute="trailing" secondItem="MwG-jL-v9A" secondAttribute="trailing" id="dST-kT-Ro6"/>
+                            <constraint firstItem="sYN-ab-wec" firstAttribute="centerX" secondItem="QRP-AI-ska" secondAttribute="centerX" id="xRF-mX-hnh"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="QRP-AI-ska"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Scan" id="ReN-Le-wit">
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="G2S-2N-OH2">
+                            <connections>
+                                <action selector="cancelPressed:" destination="sEU-cw-0rZ" id="8gw-Ok-WBo"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cameraView" destination="MwG-jL-v9A" id="KQH-EA-OXk"/>
+                        <outlet property="newButton" destination="sYN-ab-wec" id="uNC-cN-jgg"/>
+                        <outlet property="pinField" destination="bhH-fc-BYe" id="tdH-G6-vYM"/>
+                        <outlet property="pinFieldHeightConstraint" destination="6TJ-SP-CDo" id="ARe-Y5-c6u"/>
+                        <outlet property="pinFieldWidthConstraint" destination="acm-bH-Lek" id="ZL0-fi-kXg"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tqc-Z7-HWA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1435" y="805"/>
+        </scene>
         <!--Patient Table View Controller-->
         <scene sceneID="ZhR-di-gkJ">
             <objects>
-                <tableViewController id="fQO-aB-kJV" customClass="PatientTableViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Patient" id="fQO-aB-kJV" customClass="PatientTableViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="AHI-qd-onf">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

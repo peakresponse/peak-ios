@@ -17,7 +17,7 @@ class PatientsCollectionViewCell: UICollectionViewCell {
     }
 }
 
-class PatientsCollectionViewController: UICollectionViewController, LoginViewControllerDelegate {
+class PatientsCollectionViewController: UICollectionViewController, LoginViewControllerDelegate, ScanViewControllerDelegate {
     @IBOutlet weak var logoutItem: UIBarButtonItem!
     weak var refreshControl: UIRefreshControl!
 
@@ -77,7 +77,7 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             }
         }
     }
-    
+
     @objc func refresh() {
         refreshControl.beginRefreshing()
         let task = ApiClient.shared.listPatients { [weak self] (records, error) in
@@ -122,6 +122,9 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             let indexPath = collectionView.indexPath(for: cell),
             let patient = results?[indexPath.row] {
             vc.patient = patient
+        } else if let navVC = segue.destination as? UINavigationController,
+            let vc = navVC.topViewController as? ScanViewController {
+            vc.delegate = self
         }
     }
 
@@ -130,6 +133,29 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     func loginViewControllerDidLogin(_ vc: LoginViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
+        }
+    }
+
+    // MARK: - ScanViewControllerDelegate
+
+    func scanViewControllerDidDismiss(_ vc: ScanViewController) {
+        dismiss(animated: true, completion: nil)
+    }
+
+    func scanViewController(_ vc: ScanViewController, didScan pin: String) {
+        dismiss(animated: true) { [weak self] in
+            let realm = AppRealm.open()
+            let results = realm.objects(Patient.self).filter("pin=%@", pin)
+            var patient: Patient?
+            if results.count > 0 {
+                patient = results[0]
+            }
+            if let patient = patient {
+                if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
+                    vc.patient = patient
+                    self?.navigationController?.pushViewController(vc, animated: true)
+                }
+            }
         }
     }
 

@@ -35,6 +35,9 @@
 		4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */; };
 		4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F07D236D57FA00A04C75 /* PriorityView.swift */; };
 		4566F080236D581400A04C75 /* PriorityView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F07F236D581400A04C75 /* PriorityView.xib */; };
+		4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F081236DE94400A04C75 /* ScanViewController.swift */; };
+		4566F084236DF5C000A04C75 /* PinField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F083236DF5C000A04C75 /* PinField.swift */; };
+		4566F086236DF5CA00A04C75 /* PinField.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F085236DF5CA00A04C75 /* PinField.xib */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
 		6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */; };
 /* End PBXBuildFile section */
@@ -91,6 +94,9 @@
 		4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRuleView.swift; sourceTree = "<group>"; };
 		4566F07D236D57FA00A04C75 /* PriorityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityView.swift; sourceTree = "<group>"; };
 		4566F07F236D581400A04C75 /* PriorityView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriorityView.xib; sourceTree = "<group>"; };
+		4566F081236DE94400A04C75 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
+		4566F083236DF5C000A04C75 /* PinField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinField.swift; sourceTree = "<group>"; };
+		4566F085236DF5CA00A04C75 /* PinField.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PinField.xib; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TriageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A608A45BFFA66C538FB6DCB4 /* Pods-TriageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.debug.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -219,10 +225,7 @@
 				4566F057236CD1EE00A04C75 /* Patients.storyboard */,
 				4566F059236CD26900A04C75 /* PatientsCollectionViewController.swift */,
 				4566F074236D3B9E00A04C75 /* PatientTableViewController.swift */,
-				4566F06E236D2EBF00A04C75 /* PatientView.swift */,
-				4566F070236D2F1B00A04C75 /* PatientView.xib */,
-				4566F07D236D57FA00A04C75 /* PriorityView.swift */,
-				4566F07F236D581400A04C75 /* PriorityView.xib */,
+				4566F081236DE94400A04C75 /* ScanViewController.swift */,
 			);
 			path = Patients;
 			sourceTree = "<group>";
@@ -249,6 +252,12 @@
 		4566F078236D484D00A04C75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4566F06E236D2EBF00A04C75 /* PatientView.swift */,
+				4566F070236D2F1B00A04C75 /* PatientView.xib */,
+				4566F083236DF5C000A04C75 /* PinField.swift */,
+				4566F085236DF5CA00A04C75 /* PinField.xib */,
+				4566F07D236D57FA00A04C75 /* PriorityView.swift */,
+				4566F07F236D581400A04C75 /* PriorityView.xib */,
 				4566F079236D486B00A04C75 /* RoundImageView.swift */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
 			);
@@ -377,6 +386,7 @@
 				4566F053236CD05200A04C75 /* Login.storyboard in Resources */,
 				4566F071236D2F1B00A04C75 /* PatientView.xib in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
+				4566F086236DF5CA00A04C75 /* PinField.xib in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
 				4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */,
 				4566F080236D581400A04C75 /* PriorityView.xib in Resources */,
@@ -505,6 +515,7 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				4566F024236CCC5500A04C75 /* SecondViewController.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
+				4566F084236DF5C000A04C75 /* PinField.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
@@ -515,6 +526,7 @@
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				4566F022236CCC5500A04C75 /* FirstViewController.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
+				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
