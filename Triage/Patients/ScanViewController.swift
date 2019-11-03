@@ -24,7 +24,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
-    var qrCodeFrameView: UIView?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +37,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         ])
         pinFieldWidthConstraint.constant = round(pinFieldSize.width) + 1
         pinFieldHeightConstraint.constant = pinFieldSize.height
+        view.layoutIfNeeded()
         
         setupCamera()
     }
@@ -75,13 +75,16 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     @IBAction func cancelPressed(_ sender: Any) {
         delegate?.scanViewControllerDidDismiss?(self)
     }
+
+    @IBAction func didTap(_ sender: Any) {
+        pinField.resignFirstResponder()
+    }
     
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
 
     func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects.count == 0 {
-            qrCodeFrameView?.frame = CGRect.zero
             return
         }
         
@@ -89,20 +92,36 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
         
         if metadataObj.type == AVMetadataObject.ObjectType.qr {
-            // If the found metadata is equal to the QR code metadata then update the status label's text and set the bounds
-            let barCodeObject = videoPreviewLayer?.transformedMetadataObject(for: metadataObj)
-            qrCodeFrameView?.frame = barCodeObject!.bounds
-            
-            if metadataObj.stringValue != nil {
-                pinField.text = metadataObj.stringValue
+            if let pin = metadataObj.stringValue {
+                pinField.text = pin
+                pinField(pinField, didChange: pin)
             }
         }
     }
     
     // MARK: - PinFieldDelegate
+
+    func pinFieldDidBeginEditing(_ field: PinField) {
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.cameraView.alpha = 0
+        }, completion: { [weak self] (finished) in
+            self?.cameraView.isHidden = true
+            self?.view.layoutIfNeeded()
+        })
+    }
+
+    func pinFieldDidEndEditing(_ field: PinField) {
+        cameraView.isHidden = false
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.cameraView.alpha = 1
+        }, completion: { [weak self] (finished) in
+            self?.view.layoutIfNeeded()
+        })
+    }
     
     func pinField(_ field: PinField, didChange pin: String) {
         if pin.count == 6 {
+            captureSession.stopRunning()
             //// hide keyboard
             _ = field.resignFirstResponder()
             //// check if Patient record exists
@@ -127,10 +146,18 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     // MARK: - ObservationTableViewControllerDelegate
     
     func observationTableViewControllerDidDismiss(_ vc: ObservationTableViewController) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) { [weak self] in
+            if self?.videoPreviewLayer != nil {
+                self?.captureSession.startRunning()
+            }
+        }
     }
     
     func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true) { [weak self] in
+            if self?.videoPreviewLayer != nil {
+                self?.captureSession.startRunning()
+            }
+        }
     }
 }

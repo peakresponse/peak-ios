@@ -20,6 +20,8 @@ class PinTextField: UITextField {
 
 @objc protocol PinFieldDelegate {
     @objc optional func pinField(_ field: PinField, didChange pin: String)
+    @objc optional func pinFieldDidBeginEditing(_ field: PinField)
+    @objc optional func pinFieldDidEndEditing(_ field: PinField)
 }
 
 @IBDesignable
@@ -62,6 +64,14 @@ class PinField: UIView, UITextFieldDelegate {
     }
 
     // MARK: - UITextFieldDelegate
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        delegate?.pinFieldDidBeginEditing?(self)        
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        delegate?.pinFieldDidEndEditing?(self)
+    }
 
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if CharacterSet.decimalDigits.isSuperset(of: CharacterSet(charactersIn: string)) {

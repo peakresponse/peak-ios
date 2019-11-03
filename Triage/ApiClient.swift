@@ -16,7 +16,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "http://localhost:3000/api/")! {
+    static var shared: ApiClient = ApiClient(baseURL: "https://t2pnat.ngrok.io/api/")! {
         willSet {
             shared.invalidate()
         }
