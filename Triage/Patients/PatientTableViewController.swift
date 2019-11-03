@@ -15,8 +15,7 @@ let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .number]
 let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
 let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
 
-
-class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate {
+class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate, TextViewTableViewCellDelegate {
     enum Section: Int {
         case portrait = 0
         case priority
@@ -40,6 +39,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         tableView.register(UINib(nibName: "LatLngTableViewCell", bundle: nil), forCellReuseIdentifier: "LatLng")
         tableView.register(UINib(nibName: "PortraitTableViewCell", bundle: nil), forCellReuseIdentifier: "Portrait")
         tableView.register(UINib(nibName: "PriorityTableViewCell", bundle: nil), forCellReuseIdentifier: "Priority")
+        tableView.register(UINib(nibName: "TextViewTableViewCell", bundle: nil), forCellReuseIdentifier: "TextView")
         tableView.tableFooterView = UIView()
 
         title = "\(patient.firstName ?? "") \(patient.lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
@@ -172,6 +172,10 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         switch indexPath.section {
         case Section.portrait.rawValue:
             return 224
+        case Section.observations.rawValue:
+            if let text = patient.text {
+                return TextViewTableViewCell.heightForText(text, width: tableView.frame.width)
+            }
         default:
             break
         }
@@ -211,6 +215,8 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
             return NSLocalizedString("Info", comment: "")
         case Section.vitals.rawValue:
             return NSLocalizedString("Vitals", comment: "")
+        case Section.observations.rawValue:
+            return NSLocalizedString("Observation", comment: "")
         default:
             return nil
         }
@@ -228,7 +234,9 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
             return INFO.count
         case Section.vitals.rawValue:
             return VITALS.count
-        default: //// observations
+        case Section.observations.rawValue:
+            return 1
+        default:
             return 0
         }
     }
@@ -254,6 +262,12 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
                 if let cell = cell as? LatLngTableViewCell {
                     cell.delegate = self
                 }
+            }
+        case Section.observations.rawValue:
+            cell = tableView.dequeueReusableCell(withIdentifier: "TextView", for: indexPath)
+            if let cell = cell as? TextViewTableViewCell {
+                cell.delegate = self
+                cell.attribute = Patient.Keys.text
             }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)

@@ -77,7 +77,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
 
     @IBAction func didTap(_ sender: Any) {
-        pinField.resignFirstResponder()
+        _ = pinField.resignFirstResponder()
     }
     
     // MARK: - AVCaptureMetadataOutputObjectsDelegate

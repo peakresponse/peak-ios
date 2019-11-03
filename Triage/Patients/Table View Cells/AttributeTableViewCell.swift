@@ -36,9 +36,7 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        selectionStyle = .none
         editable = false
-        valueField.delegate = self
     }
     
     override func configure(from patient: Patient) {
