@@ -25,7 +25,55 @@ class AppRealm {
         }
         return realm
     }
+
+    public static func createObservation(_ observation: Observation, completionHandler: @escaping (Observation?, Error?) ->  Void) {
+        let task = ApiClient.shared.createObservation(observation.asJSON()) { (record, error) in
+            var observation: Observation?
+            if let record = record {
+                observation = Observation.instantiate(from: record) as? Observation
+                if let observation = observation {
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(observation, update: .modified)
+                    }
+                }
+            }
+            completionHandler(observation, error)
+        }
+        task.resume()
+    }
     
+    public static func getPatients(completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getPatients { (records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                let patients = records.map({ Patient.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(patients, update: .modified)
+                }
+                completionHandler(nil)
+            }
+        }
+        task.resume()
+    }
+
+    public static func getPatient(idOrPin: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getPatient(idOrPin: idOrPin) { (record, error) in
+            if let record = record {
+                if let patient = Patient.instantiate(from: record) as? Patient {
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(patient, update: .modified)
+                    }
+                }
+            }
+            completionHandler(error)
+        }
+        task.resume()
+    }
+
     public static func deleteAll() {
         let realm = AppRealm.open()
         try! realm.write {

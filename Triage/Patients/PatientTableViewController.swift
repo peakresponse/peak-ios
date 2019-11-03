@@ -117,22 +117,13 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     
     func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
         if let id = patient.id {
-            let task = ApiClient.shared.getPatient(idOrPin: id) { (record, error) in
-                if let record = record {
-                    if let patient = Patient.instantiate(from: record) as? Patient {
-                        let realm = AppRealm.open()
-                        try! realm.write {
-                            realm.add(patient, update: .modified)
-                        }
-                    }
-                }
+            AppRealm.getPatient(idOrPin: id) { (error) in
                 DispatchQueue.main.async { [weak self] in
                     if let error = error {
                         self?.presentAlert(error: error)
                     }
                 }
             }
-            task.resume()
         }
         dismiss(animated: true, completion: nil)
     }
@@ -144,25 +135,23 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         let observation = Observation()
         observation.pin = patient.pin
         observation.priority.value = priority
-        let task = ApiClient.shared.createObservation(observation.asJSON()) { [weak self] (record, error) in
-            if let record = record {
-                if let observation = Observation.instantiate(from: record) as? Observation {
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(observation, update: .modified)
-                        if let patient = realm.object(ofType: Patient.self, forPrimaryKey: patientId) {
-                            patient.priority.value = priority
+        AppRealm.createObservation(observation) { (observation, error) in
+            DispatchQueue.main.async { [weak self] in
+                if let error = error {
+                    self?.presentAlert(error: error)
+                } else {
+                    if let patientId = patientId {
+                        AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
+                            DispatchQueue.main.async { [weak self] in
+                                if let error = error {
+                                    self?.presentAlert(error: error)
+                                }
+                            }
                         }
                     }
                 }
             }
-            DispatchQueue.main.async { [weak self] in
-                if let error = error {
-                    self?.presentAlert(error: error)
-                }
-            }
         }
-        task.resume()
         view.removeFromSuperview()
     }
     

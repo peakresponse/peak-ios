@@ -60,27 +60,21 @@ class ObservationTableViewController: PatientTableViewController {
         let activityView = UIActivityIndicatorView(style: .gray)
         activityView.startAnimating()
         navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityView)]
-        let task = ApiClient.shared.createObservation(observation.asJSON()) { [weak self] (record, error) in
-            var observation: Observation?
-            if let record = record {
-                observation = Observation.instantiate(from: record) as? Observation
-                if let observation = observation {
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(observation, update: .modified)
-                    }
-                }
-            }
+        AppRealm.createObservation(observation) { (observation, error) in
+            let observationId = observation?.id
             DispatchQueue.main.async { [weak self] in
                 self?.navigationItem.rightBarButtonItems = self?.rightBarButtonItems
                 if let error = error {
                     self?.presentAlert(error: error)
-                } else if let observation = observation, let self = self {
-                    self.delegate?.observationTableViewController?(self, didSave: observation)
+                } else if let self = self, let observationId = observationId {
+                    let realm = AppRealm.open()
+                    realm.refresh()
+                    if let observation = realm.object(ofType: Observation.self, forPrimaryKey: observationId) {
+                        self.delegate?.observationTableViewController?(self, didSave: observation)
+                    }
                 }
             }
         }
-        task.resume()
     }
 
     private func extractValues(text: String) {

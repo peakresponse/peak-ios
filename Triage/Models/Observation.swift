@@ -9,8 +9,14 @@
 import RealmSwift
 
 class Observation: Patient {
-    
+    struct Keys {
+        static let patientId = "patientId"
+    }
+
+    @objc dynamic var patientId: String?
+
     override func update(from data: [String : Any]) {
         super.update(from: data)
+        patientId = data["patientId"] as? String
     }
 }

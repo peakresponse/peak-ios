@@ -80,7 +80,7 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
 
     @objc func refresh() {
         refreshControl.beginRefreshing()
-        let task = ApiClient.shared.listPatients { [weak self] (records, error) in
+        AppRealm.getPatients { [weak self] (error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.refreshControl.endRefreshing()
@@ -90,18 +90,12 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
                         self?.presentAlert(error: error)
                     }
                 }
-            } else if let records = records {
-                let patients = records.map({ Patient.instantiate(from: $0) })
-                let realm = AppRealm.open()
-                try! realm.write {
-                    realm.add(patients, update: .modified)
-                }
+            } else {
                 DispatchQueue.main.async { [weak self] in
                     self?.refreshControl.endRefreshing()
                 }
             }
         }
-        task.resume()
     }
 
     private func presentLogin() {

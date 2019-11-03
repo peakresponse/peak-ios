@@ -154,6 +154,16 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
     
     func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
+        //// Observations saved here are for new Patient records, so fetch the Patient record
+        if let patientId = observation.patientId {
+            AppRealm.getPatient(idOrPin: patientId) { (error) in
+                DispatchQueue.main.async { [weak self] in
+                    if let error = error {
+                        self?.presentAlert(error: error)
+                    }
+                }
+            }
+        }
         dismiss(animated: true) { [weak self] in
             if self?.videoPreviewLayer != nil {
                 self?.captureSession.startRunning()
