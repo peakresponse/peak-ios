@@ -137,6 +137,10 @@ class ApiClient {
         session.reset(completionHandler: completionHandler)
     }
  
+    func me(completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/users/me", completionHandler: completionHandler)
+    }
+
     // MARK: - Observations
 
     func createObservation(_ data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

@@ -59,11 +59,6 @@
                                 <action selector="logoutPressed:" destination="y4N-h3-iwZ" id="4R4-T3-LzQ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Scan" id="vZi-Pn-nRm">
-                            <connections>
-                                <segue destination="MJz-ca-iKT" kind="presentation" id="i36-VS-GTr"/>
-                            </connections>
-                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="logoutItem" destination="BQg-tt-oBo" id="yug-Jd-iE2"/>
@@ -73,12 +68,14 @@
             </objects>
             <point key="canvasLocation" x="622" y="123"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Scan-->
         <scene sceneID="MjU-hG-8iF">
             <objects>
-                <navigationController id="MJz-ca-iKT" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Scan" id="MJz-ca-iKT" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Scan" id="zy0-wN-8CH"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kGy-za-yFk">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
@@ -94,11 +91,11 @@
             <objects>
                 <viewController title="Scan" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eVf-ID-a8b">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="C6D-FK-Gai">
-                                <rect key="frame" x="0.0" y="56" width="414" height="562"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="562"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MwG-jL-v9A">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="414"/>
@@ -139,9 +136,9 @@
                         </connections>
                     </view>
                     <navigationItem key="navigationItem" title="Scan" id="ReN-Le-wit">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="G2S-2N-OH2">
+                        <barButtonItem key="leftBarButtonItem" title="Log out" id="G2S-2N-OH2">
                             <connections>
-                                <action selector="cancelPressed:" destination="sEU-cw-0rZ" id="8gw-Ok-WBo"/>
+                                <action selector="logoutPressed:" destination="sEU-cw-0rZ" id="Wvz-5r-IRX"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -270,10 +267,12 @@
             </objects>
             <point key="canvasLocation" x="622" y="-585"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Patients-->
         <scene sceneID="MqV-95-mv9">
             <objects>
-                <navigationController id="4mf-J4-hW3" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="Patients" id="4mf-J4-hW3" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Patients" id="Eli-ig-A17"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h6b-1G-2KO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>

@@ -42,6 +42,13 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         setupCamera()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if videoPreviewLayer != nil {
+            captureSession.startRunning()
+        }
+    }
+    
     private func setupCamera() {
         // Get the back-facing camera for capturing videos
         let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera], mediaType: AVMediaType.video, position: .back)
@@ -72,8 +79,8 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         }
     }
     
-    @IBAction func cancelPressed(_ sender: Any) {
-        delegate?.scanViewControllerDidDismiss?(self)
+    @IBAction func logoutPressed(_ sender: Any) {
+        logout()
     }
 
     @IBAction func didTap(_ sender: Any) {
@@ -129,6 +136,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             let results = realm.objects(Patient.self).filter("pin=%@", pin)
             if results.count > 0 {
                 delegate?.scanViewController?(self, didScan: results[0])
+                if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
+                    vc.patient = results[0]
+                    navigationController?.pushViewController(vc, animated: true)
+                }
             } else {
                 let patient = Patient()
                 patient.pin = pin

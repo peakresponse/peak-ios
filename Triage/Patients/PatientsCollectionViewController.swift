@@ -17,7 +17,7 @@ class PatientsCollectionViewCell: UICollectionViewCell {
     }
 }
 
-class PatientsCollectionViewController: UICollectionViewController, LoginViewControllerDelegate, ScanViewControllerDelegate {
+class PatientsCollectionViewController: UICollectionViewController {
     @IBOutlet weak var logoutItem: UIBarButtonItem!
     weak var refreshControl: UIRefreshControl!
 
@@ -49,11 +49,14 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
-        
-        //// trigger initial refresh
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        //// trigger additional refresh
         refresh()
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
         case .initial(_):
@@ -70,12 +73,7 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
     }
     
     @IBAction func logoutPressed(_ sender: Any) {
-        ApiClient.shared.logout { [weak self] in
-            AppRealm.deleteAll()
-            DispatchQueue.main.async { [weak self] in
-                self?.presentLogin()
-            }
-        }
+        logout()
     }
 
     @objc func refresh() {
@@ -97,13 +95,6 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             }
         }
     }
-
-    private func presentLogin() {
-        if let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController() as? LoginViewController {
-            vc.loginDelegate = self
-            present(vc, animated: true, completion: nil)
-        }
-    }
     
     // MARK: - Navigation
     
@@ -116,32 +107,14 @@ class PatientsCollectionViewController: UICollectionViewController, LoginViewCon
             let indexPath = collectionView.indexPath(for: cell),
             let patient = results?[indexPath.row] {
             vc.patient = patient
-        } else if let navVC = segue.destination as? UINavigationController,
-            let vc = navVC.topViewController as? ScanViewController {
-            vc.delegate = self
         }
     }
 
     // MARK: - LoginViewControllerDelegate
     
-    func loginViewControllerDidLogin(_ vc: LoginViewController) {
+    override func loginViewControllerDidLogin(_ vc: LoginViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
-        }
-    }
-    
-    // MARK: - ScanViewControllerDelegate
-
-    func scanViewControllerDidDismiss(_ vc: ScanViewController) {
-        dismiss(animated: true, completion: nil)
-    }
-
-    func scanViewController(_ vc: ScanViewController, didScan patient: Patient) {
-        dismiss(animated: true) { [weak self] in
-            if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
-                vc.patient = patient
-                self?.navigationController?.pushViewController(vc, animated: true)
-            }
         }
     }
 

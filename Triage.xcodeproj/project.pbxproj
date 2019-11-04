@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */; };
+		453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* AppTabBarController.swift */; };
 		4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F01F236CCC5500A04C75 /* AppDelegate.swift */; };
 		4566F027236CCC5500A04C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F025236CCC5500A04C75 /* Main.storyboard */; };
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
@@ -73,6 +74,7 @@
 
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
+		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
 		4566F01C236CCC5500A04C75 /* Triage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triage.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -205,6 +207,7 @@
 				4566F05B236CD2DB00A04C75 /* ApiClient.swift */,
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
+				453877BC236FA47300E19880 /* AppTabBarController.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
 				4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */,
@@ -581,6 +584,7 @@
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
+				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
 				4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 			);

@@ -80,8 +80,8 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         accessoryView = nil
         if let location = locations.last {
-            let lat = String(describing: location.coordinate.latitude)
-            let lng = String(describing: location.coordinate.longitude)
+            let lat = String(format: "%.6f", location.coordinate.latitude)
+            let lng = String(format: "%.6", location.coordinate.longitude)
             valueField.text = "\(lat), \(lng)"
             delegate?.latLngTableViewCell?(self, didCapture: lat, lng: lng)
             accessoryType = .disclosureIndicator
