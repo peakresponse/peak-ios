@@ -25,12 +25,22 @@
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YH5-AZ-06u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="113" y="251"/>
+            <point key="canvasLocation" x="113" y="0.0"/>
+        </scene>
+        <!--PatientsMap-->
+        <scene sceneID="SJF-A6-3Wu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Patients" referencedIdentifier="PatientsMap" id="bSX-H3-4Sa" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="jeo-5Q-J6I"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mak-E2-ZHP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="173" y="203"/>
         </scene>
         <!--App Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController id="49e-Tb-3d3" customClass="AppTabBarController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="49e-Tb-3d3" customClass="AppTabBarController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
@@ -39,6 +49,7 @@
                     <connections>
                         <segue destination="o9v-Wz-bfp" kind="relationship" relationship="viewControllers" id="wpP-mv-suP"/>
                         <segue destination="NJ5-p0-v3H" kind="relationship" relationship="viewControllers" id="zgr-Dl-Juf"/>
+                        <segue destination="bSX-H3-4Sa" kind="relationship" relationship="viewControllers" id="vQr-IM-nFG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>

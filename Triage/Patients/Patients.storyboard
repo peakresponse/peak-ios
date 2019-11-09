@@ -8,10 +8,28 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--Map-->
+        <scene sceneID="9ef-7F-xar">
+            <objects>
+                <navigationController storyboardIdentifier="PatientsMap" id="QIc-Kf-IOD" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Map" image="Map" id="Mv6-Ei-5ET"/>
+                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="FRR-HS-bJz">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="dTA-jy-ch9" kind="relationship" relationship="rootViewController" id="aHO-w1-FVg"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dTb-eM-PWG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="622" y="-590"/>
+        </scene>
         <!--Patients-->
         <scene sceneID="uNj-P8-Bqe">
             <objects>
-                <collectionViewController title="Patients" id="y4N-h3-iwZ" customClass="PatientsCollectionViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController title="Patients" id="y4N-h3-iwZ" customClass="PatientsCollectionViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="31i-P5-2SC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -23,14 +41,14 @@
                             <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Patient" id="7ER-mS-4yi" customClass="PatientsCollectionViewCell" customModule="Triage" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Patient" id="7ER-mS-4yi" customClass="PatientsCollectionViewCell" customModule="NaT" customModuleProvider="target">
                                 <rect key="frame" x="20" y="20" width="100" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
                                     <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AgZ-ag-cMH" customClass="PatientView" customModule="Triage" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AgZ-ag-cMH" customClass="PatientView" customModule="NaT" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </view>
@@ -72,7 +90,7 @@
         <scene sceneID="MjU-hG-8iF">
             <objects>
                 <navigationController storyboardIdentifier="Scan" id="MJz-ca-iKT" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Scan" id="zy0-wN-8CH"/>
+                    <tabBarItem key="tabBarItem" title="Scan" image="QRCode" id="zy0-wN-8CH"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="kGy-za-yFk">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -89,7 +107,7 @@
         <!--Scan-->
         <scene sceneID="hpx-iK-7pX">
             <objects>
-                <viewController title="Scan" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Scan" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eVf-ID-a8b">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -111,7 +129,7 @@
                                             <constraint firstAttribute="height" constant="20" id="Xcl-zu-H0e"/>
                                         </constraints>
                                     </view>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhH-fc-BYe" customClass="PinField" customModule="Triage" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bhH-fc-BYe" customClass="PinField" customModule="NaT" customModuleProvider="target">
                                         <rect key="frame" x="87" y="434" width="240" height="128"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
@@ -156,12 +174,12 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1435" y="805"/>
+            <point key="canvasLocation" x="1538" y="805"/>
         </scene>
         <!--Patient Table View Controller-->
         <scene sceneID="ZhR-di-gkJ">
             <objects>
-                <tableViewController storyboardIdentifier="Patient" id="fQO-aB-kJV" customClass="PatientTableViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Patient" id="fQO-aB-kJV" customClass="PatientTableViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="AHI-qd-onf">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -183,12 +201,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX5-bE-AB6" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1434.7826086956522" y="122.54464285714285"/>
+            <point key="canvasLocation" x="1538" y="123"/>
         </scene>
         <!--Map-->
         <scene sceneID="mcs-BV-hYe">
             <objects>
-                <viewController storyboardIdentifier="Map" title="Map" id="X9V-sR-ffC" customClass="MapViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Map" title="Map" id="X9V-sR-ffC" customClass="MapViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uyb-uj-IJz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -212,12 +230,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cWK-o4-sgz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2345" y="123"/>
+            <point key="canvasLocation" x="2448" y="123"/>
         </scene>
         <!--Observation Table View Controller-->
         <scene sceneID="CgH-TG-1XM">
             <objects>
-                <tableViewController id="Yqp-3N-bUQ" customClass="ObservationTableViewController" customModule="Triage" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="Yqp-3N-bUQ" customClass="ObservationTableViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="WLo-rc-a2I">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -249,7 +267,34 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jY0-Wg-v03" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1435" y="-585"/>
+            <point key="canvasLocation" x="3255" y="-590"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="IkQ-eD-aIn">
+            <objects>
+                <viewController id="dTA-jy-ch9" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="68y-nn-mRi">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xcK-J9-YWf">
+                                <rect key="frame" x="0.0" y="88" width="414" height="759"/>
+                            </mapView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="ILX-Ak-94l" firstAttribute="trailing" secondItem="xcK-J9-YWf" secondAttribute="trailing" id="2gv-DO-N8l"/>
+                            <constraint firstItem="xcK-J9-YWf" firstAttribute="top" secondItem="ILX-Ak-94l" secondAttribute="top" id="Hhi-Mu-3Ze"/>
+                            <constraint firstItem="xcK-J9-YWf" firstAttribute="leading" secondItem="ILX-Ak-94l" secondAttribute="leading" id="UzW-N1-1fG"/>
+                            <constraint firstItem="xcK-J9-YWf" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" constant="34" id="fL3-f9-K4M"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ILX-Ak-94l"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="1px-0h-hUG"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qts-q0-CF8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1537.68115942029" y="-590.625"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kbP-5r-1ud">
@@ -265,13 +310,13 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ufQ-Ra-4FG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="622" y="-585"/>
+            <point key="canvasLocation" x="2345" y="-590"/>
         </scene>
-        <!--Patients-->
+        <!--Queue-->
         <scene sceneID="MqV-95-mv9">
             <objects>
                 <navigationController storyboardIdentifier="Patients" id="4mf-J4-hW3" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Patients" id="Eli-ig-A17"/>
+                    <tabBarItem key="tabBarItem" title="Queue" image="Users" id="Eli-ig-A17"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h6b-1G-2KO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -286,4 +331,9 @@
             <point key="canvasLocation" x="-307" y="123"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="Map" width="31" height="25"/>
+        <image name="QRCode" width="25" height="25"/>
+        <image name="Users" width="31" height="25"/>
+    </resources>
 </document>

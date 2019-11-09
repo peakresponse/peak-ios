@@ -75,7 +75,7 @@
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
-		4566F01C236CCC5500A04C75 /* Triage.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Triage.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4566F01C236CCC5500A04C75 /* NaT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4566F028236CCC5700A04C75 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -189,7 +189,7 @@
 		4566F01D236CCC5500A04C75 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4566F01C236CCC5500A04C75 /* Triage.app */,
+				4566F01C236CCC5500A04C75 /* NaT.app */,
 				4566F032236CCC5700A04C75 /* TriageTests.xctest */,
 				4566F03D236CCC5700A04C75 /* TriageUITests.xctest */,
 			);
@@ -340,7 +340,7 @@
 			);
 			name = Triage;
 			productName = Triage;
-			productReference = 4566F01C236CCC5500A04C75 /* Triage.app */;
+			productReference = 4566F01C236CCC5500A04C75 /* NaT.app */;
 			productType = "com.apple.product-type.application";
 		};
 		4566F031236CCC5700A04C75 /* TriageTests */ = {
@@ -770,7 +770,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.Triage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NaT;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -789,7 +789,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.Triage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = NaT;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
