@@ -57,6 +57,16 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setToolbarHidden(false, animated: true)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setToolbarHidden(true, animated: true)
+    }
+    
     func didObserveChange(_ change: ObjectChange) {
         switch change {
         case .change(_):

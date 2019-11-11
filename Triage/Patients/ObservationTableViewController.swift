@@ -17,14 +17,20 @@ import UIKit
 class ObservationTableViewController: PatientTableViewController {
     weak var delegate: ObservationTableViewControllerDelegate?
     
-    var rightBarButtonItems: [UIBarButtonItem]!
+    @IBOutlet var playButton: UIButton!
+    @IBOutlet var saveBarButtonItem: UIBarButtonItem!
+
     var observation: Observation!
 
     let audioEngine = AVAudioEngine()
     let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
     var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
     var recognitionTask: SFSpeechRecognitionTask?
-    
+
+    var recordingLength: TimeInterval = 0
+    var recordingStart: Date?
+    var timer: Timer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,7 +38,6 @@ class ObservationTableViewController: PatientTableViewController {
             title = NSLocalizedString("New Patient", comment: "")
         }
         observation = patient.asObservation()
-        rightBarButtonItems = navigationItem.rightBarButtonItems
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -57,13 +62,18 @@ class ObservationTableViewController: PatientTableViewController {
             return
         }
         
-        let activityView = UIActivityIndicatorView(style: .gray)
-        activityView.startAnimating()
-        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: activityView)]
+        let index = toolbarItems?.firstIndex(of: saveBarButtonItem)
+        if let index = index {
+            let activityView = UIActivityIndicatorView(style: .gray)
+            activityView.startAnimating()
+            toolbarItems?[index] = UIBarButtonItem(customView: activityView)
+        }
         AppRealm.createObservation(observation) { (observation, error) in
             let observationId = observation?.id
             DispatchQueue.main.async { [weak self] in
-                self?.navigationItem.rightBarButtonItems = self?.rightBarButtonItems
+                if let index = index, let saveBarButtonItem = self?.saveBarButtonItem {
+                    self?.toolbarItems?[index] = saveBarButtonItem
+                }
                 if let error = error {
                     self?.presentAlert(error: error)
                 } else if let self = self, let observationId = observationId {
@@ -279,39 +289,76 @@ class ObservationTableViewController: PatientTableViewController {
         audioEngine.prepare()
         try! audioEngine.start()
 
-        rightBarButtonItems[0].isEnabled = false
-        rightBarButtonItems[1].title = NSLocalizedString("Stop", comment: "")
+        playButton.setImage(nil, for: .normal)
+        playButton.isUserInteractionEnabled = false
+        recordingStart = Date()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
+            let now = Date()
+            if let length = self?.recordingLength, let start = self?.recordingStart {
+                let seconds = length + start.distance(to: now)
+                self?.playButton.setTitle(String(format: "%2.0f:%02.0f", seconds / 60, seconds.truncatingRemainder(dividingBy: 60)), for: .normal)
+                self?.playButton.sizeToFit()
+            }
+        }
+        //// disable tableview and modal presentation interaction so that recording does not get interrupted by accidental swipe movement
+        tableView.isUserInteractionEnabled = false
+        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
+            for recognizer in recognizers {
+                recognizer.isEnabled = false
+            }
+        }
     }
-    
+
     private func stopRecording() {
         audioEngine.stop()
+        audioEngine.inputNode.removeTap(onBus: 0)
         recognitionRequest?.endAudio()
+        
         // Cancel the previous task if it's running
         if let recognitionTask = recognitionTask {
             recognitionTask.cancel()
             self.recognitionTask = nil
         }
-        rightBarButtonItems[0].isEnabled = true
-        rightBarButtonItems[1].title = NSLocalizedString("Record", comment: "")
+
+        timer?.invalidate()
+        timer = nil
+        let now = Date()
+        if let start = recordingStart {
+            recordingLength += start.distance(to: now)
+        }
+        recordingStart = nil
+        playButton.setImage(UIImage(named: "Play"), for: .normal)
+        playButton.sizeToFit()
+        playButton.isUserInteractionEnabled = true
+
+        //// re-enable tableview and model presentation interaction
+        tableView.isUserInteractionEnabled = true
+        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
+            for recognizer in recognizers {
+                recognizer.isEnabled = true
+            }
+        }
     }
     
     @IBAction func recordPressed(_ sender: Any) {
         if SFSpeechRecognizer.authorizationStatus() == .authorized {
-            if audioEngine.isRunning {
-                stopRecording()
-            } else {
+            if !audioEngine.isRunning {
                 startRecording()
             }
         } else {
-            SFSpeechRecognizer.requestAuthorization { [weak self ] (status) in
+            SFSpeechRecognizer.requestAuthorization { [weak self] (status) in
                 DispatchQueue.main.async { [weak self] in
-                    if status == .authorized {
-                        self?.recordPressed(sender)
-                    } else {
+                    if status != .authorized {
                         self?.presentAlert(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Speech Recognition is not authorized.", comment: ""))
                     }
                 }
             }
+        }
+    }
+
+    @IBAction func recordReleased(_ sender: Any) {
+        if audioEngine.isRunning {
+            stopRecording()
         }
     }
 

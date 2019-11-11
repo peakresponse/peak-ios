@@ -189,14 +189,16 @@
                             <outlet property="delegate" destination="fQO-aB-kJV" id="gvK-eT-3rN"/>
                         </connections>
                     </tableView>
-                    <toolbarItems/>
-                    <navigationItem key="navigationItem" id="SSI-Lm-QI9">
-                        <barButtonItem key="rightBarButtonItem" title="Update" id="G5D-vi-asa">
+                    <toolbarItems>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="CoG-wY-QVF"/>
+                        <barButtonItem title="Update" id="L6K-44-ns9">
                             <connections>
-                                <segue destination="PEo-mx-QpJ" kind="presentation" id="INJ-no-6Eq"/>
+                                <segue destination="PEo-mx-QpJ" kind="presentation" id="VYC-1G-CSp"/>
                             </connections>
                         </barButtonItem>
-                    </navigationItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="4n2-Ea-k8G"/>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="SSI-Lm-QI9"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aX5-bE-AB6" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -245,29 +247,64 @@
                             <outlet property="delegate" destination="Yqp-3N-bUQ" id="HJZ-AD-zm0"/>
                         </connections>
                     </tableView>
+                    <toolbarItems>
+                        <barButtonItem style="plain" id="M6m-P2-O8d">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="LdQ-gy-uiO">
+                                <rect key="frame" x="20" y="10.5" width="46" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="kPx-wG-bTa"/>
+                        <barButtonItem style="plain" id="ZEE-ac-PRA">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UH7-ZW-n9p">
+                                <rect key="frame" x="154" y="5" width="106" height="44"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" image="Microphone"/>
+                                <connections>
+                                    <action selector="recordPressed:" destination="Yqp-3N-bUQ" eventType="touchDown" id="9L3-wV-W3a"/>
+                                    <action selector="recordReleased:" destination="Yqp-3N-bUQ" eventType="touchUpOutside" id="cfF-0C-T3W"/>
+                                    <action selector="recordReleased:" destination="Yqp-3N-bUQ" eventType="touchUpInside" id="u3G-hO-s1g"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="aG9-ze-n8S"/>
+                        <barButtonItem style="plain" id="O1I-ce-VvG">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ez3-Yc-JNu">
+                                <rect key="frame" x="348" y="10.5" width="46" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="Save"/>
+                                <connections>
+                                    <action selector="savePressed:" destination="Yqp-3N-bUQ" eventType="touchUpInside" id="v4j-PZ-ELh"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </toolbarItems>
                     <navigationItem key="navigationItem" id="IsM-LS-GkA">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="RzU-Np-lag">
                             <connections>
                                 <action selector="cancelPressed:" destination="Yqp-3N-bUQ" id="XL6-q9-S7w"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="save" id="v5E-1L-yJ2">
-                                <connections>
-                                    <action selector="savePressed:" destination="Yqp-3N-bUQ" id="hb9-t0-13i"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Record" id="aGD-wl-b6u">
-                                <connections>
-                                    <action selector="recordPressed:" destination="Yqp-3N-bUQ" id="edO-Tr-z3I"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
                     </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="playButton" destination="LdQ-gy-uiO" id="vUK-In-qyO"/>
+                        <outlet property="saveBarButtonItem" destination="O1I-ce-VvG" id="cd4-fz-dwP"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jY0-Wg-v03" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="5A4-fC-hAl">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <items>
+                        <barButtonItem title="Item" id="zz0-DR-Kv5"/>
+                    </items>
+                </toolbar>
             </objects>
-            <point key="canvasLocation" x="3255" y="-590"/>
+            <point key="canvasLocation" x="3357" y="-591"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="IkQ-eD-aIn">
@@ -310,18 +347,20 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ufQ-Ra-4FG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2345" y="-590"/>
+            <point key="canvasLocation" x="2448" y="-591"/>
         </scene>
         <!--Queue-->
         <scene sceneID="MqV-95-mv9">
             <objects>
                 <navigationController storyboardIdentifier="Patients" id="4mf-J4-hW3" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Queue" image="Users" id="Eli-ig-A17"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="h6b-1G-2KO">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
+                    <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DNn-VY-76a">
+                        <autoresizingMask key="autoresizingMask"/>
+                    </toolbar>
                     <connections>
                         <segue destination="y4N-h3-iwZ" kind="relationship" relationship="rootViewController" id="IiT-jF-cMl"/>
                     </connections>
@@ -333,6 +372,7 @@
     </scenes>
     <resources>
         <image name="Map" width="31" height="25"/>
+        <image name="Microphone" width="24" height="24"/>
         <image name="QRCode" width="25" height="25"/>
         <image name="Users" width="31" height="25"/>
     </resources>
