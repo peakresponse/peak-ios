@@ -9,7 +9,7 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>To capture the location of patients.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>To scan QR codes on bracelets.</string>
+	<string>To scan QR codes and capture photos of patients.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

@@ -25,18 +25,10 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
     var attribute: String!
     var attributeType: AttributeTableViewCellType = .string
     weak var delegate: AttributeTableViewCellDelegate?
-    override var editable: Bool {
-        get { return valueField.isUserInteractionEnabled }
-        set {
-            valueField.isUserInteractionEnabled = newValue
-            valueField.clearButtonMode = newValue ? .always : .never
-        }
-    }
 
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        editable = false
     }
     
     override func configure(from patient: Patient) {
@@ -61,6 +53,14 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
 
     override func resignFirstResponder() -> Bool {
         return valueField.resignFirstResponder()
+    }
+
+    // MARK: - UITableViewCell
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        valueField.isUserInteractionEnabled = editing
+        valueField.clearButtonMode = editing ? .always : .never
     }
     
     // MARK: - UITextFieldDelegate

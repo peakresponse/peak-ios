@@ -14,13 +14,15 @@ import UIKit
     @objc optional func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation)
 }
 
-class ObservationTableViewController: PatientTableViewController {
+class ObservationTableViewController: PatientTableViewController, PatientViewDelegate {
     weak var delegate: ObservationTableViewControllerDelegate?
     
     @IBOutlet var playButton: UIButton!
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
 
+    let dispatchGroup = DispatchGroup()
     var observation: Observation!
+    var uploadTask: URLSessionTask?
 
     let audioEngine = AVAudioEngine()
     let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
@@ -31,6 +33,8 @@ class ObservationTableViewController: PatientTableViewController {
     var recordingStart: Date?
     var timer: Timer?
 
+    var cameraHelper = CameraHelper()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,6 +42,8 @@ class ObservationTableViewController: PatientTableViewController {
             title = NSLocalizedString("New Patient", comment: "")
         }
         observation = patient.asObservation()
+        
+        tableView.setEditing(true, animated: false)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -64,29 +70,41 @@ class ObservationTableViewController: PatientTableViewController {
         
         let index = toolbarItems?.firstIndex(of: saveBarButtonItem)
         if let index = index {
-            let activityView = UIActivityIndicatorView(style: .gray)
+            let activityView = UIActivityIndicatorView(style: .medium)
             activityView.startAnimating()
             toolbarItems?[index] = UIBarButtonItem(customView: activityView)
         }
-        AppRealm.createObservation(observation) { (observation, error) in
-            let observationId = observation?.id
-            DispatchQueue.main.async { [weak self] in
-                if let index = index, let saveBarButtonItem = self?.saveBarButtonItem {
-                    self?.toolbarItems?[index] = saveBarButtonItem
-                }
-                if let error = error {
-                    self?.presentAlert(error: error)
-                } else if let self = self, let observationId = observationId {
-                    let realm = AppRealm.open()
-                    realm.refresh()
-                    if let observation = realm.object(ofType: Observation.self, forPrimaryKey: observationId) {
-                        self.delegate?.observationTableViewController?(self, didSave: observation)
+
+        let saveObservation = { [weak self] in
+            guard let self = self else { return }
+            AppRealm.createObservation(self.observation) { (observation, error) in
+                let observationId = observation?.id
+                DispatchQueue.main.async { [weak self] in
+                    if let index = index, let saveBarButtonItem = self?.saveBarButtonItem {
+                        self?.toolbarItems?[index] = saveBarButtonItem
+                    }
+                    if let error = error {
+                        self?.presentAlert(error: error)
+                    } else if let self = self, let observationId = observationId {
+                        let realm = AppRealm.open()
+                        realm.refresh()
+                        if let observation = realm.object(ofType: Observation.self, forPrimaryKey: observationId) {
+                            self.delegate?.observationTableViewController?(self, didSave: observation)
+                        }
                     }
                 }
             }
         }
-    }
 
+        if uploadTask != nil {
+            dispatchGroup.notify(queue: DispatchQueue.main) {
+                saveObservation()
+            }
+        } else {
+            saveObservation()
+        }
+    }
+    
     private func extractValues(text: String) {
         var tokens = text.components(separatedBy: .whitespacesAndNewlines)
         var extracted: [String] = []
@@ -380,6 +398,22 @@ class ObservationTableViewController: PatientTableViewController {
         observation.lng = lng
     }
 
+    // MARK: - PatientViewDelegate
+
+    func patientView(_ patientView: PatientView, didCapturePhoto fileURL: URL, withImage image: UIImage) {
+        dispatchGroup.enter()
+        uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
+            if let error = error {
+                print(error)
+            } else if let response = response, let signedId = response["signed_id"] as? String {
+                self?.observation.portraitUrl = signedId
+                AppCache.cache(fileURL: fileURL, pathPrefix: "uploads/observations/portrait", filename: signedId)
+            }
+            self?.dispatchGroup.leave()
+        }
+        uploadTask?.resume()
+    }
+
     // MARK: - PriorityViewDelegate
     
     override func priorityView(_ view: PriorityView, didSelect priority: Int) {
@@ -401,6 +435,14 @@ class ObservationTableViewController: PatientTableViewController {
     }
     
     // MARK: - UITableViewDelegate
+
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .none
+    }
+
+    override func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
+        return false
+    }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -436,7 +478,10 @@ class ObservationTableViewController: PatientTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let cell = cell as? PatientTableViewCell {
             cell.configure(from: observation)
-            cell.editable = true
+            if let cell = cell as? PortraitTableViewCell {
+                cell.patientView.cameraHelper = cameraHelper
+                cell.patientView.delegate = self
+            }
         }
         return cell
     }

@@ -22,19 +22,9 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
     weak var delegate: LatLngTableViewCellDelegate?
     let locationManager = CLLocationManager()
     
-    override var editable: Bool {
-        get { return valueField.isUserInteractionEnabled }
-        set {
-            valueField.isUserInteractionEnabled = newValue
-            valueField.clearButtonMode = newValue ? .always : .never
-            captureButton.isHidden = valueField.text != "" || !newValue
-        }
-    }
-    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        editable = false
         captureButton.isHidden = true
         valueField.delegate = self
         valueField.inputView = UIView(frame: .zero)
@@ -54,7 +44,7 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
             }
         }
         valueField.text = nil
-        captureButton.isHidden = !editable
+        captureButton.isHidden = !isEditing
         accessoryType = .none
         selectionStyle = .none
     }
@@ -66,7 +56,7 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
     func captureLocation() {
         captureButton.isHidden = true
 
-        let activityView = UIActivityIndicatorView(style: .gray)
+        let activityView = UIActivityIndicatorView(style: .medium)
         activityView.startAnimating()
         accessoryView = activityView
         
@@ -95,6 +85,15 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
         valueField.text = error.localizedDescription
     }
 
+    // MARK: - UITableViewCell
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        valueField.isUserInteractionEnabled = editing
+        valueField.clearButtonMode = editing ? .always : .never
+        captureButton.isHidden = valueField.text != "" || !editing
+    }
+    
     // MARK: - UITextFieldDelegate
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

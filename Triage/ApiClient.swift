@@ -16,7 +16,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "https://t2pnat.ngrok.io/api/")! {
+    static var shared: ApiClient = ApiClient(baseURL: "https://t2pnat.ngrok.io/")! {
         willSet {
             shared.invalidate()
         }
@@ -44,7 +44,7 @@ class ApiClient {
     
     // MARK: - HTTP request helpers
     
-    private func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
+    func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
         var components = URLComponents()
         components.path = path
         if let params = params {
@@ -155,5 +155,60 @@ class ApiClient {
 
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
+    }
+
+    // MARK: - Uploads
+
+    func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/uploads", body: [
+            "blob": [
+                "content_type": contentType
+            ]
+        ]) { [weak self] (response: [String: Any]?, error: Error?) in
+            var response = response
+            if var directUpload = response?["direct_upload"] as? [String: Any], let url = directUpload["url"] as? String {
+                if url.starts(with: "/") {
+                    let request = self?.urlRequest(for: url)
+                    if let url = request?.url {
+                        directUpload["url"] = url.absoluteString
+                        response?["direct_upload"] = directUpload
+                    }
+                }
+            }
+            completionHandler(response, error)
+        }
+    }
+
+    func upload(fileURL: URL, toURL: URL, headers: [String: Any]? = nil, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+        var request = URLRequest(url: toURL)
+        request.httpMethod = "PUT"
+        if let headers = headers {
+            for (key, value) in headers {
+                request.setValue(value as? String, forHTTPHeaderField: key)
+            }
+        }
+        return session.uploadTask(with: request, fromFile: fileURL) { (data, response, error) in
+            completionHandler(error)
+        }
+    }
+
+    func upload(fileURL: URL, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return upload(contentType: fileURL.contentType) { [weak self] (response, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let response = response,
+                let directUpload = response["direct_upload"] as? [String: Any],
+                let urlString = directUpload["url"] as? String, let url = URL(string: urlString),
+                let headers = directUpload["headers"] as? [String: Any] {
+                let task = self?.upload(fileURL: fileURL, toURL: url, headers: headers) { (error) in
+                    if let error = error {
+                        completionHandler(nil, error)
+                    } else {
+                        completionHandler(response, nil)
+                    }
+                }
+                task?.resume()
+            }
+        }
     }
 }

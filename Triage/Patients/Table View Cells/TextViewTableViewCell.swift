@@ -19,14 +19,6 @@ class TextViewTableViewCell: PatientTableViewCell, UITextViewDelegate {
     weak var delegate: TextViewTableViewCellDelegate?
     var attribute: String!
 
-    override var editable: Bool {
-        get { return textView.isUserInteractionEnabled }
-        set {
-            textView.isUserInteractionEnabled = newValue
-            textView.isEditable = newValue
-        }
-    }
-
     override func awakeFromNib() {
         super.awakeFromNib()
         textView.contentInset = .zero
@@ -69,7 +61,15 @@ class TextViewTableViewCell: PatientTableViewCell, UITextViewDelegate {
         return textView.resignFirstResponder()
     }
     
-    ////  UITextViewDelegate
+    // MARK: - UITableViewCell
+    
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        textView.isUserInteractionEnabled = editing
+        textView.isEditable = editing
+    }
+
+    // MARK: - UITextViewDelegate
 
     func textViewDidChange(_ textView: UITextView) {
         delegate?.textViewTableViewCell?(self, didChange: textView.text)

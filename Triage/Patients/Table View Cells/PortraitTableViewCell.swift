@@ -20,4 +20,11 @@ class PortraitTableViewCell: PatientTableViewCell {
         selectionStyle = .none
         patientView.configure(from: patient)
     }
+
+    // MARK: - UITableViewCell
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        patientView.isEditing = editing
+    }
 }

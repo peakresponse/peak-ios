@@ -9,11 +9,6 @@
 import UIKit
 
 class PatientTableViewCell: UITableViewCell {
-    var editable: Bool {
-        get { return false }
-        set { }
-    }
-
     func configure(from patient: Patient) {
     }
 }

@@ -6,11 +6,28 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
 
-class PatientView: UIView {
+@objc protocol PatientViewDelegate {
+    @objc optional func patientView(_ patientView: PatientView, didCapturePhoto fileURL: URL, withImage image: UIImage)
+}
+
+class PatientView: UIView, CameraHelperDelegate {
+    @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var initialsLabel: UILabel!
     @IBOutlet weak var imageView: UIImageView!
+    var imageViewURL: String?
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+
+    weak var delegate: PatientViewDelegate?
+    
+    var cameraHelper: CameraHelper?
+    
+    var isEditing: Bool {
+        get { return !captureButton.isHidden }
+        set { captureButton.isHidden = !newValue }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,13 +42,67 @@ class PatientView: UIView {
     private func commonInit() {
         loadNib()
     }
-
+    
     func configure(from patient: Patient) {
-        if let priority = patient.priority.value {
-            imageView.layer.borderColor = PRIORITY_COLORS[priority].cgColor
-            imageView.layer.borderWidth = 4
-        }
+        imageView.image = nil
+        imageView.layer.borderColor = PRIORITY_COLORS[patient.priority.value ?? PRIORITY_COLORS.count - 1].cgColor
+        imageView.layer.borderWidth = 4
+
         let initials = "\(patient.firstName?.prefix(1) ?? "")\(patient.lastName?.prefix(1) ?? "")"
         initialsLabel.text = initials
+
+        imageViewURL = patient.portraitUrl
+        if let imageViewURL = imageViewURL {
+            AppCache.cachedImage(from: imageViewURL) { [weak self] (image, error) in
+                if let error = error {
+                    print(error)
+                } else if let image = image {
+                    DispatchQueue.main.async { [weak self] in
+                        if imageViewURL == self?.imageViewURL  {
+                            self?.imageView.image = image
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @IBAction func capturePressed(_ sender: Any) {
+        guard let cameraHelper = cameraHelper else { return }
+        if cameraHelper.isReady {
+            if cameraHelper.isRunning {
+                imageView.image = nil
+                captureButton.isHidden = true
+                activityIndicatorView.startAnimating()
+                cameraHelper.videoPreviewLayer?.removeFromSuperlayer()
+                cameraHelper.capture()
+            } else if let videoPreviewLayer = cameraHelper.videoPreviewLayer {
+                videoPreviewLayer.frame = imageView.layer.bounds
+                imageView.layer.addSublayer(videoPreviewLayer)
+                cameraHelper.delegate = self
+                cameraHelper.startRunning()
+            }
+        } else {
+            captureButton.isHidden = true
+            activityIndicatorView.startAnimating()
+            DispatchQueue.global().async { [weak self] in
+                // wait for setup to complete
+                self?.cameraHelper?.setupSemaphore.wait()
+                DispatchQueue.main.async { [weak self] in
+                    self?.activityIndicatorView.stopAnimating()
+                    self?.captureButton.isHidden = false
+                    self?.capturePressed(sender)
+                }
+            }
+        }
+    }
+
+    // MARK: - CameraHelperDelegate
+    
+    func cameraHelper(_ helper: CameraHelper, didCapturePhoto fileURL: URL, withImage image: UIImage) {
+        self.imageView.image = image
+        self.activityIndicatorView.stopAnimating()
+        self.captureButton.isHidden = false
+        self.delegate?.patientView?(self, didCapturePhoto: fileURL, withImage: image)
     }
 }

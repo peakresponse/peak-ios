@@ -48,6 +48,13 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             captureSession.startRunning()
         }
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if videoPreviewLayer != nil {
+            captureSession.stopRunning()
+        }
+    }
     
     private func setupCamera() {
         // Get the back-facing camera for capturing videos
