@@ -411,7 +411,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         case Section.location.rawValue:
             if indexPath.row == 1 {
                 if let lat = observation.lat, let lng = observation.lng, lat != "", lng != "" {
-                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? MapViewController {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
                         vc.patient = observation
                         navigationController?.pushViewController(vc, animated: true)
                     }

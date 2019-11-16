@@ -52,6 +52,9 @@ class Patient: Base {
     let version = RealmOptional<Int>()
     @objc dynamic var lastName: String?
     @objc dynamic var firstName: String?
+    var fullName: String {
+        return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+    }
     let age = RealmOptional<Int>()
     @objc dynamic var dob: String?
     let respiratoryRate = RealmOptional<Int>()
@@ -60,6 +63,18 @@ class Patient: Base {
     @objc dynamic var bloodPressure: String?
     @objc dynamic var text: String?
     let priority = RealmOptional<Int>()
+    var priorityColor: UIColor {
+        if let priority = priority.value, priority >= 0 && priority < 5 {
+            return PRIORITY_COLORS[priority]
+        }
+        return PRIORITY_COLORS[5]
+    }
+    var priorityLabelColor: UIColor {
+        if let priority = priority.value, priority >= 0 && priority < 5 {
+            return PRIORITY_LABEL_COLORS[priority]
+        }
+        return PRIORITY_LABEL_COLORS[5]
+    }
     @objc dynamic var location: String?
     @objc dynamic var lat: String?
     @objc dynamic var lng: String?

@@ -1,5 +1,5 @@
 //
-//  MapViewController.swift
+//  PatientMapViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 11/2/19.
@@ -9,7 +9,7 @@
 import MapKit
 import UIKit
 
-class MapViewController: UIViewController {
+class PatientMapViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
     

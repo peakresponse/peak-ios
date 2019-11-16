@@ -259,7 +259,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         case Section.location.rawValue:
             if indexPath.row == 1 {
                 if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
-                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? MapViewController {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
                         vc.patient = patient
                         navigationController?.pushViewController(vc, animated: true)
                     }

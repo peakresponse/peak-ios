@@ -70,7 +70,7 @@
                             <outlet property="delegate" destination="y4N-h3-iwZ" id="a4q-qK-Bsn"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Patients" id="8g6-TY-L0e">
+                    <navigationItem key="navigationItem" title="Queue" id="8g6-TY-L0e">
                         <barButtonItem key="leftBarButtonItem" title="Log out" id="BQg-tt-oBo">
                             <connections>
                                 <action selector="logoutPressed:" destination="y4N-h3-iwZ" id="4R4-T3-LzQ"/>
@@ -220,7 +220,7 @@
         <!--Map-->
         <scene sceneID="mcs-BV-hYe">
             <objects>
-                <viewController storyboardIdentifier="Map" title="Map" id="X9V-sR-ffC" customClass="MapViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Map" title="Map" id="X9V-sR-ffC" customClass="PatientMapViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uyb-uj-IJz">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -314,16 +314,19 @@
             </objects>
             <point key="canvasLocation" x="3357" y="-591"/>
         </scene>
-        <!--View Controller-->
+        <!--Map-->
         <scene sceneID="IkQ-eD-aIn">
             <objects>
-                <viewController id="dTA-jy-ch9" sceneMemberID="viewController">
+                <viewController title="Map" id="dTA-jy-ch9" customClass="PatientsMapViewController" customModule="NaT" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="68y-nn-mRi">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xcK-J9-YWf">
-                                <rect key="frame" x="0.0" y="88" width="414" height="759"/>
+                                <rect key="frame" x="0.0" y="88" width="414" height="676"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dTA-jy-ch9" id="LDj-Nw-g6g"/>
+                                </connections>
                             </mapView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -331,11 +334,22 @@
                             <constraint firstItem="ILX-Ak-94l" firstAttribute="trailing" secondItem="xcK-J9-YWf" secondAttribute="trailing" id="2gv-DO-N8l"/>
                             <constraint firstItem="xcK-J9-YWf" firstAttribute="top" secondItem="ILX-Ak-94l" secondAttribute="top" id="Hhi-Mu-3Ze"/>
                             <constraint firstItem="xcK-J9-YWf" firstAttribute="leading" secondItem="ILX-Ak-94l" secondAttribute="leading" id="UzW-N1-1fG"/>
-                            <constraint firstItem="xcK-J9-YWf" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" constant="34" id="fL3-f9-K4M"/>
+                            <constraint firstItem="xcK-J9-YWf" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" id="fL3-f9-K4M"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="ILX-Ak-94l"/>
                     </view>
-                    <navigationItem key="navigationItem" id="1px-0h-hUG"/>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" title="Map" id="1px-0h-hUG">
+                        <barButtonItem key="leftBarButtonItem" title="Log out" id="g40-d0-KVI">
+                            <connections>
+                                <action selector="logoutPressed:" destination="dTA-jy-ch9" id="kL9-ph-2p1"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="mapView" destination="xcK-J9-YWf" id="Lf0-br-Kan"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qts-q0-CF8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
