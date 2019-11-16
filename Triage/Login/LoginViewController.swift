@@ -47,7 +47,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                 DispatchQueue.main.async { [weak self] in
                     self?.activityView.stopAnimating()
                     if let error = error {
-                        self?.presentAlert(error: error)
+                        if let error = error as? ApiClientError, error == .unauthorized {
+                            self?.presentAlert(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Invalid email and/or password.", comment: ""))
+                        } else {
+                            self?.presentAlert(error: error)
+                        }
+                        self?.emailField.isEnabled = true
+                        self?.passwordField.isEnabled = true
+                        self?.loginButton.isEnabled = true
                     } else if let self = self {
                         self.loginDelegate?.loginViewControllerDidLogin?(self)
                     }
