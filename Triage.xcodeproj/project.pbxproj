@@ -783,14 +783,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BCKJA9Q3FW;
+				DEVELOPMENT_TEAM = SABY3CE8C3;
 				INFOPLIST_FILE = Triage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.Triage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.nat.Triage;
 				PRODUCT_NAME = NaT;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -803,14 +803,14 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = BCKJA9Q3FW;
+				DEVELOPMENT_TEAM = SABY3CE8C3;
 				INFOPLIST_FILE = Triage/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.Triage;
+				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.nat.Triage;
 				PRODUCT_NAME = NaT;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
