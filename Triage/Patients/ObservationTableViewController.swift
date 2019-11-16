@@ -17,21 +17,11 @@ import UIKit
 class ObservationTableViewController: PatientTableViewController, PatientViewDelegate {
     weak var delegate: ObservationTableViewControllerDelegate?
     
-    @IBOutlet var playButton: UIButton!
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
 
     let dispatchGroup = DispatchGroup()
     var observation: Observation!
     var uploadTask: URLSessionTask?
-
-    let audioEngine = AVAudioEngine()
-    let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
-    var recognitionRequest: SFSpeechAudioBufferRecognitionRequest?
-    var recognitionTask: SFSpeechRecognitionTask?
-
-    var recordingLength: TimeInterval = 0
-    var recordingStart: Date?
-    var timer: Timer?
 
     var cameraHelper = CameraHelper()
     
@@ -42,6 +32,11 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
             title = NSLocalizedString("New Patient", comment: "")
         }
         observation = patient.asObservation()
+        if let audioHelper = audioHelper {
+            audioHelper.reset()
+        } else {
+            audioHelper = AudioHelper()
+        }
         
         tableView.setEditing(true, animated: false)
     }
@@ -51,11 +46,6 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         if !patient.hasLatLng, let cell = tableView.cellForRow(at: IndexPath(row: 1, section: Section.location.rawValue)) as? LatLngTableViewCell {
             cell.captureLocation()
         }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopRecording()
     }
     
     @IBAction func cancelPressed(_ sender: Any) {
@@ -260,96 +250,51 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         }
     }
 
-    private func startRecording() {
-        let audioSession = AVAudioSession.sharedInstance()
-        try! audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-        try! audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-        let inputNode = audioEngine.inputNode
-        
-        recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-        guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
-        recognitionRequest.shouldReportPartialResults = true
-        
-        // Create a recognition task for the speech recognition session.
-        // Keep a reference to the task so that it can be canceled.
-        recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] (result, error) in
-            var isFinal = false
+    @IBAction func recordPressed(_ sender: Any) {
+        guard let audioHelper = audioHelper else { return }
+        audioHelper.delegate = self
+        do {
+            try audioHelper.recordPressed()
+
+            // hide and disable play button
+            playButton.setImage(nil, for: .normal)
+            playButton.isUserInteractionEnabled = false
             
-            if let result = result {
-                // Update the text view with the results.
-                isFinal = result.isFinal
-                let text = result.bestTranscription.formattedString
-                DispatchQueue.main.async { [weak self] in
-                    self?.observation.text = text
-                    self?.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-                }
-                DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                    self?.extractValues(text: text)
+            // disable tableview and modal presentation interaction so that recording does not get interrupted by accidental swipe movement
+            tableView.isUserInteractionEnabled = false
+            if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
+                for recognizer in recognizers {
+                    recognizer.isEnabled = false
                 }
             }
-            
-            if error != nil || isFinal {
-                // Stop recognizing speech if there is a problem.
-                self?.audioEngine.stop()
-                inputNode.removeTap(onBus: 0)
-
-                self?.recognitionRequest = nil
-                self?.recognitionTask = nil
-            }
-        }
-
-        // Configure the microphone input.
-        let recordingFormat = inputNode.outputFormat(forBus: 0)
-        inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-            self.recognitionRequest?.append(buffer)
-        }
-
-        audioEngine.prepare()
-        try! audioEngine.start()
-
-        playButton.setImage(nil, for: .normal)
-        playButton.isUserInteractionEnabled = false
-        recordingStart = Date()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
-            let now = Date()
-            if let length = self?.recordingLength, let start = self?.recordingStart {
-                let seconds = length + start.distance(to: now)
-                self?.playButton.setTitle(String(format: "%2.0f:%02.0f", seconds / 60, seconds.truncatingRemainder(dividingBy: 60)), for: .normal)
-                self?.playButton.sizeToFit()
-            }
-        }
-        //// disable tableview and modal presentation interaction so that recording does not get interrupted by accidental swipe movement
-        tableView.isUserInteractionEnabled = false
-        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
-            for recognizer in recognizers {
-                recognizer.isEnabled = false
-            }
+        } catch {
+            presentAlert(error: error)
         }
     }
 
-    private func stopRecording() {
-        audioEngine.stop()
-        audioEngine.inputNode.removeTap(onBus: 0)
-        recognitionRequest?.endAudio()
-        
-        // Cancel the previous task if it's running
-        if let recognitionTask = recognitionTask {
-            recognitionTask.cancel()
-            self.recognitionTask = nil
-        }
+    @IBAction func recordReleased(_ sender: Any) {
+        guard let audioHelper = audioHelper else { return }
+        audioHelper.recordReleased()
 
-        timer?.invalidate()
-        timer = nil
-        let now = Date()
-        if let start = recordingStart {
-            recordingLength += start.distance(to: now)
+        // start upload
+        dispatchGroup.enter()
+        uploadTask = ApiClient.shared.upload(fileURL: audioHelper.fileURL) { [weak self] (response, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print(error)
+            } else if let response = response, let signedId = response["signed_id"] as? String {
+                self.observation.audioUrl = signedId
+            }
+            self.dispatchGroup.leave()
         }
-        recordingStart = nil
+        uploadTask?.resume()
+        
+        // show playback button
         playButton.setImage(UIImage(named: "Play"), for: .normal)
         playButton.sizeToFit()
         playButton.isUserInteractionEnabled = true
 
-        //// re-enable tableview and model presentation interaction
+        // re-enable tableview and model presentation interaction
         tableView.isUserInteractionEnabled = true
         if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
             for recognizer in recognizers {
@@ -358,25 +303,30 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         }
     }
     
-    @IBAction func recordPressed(_ sender: Any) {
-        if SFSpeechRecognizer.authorizationStatus() == .authorized {
-            if !audioEngine.isRunning {
-                startRecording()
-            }
-        } else {
-            SFSpeechRecognizer.requestAuthorization { [weak self] (status) in
-                DispatchQueue.main.async { [weak self] in
-                    if status != .authorized {
-                        self?.presentAlert(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Speech Recognition is not authorized.", comment: ""))
-                    }
-                }
-            }
+    // MARK: - AudioHelperDelegate
+    
+    func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.observation.text = text
+            self?.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
+        }
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.extractValues(text: text)
         }
     }
 
-    @IBAction func recordReleased(_ sender: Any) {
-        if audioEngine.isRunning {
-            stopRecording()
+    func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String) {
+        DispatchQueue.main.async { [weak self] in
+            self?.playButton.setTitle(duration, for: .normal)
+            self?.playButton.sizeToFit()
+        }
+    }
+
+    func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
+        if status != .authorized {
+            DispatchQueue.main.async { [weak self] in
+                self?.presentAlert(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Speech Recognition is not authorized.", comment: ""))
+            }
         }
     }
 

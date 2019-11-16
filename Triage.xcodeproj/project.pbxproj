@@ -54,6 +54,7 @@
 		459C1404236EB7D1002216BC /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */; };
 		459C1405236EB7D1002216BC /* TextViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
+		45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
 		6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */; };
 /* End PBXBuildFile section */
@@ -129,6 +130,7 @@
 		459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 		459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextViewTableViewCell.xib; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
+		45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TriageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A608A45BFFA66C538FB6DCB4 /* Pods-TriageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.debug.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
 				453877BC236FA47300E19880 /* AppTabBarController.swift */,
+				45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */,
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
@@ -594,6 +597,7 @@
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
+				45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
 				4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */,

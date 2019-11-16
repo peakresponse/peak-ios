@@ -15,7 +15,7 @@ let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .number]
 let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
 let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
 
-class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate, TextViewTableViewCellDelegate {
+class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, AudioHelperDelgate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate, TextViewTableViewCellDelegate {
     enum Section: Int {
         case portrait = 0
         case priority
@@ -25,7 +25,10 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         case observations
     }
     
+    @IBOutlet weak var playButton: UIButton!
+    
     var patient: Patient!
+    var audioHelper: AudioHelper?
     var notificationToken: NotificationToken?
     
     deinit {
@@ -49,12 +52,8 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
                 self?.didObserveChange(change)
             }
         }
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        updatePlayButton()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -71,6 +70,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         switch change {
         case .change(_):
             tableView.reloadData()
+            updatePlayButton()
         case .error(let error):
             presentAlert(error: error)
         case .deleted:
@@ -86,6 +86,58 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
             let priorityView = PriorityView(frame: rect)
             priorityView.delegate = self
             tableView.addSubview(priorityView)
+        }
+    }
+
+    private func updatePlayButton() {
+        guard self as? ObservationTableViewController == nil else { return }
+        if let audioUrl = patient.audioUrl {
+            AppCache.cachedFile(from: audioUrl) { [weak self] (url, error) in
+                guard let self = self else { return }
+                if let error = error {
+                    print(error)
+                } else if let url = url {
+                    if self.audioHelper == nil {
+                        self.audioHelper = AudioHelper()
+                    }
+                    if let audioHelper = self.audioHelper {
+                        audioHelper.delegate = self
+                        audioHelper.fileURL = url
+                        do {
+                            try audioHelper.prepareToPlay()
+                            DispatchQueue.main.async { [weak self] in
+                                self?.playButton.isHidden = false
+                                self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
+                                self?.playButton.setTitle(audioHelper.recordingLengthFormatted, for: .normal)
+                                self?.playButton.sizeToFit()
+                            }
+                        } catch {
+                            print(error)
+                        }
+                    }
+                }
+            }
+        } else {
+            self.playButton.isHidden = true
+        }
+    }
+    
+    @IBAction func playPressed(_ sender: Any) {
+        guard let audioHelper = audioHelper else { return }
+        if audioHelper.isPlaying {
+            audioHelper.stopPressed()
+            playButton.setImage(UIImage(named: "Play"), for: .normal)
+            playButton.setTitle(audioHelper.recordingLengthFormatted, for: .normal)
+            playButton.sizeToFit()
+        } else {
+            do {
+                try audioHelper.playPressed()
+                playButton.setImage(UIImage(named: "Stop"), for: .normal)
+                playButton.setTitle("0:00", for: .normal)
+                playButton.sizeToFit()
+            } catch {
+                presentAlert(error: error)
+            }
         }
     }
 
@@ -119,6 +171,24 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         _ = resignFirstResponder()
     }
     
+    // MARK: - AudioHelperDelegate
+
+    func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool) {
+        DispatchQueue.main.async { [weak self] in
+            self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
+            self?.playButton.setTitle(audioHelper.recordingLengthFormatted, for: .normal)
+        }
+    }
+
+    func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String) {
+        DispatchQueue.main.async { [weak self] in
+            if self?.audioHelper?.isPlaying ?? false {
+                self?.playButton.setTitle(duration, for: .normal)
+                self?.playButton.sizeToFit()
+            }
+        }
+    }
+
     // MARK: - ObservationTableViewControllerDelegate
     
     func observationTableViewControllerDidDismiss(_ vc: ObservationTableViewController) {

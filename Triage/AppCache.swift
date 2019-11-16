@@ -9,7 +9,7 @@
 import UIKit
 
 class AppCache {
-    static func cachedImage(from urlString: String, completionHandler: @escaping (UIImage?, Error?) -> Void) {
+    static func cachedFile(from urlString: String, completionHandler: @escaping (URL?, Error?) -> Void) {
         DispatchQueue.global().async {
             var url: URL?
             if urlString.starts(with: "/") {
@@ -24,19 +24,29 @@ class AppCache {
                     let fileManager = FileManager.default
                     let cacheDirURL = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
                     let destURL = cacheDirURL.appendingPathComponent(String(url.path.dropFirst()), isDirectory: false)
-                    var image: UIImage?
-                    if fileManager.fileExists(atPath: destURL.path) {
-                        let data = try Data(contentsOf: destURL)
-                        image = UIImage(data: data)
-                    } else {
+                    if !fileManager.fileExists(atPath: destURL.path) {
                         // download into cache location
                         let data = try Data(contentsOf: url)
-                        image = UIImage(data: data)
-                        if image != nil {
-                            try fileManager.createDirectory(atPath: destURL.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
-                            fileManager.createFile(atPath: destURL.path, contents: data, attributes: nil)
-                        }
+                        try fileManager.createDirectory(atPath: destURL.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
+                        fileManager.createFile(atPath: destURL.path, contents: data, attributes: nil)
                     }
+                    completionHandler(destURL, nil)
+                } catch {
+                    completionHandler(nil, error)
+                }
+            }
+            completionHandler(nil, nil)
+        }
+    }
+
+    static func cachedImage(from urlString: String, completionHandler: @escaping (UIImage?, Error?) -> Void) {
+        cachedFile(from: urlString) { (url, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let url = url {
+                do {
+                    let data = try Data(contentsOf: url)
+                    let image = UIImage(data: data)
                     completionHandler(image, nil)
                 } catch {
                     completionHandler(nil, error)
