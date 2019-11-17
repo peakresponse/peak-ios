@@ -9,6 +9,22 @@ https://github.com/francisli/t2p-server
 NaT was developed as part of the 2019 Tech to Protect Challenge to create
 new technologies for emergency responders.
 
+## Demo
+
+An expiring demo build has been made available for download from TestFlight:
+
+https://testflight.apple.com/join/D9MPC0Y0
+
+This build connects to the demo server hosted at:
+
+https://natriage.org/
+
+For demo QR codes, visit:
+
+https://natriage.org/pincodes2
+
+The first seven (7) codes are associated with the existing demo patients.
+
 ## Getting Started
 
 1. Install Xcode from Apple: https://developer.apple.com/xcode/
