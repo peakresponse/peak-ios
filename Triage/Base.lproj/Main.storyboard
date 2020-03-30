@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="49e-Tb-3d3">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -11,7 +10,7 @@
         <scene sceneID="5jR-w2-9qg">
             <objects>
                 <viewControllerPlaceholder storyboardName="Patients" referencedIdentifier="Scan" id="o9v-Wz-bfp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Scan" id="z9S-dJ-qSo"/>
+                    <tabBarItem key="tabBarItem" title="Input Patient" id="z9S-dJ-qSo"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PWK-wL-jh1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -21,7 +20,7 @@
         <scene sceneID="8TV-wG-0Oe">
             <objects>
                 <viewControllerPlaceholder storyboardIdentifier="Patients" storyboardName="Patients" referencedIdentifier="Patients" id="NJ5-p0-v3H" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Patients" id="gnH-sg-YPn"/>
+                    <tabBarItem key="tabBarItem" title="Patient List" id="gnH-sg-YPn"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YH5-AZ-06u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -31,7 +30,7 @@
         <scene sceneID="SJF-A6-3Wu">
             <objects>
                 <viewControllerPlaceholder storyboardName="Patients" referencedIdentifier="PatientsMap" id="bSX-H3-4Sa" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="jeo-5Q-J6I"/>
+                    <tabBarItem key="tabBarItem" title="Map Patients" id="jeo-5Q-J6I"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mak-E2-ZHP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

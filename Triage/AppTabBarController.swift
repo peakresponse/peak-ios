@@ -17,25 +17,18 @@ class AppTabBarController: UITabBarController {
         let task = ApiClient.shared.me { [weak self] (record, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
+                    var vc = self?.selectedViewController
+                    if let navVC = vc as? UINavigationController {
+                        vc = navVC.topViewController
+                    }
                     if let error = error as? ApiClientError, error == .unauthorized {
-                        self?.presentLogin()
+                        vc?.presentLogin()
                     } else {
-                        self?.presentAlert(error: error)
+                        vc?.presentAlert(error: error)
                     }
                 }
             }
         }
         task.resume();
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

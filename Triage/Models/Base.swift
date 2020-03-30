@@ -19,6 +19,9 @@ class Base: Object {
     @objc dynamic var id: String?
     @objc dynamic var createdAt: Date?
     @objc dynamic var updatedAt: Date?
+    var updatedAtRelativeString: String {
+        return String(format: NSLocalizedString("Last updated:\n%@", comment: ""), updatedAt?.asRelativeString() ?? NSLocalizedString("Unknown", comment: ""))
+    }
 
     override public class func primaryKey() -> String? {
         return "id"

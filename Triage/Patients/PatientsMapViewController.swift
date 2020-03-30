@@ -104,9 +104,11 @@ class PatientsMapViewController: UIViewController, MKMapViewDelegate {
     }
 
     private func navigate(to patient: Patient) {
-        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientTableViewController {
+        if let navVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? UINavigationController,
+            let vc = navVC.topViewController as? PatientTableViewController {
             vc.patient = patient
-            navigationController?.pushViewController(vc, animated: true)
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .done, target: self, action: #selector(dismissAnimated))
+            presentAnimated(navVC)
         }
     }
     
@@ -152,7 +154,7 @@ class PatientsMapViewController: UIViewController, MKMapViewDelegate {
                 }
             }
             alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
-            present(alert, animated: true, completion: nil)
+            presentAnimated(alert)
         }
     }
 }

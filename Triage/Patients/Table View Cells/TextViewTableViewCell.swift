@@ -13,7 +13,8 @@ import UIKit
     @objc optional func textViewTableViewCellDidReturn(_ cell: TextViewTableViewCell)
 }
 
-class TextViewTableViewCell: PatientTableViewCell, UITextViewDelegate {
+class TextViewTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, UITextViewDelegate {
+    @IBOutlet weak var customBackgroundView: UIView!
     @IBOutlet weak var textView: UITextView!
 
     weak var delegate: TextViewTableViewCellDelegate?
@@ -27,13 +28,15 @@ class TextViewTableViewCell: PatientTableViewCell, UITextViewDelegate {
     }
 
     override func configure(from patient: Patient) {
-        if let value = patient.value(forKey: attribute) {
-            let font = UIFont.systemFont(ofSize: 17)
+        if let value = patient.value(forKey: attribute),
+            let font = textView.font,
+            let textColor = textView.textColor {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 4
             textView.attributedText = NSAttributedString(string: String(describing: value), attributes: [
                 .font: font,
-                .paragraphStyle: paragraphStyle
+                .paragraphStyle: paragraphStyle,
+                .foregroundColor: textColor
             ])
         } else {
             textView.text = nil
@@ -42,11 +45,11 @@ class TextViewTableViewCell: PatientTableViewCell, UITextViewDelegate {
     }
 
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
-        let font = UIFont.systemFont(ofSize: 17)
+        let font = UIFont(name: "NunitoSans-Regular", size: 16) ?? UIFont.systemFont(ofSize: 16)
         let text = text as NSString
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
-        let rect = text.boundingRect(with: CGSize(width: width - 40, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
+        let rect = text.boundingRect(with: CGSize(width: width - 80, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
             .font: font,
             .paragraphStyle: paragraphStyle
         ], context: nil)

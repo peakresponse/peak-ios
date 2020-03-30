@@ -14,11 +14,14 @@ import UIKit
     @objc optional func latLngTableViewCell(_ cell: LatLngTableViewCell, didCapture lat: String, lng: String)
 }
 
-class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITextFieldDelegate {
+class LatLngTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, CLLocationManagerDelegate, UITextFieldDelegate {
+    @IBOutlet weak var customBackgroundView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var valueField: UITextField!
     @IBOutlet weak var captureButton: UIButton!
-
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var disclosureImageView: UIImageView!
+    
     weak var delegate: LatLngTableViewCellDelegate?
     let locationManager = CLLocationManager()
     
@@ -38,14 +41,14 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
             if text != "," {
                 valueField.text = text
                 captureButton.isHidden = true
-                accessoryType = .disclosureIndicator
+                disclosureImageView.isHidden = false
                 selectionStyle = .default
                 return
             }
         }
         valueField.text = nil
         captureButton.isHidden = !isEditing
-        accessoryType = .none
+        disclosureImageView.isHidden = true
         selectionStyle = .none
     }
     
@@ -55,10 +58,7 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
 
     func captureLocation() {
         captureButton.isHidden = true
-
-        let activityView = UIActivityIndicatorView(style: .medium)
-        activityView.startAnimating()
-        accessoryView = activityView
+        activityIndicatorView.startAnimating()
         
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
@@ -68,13 +68,13 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
     // MARK: - CLLocationManagerDelegate
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        accessoryView = nil
+        activityIndicatorView.stopAnimating()
         if let location = locations.last {
             let lat = String(format: "%.6f", location.coordinate.latitude)
             let lng = String(format: "%.6", location.coordinate.longitude)
             valueField.text = "\(lat), \(lng)"
             delegate?.latLngTableViewCell?(self, didCapture: lat, lng: lng)
-            accessoryType = .disclosureIndicator
+            disclosureImageView.isHidden = false
             selectionStyle = .default
         } else {
             captureButton.isHidden = false
@@ -103,7 +103,7 @@ class LatLngTableViewCell: PatientTableViewCell, CLLocationManagerDelegate, UITe
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         delegate?.latLngTableViewCellDidClear?(self)
         captureButton.isHidden = false
-        accessoryType = .none
+        disclosureImageView.isHidden = true
         selectionStyle = .none
         return true
     }

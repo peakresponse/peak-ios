@@ -18,7 +18,8 @@ enum AttributeTableViewCellType {
     case number
 }
 
-class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
+class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, UITextFieldDelegate {
+    @IBOutlet weak var customBackgroundView: UIView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var valueField: UITextField!
 

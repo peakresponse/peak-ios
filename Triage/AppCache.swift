@@ -23,11 +23,10 @@ class AppCache {
                 do {
                     let fileManager = FileManager.default
                     let cacheDirURL = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-                    let destURL = cacheDirURL.appendingPathComponent(String(url.path.dropFirst()), isDirectory: false)
+                    let destURL = cacheDirURL.appendingPathComponent(url.lastPathComponent, isDirectory: false)
                     if !fileManager.fileExists(atPath: destURL.path) {
                         // download into cache location
                         let data = try Data(contentsOf: url)
-                        try fileManager.createDirectory(atPath: destURL.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
                         fileManager.createFile(atPath: destURL.path, contents: data, attributes: nil)
                     }
                     completionHandler(destURL, nil)
@@ -56,12 +55,11 @@ class AppCache {
         }
     }
 
-    static func cache(fileURL: URL, pathPrefix: String, filename: String) {
+    static func cache(fileURL: URL, filename: String) {
         do {
             let fileManager = FileManager.default
             let cacheDirURL = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let destURL = cacheDirURL.appendingPathComponent(pathPrefix, isDirectory: true).appendingPathComponent(filename, isDirectory: false)
-            try fileManager.createDirectory(atPath: destURL.deletingLastPathComponent().path, withIntermediateDirectories: true, attributes: nil)
+            let destURL = cacheDirURL.appendingPathComponent(filename, isDirectory: false)
             try fileManager.moveItem(at: fileURL, to: destURL)
         } catch {
             print(error)

@@ -1,15 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15509"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="NunitoSans-Regular.ttf">
+            <string>NunitoSans-Regular</string>
+        </array>
+    </customFonts>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PinField" customModule="Triage" customModuleProvider="target">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PinField" customModule="NaT" customModuleProvider="target">
             <connections>
+                <outlet property="stackView" destination="8Jq-sl-UhM" id="Uhp-c9-Aep"/>
                 <outlet property="textField" destination="vkk-uh-UAx" id="xIU-EY-FBx"/>
             </connections>
         </placeholder>
@@ -18,103 +23,56 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vkk-uh-UAx" customClass="PinTextField" customModule="Triage" customModuleProvider="target">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8Jq-sl-UhM">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <subviews>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xxv-kS-VCo">
+                            <rect key="frame" x="0.0" y="0.0" width="65" height="896"/>
+                            <color key="backgroundColor" red="0.96078431372549022" green="0.96862745098039216" blue="0.97647058823529409" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bJB-Xe-rD8">
+                            <rect key="frame" x="70" y="0.0" width="64.5" height="896"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="duM-xu-Ek3">
+                            <rect key="frame" x="139.5" y="0.0" width="65" height="896"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W1p-wO-YXo">
+                            <rect key="frame" x="209.5" y="0.0" width="65" height="896"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gzb-Xe-0PU">
+                            <rect key="frame" x="279.5" y="0.0" width="64.5" height="896"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pjV-0J-uf2">
+                            <rect key="frame" x="349" y="0.0" width="65" height="896"/>
+                            <color key="backgroundColor" red="0.96078431369999995" green="0.96862745100000003" blue="0.97647058819999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </view>
+                    </subviews>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                </stackView>
+                <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="natural" adjustsFontSizeToFit="NO" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="vkk-uh-UAx" customClass="PinTextField" customModule="NaT" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <fontDescription key="fontDescription" name="NunitoSans-Regular" family="Nunito Sans" pointSize="14"/>
                     <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go"/>
                     <connections>
                         <outlet property="delegate" destination="-1" id="WIh-du-gZh"/>
                     </connections>
                 </textField>
-                <stackView opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="bottom" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="8Jq-sl-UhM">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
-                    <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xxv-kS-VCo" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="817" width="65" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="Fsp-33-asi"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qOA-SZ-ZME" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="70" y="817" width="64.5" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="bqi-5f-PXm"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ss9-a6-nRj" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="139.5" y="817" width="65" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="xzR-H4-mqQ"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ent-vd-lPr" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="209.5" y="817" width="65" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="K1a-e2-dKH"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ibT-Ii-pSt" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="279.5" y="817" width="64.5" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="iCU-1u-oKD"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pJL-YB-xQu" customClass="HorizontalRuleView" customModule="Triage" customModuleProvider="target">
-                            <rect key="frame" x="349" y="817" width="65" height="1"/>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="height" constant="1" id="FTS-Fs-3IH"/>
-                            </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                    <color key="value" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
-                        </view>
-                    </subviews>
-                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                </stackView>
             </subviews>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="8Jq-sl-UhM" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="F0F-Yu-Lfy"/>
-                <constraint firstItem="8Jq-sl-UhM" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="LU4-NN-gM2"/>
-                <constraint firstItem="vkk-uh-UAx" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="PG8-aB-ZTg"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="vkk-uh-UAx" secondAttribute="bottom" id="SBT-UL-4bT"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="8Jq-sl-UhM" secondAttribute="trailing" id="Ymx-F4-4cv"/>
-                <constraint firstItem="vkk-uh-UAx" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="gDS-ei-pKJ"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="8Jq-sl-UhM" secondAttribute="bottom" id="xS7-kV-gMg"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="vkk-uh-UAx" secondAttribute="trailing" id="ytU-3x-EHB"/>
+                <constraint firstItem="8Jq-sl-UhM" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="F0F-Yu-Lfy"/>
+                <constraint firstItem="8Jq-sl-UhM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="LU4-NN-gM2"/>
+                <constraint firstItem="vkk-uh-UAx" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="PG8-aB-ZTg"/>
+                <constraint firstItem="vkk-uh-UAx" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="SBT-UL-4bT"/>
+                <constraint firstItem="8Jq-sl-UhM" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="Ymx-F4-4cv"/>
+                <constraint firstItem="vkk-uh-UAx" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="gDS-ei-pKJ"/>
+                <constraint firstItem="8Jq-sl-UhM" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="xS7-kV-gMg"/>
+                <constraint firstItem="vkk-uh-UAx" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="ytU-3x-EHB"/>
             </constraints>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <point key="canvasLocation" x="139" y="153"/>

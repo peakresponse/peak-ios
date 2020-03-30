@@ -10,34 +10,28 @@ import Speech
 import UIKit
 
 @objc protocol ObservationTableViewControllerDelegate {
-    @objc optional func observationTableViewControllerDidDismiss(_ vc: ObservationTableViewController)
     @objc optional func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation)
 }
 
-class ObservationTableViewController: PatientTableViewController, PatientViewDelegate {
+class ObservationTableViewController: PatientTableViewController, PatientViewDelegate, RecorderViewDelegate {
     weak var delegate: ObservationTableViewControllerDelegate?
     
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
 
     let dispatchGroup = DispatchGroup()
-    var observation: Observation!
     var uploadTask: URLSessionTask?
 
     var cameraHelper = CameraHelper()
+    var recorderView: RecorderView?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if title == "" {
-            title = NSLocalizedString("New Patient", comment: "")
-        }
-        observation = patient.asObservation()
-        if let audioHelper = audioHelper {
-            audioHelper.reset()
-        } else {
-            audioHelper = AudioHelper()
-        }
-        
+        updateButton.setTitle(NSLocalizedString("RECORD", comment: ""), for: .normal)
+        updateButton.setImage(UIImage(named: "Microphone"), for: .normal)
+        updateButton.removeTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
+        updateButton.addTarget(self, action: #selector(recordPressed(_:)), for: .touchUpInside)
+
         tableView.setEditing(true, animated: false)
     }
 
@@ -48,31 +42,22 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         }
     }
     
-    @IBAction func cancelPressed(_ sender: Any) {
-        delegate?.observationTableViewControllerDidDismiss?(self)
-    }
-    
     @IBAction func savePressed(_ sender: Any) {
-        if observation.priority.value == nil {
+        if patient.priority.value == nil {
             presentAlert(title: NSLocalizedString("Error", comment: ""), message: "Please select a SALT priority")
             return
         }
         
-        let index = toolbarItems?.firstIndex(of: saveBarButtonItem)
-        if let index = index {
-            let activityView = UIActivityIndicatorView(style: .medium)
-            activityView.startAnimating()
-            toolbarItems?[index] = UIBarButtonItem(customView: activityView)
-        }
+        let activityView = UIActivityIndicatorView(style: .medium)
+        activityView.startAnimating()
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
 
         let saveObservation = { [weak self] in
-            guard let self = self else { return }
-            AppRealm.createObservation(self.observation) { (observation, error) in
+            guard let self = self, let observation = self.patient as? Observation else { return }
+            AppRealm.createObservation(observation) { (observation, error) in
                 let observationId = observation?.id
                 DispatchQueue.main.async { [weak self] in
-                    if let index = index, let saveBarButtonItem = self?.saveBarButtonItem {
-                        self?.toolbarItems?[index] = saveBarButtonItem
-                    }
+                    self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
                     if let error = error {
                         self?.presentAlert(error: error)
                     } else if let self = self, let observationId = observationId {
@@ -118,7 +103,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
                 }
                 if let value = priority {
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.priority.value = value
+                        self?.patient.priority.value = value
                         self?.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
                     }
                     extracted.append(Patient.Keys.priority)
@@ -128,7 +113,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
                 number = nil
                 let value = lower == "expectant" ? 3 : 4
                 DispatchQueue.main.async { [weak self] in
-                    self?.observation.priority.value = value
+                    self?.patient.priority.value = value
                     self?.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
                 }
                 extracted.append(Patient.Keys.priority)
@@ -148,7 +133,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
                     _ = tokens.removeFirst()
                     if let value = number {
                         DispatchQueue.main.async { [weak self] in
-                            self?.observation.age.value = value
+                            self?.patient.age.value = value
                             self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.info.rawValue)], with: .none)
                         }
                         extracted.append(Patient.Keys.age)
@@ -185,7 +170,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
             } else if lower.range(of: #"\d+/\d+"#, options: .regularExpression) != nil {
                 if guess == Patient.Keys.bloodPressure {
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.bloodPressure = lower
+                        self?.patient.bloodPressure = lower
                         self?.tableView.reloadRows(at: [IndexPath(row: 3, section: Section.vitals.rawValue)], with: .none)
                     }
                     extracted.append(Patient.Keys.bloodPressure)
@@ -197,27 +182,27 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
                 switch guess {
                 case .some(Patient.Keys.age):
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.age.value = value
+                        self?.patient.age.value = value
                         self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.info.rawValue)], with: .none)
                     }
                     extracted.append(Patient.Keys.age)
                 case .some(Patient.Keys.respiratoryRate):
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.respiratoryRate.value = value
+                        self?.patient.respiratoryRate.value = value
                         self?.tableView.reloadRows(at: [IndexPath(row: 0, section: Section.vitals.rawValue)], with: .none)
                     }
                     guess = nil
                     extracted.append(Patient.Keys.respiratoryRate)
                 case .some(Patient.Keys.pulse):
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.pulse.value = value
+                        self?.patient.pulse.value = value
                         self?.tableView.reloadRows(at: [IndexPath(row: 1, section: Section.vitals.rawValue)], with: .none)
                     }
                     guess = nil
                     extracted.append(Patient.Keys.pulse)
                 case .some(Patient.Keys.capillaryRefill):
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.capillaryRefill.value = value
+                        self?.patient.capillaryRefill.value = value
                         self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.vitals.rawValue)], with: .none)
                     }
                     guess = nil
@@ -231,14 +216,14 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
                 number = nil
                 if guess == Patient.Keys.firstName {
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.firstName = token
+                        self?.patient.firstName = token
                         self?.tableView.reloadRows(at: [IndexPath(row: 0, section: Section.info.rawValue)], with: .none)
                     }
                     guess = Patient.Keys.lastName
                     extracted.append(Patient.Keys.firstName)
                 } else if guess == Patient.Keys.lastName {
                     DispatchQueue.main.async { [weak self] in
-                        self?.observation.lastName = token
+                        self?.patient.lastName = token
                         self?.tableView.reloadRows(at: [IndexPath(row: 1, section: Section.info.rawValue)], with: .none)
                     }
                     guess = nil
@@ -251,101 +236,38 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     }
 
     @IBAction func recordPressed(_ sender: Any) {
-        guard let audioHelper = audioHelper else { return }
-        audioHelper.delegate = self
-        do {
-            try audioHelper.recordPressed()
-
-            // hide and disable play button
-            playButton.setImage(nil, for: .normal)
-            playButton.isUserInteractionEnabled = false
-            
-            // disable tableview and modal presentation interaction so that recording does not get interrupted by accidental swipe movement
-            tableView.isUserInteractionEnabled = false
-            if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
-                for recognizer in recognizers {
-                    recognizer.isEnabled = false
-                }
-            }
-        } catch {
-            presentAlert(error: error)
-        }
-    }
-
-    @IBAction func recordReleased(_ sender: Any) {
-        guard let audioHelper = audioHelper else { return }
-        audioHelper.recordReleased()
-
-        // start upload
-        dispatchGroup.enter()
-        uploadTask = ApiClient.shared.upload(fileURL: audioHelper.fileURL) { [weak self] (response, error) in
-            guard let self = self else { return }
-            if let error = error {
-                print(error)
-            } else if let response = response, let signedId = response["signed_id"] as? String {
-                self.observation.audioUrl = signedId
-            }
-            self.dispatchGroup.leave()
-        }
-        uploadTask?.resume()
-        
-        // show playback button
-        playButton.setImage(UIImage(named: "Play"), for: .normal)
-        playButton.sizeToFit()
-        playButton.isUserInteractionEnabled = true
-
-        // re-enable tableview and model presentation interaction
-        tableView.isUserInteractionEnabled = true
-        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
-            for recognizer in recognizers {
-                recognizer.isEnabled = true
-            }
+        if let superview = tableView.superview {
+            /// show recorder
+            let recorderView = RecorderView(frame: .zero)
+            recorderView.delegate = self
+            recorderView.translatesAutoresizingMaskIntoConstraints = false
+            superview.addSubview(recorderView)
+            NSLayoutConstraint.activate([
+                recorderView.topAnchor.constraint(equalTo: superview.topAnchor),
+                recorderView.bottomAnchor.constraint(equalTo: superview.bottomAnchor),
+                recorderView.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
+                recorderView.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
+            ])
+            recorderView.show()
         }
     }
     
-    // MARK: - AudioHelperDelegate
-    
-    func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.observation.text = text
-            self?.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        }
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.extractValues(text: text)
-        }
-    }
-
-    func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String) {
-        DispatchQueue.main.async { [weak self] in
-            self?.playButton.setTitle(duration, for: .normal)
-            self?.playButton.sizeToFit()
-        }
-    }
-
-    func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
-        if status != .authorized {
-            DispatchQueue.main.async { [weak self] in
-                self?.presentAlert(title: NSLocalizedString("Error", comment: ""), message: NSLocalizedString("Speech Recognition is not authorized.", comment: ""))
-            }
-        }
-    }
-
     // MARK: - AttributeTableViewCellDelegate
 
     func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String) {
-        observation.setValue(text, forKey: cell.attribute)
+        patient.setValue(text, forKey: cell.attribute)
     }
     
     // MARK: - LatLngTableViewCellDelegate
     
     func latLngTableViewCellDidClear(_ cell: LatLngTableViewCell) {
-        observation.lat = ""
-        observation.lng = ""
+        patient.lat = ""
+        patient.lng = ""
     }
     
     func latLngTableViewCell(_ cell: LatLngTableViewCell, didCapture lat: String, lng: String) {
-        observation.lat = lat
-        observation.lng = lng
+        patient.lat = lat
+        patient.lng = lng
     }
 
     // MARK: - PatientViewDelegate
@@ -356,8 +278,8 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
             if let error = error {
                 print(error)
             } else if let response = response, let signedId = response["signed_id"] as? String {
-                self?.observation.portraitUrl = signedId
-                AppCache.cache(fileURL: fileURL, pathPrefix: "uploads/observations/portrait", filename: signedId)
+                self?.patient.portraitUrl = signedId
+                AppCache.cache(fileURL: fileURL, filename: signedId)
             }
             self?.dispatchGroup.leave()
         }
@@ -367,20 +289,83 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     // MARK: - PriorityViewDelegate
     
     override func priorityView(_ view: PriorityView, didSelect priority: Int) {
-        observation.priority.value = priority
+        patient.priority.value = priority
         tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
-        view.removeFromSuperview()
     }
 
-    // MARK: - TextViewTableViewCellDelegate
+    // MARK: - RecorderViewDelegate
 
-    func textViewTableViewCell(_ cell: TextViewTableViewCell, didChange text: String) {
-        observation.text = text
+    func recorderViewDidShow(_ view: RecorderView) {
+        /// disable tableview and modal presentation interaction so that recording does not get interrupted by accidental swipe movement
+        tableView.isUserInteractionEnabled = false
+        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
+            for recognizer in recognizers {
+                recognizer.isEnabled = false
+            }
+        }
+
+        /// disable navigation items
+        navigationItem.leftBarButtonItem?.isEnabled = false
+        navigationItem.rightBarButtonItem?.isEnabled = false
+    }
+    
+    func recorderView(_ view: RecorderView, didRecognizeText text: String) {
+        patient.text = text
+        tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.extractValues(text: text)
+        }
+    }
+
+    func recorderView(_ view: RecorderView, didFinishRecording fileURL: URL) {
+        // start upload
+        dispatchGroup.enter()
+        uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                if let error = error {
+                    self.presentAlert(error: error)
+                } else if let response = response, let signedId = response["signed_id"] as? String {
+                    AppCache.cache(fileURL: fileURL, filename: signedId)
+                    self.patient.audioUrl = signedId
+                    self.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
+                }
+                self.dispatchGroup.leave()
+            }
+        }
+        uploadTask?.resume()
+    }
+    
+    func recorderViewDidDismiss(_ view: RecorderView) {
+        /// re-enable tableview and model presentation interaction
+        tableView.isUserInteractionEnabled = true
+        if let recognizers = navigationController?.presentationController?.presentedView?.gestureRecognizers {
+            for recognizer in recognizers {
+                recognizer.isEnabled = true
+            }
+        }
+        
+        /// re-enable navigation items
+        navigationItem.leftBarButtonItem?.isEnabled = true
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        
+        /// hide the record button, user must clear current recording to continue
+        updateButton.isHidden = true
+    }
+
+    func recorderView(_ view: RecorderView, didThrowError error: Error) {
+        presentAlert(error: error)
+    }
+    
+    // MARK: - ObservationTableViewCellDelegate
+
+    func observationTableViewCell(_ cell: ObservationTableViewCell, didChange text: String) {
+        patient.text = text
         tableView.beginUpdates()
         tableView.endUpdates()
     }
 
-    func textViewTableViewCellDidReturn(_ cell: TextViewTableViewCell) {
+    func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell) {
         _ = cell.resignFirstResponder()
     }
     
@@ -397,8 +382,8 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
         case Section.observations.rawValue:
-            if let text = observation.text {
-                return TextViewTableViewCell.heightForText(text, width: tableView.frame.width)
+            if let text = patient.text {
+                return ObservationTableViewCell.heightForText(text, width: tableView.frame.width)
             }
         default:
             break
@@ -410,9 +395,9 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         switch indexPath.section {
         case Section.location.rawValue:
             if indexPath.row == 1 {
-                if let lat = observation.lat, let lng = observation.lng, lat != "", lng != "" {
+                if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
                     if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
-                        vc.patient = observation
+                        vc.patient = patient
                         navigationController?.pushViewController(vc, animated: true)
                     }
                 }
@@ -427,7 +412,6 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let cell = cell as? PatientTableViewCell {
-            cell.configure(from: observation)
             if let cell = cell as? PortraitTableViewCell {
                 cell.patientView.cameraHelper = cameraHelper
                 cell.patientView.delegate = self

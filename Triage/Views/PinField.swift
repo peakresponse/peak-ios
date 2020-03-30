@@ -9,12 +9,14 @@
 import UIKit
 
 class PinTextField: UITextField {
+    var inset = CGSize.zero
+
     override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds
+        return bounds.insetBy(dx: inset.width, dy: inset.height)
     }
     
     override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return bounds
+        return textRect(forBounds: bounds)
     }
 }
 
@@ -26,14 +28,15 @@ class PinTextField: UITextField {
 
 @IBDesignable
 class PinField: UIView, UITextFieldDelegate {
-    @IBOutlet weak var textField: UITextField!
+    @IBOutlet weak var textField: PinTextField!
+    @IBOutlet weak var stackView: UIStackView!
     @IBInspectable var length = 6
 
     weak var delegate: PinFieldDelegate?
     
     var font: UIFont? {
         get { return textField.font }
-        set { textField.font = newValue }
+        set { textField.font = newValue; updateAttributes() }
     }
 
     var text: String? {
@@ -41,6 +44,8 @@ class PinField: UIView, UITextFieldDelegate {
         set { textField.text = newValue }
     }
 
+    var kern: CGFloat = 0
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -53,6 +58,32 @@ class PinField: UIView, UITextFieldDelegate {
     
     private func commonInit() {
         loadNib()
+        for view in stackView.arrangedSubviews {
+            view.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 4, color: UIColor.black, opacity: 0.1)
+        }
+        updateAttributes()
+    }
+
+    private func updateAttributes() {
+        let size = ("5" as NSString).size(withAttributes: [
+            .font: textField.font as Any
+        ])
+        kern = size.width / 4
+        textField.inset = CGSize(width: kern, height: kern)
+        textField.defaultTextAttributes = [
+            .font: textField.font as Any,
+            .kern: 3 * kern
+        ]
+        stackView.spacing = CGFloat(kern)
+    }
+    
+    override func sizeThatFits(_ size: CGSize) -> CGSize {
+        var size = ("555555" as NSString).size(withAttributes: [
+            .font: textField.font as Any
+        ])
+        size.width = round(size.width + kern * 17)
+        size.height = round(size.height)
+        return size
     }
     
     override func becomeFirstResponder() -> Bool {

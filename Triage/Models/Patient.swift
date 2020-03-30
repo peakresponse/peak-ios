@@ -8,22 +8,50 @@
 
 import RealmSwift
 
+enum Priority: Int, CustomStringConvertible, CaseIterable {
+    case immediate
+    case delayed
+    case minimal
+    case expectant
+    case dead
+    
+    var description: String {
+        return NSLocalizedString("Patient.priority.\(rawValue)", comment: "")
+    }
+}
+
+enum Sort: Int, CaseIterable {
+    case recent = 0
+    case longest
+    case az
+    case za
+}
+
 let PRIORITY_COLORS = [
-    UIColor.red,
-    UIColor.yellow,
-    UIColor.green,
-    UIColor.gray,
-    UIColor.black,
-    UIColor.lightGray
+    UIColor.immediateRed,
+    UIColor.delayedYellow,
+    UIColor.minimalGreen,
+    UIColor.expectantGray,
+    UIColor.deadBlack,
+    UIColor.natBlue
+]
+
+let PRIORITY_COLORS_LIGHTENED = [
+    UIColor.immediateRedLightened,
+    UIColor.delayedYellowLightened,
+    UIColor.minimalGreenLightened,
+    UIColor.expectantGrayLightened,
+    UIColor.deadBlackLightened,
+    UIColor.natBlueLightened
 ]
 
 let PRIORITY_LABEL_COLORS = [
     UIColor.white,
-    UIColor.black,
-    UIColor.black,
-    UIColor.black,
+    UIColor.gray2,
+    UIColor.gray2,
+    UIColor.gray2,
     UIColor.white,
-    UIColor.black
+    UIColor.white
 ]
 
 class Patient: Base {
@@ -53,7 +81,8 @@ class Patient: Base {
     @objc dynamic var lastName: String?
     @objc dynamic var firstName: String?
     var fullName: String {
-        return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        let fullName = "\(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+        return fullName != "," ? fullName : ""
     }
     let age = RealmOptional<Int>()
     @objc dynamic var dob: String?
@@ -212,7 +241,7 @@ class Patient: Base {
         observation.lng = lng
         observation.portraitUrl = portraitUrl
         observation.photoUrl = photoUrl
-        observation.audioUrl = audioUrl
+        observation.audioUrl = nil
         return observation
     }
 }

@@ -16,7 +16,7 @@ import UIKit
 class PatientView: UIView, CameraHelperDelegate {
     @IBOutlet weak var captureButton: UIButton!
     @IBOutlet weak var initialsLabel: UILabel!
-    @IBOutlet weak var imageView: UIImageView!
+    @IBOutlet weak var imageView: RoundImageView!
     var imageViewURL: String?
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
@@ -45,8 +45,6 @@ class PatientView: UIView, CameraHelperDelegate {
     
     func configure(from patient: Patient) {
         imageView.image = nil
-        imageView.layer.borderColor = PRIORITY_COLORS[patient.priority.value ?? PRIORITY_COLORS.count - 1].cgColor
-        imageView.layer.borderWidth = 4
 
         let initials = "\(patient.firstName?.prefix(1) ?? "")\(patient.lastName?.prefix(1) ?? "")"
         initialsLabel.text = initials

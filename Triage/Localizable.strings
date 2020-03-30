@@ -21,3 +21,9 @@
 "Patient.priority.3" = "Expectant";
 "Patient.priority.4" = "Dead";
 "Patient.priority.5" = "Unknown";
+
+"Patient.sort.0" = "Recently Updated";
+"Patient.sort.1" = "Longest Since Update";
+"Patient.sort.2" = "A-Z by Last Name";
+"Patient.sort.3" = "Z-A by Last Name";
+

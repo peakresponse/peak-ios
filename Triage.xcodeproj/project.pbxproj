@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */; };
 		453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* AppTabBarController.swift */; };
+		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
+		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
 		4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F01F236CCC5500A04C75 /* AppDelegate.swift */; };
 		4566F027236CCC5500A04C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F025236CCC5500A04C75 /* Main.storyboard */; };
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
@@ -41,8 +43,6 @@
 		4566F08A236E0C8200A04C75 /* Observation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F089236E0C8200A04C75 /* Observation.swift */; };
 		4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */; };
 		4566F08F236E117300A04C75 /* AttributeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F08D236E117300A04C75 /* AttributeTableViewCell.xib */; };
-		4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F090236E119500A04C75 /* PriorityTableViewCell.swift */; };
-		4566F093236E119500A04C75 /* PriorityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F091236E119500A04C75 /* PriorityTableViewCell.xib */; };
 		4566F096236E11B000A04C75 /* PortraitTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */; };
 		4566F097236E11B000A04C75 /* PortraitTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */; };
 		4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F098236E12A600A04C75 /* PatientTableViewCell.swift */; };
@@ -51,11 +51,45 @@
 		4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
+		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
+		458D1C8B24284657003C7C85 /* SortSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8A24284657003C7C85 /* SortSelectorView.swift */; };
+		458D1C8D242846B7003C7C85 /* SortSelectorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 458D1C8C242846B7003C7C85 /* SortSelectorView.xib */; };
+		4595CEBE2429678B0038B917 /* RecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4595CEBD2429678B0038B917 /* RecorderView.swift */; };
+		4595CEC0242967990038B917 /* RecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4595CEBF242967990038B917 /* RecorderView.xib */; };
 		459C1404236EB7D1002216BC /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */; };
 		459C1405236EB7D1002216BC /* TextViewTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */; };
+		45A3F140242030A8009D6818 /* PriorityTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A3F13F242030A8009D6818 /* PriorityTabView.swift */; };
+		45A3F142242030FC009D6818 /* PriorityTabView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45A3F141242030FC009D6818 /* PriorityTabView.xib */; };
+		45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */; };
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
+		45E267402418AF340010CDE9 /* NunitoSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267312418AF340010CDE9 /* NunitoSans-LightItalic.ttf */; };
+		45E267412418AF340010CDE9 /* NunitoSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267322418AF340010CDE9 /* NunitoSans-BoldItalic.ttf */; };
+		45E267422418AF340010CDE9 /* NunitoSans-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267332418AF340010CDE9 /* NunitoSans-ExtraLight.ttf */; };
+		45E267432418AF340010CDE9 /* NunitoSans-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267342418AF340010CDE9 /* NunitoSans-Light.ttf */; };
+		45E267442418AF340010CDE9 /* NunitoSans-BlackItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267352418AF340010CDE9 /* NunitoSans-BlackItalic.ttf */; };
+		45E267452418AF340010CDE9 /* NunitoSans-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267362418AF340010CDE9 /* NunitoSans-ExtraBold.ttf */; };
+		45E267462418AF340010CDE9 /* NunitoSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267372418AF340010CDE9 /* NunitoSans-Regular.ttf */; };
+		45E267472418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267382418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf */; };
+		45E267482418AF340010CDE9 /* NunitoSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E267392418AF340010CDE9 /* NunitoSans-Italic.ttf */; };
+		45E267492418AF340010CDE9 /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673A2418AF340010CDE9 /* OFL.txt */; };
+		45E2674A2418AF340010CDE9 /* NunitoSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673B2418AF340010CDE9 /* NunitoSans-Bold.ttf */; };
+		45E2674B2418AF340010CDE9 /* NunitoSans-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673C2418AF340010CDE9 /* NunitoSans-SemiBold.ttf */; };
+		45E2674C2418AF340010CDE9 /* NunitoSans-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673D2418AF340010CDE9 /* NunitoSans-Black.ttf */; };
+		45E2674D2418AF340010CDE9 /* NunitoSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673E2418AF340010CDE9 /* NunitoSans-ExtraBoldItalic.ttf */; };
+		45E2674E2418AF340010CDE9 /* NunitoSans-ExtraLightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E2673F2418AF340010CDE9 /* NunitoSans-ExtraLightItalic.ttf */; };
+		45E267502418AFAD0010CDE9 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2674F2418AFAD0010CDE9 /* TextField.swift */; };
+		45E267522418B2510010CDE9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267512418B2510010CDE9 /* Button.swift */; };
+		45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */; };
+		45E267562418C0650010CDE9 /* UITabBar+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267552418C0650010CDE9 /* UITabBar+Extensions.swift */; };
+		45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2675724196E5C0010CDE9 /* NavigationController.swift */; };
+		45E5BEEE2425DA010013D78D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */; };
+		45E5BEF02425DB270013D78D /* TableViewHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45E5BEEF2425DB270013D78D /* TableViewHeaderView.xib */; };
+		45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD73E6243151C200FD7EDB /* ObservationView.swift */; };
+		45FD73E9243151D300FD7EDB /* ObservationView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45FD73E8243151D300FD7EDB /* ObservationView.xib */; };
+		45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */; };
+		45FD73ED243158B900FD7EDB /* ObservationTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45FD73EB243158B900FD7EDB /* ObservationTableViewCell.xib */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
 		6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */; };
 /* End PBXBuildFile section */
@@ -80,6 +114,8 @@
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
+		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		4566F01C236CCC5500A04C75 /* NaT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -118,8 +154,6 @@
 		4566F089236E0C8200A04C75 /* Observation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observation.swift; sourceTree = "<group>"; };
 		4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributeTableViewCell.swift; sourceTree = "<group>"; };
 		4566F08D236E117300A04C75 /* AttributeTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AttributeTableViewCell.xib; sourceTree = "<group>"; };
-		4566F090236E119500A04C75 /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
-		4566F091236E119500A04C75 /* PriorityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriorityTableViewCell.xib; sourceTree = "<group>"; };
 		4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortraitTableViewCell.swift; sourceTree = "<group>"; };
 		4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PortraitTableViewCell.xib; sourceTree = "<group>"; };
 		4566F098236E12A600A04C75 /* PatientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTableViewCell.swift; sourceTree = "<group>"; };
@@ -128,11 +162,45 @@
 		4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientMapViewController.swift; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
+		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
+		458D1C8A24284657003C7C85 /* SortSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortSelectorView.swift; sourceTree = "<group>"; };
+		458D1C8C242846B7003C7C85 /* SortSelectorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SortSelectorView.xib; sourceTree = "<group>"; };
+		4595CEBD2429678B0038B917 /* RecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderView.swift; sourceTree = "<group>"; };
+		4595CEBF242967990038B917 /* RecorderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecorderView.xib; sourceTree = "<group>"; };
 		459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
 		459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TextViewTableViewCell.xib; sourceTree = "<group>"; };
+		45A3F13F242030A8009D6818 /* PriorityTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTabView.swift; sourceTree = "<group>"; };
+		45A3F141242030FC009D6818 /* PriorityTabView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PriorityTabView.xib; sourceTree = "<group>"; };
+		45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
+		45E267312418AF340010CDE9 /* NunitoSans-LightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-LightItalic.ttf"; sourceTree = "<group>"; };
+		45E267322418AF340010CDE9 /* NunitoSans-BoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-BoldItalic.ttf"; sourceTree = "<group>"; };
+		45E267332418AF340010CDE9 /* NunitoSans-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-ExtraLight.ttf"; sourceTree = "<group>"; };
+		45E267342418AF340010CDE9 /* NunitoSans-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-Light.ttf"; sourceTree = "<group>"; };
+		45E267352418AF340010CDE9 /* NunitoSans-BlackItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-BlackItalic.ttf"; sourceTree = "<group>"; };
+		45E267362418AF340010CDE9 /* NunitoSans-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-ExtraBold.ttf"; sourceTree = "<group>"; };
+		45E267372418AF340010CDE9 /* NunitoSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-Regular.ttf"; sourceTree = "<group>"; };
+		45E267382418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-SemiBoldItalic.ttf"; sourceTree = "<group>"; };
+		45E267392418AF340010CDE9 /* NunitoSans-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-Italic.ttf"; sourceTree = "<group>"; };
+		45E2673A2418AF340010CDE9 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
+		45E2673B2418AF340010CDE9 /* NunitoSans-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-Bold.ttf"; sourceTree = "<group>"; };
+		45E2673C2418AF340010CDE9 /* NunitoSans-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-SemiBold.ttf"; sourceTree = "<group>"; };
+		45E2673D2418AF340010CDE9 /* NunitoSans-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-Black.ttf"; sourceTree = "<group>"; };
+		45E2673E2418AF340010CDE9 /* NunitoSans-ExtraBoldItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-ExtraBoldItalic.ttf"; sourceTree = "<group>"; };
+		45E2673F2418AF340010CDE9 /* NunitoSans-ExtraLightItalic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "NunitoSans-ExtraLightItalic.ttf"; sourceTree = "<group>"; };
+		45E2674F2418AFAD0010CDE9 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
+		45E267512418B2510010CDE9 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
+		45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
+		45E267552418C0650010CDE9 /* UITabBar+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBar+Extensions.swift"; sourceTree = "<group>"; };
+		45E2675724196E5C0010CDE9 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
+		45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
+		45E5BEEF2425DB270013D78D /* TableViewHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TableViewHeaderView.xib; sourceTree = "<group>"; };
+		45FD73E6243151C200FD7EDB /* ObservationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationView.swift; sourceTree = "<group>"; };
+		45FD73E8243151D300FD7EDB /* ObservationView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ObservationView.xib; sourceTree = "<group>"; };
+		45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewCell.swift; sourceTree = "<group>"; };
+		45FD73EB243158B900FD7EDB /* ObservationTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ObservationTableViewCell.xib; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TriageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A608A45BFFA66C538FB6DCB4 /* Pods-TriageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.debug.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -223,6 +291,7 @@
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
+				45E267302418AF340010CDE9 /* Fonts */,
 				4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */,
 				4566F02D236CCC5700A04C75 /* Info.plist */,
 				4566F076236D450400A04C75 /* Localizable.strings */,
@@ -275,7 +344,12 @@
 		4566F05D236CD56200A04C75 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
 				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
+				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
+				45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */,
+				45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */,
+				45E267552418C0650010CDE9 /* UITabBar+Extensions.swift */,
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
 				4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */,
 				4572BA8E237DE45400958A77 /* URL+Extensions.swift */,
@@ -296,14 +370,26 @@
 		4566F078236D484D00A04C75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45E267512418B2510010CDE9 /* Button.swift */,
+				458D1C8824283672003C7C85 /* DropdownButton.swift */,
+				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
+				45E2675724196E5C0010CDE9 /* NavigationController.swift */,
+				45FD73E6243151C200FD7EDB /* ObservationView.swift */,
+				45FD73E8243151D300FD7EDB /* ObservationView.xib */,
 				4566F06E236D2EBF00A04C75 /* PatientView.swift */,
 				4566F070236D2F1B00A04C75 /* PatientView.xib */,
 				4566F083236DF5C000A04C75 /* PinField.swift */,
 				4566F085236DF5CA00A04C75 /* PinField.xib */,
+				45A3F13F242030A8009D6818 /* PriorityTabView.swift */,
+				45A3F141242030FC009D6818 /* PriorityTabView.xib */,
 				4566F07D236D57FA00A04C75 /* PriorityView.swift */,
 				4566F07F236D581400A04C75 /* PriorityView.xib */,
+				4595CEBD2429678B0038B917 /* RecorderView.swift */,
+				4595CEBF242967990038B917 /* RecorderView.xib */,
 				4566F079236D486B00A04C75 /* RoundImageView.swift */,
-				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
+				458D1C8A24284657003C7C85 /* SortSelectorView.swift */,
+				458D1C8C242846B7003C7C85 /* SortSelectorView.xib */,
+				45E2674F2418AFAD0010CDE9 /* TextField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -316,14 +402,38 @@
 				4566F09A236E1C4800A04C75 /* LatLngTableViewCell.swift */,
 				4566F09B236E1C4800A04C75 /* LatLngTableViewCell.xib */,
 				4566F098236E12A600A04C75 /* PatientTableViewCell.swift */,
-				4566F090236E119500A04C75 /* PriorityTableViewCell.swift */,
-				4566F091236E119500A04C75 /* PriorityTableViewCell.xib */,
+				45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */,
+				45FD73EB243158B900FD7EDB /* ObservationTableViewCell.xib */,
 				4566F094236E11B000A04C75 /* PortraitTableViewCell.swift */,
 				4566F095236E11B000A04C75 /* PortraitTableViewCell.xib */,
 				459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */,
 				459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */,
+				45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */,
+				45E5BEEF2425DB270013D78D /* TableViewHeaderView.xib */,
 			);
 			path = "Table View Cells";
+			sourceTree = "<group>";
+		};
+		45E267302418AF340010CDE9 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				45E267312418AF340010CDE9 /* NunitoSans-LightItalic.ttf */,
+				45E267322418AF340010CDE9 /* NunitoSans-BoldItalic.ttf */,
+				45E267332418AF340010CDE9 /* NunitoSans-ExtraLight.ttf */,
+				45E267342418AF340010CDE9 /* NunitoSans-Light.ttf */,
+				45E267352418AF340010CDE9 /* NunitoSans-BlackItalic.ttf */,
+				45E267362418AF340010CDE9 /* NunitoSans-ExtraBold.ttf */,
+				45E267372418AF340010CDE9 /* NunitoSans-Regular.ttf */,
+				45E267382418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf */,
+				45E267392418AF340010CDE9 /* NunitoSans-Italic.ttf */,
+				45E2673A2418AF340010CDE9 /* OFL.txt */,
+				45E2673B2418AF340010CDE9 /* NunitoSans-Bold.ttf */,
+				45E2673C2418AF340010CDE9 /* NunitoSans-SemiBold.ttf */,
+				45E2673D2418AF340010CDE9 /* NunitoSans-Black.ttf */,
+				45E2673E2418AF340010CDE9 /* NunitoSans-ExtraBoldItalic.ttf */,
+				45E2673F2418AF340010CDE9 /* NunitoSans-ExtraLightItalic.ttf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		90CCACB3DC232FDED43273D4 /* Frameworks */ = {
@@ -444,19 +554,39 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45E2674C2418AF340010CDE9 /* NunitoSans-Black.ttf in Resources */,
+				45FD73E9243151D300FD7EDB /* ObservationView.xib in Resources */,
+				45E267452418AF340010CDE9 /* NunitoSans-ExtraBold.ttf in Resources */,
+				45E267482418AF340010CDE9 /* NunitoSans-Italic.ttf in Resources */,
+				45E267472418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf in Resources */,
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
+				458D1C8D242846B7003C7C85 /* SortSelectorView.xib in Resources */,
+				45E5BEF02425DB270013D78D /* TableViewHeaderView.xib in Resources */,
+				45E267442418AF340010CDE9 /* NunitoSans-BlackItalic.ttf in Resources */,
 				4566F053236CD05200A04C75 /* Login.storyboard in Resources */,
+				45E267492418AF340010CDE9 /* OFL.txt in Resources */,
+				45E2674D2418AF340010CDE9 /* NunitoSans-ExtraBoldItalic.ttf in Resources */,
+				45E2674B2418AF340010CDE9 /* NunitoSans-SemiBold.ttf in Resources */,
 				4566F09D236E1C4800A04C75 /* LatLngTableViewCell.xib in Resources */,
+				45E267422418AF340010CDE9 /* NunitoSans-ExtraLight.ttf in Resources */,
 				4566F071236D2F1B00A04C75 /* PatientView.xib in Resources */,
+				45E267402418AF340010CDE9 /* NunitoSans-LightItalic.ttf in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
+				45FD73ED243158B900FD7EDB /* ObservationTableViewCell.xib in Resources */,
 				4566F086236DF5CA00A04C75 /* PinField.xib in Resources */,
+				45E2674A2418AF340010CDE9 /* NunitoSans-Bold.ttf in Resources */,
+				45E267462418AF340010CDE9 /* NunitoSans-Regular.ttf in Resources */,
+				4595CEC0242967990038B917 /* RecorderView.xib in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
+				45E2674E2418AF340010CDE9 /* NunitoSans-ExtraLightItalic.ttf in Resources */,
 				4566F08F236E117300A04C75 /* AttributeTableViewCell.xib in Resources */,
 				4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */,
+				45A3F142242030FC009D6818 /* PriorityTabView.xib in Resources */,
 				4566F080236D581400A04C75 /* PriorityView.xib in Resources */,
+				45E267412418AF340010CDE9 /* NunitoSans-BoldItalic.ttf in Resources */,
 				4566F027236CCC5500A04C75 /* Main.storyboard in Resources */,
 				4566F097236E11B000A04C75 /* PortraitTableViewCell.xib in Resources */,
-				4566F093236E119500A04C75 /* PriorityTableViewCell.xib in Resources */,
+				45E267432418AF340010CDE9 /* NunitoSans-Light.ttf in Resources */,
 				459C1405236EB7D1002216BC /* TextViewTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -577,6 +707,8 @@
 			files = (
 				4566F075236D3B9E00A04C75 /* PatientTableViewController.swift in Sources */,
 				4566F09C236E1C4800A04C75 /* LatLngTableViewCell.swift in Sources */,
+				458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */,
+				4595CEBE2429678B0038B917 /* RecorderView.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
 				4566F088236E0A5800A04C75 /* ObservationTableViewController.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PatientView.swift in Sources */,
@@ -584,29 +716,41 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				4566F096236E11B000A04C75 /* PortraitTableViewCell.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
+				458D1C8B24284657003C7C85 /* SortSelectorView.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
+				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
+				45E5BEEE2425DA010013D78D /* TableViewHeaderView.swift in Sources */,
 				4566F084236DF5C000A04C75 /* PinField.swift in Sources */,
+				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
 				459C1404236EB7D1002216BC /* TextViewTableViewCell.swift in Sources */,
 				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
+				45A3F140242030A8009D6818 /* PriorityTabView.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
+				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
+				45E267562418C0650010CDE9 /* UITabBar+Extensions.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				4566F055236CD0C100A04C75 /* LoginViewController.swift in Sources */,
+				45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */,
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
+				4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
+				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
-				4566F092236E119500A04C75 /* PriorityTableViewCell.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
+				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,
+				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,
 				45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */,
+				45E267522418B2510010CDE9 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -712,7 +856,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -767,7 +911,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

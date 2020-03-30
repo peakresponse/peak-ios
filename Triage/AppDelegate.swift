@@ -15,6 +15,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        UIBarButtonItem.appearance().setTitleTextAttributes([
+            .font : UIFont.init(name: "NunitoSans-Black", size: 14) ?? UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: UIColor.natBlue
+        ], for: .normal)
+        UIBarButtonItem.appearance().setTitleTextAttributes([
+            .font : UIFont.init(name: "NunitoSans-Black", size: 14) ?? UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: UIColor.natBlue.colorWithBrightnessMultiplier(multiplier: 0.4)
+        ], for: .highlighted)
+        UIBarButtonItem.appearance().setTitleTextAttributes([
+            .font : UIFont.init(name: "NunitoSans-Black", size: 14) ?? UIFont.boldSystemFont(ofSize: 14),
+            .foregroundColor: UIColor.gray4
+        ], for: .disabled)
+        UINavigationBar.appearance().backgroundColor = UIColor.backgroundBlueGray
+        UINavigationBar.appearance().tintColor = UIColor.natBlue
+        UITabBar.appearance().backgroundColor = UIColor.bottomBlueGray
+        UITabBar.appearance().tintColor = UIColor.natBlue
+        UITabBarItem.appearance().setTitleTextAttributes([
+            .font : UIFont.init(name: "NunitoSans-Black", size: 12) ?? UIFont.boldSystemFont(ofSize: 12)
+        ], for: .normal)
+        UITextField.appearance().tintColor = UIColor.natBlue
         return true
     }
 

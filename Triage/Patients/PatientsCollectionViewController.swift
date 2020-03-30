@@ -11,62 +11,173 @@ import UIKit
 
 class PatientsCollectionViewCell: UICollectionViewCell {
     @IBOutlet weak var patientView: PatientView!
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var updatedLabel: UILabel!
     
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        patientView.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 4, color: UIColor.black, opacity: 0.1)
+        contentView.layer.masksToBounds = false
+        layer.masksToBounds = false
+    }
+
     func configure(from patient: Patient) {
         patientView.configure(from: patient)
+        nameLabel.text = patient.fullName
+        updatedLabel.text = patient.updatedAtRelativeString
     }
 }
 
-class PatientsCollectionViewController: UICollectionViewController {
+class PatientsCollectionViewFlowLayout: UICollectionViewFlowLayout {
+    
+}
+
+class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegate, SortSelectorViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextFieldDelegate {
+    @IBOutlet weak var searchTextField: TextField!
     @IBOutlet weak var logoutItem: UIBarButtonItem!
+    @IBOutlet weak var sortButton: DropdownButton!
+    @IBOutlet weak var sortSelectorView: SortSelectorView!
+    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var collectionViewContainer: UIView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var immediatePriorityView: PriorityTabView!
+    @IBOutlet weak var delayedPriorityView: PriorityTabView!
+    @IBOutlet weak var minimalPriorityView: PriorityTabView!
+    @IBOutlet weak var expectantPriorityView: PriorityTabView!
+    @IBOutlet weak var deadPriorityView: PriorityTabView!
+
     weak var refreshControl: UIRefreshControl!
 
     var notificationToken: NotificationToken?
     var results: Results<Patient>?
+    var priority: Priority = .immediate
+    var priorityTabViews: [Priority: PriorityTabView] = [:]
+    var sort: Sort = .recent
+    var searchDebounceTimer: Timer?
 
     // MARK: -
-    
+
     deinit {
         notificationToken?.invalidate()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        //// set up pull-to-refresh control
+        /// set up priority to view mapping
+        priorityTabViews[.immediate] = immediatePriorityView
+        priorityTabViews[.delayed] = delayedPriorityView
+        priorityTabViews[.minimal] = minimalPriorityView
+        priorityTabViews[.expectant] = expectantPriorityView
+        priorityTabViews[.dead] = deadPriorityView
+        for (_, priorityTabView) in priorityTabViews {
+            priorityTabView.delegate = self
+        }
+
+        /// set up collection view
+        collectionViewContainer.addShadow(withOffset: CGSize(width: 1, height: 2), radius: 2, color: UIColor.black, opacity: 0.1)
+        collectionViewContainer.layer.cornerRadius = 3
+        collectionViewContainer.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        collectionView.alwaysBounceVertical = true
+        collectionView.backgroundColor = UIColor.immediateRedLightened
+        collectionView.layer.cornerRadius = 3
+        collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            layout.minimumInteritemSpacing = 10
+            layout.minimumLineSpacing = 20
+        }
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.addSubview(refreshControl)
-        collectionView.alwaysBounceVertical = true
         self.refreshControl = refreshControl
 
-        //// set up Realm query and observer
-        let realm = AppRealm.open()
-        results = realm.objects(Patient.self).sorted(by: [
-            SortDescriptor(keyPath: "priority", ascending: true),
-            SortDescriptor(keyPath: "updatedAt", ascending: true)
-        ])
-        notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
-        }
+        /// set up sort dropdown button
+        sortButton.setTitle(NSLocalizedString("Patient.sort.\(sort.rawValue)", comment: ""), for: .normal)
+        sortSelectorView.delegate = self
+        
+        /// set up Realm query and observer
+        performQuery()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //// trigger additional refresh
+        /// trigger additional refresh
         refresh()
     }
 
+    @IBAction func sortPressed(_ sender: Any) {
+        sortButton.isSelected = !sortButton.isSelected
+        sortSelectorView.isHidden = !sortButton.isSelected
+    }
+
+    private func performQuery() {
+        notificationToken?.invalidate()
+        var sorts = [
+            SortDescriptor(keyPath: "priority", ascending: true)
+        ]
+        switch sort {
+        case .recent:
+            sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: false))
+        case .longest:
+            sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: true))
+        case .az:
+            sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
+        case .za:
+            sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
+        }
+        let realm = AppRealm.open()
+        if let searchText = searchTextField.text, !searchText.isEmpty {
+            results = realm.objects(Patient.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchText, searchText).sorted(by: sorts)
+        } else {
+            results = realm.objects(Patient.self).sorted(by: sorts)
+        }
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+    }
+    
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
         case .initial(_):
             collectionView.reloadData()
+            updateCounts()
         case .update(_, let deletions, let insertions, let modifications):
+            /// rewrite indices for the selected priority
+            var startIndex = 0, endIndex = 0
+            for priority in Priority.allCases {
+                if priority == self.priority {
+                    endIndex = startIndex + (priorityTabViews[priority]?.count ?? 0)
+                    break
+                }
+                startIndex += (priorityTabViews[priority]?.count ?? 0)
+            }
+            var newDeletions: [Int] = []
+            var newInsertions: [Int] = []
+            var newModifications: [Int] = []
+            for index in deletions {
+                if index >= startIndex && index < endIndex {
+                    newDeletions.append(index - startIndex)
+                }
+            }
+            for index in insertions {
+                if results?[index].priority.value == priority.rawValue {
+                    newInsertions.append(index - startIndex)
+                }
+            }
+            for index in modifications {
+                if index >= startIndex && index < endIndex {
+                    newModifications.append(index - startIndex)
+                }
+            }
             collectionView.performBatchUpdates({
-                collectionView.deleteItems(at: deletions.map{ IndexPath(row: $0, section: 0)})
-                collectionView.insertItems(at: insertions.map{ IndexPath(row: $0, section: 0)})
-                collectionView.reloadItems(at: modifications.map{ IndexPath(row: $0, section: 0)})
+                collectionView.deleteItems(at: newDeletions.map{ IndexPath(row: $0, section: 0) })
+                collectionView.insertItems(at: newInsertions.map{ IndexPath(row: $0, section: 0) })
+                collectionView.reloadItems(at: newModifications.map{ IndexPath(row: $0, section: 0) })
             }, completion: nil)
+            updateCounts()
         case .error(let error):
             presentAlert(error: error)
         }
@@ -95,6 +206,12 @@ class PatientsCollectionViewController: UICollectionViewController {
             }
         }
     }
+
+    func updateCounts() {
+        for priority in Priority.allCases {
+            priorityTabViews[priority]?.count = results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
+        }
+    }
     
     // MARK: - Navigation
     
@@ -102,11 +219,13 @@ class PatientsCollectionViewController: UICollectionViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
-        if let vc = segue.destination as? PatientTableViewController,
+        if let navVC = segue.destination as? UINavigationController,
+            let vc = navVC.viewControllers[0] as? PatientTableViewController,
             let cell = sender as? PatientsCollectionViewCell,
             let indexPath = collectionView.indexPath(for: cell),
-            let patient = results?[indexPath.row] {
+            let patient = results?.filter("priority=%@", priority.rawValue)[indexPath.row] {
             vc.patient = patient
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
         }
     }
 
@@ -118,21 +237,45 @@ class PatientsCollectionViewController: UICollectionViewController {
         }
     }
 
+    // MARK: - PriorityTabViewDelegate
+
+    func priorityTabViewDidChange(_ priorityTabView: PriorityTabView) {
+        if priorityTabView.priority != priority {
+            priorityTabViews[priority]?.isOpen = false
+            priority = priorityTabView.priority
+            collectionViewContainer.removeFromSuperview()
+            collectionView.backgroundColor = PRIORITY_COLORS_LIGHTENED[priority.rawValue]
+            stackView.insertArrangedSubview(collectionViewContainer, at: priority.rawValue + 1)
+            collectionView.reloadData()
+        }
+    }
+
+    // MARK: - SortSelectorViewDelegate
+    
+    func sortSelectorView(_ view: SortSelectorView, didSelectSort sort: Sort) {
+        sortButton.isSelected = false
+        if (sort != self.sort) {
+            self.sort = sort
+            sortButton.setTitle(NSLocalizedString("Patient.sort.\(sort.rawValue)", comment: ""), for: .normal)
+            performQuery()
+        }
+    }
+    
     // MARK: - UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
 
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results?.count ?? 0
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
     }
 
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Patient", for: indexPath)
         if let cell = cell as? PatientsCollectionViewCell,
-            let patient = results?[indexPath.row] {
+            let patient = results?.filter("priority=%@", priority.rawValue)[indexPath.row] {
             cell.configure(from: patient)
         }
         return cell
@@ -140,33 +283,32 @@ class PatientsCollectionViewController: UICollectionViewController {
 
     // MARK: - UICollectionViewDelegate
 
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        var frame = collectionView.frame
+        if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
+            frame = frame.inset(by: layout.sectionInset)
+            frame.size.width = floor((frame.size.width - layout.minimumInteritemSpacing) / 2)
+        }
+        frame.size.height = 60
+        return frame.size
     }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
-    }
-    */
+    // MARK: - UITextFieldDelegate
 
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        return textFieldShouldClear(textField)
+    }
+    
+    func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        searchDebounceTimer?.invalidate()
+        searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] (timer) in
+            self?.performQuery()
+        }
+        return true
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }
