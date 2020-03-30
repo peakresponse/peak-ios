@@ -113,6 +113,14 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         _ = resignFirstResponder()
     }
 
+    // MARK: - ObservationTableViewCellDelegate
+
+    func observationTableViewCell(_ cell: ObservationTableViewCell, didThrowError error: Error) {
+        DispatchQueue.main.async { [weak self] in
+            self?.presentAlert(error: error)
+        }
+    }
+
     // MARK: - ObservationTableViewControllerDelegate
     
     func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {

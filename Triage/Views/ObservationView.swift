@@ -8,6 +8,10 @@
 
 import UIKit
 
+@objc protocol ObservationViewDelegate {
+    @objc optional func observationView(_ observationView: ObservationView, didThrowError error: Error)
+}
+
 class ObservationView: UIView, AudioHelperDelgate {        
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         let font = UIFont(name: "NunitoSans-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
@@ -30,6 +34,7 @@ class ObservationView: UIView, AudioHelperDelgate {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var textView: UITextView!
     
+    weak var delegate: ObservationViewDelegate?
     var audioHelper: AudioHelper?
     
     override init(frame: CGRect) {
@@ -77,7 +82,7 @@ class ObservationView: UIView, AudioHelperDelgate {
                     self?.activityIndicatorView.stopAnimating()
                 }
                 if let error = error {
-                    print(error)
+                    self.delegate?.observationView?(self, didThrowError: error)
                 } else if let url = url {
                     if self.audioHelper == nil {
                         self.audioHelper = AudioHelper()
@@ -95,7 +100,7 @@ class ObservationView: UIView, AudioHelperDelgate {
                                 self?.durationLabel.text = audioHelper.recordingLengthFormatted
                             }
                         } catch {
-                            print(error)
+                            self.delegate?.observationView?(self, didThrowError: error)
                         }
                     }
                 }
@@ -115,7 +120,7 @@ class ObservationView: UIView, AudioHelperDelgate {
                 playButton.setImage(UIImage(named: "Stop"), for: .normal)
                 durationLabel.text = "00:00:00"
             } catch {
-//                presentAlert(error: error)
+                delegate?.observationView?(self, didThrowError: error)
             }
         }
     }

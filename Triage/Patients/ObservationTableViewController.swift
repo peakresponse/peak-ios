@@ -353,8 +353,15 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         updateButton.isHidden = true
     }
 
-    func recorderView(_ view: RecorderView, didThrowError error: Error) {
-        presentAlert(error: error)
+    func recorderView(_ recorderView: RecorderView, didThrowError error: Error) {
+        switch error {
+        case AudioHelperError.speechRecognitionNotAuthorized:
+            /// even with speech recognition off, we can still allow a recording...
+            recorderView.startRecording()
+        default:
+            recorderView.hide()
+            presentAlert(error: error)
+        }
     }
     
     // MARK: - ObservationTableViewCellDelegate

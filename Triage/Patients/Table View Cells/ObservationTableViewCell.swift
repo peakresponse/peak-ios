@@ -10,10 +10,11 @@ import UIKit
 
 @objc protocol ObservationTableViewCellDelegate {
     @objc optional func observationTableViewCell(_ cell: ObservationTableViewCell, didChange text: String)
+    @objc optional func observationTableViewCell(_ cell: ObservationTableViewCell, didThrowError error: Error)
     @objc optional func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell)
 }
 
-class ObservationTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, UITextViewDelegate {        
+class ObservationTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, ObservationViewDelegate, UITextViewDelegate {
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         return ObservationView.heightForText(text, width: width - 50 /* left and right margins */) + 10 /* top and bottom margins*/
     }
@@ -25,6 +26,7 @@ class ObservationTableViewCell: PatientTableViewCell, PatientTableViewCellBackgr
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        observationView.delegate = self
         observationView.textView.delegate = self
     }
     
@@ -38,6 +40,12 @@ class ObservationTableViewCell: PatientTableViewCell, PatientTableViewCellBackgr
     
     override func resignFirstResponder() -> Bool {
         return observationView.textView.resignFirstResponder()
+    }
+
+    // MARK: - ObservationViewDelegate
+
+    func observationView(_ observationView: ObservationView, didThrowError error: Error) {
+        delegate?.observationTableViewCell?(self, didThrowError: error)
     }
     
     // MARK: - UITableViewCell

@@ -96,12 +96,16 @@ class RecorderView: UIView, AudioHelperDelgate {
             guard let self = self else { return }
             self.delegate?.recorderViewDidShow?(self)
             /// start recording!
-            do {
-                try self.audioHelper.startRecording()
-            } catch {
-                self.delegate?.recorderView?(self, didThrowError: error)
-            }
+            self.startRecording()
         })
+    }
+
+    func startRecording() {
+        do {
+            try self.audioHelper.startRecording()
+        } catch {
+            self.delegate?.recorderView?(self, didThrowError: error)
+        }
     }
     
     func hide() {
@@ -155,9 +159,22 @@ class RecorderView: UIView, AudioHelperDelgate {
     func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper) {
         hide()
     }
+
+    func audioHelper(_ audioHelper: AudioHelper, didRequestRecordAuthorization status: AVAudioSession.RecordPermission) {
+        if status == .granted {
+            startRecording()
+        } else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.delegate?.recorderView?(self, didThrowError: AudioHelperError.recordNotAuthorized)
+            }
+        }
+    }
     
     func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
-        if status != .authorized {
+        if status == .authorized {
+            startRecording()
+        } else {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.delegate?.recorderView?(self, didThrowError: AudioHelperError.speechRecognitionNotAuthorized)

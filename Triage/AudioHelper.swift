@@ -17,10 +17,12 @@ import Speech
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didTransformBuffer data: [Float])
     @objc optional func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper)
+    @objc optional func audioHelper(_ audioHelper: AudioHelper, didRequestRecordAuthorization status: AVAudioSession.RecordPermission)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus)
 }
 
 enum AudioHelperError: Error {
+    case recordNotAuthorized
     case speechRecognitionNotAuthorized
 }
 
@@ -65,8 +67,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
     
     func playPressed() throws {
         let audioSession = AVAudioSession.sharedInstance()
-        try audioSession.setCategory(.playback)
-
+        try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
         if player == nil {
             try prepareToPlay()
         }
@@ -88,76 +89,83 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
     }
     
     func startRecording() throws {
-        if SFSpeechRecognizer.authorizationStatus() == .authorized {
-            if !audioEngine.isRunning {
-                let audioSession = AVAudioSession.sharedInstance()
-                try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
-                try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
-                let inputNode = audioEngine.inputNode
-                
-                recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-                guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
-                recognitionRequest.shouldReportPartialResults = true
-                
-                // Create a recognition task for the speech recognition session.
-                // Keep a reference to the task so that it can be canceled.
-                recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] (result, error) in
-                    var isFinal = false
+        let audioSession = AVAudioSession.sharedInstance()
+        if audioSession.recordPermission == .granted {
+            if SFSpeechRecognizer.authorizationStatus() == .authorized {
+                if !audioEngine.isRunning {
+                    try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .duckOthers])
+                    try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
+                    let inputNode = audioEngine.inputNode
+
+                    recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
+                    guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
+                    recognitionRequest.shouldReportPartialResults = true
                     
-                    if let result = result {
-                        // Update the text view with the results.
-                        isFinal = result.isFinal
-                        let text = result.bestTranscription.formattedString
-                        if let self = self {
-                            self.delegate?.audioHelper?(self, didRecognizeText: text)
+                    // Create a recognition task for the speech recognition session.
+                    // Keep a reference to the task so that it can be canceled.
+                    recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] (result, error) in
+                        var isFinal = false
+
+                        if let result = result {
+                            // Update the text view with the results.
+                            isFinal = result.isFinal
+                            let text = result.bestTranscription.formattedString
+                            if let self = self {
+                                self.delegate?.audioHelper?(self, didRecognizeText: text)
+                            }
+                        }
+
+                        if error != nil || isFinal {
+                            // Stop recognizing speech if there is a problem.
+                            self?.audioEngine.stop()
+                            inputNode.removeTap(onBus: 0)
+
+                            self?.recognitionRequest = nil
+                            self?.recognitionTask = nil
+
+                            if let self = self {
+                                self.delegate?.audioHelperDidFinishRecognition?(self)
+                            }
                         }
                     }
-                    
-                    if error != nil || isFinal {
-                        // Stop recognizing speech if there is a problem.
-                        self?.audioEngine.stop()
-                        inputNode.removeTap(onBus: 0)
 
-                        self?.recognitionRequest = nil
-                        self?.recognitionTask = nil
+                    // Configure the microphone input.
+                    let recordingFormat = inputNode.outputFormat(forBus: 0)
+                    let audioFile = try AVAudioFile(forWriting: fileURL, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC], commonFormat: recordingFormat.commonFormat, interleaved: false)
+                    inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+                        self?.recognitionRequest?.append(buffer)
+                        self?.performFFT(buffer: buffer)
+                        do {
+                            try audioFile.write(from: buffer)
+                        } catch {
+                            print(error)
+                        }
+                    }
 
-                        if let self = self {
-                            self.delegate?.audioHelperDidFinishRecognition?(self)
+                    audioEngine.prepare()
+                    try audioEngine.start()
+
+                    recordingStart = Date()
+                    timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
+                        guard let self = self else { return }
+                        let now = Date()
+                        if let start = self.recordingStart {
+                            let seconds = self.recordingLength + start.distance(to: now)
+                            let duration = String(format: "%02.0f:%02.0f:%02.0f", seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
+                            self.delegate?.audioHelper?(self, didRecord: seconds, formattedDuration: duration)
                         }
                     }
                 }
-
-                // Configure the microphone input.
-                let recordingFormat = inputNode.outputFormat(forBus: 0)
-                let audioFile = try AVAudioFile(forWriting: fileURL, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC], commonFormat: recordingFormat.commonFormat, interleaved: false)
-                inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
-                    self?.recognitionRequest?.append(buffer)
-                    self?.performFFT(buffer: buffer)
-                    do {
-                        try audioFile.write(from: buffer)
-                    } catch {
-                        print(error)
-                    }
-                }
-
-                audioEngine.prepare()
-                try audioEngine.start()
-
-                recordingStart = Date()
-                timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
+            } else {
+                SFSpeechRecognizer.requestAuthorization { [weak self] (status) in
                     guard let self = self else { return }
-                    let now = Date()
-                    if let start = self.recordingStart {
-                        let seconds = self.recordingLength + start.distance(to: now)
-                        let duration = String(format: "%02.0f:%02.0f:%02.0f", seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
-                        self.delegate?.audioHelper?(self, didRecord: seconds, formattedDuration: duration)
-                    }
+                    self.delegate?.audioHelper?(self, didRequestSpeechAuthorization: status)
                 }
             }
         } else {
-            SFSpeechRecognizer.requestAuthorization { [weak self] (status) in
+            audioSession.requestRecordPermission { [weak self] (granted) in
                 guard let self = self else { return }
-                self.delegate?.audioHelper?(self, didRequestSpeechAuthorization: status)
+                self.delegate?.audioHelper?(self, didRequestRecordAuthorization: granted ? .granted : .denied)
             }
         }
     }
