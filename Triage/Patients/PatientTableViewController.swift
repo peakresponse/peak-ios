@@ -15,7 +15,7 @@ let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .number]
 let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
 let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
 
-class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PriorityViewDelegate, ObservationTableViewCellDelegate {
+class PatientTableViewController: UITableViewController, AttributeTableViewCellDelegate, LatLngTableViewCellDelegate, ObservationTableViewControllerDelegate, PortraitTableViewCellCelegate, ObservationTableViewCellDelegate {
     enum Section: Int, CaseIterable {
         case portrait = 0
         case location
@@ -96,6 +96,27 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         }
     }
 
+    func save(observation: Observation) {
+        AppRealm.createObservation(observation) { (observation, error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            } else {
+                /// fow now, manually refresh, until websockets support added
+                if let patientId = observation?.patientId {
+                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
+                        if let error = error {
+                            DispatchQueue.main.async { [weak self] in
+                                self?.presentAlert(error: error)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     // MARK: - AttributeTableViewCellDelegate
 
     func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell) {
@@ -136,30 +157,39 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
         dismiss(animated: true, completion: nil)
     }
 
+    // MARK: - PortraitTableViewCellDelegate
+
+    func portaitTableViewCellDidPressTransportButton(_ cell: PortraitTableViewCell) {
+        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities") as? FacilitiesTableViewController {
+            let observation = Observation()
+            observation.pin = patient.pin
+            observation.priority.value = patient.priority.value
+            vc.observation = observation
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("CANCEL", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.handler = { [weak self] (vc) in
+                guard let self = self else { return }
+                if let nextVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Agencies") as? AgenciesTableViewController {
+                    nextVC.observation = observation
+                    nextVC.handler = { [weak self] (vc) in
+                        guard let self = self else { return }
+                        self.dismissAnimated()
+                        self.save(observation: observation)
+                    }
+                    vc.navigationController?.pushViewController(nextVC, animated: true)
+                }
+            }
+            let navVC = UINavigationController(rootViewController: vc)
+            presentAnimated(navVC)
+        }
+    }
+
     // MARK: - PriorityViewDelegate
 
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
-        let patientId = patient.id
         let observation = Observation()
         observation.pin = patient.pin
         observation.priority.value = priority
-        AppRealm.createObservation(observation) { (observation, error) in
-            DispatchQueue.main.async { [weak self] in
-                if let error = error {
-                    self?.presentAlert(error: error)
-                } else {
-                    if let patientId = patientId {
-                        AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
-                            DispatchQueue.main.async { [weak self] in
-                                if let error = error {
-                                    self?.presentAlert(error: error)
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        save(observation: observation)
     }
     
     // MARK: - UITableViewDelegate
@@ -181,7 +211,7 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case Section.location.rawValue:
-            if indexPath.row == 1 {
+            if patient.transportAgency == nil && patient.transportFacility == nil && indexPath.row == 1 {
                 if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
                     if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
                         vc.patient = patient
@@ -233,7 +263,10 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case Section.location.rawValue:
-            return NSLocalizedString("Location", comment: "")
+            if patient.transportFacility == nil && patient.transportAgency == nil {
+                return NSLocalizedString("Location", comment: "")
+            }
+            return NSLocalizedString("Transport", comment: "")
         case Section.info.rawValue:
             return NSLocalizedString("Info", comment: "")
         case Section.vitals.rawValue:
@@ -271,18 +304,37 @@ class PatientTableViewController: UITableViewController, AttributeTableViewCellD
                 cell.delegate = self
             }
         case Section.location.rawValue:
-            switch indexPath.row {
-            case 0:
-                cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
-                if let cell = cell as? AttributeTableViewCell {
-                    cell.delegate = self
-                    cell.attribute = Patient.Keys.location
-                    cell.attributeType = .string
+            if patient.transportAgency != nil || patient.transportFacility != nil {
+                switch indexPath.row {
+                case 0:
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                    if let cell = cell as? AttributeTableViewCell {
+                        cell.delegate = self
+                        cell.attribute = Patient.Keys.transportAgency
+                        cell.attributeType = .object
+                    }
+                default:
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                    if let cell = cell as? AttributeTableViewCell {
+                        cell.delegate = self
+                        cell.attribute = Patient.Keys.transportFacility
+                        cell.attributeType = .object
+                    }
                 }
-            default:
-                cell = tableView.dequeueReusableCell(withIdentifier: "LatLng", for: indexPath)
-                if let cell = cell as? LatLngTableViewCell {
-                    cell.delegate = self
+            } else {
+                switch indexPath.row {
+                case 0:
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                    if let cell = cell as? AttributeTableViewCell {
+                        cell.delegate = self
+                        cell.attribute = Patient.Keys.location
+                        cell.attributeType = .string
+                    }
+                default:
+                    cell = tableView.dequeueReusableCell(withIdentifier: "LatLng", for: indexPath)
+                    if let cell = cell as? LatLngTableViewCell {
+                        cell.delegate = self
+                    }
                 }
             }
         case Section.observations.rawValue:

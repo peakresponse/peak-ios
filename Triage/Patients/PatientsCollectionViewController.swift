@@ -32,11 +32,10 @@ class PatientsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
 }
 
-class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegate, SortSelectorViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UITextFieldDelegate {
-    @IBOutlet weak var searchTextField: TextField!
+class PatientsCollectionViewController: UIViewController, FilterViewDelegate, PriorityTabViewDelegate, SelectorViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     @IBOutlet weak var logoutItem: UIBarButtonItem!
-    @IBOutlet weak var sortButton: DropdownButton!
-    @IBOutlet weak var sortSelectorView: SortSelectorView!
+    @IBOutlet weak var filterView: FilterView!
+    weak var sortSelectorView: SelectorView?
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var collectionViewContainer: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -53,7 +52,6 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
     var priority: Priority = .immediate
     var priorityTabViews: [Priority: PriorityTabView] = [:]
     var sort: Sort = .recent
-    var searchDebounceTimer: Timer?
 
     // MARK: -
 
@@ -95,8 +93,8 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
         self.refreshControl = refreshControl
 
         /// set up sort dropdown button
-        sortButton.setTitle(NSLocalizedString("Patient.sort.\(sort.rawValue)", comment: ""), for: .normal)
-        sortSelectorView.delegate = self
+        filterView.delegate = self
+        filterView.button.setTitle(sort.description, for: .normal)
         
         /// set up Realm query and observer
         performQuery()
@@ -106,11 +104,6 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
         super.viewWillAppear(animated)
         /// trigger additional refresh
         refresh()
-    }
-
-    @IBAction func sortPressed(_ sender: Any) {
-        sortButton.isSelected = !sortButton.isSelected
-        sortSelectorView.isHidden = !sortButton.isSelected
     }
 
     private func performQuery() {
@@ -129,8 +122,8 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
             sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
         }
         let realm = AppRealm.open()
-        if let searchText = searchTextField.text, !searchText.isEmpty {
-            results = realm.objects(Patient.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", searchText, searchText).sorted(by: sorts)
+        if let text = filterView.textField.text, !text.isEmpty {
+            results = realm.objects(Patient.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text).sorted(by: sorts)
         } else {
             results = realm.objects(Patient.self).sorted(by: sorts)
         }
@@ -213,8 +206,6 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
         }
     }
     
-    // MARK: - Navigation
-    
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
@@ -226,6 +217,32 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
             let patient = results?.filter("priority=%@", priority.rawValue)[indexPath.row] {
             vc.patient = patient
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+        }
+    }
+
+    // MARK: - FilterViewDelegate
+    
+    func filterView(_ filterView: FilterView, didChangeSearch text: String?) {
+        performQuery()
+    }
+    
+    func filterView(_ filterView: FilterView, didPressButton button: UIButton) {
+        button.isSelected = !button.isSelected
+        if button.isSelected {
+            let sortSelectorView = SelectorView();
+            sortSelectorView.delegate = self
+            for sort in Sort.allCases {
+                sortSelectorView.addButton(title: sort.description)
+            }
+            view.addSubview(sortSelectorView)
+            NSLayoutConstraint.activate([
+                sortSelectorView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 0),
+                sortSelectorView.rightAnchor.constraint(equalTo: button.rightAnchor, constant: 0),
+                sortSelectorView.widthAnchor.constraint(equalToConstant: button.frame.width)
+            ])
+            self.sortSelectorView = sortSelectorView
+        } else {
+            sortSelectorView?.removeFromSuperview()
         }
     }
 
@@ -250,13 +267,13 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
         }
     }
 
-    // MARK: - SortSelectorViewDelegate
+    // MARK: - SelectorViewDelegate
     
-    func sortSelectorView(_ view: SortSelectorView, didSelectSort sort: Sort) {
-        sortButton.isSelected = false
-        if (sort != self.sort) {
-            self.sort = sort
-            sortButton.setTitle(NSLocalizedString("Patient.sort.\(sort.rawValue)", comment: ""), for: .normal)
+    func selectorView(_ view: SelectorView, didSelectButtonAtIndex index: Int) {
+        filterView.button.isSelected = false
+        if sort != Sort.allCases[index] {
+            sort = Sort.allCases[index]
+            filterView.button.setTitle(sort.description, for: .normal)
             performQuery()
         }
     }
@@ -291,24 +308,5 @@ class PatientsCollectionViewController: UIViewController, PriorityTabViewDelegat
         }
         frame.size.height = 60
         return frame.size
-    }
-    
-    // MARK: - UITextFieldDelegate
-
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        return textFieldShouldClear(textField)
-    }
-    
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        searchDebounceTimer?.invalidate()
-        searchDebounceTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] (timer) in
-            self?.performQuery()
-        }
-        return true
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        return true
     }
 }

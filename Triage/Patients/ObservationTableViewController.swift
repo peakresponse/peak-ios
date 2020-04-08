@@ -32,6 +32,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         updateButton.removeTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
         updateButton.addTarget(self, action: #selector(recordPressed(_:)), for: .touchUpInside)
 
+        tableView.allowsSelectionDuringEditing = true
         tableView.setEditing(true, animated: false)
     }
 
@@ -255,7 +256,24 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     // MARK: - AttributeTableViewCellDelegate
 
     func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String) {
-        patient.setValue(text, forKey: cell.attribute)
+        if cell.attributeType == .object {
+            if text.isEmpty {
+                patient.setValue(nil, forKey: cell.attribute)
+            }
+        } else {
+            patient.setValue(text, forKey: cell.attribute)
+        }
+        if cell.attribute == Patient.Keys.transportAgency || cell.attribute == Patient.Keys.transportFacility {
+            tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
+        }
+    }
+
+    func attributeTableViewCellDidSelect(_ cell: AttributeTableViewCell) {
+        if let indexPath = tableView.indexPath(for: cell) {
+            if indexPath.section == Section.location.rawValue {
+                tableView(tableView, didSelectRowAt: indexPath)
+            }
+        }
     }
     
     // MARK: - LatLngTableViewCellDelegate
@@ -284,6 +302,32 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
             self?.dispatchGroup.leave()
         }
         uploadTask?.resume()
+    }
+
+    // MARK: - PortraitTableViewCellDelegate
+
+    override func portaitTableViewCellDidPressTransportButton(_ cell: PortraitTableViewCell) {
+        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities") as? FacilitiesTableViewController,
+            let observation = patient as? Observation {
+            vc.observation = observation
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("CANCEL", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.handler = { [weak self] (vc) in
+                guard let self = self else { return }
+                if let nextVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Agencies") as? AgenciesTableViewController {
+                    nextVC.observation = observation
+                    nextVC.handler = { [weak self] (vc) in
+                        guard let self = self else { return }
+                        self.dismiss(animated: true) { [weak self] in
+                            guard let self = self else { return }
+                            self.tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
+                        }
+                    }
+                    vc.navigationController?.pushViewController(nextVC, animated: true)
+                }
+            }
+            let navVC = UINavigationController(rootViewController: vc)
+            presentAnimated(navVC)
+        }
     }
 
     // MARK: - PriorityViewDelegate
@@ -401,11 +445,45 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case Section.location.rawValue:
-            if indexPath.row == 1 {
-                if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
-                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
-                        vc.patient = patient
-                        navigationController?.pushViewController(vc, animated: true)
+            if patient.isTransported {
+                if indexPath.row == 0 {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Agencies") as? AgenciesTableViewController,
+                        let observation = patient as? Observation {
+                        vc.observation = observation
+                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("CANCEL", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+                        vc.handler = { [weak self] (vc) in
+                            guard let self = self else { return }
+                            self.dismiss(animated: true) { [weak self] in
+                                guard let self = self else { return }
+                                self.tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
+                            }
+                        }
+                        let navVC = UINavigationController(rootViewController: vc)
+                        presentAnimated(navVC)
+                    }
+                } else if indexPath.row == 1 {
+                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities") as? FacilitiesTableViewController,
+                        let observation = patient as? Observation {
+                        vc.observation = observation
+                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("CANCEL", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+                        vc.handler = { [weak self] (vc) in
+                            guard let self = self else { return }
+                            self.dismiss(animated: true) { [weak self] in
+                                guard let self = self else { return }
+                                self.tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
+                            }
+                        }
+                        let navVC = UINavigationController(rootViewController: vc)
+                        presentAnimated(navVC)
+                    }
+                }
+            } else {
+                if indexPath.row == 1 {
+                    if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
+                        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
+                            vc.patient = patient
+                            navigationController?.pushViewController(vc, animated: true)
+                        }
                     }
                 }
             }

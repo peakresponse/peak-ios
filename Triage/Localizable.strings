@@ -6,6 +6,26 @@
   Copyright © 2019 Francis Li. All rights reserved.
 */
 
+"Facility.type." = "All";
+"Facility.type.1701001" = "Assisted Living Facility";
+"Facility.type.1701003" = "Clinic";
+"Facility.type.1701005" = "Hospital";
+"Facility.type.1701007" = "Nursing Home";
+"Facility.type.1701009" = "Other";
+"Facility.type.1701011" = "Urgent Care";
+"Facility.type.1701013" = "Physical Rehabilitation Facility";
+"Facility.type.1701015" = "Mental Health Facility";
+"Facility.type.1701017" = "Dialysis Center";
+"Facility.type.1701019" = "Diagnostic Services";
+"Facility.type.1701021" = "Freestanding Emergency Department";
+"Facility.type.1701023" = "Morgue/Mortuary";
+"Facility.type.1701025" = "Police/Jail";
+"Facility.type.1701027" = "Other EMS Responder (air)";
+"Facility.type.1701029" = "Other EMS Responder (ground)";
+"Facility.type.1701031" = "Other Recurring Care Center";
+"Facility.type.1701033" = "Drug and/or Alcohol Rehabilitation Facility";
+"Facility.type.1701035" = "Skilled Nursing Facility";
+
 "Patient.firstName" = "First name";
 "Patient.lastName" = "Last name";
 "Patient.age" = "Age";
@@ -14,6 +34,8 @@
 "Patient.pulse" = "Pulse";
 "Patient.capillaryRefill" = "Capillary Refill";
 "Patient.bloodPressure" = "Blood Pressure";
+"Patient.transportAgency" = "Agency";
+"Patient.transportFacility" = "Facility";
 
 "Patient.priority.0" = "Immediate";
 "Patient.priority.1" = "Delayed";

@@ -8,6 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */; };
+		452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC6243CF3F000A8F1FF /* Agency.swift */; };
+		452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC8243CF40600A8F1FF /* Facility.swift */; };
+		452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBCA243D22D000A8F1FF /* FacilitiesTableViewController.swift */; };
+		452DDBCD243D22E300A8F1FF /* AgenciesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBCC243D22E300A8F1FF /* AgenciesTableViewController.swift */; };
+		452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */; };
+		452DDBD1243D341900A8F1FF /* FacilityTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 452DDBCF243D341900A8F1FF /* FacilityTableViewCell.xib */; };
+		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
+		452DDBD5243D727200A8F1FF /* FilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD4243D727200A8F1FF /* FilterView.swift */; };
+		452DDBD7243D728500A8F1FF /* FilterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 452DDBD6243D728500A8F1FF /* FilterView.xib */; };
+		452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD9243D819500A8F1FF /* SelectorView.swift */; };
 		453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* AppTabBarController.swift */; };
 		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
 		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
@@ -52,8 +62,6 @@
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
-		458D1C8B24284657003C7C85 /* SortSelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8A24284657003C7C85 /* SortSelectorView.swift */; };
-		458D1C8D242846B7003C7C85 /* SortSelectorView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 458D1C8C242846B7003C7C85 /* SortSelectorView.xib */; };
 		4595CEBE2429678B0038B917 /* RecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4595CEBD2429678B0038B917 /* RecorderView.swift */; };
 		4595CEC0242967990038B917 /* RecorderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4595CEBF242967990038B917 /* RecorderView.xib */; };
 		459C1404236EB7D1002216BC /* TextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */; };
@@ -113,6 +121,16 @@
 
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
+		452DDBC6243CF3F000A8F1FF /* Agency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Agency.swift; sourceTree = "<group>"; };
+		452DDBC8243CF40600A8F1FF /* Facility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Facility.swift; sourceTree = "<group>"; };
+		452DDBCA243D22D000A8F1FF /* FacilitiesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilitiesTableViewController.swift; sourceTree = "<group>"; };
+		452DDBCC243D22E300A8F1FF /* AgenciesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgenciesTableViewController.swift; sourceTree = "<group>"; };
+		452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityTableViewCell.swift; sourceTree = "<group>"; };
+		452DDBCF243D341900A8F1FF /* FacilityTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FacilityTableViewCell.xib; sourceTree = "<group>"; };
+		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
+		452DDBD4243D727200A8F1FF /* FilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterView.swift; sourceTree = "<group>"; };
+		452DDBD6243D728500A8F1FF /* FilterView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = FilterView.xib; sourceTree = "<group>"; };
+		452DDBD9243D819500A8F1FF /* SelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
 		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
@@ -163,8 +181,6 @@
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
-		458D1C8A24284657003C7C85 /* SortSelectorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortSelectorView.swift; sourceTree = "<group>"; };
-		458D1C8C242846B7003C7C85 /* SortSelectorView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SortSelectorView.xib; sourceTree = "<group>"; };
 		4595CEBD2429678B0038B917 /* RecorderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecorderView.swift; sourceTree = "<group>"; };
 		4595CEBF242967990038B917 /* RecorderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecorderView.xib; sourceTree = "<group>"; };
 		459C1402236EB7D1002216BC /* TextViewTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewTableViewCell.swift; sourceTree = "<group>"; };
@@ -330,6 +346,8 @@
 			isa = PBXGroup;
 			children = (
 				4566F08B236E110300A04C75 /* Table View Cells */,
+				452DDBCC243D22E300A8F1FF /* AgenciesTableViewController.swift */,
+				452DDBCA243D22D000A8F1FF /* FacilitiesTableViewController.swift */,
 				4566F087236E0A5800A04C75 /* ObservationTableViewController.swift */,
 				4566F057236CD1EE00A04C75 /* Patients.storyboard */,
 				4566F059236CD26900A04C75 /* PatientsCollectionViewController.swift */,
@@ -345,6 +363,7 @@
 			isa = PBXGroup;
 			children = (
 				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
+				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
 				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
 				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
 				45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */,
@@ -360,7 +379,9 @@
 		4566F061236CE17900A04C75 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				452DDBC6243CF3F000A8F1FF /* Agency.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
+				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				4566F089236E0C8200A04C75 /* Observation.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 			);
@@ -372,6 +393,8 @@
 			children = (
 				45E267512418B2510010CDE9 /* Button.swift */,
 				458D1C8824283672003C7C85 /* DropdownButton.swift */,
+				452DDBD4243D727200A8F1FF /* FilterView.swift */,
+				452DDBD6243D728500A8F1FF /* FilterView.xib */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
 				45E2675724196E5C0010CDE9 /* NavigationController.swift */,
 				45FD73E6243151C200FD7EDB /* ObservationView.swift */,
@@ -387,8 +410,7 @@
 				4595CEBD2429678B0038B917 /* RecorderView.swift */,
 				4595CEBF242967990038B917 /* RecorderView.xib */,
 				4566F079236D486B00A04C75 /* RoundImageView.swift */,
-				458D1C8A24284657003C7C85 /* SortSelectorView.swift */,
-				458D1C8C242846B7003C7C85 /* SortSelectorView.xib */,
+				452DDBD9243D819500A8F1FF /* SelectorView.swift */,
 				45E2674F2418AFAD0010CDE9 /* TextField.swift */,
 			);
 			path = Views;
@@ -410,6 +432,8 @@
 				459C1403236EB7D1002216BC /* TextViewTableViewCell.xib */,
 				45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */,
 				45E5BEEF2425DB270013D78D /* TableViewHeaderView.xib */,
+				452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */,
+				452DDBCF243D341900A8F1FF /* FacilityTableViewCell.xib */,
 			);
 			path = "Table View Cells";
 			sourceTree = "<group>";
@@ -560,8 +584,8 @@
 				45E267482418AF340010CDE9 /* NunitoSans-Italic.ttf in Resources */,
 				45E267472418AF340010CDE9 /* NunitoSans-SemiBoldItalic.ttf in Resources */,
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
-				458D1C8D242846B7003C7C85 /* SortSelectorView.xib in Resources */,
 				45E5BEF02425DB270013D78D /* TableViewHeaderView.xib in Resources */,
+				452DDBD1243D341900A8F1FF /* FacilityTableViewCell.xib in Resources */,
 				45E267442418AF340010CDE9 /* NunitoSans-BlackItalic.ttf in Resources */,
 				4566F053236CD05200A04C75 /* Login.storyboard in Resources */,
 				45E267492418AF340010CDE9 /* OFL.txt in Resources */,
@@ -585,6 +609,7 @@
 				4566F080236D581400A04C75 /* PriorityView.xib in Resources */,
 				45E267412418AF340010CDE9 /* NunitoSans-BoldItalic.ttf in Resources */,
 				4566F027236CCC5500A04C75 /* Main.storyboard in Resources */,
+				452DDBD7243D728500A8F1FF /* FilterView.xib in Resources */,
 				4566F097236E11B000A04C75 /* PortraitTableViewCell.xib in Resources */,
 				45E267432418AF340010CDE9 /* NunitoSans-Light.ttf in Resources */,
 				459C1405236EB7D1002216BC /* TextViewTableViewCell.xib in Resources */,
@@ -709,7 +734,6 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				4566F096236E11B000A04C75 /* PortraitTableViewCell.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
-				458D1C8B24284657003C7C85 /* SortSelectorView.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
@@ -717,27 +741,35 @@
 				4566F084236DF5C000A04C75 /* PinField.swift in Sources */,
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
+				452DDBD5243D727200A8F1FF /* FilterView.swift in Sources */,
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
+				452DDBCD243D22E300A8F1FF /* AgenciesTableViewController.swift in Sources */,
 				459C1404236EB7D1002216BC /* TextViewTableViewCell.swift in Sources */,
 				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
+				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
 				45A3F140242030A8009D6818 /* PriorityTabView.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
+				452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				45E267562418C0650010CDE9 /* UITabBar+Extensions.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				4566F055236CD0C100A04C75 /* LoginViewController.swift in Sources */,
+				452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */,
 				45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */,
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
 				4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
+				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
+				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
+				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,

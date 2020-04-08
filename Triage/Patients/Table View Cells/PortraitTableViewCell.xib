@@ -40,13 +40,13 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VSO-dq-pNM">
-                        <rect key="frame" x="190" y="59" width="62" height="33"/>
+                        <rect key="frame" x="190" y="36" width="62" height="33"/>
                         <fontDescription key="fontDescription" name="NunitoSans-Black" family="Nunito Sans" pointSize="24"/>
                         <color key="textColor" red="0.30980392156862746" green="0.30980392156862746" blue="0.30980392156862746" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7yh-ig-OG4">
-                        <rect key="frame" x="262" y="58.5" width="28" height="28"/>
+                        <rect key="frame" x="190" y="74" width="28" height="28"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="28" id="Cga-V0-BEw"/>
                             <constraint firstAttribute="width" constant="28" id="O2v-9j-HiC"/>
@@ -55,6 +55,18 @@
                         <state key="normal" image="Edit"/>
                         <connections>
                             <action selector="editPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="bz5-RT-54F"/>
+                        </connections>
+                    </button>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6xe-jE-Eut">
+                        <rect key="frame" x="228" y="74" width="28" height="28"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="28" id="NfR-Cz-8eW"/>
+                            <constraint firstAttribute="width" constant="28" id="sb1-Lo-FTb"/>
+                        </constraints>
+                        <color key="tintColor" red="0.27450980390000002" green="0.64705882349999999" blue="0.85882352939999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <state key="normal" image="Transport"/>
+                        <connections>
+                            <action selector="transportPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="0ID-QL-t75"/>
                         </connections>
                     </button>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="V4p-Dr-q9J">
@@ -75,13 +87,14 @@
                     </view>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="VSO-dq-pNM" firstAttribute="bottom" secondItem="FMc-Jd-nrT" secondAttribute="bottom" constant="-20" id="2fn-Qt-YbA"/>
+                    <constraint firstItem="VSO-dq-pNM" firstAttribute="bottom" secondItem="7yh-ig-OG4" secondAttribute="top" constant="-5" id="2fn-Qt-YbA"/>
                     <constraint firstItem="s1g-An-PJI" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailing" id="4f3-Gj-rHb"/>
                     <constraint firstItem="9rV-54-D69" firstAttribute="top" secondItem="V4p-Dr-q9J" secondAttribute="bottom" id="8uz-x1-4eI"/>
                     <constraint firstItem="VSO-dq-pNM" firstAttribute="leading" secondItem="IhE-bR-qha" secondAttribute="trailing" constant="30" id="ALn-E4-Pas"/>
+                    <constraint firstItem="6xe-jE-Eut" firstAttribute="centerY" secondItem="7yh-ig-OG4" secondAttribute="centerY" id="BCu-Xf-CYA"/>
                     <constraint firstItem="FMc-Jd-nrT" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailing" id="BiR-Rd-6Jv"/>
                     <constraint firstItem="FMc-Jd-nrT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="EOg-Cq-BEo"/>
-                    <constraint firstItem="7yh-ig-OG4" firstAttribute="centerY" secondItem="VSO-dq-pNM" secondAttribute="centerY" constant="-3" id="Eca-7W-rbG"/>
+                    <constraint firstItem="7yh-ig-OG4" firstAttribute="bottom" secondItem="FMc-Jd-nrT" secondAttribute="bottom" constant="-10" id="Eca-7W-rbG"/>
                     <constraint firstItem="FMc-Jd-nrT" firstAttribute="height" secondItem="H2p-sc-9uM" secondAttribute="height" multiplier="0.5" id="Lah-Mv-V6z"/>
                     <constraint firstItem="V4p-Dr-q9J" firstAttribute="top" secondItem="FMc-Jd-nrT" secondAttribute="bottom" constant="10" id="SXL-c6-hti"/>
                     <constraint firstItem="s1g-An-PJI" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="Ujl-3W-NFM"/>
@@ -91,8 +104,9 @@
                     <constraint firstItem="IhE-bR-qha" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="kmZ-6R-7lk"/>
                     <constraint firstItem="9rV-54-D69" firstAttribute="leading" secondItem="IhE-bR-qha" secondAttribute="trailing" constant="30" id="nCm-gE-AUC"/>
                     <constraint firstItem="IhE-bR-qha" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="nie-Vk-9LA"/>
-                    <constraint firstItem="7yh-ig-OG4" firstAttribute="leading" secondItem="VSO-dq-pNM" secondAttribute="trailing" constant="10" id="pxy-GY-iJt"/>
+                    <constraint firstItem="7yh-ig-OG4" firstAttribute="leading" secondItem="VSO-dq-pNM" secondAttribute="leading" id="pxy-GY-iJt"/>
                     <constraint firstItem="V4p-Dr-q9J" firstAttribute="leading" secondItem="IhE-bR-qha" secondAttribute="trailing" constant="30" id="r5P-eD-JjC"/>
+                    <constraint firstItem="6xe-jE-Eut" firstAttribute="leading" secondItem="7yh-ig-OG4" secondAttribute="trailing" constant="10" id="z5y-GT-Xhv"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -103,6 +117,7 @@
                 <outlet property="priorityLabel" destination="VSO-dq-pNM" id="Lhw-7k-I1E"/>
                 <outlet property="prioritySelectorView" destination="s1g-An-PJI" id="lVd-fi-22n"/>
                 <outlet property="priorityView" destination="FMc-Jd-nrT" id="0xa-eF-dVI"/>
+                <outlet property="transportButton" destination="6xe-jE-Eut" id="YbV-kb-VKT"/>
                 <outlet property="updatedLabel" destination="9rV-54-D69" id="xRi-x8-Z06"/>
             </connections>
             <point key="canvasLocation" x="156.52173913043478" y="95.758928571428569"/>
@@ -110,5 +125,6 @@
     </objects>
     <resources>
         <image name="Edit" width="24" height="24"/>
+        <image name="Transport" width="24" height="24"/>
     </resources>
 </document>

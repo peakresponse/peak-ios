@@ -69,6 +69,10 @@ extension UIColor {
         return UIColor(r: 79, g: 79, b: 79)
     }
     
+    static var gray3: UIColor {
+        return UIColor(r: 130, g: 130, b: 130)
+    }
+    
     static var gray4: UIColor {
         return UIColor(r: 189, g: 189, b: 189)
     }

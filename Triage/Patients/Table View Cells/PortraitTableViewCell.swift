@@ -8,6 +8,10 @@
 
 import UIKit
 
+@objc protocol PortraitTableViewCellCelegate: PriorityViewDelegate {
+    @objc optional func portaitTableViewCellDidPressTransportButton(_ cell: PortraitTableViewCell)
+}
+
 class PortraitTableViewCell: PatientTableViewCell, PriorityViewDelegate {
     @IBOutlet weak var priorityView: UIView!
     @IBOutlet weak var prioritySelectorView: PriorityView!
@@ -16,8 +20,9 @@ class PortraitTableViewCell: PatientTableViewCell, PriorityViewDelegate {
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var updatedLabel: UILabel!
     @IBOutlet weak var editButton: UIButton!
-
-    weak var delegate: PriorityViewDelegate?
+    @IBOutlet weak var transportButton: UIButton!
+    
+    weak var delegate: PortraitTableViewCellCelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -25,6 +30,7 @@ class PortraitTableViewCell: PatientTableViewCell, PriorityViewDelegate {
         patientView.imageView.layer.borderColor = UIColor.white.cgColor
         patientView.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 4, color: .black, opacity: 0.25)
         editButton.setBackgroundImage(UIImage.resizableImage(withColor: .bottomBlueGray, cornerRadius: 3), for: .normal)
+        transportButton.setBackgroundImage(UIImage.resizableImage(withColor: .bottomBlueGray, cornerRadius: 3), for: .normal)
         prioritySelectorView.isHidden = true
         prioritySelectorView.delegate = self
     }
@@ -46,6 +52,10 @@ class PortraitTableViewCell: PatientTableViewCell, PriorityViewDelegate {
         prioritySelectorView.isHidden = !prioritySelectorView.isHidden
     }
 
+    @IBAction func transportPressed(_ sender: Any) {
+        delegate?.portaitTableViewCellDidPressTransportButton?(self)
+    }
+    
     // MARK: - PriorityViewDelegate
 
     func priorityView(_ view: PriorityView, didSelect priority: Int) {

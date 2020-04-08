@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import RealmSwift
 
 class AppRealm {
@@ -26,6 +27,54 @@ class AppRealm {
         return realm
     }
 
+    // MARK: - Agencies
+
+    public static func getAgencies(search: String? = nil, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getAgencies(search: search, completionHandler: { (records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                let agencies = records.map({ Agency.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(agencies, update: .modified)
+                }
+                completionHandler(nil)
+            }
+        })
+        task.resume()
+    }
+
+    // MARK: - Facilities
+
+    public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                var origin: CLLocation?
+                if let lat = Double(lat), let lng = Double(lng) {
+                    origin = CLLocation(latitude: lat, longitude: lng)
+                }
+                let facilities = records.map({ (record) -> Base in
+                    let facility = Facility.instantiate(from: record)
+                    if let facility = facility as? Facility, let latlng = facility.latlng, let origin = origin {
+                        facility.distance = latlng.distance(from: origin)
+                    }
+                    return facility
+                })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(facilities, update: .modified)
+                }
+                completionHandler(nil)
+            }
+        })
+        task.resume()
+    }
+
+    // MARK: - Observations
+
     public static func createObservation(_ observation: Observation, completionHandler: @escaping (Observation?, Error?) ->  Void) {
         let task = ApiClient.shared.createObservation(observation.asJSON()) { (record, error) in
             var observation: Observation?
@@ -42,7 +91,9 @@ class AppRealm {
         }
         task.resume()
     }
-    
+
+    // MARK: - Patients
+
     public static func getPatients(completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.getPatients { (records, error) in
             if let error = error {

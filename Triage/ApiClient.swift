@@ -21,7 +21,7 @@ class ApiClient {
             shared.invalidate()
         }
     }
-    
+
     var session: URLSession
     let baseURL: URL
     
@@ -139,6 +139,29 @@ class ApiClient {
  
     func me(completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/users/me", completionHandler: completionHandler)
+    }
+    
+    // MARK: - Agencies
+
+    func getAgencies(search: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        var params: [String: String] = [:]
+        if let search = search, !search.isEmpty {
+            params["search"] = search
+        }
+        return GET(path: "/api/agencies", params: params, completionHandler: completionHandler)
+    }
+
+    // MARK: - Facilities
+
+    func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        var params = ["lat": lat, "lng": lng]
+        if let search = search, !search.isEmpty {
+            params["search"] = search
+        }
+        if let type = type, !type.isEmpty {
+            params["type"] = type
+        }
+        return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
 
     // MARK: - Observations

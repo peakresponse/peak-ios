@@ -20,11 +20,15 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
     }
 }
 
-enum Sort: Int, CaseIterable {
+enum Sort: Int, CaseIterable, CustomStringConvertible {
     case recent = 0
     case longest
     case az
     case za
+    
+    var description: String {
+        return NSLocalizedString("Patient.sort.\(rawValue)", comment: "")
+    }
 }
 
 let PRIORITY_COLORS = [
@@ -74,6 +78,10 @@ class Patient: Base {
         static let portraitUrl = "portraitUrl"
         static let photoUrl = "photoUrl"
         static let audioUrl = "audioUrl"
+        static let transportAgency = "transportAgency"
+        static let transportAgencyId = "transportAgencyId"
+        static let transportFacility = "transportFacility"
+        static let transportFacilityId = "transportFacilityId"
     }
     
     @objc dynamic var pin: String?
@@ -116,6 +124,29 @@ class Patient: Base {
     @objc dynamic var portraitUrl: String?
     @objc dynamic var photoUrl: String?
     @objc dynamic var audioUrl: String?
+    @objc dynamic var transportAgency: Agency? {
+        didSet {
+            if transportAgency != nil {
+                transportAgencyRemoved = false
+            } else if oldValue != nil && transportAgency == nil {
+                transportAgencyRemoved = true
+            }
+        }
+    }
+    @objc dynamic var transportAgencyRemoved = false
+    @objc dynamic var transportFacility: Facility? {
+        didSet {
+            if transportFacility != nil {
+                transportFacilityRemoved = false
+            } else if oldValue != nil && transportFacility == nil {
+                transportFacilityRemoved = true
+            }
+        }
+    }
+    @objc dynamic var transportFacilityRemoved = false
+    var isTransported: Bool {
+        return transportAgency != nil || transportFacility != nil
+    }
 
     override func setValue(_ value: Any?, forKey key: String) {
         if [Keys.age, Keys.respiratoryRate, Keys.pulse, Keys.capillaryRefill, Keys.priority].contains(key) {
@@ -142,7 +173,7 @@ class Patient: Base {
         super.setValue(value, forKey: key)
     }
     
-    override func update(from data: [String : Any]) {
+    override func update(from data: [String: Any]) {
         super.update(from: data)
         pin = data[Keys.pin] as? String
         version.value = data[Keys.version] as? Int
@@ -162,9 +193,23 @@ class Patient: Base {
         portraitUrl = data[Keys.portraitUrl] as? String
         photoUrl = data[Keys.photoUrl] as? String
         audioUrl = data[Keys.audioUrl] as? String
+        if let data = data[Keys.transportAgency] as? [String: Any],
+            let agency = Agency.instantiate(from: data) as? Agency {
+            transportAgency = agency
+        } else if let agencyId = data[Keys.transportAgencyId] as? String,
+            let agency = AppRealm.open().object(ofType: Agency.self, forPrimaryKey: agencyId) {
+            transportAgency = agency
+        }
+        if let data = data[Keys.transportFacility] as? [String: Any],
+            let facility = Facility.instantiate(from: data) as? Facility {
+            transportFacility = facility
+        } else if let facilityId = data[Keys.transportFacilityId]	 as? String,
+            let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
+            transportFacility = facility
+        }
     }
-    
-    override func asJSON() -> [String : Any] {
+
+    override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = pin {
             data[Keys.pin] = value
@@ -220,6 +265,16 @@ class Patient: Base {
         if let value = audioUrl {
             data[Keys.audioUrl] = value
         }
+        if let obj = transportAgency, let id = obj.id {
+            data[Keys.transportAgencyId] = id
+        } else if transportAgencyRemoved {
+            data[Keys.transportAgencyId] = NSNull()
+        }
+        if let obj = transportFacility, let id = obj.id {
+            data[Keys.transportFacilityId] = id
+        } else if transportFacilityRemoved {
+            data[Keys.transportFacilityId] = NSNull()
+        }
         return data
     }
 
@@ -242,6 +297,8 @@ class Patient: Base {
         observation.portraitUrl = portraitUrl
         observation.photoUrl = photoUrl
         observation.audioUrl = nil
+        observation.transportAgency = transportAgency
+        observation.transportFacility = transportFacility
         return observation
     }
 }

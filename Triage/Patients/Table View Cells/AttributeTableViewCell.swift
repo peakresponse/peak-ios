@@ -11,11 +11,13 @@ import UIKit
 @objc protocol AttributeTableViewCellDelegate {
     @objc optional func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String)
     @objc optional func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell)
+    @objc optional func attributeTableViewCellDidSelect(_ cell: AttributeTableViewCell)
 }
 
 enum AttributeTableViewCellType {
     case string
     case number
+    case object
 }
 
 class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, UITextFieldDelegate {
@@ -26,7 +28,8 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
     var attribute: String!
     var attributeType: AttributeTableViewCellType = .string
     weak var delegate: AttributeTableViewCellDelegate?
-
+    weak var timer: Timer?
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -44,6 +47,8 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
             valueField.keyboardType = .default
         case .number:
             valueField.keyboardType = .numberPad
+        case .object:
+            break
         }
         valueField.returnKeyType = .next
     }
@@ -60,12 +65,24 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        
         valueField.isUserInteractionEnabled = editing
         valueField.clearButtonMode = editing ? .always : .never
     }
     
     // MARK: - UITextFieldDelegate
 
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if attributeType == .object {
+            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { [weak self] (timer) in
+                guard let self = self else { return }
+                self.delegate?.attributeTableViewCellDidSelect?(self)
+            })
+            return false
+        }
+        return true
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         delegate?.attributeTableViewCellDidReturn?(self)
         return true
@@ -82,6 +99,7 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
     }
 
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
+        timer?.invalidate()
         DispatchQueue.main.async { [weak self] in
             if let self = self {
                 self.delegate?.attributeTableViewCell?(self, didChange: "")
