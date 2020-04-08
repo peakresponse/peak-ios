@@ -37,13 +37,18 @@ class PortraitTableViewCell: PatientTableViewCell, PriorityViewDelegate {
 
     override func configure(from patient: Patient) {
         selectionStyle = .none
+
         patientView.configure(from: patient)
+        patientView.imageView.layer.borderColor = patient.portraitUrl != nil ? UIColor.white.cgColor : UIColor.bottomBlueGray.cgColor
+        
         priorityView.backgroundColor = PRIORITY_COLORS[patient.priority.value ?? 5]
         prioritySelectorView.isHidden = true
         prioritySelectorView.select(priority: patient.priority.value)
+        
         contentView.backgroundColor = PRIORITY_COLORS_LIGHTENED[patient.priority.value ?? 5]
         priorityLabel.text = NSLocalizedString("Patient.priority.\(patient.priority.value ?? 5)", comment: "")
         priorityLabel.textColor = PRIORITY_LABEL_COLORS[patient.priority.value ?? 5]
+        
         nameLabel.text = patient.fullName
         updatedLabel.text = patient.updatedAtRelativeString
     }

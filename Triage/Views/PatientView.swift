@@ -13,9 +13,14 @@ import UIKit
     @objc optional func patientView(_ patientView: PatientView, didCapturePhoto fileURL: URL, withImage image: UIImage)
 }
 
+class PatientViewCameraButton: UIButton {
+    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+        return contentRect
+    }
+}
+
 class PatientView: UIView, CameraHelperDelegate {
     @IBOutlet weak var captureButton: UIButton!
-    @IBOutlet weak var initialsLabel: UILabel!
     @IBOutlet weak var imageView: RoundImageView!
     var imageViewURL: String?
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -41,14 +46,11 @@ class PatientView: UIView, CameraHelperDelegate {
     
     private func commonInit() {
         loadNib()
+        captureButton.layer.opacity = 0.25
     }
     
     func configure(from patient: Patient) {
         imageView.image = nil
-
-        let initials = "\(patient.firstName?.prefix(1) ?? "")\(patient.lastName?.prefix(1) ?? "")"
-        initialsLabel.text = initials
-
         imageViewURL = patient.portraitUrl
         if let imageViewURL = imageViewURL {
             AppCache.cachedImage(from: imageViewURL) { [weak self] (image, error) in
