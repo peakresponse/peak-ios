@@ -51,6 +51,22 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         reset()
     }
 
+    static var bluetoothHFPInputs: [AVAudioSessionPortDescription] {
+        var inputs: [AVAudioSessionPortDescription] = []
+        do {
+            let audioSession = AVAudioSession.sharedInstance()
+            try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.allowBluetooth, .defaultToSpeaker, .duckOthers])
+            for port in audioSession.availableInputs ?? [] {
+                if port.portType == .bluetoothHFP {
+                    inputs.append(port)
+                }
+            }
+        } catch {
+            print(error)
+        }
+        return inputs
+    }
+    
     func reset() {
         player = nil
         let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
@@ -93,7 +109,25 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         if audioSession.recordPermission == .granted {
             if SFSpeechRecognizer.authorizationStatus() == .authorized {
                 if !audioEngine.isRunning {
-                    try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.defaultToSpeaker, .duckOthers])
+                    try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.allowBluetooth, .defaultToSpeaker, .duckOthers])
+                    var customInput = false
+                    if let uid = AppSettings.audioInputPortUID {
+                        for port in audioSession.availableInputs ?? [] {
+                            if port.uid == uid {
+                                try audioSession.setPreferredInput(port)
+                                customInput = true
+                                break
+                            }
+                        }
+                    }
+                    if !customInput {
+                        for port in audioSession.availableInputs ?? [] {
+                            if port.portType == .builtInMic {
+                                try audioSession.setPreferredInput(port)
+                                break
+                            }
+                        }
+                    }
                     try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
                     let inputNode = audioEngine.inputNode
 

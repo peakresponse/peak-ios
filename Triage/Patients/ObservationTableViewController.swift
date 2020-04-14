@@ -24,6 +24,8 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     var cameraHelper = CameraHelper()
     var recorderView: RecorderView?
     
+    var bluetoothButton: Button!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,8 +34,36 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         updateButton.removeTarget(self, action: #selector(updatePressed(_:)), for: .touchUpInside)
         updateButton.addTarget(self, action: #selector(recordPressed(_:)), for: .touchUpInside)
 
+        bluetoothButton = Button(frame: CGRect(x: 0, y: 0, width: 44, height: 44))
+        bluetoothButton.translatesAutoresizingMaskIntoConstraints = false
+        bluetoothButton.backgroundColor = .gray3
+        bluetoothButton.selectedColor = .natBlue
+        bluetoothButton.tintColor = .white
+        bluetoothButton.adjustsImageWhenHighlighted = false
+        bluetoothButton.titleLabel?.font = UIFont(name: "NunitoSans-SemiBold", size: 18)
+        bluetoothButton.setImage(UIImage(named: "Bluetooth"), for: .normal)
+        bluetoothButton.addTarget(self, action: #selector(bluetoothPressed(_:)), for: .touchUpInside)
+        
         tableView.allowsSelectionDuringEditing = true
         tableView.setEditing(true, animated: false)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        bluetoothButton.removeFromSuperview()
+        if AudioHelper.bluetoothHFPInputs.count > 0 {
+            if let superview = tableView.superview {
+                superview.addSubview(bluetoothButton)
+                NSLayoutConstraint.activate([
+                    bluetoothButton.widthAnchor.constraint(equalToConstant: 44),
+                    bluetoothButton.heightAnchor.constraint(equalToConstant: 44),
+                    bluetoothButton.trailingAnchor.constraint(equalTo: updateButton.leadingAnchor, constant: -20),
+                    bluetoothButton.centerYAnchor.constraint(equalTo: updateButton.centerYAnchor)
+                ])
+                bluetoothButton.isHidden = updateButton.isHidden
+                bluetoothButton.isSelected = AppSettings.audioInputPortUID != nil
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -41,6 +71,30 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         if !patient.hasLatLng, let cell = tableView.cellForRow(at: IndexPath(row: 1, section: Section.location.rawValue)) as? LatLngTableViewCell {
             cell.captureLocation()
         }
+    }
+
+    @objc func bluetoothPressed(_ sender: Any) {
+        if AppSettings.audioInputPortUID != nil {
+            /// toggle Bluetooth off
+            AppSettings.audioInputPortUID = nil
+        } else {
+            /// select Bluetooth input, provide prompt if multiple
+            let inputPorts = AudioHelper.bluetoothHFPInputs
+            if inputPorts.count > 1 {
+                let alert = UIAlertController(title: NSLocalizedString("Select Bluetooth Input", comment: ""), message: nil, preferredStyle: .actionSheet)
+                for inputPort in inputPorts {
+                    alert.addAction(UIAlertAction(title: inputPort.portName, style: .default, handler: { [weak self] (action) in
+                        AppSettings.audioInputPortUID = inputPort.uid
+                        self?.bluetoothButton.isSelected = true
+                    }))
+                }
+                alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
+                presentAnimated(alert)
+            } else {
+                AppSettings.audioInputPortUID = inputPorts[0].uid
+            }
+        }
+        bluetoothButton.isSelected = AppSettings.audioInputPortUID != nil
     }
     
     @IBAction func savePressed(_ sender: Any) {
@@ -395,6 +449,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
         
         /// hide the record button, user must clear current recording to continue
         updateButton.isHidden = true
+        bluetoothButton.isHidden = true
     }
 
     func recorderView(_ recorderView: RecorderView, didThrowError error: Error) {

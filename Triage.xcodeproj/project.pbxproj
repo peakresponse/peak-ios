@@ -21,6 +21,7 @@
 		453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* AppTabBarController.swift */; };
 		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
 		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
+		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
 		4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F01F236CCC5500A04C75 /* AppDelegate.swift */; };
 		4566F027236CCC5500A04C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F025236CCC5500A04C75 /* Main.storyboard */; };
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
@@ -134,6 +135,7 @@
 		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
 		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		4566F01C236CCC5500A04C75 /* NaT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NaT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -302,6 +304,7 @@
 				4566F05B236CD2DB00A04C75 /* ApiClient.swift */,
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
+				454096A724452CEA00AEE53E /* AppSettings.swift */,
 				453877BC236FA47300E19880 /* AppTabBarController.swift */,
 				45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */,
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
@@ -773,6 +776,7 @@
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,
+				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,
 				45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */,
 				45E267522418B2510010CDE9 /* Button.swift in Sources */,

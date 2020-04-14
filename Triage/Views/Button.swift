@@ -14,6 +14,10 @@ class Button: UIButton {
         didSet { updateButtonBackgrounds() }
     }
     
+    var selectedColor: UIColor? {
+        didSet { updateSelectedButtonBackgrounds() }
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -34,6 +38,13 @@ class Button: UIButton {
         if let backgroundColor = backgroundColor {
             setBackgroundImage(UIImage.resizableImage(withColor: backgroundColor, cornerRadius: frame.height / 2), for: .normal)
             setBackgroundImage(UIImage.resizableImage(withColor: backgroundColor.colorWithBrightnessMultiplier(multiplier: 0.4), cornerRadius: frame.height / 2), for: .highlighted)
+        }
+    }
+    
+    private func updateSelectedButtonBackgrounds() {
+        if let selectedColor = selectedColor {
+            setBackgroundImage(UIImage.resizableImage(withColor: selectedColor, cornerRadius: frame.height / 2), for: .selected)
+            setBackgroundImage(UIImage.resizableImage(withColor: selectedColor.colorWithBrightnessMultiplier(multiplier: 0.4), cornerRadius: frame.height / 2), for: [.selected, .highlighted])
         }
     }
 }
