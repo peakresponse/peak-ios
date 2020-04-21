@@ -25,9 +25,14 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
     var recorderView: RecorderView?
     
     var bluetoothButton: Button!
+
+    var originalObservation: Observation!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        /// make a copy of the observation object before editing for comparison
+        originalObservation = patient.asObservation()
 
         updateButton.setTitle(NSLocalizedString("RECORD", comment: ""), for: .normal)
         updateButton.setImage(UIImage(named: "Microphone"), for: .normal)
@@ -109,7 +114,7 @@ class ObservationTableViewController: PatientTableViewController, PatientViewDel
 
         let saveObservation = { [weak self] in
             guard let self = self, let observation = self.patient as? Observation else { return }
-            AppRealm.createObservation(observation) { (observation, error) in
+            AppRealm.createObservation(observation.changes(from: self.originalObservation)) { (observation, error) in
                 let observationId = observation?.id
                 DispatchQueue.main.async { [weak self] in
                     self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
