@@ -39,6 +39,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         let defaultNotificationCenter = NotificationCenter.default
         defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        /// re-enable camera
+        if videoPreviewLayer != nil {
+            captureSession.startRunning()
+        }
     }
 
     override func didPresentAnimated() {
@@ -60,6 +64,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
+        /// disable camera, if running
+        if videoPreviewLayer != nil {
+            captureSession.stopRunning()
+        }
     }
 
     @objc func keyboardWillShow(_ notification: NSNotification) {
