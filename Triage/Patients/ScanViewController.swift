@@ -93,8 +93,11 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     private func setupCamera() {
         // Get the back-facing camera for capturing videos
-        let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera], mediaType: AVMediaType.video, position: .back)
-        guard let captureDevice = deviceDiscoverySession.devices.first else {
+        var captureDevice: AVCaptureDevice! = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        }
+        guard captureDevice != nil else {
             print("Failed to get the camera device")
             return
         }
