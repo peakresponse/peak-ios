@@ -138,6 +138,12 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
             collectionView.reloadData()
             updateCounts()
         case .update(_, let deletions, let insertions, let modifications):
+            /// if the collection view is empty just do a complete reload
+            if Priority.allCases.reduce(0, {$0 + (priorityTabViews[$1]?.count ?? 0)}) == 0 {
+                collectionView.reloadData()
+                updateCounts()
+                return
+            }
             /// rewrite indices for the selected priority
             var startIndex = 0, endIndex = 0
             for priority in Priority.allCases {
@@ -175,7 +181,7 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
             presentAlert(error: error)
         }
     }
-    
+
     @IBAction func logoutPressed(_ sender: Any) {
         logout()
     }
