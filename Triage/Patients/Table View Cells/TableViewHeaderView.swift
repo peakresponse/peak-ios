@@ -9,17 +9,42 @@
 import UIKit
 
 class TableViewHeaderView: UITableViewHeaderFooterView {
-    @IBOutlet weak var customBackgroundView: UIView!
-    @IBOutlet weak var customLabel: UILabel!
-
+    private let _textLabel = UILabel()
     override var textLabel: UILabel? {
-        get { return nil }
-        set {}
+        return _textLabel
     }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        customBackgroundView.layer.cornerRadius = 5
-        customBackgroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        backgroundView = UIView()
+        
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .greyPeakBlue
+        contentView.addSubview(view)
+        NSLayoutConstraint.activate([
+            view.topAnchor.constraint(equalTo: contentView.topAnchor),
+            view.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            view.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            view.heightAnchor.constraint(equalToConstant: 34)
+        ])
+        
+        _textLabel.translatesAutoresizingMaskIntoConstraints = false
+        _textLabel.font = .copySBold
+        _textLabel.textColor = .white
+        contentView.addSubview(_textLabel)
+        NSLayoutConstraint.activate([
+            _textLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22),
+            _textLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
 }

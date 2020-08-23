@@ -8,12 +8,10 @@
 
 import UIKit
 
-class AppTabBarController: UITabBarController {
-
+class AppTabBarController: TabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        /// hit the server to check current log-in status
         let task = ApiClient.shared.me { [weak self] (record, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in

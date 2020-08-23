@@ -9,12 +9,15 @@
 import AVFoundation
 import UIKit
 
-class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, ObservationTableViewControllerDelegate, PinFieldDelegate {
+class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, ObservationViewControllerDelegate, UITextFieldDelegate {
+    @IBOutlet weak var navigationBar: NavigationBar!
+    @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
-    @IBOutlet weak var pinField: PinField!
-    @IBOutlet weak var pinFieldWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var pinFieldHeightConstraint: NSLayoutConstraint!
+    @IBOutlet weak var orLabel: UILabel!
     @IBOutlet weak var pinFieldLabel: UILabel!
+    @IBOutlet weak var pinField: UITextField!
+
+    private var inputToolbar: UIToolbar!
 
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -22,23 +25,30 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set up pin field entry
-        pinField.text = nil
-        pinField.font = UIFont(name: "NunitoSans-Regular", size: 48)
-        pinField.delegate = self
-        let pinFieldSize = pinField.sizeThatFits(CGSize.zero)
-        pinFieldWidthConstraint.constant = pinFieldSize.width
-        pinFieldHeightConstraint.constant = pinFieldSize.height
-        view.layoutIfNeeded()
+        isModalInPresentation = true
+
+        inputToolbar = UIToolbar()
+        inputToolbar.setItems([
+            UIBarButtonItem(title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
+            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
+            UIBarButtonItem(title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
+        ], animated: false)
+        pinField.inputAccessoryView = inputToolbar
+
+        /// labels and fields
+        cameraLabel.font = .copyMBold
+        orLabel.font = .copyMBold
+        pinFieldLabel.font = .copyMBold
         
         setupCamera()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
         defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+
         /// re-enable camera
         if videoPreviewLayer != nil {
             captureSession.startRunning()
@@ -70,14 +80,21 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         }
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        videoPreviewLayer?.frame = cameraView.bounds
+        /// properly size the input accessory subview
+        inputToolbar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
+    }
+    
     @objc func keyboardWillShow(_ notification: NSNotification) {
-        if let pinFieldFrame = pinFieldLabel.superview?.convert(pinFieldLabel.frame, to: nil),
+        if let pinFieldFrame = pinField.superview?.convert(pinField.frame, to: nil),
             let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             if keyboardFrame.minY < pinFieldFrame.maxY {
                 UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
-                    var frame = self.view.frame
-                    frame.origin.y = floor(keyboardFrame.minY - pinFieldFrame.maxY)
-                    self.view.frame = frame
+                    var bounds = self.view.bounds
+                    bounds.origin.y = -floor(keyboardFrame.minY - pinFieldFrame.maxY)
+                    self.view.bounds = bounds
                 }
             }
         }
@@ -85,9 +102,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
         UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
-            var frame = self.view.frame
-            frame.origin.y = 0
-            self.view.frame = frame
+            var bounds = self.view.bounds
+            bounds.origin.y = 0
+            self.view.bounds = bounds
         }
     }
 
@@ -116,6 +133,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             videoPreviewLayer?.frame = cameraView.layer.bounds
+            print(cameraView.frame, cameraView.layer.bounds)
             cameraView.layer.addSublayer(videoPreviewLayer!)
             // Start video capture.
             captureSession.startRunning()
@@ -123,13 +141,44 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             print(error)
         }
     }
-    
-    @IBAction func logoutPressed(_ sender: Any) {
-        logout()
-    }
 
     @IBAction func didTap(_ sender: Any) {
+        inputCancelPressed()
+    }
+
+    @objc func inputCancelPressed() {
         _ = pinField.resignFirstResponder()
+    }
+
+    @objc func inputSearchPressed() {
+        /// hide keyboard
+        _ = pinField.resignFirstResponder()
+        /// get input
+        guard let pin = pinField.text else { return }
+        /// check if Patient record exists
+        let realm = AppRealm.open()
+        let results = realm.objects(Patient.self).filter("pin=%@", pin)
+        var vc: UIViewController?
+        if results.count > 0 {
+            vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient")
+            if let vc = vc as? PatientViewController {
+                vc.patient = results[0]
+            }
+        } else {
+            let observation = Observation()
+            observation.pin = pin
+            vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation")
+            if let vc = vc as? ObservationViewController {
+                vc.delegate = self
+                vc.patient = observation
+            }
+        }
+        if let vc = vc {
+            /// present modally
+            presentAnimated(vc)
+        }
+        /// clear pinfield
+        pinField.text = nil
     }
     
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
@@ -146,58 +195,24 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         if metadataObj.type == AVMetadataObject.ObjectType.qr {
             if let pin = metadataObj.stringValue {
                 pinField.text = pin
-                pinField(pinField, didChange: pin)
+                inputSearchPressed()
             }
         }
     }
-    
-    // MARK: - PinFieldDelegate
 
-    func pinFieldDidBeginEditing(_ field: PinField) {
+    // MARK: - UITextFieldDelegate
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
         captureSession.stopRunning()
     }
 
-    func pinFieldDidEndEditing(_ field: PinField) {
+    func textFieldDidEndEditing(_ textField: UITextField) {
         captureSession.startRunning()
     }
+
+    // MARK: - ObservationViewControllerDelegate
     
-    func pinField(_ field: PinField, didChange pin: String) {
-        if pin.count == 6 {
-            captureSession.stopRunning()
-            /// hide keyboard
-            _ = field.resignFirstResponder()
-            /// check if Patient record exists
-            let realm = AppRealm.open()
-            let results = realm.objects(Patient.self).filter("pin=%@", pin)
-            var navVC: UINavigationController?
-            if results.count > 0 {
-                navVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? UINavigationController
-                if let vc = navVC?.topViewController as? PatientTableViewController {
-                    vc.patient = results[0]
-                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .done, target: self, action: #selector(dismissAnimated))
-                }
-            } else {
-                let observation = Observation()
-                observation.pin = pin
-                navVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation") as? UINavigationController
-                if let vc = navVC?.topViewController as? ObservationTableViewController {
-                    vc.delegate = self
-                    vc.patient = observation
-                    vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("CANCEL", comment: ""), style: .done, target: self, action: #selector(dismissAnimated))
-                }
-            }
-            if let navVC = navVC {
-                /// present modally
-                presentAnimated(navVC)
-            }
-            /// clear pinfield
-            pinField.text = nil
-        }
-    }
-    
-    // MARK: - ObservationTableViewControllerDelegate
-    
-    func observationTableViewController(_ vc: ObservationTableViewController, didSave observation: Observation) {
+    func observationViewController(_ vc: ObservationViewController, didSave observation: Observation) {
         /// Observations saved here are for new Patient records, so fetch the Patient record
         if let patientId = observation.patientId {
             AppRealm.getPatient(idOrPin: patientId) { (error) in

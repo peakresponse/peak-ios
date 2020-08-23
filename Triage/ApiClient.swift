@@ -16,7 +16,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "https://natriage.org")! {
+    static var shared: ApiClient = ApiClient(baseURL: "https://peakresponse.net")! {
         willSet {
             shared.invalidate()
         }
@@ -24,7 +24,7 @@ class ApiClient {
 
     var session: URLSession
     let baseURL: URL
-    
+
     public required init?(baseURL: String) {
         let config = URLSessionConfiguration.default
         config.httpCookieStorage = HTTPCookieStorage.shared
@@ -37,13 +37,13 @@ class ApiClient {
             return nil
         }
     }
-    
+
     open func invalidate() {
         session.invalidateAndCancel()
     }
-    
+
     // MARK: - HTTP request helpers
-    
+
     func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
         var components = URLComponents()
         components.path = path

@@ -9,42 +9,98 @@
 import RealmSwift
 import UIKit
 
-class AgenciesTableViewController: UITableViewController, FilterViewDelegate {
-    @IBOutlet weak var filterView: FilterView!
-
-    var observation: Observation?
-    var handler: ((AgenciesTableViewController) -> ())?
+class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var headerViewTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var facilityView: FacilityView!
+    @IBOutlet weak var selectLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: SearchBar!
+    var debounceTimer: Timer?
     
+    var facility: Facility!
+
     var notificationToken: NotificationToken?
     var results: Results<Agency>?
 
     deinit {
         notificationToken?.invalidate()
+        debounceTimer?.invalidate()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        filterView.button.isHidden = true
-        filterView.delegate = self
+        facilityView.configure(from: facility)
+        facilityView.layer.borderColor = UIColor.greyPeakBlue.cgColor
+        facilityView.layer.borderWidth = 2
+
+        selectLabel.font = .copySBold
+        selectLabel.textColor = .mainGrey
+        selectLabel.text = "AgenciesTableViewController.selectLabel".localized
         
-        tableView.register(UINib(nibName: "FacilityTableViewCell", bundle: nil), forCellReuseIdentifier: "Facility")
-        tableView.tableFooterView = UIView()
+        tableView.register(FacilityTableViewCell.self, forCellReuseIdentifier: "Facility")
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 88
         
-        refreshControl = UIRefreshControl()
-        refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+
         refresh()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        let defaultNotificationCenter = NotificationCenter.default
+        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
+        tableView.tableHeaderView = tableView.tableHeaderView
+        tableView.layoutIfNeeded()
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    @objc func keyboardWillShow(_ notification: NSNotification) {
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            view.layoutIfNeeded()
+            UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+                self.headerViewTopConstraint.constant = 0
+                self.tableView.contentInset.bottom = keyboardFrame.height
+                self.tableView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
+                self.view.layoutIfNeeded()
+            }
+        }
+    }
+
+    @objc func keyboardWillHide(_ notification: NSNotification) {
+        view.layoutIfNeeded()
+        UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+            self.headerViewTopConstraint.constant = 140
+            self.tableView.contentInset.bottom = 0
+            self.tableView.verticalScrollIndicatorInsets.bottom = 0
+            self.view.layoutIfNeeded()
+        }
     }
 
     @objc func refresh() {
-        if let refreshControl = refreshControl, !refreshControl.isRefreshing {
+        if let refreshControl = tableView.refreshControl, !refreshControl.isRefreshing {
             refreshControl.beginRefreshing()
 
             var predicates: [NSPredicate] = []
-            if let text = filterView.textField.text, !text.isEmpty {
+            if let text = searchBar.text, !text.isEmpty {
                 predicates.append(NSPredicate(format: "name CONTAINS[cd] %@", text))
             }
             let realm = AppRealm.open()
+            notificationToken?.invalidate()
             results = realm.objects(Agency.self)
                 .filter(NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
                 .sorted(by: [SortDescriptor(keyPath: "name", ascending: true)])
@@ -52,9 +108,9 @@ class AgenciesTableViewController: UITableViewController, FilterViewDelegate {
                 self?.didObserveRealmChanges(changes)
             }
 
-            AppRealm.getAgencies(search: filterView.textField.text) { (error) in
-                DispatchQueue.main.async { [weak self] in
-                    self?.refreshControl?.endRefreshing()
+            AppRealm.getAgencies(search: searchBar.text) { (error) in
+                DispatchQueue.main.async {
+                    refreshControl.endRefreshing()
                 }
                 if let error = error {
                     DispatchQueue.main.async { [weak self] in
@@ -82,24 +138,46 @@ class AgenciesTableViewController: UITableViewController, FilterViewDelegate {
             presentAlert(error: error)
         }
     }
-    
-    // MARK: - FilterViewDelegate
 
-    func filterView(_ filterView: FilterView, didChangeSearch text: String?) {
-        refresh()
+    @IBAction func unwindToAgencies(_ segue: UIStoryboardSegue) {
+        if let indexPath = tableView.indexPathForSelectedRow {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? ConfirmTransportViewController,
+            let indexPath = tableView.indexPathForSelectedRow,
+            let agency = results?[indexPath.row] {
+            vc.facility = facility
+            vc.agency = agency
+        }
+    }
+    
+    // MARK: - UISearchBarDelegate
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [weak self] (timer) in
+            self?.refresh()
+        })
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 
-    // MARK: - Table view data source
+    // MARK: - UITableViewDataSource
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results?.count ?? 0
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Facility", for: indexPath)
         if let cell = cell as? FacilityTableViewCell, let agency = results?[indexPath.row] {
             cell.configure(from: agency)
@@ -109,17 +187,7 @@ class AgenciesTableViewController: UITableViewController, FilterViewDelegate {
 
     // MARK: - UITableViewDelegate
 
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if let agency = results?[indexPath.row] {
-            return FacilityTableViewCell.height(for: agency)
-        }
-        return super.tableView(tableView, heightForRowAt: indexPath)
-    }
-
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let agency = results?[indexPath.row] {
-            observation?.transportAgency = agency
-        }
-        handler?(self)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        performSegue(withIdentifier: "ConfirmTransport", sender: self)
     }
 }

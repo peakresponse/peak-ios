@@ -20,7 +20,7 @@ class Base: Object {
     @objc dynamic var createdAt: Date?
     @objc dynamic var updatedAt: Date?
     var updatedAtRelativeString: String {
-        return String(format: NSLocalizedString("Last updated:\n%@", comment: ""), updatedAt?.asRelativeString() ?? NSLocalizedString("Unknown", comment: ""))
+        return updatedAt?.asRelativeString() ?? "Unknown".localized
     }
 
     override public class func primaryKey() -> String? {

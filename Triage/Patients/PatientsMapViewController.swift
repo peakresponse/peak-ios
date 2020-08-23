@@ -14,7 +14,9 @@ class PatientAnnotation: MKPointAnnotation {
     var patient: Patient!
 }
 
-class PatientsMapViewController: UIViewController, MKMapViewDelegate {
+class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapViewDelegate {
+    @IBOutlet weak var searchBar: UISearchBar!
+    private var searchBarShouldBeginEditing = true
     @IBOutlet weak var mapView: MKMapView!
 
     var notificationToken: NotificationToken?
@@ -28,6 +30,8 @@ class PatientsMapViewController: UIViewController, MKMapViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        searchBar.delegate = self
         
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "Patient")
         
@@ -104,11 +108,10 @@ class PatientsMapViewController: UIViewController, MKMapViewDelegate {
     }
 
     private func navigate(to patient: Patient) {
-        if let navVC = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? UINavigationController,
-            let vc = navVC.topViewController as? PatientTableViewController {
+        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientViewController {
             vc.patient = patient
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .done, target: self, action: #selector(dismissAnimated))
-            presentAnimated(navVC)
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .done, target: self, action: #selector(dismissAnimated))
+            presentAnimated(vc)
         }
     }
     
@@ -153,8 +156,31 @@ class PatientsMapViewController: UIViewController, MKMapViewDelegate {
                     alert.addAction(action);
                 }
             }
-            alert.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
             presentAnimated(alert)
         }
+    }
+    
+    // MARK: - UISearchBarDelegate
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchBar.isFirstResponder {
+            searchBarShouldBeginEditing = false
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        let result = searchBarShouldBeginEditing
+        searchBarShouldBeginEditing = true
+        return result
     }
 }

@@ -9,46 +9,90 @@
 import UIKit
 
 extension UIColor {
+    /// Helper for retrieving colors from the Assets xcassets bundle- providing an explicit Bundle
+    /// reference ensures this works in other contexts- including Interface Builder IBDesignable execution
+    private static func named(_ name: String) -> UIColor {
+        return UIColor(named: name, in: Bundle(for: AppDelegate.self), compatibleWith: nil)!
+    }
+    
     static var immediateRed: UIColor {
-        return UIColor(r: 237, g: 117, b: 66)
+        return UIColor.named("ImmediateRed")
     }
 
     static var immediateRedLightened: UIColor {
-        return UIColor(r: 238, g: 169, b: 139)
+        return UIColor.named("LightImmediateRed")
     }
     
     static var delayedYellow: UIColor {
-        return UIColor(r: 243, g: 236, b: 66)
+        return UIColor.named("DelayedYellow")
     }
 
     static var delayedYellowLightened: UIColor {
-        return UIColor(r: 251, g: 248, b: 189)
+        return UIColor.named("LightDelayedYellow")
     }
     
     static var minimalGreen: UIColor {
-        return UIColor(r: 66, g: 237, b: 114)
+        return UIColor.named("MinimalGreen")
     }
 
     static var minimalGreenLightened: UIColor {
-        return UIColor(r: 197, g: 249, b: 211)
+        return UIColor.named("LightMinimalGreen")
     }
     
     static var expectantGray: UIColor {
-        return UIColor(r: 186, g: 191, b: 187)
+        return UIColor.named("ExpectGrey")
     }
 
     static var expectantGrayLightened: UIColor {
-        return UIColor(r: 214, g: 215, b: 214)
+        return UIColor.named("LightExpectGrey")
     }
     
     static var deadBlack: UIColor {
-        return UIColor(r: 71, g: 71, b: 71)
+        return UIColor.named("DeadBlack")
     }
 
     static var deadBlackLightened: UIColor {
-        return UIColor(r: 139, g: 139, b: 138)
+        return UIColor.named("LightDeadBlack")
     }
 
+    static var peakBlue: UIColor {
+        return UIColor.named("PeakBlue")
+    }
+    
+    static var lightPeakBlue: UIColor {
+        return UIColor.named("LightPeakBlue")
+    }
+    
+    static var middlePeakBlue: UIColor {
+        return UIColor.named("MiddlePeakBlue")
+    }
+    
+    static var darkPeakBlue: UIColor {
+        return UIColor.named("DarkPeakBlue")
+    }
+    
+    static var greyPeakBlue: UIColor {
+        return UIColor.named("GreyPeakBlue")
+    }
+
+    static var bgBackground: UIColor {
+        return UIColor.named("BgBackground")
+    }
+    
+    static var orangeAccent: UIColor {
+        return UIColor.named("OrangeAccent")
+    }
+    
+    static var mainGrey: UIColor {
+        return UIColor.named("MainGrey")
+    }
+    
+    static var lowPriorityGrey: UIColor {
+        return UIColor.named("LowPriorityGrey")
+    }
+
+    /// deprecated legacy colors -------------------
+    
     static var backgroundBlueGray: UIColor {
         return UIColor(r: 229, g: 236, b: 239)
     }

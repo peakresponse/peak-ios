@@ -12,6 +12,7 @@ import UIKit
     @objc optional func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String)
     @objc optional func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell)
     @objc optional func attributeTableViewCellDidSelect(_ cell: AttributeTableViewCell)
+    @objc optional func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell)
 }
 
 enum AttributeTableViewCellType {
@@ -20,45 +21,87 @@ enum AttributeTableViewCellType {
     case object
 }
 
-class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, UITextFieldDelegate {
-    @IBOutlet weak var customBackgroundView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var valueField: UITextField!
+class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
+    let field = FormField()
+    var fieldTopConstraint: NSLayoutConstraint!
+    var fieldLeftConstraint: NSLayoutConstraint!
+    var fieldRightConstraint: NSLayoutConstraint!
+    var bottomConstraint: NSLayoutConstraint!
 
     var attribute: String!
     var attributeType: AttributeTableViewCellType = .string
     weak var delegate: AttributeTableViewCellDelegate?
     weak var timer: Timer?
+
+    override var inputAccessoryView: UIView? {
+        get { return field.textField.inputAccessoryView }
+        set { field.textField.inputAccessoryView = newValue }
+    }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
+    func commonInit() {
+        layer.zPosition = -1
+        backgroundColor = .clear
+        selectionStyle = .none
+
+        field.translatesAutoresizingMaskIntoConstraints = false
+        field.delegate = self
+        contentView.addSubview(field)
+        fieldTopConstraint = field.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
+        fieldLeftConstraint = field.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22)
+        fieldRightConstraint = field.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -22)
+        bottomConstraint = contentView.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 5)
+        NSLayoutConstraint.activate([
+            fieldTopConstraint,
+            fieldLeftConstraint,
+            fieldRightConstraint,
+            bottomConstraint
+        ])
     }
     
     override func configure(from patient: Patient) {
-        titleLabel.text = NSLocalizedString("Patient.\(attribute ?? "")", comment: "")
+        field.labelText = "Patient.\(attribute ?? "")".localized
         if let value = patient.value(forKey: attribute) {
-            valueField.text = String(describing: value)
+            field.text = String(describing: value)
         } else {
-            valueField.text = nil
+            field.text = nil
         }
         switch attributeType {
         case .string:
-            valueField.keyboardType = .default
+            field.textField.keyboardType = .default
         case .number:
-            valueField.keyboardType = .numberPad
+            field.textField.keyboardType = .numberPad
         case .object:
             break
         }
-        valueField.returnKeyType = .next
+        field.textField.returnKeyType = .next
     }
 
+    func addAlertLabelTapRecognizer() {
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(alertPressed))
+        field.alertLabel.addGestureRecognizer(recognizer)
+        field.alertLabel.isUserInteractionEnabled = true
+    }
+    
+    @objc private func alertPressed() {
+        delegate?.attributeTableViewCellDidPressAlert?(self)
+    }
+    
     override func becomeFirstResponder() -> Bool {
-        return valueField.becomeFirstResponder()
+        return field.becomeFirstResponder()
     }
 
     override func resignFirstResponder() -> Bool {
-        return valueField.resignFirstResponder()
+        return field.resignFirstResponder()
     }
 
     // MARK: - UITableViewCell
@@ -66,8 +109,8 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         
-        valueField.isUserInteractionEnabled = editing
-        valueField.clearButtonMode = editing ? .always : .never
+        field.textField.isUserInteractionEnabled = editing
+        field.textField.rightViewMode = editing ? .always : .never
     }
     
     // MARK: - UITextFieldDelegate
@@ -82,7 +125,23 @@ class AttributeTableViewCell: PatientTableViewCell, PatientTableViewCellBackgrou
         }
         return true
     }
-    
+
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        fieldTopConstraint.constant = -5
+        fieldLeftConstraint.constant = 12
+        fieldRightConstraint.constant = -12
+        bottomConstraint.constant = -5
+        layer.zPosition = 0
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        fieldTopConstraint.constant = 5
+        fieldLeftConstraint.constant = 22
+        fieldRightConstraint.constant = -22
+        bottomConstraint.constant = 5
+        layer.zPosition = -1
+    }
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         delegate?.attributeTableViewCellDidReturn?(self)
         return true

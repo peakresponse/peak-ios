@@ -9,15 +9,31 @@
 import MapKit
 import UIKit
 
+
 class PatientMapViewController: UIViewController {
-    
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var headerView: UIView!
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var coordinateLabel: UILabel!
     @IBOutlet weak var mapView: MKMapView!
     
     var patient: Patient!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        containerView.layer.cornerRadius = 5
+        containerView.addShadow(withOffset: CGSize(width: 7, height: 7), radius: 50, color: .black, opacity: 0.4)
 
+        headerView.layer.cornerRadius = 5
+        headerView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        locationLabel.font = .copyMBold
+        locationLabel.text = patient.location
+        coordinateLabel.font = .copyXSRegular
+        coordinateLabel.text = patient.latLngString
+        
+        mapView.layer.cornerRadius = 5
+        mapView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         // Do any additional setup after loading the view.
         if let lat = Double(patient.lat ?? ""), let lng = Double(patient.lng ?? "") {
             let location = CLLocation(latitude: lat, longitude: lng)
@@ -32,16 +48,4 @@ class PatientMapViewController: UIViewController {
             mapView.addAnnotation(annotation)
         }
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

@@ -14,25 +14,28 @@ import UIKit
 
 class ObservationView: UIView, AudioHelperDelgate {        
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
-        let font = UIFont(name: "NunitoSans-Regular", size: 14) ?? UIFont.systemFont(ofSize: 14)
+        let font = UIFont.copySBold
         let text = text as NSString
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
-        let rect = text.boundingRect(with: CGSize(width: width - 30 /* left and right margins */, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
+        let rect = text.boundingRect(with: CGSize(width: width - 20 /* left and right margins */, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
             .font: font,
             .paragraphStyle: paragraphStyle
         ], context: nil)
-        return round(rect.height) + 16 /* top and bottom margins */ + 24 /* First row label height and bottom margin */
+        return round(rect.height) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
     }
 
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var timestampSeparatorLabel: UILabel!
-    @IBOutlet weak var timestampLabel: UILabel!
-    @IBOutlet weak var durationSeparatorLabel: UILabel!
-    @IBOutlet weak var durationLabel: UILabel!
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var textView: UITextView!
+    let playButton = UIButton(type: .custom)
+    let activityIndicatorView = UIActivityIndicatorView()
+    let titleLabel = UILabel()
+    var titleLabelLeftConstraint: NSLayoutConstraint!
+    var titleLabelPlayButtonConstraint: NSLayoutConstraint!
+    let durationLabel = UILabel()
+    let durationSeparatorLabel = UILabel()
+    let timestampLabel = UILabel()
+    var timestampLabelTitleLabelConstraint: NSLayoutConstraint!
+    var timestampLabelDurationLabelConstraint: NSLayoutConstraint!
+    let textView = UITextView()
     
     weak var delegate: ObservationViewDelegate?
     var audioHelper: AudioHelper?
@@ -48,33 +51,117 @@ class ObservationView: UIView, AudioHelperDelgate {
     }
 
     private func commonInit() {
-        loadNib()
-        backgroundColor = .clear
+        backgroundColor = .white
+        addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
+
+        playButton.translatesAutoresizingMaskIntoConstraints = false
+        playButton.setBackgroundImage(.resizableImage(withColor: .peakBlue, cornerRadius: 16), for: .normal)
+        playButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 16), for: .highlighted)
+        playButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 2, bottom: 0, right: -2)
+        playButton.tintColor = .white
+        playButton.addTarget(self, action: #selector(playPressed(_:)), for: .touchUpInside)
+        addSubview(playButton)
+        NSLayoutConstraint.activate([
+            playButton.topAnchor.constraint(equalTo: topAnchor, constant: 8),
+            playButton.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
+            playButton.widthAnchor.constraint(equalToConstant: 32),
+            playButton.heightAnchor.constraint(equalToConstant: 32)
+        ])
+
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: playButton.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: playButton.centerYAnchor)
+        ])
+
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .copyXSBold
+        titleLabel.textColor = .lowPriorityGrey
+        addSubview(titleLabel)
+        titleLabelLeftConstraint = titleLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 10)
+        titleLabelPlayButtonConstraint = titleLabel.leftAnchor.constraint(equalTo: playButton.rightAnchor, constant: 8)
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: topAnchor, constant: 8)
+        ])
+
+        durationLabel.translatesAutoresizingMaskIntoConstraints = false
+        durationLabel.font = .copySRegular
+        durationLabel.textColor = .peakBlue
+        addSubview(durationLabel)
+        NSLayoutConstraint.activate([
+            durationLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
+            durationLabel.bottomAnchor.constraint(equalTo: playButton.bottomAnchor)
+        ])
+        
+        durationSeparatorLabel.translatesAutoresizingMaskIntoConstraints = false
+        durationSeparatorLabel.font = .copySRegular
+        durationSeparatorLabel.textColor = .peakBlue
+        durationSeparatorLabel.text = "  |  "
+        addSubview(durationSeparatorLabel)
+        NSLayoutConstraint.activate([
+            durationSeparatorLabel.leftAnchor.constraint(equalTo: durationLabel.rightAnchor),
+            durationSeparatorLabel.bottomAnchor.constraint(equalTo: durationLabel.bottomAnchor)
+        ])
+
+        timestampLabel.translatesAutoresizingMaskIntoConstraints = false
+        timestampLabel.font = .copySRegular
+        timestampLabel.textColor = .peakBlue
+        addSubview(timestampLabel)
+        timestampLabelTitleLabelConstraint = timestampLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor)
+        timestampLabelDurationLabelConstraint = timestampLabel.leftAnchor.constraint(equalTo: durationSeparatorLabel.rightAnchor)
+        NSLayoutConstraint.activate([
+            timestampLabel.bottomAnchor.constraint(equalTo: playButton.bottomAnchor)
+        ])
+
+        textView.translatesAutoresizingMaskIntoConstraints = false
         textView.contentInset = .zero
         textView.textContainerInset = .zero
         textView.textContainer.lineFragmentPadding = 0
+        textView.font = .copySBold
+        textView.textColor = .mainGrey
+        addSubview(textView)
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
+            textView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
+            textView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
+        ])
     }
 
-    func configure(from patient: Patient) {
-        titleLabel.text = NSLocalizedString("Observation", comment: "")
-        timestampSeparatorLabel.isHidden = true
-        timestampLabel.isHidden = true
-        if let timestamp = patient.updatedAt?.asLocalizedTime() {
-            timestampSeparatorLabel.isHidden = false
-            timestampLabel.isHidden = false
-            timestampLabel.text = timestamp
+    private func setAudioControlsVisible(_ isVisible: Bool) {
+        if isVisible {
+            durationSeparatorLabel.isHidden = false
+            durationLabel.isHidden = false
+            playButton.isHidden = false
+            titleLabelLeftConstraint.isActive = false
+            titleLabelPlayButtonConstraint.isActive = true
+            timestampLabelTitleLabelConstraint.isActive = false
+            timestampLabelDurationLabelConstraint.isActive = true
+        } else {
+            durationSeparatorLabel.isHidden = true
+            durationLabel.isHidden = true
+            playButton.isHidden = true
+            titleLabelPlayButtonConstraint.isActive = false
+            titleLabelLeftConstraint.isActive = true
+            timestampLabelTitleLabelConstraint.isActive = true
+            timestampLabelDurationLabelConstraint.isActive = false
         }
+    }
+    
+    func configure(from patient: Patient) {
+        titleLabel.text = "Observation".localized
+        timestampLabel.text = patient.updatedAt?.asLocalizedTime()
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
         textView.attributedText = NSAttributedString(string: patient.text ?? "", attributes: [
-            .font: textView.font ?? UIFont.systemFont(ofSize: 14),
+            .font: textView.font!,
             .paragraphStyle: paragraphStyle,
-            .foregroundColor: textView.textColor ?? UIColor.gray4
+            .foregroundColor: textView.textColor!
         ])
-        durationSeparatorLabel.isHidden = true
-        durationLabel.isHidden = true
-        playButton.isHidden = true
+        setAudioControlsVisible(false)
         if let audioUrl = patient.audioUrl {
+            setAudioControlsVisible(true)
             activityIndicatorView.startAnimating()
             AppCache.cachedFile(from: audioUrl) { [weak self] (url, error) in
                 guard let self = self else { return }
@@ -108,7 +195,7 @@ class ObservationView: UIView, AudioHelperDelgate {
         }
     }
     
-    @IBAction func playPressed(_ sender: Any) {
+    @objc func playPressed(_ sender: Any) {
         guard let audioHelper = audioHelper else { return }
         if audioHelper.isPlaying {
             audioHelper.stopPressed()

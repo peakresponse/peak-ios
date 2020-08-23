@@ -14,20 +14,45 @@ import UIKit
     @objc optional func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell)
 }
 
-class ObservationTableViewCell: PatientTableViewCell, PatientTableViewCellBackground, ObservationViewDelegate, UITextViewDelegate {
+class ObservationTableViewCell: PatientTableViewCell, ObservationViewDelegate, UITextViewDelegate {
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
-        return ObservationView.heightForText(text, width: width - 50 /* left and right margins */) + 10 /* top and bottom margins*/
+        return ObservationView.heightForText(text, width: width - 44 /* left and right margins */) + 10 /* top and bottom margins*/
     }
 
-    @IBOutlet weak var customBackgroundView: UIView!
-    @IBOutlet weak var observationView: ObservationView!
+    override var inputAccessoryView: UIView? {
+        get { return observationView.textView.inputAccessoryView }
+        set { observationView.textView.inputAccessoryView = newValue }
+    }
+    
+    let observationView = ObservationView()
 
     weak var delegate: ObservationTableViewCellDelegate?
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    private func commonInit() {
+        backgroundView = UIView()
+        backgroundView?.backgroundColor = .bgBackground
+        contentView.backgroundColor = .clear
+
+        observationView.translatesAutoresizingMaskIntoConstraints = false
         observationView.delegate = self
         observationView.textView.delegate = self
+        contentView.addSubview(observationView)
+        NSLayoutConstraint.activate([
+            observationView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            observationView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22),
+            observationView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -22),
+            contentView.bottomAnchor.constraint(equalTo: observationView.bottomAnchor, constant: 5),
+        ])
     }
     
     override func configure(from patient: Patient) {

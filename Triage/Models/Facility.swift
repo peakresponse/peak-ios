@@ -31,7 +31,7 @@ enum FacilityType: String, CustomStringConvertible {
     case skilledNursing = "1701035"
 
     var description: String {
-        return NSLocalizedString("Facility.type.\(rawValue)", comment: "")
+        return "Facility.type.\(rawValue)".localized
     }
 }
 

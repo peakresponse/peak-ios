@@ -11,10 +11,18 @@ import UIKit
 class NavigationController: UINavigationController {
     var iconView: UIImageView?
 
+    override var tabBarItem: UITabBarItem! {
+        get {
+            if let tabBarItem = viewControllers.first?.tabBarItem {
+                return tabBarItem
+            }
+            return super.tabBarItem
+        }
+        set { super.tabBarItem = newValue }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        navigationBar.backgroundColor = UIColor.clear
         
         iconView = UIImageView(image: UIImage(named: "Icon"))
         if let iconView = iconView {
@@ -22,8 +30,8 @@ class NavigationController: UINavigationController {
             iconView.translatesAutoresizingMaskIntoConstraints = false
             navigationBar.addSubview(iconView)
             NSLayoutConstraint.activate([
-                iconView.widthAnchor.constraint(equalToConstant: 50),
-                iconView.heightAnchor.constraint(equalToConstant: 50),
+                iconView.widthAnchor.constraint(equalToConstant: 36),
+                iconView.heightAnchor.constraint(equalToConstant: 30),
                 iconView.centerXAnchor.constraint(equalTo: navigationBar.centerXAnchor),
                 iconView.centerYAnchor.constraint(equalTo: navigationBar.centerYAnchor)
             ])

@@ -10,21 +10,111 @@ import RealmSwift
 import UIKit
 
 class PatientsCollectionViewCell: UICollectionViewCell {
-    @IBOutlet weak var patientView: PatientView!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var updatedLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        patientView.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 4, color: UIColor.black, opacity: 0.1)
-        contentView.layer.masksToBounds = false
-        layer.masksToBounds = false
+    let priorityView = UIView()
+    let priorityLabel = UILabel()
+    let patientView = PatientView()
+    let nameLabel = UILabel()
+    let updatedLabel = UILabel()
+    let genderLabel = UILabel()
+    let ageLabel = UILabel()
+    let complaintLabel = UILabel()
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+
+    private func commonInit() {
+        backgroundColor = .white
+        layer.cornerRadius = 3
+        contentView.layer.cornerRadius = 3
+        addShadow(withOffset: CGSize(width: 2, height: 2), radius: 4, color: .black, opacity: 0.1)
+        
+        priorityView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(priorityView)
+        NSLayoutConstraint.activate([
+            priorityView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            priorityView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            priorityView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            priorityView.heightAnchor.constraint(equalToConstant: 16)
+        ])
+
+        priorityLabel.translatesAutoresizingMaskIntoConstraints = false
+        priorityLabel.font = .copyXSBold
+        priorityLabel.textColor = .mainGrey
+        contentView.addSubview(priorityLabel)
+        NSLayoutConstraint.activate([
+            priorityLabel.centerYAnchor.constraint(equalTo: priorityView.centerYAnchor),
+            priorityLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -6)
+        ])
+        
+        patientView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(patientView)
+        NSLayoutConstraint.activate([
+            patientView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 4),
+            patientView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 6),
+            patientView.widthAnchor.constraint(equalToConstant: 36),
+            patientView.heightAnchor.constraint(equalToConstant: 36),
+        ])
+        
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = .copyMBold
+        nameLabel.textColor = .mainGrey
+        contentView.addSubview(nameLabel)
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: priorityView.bottomAnchor, constant: 2),
+            nameLabel.leftAnchor.constraint(equalTo: patientView.rightAnchor, constant: 10)
+        ])
+
+        updatedLabel.translatesAutoresizingMaskIntoConstraints = false
+        updatedLabel.font = .copyXSRegular
+        updatedLabel.textColor = .mainGrey
+        contentView.addSubview(updatedLabel)
+        NSLayoutConstraint.activate([
+            updatedLabel.topAnchor.constraint(equalTo: priorityView.bottomAnchor, constant: 6),
+            updatedLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -6)
+        ])
+
+        genderLabel.translatesAutoresizingMaskIntoConstraints = false
+        genderLabel.font = .copySRegular
+        genderLabel.textColor = .mainGrey
+        contentView.addSubview(genderLabel)
+        NSLayoutConstraint.activate([
+            genderLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            genderLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor)
+        ])
+        
+        ageLabel.translatesAutoresizingMaskIntoConstraints = false
+        ageLabel.font = .copySRegular
+        ageLabel.textColor = .mainGrey
+        contentView.addSubview(ageLabel)
+        NSLayoutConstraint.activate([
+            ageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            ageLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 60)
+        ])
+        
+        complaintLabel.translatesAutoresizingMaskIntoConstraints = false
+        complaintLabel.font = .copySRegular
+        complaintLabel.textColor = .mainGrey
+        contentView.addSubview(complaintLabel)
+        NSLayoutConstraint.activate([
+            complaintLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            complaintLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 120)
+        ])
     }
 
     func configure(from patient: Patient) {
+        priorityView.backgroundColor = PRIORITY_COLORS_LIGHTENED[patient.priority.value ?? Priority.unknown.rawValue]
+        priorityLabel.text = Priority(rawValue: patient.priority.value ?? Priority.unknown.rawValue)?.description ?? ""
         patientView.configure(from: patient)
         nameLabel.text = patient.fullName
         updatedLabel.text = patient.updatedAtRelativeString
+        ageLabel.text = patient.ageString
     }
 }
 
@@ -32,25 +122,17 @@ class PatientsCollectionViewFlowLayout: UICollectionViewFlowLayout {
     
 }
 
-class PatientsCollectionViewController: UIViewController, FilterViewDelegate, PriorityTabViewDelegate, SelectorViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    @IBOutlet weak var logoutItem: UIBarButtonItem!
-    @IBOutlet weak var filterView: FilterView!
-    weak var sortSelectorView: SelectorView?
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var collectionViewContainer: UIView!
+class PatientsCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UISearchBarDelegate, SortBarDelegate {
+    @IBOutlet weak var searchBar: SearchBar!
+    private var searchBarShouldBeginEditing = true
+    @IBOutlet weak var sortBar: SortBar!
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var immediatePriorityView: PriorityTabView!
-    @IBOutlet weak var delayedPriorityView: PriorityTabView!
-    @IBOutlet weak var minimalPriorityView: PriorityTabView!
-    @IBOutlet weak var expectantPriorityView: PriorityTabView!
-    @IBOutlet weak var deadPriorityView: PriorityTabView!
 
     weak var refreshControl: UIRefreshControl!
 
     var notificationToken: NotificationToken?
     var results: Results<Patient>?
-    var priority: Priority = .immediate
-    var priorityTabViews: [Priority: PriorityTabView] = [:]
+    var priority: Priority?
     var sort: Sort = .recent
 
     // MARK: -
@@ -62,30 +144,14 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        /// set up priority to view mapping
-        priorityTabViews[.immediate] = immediatePriorityView
-        priorityTabViews[.delayed] = delayedPriorityView
-        priorityTabViews[.minimal] = minimalPriorityView
-        priorityTabViews[.expectant] = expectantPriorityView
-        priorityTabViews[.dead] = deadPriorityView
-        for (_, priorityTabView) in priorityTabViews {
-            priorityTabView.delegate = self
-        }
-
         /// set up collection view
-        collectionViewContainer.addShadow(withOffset: CGSize(width: 1, height: 2), radius: 2, color: UIColor.black, opacity: 0.1)
-        collectionViewContainer.layer.cornerRadius = 3
-        collectionViewContainer.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
-        collectionView.backgroundColor = UIColor.immediateRedLightened
-        collectionView.layer.cornerRadius = 3
-        collectionView.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+            layout.sectionInset = UIEdgeInsets(top: 10, left: 22, bottom: 15, right: 22)
             layout.minimumInteritemSpacing = 10
-            layout.minimumLineSpacing = 20
+            layout.minimumLineSpacing = 10
         }
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -93,8 +159,8 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
         self.refreshControl = refreshControl
 
         /// set up sort dropdown button
-        filterView.delegate = self
-        filterView.button.setTitle(sort.description, for: .normal)
+        sortBar.delegate = self
+        sortBar.dropdownButton.setTitle(sort.description, for: .normal)
         
         /// set up Realm query and observer
         performQuery()
@@ -122,7 +188,7 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
             sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
         }
         let realm = AppRealm.open()
-        if let text = filterView.textField.text, !text.isEmpty {
+        if let text = searchBar.text, !text.isEmpty {
             results = realm.objects(Patient.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text).sorted(by: sorts)
         } else {
             results = realm.objects(Patient.self).sorted(by: sorts)
@@ -138,52 +204,15 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
             collectionView.reloadData()
             updateCounts()
         case .update(_, let deletions, let insertions, let modifications):
-            /// if the collection view is empty just do a complete reload
-            if Priority.allCases.reduce(0, {$0 + (priorityTabViews[$1]?.count ?? 0)}) == 0 {
-                collectionView.reloadData()
-                updateCounts()
-                return
-            }
-            /// rewrite indices for the selected priority
-            var startIndex = 0, endIndex = 0
-            for priority in Priority.allCases {
-                if priority == self.priority {
-                    endIndex = startIndex + (priorityTabViews[priority]?.count ?? 0)
-                    break
-                }
-                startIndex += (priorityTabViews[priority]?.count ?? 0)
-            }
-            var newDeletions: [Int] = []
-            var newInsertions: [Int] = []
-            var newModifications: [Int] = []
-            for index in deletions {
-                if index >= startIndex && index < endIndex {
-                    newDeletions.append(index - startIndex)
-                }
-            }
-            for index in insertions {
-                if results?[index].priority.value == priority.rawValue {
-                    newInsertions.append(index - startIndex)
-                }
-            }
-            for index in modifications {
-                if index >= startIndex && index < endIndex {
-                    newModifications.append(index - startIndex)
-                }
-            }
             collectionView.performBatchUpdates({
-                collectionView.deleteItems(at: newDeletions.map{ IndexPath(row: $0, section: 0) })
-                collectionView.insertItems(at: newInsertions.map{ IndexPath(row: $0, section: 0) })
-                collectionView.reloadItems(at: newModifications.map{ IndexPath(row: $0, section: 0) })
+                collectionView.deleteItems(at: deletions.map{ IndexPath(row: $0, section: 0) })
+                collectionView.insertItems(at: insertions.map{ IndexPath(row: $0, section: 0) })
+                collectionView.reloadItems(at: modifications.map{ IndexPath(row: $0, section: 0) })
             }, completion: nil)
             updateCounts()
         case .error(let error):
             presentAlert(error: error)
         }
-    }
-
-    @IBAction func logoutPressed(_ sender: Any) {
-        logout()
     }
 
     @objc func refresh() {
@@ -207,48 +236,41 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
     }
 
     func updateCounts() {
-        for priority in Priority.allCases {
-            priorityTabViews[priority]?.count = results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
-        }
+//        for priority in Priority.allCases {
+//            priorityTabViews[priority]?.count = results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
+//        }
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
-        if let navVC = segue.destination as? UINavigationController,
-            let vc = navVC.viewControllers[0] as? PatientTableViewController,
+        var results = self.results
+        if let priority = priority {
+            results = results?.filter("priority=%@", priority.rawValue)
+        }
+        if let vc = segue.destination as? PatientViewController,
             let cell = sender as? PatientsCollectionViewCell,
             let indexPath = collectionView.indexPath(for: cell),
-            let patient = results?.filter("priority=%@", priority.rawValue)[indexPath.row] {
+            let patient = results?[indexPath.row] {
             vc.patient = patient
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: NSLocalizedString("DONE", comment: ""), style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
         }
     }
 
-    // MARK: - FilterViewDelegate
-    
-    func filterView(_ filterView: FilterView, didChangeSearch text: String?) {
-        performQuery()
+    // MARK: - SortBarDelegate
+
+    func sortBar(_ sortBar: SortBar, willShow selectorView: SelectorView) {
+        for sort in Sort.allCases {
+            selectorView.addButton(title: sort.description)
+        }
     }
-    
-    func filterView(_ filterView: FilterView, didPressButton button: UIButton) {
-        button.isSelected = !button.isSelected
-        if button.isSelected {
-            let sortSelectorView = SelectorView();
-            sortSelectorView.delegate = self
-            for sort in Sort.allCases {
-                sortSelectorView.addButton(title: sort.description)
-            }
-            view.addSubview(sortSelectorView)
-            NSLayoutConstraint.activate([
-                sortSelectorView.topAnchor.constraint(equalTo: button.bottomAnchor, constant: 0),
-                sortSelectorView.rightAnchor.constraint(equalTo: button.rightAnchor, constant: 0),
-                sortSelectorView.widthAnchor.constraint(equalToConstant: button.frame.width)
-            ])
-            self.sortSelectorView = sortSelectorView
-        } else {
-            sortSelectorView?.removeFromSuperview()
+
+    func sortBar(_ sortBar: SortBar, selectorView: SelectorView, didSelectButtonAtIndex index: Int) {
+        if sort != Sort.allCases[index] {
+            sort = Sort.allCases[index]
+            sortBar.dropdownButton.setTitle(sort.description, for: .normal)
+            performQuery()
         }
     }
 
@@ -257,30 +279,6 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
     override func loginViewControllerDidLogin(_ vc: LoginViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
-        }
-    }
-
-    // MARK: - PriorityTabViewDelegate
-
-    func priorityTabViewDidChange(_ priorityTabView: PriorityTabView) {
-        if priorityTabView.priority != priority {
-            priorityTabViews[priority]?.isOpen = false
-            priority = priorityTabView.priority
-            collectionViewContainer.removeFromSuperview()
-            collectionView.backgroundColor = PRIORITY_COLORS_LIGHTENED[priority.rawValue]
-            stackView.insertArrangedSubview(collectionViewContainer, at: priority.rawValue + 1)
-            collectionView.reloadData()
-        }
-    }
-
-    // MARK: - SelectorViewDelegate
-    
-    func selectorView(_ view: SelectorView, didSelectButtonAtIndex index: Int) {
-        filterView.button.isSelected = false
-        if sort != Sort.allCases[index] {
-            sort = Sort.allCases[index]
-            filterView.button.setTitle(sort.description, for: .normal)
-            performQuery()
         }
     }
     
@@ -292,13 +290,13 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
 
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
+        return results?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Patient", for: indexPath)
         if let cell = cell as? PatientsCollectionViewCell,
-            let patient = results?.filter("priority=%@", priority.rawValue)[indexPath.row] {
+            let patient = results?[indexPath.row] {
             cell.configure(from: patient)
         }
         return cell
@@ -310,9 +308,31 @@ class PatientsCollectionViewController: UIViewController, FilterViewDelegate, Pr
         var frame = collectionView.frame
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             frame = frame.inset(by: layout.sectionInset)
-            frame.size.width = floor((frame.size.width - layout.minimumInteritemSpacing) / 2)
         }
-        frame.size.height = 60
+        frame.size.height = 70
         return frame.size
+    }
+    
+    // MARK: - UISearchBarDelegate
+    
+    func position(for bar: UIBarPositioning) -> UIBarPosition {
+        return .topAttached
+    }
+
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchBar.isFirstResponder {
+            searchBarShouldBeginEditing = false
+        }
+        performQuery()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        let result = searchBarShouldBeginEditing
+        searchBarShouldBeginEditing = true
+        return result
     }
 }

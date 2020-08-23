@@ -6,6 +6,24 @@
   Copyright © 2019 Francis Li. All rights reserved.
 */
 
+"AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
+
+"Button.addRecording" = "Add Recording";
+"Button.confirm" = "Confirm";
+"Button.cancel" = "Cancel";
+"Button.edit" = "Edit";
+"Button.record" = "Record";
+"Button.stopAndSave" = "Stop & Save";
+"Button.update" = "Update";
+
+"ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
+
+"FacilitiesTableViewController.facilityTitle" = "Transporting to Facility";
+"FacilitiesTableViewController.leavingTitle" = "Leaving Independently";
+"FacilitiesTableViewController.selectLabel" = "Select the receiving facility:";
+"FacilitiesTableViewController.confirmLeavingLabel" = "Please Confirm the Patient is Leaving Independently";
+"FacilitiesTableViewController.confirmLeavingExportLabel" = "Patient's information will NOT be exported. Their profile will be archived in our system.";
+
 "Facility.type." = "All";
 "Facility.type.1701001" = "Assisted Living Facility";
 "Facility.type.1701003" = "Clinic";
@@ -26,9 +44,22 @@
 "Facility.type.1701033" = "Drug and/or Alcohol Rehabilitation Facility";
 "Facility.type.1701035" = "Skilled Nursing Facility";
 
+"InputAccessoryView.cancel" = "Cancel";
+"InputAccessoryView.done" = "Done";
+"InputAccessoryView.search" = "Search";
+
+"Location.capture" = "Capture";
+"Location.viewOnMap" = "View on Map";
+
+"NavigationBar.cancel" = "Cancel";
+"NavigationBar.done" = "Done";
+"NavigationBar.edit" = "Edit";
+"NavigationBar.save" = "Save";
+
 "Patient.firstName" = "First name";
 "Patient.lastName" = "Last name";
 "Patient.age" = "Age";
+"Patient.ageString" = "%dy/o";
 "Patient.location" = "Location";
 "Patient.respiratoryRate" = "Respiratory Rate";
 "Patient.pulse" = "Pulse";
@@ -42,10 +73,15 @@
 "Patient.priority.2" = "Minimal";
 "Patient.priority.3" = "Expectant";
 "Patient.priority.4" = "Dead";
-"Patient.priority.5" = "Unknown";
+"Patient.priority.5" = "Transported";
 
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
 "Patient.sort.2" = "A-Z by Last Name";
 "Patient.sort.3" = "Z-A by Last Name";
 
+"RecordButton.selectInputLabel" = "Select Bluetooth Input";
+
+"RecordingViewController.observationLabel" = "Observation";
+
+"SortBar.sortBy" = "Sort By :";

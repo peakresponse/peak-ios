@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8Ea-WO-aQv">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8Ea-WO-aQv">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,17 +16,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Icon" translatesAutoresizingMaskIntoConstraints="NO" id="CpP-zf-dxt">
-                                <rect key="frame" x="157" y="403" width="100" height="100"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="CpP-zf-dxt">
+                                <rect key="frame" x="41" y="409" width="332" height="88"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="CpP-zf-dxt" secondAttribute="height" multiplier="1:1" id="br5-Ra-AV3"/>
-                                    <constraint firstAttribute="width" constant="100" id="tIH-Yt-Cxr"/>
+                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="332" id="4gl-s2-WJf"/>
+                                    <constraint firstAttribute="width" secondItem="CpP-zf-dxt" secondAttribute="height" multiplier="332:88" id="kts-AL-wIu"/>
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" red="0.89803921568627454" green="0.89803921568627454" blue="0.89803921568627454" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" name="BgBackground"/>
                         <constraints>
                             <constraint firstItem="CpP-zf-dxt" firstAttribute="centerX" secondItem="7uy-id-cJn" secondAttribute="centerX" id="4Yx-U8-zfk"/>
+                            <constraint firstItem="CpP-zf-dxt" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="7uy-id-cJn" secondAttribute="leading" constant="22" id="CuX-Mo-TyP"/>
+                            <constraint firstItem="CpP-zf-dxt" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="7uy-id-cJn" secondAttribute="trailing" constant="-22" id="WlZ-SY-67g"/>
                             <constraint firstItem="CpP-zf-dxt" firstAttribute="centerY" secondItem="7uy-id-cJn" secondAttribute="centerY" id="rnf-k8-YuY"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="7uy-id-cJn"/>
@@ -38,6 +41,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Icon" width="256" height="256"/>
+        <image name="Logo" width="332" height="88"/>
+        <namedColor name="BgBackground">
+            <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

@@ -14,9 +14,11 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
     case minimal
     case expectant
     case dead
+    case transported
+    case unknown
     
     var description: String {
-        return NSLocalizedString("Patient.priority.\(rawValue)", comment: "")
+        return "Patient.priority.\(rawValue)".localized
     }
 }
 
@@ -27,7 +29,7 @@ enum Sort: Int, CaseIterable, CustomStringConvertible {
     case za
     
     var description: String {
-        return NSLocalizedString("Patient.sort.\(rawValue)", comment: "")
+        return "Patient.sort.\(rawValue)".localized
     }
 }
 
@@ -89,10 +91,15 @@ class Patient: Base {
     @objc dynamic var lastName: String?
     @objc dynamic var firstName: String?
     var fullName: String {
-        let fullName = "\(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
-        return fullName != "," ? fullName : ""
+        return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
     }
     let age = RealmOptional<Int>()
+    var ageString: String {
+        if let value = age.value {
+            return String(format: "Patient.ageString".localized, value)
+        }
+        return ""
+    }
     @objc dynamic var dob: String?
     let respiratoryRate = RealmOptional<Int>()
     let pulse = RealmOptional<Int>()
@@ -120,6 +127,16 @@ class Patient: Base {
             return true
         }
         return false
+    }
+    var latLngString: String? {
+        if let lat = lat, let lng = lng {
+            return "\(lat), \(lng)".trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return nil
+    }
+    func clearLatLng() {
+        lat = nil
+        lng = nil
     }
     @objc dynamic var portraitUrl: String?
     @objc dynamic var photoUrl: String?
@@ -299,6 +316,8 @@ class Patient: Base {
         observation.audioUrl = nil
         observation.transportAgency = transportAgency
         observation.transportFacility = transportFacility
+        observation.createdAt = createdAt
+        observation.updatedAt = updatedAt
         return observation
     }
 }

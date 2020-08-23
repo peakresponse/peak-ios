@@ -1,29 +1,13 @@
-# NaT
-## SALT(Na) Triage Intelligent Assistant
+# Peak Response
 
-This is the iOS mobile app repository for the NaT intelligent assistant.
+This is the iOS mobile app repository for Peak Response.
+
 For the server repository, visit:
 
-https://github.com/francisli/t2p-server
+https://github.com/peakresponse/peak-server
 
-NaT was developed as part of the 2019 Tech to Protect Challenge to create
-new technologies for emergency responders.
+Peak Response (formerly NaT/NaTriage) was developed as part of the 2019 Tech to Protect Challenge to create new technologies for emergency responders.
 
-## Demo
-
-An expiring demo build has been made available for download from TestFlight:
-
-https://testflight.apple.com/join/D9MPC0Y0
-
-This build connects to the demo server hosted at:
-
-https://natriage.org/
-
-For demo QR codes, visit:
-
-https://natriage.org/pincodes2
-
-The first seven (7) codes are associated with the existing demo patients.
 
 ## Getting Started
 
@@ -35,8 +19,8 @@ The first seven (7) codes are associated with the existing demo patients.
    into the directory.
 
    ```
-   $ git clone https://github.com/francisli/t2p-ios.git
-   $ cd t2p-ios
+   $ git clone https://github.com/peakresponse/peak-ios.git
+   $ cd peak-ios
    ```
 
 4. Install dependencies with CocoaPods.
@@ -53,7 +37,7 @@ The first seven (7) codes are associated with the existing demo patients.
 
 6. Change the default API server hostname in ApiClient.swift. If you are
    developing locally on your computer with the simulator, you can change it
-   to http://localhost:3000/api/. If you wish to use a device for testing,
+   to http://localhost:3000/. If you wish to use a device for testing,
    I recommend using a secure HTTPS proxy to the localhost server, such as
    ngrok: https://ngrok.com/
 
@@ -76,9 +60,8 @@ MDM (Mobile Device Management) solution.
 
 ## License
 
-NaT: SALT(Na) Triage Intelligent Assistant
-
-Copyright (C) 2019 Francis Li
+Peak Response
+Copyright (C) 2019-2020 Peak Response Inc
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -100,3 +83,7 @@ Font Awesome, under the terms of the Font Awesome Free license and the
 Creative Commons CC BY 4.0 license.
 
 https://fontawesome.com/license/free
+
+This repository contains font files licensed under the SIL Open Font License (OFL).
+
+https://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL

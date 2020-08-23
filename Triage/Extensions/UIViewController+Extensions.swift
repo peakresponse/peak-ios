@@ -10,12 +10,12 @@ import UIKit
 
 extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     func presentAlert(error: Error) {
-        presentAlert(title: NSLocalizedString("Error", comment: ""), message: error.localizedDescription)
+        presentAlert(title: "Error".localized, message: error.localizedDescription)
     }
 
     func presentAlert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: ""), style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
         present(alert, animated: true, completion: nil)
     }
 
@@ -48,7 +48,7 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
         
     }
     
-    @objc func dismissAnimated() {
+    @IBAction @objc func dismissAnimated() {
         dismiss(animated: true, completion: { [weak self] in
             self?.didDismissPresentation()
         })
