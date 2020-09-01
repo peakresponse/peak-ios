@@ -76,6 +76,7 @@
 		45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3724F06A8E005A8059 /* RecordButton.swift */; };
 		45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3924F09B1E005A8059 /* RecordingViewController.swift */; };
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
+		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
 		45E5BEEE2425DA010013D78D /* TableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */; };
 		45F218FA24E206330046A39B /* PatientViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F218F924E206330046A39B /* PatientViewController.swift */; };
 		45F218FC24E371660046A39B /* LocationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F218FB24E371660046A39B /* LocationTableViewCell.swift */; };
@@ -183,6 +184,7 @@
 		45E35A3724F06A8E005A8059 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 		45E35A3924F09B1E005A8059 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
+		45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Scenes.storyboard; sourceTree = "<group>"; };
 		45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewHeaderView.swift; sourceTree = "<group>"; };
 		45F218F924E206330046A39B /* PatientViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientViewController.swift; sourceTree = "<group>"; };
 		45F218FB24E371660046A39B /* LocationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableViewCell.swift; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 				4566F05D236CD56200A04C75 /* Extensions */,
 				4566F04F236CCF5C00A04C75 /* Login */,
 				4566F056236CD1E000A04C75 /* Patients */,
+				45E35A3D24FDD836005A8059 /* Scenes */,
 				4566F078236D484D00A04C75 /* Views */,
 				45ACBDC7237E718600C99EBB /* AppCache.swift */,
 				4566F05B236CD2DB00A04C75 /* ApiClient.swift */,
@@ -424,6 +427,14 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		45E35A3D24FDD836005A8059 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
 		90CCACB3DC232FDED43273D4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -547,6 +558,7 @@
 				4566F071236D2F1B00A04C75 /* PatientView.xib in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
+				45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */,
 				4563C74124DA6FB200217901 /* Barlow-Regular.ttf in Resources */,
 				4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */,
 				4566F027236CCC5500A04C75 /* Main.storyboard in Resources */,

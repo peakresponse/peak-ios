@@ -16,7 +16,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "https://peakresponse.net")! {
+    static var shared: ApiClient = ApiClient(baseURL: "http://lvh.me:3000")! {
         willSet {
             shared.invalidate()
         }
