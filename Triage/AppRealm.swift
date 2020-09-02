@@ -26,6 +26,13 @@ class AppRealm {
         }
         return realm
     }
+    
+    public static func deleteAll() {
+        let realm = AppRealm.open()
+        try! realm.write {
+            realm.deleteAll()
+        }
+    }
 
     // MARK: - Agencies
 
@@ -125,10 +132,21 @@ class AppRealm {
         task.resume()
     }
 
-    public static func deleteAll() {
-        let realm = AppRealm.open()
-        try! realm.write {
-            realm.deleteAll()
+    // MARK: - Scene
+
+    public static func getScenes(completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getScenes { (records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                let scenes = records.map({ Scene.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(scenes, update: .modified)
+                }
+                completionHandler(nil)
+            }
         }
+        task.resume()
     }
 }

@@ -22,6 +22,11 @@
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
 		4543DD4C24DDE62100F9E50B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543DD4B24DDE62100F9E50B /* TabBarController.swift */; };
 		4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543DD4D24DE20B100F9E50B /* NavigationBar.swift */; };
+		454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */; };
+		454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */; };
+		454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17AF24FECD8800F9EB8B /* BannerView.swift */; };
+		454E17B224FF159C00F9EB8B /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B124FF159C00F9EB8B /* Scene.swift */; };
+		454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
@@ -124,6 +129,11 @@
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		4543DD4B24DDE62100F9E50B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		4543DD4D24DE20B100F9E50B /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
+		454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousScenesViewController.swift; sourceTree = "<group>"; };
+		454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewSceneViewController.swift; sourceTree = "<group>"; };
+		454E17AF24FECD8800F9EB8B /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
+		454E17B124FF159C00F9EB8B /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
+		454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTableViewCell.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -244,6 +254,14 @@
 				2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		454E17B324FF28BF00F9EB8B /* Table View Cells */ = {
+			isa = PBXGroup;
+			children = (
+				454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */,
+			);
+			path = "Table View Cells";
 			sourceTree = "<group>";
 		};
 		4566F013236CCC5500A04C75 = {
@@ -373,6 +391,7 @@
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				4566F089236E0C8200A04C75 /* Observation.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
+				454E17B124FF159C00F9EB8B /* Scene.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -380,6 +399,7 @@
 		4566F078236D484D00A04C75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				454E17AF24FECD8800F9EB8B /* BannerView.swift */,
 				45E267512418B2510010CDE9 /* Button.swift */,
 				458D1C8824283672003C7C85 /* DropdownButton.swift */,
 				45E35A3324EF8E8B005A8059 /* FacilityView.swift */,
@@ -430,7 +450,10 @@
 		45E35A3D24FDD836005A8059 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				454E17B324FF28BF00F9EB8B /* Table View Cells */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
+				454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */,
+				454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -673,6 +696,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				454E17B224FF159C00F9EB8B /* Scene.swift in Sources */,
+				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
 				45515A3124DF682A007BAE09 /* SortBar.swift in Sources */,
 				458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */,
 				45F218FA24E206330046A39B /* PatientViewController.swift in Sources */,
@@ -703,6 +728,7 @@
 				45E35A3424EF8E8B005A8059 /* FacilityView.swift in Sources */,
 				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
+				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
@@ -724,11 +750,13 @@
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
+				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
 				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */,
+				454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,

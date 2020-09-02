@@ -10,9 +10,14 @@ import Foundation
 
 class AppSettings {
     private static let defaults = UserDefaults.standard
-    
+
     static var audioInputPortUID: String? {
         get { return defaults.string(forKey: "audioInputPortUID") }
         set { defaults.set(newValue, forKey: "audioInputPortUID") }
+    }
+    
+    static var subdomain: String? {
+        get { return defaults.string(forKey: "subdomain") }
+        set { defaults.set(newValue, forKey: "subdomain") }
     }
 }

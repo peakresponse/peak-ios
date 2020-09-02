@@ -55,20 +55,32 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             passwordField.isEnabled = false
             loginButton.isEnabled = false
             activityView.startAnimating()
-            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (error) in
+            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
                 DispatchQueue.main.async { [weak self] in
                     self?.activityView.stopAnimating()
                     if let error = error {
                         if let error = error as? ApiClientError, error == .unauthorized {
-                            self?.presentAlert(title: "Error".localized, message: "Invalid email and/or password.".localized)
+                            self?.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
                         } else {
                             self?.presentAlert(error: error)
                         }
                         self?.emailField.isEnabled = true
                         self?.passwordField.isEnabled = true
                         self?.loginButton.isEnabled = true
-                    } else if let self = self {
-                        self.loginDelegate?.loginViewControllerDidLogin?(self)
+                    } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
+                        if agencies.count > 1 {
+                            /// TODO navigate to a selection screen
+                            self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                        }
+                        if let subdomain = agencies[0]["subdomain"] as? String {
+                            AppSettings.subdomain = subdomain
+                            guard let self = self else { return }
+                            self.loginDelegate?.loginViewControllerDidLogin?(self)
+                        } else {
+                            self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                        }
+                    } else {
+                        self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
                 }
             }

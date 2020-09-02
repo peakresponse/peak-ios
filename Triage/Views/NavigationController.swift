@@ -26,7 +26,6 @@ class NavigationController: UINavigationController {
         
         iconView = UIImageView(image: UIImage(named: "Icon"))
         if let iconView = iconView {
-            iconView.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 4, color: UIColor.black, opacity: 0.1)
             iconView.translatesAutoresizingMaskIntoConstraints = false
             navigationBar.addSubview(iconView)
             NSLayoutConstraint.activate([

@@ -222,10 +222,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="Agency" width="30" height="28"/>
-        <image name="AgencySelected" width="30" height="28"/>
-        <image name="GlobalSearch" width="29" height="31"/>
-        <image name="GlobalSearchSelected" width="29" height="31"/>
+        <image name="Agency" width="30" height="32"/>
+        <image name="AgencySelected" width="30" height="32"/>
+        <image name="GlobalSearch" width="29" height="32"/>
+        <image name="GlobalSearchSelected" width="29" height="32"/>
         <image name="NewScene" width="52" height="52"/>
         <image name="NewSceneSelected" width="52" height="52"/>
         <image name="Profile" width="40" height="32"/>

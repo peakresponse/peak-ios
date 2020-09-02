@@ -62,6 +62,9 @@ class ApiClient {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: [])
         }
+        if let subdomain = AppSettings.subdomain {
+            request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+        }
         return request
     }
     
@@ -124,12 +127,12 @@ class ApiClient {
     
     // MARK: - Sessions
     
-    func login(email: String, password: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+    func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/login", body: [
             "email": email,
             "password": password
-        ]) { (_: Any?, error) in
-            completionHandler(error)
+        ]) { (data, error) in
+            completionHandler(data, error)
         }
     }
     
@@ -171,13 +174,19 @@ class ApiClient {
     }
     
     // MARK: - Patients
-    
+
     func getPatients(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients", completionHandler: completionHandler)
     }
 
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
+    }
+
+    // MARK: - Scenes
+
+    func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/scenes", completionHandler: completionHandler)
     }
 
     // MARK: - Uploads

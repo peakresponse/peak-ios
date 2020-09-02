@@ -8,6 +8,8 @@
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
+"Banner.noActiveScenes" = "No Active Scenes";
+
 "Button.addRecording" = "Add Recording";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
@@ -17,6 +19,9 @@
 "Button.update" = "Update";
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
+
+"Error.title" = "An error has occurred";
+"Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
 
 "FacilitiesTableViewController.facilityTitle" = "Transporting to Facility";
 "FacilitiesTableViewController.leavingTitle" = "Leaving Independently";
@@ -83,5 +88,8 @@
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
+
+"SceneTableViewCell.patientsLabel" = "%d Patients Total";
+"SceneTableViewCell.respondersLabel" = "%d First Responders";
 
 "SortBar.sortBy" = "Sort By :";

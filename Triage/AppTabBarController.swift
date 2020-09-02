@@ -19,7 +19,7 @@ class AppTabBarController: TabBarController {
                     if let navVC = vc as? UINavigationController {
                         vc = navVC.topViewController
                     }
-                    if let error = error as? ApiClientError, error == .unauthorized {
+                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden {
                         vc?.presentLogin()
                     } else {
                         vc?.presentAlert(error: error)
