@@ -188,16 +188,20 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
             sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
         }
         let realm = AppRealm.open()
-        if let text = searchBar.text, !text.isEmpty {
-            results = realm.objects(Patient.self).filter("firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text).sorted(by: sorts)
-        } else {
-            results = realm.objects(Patient.self).sorted(by: sorts)
+        var predicates: [NSPredicate] = []
+        if let sceneId = AppSettings.sceneId {
+            predicates.append(NSPredicate(format: "sceneId=%@", sceneId))
         }
+        if let text = searchBar.text, !text.isEmpty {
+            predicates.append(NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
+        }
+        let predicate = predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        results = realm.objects(Patient.self).filter(predicate).sorted(by: sorts)
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
         case .initial(_):

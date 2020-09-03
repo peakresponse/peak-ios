@@ -15,7 +15,12 @@ class AppSettings {
         get { return defaults.string(forKey: "audioInputPortUID") }
         set { defaults.set(newValue, forKey: "audioInputPortUID") }
     }
-    
+
+    static var sceneId: String? {
+        get { return defaults.string(forKey: "sceneId") }
+        set { defaults.set(newValue, forKey: "sceneId") }
+    }
+
     static var subdomain: String? {
         get { return defaults.string(forKey: "subdomain") }
         set { defaults.set(newValue, forKey: "subdomain") }

@@ -10,9 +10,14 @@
 
 "Banner.noActiveScenes" = "No Active Scenes";
 
+"Button.addNote" = "Add Note";
+"Button.addPhoto" = "Add Photo";
 "Button.addRecording" = "Add Recording";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
+"Button.closeScene" = "Close Scene";
+"Button.transferCommand" = "Transfer Command";
+"Button.leaveScene" = "Leave Scene";
 "Button.edit" = "Edit";
 "Button.record" = "Record";
 "Button.stopAndSave" = "Stop & Save";
@@ -80,6 +85,13 @@
 "Patient.priority.4" = "Dead";
 "Patient.priority.5" = "Transported";
 
+"Patient.priority.abbrev.0" = "Imm.";
+"Patient.priority.abbrev.1" = "Del.";
+"Patient.priority.abbrev.2" = "Min.";
+"Patient.priority.abbrev.3" = "Exp.";
+"Patient.priority.abbrev.4" = "Dead";
+"Patient.priority.abbrev.5" = "Tra.";
+
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
 "Patient.sort.2" = "A-Z by Last Name";
@@ -88,6 +100,13 @@
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
+
+"SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
+"SceneHeaderView.urgencyLabel" = "Patient Urgency";
+
+"ScenePatientsView.patientsLabel" = "# Patients Recorded";
+
+"SceneRespondersView.respondersLabel" = "First Responders";
 
 "SceneTableViewCell.patientsLabel" = "%d Patients Total";
 "SceneTableViewCell.respondersLabel" = "%d First Responders";

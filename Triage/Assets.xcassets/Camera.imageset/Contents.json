@@ -1,15 +1,12 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "filename" : "camera-solid.pdf"
+      "filename" : "Camera.pdf",
+      "idiom" : "universal"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
-  },
-  "properties" : {
-    "template-rendering-intent" : "template"
+    "author" : "xcode",
+    "version" : 1
   }
 }

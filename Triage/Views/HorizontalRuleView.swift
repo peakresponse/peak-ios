@@ -10,10 +10,20 @@ import UIKit
 
 @IBDesignable
 class HorizontalRuleView: UIView {
-    @IBInspectable var lineColor: UIColor = UIColor.black
+    @IBInspectable var lineColor: UIColor = .lowPriorityGrey
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
     
-    override func awakeFromNib() {
-        backgroundColor = UIColor.clear
+    private func commonInit() {
+        backgroundColor = .clear
     }
     
     override func draw(_ rect: CGRect) {

@@ -88,4 +88,19 @@ class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITab
         }
         return cell;
     }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let scene = results?[indexPath.row] {
+            AppSettings.sceneId = scene.id
+            if AppSettings.sceneId != nil {
+                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
+                for window in UIApplication.shared.windows {
+                    if window.isKeyWindow {
+                        window.rootViewController = vc
+                        break
+                    }
+                }
+            }
+        }
+    }
 }

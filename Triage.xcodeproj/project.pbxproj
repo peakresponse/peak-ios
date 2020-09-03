@@ -27,6 +27,12 @@
 		454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17AF24FECD8800F9EB8B /* BannerView.swift */; };
 		454E17B224FF159C00F9EB8B /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B124FF159C00F9EB8B /* Scene.swift */; };
 		454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */; };
+		454E17B724FFF5BF00F9EB8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B624FFF5BF00F9EB8B /* User.swift */; };
+		454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B824FFF5C900F9EB8B /* Responder.swift */; };
+		454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */; };
+		454E17BD250022C700F9EB8B /* SceneHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BC250022C700F9EB8B /* SceneHeaderView.swift */; };
+		454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BE250022E000F9EB8B /* ScenePatientsView.swift */; };
+		454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
@@ -134,6 +140,12 @@
 		454E17AF24FECD8800F9EB8B /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		454E17B124FF159C00F9EB8B /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTableViewCell.swift; sourceTree = "<group>"; };
+		454E17B624FFF5BF00F9EB8B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		454E17B824FFF5C900F9EB8B /* Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responder.swift; sourceTree = "<group>"; };
+		454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
+		454E17BC250022C700F9EB8B /* SceneHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneHeaderView.swift; sourceTree = "<group>"; };
+		454E17BE250022E000F9EB8B /* ScenePatientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePatientsView.swift; sourceTree = "<group>"; };
+		454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneRespondersView.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -256,12 +268,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
-		454E17B324FF28BF00F9EB8B /* Table View Cells */ = {
+		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */,
+				454E17BC250022C700F9EB8B /* SceneHeaderView.swift */,
+				454E17BE250022E000F9EB8B /* ScenePatientsView.swift */,
+				454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */,
 			);
-			path = "Table View Cells";
+			path = Views;
 			sourceTree = "<group>";
 		};
 		4566F013236CCC5500A04C75 = {
@@ -343,7 +358,7 @@
 		4566F056236CD1E000A04C75 /* Patients */ = {
 			isa = PBXGroup;
 			children = (
-				4566F08B236E110300A04C75 /* Table View Cells */,
+				4566F08B236E110300A04C75 /* Views */,
 				452DDBCC243D22E300A8F1FF /* AgenciesTableViewController.swift */,
 				45E35A3524EF9ECC005A8059 /* ConfirmTransportViewController.swift */,
 				452DDBCA243D22D000A8F1FF /* FacilitiesTableViewController.swift */,
@@ -391,7 +406,9 @@
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				4566F089236E0C8200A04C75 /* Observation.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
+				454E17B824FFF5C900F9EB8B /* Responder.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
+				454E17B624FFF5BF00F9EB8B /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -424,7 +441,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		4566F08B236E110300A04C75 /* Table View Cells */ = {
+		4566F08B236E110300A04C75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */,
@@ -435,7 +452,7 @@
 				4566F094236E11B000A04C75 /* PatientTableHeaderView.swift */,
 				45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */,
 			);
-			path = "Table View Cells";
+			path = Views;
 			sourceTree = "<group>";
 		};
 		45E267302418AF340010CDE9 /* Fonts */ = {
@@ -450,10 +467,11 @@
 		45E35A3D24FDD836005A8059 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				454E17B324FF28BF00F9EB8B /* Table View Cells */,
+				454E17B324FF28BF00F9EB8B /* Views */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
 				454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */,
 				454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */,
+				454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -702,6 +720,7 @@
 				458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */,
 				45F218FA24E206330046A39B /* PatientViewController.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
+				454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */,
 				4566F088236E0A5800A04C75 /* ObservationViewController.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PatientView.swift in Sources */,
 				45F218FE24E5BB510046A39B /* PatientTableViewController.swift in Sources */,
@@ -729,13 +748,16 @@
 				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
 				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
+				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
+				454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */,
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */,
+				454E17BD250022C700F9EB8B /* SceneHeaderView.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				45F2190424E5ECC10046A39B /* String+Extensions.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
@@ -757,6 +779,8 @@
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */,
 				454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */,
+				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
+				454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,

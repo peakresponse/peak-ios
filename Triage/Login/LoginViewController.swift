@@ -64,9 +64,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         } else {
                             self?.presentAlert(error: error)
                         }
-                        self?.emailField.isEnabled = true
-                        self?.passwordField.isEnabled = true
-                        self?.loginButton.isEnabled = true
                     } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
                         if agencies.count > 1 {
                             /// TODO navigate to a selection screen
@@ -82,6 +79,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     } else {
                         self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
+                    self?.emailField.isEnabled = true
+                    self?.passwordField.isEnabled = true
+                    self?.loginButton.isEnabled = true
                 }
             }
             task.resume()

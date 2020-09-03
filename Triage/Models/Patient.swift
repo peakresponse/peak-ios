@@ -62,6 +62,7 @@ let PRIORITY_LABEL_COLORS = [
 
 class Patient: Base {
     struct Keys {
+        static let sceneId = "sceneId"
         static let pin = "pin"
         static let version = "version"
         static let lastName = "lastName"
@@ -86,6 +87,7 @@ class Patient: Base {
         static let transportFacilityId = "transportFacilityId"
     }
     
+    @objc dynamic var sceneId: String?
     @objc dynamic var pin: String?
     let version = RealmOptional<Int>()
     @objc dynamic var lastName: String?
@@ -192,6 +194,7 @@ class Patient: Base {
     
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        sceneId = data[Keys.sceneId] as? String
         pin = data[Keys.pin] as? String
         version.value = data[Keys.version] as? Int
         lastName = data[Keys.lastName] as? String
@@ -228,6 +231,9 @@ class Patient: Base {
 
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        if let value = sceneId {
+            data[Keys.sceneId] = value
+        }
         if let value = pin {
             data[Keys.pin] = value
         }
