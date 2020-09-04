@@ -8,6 +8,25 @@
 
 import UIKit
 
-class NewSceneViewController: UIViewController {
+class NewSceneViewController: UIViewController, UITextFieldDelegate {
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var locationView: SceneLocationView!
+    @IBOutlet weak var nameField: FormField!
+    @IBOutlet weak var descField: FormField!
+    @IBOutlet weak var approxPatientsField: FormField!
+    @IBOutlet weak var urgencyField: FormField!
+
+    var fields: [FormField]!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        fields = [nameField, descField, approxPatientsField, urgencyField]
+    }
+
+    // MARK: - UITextFieldDelegate
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return false
+    }
 }

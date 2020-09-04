@@ -23,10 +23,6 @@ enum AttributeTableViewCellType {
 
 class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
     let field = FormField()
-    var fieldTopConstraint: NSLayoutConstraint!
-    var fieldLeftConstraint: NSLayoutConstraint!
-    var fieldRightConstraint: NSLayoutConstraint!
-    var bottomConstraint: NSLayoutConstraint!
 
     var attribute: String!
     var attributeType: AttributeTableViewCellType = .string
@@ -56,15 +52,11 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
         field.translatesAutoresizingMaskIntoConstraints = false
         field.delegate = self
         contentView.addSubview(field)
-        fieldTopConstraint = field.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5)
-        fieldLeftConstraint = field.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22)
-        fieldRightConstraint = field.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -22)
-        bottomConstraint = contentView.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 5)
         NSLayoutConstraint.activate([
-            fieldTopConstraint,
-            fieldLeftConstraint,
-            fieldRightConstraint,
-            bottomConstraint
+            field.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            field.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22),
+            field.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -22),
+            contentView.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 5)
         ])
     }
     
@@ -127,18 +119,10 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        fieldTopConstraint.constant = -5
-        fieldLeftConstraint.constant = 12
-        fieldRightConstraint.constant = -12
-        bottomConstraint.constant = -5
         layer.zPosition = 0
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        fieldTopConstraint.constant = 5
-        fieldLeftConstraint.constant = 22
-        fieldRightConstraint.constant = -22
-        bottomConstraint.constant = 5
         layer.zPosition = -1
     }
 

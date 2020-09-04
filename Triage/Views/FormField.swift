@@ -38,6 +38,8 @@ private class FormFieldTextField: UITextField {
 
 @IBDesignable
 class FormField: UIView, Localizable {
+    let contentView = UIView()
+    var contentViewConstraints: [NSLayoutConstraint]!
     let statusView = UIView()
     var statusViewWidthConstraint: NSLayoutConstraint!
     let label = UILabel()
@@ -116,16 +118,28 @@ class FormField: UIView, Localizable {
     }
     
     private func commonInit() {
-        backgroundColor = .white
-        addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
+        backgroundColor = .clear
+        layer.zPosition = -1
+        
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.backgroundColor = .white
+        contentView.addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
+        addSubview(contentView)
+        contentViewConstraints = [
+            contentView.topAnchor.constraint(equalTo: topAnchor),
+            contentView.leftAnchor.constraint(equalTo: leftAnchor),
+            rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ]
+        NSLayoutConstraint.activate(contentViewConstraints)
 
         statusView.translatesAutoresizingMaskIntoConstraints = false
         statusView.backgroundColor = .middlePeakBlue
-        addSubview(statusView)
+        contentView.addSubview(statusView)
 
         label.translatesAutoresizingMaskIntoConstraints = false;
         label.textColor = .lowPriorityGrey
-        addSubview(label)
+        contentView.addSubview(label)
         
         (textField as? FormFieldTextField)?.formField = self
         textField.translatesAutoresizingMaskIntoConstraints = false;
@@ -136,24 +150,24 @@ class FormField: UIView, Localizable {
         button.setImage(UIImage(named: "Clear"), for: .normal)
         button.addTarget(self, action: #selector(clearPressed), for: .touchUpInside)
         textField.rightView = button
-        addSubview(textField)
+        contentView.addSubview(textField)
 
         statusViewWidthConstraint = statusView.widthAnchor.constraint(equalToConstant: 8)
-        labelTopConstraint = label.topAnchor.constraint(equalTo: topAnchor, constant: 6)
+        labelTopConstraint = label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6)
         textFieldTopConstraint = textField.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 10)
         textFieldHeightConstraint = textField.heightAnchor.constraint(equalToConstant: round(textField.font!.lineHeight * 1.2))
-        bottomConstraint = bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 14)
+        bottomConstraint = contentView.bottomAnchor.constraint(equalTo: textField.bottomAnchor, constant: 14)
 
         NSLayoutConstraint.activate([
-            statusView.topAnchor.constraint(equalTo: topAnchor),
-            statusView.leftAnchor.constraint(equalTo: leftAnchor),
-            statusView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            statusView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            statusView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            statusView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             statusViewWidthConstraint,
             labelTopConstraint,
             label.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10),
             textFieldTopConstraint,
             textField.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10),
-            textField.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            textField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             textFieldHeightConstraint,
             bottomConstraint
         ])
@@ -205,6 +219,13 @@ class FormField: UIView, Localizable {
                 labelTopConstraint.constant = 8
                 textFieldTopConstraint.constant = 6
                 bottomConstraint.constant = 16
+
+                let dy: CGFloat = 5 + (round(UIFont.copyLBold.lineHeight * 1.2) - round(UIFont.copyMBold.lineHeight * 1.2)) / 2
+                contentViewConstraints[0].constant = -dy
+                contentViewConstraints[1].constant = -8
+                contentViewConstraints[2].constant = -8
+                contentViewConstraints[3].constant = -dy
+                layer.zPosition = 0
             } else {
                 textField.font = .copyMBold
                 if status == .none {
@@ -215,6 +236,12 @@ class FormField: UIView, Localizable {
                 labelTopConstraint.constant = 4
                 textFieldTopConstraint.constant = 4
                 bottomConstraint.constant = 12
+
+                contentViewConstraints[0].constant = 0
+                contentViewConstraints[1].constant = 0
+                contentViewConstraints[2].constant = 0
+                contentViewConstraints[3].constant = 0
+                layer.zPosition = -1
             }
         case .onboarding:
             label.font = .copySBold
