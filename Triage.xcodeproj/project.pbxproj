@@ -77,6 +77,7 @@
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */; };
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
+		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45E267502418AFAD0010CDE9 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2674F2418AFAD0010CDE9 /* TextField.swift */; };
 		45E267522418B2510010CDE9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267512418B2510010CDE9 /* Button.swift */; };
 		45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */; };
@@ -196,6 +197,7 @@
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
+		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45E2674F2418AFAD0010CDE9 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		45E267512418B2510010CDE9 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -273,6 +275,7 @@
 			children = (
 				454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */,
 				454E17BC250022C700F9EB8B /* SceneHeaderView.swift */,
+				45BA942C2501C6A60098E9BD /* SceneLocationView.swift */,
 				454E17BE250022E000F9EB8B /* ScenePatientsView.swift */,
 				454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */,
 			);
@@ -755,6 +758,7 @@
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,
+				45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */,
 				454E17BD250022C700F9EB8B /* SceneHeaderView.swift in Sources */,

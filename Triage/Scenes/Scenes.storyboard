@@ -80,14 +80,164 @@
                     <view key="view" contentMode="scaleToFill" id="FQg-C8-sGn">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FVT-e2-xKs" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="38"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="color" keyPath="barTintColor">
+                                        <color key="value" name="OrangeAccent"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="navigationItem" destination="tkI-tH-GHa" id="Ogy-Tc-Pid"/>
+                                </connections>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ges-Hg-7s3">
+                                <rect key="frame" x="0.0" y="81" width="414" height="815"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NewSceneViewController.title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8I6-0Y-5KN">
+                                        <rect key="frame" x="22" y="10" width="225.5" height="20.5"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" name="OrangeAccent"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="copyLBold"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.title"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EXc-1V-tii">
+                                        <rect key="frame" x="22" y="46.5" width="370" height="587"/>
+                                        <subviews>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBg-Fk-cYf" customClass="SceneLocationView" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="370" height="135"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ob4-Ag-Rtg" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="145" width="370" height="61"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.nameField"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tw0-dV-zRD" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="216" width="370" height="61"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.descField"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g6Z-9v-7yb" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="287" width="370" height="61"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.approxPatientsField"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8RM-Xo-zgx" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="358" width="370" height="61"/>
+                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.urgencyField"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </view>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rk-w2-jaB">
+                                                <rect key="frame" x="0.0" y="429" width="370" height="158"/>
+                                                <subviews>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rjd-Hh-ey5">
+                                                        <rect key="frame" x="60" y="8" width="250" height="34"/>
+                                                        <subviews>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c5c-2E-Yib" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="115" height="34"/>
+                                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addNote"/>
+                                                                    <userDefinedRuntimeAttribute type="image" keyPath="buttonImage" value="Note"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BmF-kD-jrx" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                                <rect key="frame" x="135" y="0.0" width="115" height="34"/>
+                                                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                                <userDefinedRuntimeAttributes>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
+                                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addPhoto"/>
+                                                                    <userDefinedRuntimeAttribute type="image" keyPath="buttonImage" value="Camera"/>
+                                                                </userDefinedRuntimeAttributes>
+                                                            </view>
+                                                        </subviews>
+                                                        <constraints>
+                                                            <constraint firstAttribute="width" constant="250" id="HWh-Uf-Qkw"/>
+                                                        </constraints>
+                                                    </stackView>
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U8n-w7-7cq" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                        <rect key="frame" x="0.0" y="74" width="370" height="62"/>
+                                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                        <userDefinedRuntimeAttributes>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="buttonColor">
+                                                                <color key="value" name="OrangeAccent"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.startScene"/>
+                                                            <userDefinedRuntimeAttribute type="color" keyPath="highlightedButtonColor">
+                                                                <color key="value" name="LowPriorityGrey"/>
+                                                            </userDefinedRuntimeAttribute>
+                                                        </userDefinedRuntimeAttributes>
+                                                    </view>
+                                                </subviews>
+                                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstItem="Rjd-Hh-ey5" firstAttribute="centerX" secondItem="9Rk-w2-jaB" secondAttribute="centerX" id="DFG-gf-8tf"/>
+                                                    <constraint firstAttribute="bottom" secondItem="U8n-w7-7cq" secondAttribute="bottom" constant="22" id="HbP-QN-I5h"/>
+                                                    <constraint firstItem="Rjd-Hh-ey5" firstAttribute="top" secondItem="9Rk-w2-jaB" secondAttribute="top" constant="8" id="XvG-Bm-uGI"/>
+                                                    <constraint firstItem="U8n-w7-7cq" firstAttribute="trailing" secondItem="9Rk-w2-jaB" secondAttribute="trailing" id="h0l-Wq-GgT"/>
+                                                    <constraint firstItem="U8n-w7-7cq" firstAttribute="top" secondItem="Rjd-Hh-ey5" secondAttribute="bottom" constant="32" id="k5w-vz-cCf"/>
+                                                    <constraint firstItem="U8n-w7-7cq" firstAttribute="leading" secondItem="9Rk-w2-jaB" secondAttribute="leading" id="w3v-2C-RPQ"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" name="BgBackground"/>
+                                <constraints>
+                                    <constraint firstItem="EXc-1V-tii" firstAttribute="trailing" secondItem="KCG-OO-7Ds" secondAttribute="trailing" constant="-22" id="9rq-dc-QEP"/>
+                                    <constraint firstItem="8I6-0Y-5KN" firstAttribute="leading" secondItem="KCG-OO-7Ds" secondAttribute="leading" constant="22" id="dFA-m8-g7l"/>
+                                    <constraint firstItem="EXc-1V-tii" firstAttribute="top" secondItem="8I6-0Y-5KN" secondAttribute="bottom" constant="16" id="h5d-gA-g0V"/>
+                                    <constraint firstItem="8I6-0Y-5KN" firstAttribute="top" secondItem="Hos-ZE-ZSl" secondAttribute="top" constant="10" id="hlA-Dj-0Cf"/>
+                                    <constraint firstItem="EXc-1V-tii" firstAttribute="leading" secondItem="KCG-OO-7Ds" secondAttribute="leading" constant="22" id="qRa-2a-2uD"/>
+                                </constraints>
+                                <viewLayoutGuide key="contentLayoutGuide" id="Hos-ZE-ZSl"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="KCG-OO-7Ds"/>
+                            </scrollView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="FVT-e2-xKs" firstAttribute="top" secondItem="TnZ-RK-ui7" secondAttribute="top" id="3La-Bn-SsO"/>
+                            <constraint firstItem="ges-Hg-7s3" firstAttribute="bottom" secondItem="FQg-C8-sGn" secondAttribute="bottom" id="CRU-cb-O4G"/>
+                            <constraint firstItem="FVT-e2-xKs" firstAttribute="leading" secondItem="TnZ-RK-ui7" secondAttribute="leading" id="EBW-kV-lKb"/>
+                            <constraint firstItem="ges-Hg-7s3" firstAttribute="top" secondItem="FVT-e2-xKs" secondAttribute="bottom" id="TfD-vA-aab"/>
+                            <constraint firstItem="FVT-e2-xKs" firstAttribute="trailing" secondItem="TnZ-RK-ui7" secondAttribute="trailing" id="m5w-ky-6AT"/>
+                            <constraint firstItem="ges-Hg-7s3" firstAttribute="leading" secondItem="TnZ-RK-ui7" secondAttribute="leading" id="rNe-lE-03c"/>
+                            <constraint firstItem="ges-Hg-7s3" firstAttribute="trailing" secondItem="TnZ-RK-ui7" secondAttribute="trailing" id="sr7-oI-0La"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="TnZ-RK-ui7"/>
                     </view>
+                    <navigationItem key="navigationItem" id="tkI-tH-GHa">
+                        <barButtonItem key="leftBarButtonItem" id="lEX-0K-WX8">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NavigationBar.cancel"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="dismissAnimated" destination="FKs-so-x4D" id="dWK-TC-1VV"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jaO-RK-ET1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-471" y="943"/>
+            <point key="canvasLocation" x="-471.01449275362324" y="942.85714285714278"/>
         </scene>
         <!--Scene Overview View Controller-->
         <scene sceneID="vSr-FF-QCy">
@@ -118,6 +268,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addNote"/>
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="buttonImage" value="Note"/>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="notePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="EBC-j5-rRm"/>
+                                                            </connections>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3kG-AG-IlB" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                             <rect key="frame" x="135" y="0.0" width="115" height="34"/>
@@ -128,6 +281,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addPhoto"/>
                                                                 <userDefinedRuntimeAttribute type="image" keyPath="buttonImage" value="Camera"/>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="photoPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="8P3-oR-780"/>
+                                                            </connections>
                                                         </view>
                                                     </subviews>
                                                     <constraints>
@@ -163,6 +319,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.closeScene"/>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="closePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="Mgs-YG-qji"/>
+                                                            </connections>
                                                         </view>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YnP-wc-rbb" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                             <rect key="frame" x="168" y="0.0" width="0.0" height="46"/>
@@ -171,6 +330,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.leaveScene"/>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="leavePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="vDw-Ni-K5d"/>
+                                                            </connections>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKh-ph-2Ha" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                             <rect key="frame" x="178" y="0.0" width="158" height="46"/>
@@ -179,6 +341,9 @@
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.transferCommand"/>
                                                             </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="transferPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="ZHA-ip-iWE"/>
+                                                            </connections>
                                                         </view>
                                                     </subviews>
                                                 </stackView>
@@ -195,10 +360,23 @@
                                             <rect key="frame" x="0.0" y="-44" width="414" height="180"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         </view>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCo-hG-lPv">
+                                            <rect key="frame" x="314" y="0.0" width="44" height="44"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="44" id="cDi-LS-8Iw"/>
+                                                <constraint firstAttribute="height" constant="44" id="ovE-Oe-Rx0"/>
+                                            </constraints>
+                                            <color key="tintColor" name="LowPriorityGrey"/>
+                                            <state key="normal" image="Edit"/>
+                                            <connections>
+                                                <action selector="editPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="ndE-m2-LoU"/>
+                                            </connections>
+                                        </button>
                                     </subviews>
                                     <color key="backgroundColor" name="BgBackground"/>
                                     <constraints>
                                         <constraint firstItem="NFm-vW-AB2" firstAttribute="trailing" secondItem="FM6-6D-YMk" secondAttribute="trailing" id="0pZ-MO-ZkZ"/>
+                                        <constraint firstItem="oCo-hG-lPv" firstAttribute="trailing" secondItem="FM6-6D-YMk" secondAttribute="trailing" constant="-22" id="1HE-j4-jQk"/>
                                         <constraint firstItem="iYt-Iw-65g" firstAttribute="leading" secondItem="FM6-6D-YMk" secondAttribute="leading" id="2Qo-A2-9ul"/>
                                         <constraint firstItem="iYt-Iw-65g" firstAttribute="top" secondItem="NFm-vW-AB2" secondAttribute="bottom" id="4TL-zE-GGd"/>
                                         <constraint firstAttribute="bottom" secondItem="e9v-St-7fA" secondAttribute="bottom" id="DQn-Qd-qVc"/>
@@ -209,6 +387,7 @@
                                         <constraint firstItem="NFm-vW-AB2" firstAttribute="top" secondItem="FM6-6D-YMk" secondAttribute="top" constant="-44" id="VGm-Pr-mhJ"/>
                                         <constraint firstItem="Wi6-vt-Ifh" firstAttribute="leading" secondItem="FM6-6D-YMk" secondAttribute="leading" id="dkw-YT-7eI"/>
                                         <constraint firstItem="Wi6-vt-Ifh" firstAttribute="top" secondItem="nq2-V3-BP0" secondAttribute="bottom" id="faT-d0-udt"/>
+                                        <constraint firstItem="oCo-hG-lPv" firstAttribute="top" secondItem="FM6-6D-YMk" secondAttribute="top" id="kwi-It-5LT"/>
                                         <constraint firstItem="NFm-vW-AB2" firstAttribute="leading" secondItem="FM6-6D-YMk" secondAttribute="leading" id="oMa-0z-R8F"/>
                                         <constraint firstItem="nq2-V3-BP0" firstAttribute="trailing" secondItem="FM6-6D-YMk" secondAttribute="trailing" id="pVV-a1-9ya"/>
                                         <constraint firstItem="Wi6-vt-Ifh" firstAttribute="trailing" secondItem="FM6-6D-YMk" secondAttribute="trailing" id="s85-Rl-8ia"/>
@@ -247,6 +426,7 @@
     </scenes>
     <resources>
         <image name="Camera" width="25" height="19"/>
+        <image name="Edit" width="24" height="28"/>
         <image name="Note" width="17" height="20"/>
         <image name="Previous" width="29" height="32"/>
         <image name="PreviousSelected" width="30" height="32"/>
@@ -254,6 +434,12 @@
         <image name="SceneSelected" width="40" height="32"/>
         <namedColor name="BgBackground">
             <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="LowPriorityGrey">
+            <color red="0.57999998331069946" green="0.65100002288818359" blue="0.67799997329711914" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="OrangeAccent">
+            <color red="0.93300002813339233" green="0.57300001382827759" blue="0.31000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

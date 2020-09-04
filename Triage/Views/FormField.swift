@@ -8,6 +8,10 @@
 
 import UIKit
 
+enum FormFieldStatus: String {
+    case none, unverified, verified
+}
+
 enum FormFieldStyle: String {
     case input, onboarding
 }
@@ -33,7 +37,7 @@ private class FormFieldTextField: UITextField {
 }
 
 @IBDesignable
-class FormField: UIView {
+class FormField: UIView, Localizable {
     let statusView = UIView()
     var statusViewWidthConstraint: NSLayoutConstraint!
     let label = UILabel()
@@ -57,10 +61,15 @@ class FormField: UIView {
         }
         return _alertLabel
     }
+
+    var status: FormFieldStatus = .none {
+        didSet { updateStyle() }
+    }
     
     var style: FormFieldStyle = .input {
         didSet { updateStyle() }
     }
+
     @IBInspectable var Style: String {
         get { return style.rawValue }
         set { style = FormFieldStyle(rawValue: newValue) ?? .input }
@@ -74,6 +83,11 @@ class FormField: UIView {
     @IBInspectable var isEnabled: Bool {
         get { return textField.isEnabled }
         set { textField.isEnabled = newValue }
+    }
+    
+    @IBInspectable var l10nKey: String? {
+        get { return nil }
+        set { label.l10nKey = newValue }
     }
 
     @IBInspectable var labelText: String? {
@@ -183,13 +197,21 @@ class FormField: UIView {
             label.font = .copyXSBold
             if textField.isFirstResponder {
                 textField.font = .copyLBold
-                statusViewWidthConstraint.constant = 22
+                if status == .none {
+                    statusViewWidthConstraint.constant = 0
+                } else {
+                    statusViewWidthConstraint.constant = 22
+                }
                 labelTopConstraint.constant = 8
                 textFieldTopConstraint.constant = 6
                 bottomConstraint.constant = 16
             } else {
                 textField.font = .copyMBold
-                statusViewWidthConstraint.constant = 8
+                if status == .none {
+                    statusViewWidthConstraint.constant = 0
+                } else {
+                    statusViewWidthConstraint.constant = 8
+                }
                 labelTopConstraint.constant = 4
                 textFieldTopConstraint.constant = 4
                 bottomConstraint.constant = 12

@@ -53,4 +53,36 @@ class SceneOverviewViewController: UIViewController {
             sceneRespondersView.configure(from: scene)
         }
     }
+
+    private func close() {
+        AppSettings.sceneId = nil
+        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
+            for window in UIApplication.shared.windows {
+                if window.isKeyWindow {
+                    window.rootViewController = vc
+                    break
+                }
+            }
+        }
+    }
+    
+    @IBAction func editPressed(_ sender: Any) {
+    }
+
+    @IBAction func notePressed(_ sender: Any) {
+    }
+    
+    @IBAction func photoPressed(_ sender: Any) {
+    }
+
+    @IBAction func closePressed(_ sender: Any) {
+        close()
+    }
+    
+    @IBAction func leavePressed(_ sender: Any) {
+        close()
+    }
+
+    @IBAction func transferPressed(_ sender: Any) {
+    }
 }

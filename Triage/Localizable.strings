@@ -16,11 +16,12 @@
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.closeScene" = "Close Scene";
-"Button.transferCommand" = "Transfer Command";
-"Button.leaveScene" = "Leave Scene";
 "Button.edit" = "Edit";
+"Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
+"Button.startScene" = "Start Scene";
 "Button.stopAndSave" = "Stop & Save";
+"Button.transferCommand" = "Transfer Command";
 "Button.update" = "Update";
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
@@ -66,6 +67,12 @@
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
 
+"NewSceneViewController.title" = "New Scene Set-Up";
+"NewSceneViewController.nameField" = "Incident Name";
+"NewSceneViewController.descField" = "Description";
+"NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";
+"NewSceneViewController.urgencyField" = "Description of Patient Urgency";
+
 "Patient.firstName" = "First name";
 "Patient.lastName" = "Last name";
 "Patient.age" = "Age";
@@ -103,6 +110,12 @@
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";
+
+"SceneLocationView.gpsLabel" = "GPS Location: ";
+"SceneLocationView.cityLabel" = "City: ";
+"SceneLocationView.stateLabel" = "State: ";
+"SceneLocationView.zipLabel" = "Zipcode: ";
+"SceneLocationView.startLabel" = "Start Time: ";
 
 "ScenePatientsView.patientsLabel" = "# Patients Recorded";
 

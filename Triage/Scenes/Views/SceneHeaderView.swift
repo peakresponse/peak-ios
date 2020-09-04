@@ -28,25 +28,13 @@ class SceneHeaderView: UIView {
     private func commonInit() {
         backgroundColor = .white
 
-        let editButton = UIButton(type: .custom)
-        editButton.translatesAutoresizingMaskIntoConstraints = false
-        editButton.setImage(UIImage(named: "Edit", in: Bundle(for: type(of: self)), with: nil), for: .normal)
-        editButton.tintColor = .lowPriorityGrey
-        addSubview(editButton)
-        NSLayoutConstraint.activate([
-            editButton.topAnchor.constraint(equalTo: topAnchor, constant: 58),
-            editButton.rightAnchor.constraint(equalTo: rightAnchor, constant: -12),
-            editButton.widthAnchor.constraint(equalToConstant: 44),
-            editButton.heightAnchor.constraint(equalToConstant: 44)
-        ])
-
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .copyMBold
         nameLabel.textColor = .mainGrey
         addSubview(nameLabel)
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: editButton.bottomAnchor),
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 102),
             nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 22),
             nameLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -22)
         ])
