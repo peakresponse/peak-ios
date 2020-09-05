@@ -20,6 +20,7 @@
 "Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
 "Button.startScene" = "Start Scene";
+"Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
 "Button.transferCommand" = "Transfer Command";
 "Button.update" = "Update";

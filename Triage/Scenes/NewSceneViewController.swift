@@ -14,7 +14,8 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
     @IBOutlet weak var nameField: FormField!
     @IBOutlet weak var descField: FormMultilineField!
     @IBOutlet weak var approxPatientsField: FormField!
-    @IBOutlet weak var urgencyField: FormField!
+    @IBOutlet weak var urgencyField: FormMultilineField!
+    @IBOutlet weak var startAndFillLaterButton: UIButton!
 
     private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
@@ -22,6 +23,20 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if let title = startAndFillLaterButton.title(for: .normal) {
+            var attributedTitle = NSAttributedString(string: title, attributes: [
+                .font: UIFont.copySBold,
+                .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
+            ])
+            startAndFillLaterButton.setAttributedTitle(attributedTitle, for: .normal)
+            attributedTitle = NSAttributedString(string: title, attributes: [
+                .font: UIFont.copySBold,
+                .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue),
+                .foregroundColor: UIColor.lowPriorityGrey
+            ])
+            startAndFillLaterButton.setAttributedTitle(attributedTitle, for: .highlighted)
+        }
+        
         approxPatientsField.textField.keyboardType = .numberPad
 
         fields = [nameField, descField, approxPatientsField, urgencyField]
@@ -60,6 +75,10 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
         NotificationCenter.default.removeObserver(self)
     }
 
+    @IBAction func startPressed() {
+        
+    }
+    
     @objc func inputPrevPressed() {
         if let index = fields.firstIndex(where: {$0.isFirstResponder}) {
             if index > 0 {
