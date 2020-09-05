@@ -22,7 +22,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             .font: font,
             .paragraphStyle: paragraphStyle
         ], context: nil)
-        return round(rect.height) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
+        return max(font.lineHeight, round(rect.height)) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
     }
 
     let playButton = UIButton(type: .custom)
@@ -125,6 +125,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             textView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
             textView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight),
             textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }

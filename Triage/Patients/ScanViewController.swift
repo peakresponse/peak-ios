@@ -166,6 +166,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             }
         } else {
             let observation = Observation()
+            observation.updatedAt = Date()
             observation.pin = pin
             vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation")
             if let vc = vc as? ObservationViewController {

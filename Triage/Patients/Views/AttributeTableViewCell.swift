@@ -21,7 +21,7 @@ enum AttributeTableViewCellType {
     case object
 }
 
-class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
+class AttributeTableViewCell: PatientTableViewCell, FormFieldDelegate {
     let field = FormField()
 
     var attribute: String!
@@ -105,9 +105,9 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
         field.textField.rightViewMode = editing ? .always : .never
     }
     
-    // MARK: - UITextFieldDelegate
+    // MARK: - FormFieldDelegate
 
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+    func formFieldShouldBeginEditing(_ field: BaseField) -> Bool {
         if attributeType == .object {
             timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { [weak self] (timer) in
                 guard let self = self else { return }
@@ -118,36 +118,20 @@ class AttributeTableViewCell: PatientTableViewCell, UITextFieldDelegate {
         return true
     }
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func formFieldDidBeginEditing(_ field: BaseField) {
         layer.zPosition = 0
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
+    func formFieldDidEndEditing(_ field: BaseField) {
         layer.zPosition = -1
     }
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func formFieldShouldReturn(_ field: BaseField) -> Bool {
         delegate?.attributeTableViewCellDidReturn?(self)
         return true
     }
 
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        let text = ((textField.text ?? "") as NSString).replacingCharacters(in: range, with: string)
-        DispatchQueue.main.async { [weak self] in
-            if let self = self {
-                self.delegate?.attributeTableViewCell?(self, didChange: text)
-            }
-        }
-        return true
-    }
-
-    func textFieldShouldClear(_ textField: UITextField) -> Bool {
-        timer?.invalidate()
-        DispatchQueue.main.async { [weak self] in
-            if let self = self {
-                self.delegate?.attributeTableViewCell?(self, didChange: "")
-            }
-        }
-        return true
+    func formFieldDidChange(_ field: BaseField) {
+        delegate?.attributeTableViewCell?(self, didChange: field.text ?? "")
     }
 }

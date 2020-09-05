@@ -12,7 +12,7 @@ import UIKit
     @objc optional func loginViewControllerDidLogin(_ vc: LoginViewController)
 }
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, FormFieldDelegate {
     @IBOutlet weak var loginFormView: UIView!
     @IBOutlet weak var emailField: FormField!
     @IBOutlet weak var passwordField: FormField!
@@ -35,17 +35,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         super.viewDidAppear(animated)
         _ = emailField.becomeFirstResponder()
     }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailField.textField {
-            _ = passwordField.becomeFirstResponder()
-        } else if textField == passwordField.textField {
-            _ = passwordField.resignFirstResponder()
-            loginPressed(loginButton)
-        }
-        return true
-    }
-    
     
     @IBAction func loginPressed(_ sender: FormButton) {
         let email = emailField.text
@@ -86,5 +75,17 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             }
             task.resume()
         }
+    }
+
+    // MARK: - FormFieldDelegate
+    
+    func formFieldShouldReturn(_ field: BaseField) -> Bool {
+        if field == emailField {
+            _ = passwordField.becomeFirstResponder()
+        } else if field == passwordField {
+            _ = passwordField.resignFirstResponder()
+            loginPressed(loginButton)
+        }
+        return false
     }
 }

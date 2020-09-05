@@ -8,15 +8,15 @@
 
 import UIKit
 
-class NewSceneViewController: UIViewController, UITextFieldDelegate {
+class NewSceneViewController: UIViewController, FormFieldDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationView: SceneLocationView!
     @IBOutlet weak var nameField: FormField!
-    @IBOutlet weak var descField: FormField!
+    @IBOutlet weak var descField: FormMultilineField!
     @IBOutlet weak var approxPatientsField: FormField!
     @IBOutlet weak var urgencyField: FormField!
 
-    private var fields: [FormField]!
+    private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
 
     override func viewDidLoad() {
@@ -37,6 +37,10 @@ class NewSceneViewController: UIViewController, UITextFieldDelegate {
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self, action: #selector(inputDonePressed))
         ], animated: false)
+
+        for field in fields {
+            field.inputAccessoryView = inputToolbar
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -57,7 +61,7 @@ class NewSceneViewController: UIViewController, UITextFieldDelegate {
     }
 
     @objc func inputPrevPressed() {
-        if let index = fields.firstIndex(where: {$0.textField.isFirstResponder}) {
+        if let index = fields.firstIndex(where: {$0.isFirstResponder}) {
             if index > 0 {
                 _ = fields[index - 1].becomeFirstResponder()
             } else {
@@ -67,7 +71,7 @@ class NewSceneViewController: UIViewController, UITextFieldDelegate {
     }
 
     @objc func inputNextPressed() {
-        if let index = fields.firstIndex(where: {$0.textField.isFirstResponder}) {
+        if let index = fields.firstIndex(where: {$0.isFirstResponder}) {
             if index < (fields.count - 1) {
                 _ = fields[index + 1].becomeFirstResponder()
             } else {
@@ -77,7 +81,7 @@ class NewSceneViewController: UIViewController, UITextFieldDelegate {
     }
 
     @objc func inputDonePressed() {
-        if let index = fields.firstIndex(where: {$0.textField.isFirstResponder}) {
+        if let index = fields.firstIndex(where: {$0.isFirstResponder}) {
             _ = fields[index].resignFirstResponder()
         }
     }
@@ -106,18 +110,13 @@ class NewSceneViewController: UIViewController, UITextFieldDelegate {
         }
     }
 
-    // MARK: - UITextFieldDelegate
-
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        textField.inputAccessoryView = inputToolbar
-        return true
-    }
+    // MARK: - FormFieldDelegate
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let index = fields.firstIndex(where: {$0.textField == textField}), index < (fields.count - 1) {
+    func formFieldShouldReturn(_ field: BaseField) -> Bool {
+        if let index = fields.firstIndex(where: {$0 == field}), index < (fields.count - 1) {
             _ = fields[index + 1].becomeFirstResponder()
         } else {
-            textField.resignFirstResponder()
+            field.resignFirstResponder()
         }
         return false
     }
