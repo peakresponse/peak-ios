@@ -17,8 +17,8 @@ let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .st
 
 @objc protocol PatientTableViewControllerDelegate {
     @objc optional func patientTableViewControllerDidCancel(_ vc: PatientTableViewController)
+    @objc optional func patientTableViewControllerDidSave(_ vc: PatientTableViewController)
     @objc optional func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int)
-    @objc optional func patientTableViewController(_ vc: PatientTableViewController, didSave observation: Observation)
 }
 
 class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate, AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate, ObservationTableViewCellDelegate, RecordButtonDelegate {
@@ -204,23 +204,12 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func save(observation: Observation) {
-        AppRealm.createObservation(observation) { [weak self] (observation, error) in
-            guard let self = self else { return }
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            } else if let observation = observation {
-                /// dispatch update
-                self.delegate?.patientTableViewController?(self, didSave: observation)
-                /// fow now, manually refresh, until websockets support added
-                if let patientId = observation.patientId {
-                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
-                        if let error = error {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.presentAlert(error: error)
-                            }
-                        }
+        if let patientId = patient.id {
+            AppRealm.addPatientObservation(patientId: patientId, observation: observation) { [weak self] (patient, error) in
+                guard let self = self else { return }
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentAlert(error: error)
                     }
                 }
             }
@@ -310,16 +299,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         delegate?.patientTableViewController?(self, didUpdatePriority: priority)
     }
     
-    func patientTableViewController(_ vc: PatientTableViewController, didSave observation: Observation) {
-        if let id = patient.id {
-            AppRealm.getPatient(idOrPin: id) { (error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    }
-                }
-            }
-        }
+    func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
         navigationController?.popViewController(animated: false)
     }
     

@@ -97,6 +97,7 @@ class ScenePatientsView: UIView {
                 countLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
                 countLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
             ])
+            countLabels.append(countLabel)
         }
 
         let hr = HorizontalRuleView()
@@ -111,6 +112,11 @@ class ScenePatientsView: UIView {
     }
 
     func configure(from scene: Scene) {
-        
+        countLabel.text = "\(scene.patientsCount.value ?? 0)"
+        if let priorityPatientsCounts = scene.priorityPatientsCounts {
+            for (index, count) in priorityPatientsCounts.enumerated() {
+                countLabels[index].text = "\(count)"
+            }
+        }
     }
 }

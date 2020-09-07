@@ -125,6 +125,13 @@ class ApiClient {
         })
     }
     
+    func PATCH<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+        let request = urlRequest(for: path, data: data, params: params, method: "PATCH", body: body)
+        return session.dataTask(with: request, completionHandler: { (data, response, error) in
+            self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
+        })
+    }
+
     // MARK: - Sessions
     
     func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
@@ -166,12 +173,6 @@ class ApiClient {
         }
         return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
-
-    // MARK: - Observations
-
-    func createObservation(_ data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/observations", body: data, completionHandler: completionHandler)
-    }
     
     // MARK: - Patients
 
@@ -181,6 +182,10 @@ class ApiClient {
 
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
+    }
+    
+    func addPatientObservation(patientId: String, data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/patients/\(patientId)", body: data, completionHandler: completionHandler)
     }
 
     // MARK: - Scenes

@@ -61,19 +61,14 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
 
         let saveObservation = { [weak self] in
-            guard let self = self, let observation = self.patient as? Observation else { return }
-            AppRealm.createObservation(observation.changes(from: self.originalObservation)) { (observation, error) in
-                let observationId = observation?.id
+            guard let self = self, let observation = self.patient as? Observation, let patientId = observation.patientId else { return }
+            AppRealm.addPatientObservation(patientId: patientId, observation: observation.changes(from: self.originalObservation)) { (patient, error) in
                 DispatchQueue.main.async { [weak self] in
                     self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
                     if let error = error {
                         self?.presentAlert(error: error)
-                    } else if let self = self, let observationId = observationId {
-                        let realm = AppRealm.open()
-                        realm.refresh()
-                        if let observation = realm.object(ofType: Observation.self, forPrimaryKey: observationId) {
-                            self.delegate?.patientTableViewController?(self, didSave: observation)
-                        }
+                    } else if let self = self {
+                        self.delegate?.patientTableViewControllerDidSave?(self)
                     }
                 }
             }

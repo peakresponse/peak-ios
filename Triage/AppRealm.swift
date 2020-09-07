@@ -80,25 +80,6 @@ class AppRealm {
         task.resume()
     }
 
-    // MARK: - Observations
-
-    public static func createObservation(_ observation: Observation, completionHandler: @escaping (Observation?, Error?) ->  Void) {
-        let task = ApiClient.shared.createObservation(observation.asJSON()) { (record, error) in
-            var observation: Observation?
-            if let record = record {
-                observation = Observation.instantiate(from: record) as? Observation
-                if let observation = observation {
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(observation, update: .modified)
-                    }
-                }
-            }
-            completionHandler(observation, error)
-        }
-        task.resume()
-    }
-
     // MARK: - Patients
 
     public static func getPatients(completionHandler: @escaping (Error?) -> Void) {
@@ -128,6 +109,23 @@ class AppRealm {
                 }
             }
             completionHandler(error)
+        }
+        task.resume()
+    }
+    
+    public static func addPatientObservation(patientId: String, observation: Observation, completionHandler: @escaping (Patient?, Error?) ->  Void) {
+        let task = ApiClient.shared.addPatientObservation(patientId: patientId, data: observation.asJSON()) { (record, error) in
+            var patient: Patient?
+            if let record = record {
+                patient = Patient.instantiate(from: record) as? Observation
+                if let patient = patient {
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(patient, update: .modified)
+                    }
+                }
+            }
+            completionHandler(patient, error)
         }
         task.resume()
     }

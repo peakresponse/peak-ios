@@ -62,24 +62,24 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
     }
 
     func save(observation: Observation) {
-        AppRealm.createObservation(observation) { (observation, error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            } else {
-                /// fow now, manually refresh, until websockets support added
-                if let patientId = observation?.patientId {
-                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
-                        if let error = error {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.presentAlert(error: error)
-                            }
-                        }
-                    }
-                }
-            }
-        }
+//        AppRealm.createObservation(observation) { (observation, error) in
+//            if let error = error {
+//                DispatchQueue.main.async { [weak self] in
+//                    self?.presentAlert(error: error)
+//                }
+//            } else {
+//                /// fow now, manually refresh, until websockets support added
+//                if let patientId = observation?.patientId {
+//                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
+//                        if let error = error {
+//                            DispatchQueue.main.async { [weak self] in
+//                                self?.presentAlert(error: error)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     // MARK: - PatientTableViewControllerDelegate

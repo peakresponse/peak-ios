@@ -15,6 +15,9 @@ class Scene: Base {
         static let desc = "desc"
         static let urgency = "urgency"
         static let approxPatients = "approxPatients"
+        static let patientsCount = "patientsCount"
+        static let priorityPatientsCounts = "priorityPatientsCounts"
+        static let respondersCount = "respondersCount"
         static let isActive = "isActive"
         static let isMCI = "isMCI"
         static let lat = "lat"
@@ -28,6 +31,15 @@ class Scene: Base {
     @objc dynamic var desc: String?
     @objc dynamic var urgency: String?
     let approxPatients = RealmOptional<Int>()
+    let patientsCount = RealmOptional<Int>()
+    @objc dynamic var _priorityPatientsCounts: String?
+    var priorityPatientsCounts: [Int]? {
+        if let _priorityPatientsCounts = _priorityPatientsCounts {
+            return _priorityPatientsCounts.split(separator: ",").map({ Int($0) ?? 0 })
+        }
+        return nil
+    }
+    let respondersCount = RealmOptional<Int>()
     @objc dynamic var isActive: Bool = false
     @objc dynamic var isMCI: Bool = false
     @objc dynamic var lat: String?
@@ -46,6 +58,11 @@ class Scene: Base {
         desc = data[Keys.desc] as? String
         urgency = data[Keys.urgency] as? String
         approxPatients.value = data[Keys.approxPatients] as? Int
+        patientsCount.value = data[Keys.patientsCount] as? Int
+        respondersCount.value = data[Keys.respondersCount] as? Int
+        if let _priorityPatientsCounts = data[Keys.priorityPatientsCounts] as? [Int] {
+            self._priorityPatientsCounts = _priorityPatientsCounts.map({ String($0) }).joined(separator: ",")
+        }
         isActive = data[Keys.isActive] as? Bool ?? false
         isMCI = data[Keys.isMCI] as? Bool ?? false
         lat = data[Keys.lat] as? String
@@ -68,6 +85,15 @@ class Scene: Base {
         }
         if let value = approxPatients.value {
             data[Keys.approxPatients] = value
+        }
+        if let value = patientsCount.value {
+            data[Keys.patientsCount] = value
+        }
+        if let value = priorityPatientsCounts {
+            data[Keys.priorityPatientsCounts] = value
+        }
+        if let value = respondersCount.value {
+            data[Keys.respondersCount] = value
         }
         data[Keys.isActive] = isActive
         data[Keys.isMCI] = isMCI

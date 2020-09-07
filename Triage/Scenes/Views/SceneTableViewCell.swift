@@ -143,7 +143,7 @@ class SceneTableViewCell: UITableViewCell {
         nameLabel.text = scene.name?.isEmpty ?? true ? " " : scene.name
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc
         
-        patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized)
-        respondersLabel.text = String(format: "SceneTableViewCell.respondersLabel".localized)
+        patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized, scene.patientsCount.value ?? 0)
+        respondersLabel.text = String(format: "SceneTableViewCell.respondersLabel".localized, scene.respondersCount.value ?? 0)
     }
 }
