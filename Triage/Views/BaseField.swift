@@ -131,8 +131,8 @@ class BaseField: UIView, Localizable {
         _alertLabel.textColor = .orangeAccent
         addSubview(_alertLabel)
         NSLayoutConstraint.activate([
-            _alertLabel.topAnchor.constraint(equalTo: label.topAnchor),
-            _alertLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10)
+            _alertLabel.firstBaselineAnchor.constraint(equalTo: label.firstBaselineAnchor),
+            _alertLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10)
         ])
     }
 
@@ -143,8 +143,8 @@ class BaseField: UIView, Localizable {
         _detailLabel.textColor = .mainGrey
         addSubview(_detailLabel)
         NSLayoutConstraint.activate([
-            _detailLabel.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
-            _detailLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -3)
+            _detailLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
+            _detailLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -3)
         ])
     }
 

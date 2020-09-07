@@ -29,7 +29,7 @@ class LocationTableViewCell: AttributeTableViewCell {
 
     override func configure(from patient: Patient) {
         super.configure(from: patient)
-        field.alertLabel.text = patient.hasLatLng ? "Location.viewOnMap".localized : "Location.capture".localized
+        field.alertLabel.text = patient.hasLatLng ? "Location.viewOnMap".localized : (isEditing ? "Location.capture".localized : nil)
         field.alertLabel.isHidden = false
         field.detailLabel.text = patient.latLngString
     }

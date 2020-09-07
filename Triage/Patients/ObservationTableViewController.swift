@@ -282,7 +282,7 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
     }
     
     override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell) {
-        if let cell = cell as? LocationTableViewCell {
+        if cell as? LocationTableViewCell != nil {
             if !patient.hasLatLng {
                 captureLocation()
                 return
@@ -340,7 +340,9 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
             patient.lat = String(format: "%.6f", location.coordinate.latitude)
             patient.lng = String(format: "%.6f", location.coordinate.longitude)
         }
-        tableView.reloadRows(at: [IndexPath(row: 3, section: Section.info.rawValue)], with: .none)
+        if let cell = tableView.cellForRow(at: IndexPath(row: 3, section: Section.info.rawValue)) as? LocationTableViewCell {
+            cell.configure(from: patient)
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {

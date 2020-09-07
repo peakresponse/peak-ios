@@ -121,11 +121,13 @@ class ObservationView: UIView, AudioHelperDelgate {
         textView.font = .copySBold
         textView.textColor = .mainGrey
         addSubview(textView)
+        let textViewMinHeightConstraint = textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight)
+        textViewMinHeightConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
             textView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
-//            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight),
+            textViewMinHeightConstraint,
             textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
