@@ -57,10 +57,6 @@ class BaseField: UIView, Localizable {
     }
 
     @objc var text: String?
-    @objc override var inputAccessoryView: UIView? {
-        get { return nil }
-        set {}
-    }
     
     @IBOutlet weak var delegate: FormFieldDelegate?
 

@@ -45,22 +45,13 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
         prevItem.width = 44
         let nextItem = UIBarButtonItem(image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
         nextItem.width = 44
-        inputToolbar = UIToolbar()
+        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             prevItem,
             nextItem,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self, action: #selector(inputDonePressed))
         ], animated: false)
-
-        for field in fields {
-            field.inputAccessoryView = inputToolbar
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        inputToolbar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -77,6 +68,10 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
 
     @IBAction func startPressed() {
         
+    }
+
+    override var inputAccessoryView: UIView? {
+        return inputToolbar
     }
     
     @objc func inputPrevPressed() {

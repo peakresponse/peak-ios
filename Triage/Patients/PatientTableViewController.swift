@@ -49,7 +49,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         prevItem.width = 44
         let nextItem = UIBarButtonItem(image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
         nextItem.width = 44
-        inputToolbar = UIToolbar()
+        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             prevItem,
             nextItem,
@@ -86,8 +86,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
-        /// properly size the input accessory subview
-        inputToolbar.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 44)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +120,10 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
+    override var inputAccessoryView: UIView? {
+        return inputToolbar
+    }
+    
     @objc func inputPrevPressed() {
         for cell in tableView.visibleCells {
             if cell.resignFirstResponder() {
@@ -464,7 +466,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
         if let cell = cell as? PatientTableViewCell {
             cell.configure(from: patient)
-            cell.inputAccessoryView = inputToolbar
         }
         return cell
     }

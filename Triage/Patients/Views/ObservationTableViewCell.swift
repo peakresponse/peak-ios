@@ -18,11 +18,6 @@ class ObservationTableViewCell: PatientTableViewCell, ObservationViewDelegate, U
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         return ObservationView.heightForText(text, width: width - 44 /* left and right margins */) + 10 /* top and bottom margins*/
     }
-
-    override var inputAccessoryView: UIView? {
-        get { return observationView.textView.inputAccessoryView }
-        set { observationView.textView.inputAccessoryView = newValue }
-    }
     
     let observationView = ObservationView()
 

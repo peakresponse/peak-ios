@@ -125,7 +125,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             textView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
             textView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
-            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight),
+//            textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight),
             textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }

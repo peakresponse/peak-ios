@@ -44,11 +44,6 @@ class FormField: BaseField, UITextFieldDelegate {
         get { return textField.text }
         set { textField.text = newValue }
     }
-
-    override var inputAccessoryView: UIView? {
-        get { return textField.inputAccessoryView }
-        set { textField.inputAccessoryView = newValue }
-    }
     
     @IBInspectable var isSecureTextEntry: Bool {
         get { return textField.isSecureTextEntry }

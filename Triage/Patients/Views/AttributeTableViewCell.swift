@@ -29,11 +29,6 @@ class AttributeTableViewCell: PatientTableViewCell, FormFieldDelegate {
     weak var delegate: AttributeTableViewCellDelegate?
     weak var timer: Timer?
 
-    override var inputAccessoryView: UIView? {
-        get { return field.textField.inputAccessoryView }
-        set { field.textField.inputAccessoryView = newValue }
-    }
-
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         commonInit()

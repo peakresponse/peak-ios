@@ -12,12 +12,7 @@ protocol PatientTableViewCellBackground {
     var customBackgroundView: UIView! { get set }
 }
 
-class PatientTableViewCell: UITableViewCell {
-    override var inputAccessoryView: UIView? {
-        get { return nil }
-        set { }
-    }
-    
+class PatientTableViewCell: UITableViewCell {    
     func configure(from patient: Patient) {
     }
 }

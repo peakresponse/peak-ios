@@ -44,11 +44,6 @@ class FormMultilineField: BaseField, UITextViewDelegate {
         get { return textView.text }
         set { textView.text = newValue }
     }
-
-    override var inputAccessoryView: UIView? {
-        get { return textView.inputAccessoryView }
-        set { textView.inputAccessoryView = newValue }
-    }
     
     private func heightForText(_ text: String, font: UIFont, width: CGFloat) -> CGFloat {
         let text = text as NSString

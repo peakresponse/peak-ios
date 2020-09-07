@@ -27,13 +27,12 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         
         isModalInPresentation = true
 
-        inputToolbar = UIToolbar()
+        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             UIBarButtonItem(title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
         ], animated: false)
-        pinField.inputAccessoryView = inputToolbar
 
         /// labels and fields
         cameraLabel.font = .copyMBold
@@ -83,8 +82,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         videoPreviewLayer?.frame = cameraView.bounds
-        /// properly size the input accessory subview
-        inputToolbar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
@@ -146,6 +143,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         inputCancelPressed()
     }
 
+    override var inputAccessoryView: UIView? {
+        return inputToolbar
+    }
+    
     @objc func inputCancelPressed() {
         _ = pinField.resignFirstResponder()
     }
