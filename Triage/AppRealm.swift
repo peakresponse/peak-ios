@@ -153,11 +153,17 @@ class AppRealm {
         /// cancel any existing task
         sceneTask?.cancel(with: .normalClosure, reason: nil)
         /// connect to scene socket
-        sceneTask = ApiClient.shared.connect(sceneId: sceneId) { (data, error) in
-            if let error = error {
-                print("scene error", error)
+        sceneTask = ApiClient.shared.connect(sceneId: sceneId) { (task, data, error) in
+            guard task == sceneTask else { return }
+            if error != nil {
+                /// close current connection
+                sceneTask?.cancel(with: .internalServerError, reason: nil)
+                sceneTask = nil
+                /// retry after 5 secs
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    connect(sceneId: sceneId)
+                }
             } else if let data = data {
-                print("scene data", data)
                 let realm = AppRealm.open()
                 if let scene = data["scene"] as? [String: Any] {
                     if let scene = Scene.instantiate(from: scene) as? Scene {
@@ -191,5 +197,6 @@ class AppRealm {
 
     public static func disconnectScene() {
         sceneTask?.cancel(with: .normalClosure, reason: nil)
+        sceneTask = nil
     }
 }

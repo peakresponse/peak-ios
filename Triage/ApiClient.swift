@@ -104,7 +104,7 @@ class ApiClient {
         }
     }
 
-    func WS<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionWebSocketTask {
+    func WS<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) -> URLSessionWebSocketTask {
         var components = URLComponents()
         components.path = path
         if let params = params {
@@ -122,29 +122,33 @@ class ApiClient {
             request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
         }
         let task = session.webSocketTask(with: request)
-        pingWebSocket(task: task)
-        receiveWebSocket(task: task, completionHandler: completionHandler)
+        pingWebSocket(task: task, completionHandler: completionHandler)
+        receiveFromWebSocket(task: task, completionHandler: completionHandler)
         return task
     }
 
-    func pingWebSocket(task: URLSessionWebSocketTask) {
+    private func pingWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
         guard task.closeCode == .invalid else { return }
         task.sendPing { [weak self] (error) in
+            objc_sync_enter(task)
             if let error = error {
-                print("ping error", error)
+                completionHandler(task, nil, error)
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                    self?.pingWebSocket(task: task, completionHandler: completionHandler)
+                }
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                self?.pingWebSocket(task: task)
-            }
+            objc_sync_exit(task)
         }
     }
     
-    func receiveWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (T?, Error?) -> Void) {
+    private func receiveFromWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
         guard task.closeCode == .invalid else { return }
         task.receive { [weak self] (result) in
+            objc_sync_enter(task)
             switch result {
             case .failure(let error):
-                print("receive error", error)
+                completionHandler(task, nil, error)
             case .success(let message):
                 var data: Data?
                 switch message {
@@ -158,19 +162,20 @@ class ApiClient {
                 if let data = data {
                     do {
                         if let json = try JSONSerialization.jsonObject(with: data, options: []) as? T {
-                            completionHandler(json, nil)
+                            completionHandler(task, json, nil)
                         } else {
-                            completionHandler(nil, ApiClientError.unexpected)
+                            completionHandler(task, nil, ApiClientError.unexpected)
                         }
                     } catch {
-                        completionHandler(nil, error)
+                        completionHandler(task, nil, error)
                     }
                 }
-                self?.receiveWebSocket(task: task, completionHandler: completionHandler)
+                self?.receiveFromWebSocket(task: task, completionHandler: completionHandler)
             }
+            objc_sync_exit(task)
         }
     }
-    
+
     func GET<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, params: params)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
@@ -257,7 +262,7 @@ class ApiClient {
 
     // MARK: - Scenes
 
-    func connect(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+    func connect(sceneId: String, completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
     
