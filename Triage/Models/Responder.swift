@@ -7,3 +7,7 @@
 //
 
 import Foundation
+import RealmSwift
+
+class Responder: Base {
+}

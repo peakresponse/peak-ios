@@ -11,6 +11,7 @@ import RealmSwift
 
 class AppRealm {
     private static var main: Realm!
+    private static var sceneTask: URLSessionWebSocketTask?
     
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
@@ -117,7 +118,7 @@ class AppRealm {
         let task = ApiClient.shared.addPatientObservation(patientId: patientId, data: observation.asJSON()) { (record, error) in
             var patient: Patient?
             if let record = record {
-                patient = Patient.instantiate(from: record) as? Observation
+                patient = Patient.instantiate(from: record) as? Patient
                 if let patient = patient {
                     let realm = AppRealm.open()
                     try! realm.write {
@@ -146,5 +147,49 @@ class AppRealm {
             }
         }
         task.resume()
+    }
+
+    public static func connect(sceneId: String) {
+        /// cancel any existing task
+        sceneTask?.cancel(with: .normalClosure, reason: nil)
+        /// connect to scene socket
+        sceneTask = ApiClient.shared.connect(sceneId: sceneId) { (data, error) in
+            if let error = error {
+                print("scene error", error)
+            } else if let data = data {
+                print("scene data", data)
+                let realm = AppRealm.open()
+                if let scene = data["scene"] as? [String: Any] {
+                    if let scene = Scene.instantiate(from: scene) as? Scene {
+                        try! realm.write {
+                            realm.add(scene, update: .modified)
+                        }
+                    }
+                }
+                if let patients = data["patients"] as? [[String: Any]] {
+                    for patient in patients {
+                        if let patient = Patient.instantiate(from: patient) as? Patient {
+                            try! realm.write {
+                                realm.add(patient, update: .modified)
+                            }
+                        }
+                    }
+                }
+//                if let responders = data["responders"] as? [[String: Any]] {
+//                    for responder in responders {
+//                        if let responder = Responder.instantiate(from: responder) as? Responder {
+//                            try! realm.write {
+//                                realm.add(responder, update: .modified)
+//                            }
+//                        }
+//                    }
+//                }
+            }
+        }
+        sceneTask?.resume()
+    }
+
+    public static func disconnectScene() {
+        sceneTask?.cancel(with: .normalClosure, reason: nil)
     }
 }

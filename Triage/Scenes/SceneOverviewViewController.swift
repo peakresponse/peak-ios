@@ -6,6 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import RealmSwift
 import UIKit
 
 class SceneOverviewViewController: UIViewController {
@@ -18,8 +19,13 @@ class SceneOverviewViewController: UIViewController {
     @IBOutlet weak var scenePatientsView: ScenePatientsView!
     @IBOutlet weak var sceneRespondersView: SceneRespondersView!
 
-    private var scene: Scene?
+    private var scene: Scene!
+    var notificationToken: NotificationToken?
     
+    deinit {
+        notificationToken?.invalidate()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,29 +38,40 @@ class SceneOverviewViewController: UIViewController {
             ])
         }
 
-        if let sceneId = AppSettings.sceneId {
-            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+        guard let sceneId = AppSettings.sceneId else { return }
+        scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+        notificationToken = scene.observe { [weak self] (change) in
+            self?.didObserveChange(change)
         }
-        
         refresh();
     }
-    
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
     }
-
-    private func refresh() {
-        if let scene = scene {
-            sceneHeaderView.configure(from: scene)
-            scenePatientsView.configure(from: scene)
-            sceneRespondersView.configure(from: scene)
+    
+    func didObserveChange(_ change: ObjectChange) {
+        switch change {
+        case .change(_):
+            refresh();
+        case .error(let error):
+            presentAlert(error: error)
+        case .deleted:
+            close()
         }
     }
 
+    private func refresh() {
+        sceneHeaderView.configure(from: scene)
+        scenePatientsView.configure(from: scene)
+        sceneRespondersView.configure(from: scene)
+    }
+
     private func close() {
+        AppRealm.disconnectScene()
         AppSettings.sceneId = nil
         if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
             for window in UIApplication.shared.windows {

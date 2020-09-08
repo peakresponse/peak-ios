@@ -92,7 +92,8 @@ class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let scene = results?[indexPath.row] {
             AppSettings.sceneId = scene.id
-            if AppSettings.sceneId != nil {
+            if let sceneId = AppSettings.sceneId {
+                AppRealm.connect(sceneId: sceneId)
                 let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
                 for window in UIApplication.shared.windows {
                     if window.isKeyWindow {
