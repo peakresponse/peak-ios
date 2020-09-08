@@ -75,6 +75,8 @@ class BaseField: UIView, Localizable {
         set { label.text = newValue }
     }
 
+    @IBInspectable var attributeKey: String?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()

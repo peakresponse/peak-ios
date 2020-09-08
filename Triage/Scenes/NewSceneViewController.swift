@@ -6,9 +6,10 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import UIKit
 
-class NewSceneViewController: UIViewController, FormFieldDelegate {
+class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationManagerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationView: SceneLocationView!
     @IBOutlet weak var nameField: FormField!
@@ -16,13 +17,24 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
     @IBOutlet weak var approxPatientsField: FormField!
     @IBOutlet weak var urgencyField: FormMultilineField!
     @IBOutlet weak var startAndFillLaterButton: UIButton!
-
+    
     private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
 
+    private var locationManager: CLLocationManager!
+    private var scene: Scene!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        scene = Scene()
+        scene.createdAt = Date()
 
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
+        locationManager.requestLocation()
+        
         if let title = startAndFillLaterButton.title(for: .normal) {
             var attributedTitle = NSAttributedString(string: title, attributes: [
                 .font: UIFont.copySBold,
@@ -66,8 +78,25 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
         NotificationCenter.default.removeObserver(self)
     }
 
+    private func refresh() {
+        locationView.configure(from: scene)
+    }
+    
     @IBAction func startPressed() {
-        
+        AppRealm.createScene(scene: scene) { [weak self] (scene, error) in
+            guard let self = self else { return }
+            if let error = error {
+                self.presentAlert(error: error)
+            } else if let scene = scene, let sceneId = scene.id {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true) {
+                        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+                            appDelegate.enterScene(id: sceneId)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override var inputAccessoryView: UIView? {
@@ -126,6 +155,17 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
 
     // MARK: - FormFieldDelegate
     
+    func formFieldDidChange(_ field: BaseField) {
+        if let attributeKey = field.attributeKey {
+            switch field.attributeKey {
+            case "approxPatients":
+                scene.approxPatients.value = Int(field.text ?? "")
+            default:
+                scene.setValue(field.text, forKey: attributeKey)
+            }
+        }
+    }
+    
     func formFieldShouldReturn(_ field: BaseField) -> Bool {
         if let index = fields.firstIndex(where: {$0 == field}), index < (fields.count - 1) {
             _ = fields[index + 1].becomeFirstResponder()
@@ -133,5 +173,29 @@ class NewSceneViewController: UIViewController, FormFieldDelegate {
             field.resignFirstResponder()
         }
         return false
+    }
+    
+    // MARK: - CLLocationManagerDelegate
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            scene.lat = String(format: "%.6f", location.coordinate.latitude)
+            scene.lng = String(format: "%.6f", location.coordinate.longitude)
+            let task = ApiClient.shared.geocode(lat: scene.lat!, lng: scene.lng!) { [weak self] (data, error) in
+                if let error = error {
+                    print(error)
+                } else {
+                    self?.scene.zip = data?["zip"] as? String
+                    DispatchQueue.main.async { [weak self] in
+                        self?.refresh()
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
     }
 }

@@ -58,4 +58,10 @@ class SceneLocationView: UIView {
             bottomAnchor.constraint(equalTo: prevLabel.bottomAnchor, constant: 10)
         ])
     }
+
+    func configure(from scene: Scene) {
+        gpsLabel.text = scene.latLngString
+        zipLabel.text = scene.zip
+        startLabel.text = scene.createdAt?.description
+    }
 }

@@ -118,6 +118,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.nameField"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="attributeKey" value="name"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="Dyk-Og-ZN2"/>
@@ -128,6 +129,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.descField"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="attributeKey" value="desc"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="oCd-rU-n0F"/>
@@ -138,6 +140,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.approxPatientsField"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="attributeKey" value="approxPatients"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="b8M-cL-8FP"/>
@@ -148,6 +151,7 @@
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.urgencyField"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="attributeKey" value="urgency"/>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="wMA-SQ-WkW"/>

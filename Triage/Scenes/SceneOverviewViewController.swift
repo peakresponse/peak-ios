@@ -60,27 +60,20 @@ class SceneOverviewViewController: UIViewController {
         case .error(let error):
             presentAlert(error: error)
         case .deleted:
-            close()
+            leaveScene()
         }
     }
 
+    private func leaveScene() {
+        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
+            appDelegate.leaveScene()
+        }
+    }
+    
     private func refresh() {
         sceneHeaderView.configure(from: scene)
         scenePatientsView.configure(from: scene)
         sceneRespondersView.configure(from: scene)
-    }
-
-    private func close() {
-        AppRealm.disconnectScene()
-        AppSettings.sceneId = nil
-        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
-            for window in UIApplication.shared.windows {
-                if window.isKeyWindow {
-                    window.rootViewController = vc
-                    break
-                }
-            }
-        }
     }
     
     @IBAction func editPressed(_ sender: Any) {
@@ -93,11 +86,11 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func closePressed(_ sender: Any) {
-        close()
+        leaveScene()
     }
     
     @IBAction func leavePressed(_ sender: Any) {
-        close()
+        leaveScene()
     }
 
     @IBAction func transferPressed(_ sender: Any) {

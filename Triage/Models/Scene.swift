@@ -24,6 +24,9 @@ class Scene: Base {
         static let lng = "lng"
         static let address1 = "address1"
         static let address2 = "address2"
+        static let cityId = "cityId"
+        static let countyId = "countyId"
+        static let stateId = "stateId"
         static let zip = "zip"
     }
     
@@ -44,8 +47,27 @@ class Scene: Base {
     @objc dynamic var isMCI: Bool = false
     @objc dynamic var lat: String?
     @objc dynamic var lng: String?
+    var hasLatLng: Bool {
+        if let lat = lat, let lng = lng, lat != "", lng != "" {
+            return true
+        }
+        return false
+    }
+    var latLngString: String? {
+        if let lat = lat, let lng = lng {
+            return "\(lat), \(lng)".trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        return nil
+    }
+    func clearLatLng() {
+        lat = nil
+        lng = nil
+    }
     @objc dynamic var address1: String?
     @objc dynamic var address2: String?
+    @objc dynamic var cityId: String?
+    @objc dynamic var countyId: String?
+    @objc dynamic var stateId: String?
     @objc dynamic var zip: String?
 
     override var description: String {
@@ -69,6 +91,9 @@ class Scene: Base {
         lng = data[Keys.lng] as? String
         address1 = data[Keys.address1] as? String
         address2 = data[Keys.address2] as? String
+        cityId = data[Keys.cityId] as? String
+        countyId = data[Keys.countyId] as? String
+        stateId = data[Keys.stateId] as? String
         zip = data[Keys.zip] as? String
     }
     
@@ -86,16 +111,6 @@ class Scene: Base {
         if let value = approxPatients.value {
             data[Keys.approxPatients] = value
         }
-        if let value = patientsCount.value {
-            data[Keys.patientsCount] = value
-        }
-        if let value = priorityPatientsCounts {
-            data[Keys.priorityPatientsCounts] = value
-        }
-        if let value = respondersCount.value {
-            data[Keys.respondersCount] = value
-        }
-        data[Keys.isActive] = isActive
         data[Keys.isMCI] = isMCI
         if let value = lat {
             data[Keys.lat] = value
@@ -108,6 +123,15 @@ class Scene: Base {
         }
         if let value = address2 {
             data[Keys.address2] = value
+        }
+        if let value = cityId {
+            data[Keys.cityId] = value
+        }
+        if let value = countyId {
+            data[Keys.countyId] = value
+        }
+        if let value = stateId {
+            data[Keys.stateId] = value
         }
         if let value = zip {
             data[Keys.zip] = value

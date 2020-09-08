@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {    
     func presentAlert(error: Error) {
         presentAlert(title: "Error".localized, message: error.localizedDescription)
     }

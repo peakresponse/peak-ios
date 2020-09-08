@@ -12,6 +12,30 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    func enterScene(id: String) {
+        AppSettings.sceneId = id
+        AppRealm.connect(sceneId: id)
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
+        for window in UIApplication.shared.windows {
+            if window.isKeyWindow {
+                window.rootViewController = vc
+                break
+            }
+        }
+    }
+
+    func leaveScene() {
+        AppRealm.disconnectScene()
+        AppSettings.sceneId = nil
+        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
+            for window in UIApplication.shared.windows {
+                if window.isKeyWindow {
+                    window.rootViewController = vc
+                    break
+                }
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.

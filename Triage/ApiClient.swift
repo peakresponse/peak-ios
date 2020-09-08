@@ -265,7 +265,11 @@ class ApiClient {
     func connect(sceneId: String, completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
-    
+
+    func createScene(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
+    }
+
     func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes", completionHandler: completionHandler)
     }
@@ -323,5 +327,11 @@ class ApiClient {
                 task?.resume()
             }
         }
+    }
+
+    // MARK: - Utils
+    
+    func geocode(lat: String, lng: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/utils/geocode", params: ["lat": lat, "lng": lng], completionHandler: completionHandler)
     }
 }
