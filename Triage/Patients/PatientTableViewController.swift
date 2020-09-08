@@ -186,6 +186,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         if let vc = segue.destination as? ObservationTableViewController {
             vc.delegate = self
             vc.patient = patient.asObservation()
+            vc.patient.version.value = (vc.patient.version.value ?? 0) + 1
         }
     }
 
@@ -204,17 +205,15 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func save(observation: Observation) {
-        if let patientId = patient.id {
-            AppRealm.addPatientObservation(patientId: patientId, observation: observation) { [weak self] (patient, error) in
-                guard let self = self else { return }
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.presentAlert(error: error)
-                    }
+        AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (patient, error) in
+            guard let self = self else { return }
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
                 }
             }
         }
-    }
+}
 
     // MARK: - AttributeTableViewCellDelegate
 
@@ -313,7 +312,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
         let observation = Observation()
+        observation.sceneId = patient.sceneId
         observation.pin = patient.pin
+        observation.version.value = (patient.version.value ?? 0) + 1
         observation.priority.value = priority
         save(observation: observation)
     }

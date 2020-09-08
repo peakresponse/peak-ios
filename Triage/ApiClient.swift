@@ -251,8 +251,8 @@ class ApiClient {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
     }
     
-    func addPatientObservation(patientId: String, data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/patients/\(patientId)", body: data, completionHandler: completionHandler)
+    func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/patients", body: data, completionHandler: completionHandler)
     }
 
     // MARK: - Scenes

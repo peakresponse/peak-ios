@@ -114,8 +114,8 @@ class AppRealm {
         task.resume()
     }
     
-    public static func addPatientObservation(patientId: String, observation: Observation, completionHandler: @escaping (Patient?, Error?) ->  Void) {
-        let task = ApiClient.shared.addPatientObservation(patientId: patientId, data: observation.asJSON()) { (record, error) in
+    public static func createOrUpdatePatient(observation: Observation, completionHandler: @escaping (Patient?, Error?) ->  Void) {
+        let task = ApiClient.shared.createOrUpdatePatient(data: observation.asJSON()) { (record, error) in
             var patient: Patient?
             if let record = record {
                 patient = Patient.instantiate(from: record) as? Patient

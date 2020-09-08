@@ -303,7 +303,9 @@ class Patient: Base {
 
     func asObservation() -> Observation {
         let observation = Observation()
+        observation.sceneId = sceneId
         observation.pin = pin
+        observation.version.value = version.value
         observation.lastName = lastName
         observation.firstName = firstName
         observation.age.value = age.value

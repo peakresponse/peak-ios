@@ -167,8 +167,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             }
         } else {
             let observation = Observation()
-            observation.updatedAt = Date()
+            observation.sceneId = AppSettings.sceneId
             observation.pin = pin
+            observation.version.value = 1
+            observation.createdAt = Date()
             vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation")
             if let vc = vc as? ObservationViewController {
                 vc.delegate = self
@@ -214,17 +216,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     // MARK: - ObservationViewControllerDelegate
     
-    func observationViewController(_ vc: ObservationViewController, didSave observation: Observation) {
-        /// Observations saved here are for new Patient records, so fetch the Patient record
-        if let patientId = observation.patientId {
-            AppRealm.getPatient(idOrPin: patientId) { (error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    }
-                }
-            }
-        }
+    func observationViewControllerDidSave(_ vc: ObservationViewController) {
         dismissAnimated()
     }
 }

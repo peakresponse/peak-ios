@@ -63,6 +63,6 @@ class SceneRespondersView: UIView {
     }
 
     func configure(from scene: Scene) {
-        
+        countLabel.text = "\(scene.respondersCount.value ?? 0)"
     }
 }

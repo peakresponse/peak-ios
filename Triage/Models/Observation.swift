@@ -22,7 +22,9 @@ class Observation: Patient {
 
     func changes(from source: Observation) -> Observation {
         let observation = Observation()
+        observation.sceneId = source.sceneId
         observation.pin = source.pin
+        observation.version.value = source.version.value
         if lastName != source.lastName {
             observation.lastName = lastName
         }

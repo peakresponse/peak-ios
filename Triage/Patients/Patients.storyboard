@@ -204,13 +204,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
+                            <containerView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
                                 <rect key="frame" x="0.0" y="38" width="414" height="804"/>
                                 <connections>
                                     <segue destination="VKI-7c-oCx" kind="embed" id="oiL-nl-Oms"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
@@ -388,13 +388,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O2X-e2-cL8">
+                            <containerView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O2X-e2-cL8">
                                 <rect key="frame" x="0.0" y="38" width="414" height="804"/>
                                 <connections>
                                     <segue destination="t3w-T6-qhM" kind="embed" id="Z3V-nt-F7z"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-c6-9Q3" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-c6-9Q3" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
@@ -446,7 +446,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eRj-Cu-WoL">
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eRj-Cu-WoL">
                                 <rect key="frame" x="0.0" y="150" width="414" height="663"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                                 <collectionViewLayout key="collectionViewLayout" id="aH6-5z-qvU" customClass="PatientsCollectionViewFlowLayout" customModule="Peak_Response" customModuleProvider="target"/>
@@ -464,7 +464,7 @@
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BeN-q8-LM6" customClass="SortBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BeN-q8-LM6" customClass="SortBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="100" width="414" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
@@ -527,7 +527,7 @@
                                     <outlet property="delegate" destination="9Hb-xL-yxQ" id="QTM-9s-ik8"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxX-pb-cRP" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nxX-pb-cRP" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="22" y="710" width="370" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -618,7 +618,7 @@
                                     <outlet property="delegate" destination="wZS-XM-NNO" id="dLt-xb-g5n"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="22" y="710" width="370" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <connections>
@@ -675,14 +675,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="750"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
                                 <rect key="frame" x="0.0" y="471" width="414" height="279"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
                                         <rect key="frame" x="188.5" y="202.5" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                         <rect key="frame" x="22" y="185" width="370" height="72"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -879,7 +879,7 @@
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="q9a-1A-9PH">
                                 <rect key="frame" x="0.0" y="298" width="414" height="598"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7Ql-i1-HWK">
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="7Ql-i1-HWK">
                                         <rect key="frame" x="32" y="215.5" width="350" height="167"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="05J-Oi-Ptu">
@@ -902,7 +902,7 @@
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="FacilitiesTableViewController.confirmLeavingExportLabel"/>
                                                 </userDefinedRuntimeAttributes>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="rVX-sO-F1l" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="rVX-sO-F1l" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="55" y="105" width="240" height="62"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <constraints>
@@ -1147,10 +1147,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nE-o8-1lZ">
                                         <rect key="frame" x="0.0" y="235.5" width="414" height="432.5"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
+                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
                                                 <rect key="frame" x="107" y="146.5" width="200" height="140"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -1160,7 +1160,7 @@
                                                             <action selector="confirmPressed:" destination="AJM-DO-iCT" eventType="touchUpInside" id="sBc-0g-Chh"/>
                                                         </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="78" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                         <userDefinedRuntimeAttributes>
