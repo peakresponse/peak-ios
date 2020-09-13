@@ -1,5 +1,5 @@
 //
-//  AppTabBarController.swift
+//  NonSceneTabBarController.swift
 //  Triage
 //
 //  Created by Francis Li on 11/3/19.
@@ -8,7 +8,11 @@
 
 import UIKit
 
-class AppTabBarController: TabBarController {
+class NonSceneTabBarController: TabBarController {
+    deinit {
+        AppRealm.disconnect()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         /// hit the server to check current log-in status
@@ -26,6 +30,7 @@ class AppTabBarController: TabBarController {
                     }
                 }
             }
+            AppRealm.connect()
         }
         task.resume();
     }

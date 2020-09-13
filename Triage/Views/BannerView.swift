@@ -11,7 +11,7 @@ import UIKit
 @IBDesignable
 class BannerView: UIView {
     weak var label: UILabel!
-
+    
     @IBInspectable var l10nKey: String? {
         get { return nil }
         set { label.l10nKey = newValue }

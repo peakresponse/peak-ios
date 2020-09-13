@@ -16,7 +16,7 @@
 		452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */; };
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD9243D819500A8F1FF /* SelectorView.swift */; };
-		453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* AppTabBarController.swift */; };
+		453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* NonSceneTabBarController.swift */; };
 		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
 		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
@@ -79,6 +79,9 @@
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
 		45B7A2D82508330700BCAAAE /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D72508330600BCAAAE /* City.swift */; };
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
+		45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */; };
+		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
+		45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */; };
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
@@ -134,7 +137,7 @@
 		452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityTableViewCell.swift; sourceTree = "<group>"; };
 		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		452DDBD9243D819500A8F1FF /* SelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
-		453877BC236FA47300E19880 /* AppTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTabBarController.swift; sourceTree = "<group>"; };
+		453877BC236FA47300E19880 /* NonSceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonSceneTabBarController.swift; sourceTree = "<group>"; };
 		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -203,6 +206,9 @@
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
 		45B7A2D72508330600BCAAAE /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		45B7A2D92508331500BCAAAE /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNonSceneViewController.swift; sourceTree = "<group>"; };
+		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
+		45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScenesView.swift; sourceTree = "<group>"; };
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
@@ -281,6 +287,7 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */,
 				454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */,
 				454E17BC250022C700F9EB8B /* SceneHeaderView.swift */,
 				45BA942C2501C6A60098E9BD /* SceneLocationView.swift */,
@@ -326,9 +333,10 @@
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
 				454096A724452CEA00AEE53E /* AppSettings.swift */,
-				453877BC236FA47300E19880 /* AppTabBarController.swift */,
 				45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */,
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
+				453877BC236FA47300E19880 /* NonSceneTabBarController.swift */,
+				45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
 				45E267302418AF340010CDE9 /* Fonts */,
@@ -484,6 +492,7 @@
 			children = (
 				454E17B324FF28BF00F9EB8B /* Views */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
+				45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */,
 				454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */,
 				454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */,
 				454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */,
@@ -744,6 +753,7 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */,
 				4566F096236E11B000A04C75 /* PatientTableHeaderView.swift in Sources */,
+				45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
@@ -761,6 +771,7 @@
 				450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */,
 				4543DD4C24DDE62100F9E50B /* TabBarController.swift in Sources */,
 				45E35A3424EF8E8B005A8059 /* FacilityView.swift in Sources */,
+				45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */,
 				4566F099236E12A600A04C75 /* PatientTableViewCell.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
 				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
@@ -785,6 +796,7 @@
 				45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */,
 				4563C74324DA763700217901 /* FormField.swift in Sources */,
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
+				45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */,
 				45E35A3624EF9ECC005A8059 /* ConfirmTransportViewController.swift in Sources */,
 				4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
@@ -802,7 +814,7 @@
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
 				454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
-				453877BD236FA47300E19880 /* AppTabBarController.swift in Sources */,
+				453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,

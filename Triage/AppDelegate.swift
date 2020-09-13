@@ -12,9 +12,8 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
-    func enterScene(id: String) {
+    static func enterScene(id: String) {
         AppSettings.sceneId = id
-        AppRealm.connect(sceneId: id)
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
         for window in UIApplication.shared.windows {
             if window.isKeyWindow {
@@ -24,8 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    func leaveScene() {
-        AppRealm.disconnectScene()
+    static func leaveScene() {
         AppSettings.sceneId = nil
         if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
             for window in UIApplication.shared.windows {

@@ -150,10 +150,10 @@
             </objects>
             <point key="canvasLocation" x="-2081" y="-648"/>
         </scene>
-        <!--App Tab Bar Controller-->
+        <!--Non Scene Tab Bar Controller-->
         <scene sceneID="vEv-Ym-ayQ">
             <objects>
-                <tabBarController id="pqi-yF-G1G" customClass="AppTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController id="pqi-yF-G1G" customClass="NonSceneTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hum-RW-fwI" customClass="PlaceholderTabBar" customModule="Peak_Response" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -172,10 +172,10 @@
             </objects>
             <point key="canvasLocation" x="-2986" y="1"/>
         </scene>
-        <!--App Tab Bar Controller-->
+        <!--Scene Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
-                <tabBarController storyboardIdentifier="ActiveScene" id="49e-Tb-3d3" customClass="AppTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="ActiveScene" id="49e-Tb-3d3" customClass="SceneTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA" customClass="PlaceholderTabBar" customModule="Peak_Response" customModuleProvider="target">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>

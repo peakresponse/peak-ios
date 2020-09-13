@@ -89,11 +89,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
                 self.presentAlert(error: error)
             } else if let scene = scene, let sceneId = scene.id {
                 DispatchQueue.main.async {
-                    self.dismiss(animated: true) {
-                        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                            appDelegate.enterScene(id: sceneId)
-                        }
-                    }
+                    AppDelegate.enterScene(id: sceneId)
                 }
             }
         }

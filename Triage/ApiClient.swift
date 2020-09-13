@@ -225,6 +225,10 @@ class ApiClient {
     
     // MARK: - Agencies
 
+    func connect(completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+        return WS(path: "/agency", completionHandler: completionHandler)
+    }
+
     func getAgencies(search: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: String] = [:]
         if let search = search, !search.isEmpty {

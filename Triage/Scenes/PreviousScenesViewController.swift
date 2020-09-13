@@ -9,8 +9,7 @@
 import RealmSwift
 import UIKit
 
-class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-    @IBOutlet weak var bannerView: BannerView!
+class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet weak var tableView: UITableView!
 
     var notificationToken: NotificationToken?
@@ -19,6 +18,7 @@ class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         tableView.register(SceneTableViewCell.self, forCellReuseIdentifier: "Scene")
         
         let refreshControl = UIRefreshControl()
@@ -27,7 +27,8 @@ class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITab
 
         let realm = AppRealm.open()
         results = realm.objects(Scene.self)
-            .sorted(by: [SortDescriptor(keyPath: "createdAt", ascending: false)])
+            .filter("closedAt != NULL")
+            .sorted(by: [SortDescriptor(keyPath: "closedAt", ascending: false)])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
@@ -91,9 +92,7 @@ class PreviousScenesViewController: UIViewController, UITableViewDelegate, UITab
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let scene = results?[indexPath.row], let sceneId = scene.id {
-            if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-                appDelegate.enterScene(id: sceneId)
-            }
+            AppDelegate.enterScene(id: sceneId)
         }
     }
 }

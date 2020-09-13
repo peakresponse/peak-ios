@@ -65,9 +65,7 @@ class SceneOverviewViewController: UIViewController {
     }
 
     private func leaveScene() {
-        if let appDelegate = UIApplication.shared.delegate as? AppDelegate {
-            appDelegate.leaveScene()
-        }
+        AppDelegate.leaveScene()
     }
     
     private func refresh() {

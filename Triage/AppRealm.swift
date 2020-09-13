@@ -11,6 +11,7 @@ import RealmSwift
 
 class AppRealm {
     private static var main: Realm!
+    private static var agencyTask: URLSessionWebSocketTask?
     private static var sceneTask: URLSessionWebSocketTask?
     
     public static func open() -> Realm {
@@ -36,6 +37,38 @@ class AppRealm {
     }
 
     // MARK: - Agencies
+    
+    public static func connect() {
+        /// cancel any existing task
+        agencyTask?.cancel(with: .normalClosure, reason: nil)
+        /// connect to scene socket
+        agencyTask = ApiClient.shared.connect() { (task, data, error) in
+            guard task == agencyTask else { return }
+            if error != nil {
+                /// close current connection
+                agencyTask?.cancel(with: .internalServerError, reason: nil)
+                agencyTask = nil
+                /// retry after 5 secs
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    connect()
+                }
+            } else if let data = data {
+                if let records = data["scenes"] as? [[String: Any]] {
+                    let scenes = records.map({ Scene.instantiate(from: $0) })
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(scenes, update: .modified)
+                    }
+                }
+            }
+        }
+        agencyTask?.resume()
+    }
+    
+    public static func disconnect() {
+        agencyTask?.cancel(with: .normalClosure, reason: nil)
+        agencyTask = nil
+    }
 
     public static func getAgencies(search: String? = nil, completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.getAgencies(search: search, completionHandler: { (records, error) in
