@@ -74,7 +74,7 @@ class ApiClient {
         } else {
             if let response = response as? HTTPURLResponse {
                 if response.statusCode >= 200 && response.statusCode < 300 {
-                    if let data = data {
+                    if let data = data, data.count > 0 {
                         if let dataBlob = data as? T {
                             completionHandler(dataBlob, error)
                         } else {
@@ -278,6 +278,10 @@ class ApiClient {
         return GET(path: "/api/scenes", completionHandler: completionHandler)
     }
 
+    func closeScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/close", completionHandler: completionHandler)
+    }
+    
     // MARK: - Uploads
 
     func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

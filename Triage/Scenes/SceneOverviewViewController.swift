@@ -84,9 +84,27 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func closePressed(_ sender: Any) {
-        leaveScene()
+        let vc = AlertViewController()
+        vc.alertTitle = String(format: "CloseSceneConfirmation.title".localized, scene.name ?? "")
+        vc.alertMessage = "CloseSceneConfirmation.message".localized
+        vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
+        vc.addAlertAction(title: "Button.close".localized, style: .default) { [weak self] (_) in
+            guard let self = self else { return }
+            AppRealm.closeScene(scene: self.scene) { [weak self] (error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentAlert(error: error)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        AppDelegate.leaveScene()
+                    }
+                }
+            }
+        }
+        presentAnimated(vc)
     }
-    
+
     @IBAction func leavePressed(_ sender: Any) {
         leaveScene()
     }

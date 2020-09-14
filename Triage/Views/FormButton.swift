@@ -83,6 +83,8 @@ class FormButton: UIControl {
         set { style = FormButtonStyle(rawValue: newValue) ?? .priority }
     }
 
+    weak var userData: NSObject?
+    
     private var heightConstraint: NSLayoutConstraint!
     var height: CGFloat {
         var height: CGFloat

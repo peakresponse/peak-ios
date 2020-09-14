@@ -44,7 +44,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KZD-XU-FJz">
-                                        <rect key="frame" x="0.0" y="50" width="414" height="625"/>
+                                        <rect key="frame" x="0.0" y="50" width="414" height="600"/>
                                         <color key="backgroundColor" name="BgBackground"/>
                                         <connections>
                                             <outlet property="dataSource" destination="BL0-Uy-5Vz" id="0Ni-AG-YbF"/>
@@ -52,7 +52,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wNY-xf-i6v" customClass="ActiveScenesView" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="675" width="414" height="50"/>
+                                        <rect key="frame" x="0.0" y="650" width="414" height="75"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                 </subviews>
@@ -367,30 +367,8 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Or-pq-IYE">
                                                     <rect key="frame" x="22" y="0.0" width="336" height="50"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcL-GR-BhX" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="50"/>
-                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.closeScene"/>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <action selector="closePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="Mgs-YG-qji"/>
-                                                            </connections>
-                                                        </view>
-                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YnP-wc-rbb" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="168" y="0.0" width="0.0" height="50"/>
-                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.leaveScene"/>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <action selector="leavePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="vDw-Ni-K5d"/>
-                                                            </connections>
-                                                        </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKh-ph-2Ha" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="178" y="0.0" width="158" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="50"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
@@ -398,6 +376,34 @@
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="transferPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="ZHA-ip-iWE"/>
+                                                            </connections>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcL-GR-BhX" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                            <rect key="frame" x="178" y="0.0" width="158" height="50"/>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.closeScene"/>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="buttonColor">
+                                                                    <color key="value" name="OrangeAccent"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="highlightedButtonColor">
+                                                                    <color key="value" name="LowPriorityGrey"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="closePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="Mgs-YG-qji"/>
+                                                            </connections>
+                                                        </view>
+                                                        <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YnP-wc-rbb" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                            <rect key="frame" x="336" y="0.0" width="0.0" height="50"/>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.leaveScene"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="leavePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="vDw-Ni-K5d"/>
                                                             </connections>
                                                         </view>
                                                     </subviews>
