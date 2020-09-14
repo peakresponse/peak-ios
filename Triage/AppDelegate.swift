@@ -6,6 +6,8 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
+import Keys
 import UIKit
 
 @UIApplicationMain
@@ -36,7 +38,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let keys = TriageKeys()
+        GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
+        
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,
             .foregroundColor: UIColor.mainGrey
