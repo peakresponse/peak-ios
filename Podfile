@@ -13,6 +13,7 @@ target 'Triage' do
   use_frameworks!
 
   # Pods for Triage
+  pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'RealmSwift'
 

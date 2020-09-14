@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
 import MapKit
 import RealmSwift
 import UIKit

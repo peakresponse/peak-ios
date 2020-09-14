@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import RealmSwift
 
 enum Priority: Int, CustomStringConvertible, CaseIterable {
@@ -129,6 +130,12 @@ class Patient: Base {
             return true
         }
         return false
+    }
+    var latLng: CLLocationCoordinate2D? {
+        if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
+            return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+        }
+        return nil
     }
     var latLngString: String? {
         if let lat = lat, let lng = lng {

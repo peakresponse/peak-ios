@@ -12,4 +12,14 @@ extension GMSMarker {
     static let customMarkerImage: UIImage = {
         return UIImage(named: "MapMarker")!
     }()
+
+    static let priorityMarkerImages: [UIImage] = {
+        return [
+            UIImage(named: "MapMarkerImmediate")!,
+            UIImage(named: "MapMarkerDelayed")!,
+            UIImage(named: "MapMarkerMinimal")!,
+            UIImage(named: "MapMarkerExpectant")!,
+            UIImage(named: "MapMarkerDead")!
+        ]
+    }()
 }
