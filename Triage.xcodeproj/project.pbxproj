@@ -84,6 +84,7 @@
 		45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */; };
 		45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */; };
 		45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */; };
+		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
@@ -213,6 +214,7 @@
 		45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScenesView.swift; sourceTree = "<group>"; };
 		45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSceneView.swift; sourceTree = "<group>"; };
 		45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
+		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
 				45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */,
 				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
+				45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */,
 				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
 				45F2190124E5EC640046A39B /* Localizable.swift */,
 				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
@@ -781,6 +784,7 @@
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
+				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
 				45E5BEEE2425DA010013D78D /* TableViewHeaderView.swift in Sources */,

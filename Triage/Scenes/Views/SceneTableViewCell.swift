@@ -6,13 +6,15 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
 import UIKit
 
 class SceneTableViewCell: UITableViewCell {
     weak var containerView: UIView!
-    weak var mapView: UIView!
+    weak var mapView: GMSMapView!
     weak var headerView: UIView!
     weak var bodyView: UIView!
+    weak var dateLabel: UILabel!
     weak var nameLabel: UILabel!
     weak var descLabel: UILabel!
     weak var patientsLabel: UILabel!
@@ -44,8 +46,7 @@ class SceneTableViewCell: UITableViewCell {
         ])
         self.containerView = containerView
 
-        let mapView = UIView()
-        mapView.backgroundColor = .white
+        let mapView = GMSMapView()
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.layer.cornerRadius = 4
         mapView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -72,6 +73,18 @@ class SceneTableViewCell: UITableViewCell {
         ])
         self.headerView = headerView
 
+        let dateLabel = UILabel()
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        dateLabel.font = .copyXSRegular
+        dateLabel.textColor = .mainGrey
+        headerView.addSubview(dateLabel)
+        NSLayoutConstraint.activate([
+            dateLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 6),
+            dateLabel.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 14),
+            dateLabel.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -14)
+        ])
+        self.dateLabel = dateLabel
+        
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .copySBold
@@ -79,7 +92,7 @@ class SceneTableViewCell: UITableViewCell {
         nameLabel.numberOfLines = 1
         headerView.addSubview(nameLabel)
         NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 6),
+            nameLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
             nameLabel.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 14),
             nameLabel.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -14)
         ])
@@ -140,9 +153,18 @@ class SceneTableViewCell: UITableViewCell {
     }
 
     func configure(from scene: Scene) {
+        dateLabel.text = scene.createdAt?.asTimeDateString() ?? " "
         nameLabel.text = scene.name?.isEmpty ?? true ? " " : scene.name
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc
-        
+
+        if let target = scene.latLng {
+            mapView.camera = GMSCameraPosition(target: target, zoom: 13.5)
+            mapView.clear()
+            let marker = GMSMarker(position: target)
+            marker.icon = GMSMarker.customMarkerImage
+            marker.map = mapView
+        }
+
         patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized, scene.patientsCount.value ?? 0)
         respondersLabel.text = String(format: "SceneTableViewCell.respondersLabel".localized, scene.respondersCount.value ?? 0)
     }

@@ -6,6 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import Foundation
 import RealmSwift
 
@@ -53,6 +54,14 @@ class Scene: Base {
             return true
         }
         return false
+    }
+    var latLng: CLLocationCoordinate2D? {
+        if let lat = lat, let lng = lng, lat != "", lng != "" {
+            if let lat = Double(lat), let lng = Double(lng) {
+                return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+            }
+        }
+        return nil
     }
     var latLngString: String? {
         if let lat = lat, let lng = lng {

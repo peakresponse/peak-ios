@@ -6,6 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
 import UIKit
 
 @IBDesignable
@@ -22,7 +23,7 @@ class ActiveSceneView: UIView {
     weak var descLabel: UILabel!
     
     weak var bodyView: UIView!
-    weak var mapView: UIView!
+    weak var mapView: GMSMapView!
     weak var dateLabel: UILabel!
     weak var patientsCountLabel: UILabel!
     weak var patientsLabel: UILabel!
@@ -110,7 +111,7 @@ class ActiveSceneView: UIView {
         ])
         self.bodyView = bodyView
 
-        let mapView = UIView()
+        let mapView = GMSMapView()
         mapView.translatesAutoresizingMaskIntoConstraints = false
         bodyView.addSubview(mapView)
         NSLayoutConstraint.activate([
@@ -245,6 +246,13 @@ class ActiveSceneView: UIView {
         id = scene.id
         nameLabel.text = (scene.name ?? "").isEmpty ? " " : scene.name
         descLabel.text = (scene.desc ?? "").isEmpty ? " " : scene.desc
+        if let target = scene.latLng {
+            mapView.camera = GMSCameraPosition(target: target, zoom: 15)
+            mapView.clear()
+            let marker = GMSMarker(position: target)
+            marker.icon = GMSMarker.customMarkerImage
+            marker.map = mapView
+        }
         dateLabel.text = scene.createdAt?.asTimeDateString()
         patientsCountLabel.text = "\(scene.patientsCount.value ?? 0)"
         transportedCountLabel.text = "\(scene.priorityPatientsCounts?[5] ?? 0)"
