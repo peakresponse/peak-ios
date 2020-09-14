@@ -8,6 +8,10 @@
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
+"ActiveSceneView.patientsLabel" = " Patients on Scene";
+"ActiveSceneView.transportedLabel" = " Patients Transported";
+"ActiveSceneView.respondersLabel" = " First Responders on Scene";
+
 "Banner.noActiveScenes" = "No Active Scenes";
 
 "Button.addNote" = "Add Note";
@@ -17,6 +21,7 @@
 "Button.cancel" = "Cancel";
 "Button.closeScene" = "Close Scene";
 "Button.edit" = "Edit";
+"Button.joinScene" = "Join Scene";
 "Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
 "Button.startScene" = "Start Scene";

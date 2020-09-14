@@ -16,4 +16,8 @@ extension Date {
     func asLocalizedTime() -> String {
         return DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
     }
+
+    func asTimeDateString() -> String {
+        return DateFormatter.timeDateFormatter.string(from: self)
+    }
 }

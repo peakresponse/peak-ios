@@ -82,6 +82,8 @@
 		45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */; };
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */; };
+		45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */; };
+		45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */; };
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
@@ -209,6 +211,8 @@
 		45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNonSceneViewController.swift; sourceTree = "<group>"; };
 		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
 		45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScenesView.swift; sourceTree = "<group>"; };
+		45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSceneView.swift; sourceTree = "<group>"; };
+		45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
@@ -287,6 +291,7 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */,
 				45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */,
 				454E17B424FF29B500F9EB8B /* SceneTableViewCell.swift */,
 				454E17BC250022C700F9EB8B /* SceneHeaderView.swift */,
@@ -399,9 +404,12 @@
 			isa = PBXGroup;
 			children = (
 				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
+				45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */,
 				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
 				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
+				45F2190124E5EC640046A39B /* Localizable.swift */,
 				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
+				45F2190324E5ECC10046A39B /* String+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
 				45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */,
@@ -411,8 +419,6 @@
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
 				4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */,
 				4572BA8E237DE45400958A77 /* URL+Extensions.swift */,
-				45F2190124E5EC640046A39B /* Localizable.swift */,
-				45F2190324E5ECC10046A39B /* String+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -818,11 +824,13 @@
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
+				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
 				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
 				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,
 				45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */,
+				45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */,
 				45E267522418B2510010CDE9 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
