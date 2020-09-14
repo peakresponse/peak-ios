@@ -190,9 +190,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    func didObserveChange(_ change: ObjectChange) {
+    func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_):
+        case .change(_, _):
             if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
                 tableViewHeader.configure(from: patient)
             }

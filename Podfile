@@ -6,7 +6,8 @@ target 'Triage' do
   use_frameworks!
 
   # Pods for Triage
-  pod "RealmSwift"
+  pod 'GoogleMaps'
+  pod 'RealmSwift'
 
   target 'TriageTests' do
     inherit! :search_paths

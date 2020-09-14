@@ -528,6 +528,7 @@
 				4566F019236CCC5500A04C75 /* Frameworks */,
 				4566F01A236CCC5500A04C75 /* Resources */,
 				41170FF1B51A5441BDEE2359 /* [CP] Embed Pods Frameworks */,
+				5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -691,6 +692,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		5F0561CF6B0232C999B34857 /* [CP] Check Pods Manifest.lock */ = {

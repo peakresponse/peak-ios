@@ -50,9 +50,9 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
         }
     }
     
-    func didObserveChange(_ change: ObjectChange) {
+    func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_):
+        case .change(_, _):
             updateNavigationBarColor(priority: patient.priority.value)
         case .error(let error):
             presentAlert(error: error)

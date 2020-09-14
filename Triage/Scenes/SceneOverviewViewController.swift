@@ -53,9 +53,9 @@ class SceneOverviewViewController: UIViewController {
         tableView.layoutIfNeeded()
     }
     
-    func didObserveChange(_ change: ObjectChange) {
+    func didObserveChange(_ change: ObjectChange<Scene>) {
         switch change {
-        case .change(_):
+        case .change(_, _):
             refresh();
         case .error(let error):
             presentAlert(error: error)
