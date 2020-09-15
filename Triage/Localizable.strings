@@ -132,6 +132,14 @@
 
 "SceneRespondersView.respondersLabel" = "First Responders";
 
+"SceneSummaryHeaderView.dateLabel" = "Date: ";
+"SceneSummaryHeaderView.timeLabel" = "Time: ";
+"SceneSummaryHeaderView.locationLabel" = "Location: ";
+
+"SceneSummaryViewController.patients" = "Patients";
+"SceneSummaryViewController.notes" = "Notes";
+"SceneSummaryViewController.photos" = "Photos";
+
 "SceneTableViewCell.patientsLabel" = "%d Patients Total";
 "SceneTableViewCell.respondersLabel" = "%d First Responders";
 

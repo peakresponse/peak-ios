@@ -270,4 +270,51 @@ class AppRealm {
         sceneTask?.cancel(with: .normalClosure, reason: nil)
         sceneTask = nil
     }
+
+    // MARK: - Users
+    
+    public static func me(completionHandler: @escaping (User?, Agency?, Scene?, Error?) -> Void) {
+        let task = ApiClient.shared.me { (data, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    completionHandler(nil, nil, nil, error)
+                }
+            } else if let data = data {
+                var user: User?
+                var agency: Agency?
+                var activeScenes: [Base]?
+                if let data = data["user"] as? [String: Any] {
+                    user = User.instantiate(from: data) as? User
+                    if let data = data["activeScenes"] as? [[String: Any]] {
+                        activeScenes = data.map({ Scene.instantiate(from: $0) })
+                    }
+                }
+                if let data = data["agency"] as? [String: Any] {
+                    agency = Agency.instantiate(from: data) as? Agency
+                }
+                let realm = AppRealm.open()
+                try! realm.write {
+                    if let user = user {
+                        realm.add(user, update: .modified)
+                    }
+                    if let agency = agency {
+                        realm.add(agency, update: .modified)
+                    }
+                    if let activeScenes = activeScenes {
+                        realm.add(activeScenes, update: .modified)
+                    }
+                }
+                var scene: Scene?
+                if let activeScenes = activeScenes, activeScenes.count > 0 {
+                    scene = activeScenes[0] as? Scene
+                }
+                completionHandler(user, agency, scene, nil)
+            } else {
+                DispatchQueue.main.async {
+                    completionHandler(nil, nil, nil, ApiClientError.unexpected)
+                }
+            }
+        }
+        task.resume();
+    }
 }

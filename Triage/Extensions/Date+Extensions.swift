@@ -9,15 +9,23 @@
 import Foundation
 
 extension Date {
-    func asRelativeString() -> String {
-        return RelativeDateTimeFormatter.localizedString(for: self)
+    func asDateString() -> String {
+        return DateFormatter.dateFormatter.string(from: self)
     }
 
     func asLocalizedTime() -> String {
         return DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
     }
 
+    func asRelativeString() -> String {
+        return RelativeDateTimeFormatter.localizedString(for: self)
+    }
+
     func asTimeDateString() -> String {
         return DateFormatter.timeDateFormatter.string(from: self)
+    }
+    
+    func asTimeString() -> String {
+        return DateFormatter.timeFormatter.string(from: self)
     }
 }

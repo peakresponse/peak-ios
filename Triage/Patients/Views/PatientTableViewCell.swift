@@ -8,10 +8,6 @@
 
 import UIKit
 
-protocol PatientTableViewCellBackground {
-    var customBackgroundView: UIView! { get set }
-}
-
 class PatientTableViewCell: UITableViewCell {    
     func configure(from patient: Patient) {
     }

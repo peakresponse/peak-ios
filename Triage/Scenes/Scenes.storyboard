@@ -16,6 +16,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="7lp-p5-u9z">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" name="MainGrey"/>
                     </navigationBar>
                     <connections>
                         <segue destination="BL0-Uy-5Vz" kind="relationship" relationship="rootViewController" id="XJT-3B-6eb"/>
@@ -36,15 +37,15 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="ZX8-CY-ccH">
                                 <rect key="frame" x="0.0" y="88" width="414" height="725"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9hY-oB-zL0" customClass="BannerView" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="414" height="50"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9hY-oB-zL0" customClass="BannerView" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="25"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Banner.noActiveScenes"/>
                                         </userDefinedRuntimeAttributes>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="KZD-XU-FJz">
-                                        <rect key="frame" x="0.0" y="50" width="414" height="600"/>
+                                        <rect key="frame" x="0.0" y="25" width="414" height="500"/>
                                         <color key="backgroundColor" name="BgBackground"/>
                                         <connections>
                                             <outlet property="dataSource" destination="BL0-Uy-5Vz" id="0Ni-AG-YbF"/>
@@ -52,7 +53,7 @@
                                         </connections>
                                     </tableView>
                                     <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wNY-xf-i6v" customClass="ActiveScenesView" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="650" width="414" height="75"/>
+                                        <rect key="frame" x="0.0" y="525" width="414" height="200"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                     </view>
                                 </subviews>
@@ -74,11 +75,72 @@
                         <outlet property="activeScenesView" destination="wNY-xf-i6v" id="5KS-x0-442"/>
                         <outlet property="bannerView" destination="9hY-oB-zL0" id="60n-Ra-qdt"/>
                         <outlet property="tableView" destination="KZD-XU-FJz" id="7E7-0d-GQy"/>
+                        <segue destination="SnA-o2-Aol" kind="show" identifier="ShowSceneSummary" id="RzK-fc-raJ"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="MF4-kg-ctv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="373.91304347826087" y="215.625"/>
+        </scene>
+        <!--Scene Summary View Controller-->
+        <scene sceneID="6qq-2U-m2J">
+            <objects>
+                <viewController id="SnA-o2-Aol" customClass="SceneSummaryViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mzN-q3-sHG">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="hPI-kv-7ev">
+                                <rect key="frame" x="0.0" y="88" width="414" height="725"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgd-LQ-6L8" customClass="BannerView" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="25"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Banner.noActiveScenes"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="oYq-bk-5Lr">
+                                        <rect key="frame" x="0.0" y="25" width="414" height="25"/>
+                                        <color key="backgroundColor" name="BgBackground"/>
+                                        <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="lx6-7a-h0U">
+                                            <size key="itemSize" width="128" height="128"/>
+                                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                        </collectionViewFlowLayout>
+                                        <cells/>
+                                        <connections>
+                                            <outlet property="dataSource" destination="SnA-o2-Aol" id="TgJ-vC-3yd"/>
+                                            <outlet property="delegate" destination="SnA-o2-Aol" id="2of-WQ-Cc6"/>
+                                        </connections>
+                                    </collectionView>
+                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R9Q-vg-SeT" customClass="ActiveScenesView" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="414" height="675"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="hPI-kv-7ev" firstAttribute="trailing" secondItem="4EE-dh-6pA" secondAttribute="trailing" id="9tv-PV-d1H"/>
+                            <constraint firstItem="hPI-kv-7ev" firstAttribute="bottom" secondItem="4EE-dh-6pA" secondAttribute="bottom" id="Mce-SX-Ymv"/>
+                            <constraint firstItem="hPI-kv-7ev" firstAttribute="top" secondItem="4EE-dh-6pA" secondAttribute="top" id="Y46-Bz-hgb"/>
+                            <constraint firstItem="hPI-kv-7ev" firstAttribute="leading" secondItem="4EE-dh-6pA" secondAttribute="leading" id="Zb3-v7-b2V"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="4EE-dh-6pA"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="F4k-j9-uN5"/>
+                    <connections>
+                        <outlet property="activeScenesView" destination="R9Q-vg-SeT" id="w3y-LX-llY"/>
+                        <outlet property="bannerView" destination="bgd-LQ-6L8" id="r3f-EG-0ho"/>
+                        <outlet property="collectionView" destination="oYq-bk-5Lr" id="Aox-iD-c4E"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mva-6v-Vts" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1166.6666666666667" y="215.625"/>
         </scene>
         <!--New Scene View Controller-->
         <scene sceneID="NIo-7I-8AQ">
@@ -88,7 +150,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FVT-e2-xKs" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FVT-e2-xKs" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -100,7 +162,7 @@
                                     <outlet property="navigationItem" destination="tkI-tH-GHa" id="Ogy-Tc-Pid"/>
                                 </connections>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ges-Hg-7s3">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ges-Hg-7s3">
                                 <rect key="frame" x="0.0" y="82" width="414" height="814"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="NewSceneViewController.title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8I6-0Y-5KN">
@@ -113,14 +175,14 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NewSceneViewController.title"/>
                                         </userDefinedRuntimeAttributes>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EXc-1V-tii">
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="EXc-1V-tii">
                                         <rect key="frame" x="22" y="46.5" width="370" height="644"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cBg-Fk-cYf" customClass="SceneLocationView" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBg-Fk-cYf" customClass="SceneLocationView" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="0.0" width="370" height="135"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ob4-Ag-Rtg" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ob4-Ag-Rtg" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="145" width="370" height="61"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
@@ -131,7 +193,7 @@
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="Dyk-Og-ZN2"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tw0-dV-zRD" customClass="FormMultilineField" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Tw0-dV-zRD" customClass="FormMultilineField" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="216" width="370" height="72.5"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
@@ -142,7 +204,7 @@
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="oCd-rU-n0F"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="g6Z-9v-7yb" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="g6Z-9v-7yb" customClass="FormField" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="298.5" width="370" height="61"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
@@ -153,7 +215,7 @@
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="b8M-cL-8FP"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8RM-Xo-zgx" customClass="FormMultilineField" customModule="Peak_Response" customModuleProvider="target">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8RM-Xo-zgx" customClass="FormMultilineField" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="369.5" width="370" height="72.5"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                 <userDefinedRuntimeAttributes>
@@ -164,14 +226,14 @@
                                                     <outlet property="delegate" destination="FKs-so-x4D" id="wMA-SQ-WkW"/>
                                                 </connections>
                                             </view>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Rk-w2-jaB">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9Rk-w2-jaB">
                                                 <rect key="frame" x="0.0" y="452" width="370" height="192"/>
                                                 <subviews>
-                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rjd-Hh-ey5">
-                                                        <rect key="frame" x="60" y="8" width="250" height="50"/>
+                                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Rjd-Hh-ey5">
+                                                        <rect key="frame" x="60" y="8" width="250" height="34"/>
                                                         <subviews>
-                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c5c-2E-Yib" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="115" height="50"/>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c5c-2E-Yib" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="115" height="34"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
@@ -180,8 +242,8 @@
                                                                     <userDefinedRuntimeAttribute type="image" keyPath="buttonImage" value="Note"/>
                                                                 </userDefinedRuntimeAttributes>
                                                             </view>
-                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BmF-kD-jrx" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                <rect key="frame" x="135" y="0.0" width="115" height="50"/>
+                                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BmF-kD-jrx" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                                <rect key="frame" x="135" y="0.0" width="115" height="34"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
@@ -195,7 +257,7 @@
                                                             <constraint firstAttribute="width" constant="250" id="HWh-Uf-Qkw"/>
                                                         </constraints>
                                                     </stackView>
-                                                    <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ff0-4a-xTl">
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ff0-4a-xTl">
                                                         <rect key="frame" x="170" y="64" width="30" height="34"/>
                                                         <state key="normal">
                                                             <color key="titleColor" name="OrangeAccent"/>
@@ -211,7 +273,7 @@
                                                             <action selector="startPressed" destination="FKs-so-x4D" eventType="touchUpInside" id="EXs-e8-z1S"/>
                                                         </connections>
                                                     </button>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="U8n-w7-7cq" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U8n-w7-7cq" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="108" width="370" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -308,14 +370,14 @@
                                 <view key="tableHeaderView" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FM6-6D-YMk">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="499"/>
                                     <subviews>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e9v-St-7fA">
+                                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="e9v-St-7fA">
                                             <rect key="frame" x="0.0" y="421" width="414" height="78"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="rFf-e6-H8u">
-                                                    <rect key="frame" x="65" y="22" width="250" height="50"/>
+                                                    <rect key="frame" x="65" y="22" width="250" height="34"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yX7-UU-1k7" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="115" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="115" height="34"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
@@ -328,7 +390,7 @@
                                                             </connections>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3kG-AG-IlB" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="135" y="0.0" width="115" height="50"/>
+                                                            <rect key="frame" x="135" y="0.0" width="115" height="34"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xxsmall"/>
@@ -353,22 +415,22 @@
                                                 <constraint firstAttribute="bottom" secondItem="rFf-e6-H8u" secondAttribute="bottom" constant="22" id="g0d-61-X6X"/>
                                             </constraints>
                                         </view>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wi6-vt-Ifh" customClass="SceneRespondersView" customModule="Peak_Response" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Wi6-vt-Ifh" customClass="SceneRespondersView" customModule="Peak_Response" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="333" width="414" height="89"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         </view>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nq2-V3-BP0" customClass="ScenePatientsView" customModule="Peak_Response" customModuleProvider="target">
+                                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nq2-V3-BP0" customClass="ScenePatientsView" customModule="Peak_Response" customModuleProvider="target">
                                             <rect key="frame" x="0.0" y="183" width="414" height="150"/>
                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         </view>
-                                        <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iYt-Iw-65g">
+                                        <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iYt-Iw-65g">
                                             <rect key="frame" x="0.0" y="136" width="414" height="66"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Or-pq-IYE">
-                                                    <rect key="frame" x="22" y="0.0" width="336" height="50"/>
+                                                    <rect key="frame" x="22" y="0.0" width="336" height="46"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKh-ph-2Ha" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="50"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="46"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
@@ -379,7 +441,7 @@
                                                             </connections>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcL-GR-BhX" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="178" y="0.0" width="158" height="50"/>
+                                                            <rect key="frame" x="178" y="0.0" width="158" height="46"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
@@ -396,7 +458,7 @@
                                                             </connections>
                                                         </view>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YnP-wc-rbb" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="336" y="0.0" width="0.0" height="50"/>
+                                                            <rect key="frame" x="336" y="0.0" width="0.0" height="46"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
@@ -498,6 +560,9 @@
         </namedColor>
         <namedColor name="LowPriorityGrey">
             <color red="0.57999998331069946" green="0.65100002288818359" blue="0.67799997329711914" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="MainGrey">
+            <color red="0.23899999260902405" green="0.31400001049041748" blue="0.3449999988079071" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="OrangeAccent">
             <color red="0.93300002813339233" green="0.57300001382827759" blue="0.31000000238418579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

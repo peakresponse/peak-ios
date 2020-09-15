@@ -74,6 +74,12 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
         }
     }
 
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? SceneSummaryViewController, let scene = sender as? Scene {
+            vc.scene = scene
+        }
+    }
+    
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -91,8 +97,9 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let scene = results?[indexPath.row], let sceneId = scene.id {
-            AppDelegate.enterScene(id: sceneId)
+        if let scene = results?[indexPath.row] {
+            performSegue(withIdentifier: "ShowSceneSummary", sender: scene)
         }
+        tableView.deselectRow(at: indexPath, animated: false)
     }
 }

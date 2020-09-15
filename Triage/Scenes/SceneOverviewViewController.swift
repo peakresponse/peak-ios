@@ -30,7 +30,7 @@ class SceneOverviewViewController: UIViewController {
         super.viewDidLoad()
 
         sceneCommandsView.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 20, color: .black, opacity: 0.1)
-        
+
         if let tableHeaderView = tableView.tableHeaderView {
             tableHeaderView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([

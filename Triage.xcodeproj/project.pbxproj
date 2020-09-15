@@ -87,6 +87,9 @@
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45B7A2E9250F2AAC00BCAAAE /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E7250F2AAC00BCAAAE /* AlertViewController.swift */; };
 		45B7A2EA250F2AAC00BCAAAE /* AlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45B7A2E8250F2AAC00BCAAAE /* AlertViewController.xib */; };
+		45B7A2EE250F3E7800BCAAAE /* SceneSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2ED250F3E7800BCAAAE /* SceneSummaryViewController.swift */; };
+		45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2EF25101DD400BCAAAE /* SceneSummaryHeaderView.swift */; };
+		45B7A2F2251038D200BCAAAE /* PatientsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2F1251038D200BCAAAE /* PatientsCollectionViewCell.swift */; };
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
@@ -219,6 +222,9 @@
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2E7250F2AAC00BCAAAE /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
 		45B7A2E8250F2AAC00BCAAAE /* AlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertViewController.xib; sourceTree = "<group>"; };
+		45B7A2ED250F3E7800BCAAAE /* SceneSummaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSummaryViewController.swift; sourceTree = "<group>"; };
+		45B7A2EF25101DD400BCAAAE /* SceneSummaryHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneSummaryHeaderView.swift; sourceTree = "<group>"; };
+		45B7A2F1251038D200BCAAAE /* PatientsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
@@ -304,6 +310,7 @@
 				45BA942C2501C6A60098E9BD /* SceneLocationView.swift */,
 				454E17BE250022E000F9EB8B /* ScenePatientsView.swift */,
 				454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */,
+				45B7A2EF25101DD400BCAAAE /* SceneSummaryHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -486,6 +493,7 @@
 				452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */,
 				45F218FB24E371660046A39B /* LocationTableViewCell.swift */,
 				45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */,
+				45B7A2F1251038D200BCAAAE /* PatientsCollectionViewCell.swift */,
 				4566F098236E12A600A04C75 /* PatientTableViewCell.swift */,
 				4566F094236E11B000A04C75 /* PatientTableHeaderView.swift */,
 				45E5BEED2425DA010013D78D /* TableViewHeaderView.swift */,
@@ -511,6 +519,7 @@
 				454E17AD24FECC1B00F9EB8B /* NewSceneViewController.swift */,
 				454E17AB24FECBF800F9EB8B /* PreviousScenesViewController.swift */,
 				454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */,
+				45B7A2ED250F3E7800BCAAAE /* SceneSummaryViewController.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -793,6 +802,7 @@
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
+				45B7A2F2251038D200BCAAAE /* PatientsCollectionViewCell.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
 				45E5BEEE2425DA010013D78D /* TableViewHeaderView.swift in Sources */,
@@ -818,6 +828,7 @@
 				4566F073236D2FB100A04C75 /* UIView+Extensions.swift in Sources */,
 				45B7A2DA2508331500BCAAAE /* State.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
+				45B7A2EE250F3E7800BCAAAE /* SceneSummaryViewController.swift in Sources */,
 				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,
 				45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
@@ -838,6 +849,7 @@
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */,
 				4566F08A236E0C8200A04C75 /* Observation.swift in Sources */,
+				45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,

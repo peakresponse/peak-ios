@@ -16,7 +16,7 @@ class NonSceneTabBarController: TabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         /// hit the server to check current log-in status
-        let task = ApiClient.shared.me { [weak self] (record, error) in
+        AppRealm.me { (user, agency, scene, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     var vc = self?.selectedViewController
@@ -30,8 +30,13 @@ class NonSceneTabBarController: TabBarController {
                     }
                 }
             }
-            AppRealm.connect()
+            if let scene = scene, let sceneId = scene.id {
+                DispatchQueue.main.async {
+                    AppDelegate.enterScene(id: sceneId)
+                }
+            } else {
+                AppRealm.connect()
+            }
         }
-        task.resume();
     }
 }
