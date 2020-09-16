@@ -70,6 +70,9 @@
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.search" = "Search";
 
+"LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
+"LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
+
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
 

@@ -226,6 +226,17 @@ class AppRealm {
         }
         task.resume()
     }
+    
+    public static func leaveScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.leaveScene(sceneId: scene.id) { (_, error) in
+            if let error = error {
+                completionHandler(error)
+            } else {
+                completionHandler(nil)
+            }
+        }
+        task.resume()
+    }
 
     public static func connect(sceneId: String) {
         /// cancel any existing task
