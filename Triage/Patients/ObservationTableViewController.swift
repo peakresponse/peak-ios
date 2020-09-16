@@ -337,6 +337,7 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
         }
         if let cell = tableView.cellForRow(at: IndexPath(row: 3, section: Section.info.rawValue)) as? LocationTableViewCell {
             cell.configure(from: patient)
+            cell.setCapturing(false)
         }
     }
 

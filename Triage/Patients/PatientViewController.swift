@@ -25,7 +25,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
         
         isModalInPresentation = true
         
-        if patient.id != nil {
+        if patient.realm != nil {
             notificationToken = patient.observe { [weak self] (change) in
                 self?.didObserveChange(change)
             }
