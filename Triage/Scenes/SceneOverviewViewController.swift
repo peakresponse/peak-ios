@@ -37,7 +37,7 @@ class SceneOverviewViewController: UIViewController {
                 tableHeaderView.widthAnchor.constraint(equalTo: tableView.widthAnchor)
             ])
         }
-
+        
         guard let sceneId = AppSettings.sceneId else { return }
         scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
         notificationToken = scene.observe { [weak self] (change) in
@@ -72,6 +72,15 @@ class SceneOverviewViewController: UIViewController {
         sceneHeaderView.configure(from: scene)
         scenePatientsView.configure(from: scene)
         sceneRespondersView.configure(from: scene)
+        if AppSettings.userId == scene.incidentCommanderId {
+            closeButton.isHidden = false
+            leaveButton.isHidden = true
+            transferButton.alpha = 1
+        } else {
+            closeButton.isHidden = true
+            leaveButton.isHidden = false
+            transferButton.alpha = 0
+        }
     }
     
     @IBAction func editPressed(_ sender: Any) {

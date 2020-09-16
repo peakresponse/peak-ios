@@ -87,10 +87,10 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
             guard let self = self else { return }
             if let error = error {
                 self.presentAlert(error: error)
-            } else if let scene = scene, let sceneId = scene.id {
+            } else if let scene = scene {
                 DispatchQueue.main.async {
                     AppRealm.open().refresh()
-                    AppDelegate.enterScene(id: sceneId)
+                    AppDelegate.enterScene(id: scene.id)
                 }
             }
         }

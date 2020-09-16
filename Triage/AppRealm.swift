@@ -200,24 +200,31 @@ class AppRealm {
     }
 
     public static func closeScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
-        if let sceneId = scene.id {
-            let task = ApiClient.shared.closeScene(sceneId: sceneId) { (data, error) in
-                if let error = error {
-                    completionHandler(error)
-                } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(scene, update: .modified)
-                    }
-                    completionHandler(nil)
-                } else {
-                    completionHandler(ApiClientError.unexpected)
+        let task = ApiClient.shared.closeScene(sceneId: scene.id) { (data, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(scene, update: .modified)
                 }
+                completionHandler(nil)
+            } else {
+                completionHandler(ApiClientError.unexpected)
             }
-            task.resume()
-        } else {
-            completionHandler(ApiClientError.unexpected)
         }
+        task.resume()
+    }
+
+    public static func joinScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.joinScene(sceneId: scene.id) { (_, error) in
+            if let error = error {
+                completionHandler(error)
+            } else {
+                completionHandler(nil)
+            }
+        }
+        task.resume()
     }
 
     public static func connect(sceneId: String) {

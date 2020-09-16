@@ -110,8 +110,11 @@ class SceneSummaryViewController: BaseNonSceneViewController, UICollectionViewDa
         collectionView.reloadData()
 
         let realm = AppRealm.open()
-        results = realm.objects(Patient.self).sorted(by: [
-            SortDescriptor(keyPath: "updatedAt", ascending: false)
+        results = realm.objects(Patient.self)
+        results = results?.filter("sceneId=%@", scene.id)
+        results = results?.sorted(by: [
+            SortDescriptor(keyPath: "firstName", ascending: true),
+            SortDescriptor(keyPath: "lastName", ascending: true)
         ])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)

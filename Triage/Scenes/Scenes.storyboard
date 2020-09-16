@@ -429,19 +429,8 @@
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="3Or-pq-IYE">
                                                     <rect key="frame" x="22" y="0.0" width="336" height="46"/>
                                                     <subviews>
-                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKh-ph-2Ha" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="46"/>
-                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                                            <userDefinedRuntimeAttributes>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.transferCommand"/>
-                                                            </userDefinedRuntimeAttributes>
-                                                            <connections>
-                                                                <action selector="transferPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="ZHA-ip-iWE"/>
-                                                            </connections>
-                                                        </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RcL-GR-BhX" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="178" y="0.0" width="158" height="46"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="158" height="46"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
@@ -458,14 +447,31 @@
                                                             </connections>
                                                         </view>
                                                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YnP-wc-rbb" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                                            <rect key="frame" x="336" y="0.0" width="0.0" height="46"/>
+                                                            <rect key="frame" x="168" y="0.0" width="0.0" height="46"/>
                                                             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                             <userDefinedRuntimeAttributes>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
                                                                 <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.leaveScene"/>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="buttonColor">
+                                                                    <color key="value" name="OrangeAccent"/>
+                                                                </userDefinedRuntimeAttribute>
+                                                                <userDefinedRuntimeAttribute type="color" keyPath="highlightedButtonColor">
+                                                                    <color key="value" name="LowPriorityGrey"/>
+                                                                </userDefinedRuntimeAttribute>
                                                             </userDefinedRuntimeAttributes>
                                                             <connections>
                                                                 <action selector="leavePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="vDw-Ni-K5d"/>
+                                                            </connections>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YKh-ph-2Ha" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                            <rect key="frame" x="178" y="0.0" width="158" height="46"/>
+                                                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                                            <userDefinedRuntimeAttributes>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
+                                                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.transferCommand"/>
+                                                            </userDefinedRuntimeAttributes>
+                                                            <connections>
+                                                                <action selector="transferPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="ZHA-ip-iWE"/>
                                                             </connections>
                                                         </view>
                                                     </subviews>

@@ -9,9 +9,14 @@
 import RealmSwift
 import UIKit
 
+@objc protocol ActiveScenesViewDelegate {
+    @objc optional func activeScenesView(_ view: ActiveScenesView, didJoinScene scene: Scene)
+}
+
 @IBDesignable
-class ActiveScenesView: UIView {
+class ActiveScenesView: UIView, ActiveSceneViewDelegate {
     weak var stackView: UIStackView!
+    weak var delegate: ActiveScenesViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -46,7 +51,7 @@ class ActiveScenesView: UIView {
         for scene in results {
             var found = false
             for view in stackView.arrangedSubviews {
-                if let view = view as? ActiveSceneView, view.id == scene.id {
+                if let view = view as? ActiveSceneView, view.scene.id == scene.id {
                     view.configure(from: scene)
                     views.append(view)
                     found = true
@@ -55,6 +60,7 @@ class ActiveScenesView: UIView {
             }
             if !found {
                 let view = ActiveSceneView()
+                view.delegate = self
                 view.configure(from: scene)
                 views.append(view)
             }
@@ -65,5 +71,11 @@ class ActiveScenesView: UIView {
         for view in views {
             stackView.addArrangedSubview(view)
         }
+    }
+
+    // MARK: - ActiveSceneViewDelegate
+
+    func activeSceneView(_ view: ActiveSceneView, didJoinScene scene: Scene) {
+        delegate?.activeScenesView?(self, didJoinScene: scene)
     }
 }

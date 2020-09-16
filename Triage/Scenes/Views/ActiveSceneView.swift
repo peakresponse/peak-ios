@@ -9,9 +9,14 @@
 import GoogleMaps
 import UIKit
 
+@objc protocol ActiveSceneViewDelegate {
+    @objc optional func activeSceneView(_ view: ActiveSceneView, didJoinScene scene: Scene)
+}
+
 @IBDesignable
 class ActiveSceneView: UIView {
-    var id: String?
+    var scene: Scene!
+    weak var delegate: ActiveSceneViewDelegate?
     
     var isMaximized = false
     var bottomHeaderViewConstraint: NSLayoutConstraint!
@@ -237,13 +242,11 @@ class ActiveSceneView: UIView {
     }
 
     @objc func buttonPressed() {
-        if let id = id {
-            AppDelegate.enterScene(id: id)
-        }
+        delegate?.activeSceneView?(self, didJoinScene: scene)
     }
 
     func configure(from scene: Scene) {
-        id = scene.id
+        self.scene = scene
         nameLabel.text = (scene.name ?? "").isEmpty ? " " : scene.name
         descLabel.text = (scene.desc ?? "").isEmpty ? " " : scene.desc
         if let target = scene.latLng {

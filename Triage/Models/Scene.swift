@@ -29,6 +29,8 @@ class Scene: Base {
         static let countyId = "countyId"
         static let stateId = "stateId"
         static let zip = "zip"
+        static let incidentCommanderId = "incidentCommanderId"
+        static let incidentCommanderAgencyId = "incidentCommanderAgencyId"
         static let closedAt = "closedAt"
     }
     
@@ -78,6 +80,8 @@ class Scene: Base {
     @objc dynamic var stateId: String?
     @objc dynamic var zip: String?
     @objc dynamic var closedAt: Date?
+    @objc dynamic var incidentCommanderId: String?
+    @objc dynamic var incidentCommanderAgencyId: String?
 
     override var description: String {
         return name ?? ""
@@ -105,6 +109,8 @@ class Scene: Base {
         stateId = data[Keys.stateId] as? String
         zip = data[Keys.zip] as? String
         closedAt = ISO8601DateFormatter.date(from: data[Keys.closedAt])
+        incidentCommanderId = data[Keys.incidentCommanderId] as? String
+        incidentCommanderAgencyId = data[Keys.incidentCommanderAgencyId] as? String
     }
 
     override func asJSON() -> [String : Any] {

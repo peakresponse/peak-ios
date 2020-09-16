@@ -9,7 +9,7 @@
 import RealmSwift
 import UIKit
 
-class BaseNonSceneViewController: UIViewController {
+class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
     @IBOutlet weak var bannerView: BannerView!
     @IBOutlet weak var activeScenesView: ActiveScenesView!
 
@@ -22,6 +22,8 @@ class BaseNonSceneViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        activeScenesView.delegate = self
 
         let realm = AppRealm.open()
         activeScenesResults = realm.objects(Scene.self)
@@ -51,6 +53,21 @@ class BaseNonSceneViewController: UIViewController {
         } else {
             bannerView.isHidden = false
             activeScenesView.isHidden = true
+        }
+    }
+
+    // MARK: - ActiveScenesViewDelegate
+    
+    func activeScenesView(_ view: ActiveScenesView, didJoinScene scene: Scene) {
+        AppRealm.joinScene(scene: scene) { [weak self] (error) in
+            guard let self = self else { return }
+            if let error = error {
+                self.presentAlert(error: error)
+            } else {
+                DispatchQueue.main.async {
+                    AppDelegate.enterScene(id: scene.id)
+                }
+            }
         }
     }
 }

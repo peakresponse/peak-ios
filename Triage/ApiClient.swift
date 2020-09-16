@@ -281,7 +281,15 @@ class ApiClient {
     func closeScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/close", completionHandler: completionHandler)
     }
+
+    func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
+    }
     
+    func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
+    }
+
     // MARK: - Uploads
 
     func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

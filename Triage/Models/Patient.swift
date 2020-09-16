@@ -295,12 +295,12 @@ class Patient: Base {
         if let value = audioUrl {
             data[Keys.audioUrl] = value
         }
-        if let obj = transportAgency, let id = obj.id {
+        if let obj = transportAgency {
             data[Keys.transportAgencyId] = id
         } else if transportAgencyRemoved {
             data[Keys.transportAgencyId] = NSNull()
         }
-        if let obj = transportFacility, let id = obj.id {
+        if let obj = transportFacility {
             data[Keys.transportFacilityId] = id
         } else if transportFacilityRemoved {
             data[Keys.transportFacilityId] = NSNull()

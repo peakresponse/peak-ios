@@ -18,6 +18,8 @@ class NonSceneTabBarController: TabBarController {
         /// hit the server to check current log-in status
         AppRealm.me { (user, agency, scene, error) in
             if let error = error {
+                AppSettings.userId = nil
+                AppSettings.agencyId = nil
                 DispatchQueue.main.async { [weak self] in
                     var vc = self?.selectedViewController
                     if let navVC = vc as? UINavigationController {
@@ -30,7 +32,10 @@ class NonSceneTabBarController: TabBarController {
                     }
                 }
             }
-            if let scene = scene, let sceneId = scene.id {
+            AppSettings.userId = user?.id
+            AppSettings.agencyId = agency?.id
+            if let scene = scene {
+                let sceneId = scene.id
                 DispatchQueue.main.async {
                     AppDelegate.enterScene(id: sceneId)
                 }
