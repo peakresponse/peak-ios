@@ -1061,7 +1061,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.nat.Triage;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1081,7 +1081,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.nat.Triage;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1102,7 +1102,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.TriageTests;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.TriageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1124,7 +1124,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.TriageTests;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.TriageTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1145,7 +1145,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.TriageUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.TriageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1166,7 +1166,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.francisli.t2p.TriageUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.TriageUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

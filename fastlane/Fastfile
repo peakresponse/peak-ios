@@ -46,7 +46,7 @@ platform :ios do
       scheme: "Triage",
       export_options: {
         provisioningProfiles: {
-          "com.francisli.nat.Triage": "com.francisli.nat.Triage AppStore",
+          "net.peakresponse.Triage": "net.peakresponse.Triage AppStore",
         }
       }
     )
