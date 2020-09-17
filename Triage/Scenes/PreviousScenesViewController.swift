@@ -60,7 +60,7 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView.refreshControl?.endRefreshing()
-                    if let error = error as? ApiClientError, error == .unauthorized {
+                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden {
                         self?.presentLogin()
                     } else {
                         self?.presentAlert(error: error)

@@ -31,16 +31,17 @@ class NonSceneTabBarController: TabBarController {
                         vc?.presentAlert(error: error)
                     }
                 }
-            }
-            AppSettings.userId = user?.id
-            AppSettings.agencyId = agency?.id
-            if let scene = scene {
-                let sceneId = scene.id
-                DispatchQueue.main.async {
-                    AppDelegate.enterScene(id: sceneId)
-                }
             } else {
-                AppRealm.connect()
+                AppSettings.userId = user?.id
+                AppSettings.agencyId = agency?.id
+                if let scene = scene {
+                    let sceneId = scene.id
+                    DispatchQueue.main.async {
+                        AppDelegate.enterScene(id: sceneId)
+                    }
+                } else {
+                    AppRealm.connect()
+                }
             }
         }
     }
