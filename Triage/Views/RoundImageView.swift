@@ -9,6 +9,30 @@
 import UIKit
 
 class RoundImageView: UIImageView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    override init(image: UIImage?) {
+        super.init(image: image)
+        commonInit()
+    }
+
+    override init(image: UIImage?, highlightedImage: UIImage?) {
+        super.init(image: image, highlightedImage: highlightedImage)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        commonInit()
+    }
+    
+    private func commonInit() {
+        layer.masksToBounds = true
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = frame.width / 2

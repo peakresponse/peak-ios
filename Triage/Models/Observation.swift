@@ -11,13 +11,36 @@ import RealmSwift
 class Observation: Patient {
     struct Keys {
         static let patientId = "patientId"
+        static let portraitFile = "portraitFile"
+        static let photoFile = "photoFile"
+        static let audioFile = "audioFile"
     }
 
     @objc dynamic var patientId: String?
+    @objc dynamic var portraitFile: String?
+    @objc dynamic var photoFile: String?
+    @objc dynamic var audioFile: String?
 
     override func update(from data: [String : Any]) {
         super.update(from: data)
         patientId = data["patientId"] as? String
+        portraitFile = data["portraitFile"] as? String
+        photoFile = data["photoFile"] as? String
+        audioFile = data["audioFile"] as? String
+    }
+
+    override func asJSON() -> [String : Any] {
+        var json = super.asJSON()
+        if let value = portraitFile {
+            json[Keys.portraitFile] = value
+        }
+        if let value = photoFile {
+            json[Keys.photoFile] = value
+        }
+        if let value = audioFile {
+            json[Keys.audioFile] = value
+        }
+        return json
     }
 
     func changes(from source: Observation) -> Observation {
@@ -72,6 +95,15 @@ class Observation: Patient {
         }
         if audioUrl != source.audioUrl {
             observation.audioUrl = audioUrl
+        }
+        if portraitFile != source.portraitFile {
+            observation.portraitFile = portraitFile
+        }
+        if photoFile != source.photoFile {
+            observation.photoFile = photoFile
+        }
+        if audioFile != source.audioFile {
+            observation.audioFile = audioFile
         }
         if transportAgency != source.transportAgency {
             observation.transportAgency = transportAgency

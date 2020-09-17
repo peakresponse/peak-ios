@@ -27,6 +27,7 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
         originalObservation = patient.asObservation()
 
         if let tableHeaderView = tableView.tableHeaderView as? PatientTableHeaderView {
+            tableHeaderView.patientView.isEditing = true
             tableHeaderView.patientView.cameraHelper = cameraHelper
             tableHeaderView.patientView.delegate = self
         }
@@ -353,7 +354,9 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
             if let error = error {
                 print(error)
             } else if let response = response, let signedId = response["signed_id"] as? String {
-                self?.patient.portraitUrl = signedId
+                if let observation = self?.patient as? Observation {
+                    observation.portraitFile = signedId
+                }
                 AppCache.cache(fileURL: fileURL, filename: signedId)
             }
             self?.dispatchGroup.leave()
@@ -398,7 +401,9 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
                     self.presentAlert(error: error)
                 } else if let response = response, let signedId = response["signed_id"] as? String {
                     AppCache.cache(fileURL: fileURL, filename: signedId)
-                    self.patient.audioUrl = signedId
+                    if let observation = self.patient as? Observation {
+                        observation.audioFile = signedId
+                    }
                     self.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
                 }
                 self.dispatchGroup.leave()

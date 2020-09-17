@@ -20,10 +20,11 @@ class PatientViewCameraButton: UIButton {
 }
 
 class PatientView: UIView, CameraHelperDelegate {
-    @IBOutlet weak var captureButton: UIButton!
-    @IBOutlet weak var imageView: RoundImageView!
+    weak var imageView: RoundImageView!
+    weak var captureButton: UIButton!
+    weak var activityIndicatorView: UIActivityIndicatorView!
+
     var imageViewURL: String?
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
     weak var delegate: PatientViewDelegate?
     
@@ -45,13 +46,50 @@ class PatientView: UIView, CameraHelperDelegate {
     }
     
     private func commonInit() {
-        loadNib()
-        captureButton.layer.opacity = 0.25
+        let imageView = RoundImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(imageView)
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: topAnchor),
+            imageView.leftAnchor.constraint(equalTo: leftAnchor),
+            imageView.rightAnchor.constraint(equalTo: rightAnchor),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
+            bottomAnchor.constraint(equalTo: imageView.bottomAnchor)
+        ])
+        self.imageView = imageView
+
+        let captureButton = UIButton(type: .custom)
+        captureButton.translatesAutoresizingMaskIntoConstraints = false
+        captureButton.setImage(UIImage(named: "Camera")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        captureButton.tintColor = .mainGrey
+        captureButton.isHidden = true
+        captureButton.addTarget(self, action: #selector(capturePressed(_:)), for: .touchUpInside)
+        addSubview(captureButton)
+        NSLayoutConstraint.activate([
+            captureButton.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            captureButton.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+        ])
+        self.captureButton = captureButton
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.tintColor = .mainGrey
+        addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+        ])
+        self.activityIndicatorView = activityIndicatorView
     }
     
     func configure(from patient: Patient) {
         imageView.image = nil
-        imageViewURL = patient.portraitUrl
+        if let observation = patient as? Observation {
+            imageViewURL = observation.portraitFile
+        }
+        if imageViewURL == nil {
+            imageViewURL = patient.portraitUrl
+        }
         if let imageViewURL = imageViewURL {
             AppCache.cachedImage(from: imageViewURL) { [weak self] (image, error) in
                 if let error = error {
@@ -64,10 +102,14 @@ class PatientView: UIView, CameraHelperDelegate {
                     }
                 }
             }
+        } else {
+            imageView.contentMode = .scaleAspectFill
+            imageView.image = UIImage(named: "User")
+            imageView.backgroundColor = .greyPeakBlue
         }
     }
 
-    @IBAction func capturePressed(_ sender: Any) {
+    @objc func capturePressed(_ sender: Any) {
         guard let cameraHelper = cameraHelper else { return }
         if cameraHelper.isReady {
             if cameraHelper.isRunning {

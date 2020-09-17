@@ -158,7 +158,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         guard let pin = pinField.text else { return }
         /// check if Patient record exists
         let realm = AppRealm.open()
-        let results = realm.objects(Patient.self).filter("pin=%@", pin)
+        let results = realm.objects(Patient.self).filter("sceneId=%@ AND pin=%@", AppSettings.sceneId ?? "", pin)
         var vc: UIViewController?
         if results.count > 0 {
             vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient")

@@ -16,7 +16,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "http://lvh.me:3000")! {
+    static var shared: ApiClient = ApiClient(baseURL: "https://peakweb.ngrok.io")! {
         willSet {
             shared.invalidate()
         }
@@ -315,6 +315,11 @@ class ApiClient {
     func upload(fileURL: URL, toURL: URL, headers: [String: Any]? = nil, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
         var request = URLRequest(url: toURL)
         request.httpMethod = "PUT"
+        if toURL.absoluteString.starts(with: baseURL.absoluteString) {
+            if let subdomain = AppSettings.subdomain {
+                request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+            }
+        }
         if let headers = headers {
             for (key, value) in headers {
                 request.setValue(value as? String, forHTTPHeaderField: key)
