@@ -15,7 +15,8 @@ class SceneLocationView: UIView {
     @objc weak var stateLabel: UILabel!
     @objc weak var zipLabel: UILabel!
     @objc weak var startLabel: UILabel!
-    
+    weak var activityIndicatorView: UIActivityIndicatorView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -36,6 +37,7 @@ class SceneLocationView: UIView {
             label.font = .copySBold
             label.text = "SceneLocationView.\(attr)".localized
             label.textColor = .mainGrey
+            label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             addSubview(label)
             NSLayoutConstraint.activate([
                 label.topAnchor.constraint(equalTo: prevLabel == nil ? topAnchor : prevLabel.bottomAnchor, constant: prevLabel == nil ? 0 : 10),
@@ -57,6 +59,16 @@ class SceneLocationView: UIView {
         NSLayoutConstraint.activate([
             bottomAnchor.constraint(equalTo: prevLabel.bottomAnchor, constant: 10)
         ])
+        
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.color = .mainGrey
+        addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leftAnchor.constraint(equalTo: gpsLabel.rightAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: gpsLabel.topAnchor),
+        ])
+        self.activityIndicatorView = activityIndicatorView
     }
 
     func configure(from scene: Scene) {

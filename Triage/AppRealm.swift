@@ -116,8 +116,8 @@ class AppRealm {
 
     // MARK: - Patients
 
-    public static func getPatients(completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getPatients { (records, error) in
+    public static func getPatients(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getPatients(sceneId: sceneId, completionHandler: { (records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -128,7 +128,7 @@ class AppRealm {
                 }
                 completionHandler(nil)
             }
-        }
+        })
         task.resume()
     }
 

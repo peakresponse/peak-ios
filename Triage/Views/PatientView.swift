@@ -48,6 +48,7 @@ class PatientView: UIView, CameraHelperDelegate {
     private func commonInit() {
         let imageView = RoundImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFill
         addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),

@@ -252,8 +252,9 @@ class ApiClient {
     
     // MARK: - Patients
 
-    func getPatients(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/patients", completionHandler: completionHandler)
+    func getPatients(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        let params = ["sceneId": sceneId]
+        return GET(path: "/api/patients", params: params, completionHandler: completionHandler)
     }
 
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

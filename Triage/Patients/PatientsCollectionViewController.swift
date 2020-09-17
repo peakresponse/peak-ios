@@ -111,20 +111,22 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
     }
 
     @objc func refresh() {
-        refreshControl.beginRefreshing()
-        AppRealm.getPatients { [weak self] (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.refreshControl.endRefreshing()
-                    if let error = error as? ApiClientError, error == .unauthorized {
-                        self?.presentLogin()
-                    } else {
-                        self?.presentAlert(error: error)
+        if let sceneId = AppSettings.sceneId {
+            refreshControl.beginRefreshing()
+            AppRealm.getPatients(sceneId: sceneId) { [weak self] (error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.refreshControl.endRefreshing()
+                        if let error = error as? ApiClientError, error == .unauthorized {
+                            self?.presentLogin()
+                        } else {
+                            self?.presentAlert(error: error)
+                        }
                     }
-                }
-            } else {
-                DispatchQueue.main.async { [weak self] in
-                    self?.refreshControl.endRefreshing()
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.refreshControl.endRefreshing()
+                    }
                 }
             }
         }

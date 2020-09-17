@@ -34,6 +34,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
         locationManager.requestLocation()
+        locationView.activityIndicatorView.startAnimating()
         
         if let title = startAndFillLaterButton.title(for: .normal) {
             var attributedTitle = NSAttributedString(string: title, attributes: [
@@ -184,6 +185,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
                 } else {
                     self?.scene.zip = data?["zip"] as? String
                     DispatchQueue.main.async { [weak self] in
+                        self?.locationView.activityIndicatorView.stopAnimating()
                         self?.refresh()
                     }
                 }
@@ -193,6 +195,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
+        locationView.activityIndicatorView.stopAnimating()
+        print(error)
     }
 }

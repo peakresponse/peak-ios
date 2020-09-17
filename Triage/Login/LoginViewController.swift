@@ -73,6 +73,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                     self?.loginButton.isEnabled = true
                 }
             }
+
             task.resume()
         }
     }

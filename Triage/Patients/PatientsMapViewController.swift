@@ -101,13 +101,15 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
     }
     
     @objc func refresh() {
-        AppRealm.getPatients { [weak self] (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error as? ApiClientError, error == .unauthorized {
-                        self?.presentLogin()
-                    } else {
-                        self?.presentAlert(error: error)
+        if let sceneId = AppSettings.sceneId {
+            AppRealm.getPatients(sceneId: sceneId) { [weak self] (error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        if let error = error as? ApiClientError, error == .unauthorized {
+                            self?.presentLogin()
+                        } else {
+                            self?.presentAlert(error: error)
+                        }
                     }
                 }
             }

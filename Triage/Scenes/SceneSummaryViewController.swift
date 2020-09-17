@@ -119,6 +119,7 @@ class SceneSummaryViewController: BaseNonSceneViewController, UICollectionViewDa
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
+        refresh()
     }
     
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
@@ -133,6 +134,16 @@ class SceneSummaryViewController: BaseNonSceneViewController, UICollectionViewDa
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
+        }
+    }
+
+    func refresh() {
+        AppRealm.getPatients(sceneId: scene.id) { [weak self] (error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            }
         }
     }
 
@@ -229,5 +240,4 @@ class SceneSummaryViewController: BaseNonSceneViewController, UICollectionViewDa
             return CGSize(width: 0, height: UIFont.copyMBold.lineHeight + 20)
         }
     }
-
 }

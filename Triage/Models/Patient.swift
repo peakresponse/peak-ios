@@ -296,12 +296,12 @@ class Patient: Base {
             data[Keys.audioUrl] = value
         }
         if let obj = transportAgency {
-            data[Keys.transportAgencyId] = id
+            data[Keys.transportAgencyId] = obj.id
         } else if transportAgencyRemoved {
             data[Keys.transportAgencyId] = NSNull()
         }
         if let obj = transportFacility {
-            data[Keys.transportFacilityId] = id
+            data[Keys.transportFacilityId] = obj.id
         } else if transportFacilityRemoved {
             data[Keys.transportFacilityId] = NSNull()
         }

@@ -79,7 +79,14 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
             vc.scene = scene
         }
     }
+
+    // MARK: - LoginViewControllerDelegate
     
+    override func loginViewControllerDidLogin(_ vc: LoginViewController) {
+        super.loginViewControllerDidLogin(vc)
+        refresh()
+    }
+
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
