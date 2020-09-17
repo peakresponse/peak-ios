@@ -46,7 +46,7 @@ platform :ios do
       scheme: "Triage",
       export_options: {
         provisioningProfiles: {
-          "net.peakresponse.Triage": "net.peakresponse.Triage AppStore",
+          "net.peakresponse.Triage": "net.peakresponse.Triage App Store",
         }
       }
     )
