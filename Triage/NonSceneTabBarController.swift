@@ -18,14 +18,15 @@ class NonSceneTabBarController: TabBarController {
         /// hit the server to check current log-in status
         AppRealm.me { (user, agency, scene, error) in
             if let error = error {
-                AppSettings.userId = nil
-                AppSettings.agencyId = nil
                 DispatchQueue.main.async { [weak self] in
                     var vc = self?.selectedViewController
                     if let navVC = vc as? UINavigationController {
                         vc = navVC.topViewController
                     }
-                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden {
+                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
+                        AppSettings.userId = nil
+                        AppSettings.agencyId = nil
+                        AppSettings.subdomain = nil
                         vc?.presentLogin()
                     } else {
                         vc?.presentAlert(error: error)

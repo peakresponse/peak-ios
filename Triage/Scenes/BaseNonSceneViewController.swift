@@ -59,13 +59,14 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
     // MARK: - ActiveScenesViewDelegate
     
     func activeScenesView(_ view: ActiveScenesView, didJoinScene scene: Scene) {
-        AppRealm.joinScene(scene: scene) { [weak self] (error) in
+        let sceneId = scene.id
+        AppRealm.joinScene(sceneId: sceneId) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
                 self.presentAlert(error: error)
             } else {
                 DispatchQueue.main.async {
-                    AppDelegate.enterScene(id: scene.id)
+                    AppDelegate.enterScene(id: sceneId)
                 }
             }
         }

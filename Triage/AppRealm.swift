@@ -199,8 +199,8 @@ class AppRealm {
         task.resume()
     }
 
-    public static func closeScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.closeScene(sceneId: scene.id) { (data, error) in
+    public static func closeScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.closeScene(sceneId: sceneId) { (data, error) in
             if let error = error {
                 completionHandler(error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -216,8 +216,8 @@ class AppRealm {
         task.resume()
     }
 
-    public static func joinScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.joinScene(sceneId: scene.id) { (_, error) in
+    public static func joinScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, error) in
             if let error = error {
                 completionHandler(error)
             } else {
@@ -227,8 +227,8 @@ class AppRealm {
         task.resume()
     }
     
-    public static func leaveScene(scene: Scene, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.leaveScene(sceneId: scene.id) { (_, error) in
+    public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, error) in
             if let error = error {
                 completionHandler(error)
             } else {

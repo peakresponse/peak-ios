@@ -13,10 +13,11 @@ enum ApiClientError: Error {
     case unauthorized
     case forbidden
     case unexpected
+    case notFound
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "https://peakresponse.net")! {
+    static var shared: ApiClient = ApiClient(baseURL: "http://lvh.me:3000")! {
         willSet {
             shared.invalidate()
         }
@@ -95,6 +96,8 @@ class ApiClient {
                     completionHandler(nil, ApiClientError.unauthorized)
                 } else if response.statusCode == 403 {
                     completionHandler(nil, ApiClientError.forbidden)
+                } else if response.statusCode == 404 {
+                    completionHandler(nil, ApiClientError.notFound)
                 } else {
                     completionHandler(nil, ApiClientError.unexpected)
                 }

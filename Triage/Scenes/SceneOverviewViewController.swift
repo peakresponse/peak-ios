@@ -93,13 +93,14 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func closePressed(_ sender: Any) {
+        let sceneId = scene.id
         let vc = AlertViewController()
         vc.alertTitle = String(format: "CloseSceneConfirmation.title".localized, scene.name ?? "")
         vc.alertMessage = "CloseSceneConfirmation.message".localized
         vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
         vc.addAlertAction(title: "Button.close".localized, style: .default) { [weak self] (_) in
             guard let self = self else { return }
-            AppRealm.closeScene(scene: self.scene) { [weak self] (error) in
+            AppRealm.closeScene(sceneId: sceneId) { [weak self] (error) in
                 if let error = error {
                     DispatchQueue.main.async { [weak self] in
                         self?.presentAlert(error: error)
@@ -115,13 +116,14 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func leavePressed(_ sender: Any) {
+        let sceneId = scene.id
         let vc = AlertViewController()
         vc.alertTitle = String(format: "LeaveSceneConfirmation.title".localized, scene.name ?? "")
         vc.alertMessage = "LeaveSceneConfirmation.message".localized
         vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
         vc.addAlertAction(title: "Button.close".localized, style: .default) { [weak self] (_) in
             guard let self = self else { return }
-            AppRealm.leaveScene(scene: self.scene) { [weak self] (error) in
+            AppRealm.leaveScene(sceneId: sceneId) { [weak self] (error) in
                 if let error = error {
                     DispatchQueue.main.async { [weak self] in
                         self?.presentAlert(error: error)
