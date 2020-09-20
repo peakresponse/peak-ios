@@ -39,11 +39,22 @@ class SceneOverviewViewController: UIViewController {
         }
         
         guard let sceneId = AppSettings.sceneId else { return }
-        scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
-        notificationToken = scene.observe { [weak self] (change) in
-            self?.didObserveChange(change)
+        AppRealm.getScene(sceneId: sceneId) { [weak self] (scene, error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            } else if let sceneId = scene?.id {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+                    self.notificationToken = self.scene.observe { [weak self] (change) in
+                        self?.didObserveChange(change)
+                    }
+                    self.refresh();
+                }
+            }
         }
-        refresh();
     }
 
     override func viewDidLayoutSubviews() {

@@ -17,7 +17,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "http://lvh.me:3000")! {
+    static var shared: ApiClient = ApiClient(baseURL: "https://peakresponse.net")! {
         willSet {
             shared.invalidate()
         }
@@ -278,6 +278,10 @@ class ApiClient {
         return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 
+    func getScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
+    }
+    
     func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes", completionHandler: completionHandler)
     }

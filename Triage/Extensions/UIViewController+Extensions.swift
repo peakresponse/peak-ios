@@ -22,7 +22,7 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     func logout() {
         ApiClient.shared.logout { [weak self] in
             AppRealm.deleteAll()
-            AppSettings.subdomain = nil
+            AppSettings.logout()
             DispatchQueue.main.async { [weak self] in
                 self?.presentLogin()
             }

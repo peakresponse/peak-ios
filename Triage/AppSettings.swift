@@ -35,4 +35,11 @@ class AppSettings {
         get { return defaults.string(forKey: "subdomain") }
         set { defaults.set(newValue, forKey: "subdomain") }
     }
+    
+    static func logout() {
+        AppSettings.userId = nil
+        AppSettings.agencyId = nil
+        AppSettings.sceneId = nil
+        AppSettings.subdomain = nil
+    }
 }

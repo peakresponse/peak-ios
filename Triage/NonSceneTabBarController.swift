@@ -24,10 +24,7 @@ class NonSceneTabBarController: TabBarController {
                         vc = navVC.topViewController
                     }
                     if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
-                        AppSettings.userId = nil
-                        AppSettings.agencyId = nil
-                        AppSettings.subdomain = nil
-                        vc?.presentLogin()
+                        vc?.logout()
                     } else {
                         vc?.presentAlert(error: error)
                     }
