@@ -46,34 +46,53 @@ class LoginViewController: UIViewController, FormFieldDelegate {
             activityView.startAnimating()
             let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
                 DispatchQueue.main.async { [weak self] in
-                    self?.activityView.stopAnimating()
+                    guard let self = self else { return }
+                    self.activityView.stopAnimating()
                     if let error = error {
                         if let error = error as? ApiClientError, error == .unauthorized {
-                            self?.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
+                            self.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
                         } else {
-                            self?.presentAlert(error: error)
+                            self.presentAlert(error: error)
                         }
                     } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
                         if agencies.count > 1 {
                             /// TODO navigate to a selection screen
-                            self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                            self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                         }
                         if let subdomain = agencies[0]["subdomain"] as? String {
                             AppSettings.subdomain = subdomain
-                            guard let self = self else { return }
-                            self.loginDelegate?.loginViewControllerDidLogin?(self)
+                            AppRealm.me { [weak self] (user, agency, scene, error) in
+                                let userId = user?.id
+                                let agencyId = agency?.id
+                                let sceneId = scene?.id
+                                DispatchQueue.main.async { [weak self] in
+                                    guard let self = self else { return }
+                                    if let error = error {
+                                        self.presentAlert(error: error)
+                                    } else if let userId = userId, let agencyId = agencyId {
+                                        AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
+                                        if let sceneId = scene?.id {
+                                            AppDelegate.enterScene(id: sceneId)
+                                        } else {
+                                            AppRealm.connect()
+                                        }
+                                        self.loginDelegate?.loginViewControllerDidLogin?(self)
+                                    } else {
+                                        self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                                    }
+                                }
+                            }
                         } else {
-                            self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                            self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                         }
                     } else {
-                        self?.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                        self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
-                    self?.emailField.isEnabled = true
-                    self?.passwordField.isEnabled = true
-                    self?.loginButton.isEnabled = true
+                    self.emailField.isEnabled = true
+                    self.passwordField.isEnabled = true
+                    self.loginButton.isEnabled = true
                 }
             }
-
             task.resume()
         }
     }

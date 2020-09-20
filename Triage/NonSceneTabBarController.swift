@@ -38,6 +38,7 @@ class NonSceneTabBarController: TabBarController {
                         AppDelegate.enterScene(id: sceneId)
                     }
                 } else {
+                    AppSettings.sceneId = nil
                     AppRealm.connect()
                 }
             }

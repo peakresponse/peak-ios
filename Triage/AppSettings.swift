@@ -35,6 +35,12 @@ class AppSettings {
         get { return defaults.string(forKey: "subdomain") }
         set { defaults.set(newValue, forKey: "subdomain") }
     }
+
+    static func login(userId: String, agencyId: String, sceneId: String?) {
+        AppSettings.userId = userId
+        AppSettings.agencyId = agencyId
+        AppSettings.sceneId = sceneId
+    }
     
     static func logout() {
         AppSettings.userId = nil
