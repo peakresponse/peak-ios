@@ -71,7 +71,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                                         self.presentAlert(error: error)
                                     } else if let userId = userId, let agencyId = agencyId {
                                         AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
-                                        if let sceneId = scene?.id {
+                                        if let sceneId = sceneId {
                                             AppDelegate.enterScene(id: sceneId)
                                         } else {
                                             AppRealm.connect()
