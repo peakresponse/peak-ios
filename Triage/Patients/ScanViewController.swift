@@ -125,7 +125,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             captureSession.addOutput(captureMetadataOutput)
             // Set delegate and use the default dispatch queue to execute the call back
             captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            captureMetadataOutput.metadataObjectTypes = [AVMetadataObject.ObjectType.qr]
+            captureMetadataOutput.metadataObjectTypes = [.code39, .code128, .qr]
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
@@ -195,12 +195,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         
         // Get the metadata object.
         let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        
-        if metadataObj.type == AVMetadataObject.ObjectType.qr {
-            if let pin = metadataObj.stringValue {
-                pinField.text = pin
-                inputSearchPressed()
-            }
+        if let pin = metadataObj.stringValue {
+            pinField.text = pin
+            inputSearchPressed()
         }
     }
 
