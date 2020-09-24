@@ -13,6 +13,7 @@ enum ApiClientError: Error {
     case unauthorized
     case forbidden
     case unexpected
+    case notFound
 }
 
 class ApiClient {
@@ -62,6 +63,9 @@ class ApiClient {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: [])
         }
+        if let subdomain = AppSettings.subdomain {
+            request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+        }
         return request
     }
     
@@ -71,7 +75,7 @@ class ApiClient {
         } else {
             if let response = response as? HTTPURLResponse {
                 if response.statusCode >= 200 && response.statusCode < 300 {
-                    if let data = data {
+                    if let data = data, data.count > 0 {
                         if let dataBlob = data as? T {
                             completionHandler(dataBlob, error)
                         } else {
@@ -92,6 +96,8 @@ class ApiClient {
                     completionHandler(nil, ApiClientError.unauthorized)
                 } else if response.statusCode == 403 {
                     completionHandler(nil, ApiClientError.forbidden)
+                } else if response.statusCode == 404 {
+                    completionHandler(nil, ApiClientError.notFound)
                 } else {
                     completionHandler(nil, ApiClientError.unexpected)
                 }
@@ -100,7 +106,79 @@ class ApiClient {
             }
         }
     }
+
+    func WS<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) -> URLSessionWebSocketTask {
+        var components = URLComponents()
+        components.path = path
+        if let params = params {
+            var queryItems = [URLQueryItem]()
+            for (name, value) in params {
+                queryItems.append(URLQueryItem(name: name, value: String(describing: value)))
+            }
+            components.queryItems = queryItems
+        }
+        let urlString = baseURL.absoluteString
+        let baseURL = URL(string: "ws\(urlString[urlString.index(urlString.startIndex, offsetBy: 4)...])")!
+        let url = components.url(relativeTo: baseURL)!
+        var request = URLRequest(url: url)
+        if let subdomain = AppSettings.subdomain {
+            request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+        }
+        let task = session.webSocketTask(with: request)
+        pingWebSocket(task: task, completionHandler: completionHandler)
+        receiveFromWebSocket(task: task, completionHandler: completionHandler)
+        return task
+    }
+
+    private func pingWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
+        guard task.closeCode == .invalid else { return }
+        task.sendPing { [weak self] (error) in
+            objc_sync_enter(task)
+            if let error = error {
+                completionHandler(task, nil, error)
+            } else {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                    self?.pingWebSocket(task: task, completionHandler: completionHandler)
+                }
+            }
+            objc_sync_exit(task)
+        }
+    }
     
+    private func receiveFromWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
+        guard task.closeCode == .invalid else { return }
+        task.receive { [weak self] (result) in
+            objc_sync_enter(task)
+            switch result {
+            case .failure(let error):
+                completionHandler(task, nil, error)
+            case .success(let message):
+                var data: Data?
+                switch message {
+                case .string(let text):
+                    data = text.data(using: .utf8)
+                case .data(data):
+                    break
+                default:
+                    break
+                }
+                if let data = data {
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? T {
+                            completionHandler(task, json, nil)
+                        } else {
+                            completionHandler(task, nil, ApiClientError.unexpected)
+                        }
+                    } catch {
+                        completionHandler(task, nil, error)
+                    }
+                }
+                self?.receiveFromWebSocket(task: task, completionHandler: completionHandler)
+            }
+            objc_sync_exit(task)
+        }
+    }
+
     func GET<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, params: params)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
@@ -122,14 +200,21 @@ class ApiClient {
         })
     }
     
+    func PATCH<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+        let request = urlRequest(for: path, data: data, params: params, method: "PATCH", body: body)
+        return session.dataTask(with: request, completionHandler: { (data, response, error) in
+            self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
+        })
+    }
+
     // MARK: - Sessions
     
-    func login(email: String, password: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+    func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/login", body: [
             "email": email,
             "password": password
-        ]) { (_: Any?, error) in
-            completionHandler(error)
+        ]) { (data, error) in
+            completionHandler(data, error)
         }
     }
     
@@ -142,6 +227,10 @@ class ApiClient {
     }
     
     // MARK: - Agencies
+
+    func connect(completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+        return WS(path: "/agency", completionHandler: completionHandler)
+    }
 
     func getAgencies(search: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: String] = [:]
@@ -163,21 +252,50 @@ class ApiClient {
         }
         return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
-
-    // MARK: - Observations
-
-    func createObservation(_ data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/observations", body: data, completionHandler: completionHandler)
-    }
     
     // MARK: - Patients
-    
-    func getPatients(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/patients", completionHandler: completionHandler)
+
+    func getPatients(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        let params = ["sceneId": sceneId]
+        return GET(path: "/api/patients", params: params, completionHandler: completionHandler)
     }
 
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
+    }
+    
+    func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/patients", body: data, completionHandler: completionHandler)
+    }
+
+    // MARK: - Scenes
+
+    func connect(sceneId: String, completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+        return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
+    }
+
+    func createScene(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
+    }
+
+    func getScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
+    }
+    
+    func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/scenes", completionHandler: completionHandler)
+    }
+
+    func closeScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/close", completionHandler: completionHandler)
+    }
+
+    func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
+    }
+    
+    func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
     }
 
     // MARK: - Uploads
@@ -205,6 +323,11 @@ class ApiClient {
     func upload(fileURL: URL, toURL: URL, headers: [String: Any]? = nil, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
         var request = URLRequest(url: toURL)
         request.httpMethod = "PUT"
+        if toURL.absoluteString.starts(with: baseURL.absoluteString) {
+            if let subdomain = AppSettings.subdomain {
+                request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+            }
+        }
         if let headers = headers {
             for (key, value) in headers {
                 request.setValue(value as? String, forHTTPHeaderField: key)
@@ -233,5 +356,11 @@ class ApiClient {
                 task?.resume()
             }
         }
+    }
+
+    // MARK: - Utils
+    
+    func geocode(lat: String, lng: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/utils/geocode", params: ["lat": lat, "lng": lng], completionHandler: completionHandler)
     }
 }

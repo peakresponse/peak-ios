@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import RealmSwift
 
 enum Priority: Int, CustomStringConvertible, CaseIterable {
@@ -62,6 +63,7 @@ let PRIORITY_LABEL_COLORS = [
 
 class Patient: Base {
     struct Keys {
+        static let sceneId = "sceneId"
         static let pin = "pin"
         static let version = "version"
         static let lastName = "lastName"
@@ -86,6 +88,7 @@ class Patient: Base {
         static let transportFacilityId = "transportFacilityId"
     }
     
+    @objc dynamic var sceneId: String?
     @objc dynamic var pin: String?
     let version = RealmOptional<Int>()
     @objc dynamic var lastName: String?
@@ -127,6 +130,12 @@ class Patient: Base {
             return true
         }
         return false
+    }
+    var latLng: CLLocationCoordinate2D? {
+        if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
+            return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+        }
+        return nil
     }
     var latLngString: String? {
         if let lat = lat, let lng = lng {
@@ -192,6 +201,7 @@ class Patient: Base {
     
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        sceneId = data[Keys.sceneId] as? String
         pin = data[Keys.pin] as? String
         version.value = data[Keys.version] as? Int
         lastName = data[Keys.lastName] as? String
@@ -228,6 +238,9 @@ class Patient: Base {
 
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        if let value = sceneId {
+            data[Keys.sceneId] = value
+        }
         if let value = pin {
             data[Keys.pin] = value
         }
@@ -282,13 +295,13 @@ class Patient: Base {
         if let value = audioUrl {
             data[Keys.audioUrl] = value
         }
-        if let obj = transportAgency, let id = obj.id {
-            data[Keys.transportAgencyId] = id
+        if let obj = transportAgency {
+            data[Keys.transportAgencyId] = obj.id
         } else if transportAgencyRemoved {
             data[Keys.transportAgencyId] = NSNull()
         }
-        if let obj = transportFacility, let id = obj.id {
-            data[Keys.transportFacilityId] = id
+        if let obj = transportFacility {
+            data[Keys.transportFacilityId] = obj.id
         } else if transportFacilityRemoved {
             data[Keys.transportFacilityId] = NSNull()
         }
@@ -297,7 +310,9 @@ class Patient: Base {
 
     func asObservation() -> Observation {
         let observation = Observation()
+        observation.sceneId = sceneId
         observation.pin = pin
+        observation.version.value = version.value
         observation.lastName = lastName
         observation.firstName = firstName
         observation.age.value = age.value

@@ -22,7 +22,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             .font: font,
             .paragraphStyle: paragraphStyle
         ], context: nil)
-        return round(rect.height) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
+        return max(font.lineHeight, round(rect.height)) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
     }
 
     let playButton = UIButton(type: .custom)
@@ -121,10 +121,13 @@ class ObservationView: UIView, AudioHelperDelgate {
         textView.font = .copySBold
         textView.textColor = .mainGrey
         addSubview(textView)
+        let textViewMinHeightConstraint = textView.heightAnchor.constraint(greaterThanOrEqualToConstant: UIFont.copySBold.lineHeight)
+        textViewMinHeightConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: playButton.bottomAnchor, constant: 8),
             textView.leftAnchor.constraint(equalTo: leftAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: rightAnchor, constant: -10),
+            textViewMinHeightConstraint,
             textView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10)
         ])
     }
@@ -160,7 +163,13 @@ class ObservationView: UIView, AudioHelperDelgate {
             .foregroundColor: textView.textColor!
         ])
         setAudioControlsVisible(false)
-        if let audioUrl = patient.audioUrl {
+        var audioUrl: String?
+        if let observation = patient as? Observation {
+            audioUrl = observation.audioFile
+        } else {
+            audioUrl = patient.audioUrl
+        }
+        if let audioUrl = audioUrl {
             setAudioControlsVisible(true)
             activityIndicatorView.startAnimating()
             AppCache.cachedFile(from: audioUrl) { [weak self] (url, error) in

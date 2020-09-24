@@ -17,8 +17,8 @@ let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .st
 
 @objc protocol PatientTableViewControllerDelegate {
     @objc optional func patientTableViewControllerDidCancel(_ vc: PatientTableViewController)
+    @objc optional func patientTableViewControllerDidSave(_ vc: PatientTableViewController)
     @objc optional func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int)
-    @objc optional func patientTableViewController(_ vc: PatientTableViewController, didSave observation: Observation)
 }
 
 class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate, AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate, ObservationTableViewCellDelegate, RecordButtonDelegate {
@@ -49,7 +49,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         prevItem.width = 44
         let nextItem = UIBarButtonItem(image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
         nextItem.width = 44
-        inputToolbar = UIToolbar()
+        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             prevItem,
             nextItem,
@@ -74,7 +74,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             ])
         }
 
-        if patient.id != nil {
+        if patient.realm != nil {
             notificationToken = patient.observe { [weak self] (change) in
                 self?.didObserveChange(change)
             }
@@ -86,8 +86,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
-        /// properly size the input accessory subview
-        inputToolbar.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 44)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -122,6 +120,10 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
+    override var inputAccessoryView: UIView? {
+        return inputToolbar
+    }
+    
     @objc func inputPrevPressed() {
         for cell in tableView.visibleCells {
             if cell.resignFirstResponder() {
@@ -184,12 +186,13 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         if let vc = segue.destination as? ObservationTableViewController {
             vc.delegate = self
             vc.patient = patient.asObservation()
+            vc.patient.version.value = (vc.patient.version.value ?? 0) + 1
         }
     }
 
-    func didObserveChange(_ change: ObjectChange) {
+    func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_):
+        case .change(_, _):
             if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
                 tableViewHeader.configure(from: patient)
             }
@@ -202,28 +205,15 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func save(observation: Observation) {
-        AppRealm.createObservation(observation) { [weak self] (observation, error) in
+        AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (patient, error) in
             guard let self = self else { return }
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.presentAlert(error: error)
                 }
-            } else if let observation = observation {
-                /// dispatch update
-                self.delegate?.patientTableViewController?(self, didSave: observation)
-                /// fow now, manually refresh, until websockets support added
-                if let patientId = observation.patientId {
-                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
-                        if let error = error {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.presentAlert(error: error)
-                            }
-                        }
-                    }
-                }
             }
         }
-    }
+}
 
     // MARK: - AttributeTableViewCellDelegate
 
@@ -308,16 +298,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         delegate?.patientTableViewController?(self, didUpdatePriority: priority)
     }
     
-    func patientTableViewController(_ vc: PatientTableViewController, didSave observation: Observation) {
-        if let id = patient.id {
-            AppRealm.getPatient(idOrPin: id) { (error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    }
-                }
-            }
-        }
+    func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
         navigationController?.popViewController(animated: false)
     }
     
@@ -331,7 +312,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
         let observation = Observation()
+        observation.sceneId = patient.sceneId
         observation.pin = patient.pin
+        observation.version.value = (patient.version.value ?? 0) + 1
         observation.priority.value = priority
         save(observation: observation)
     }
@@ -464,7 +447,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
         if let cell = cell as? PatientTableViewCell {
             cell.configure(from: patient)
-            cell.inputAccessoryView = inputToolbar
         }
         return cell
     }

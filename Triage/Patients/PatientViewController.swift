@@ -25,7 +25,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
         
         isModalInPresentation = true
         
-        if patient.id != nil {
+        if patient.realm != nil {
             notificationToken = patient.observe { [weak self] (change) in
                 self?.didObserveChange(change)
             }
@@ -50,35 +50,14 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
         }
     }
     
-    func didObserveChange(_ change: ObjectChange) {
+    func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_):
+        case .change(_, _):
             updateNavigationBarColor(priority: patient.priority.value)
         case .error(let error):
             presentAlert(error: error)
         case .deleted:
             navigationController?.popViewController(animated: true)
-        }
-    }
-
-    func save(observation: Observation) {
-        AppRealm.createObservation(observation) { (observation, error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            } else {
-                /// fow now, manually refresh, until websockets support added
-                if let patientId = observation?.patientId {
-                    AppRealm.getPatient(idOrPin: patientId) { [weak self] (error) in
-                        if let error = error {
-                            DispatchQueue.main.async { [weak self] in
-                                self?.presentAlert(error: error)
-                            }
-                        }
-                    }
-                }
-            }
         }
     }
 

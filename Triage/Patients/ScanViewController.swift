@@ -27,13 +27,12 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         
         isModalInPresentation = true
 
-        inputToolbar = UIToolbar()
+        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             UIBarButtonItem(title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
         ], animated: false)
-        pinField.inputAccessoryView = inputToolbar
 
         /// labels and fields
         cameraLabel.font = .copyMBold
@@ -83,8 +82,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         videoPreviewLayer?.frame = cameraView.bounds
-        /// properly size the input accessory subview
-        inputToolbar.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 44)
     }
     
     @objc func keyboardWillShow(_ notification: NSNotification) {
@@ -146,6 +143,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         inputCancelPressed()
     }
 
+    override var inputAccessoryView: UIView? {
+        return inputToolbar
+    }
+    
     @objc func inputCancelPressed() {
         _ = pinField.resignFirstResponder()
     }
@@ -157,7 +158,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         guard let pin = pinField.text else { return }
         /// check if Patient record exists
         let realm = AppRealm.open()
-        let results = realm.objects(Patient.self).filter("pin=%@", pin)
+        let results = realm.objects(Patient.self).filter("sceneId=%@ AND pin=%@", AppSettings.sceneId ?? "", pin)
         var vc: UIViewController?
         if results.count > 0 {
             vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient")
@@ -166,7 +167,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             }
         } else {
             let observation = Observation()
+            observation.sceneId = AppSettings.sceneId
             observation.pin = pin
+            observation.version.value = 1
+            observation.createdAt = Date()
             vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation")
             if let vc = vc as? ObservationViewController {
                 vc.delegate = self
@@ -212,17 +216,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     // MARK: - ObservationViewControllerDelegate
     
-    func observationViewController(_ vc: ObservationViewController, didSave observation: Observation) {
-        /// Observations saved here are for new Patient records, so fetch the Patient record
-        if let patientId = observation.patientId {
-            AppRealm.getPatient(idOrPin: patientId) { (error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    }
-                }
-            }
-        }
+    func observationViewControllerDidSave(_ vc: ObservationViewController) {
         dismissAnimated()
     }
 }

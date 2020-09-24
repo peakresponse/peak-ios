@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {    
     func presentAlert(error: Error) {
         presentAlert(title: "Error".localized, message: error.localizedDescription)
     }
@@ -22,6 +22,7 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     func logout() {
         ApiClient.shared.logout { [weak self] in
             AppRealm.deleteAll()
+            AppSettings.logout()
             DispatchQueue.main.async { [weak self] in
                 self?.presentLogin()
             }

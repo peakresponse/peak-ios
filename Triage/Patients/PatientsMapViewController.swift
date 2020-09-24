@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
 import MapKit
 import RealmSwift
 import UIKit
@@ -36,20 +37,30 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "Patient")
         
         // set up Realm query and observer
-        let realm = AppRealm.open()
-        results = realm.objects(Patient.self).sorted(by: [
-            SortDescriptor(keyPath: "priority", ascending: true),
-            SortDescriptor(keyPath: "updatedAt", ascending: true)
-        ])
-        notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
-        }
+        performQuery()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // trigger additional refresh
         refresh()
+    }
+    
+    private func performQuery() {
+        notificationToken?.invalidate()
+        let realm = AppRealm.open()
+        var predicates: [NSPredicate] = []
+        if let sceneId = AppSettings.sceneId {
+            predicates.append(NSPredicate(format: "sceneId=%@", sceneId))
+        }
+        if let text = searchBar.text, !text.isEmpty {
+            predicates.append(NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
+        }
+        let predicate = predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        results = realm.objects(Patient.self).filter(predicate)
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
     }
 
     private func createAnnotation(for patient: Patient) -> MKAnnotation? {
@@ -90,13 +101,15 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
     }
     
     @objc func refresh() {
-        AppRealm.getPatients { [weak self] (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error as? ApiClientError, error == .unauthorized {
-                        self?.presentLogin()
-                    } else {
-                        self?.presentAlert(error: error)
+        if let sceneId = AppSettings.sceneId {
+            AppRealm.getPatients(sceneId: sceneId) { [weak self] (error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        if let error = error as? ApiClientError, error == .unauthorized {
+                            self?.presentLogin()
+                        } else {
+                            self?.presentAlert(error: error)
+                        }
                     }
                 }
             }

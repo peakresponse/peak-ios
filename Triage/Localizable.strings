@@ -8,15 +8,37 @@
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
+"ActiveSceneView.patientsLabel" = " Patients on Scene";
+"ActiveSceneView.transportedLabel" = " Patients Transported";
+"ActiveSceneView.respondersLabel" = " First Responders on Scene";
+
+"Banner.noActiveScenes" = "No Active Scenes";
+
+"Button.addNote" = "Add Note";
+"Button.addPhoto" = "Add Photo";
 "Button.addRecording" = "Add Recording";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
+"Button.close" = "Close";
+"Button.closeScene" = "Close Scene";
 "Button.edit" = "Edit";
+"Button.joinScene" = "Join Scene";
+"Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
+"Button.startScene" = "Start Scene";
+"Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
+"Button.transfer" = "Transfer";
+"Button.transferCommand" = "Transfer Command";
 "Button.update" = "Update";
 
+"CloseSceneConfirmation.title" = "Are you sure you want to close the %@ scene?";
+"CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
+
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
+
+"Error.title" = "An error has occurred";
+"Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
 
 "FacilitiesTableViewController.facilityTitle" = "Transporting to Facility";
 "FacilitiesTableViewController.leavingTitle" = "Leaving Independently";
@@ -48,6 +70,9 @@
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.search" = "Search";
 
+"LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
+"LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
+
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
 
@@ -55,6 +80,12 @@
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
+
+"NewSceneViewController.title" = "New Scene Set-Up";
+"NewSceneViewController.nameField" = "Incident Name";
+"NewSceneViewController.descField" = "Description";
+"NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";
+"NewSceneViewController.urgencyField" = "Description of Patient Urgency";
 
 "Patient.firstName" = "First name";
 "Patient.lastName" = "Last name";
@@ -75,6 +106,13 @@
 "Patient.priority.4" = "Dead";
 "Patient.priority.5" = "Transported";
 
+"Patient.priority.abbrev.0" = "Imm.";
+"Patient.priority.abbrev.1" = "Del.";
+"Patient.priority.abbrev.2" = "Min.";
+"Patient.priority.abbrev.3" = "Exp.";
+"Patient.priority.abbrev.4" = "Dead";
+"Patient.priority.abbrev.5" = "Tra.";
+
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
 "Patient.sort.2" = "A-Z by Last Name";
@@ -84,4 +122,31 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
+"SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
+"SceneHeaderView.urgencyLabel" = "Patient Urgency";
+
+"SceneLocationView.gpsLabel" = "GPS Location: ";
+"SceneLocationView.cityLabel" = "City: ";
+"SceneLocationView.stateLabel" = "State: ";
+"SceneLocationView.zipLabel" = "Zipcode: ";
+"SceneLocationView.startLabel" = "Start Time: ";
+
+"ScenePatientsView.patientsLabel" = "# Patients Recorded";
+
+"SceneRespondersView.respondersLabel" = "First Responders";
+
+"SceneSummaryHeaderView.dateLabel" = "Date: ";
+"SceneSummaryHeaderView.timeLabel" = "Time: ";
+"SceneSummaryHeaderView.locationLabel" = "Location: ";
+
+"SceneSummaryViewController.patients" = "Patients";
+"SceneSummaryViewController.notes" = "Notes";
+"SceneSummaryViewController.photos" = "Photos";
+
+"SceneTableViewCell.patientsLabel" = "%d Patients Total";
+"SceneTableViewCell.respondersLabel" = "%d First Responders";
+
 "SortBar.sortBy" = "Sort By :";
+
+"TransferCommandConfirmation.title" = "Are you sure you want to transfer incident command to %@?";
+"TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";

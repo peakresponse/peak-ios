@@ -12,7 +12,7 @@ import UIKit
     @objc optional func loginViewControllerDidLogin(_ vc: LoginViewController)
 }
 
-class LoginViewController: UIViewController, UITextFieldDelegate {
+class LoginViewController: UIViewController, FormFieldDelegate {
     @IBOutlet weak var loginFormView: UIView!
     @IBOutlet weak var emailField: FormField!
     @IBOutlet weak var passwordField: FormField!
@@ -36,17 +36,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         _ = emailField.becomeFirstResponder()
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailField.textField {
-            _ = passwordField.becomeFirstResponder()
-        } else if textField == passwordField.textField {
-            _ = passwordField.resignFirstResponder()
-            loginPressed(loginButton)
-        }
-        return true
-    }
-    
-    
     @IBAction func loginPressed(_ sender: FormButton) {
         let email = emailField.text
         let password = passwordField.text
@@ -55,24 +44,68 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             passwordField.isEnabled = false
             loginButton.isEnabled = false
             activityView.startAnimating()
-            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (error) in
+            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
                 DispatchQueue.main.async { [weak self] in
-                    self?.activityView.stopAnimating()
+                    guard let self = self else { return }
+                    self.activityView.stopAnimating()
                     if let error = error {
                         if let error = error as? ApiClientError, error == .unauthorized {
-                            self?.presentAlert(title: "Error".localized, message: "Invalid email and/or password.".localized)
+                            self.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
                         } else {
-                            self?.presentAlert(error: error)
+                            self.presentAlert(error: error)
                         }
-                        self?.emailField.isEnabled = true
-                        self?.passwordField.isEnabled = true
-                        self?.loginButton.isEnabled = true
-                    } else if let self = self {
-                        self.loginDelegate?.loginViewControllerDidLogin?(self)
+                    } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
+                        if agencies.count > 1 {
+                            /// TODO navigate to a selection screen
+                            self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                        }
+                        if let subdomain = agencies[0]["subdomain"] as? String {
+                            AppSettings.subdomain = subdomain
+                            AppRealm.me { [weak self] (user, agency, scene, error) in
+                                let userId = user?.id
+                                let agencyId = agency?.id
+                                let sceneId = scene?.id
+                                DispatchQueue.main.async { [weak self] in
+                                    guard let self = self else { return }
+                                    if let error = error {
+                                        self.presentAlert(error: error)
+                                    } else if let userId = userId, let agencyId = agencyId {
+                                        AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
+                                        if let sceneId = sceneId {
+                                            AppDelegate.enterScene(id: sceneId)
+                                        } else {
+                                            AppRealm.connect()
+                                        }
+                                        self.loginDelegate?.loginViewControllerDidLogin?(self)
+                                    } else {
+                                        self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                                    }
+                                }
+                            }
+                        } else {
+                            self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+                        }
+                    } else {
+                        self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
+                    self.emailField.isEnabled = true
+                    self.passwordField.isEnabled = true
+                    self.loginButton.isEnabled = true
                 }
             }
             task.resume()
         }
+    }
+
+    // MARK: - FormFieldDelegate
+    
+    func formFieldShouldReturn(_ field: BaseField) -> Bool {
+        if field == emailField {
+            _ = passwordField.becomeFirstResponder()
+        } else if field == passwordField {
+            _ = passwordField.resignFirstResponder()
+            loginPressed(loginButton)
+        }
+        return false
     }
 }

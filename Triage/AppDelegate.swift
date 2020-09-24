@@ -6,15 +6,42 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import GoogleMaps
+import Keys
 import UIKit
 
 @UIApplicationMain
+
 class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
+    static func enterScene(id: String) {
+        AppSettings.sceneId = id
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
+        for window in UIApplication.shared.windows {
+            if window.isKeyWindow {
+                window.rootViewController = vc
+                break
+            }
+        }
+    }
+
+    static func leaveScene() {
+        AppSettings.sceneId = nil
+        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
+            for window in UIApplication.shared.windows {
+                if window.isKeyWindow {
+                    window.rootViewController = vc
+                    break
+                }
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        let keys = TriageKeys()
+        GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
+        
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,
             .foregroundColor: UIColor.mainGrey

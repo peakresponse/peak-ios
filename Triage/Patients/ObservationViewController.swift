@@ -10,7 +10,7 @@ import Speech
 import UIKit
 
 @objc protocol ObservationViewControllerDelegate {
-    @objc optional func observationViewController(_ vc: ObservationViewController, didSave observation: Observation)
+    @objc optional func observationViewControllerDidSave(_ vc: ObservationViewController)
 }
 
 class ObservationViewController: PatientViewController {
@@ -20,7 +20,7 @@ class ObservationViewController: PatientViewController {
         dismissAnimated()
     }
     
-    func patientTableViewController(_ vc: PatientTableViewController, didSave observation: Observation) {
-        delegate?.observationViewController?(self, didSave: observation)
+    func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
+        delegate?.observationViewControllerDidSave?(self)
     }
 }
