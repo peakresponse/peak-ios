@@ -33,6 +33,7 @@
 		454E17BD250022C700F9EB8B /* SceneHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BC250022C700F9EB8B /* SceneHeaderView.swift */; };
 		454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BE250022E000F9EB8B /* ScenePatientsView.swift */; };
 		454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */; };
+		454EE968251C62D800EB266A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE967251C62D800EB266A /* LocationHelper.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
@@ -162,6 +163,7 @@
 		454E17BC250022C700F9EB8B /* SceneHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneHeaderView.swift; sourceTree = "<group>"; };
 		454E17BE250022E000F9EB8B /* ScenePatientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePatientsView.swift; sourceTree = "<group>"; };
 		454E17C0250022ED00F9EB8B /* SceneRespondersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneRespondersView.swift; sourceTree = "<group>"; };
+		454EE967251C62D800EB266A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				454096A724452CEA00AEE53E /* AppSettings.swift */,
 				45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */,
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
+				454EE967251C62D800EB266A /* LocationHelper.swift */,
 				453877BC236FA47300E19880 /* NonSceneTabBarController.swift */,
 				45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
@@ -811,6 +814,7 @@
 				45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */,
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
 				45F2190024E5D7B50046A39B /* ObservationTableViewController.swift in Sources */,
+				454EE968251C62D800EB266A /* LocationHelper.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
 				45E35A3224ECE7CA005A8059 /* UILabel+Extensions.swift in Sources */,
 				45F218FC24E371660046A39B /* LocationTableViewCell.swift in Sources */,

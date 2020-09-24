@@ -14,7 +14,7 @@ import UIKit
     @objc optional func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController)
 }
 
-class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate, UISearchBarDelegate, DropdownButtonDelegate {
+class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationHelperDelegate, UISearchBarDelegate, DropdownButtonDelegate {
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var headerViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var leavingView: UIView!
@@ -27,7 +27,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
 
     weak var delegate: FacilitiesTableViewControllerDelegate?
     
-    let locationManager = CLLocationManager()
+    var locationHelper: LocationHelper!
 
     var observation: Observation!
 
@@ -49,6 +49,9 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        locationHelper = LocationHelper()
+        locationHelper.delegate = self
+        
         headerView.addShadow(withOffset: CGSize(width: 4, height: 4), radius: 20, color: .black, opacity: 0.2)
         
         transportSwitch.layer.borderColor = UIColor.greyPeakBlue.cgColor
@@ -106,11 +109,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
             if let lat = observation?.lat, let lng = observation?.lng {
                 getFacilities(lat: lat, lng: lng)
             } else {
-                locationManager.requestWhenInUseAuthorization()
-                locationManager.delegate = self
-                /// reduce accuracy for a faster response
-                locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-                locationManager.requestLocation()
+                locationHelper.requestLocation()
             }
         }
     }
@@ -217,9 +216,9 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
         }
     }
     
-    // MARK: - CLLocationManagerDelegate
+    // MARK: - LocationHelper
 
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             let lat = String(format: "%.6f", location.coordinate.latitude)
             let lng = String(format: "%.6f", location.coordinate.longitude)
@@ -230,7 +229,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    func locationHelper(_ helper: LocationHelper, didFailWithError error: Error) {
         tableView.refreshControl?.endRefreshing()
         presentAlert(error: error)
     }

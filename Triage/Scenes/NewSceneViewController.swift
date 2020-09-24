@@ -9,7 +9,7 @@
 import CoreLocation
 import UIKit
 
-class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationManagerDelegate {
+class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelperDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var locationView: SceneLocationView!
     @IBOutlet weak var nameField: FormField!
@@ -21,7 +21,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
     private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
 
-    private var locationManager: CLLocationManager!
+    private var locationHelper: LocationHelper!
     private var scene: Scene!
     
     override func viewDidLoad() {
@@ -30,10 +30,9 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
         scene = Scene()
         scene.createdAt = Date()
 
-        locationManager = CLLocationManager()
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        locationManager.requestLocation()
+        locationHelper = LocationHelper()
+        locationHelper.delegate = self
+        locationHelper.requestLocation()
         locationView.activityIndicatorView.startAnimating()
         
         if let title = startAndFillLaterButton.title(for: .normal) {
@@ -174,9 +173,9 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
         return false
     }
     
-    // MARK: - CLLocationManagerDelegate
+    // MARK: - LocationHelperDelegate
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             scene.lat = String(format: "%.6f", location.coordinate.latitude)
             scene.lng = String(format: "%.6f", location.coordinate.longitude)
@@ -195,8 +194,8 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, CLLocationMan
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    func locationHelper(_ helper: LocationHelper, didFailWithError error: Error) {
         locationView.activityIndicatorView.stopAnimating()
-        print(error)
+        presentAlert(error: error)
     }
 }

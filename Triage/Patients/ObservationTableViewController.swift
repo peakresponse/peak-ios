@@ -10,19 +10,24 @@ import CoreLocation
 import Speech
 import UIKit
 
-class ObservationTableViewController: PatientTableViewController, CLLocationManagerDelegate, PatientViewDelegate, RecordingViewControllerDelegate {
+class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PatientViewDelegate, RecordingViewControllerDelegate {
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
     
     let dispatchGroup = DispatchGroup()
     var uploadTask: URLSessionTask?
 
-    let locationManager = CLLocationManager()
-    var cameraHelper = CameraHelper()
+    var locationHelper: LocationHelper!
+    var cameraHelper: CameraHelper!
     var originalObservation: Observation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        locationHelper = LocationHelper()
+        locationHelper.delegate = self
+        
+        cameraHelper = CameraHelper()
+        
         /// make a copy of the observation object before editing for comparison
         originalObservation = patient.asObservation()
 
@@ -85,9 +90,7 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
     }
     
     private func captureLocation() {
-        locationManager.delegate = self
-        locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
-        locationManager.requestLocation()
+        locationHelper.requestLocation()
         if let cell = tableView.cellForRow(at: IndexPath(row: 3, section: Section.info.rawValue)) as? LocationTableViewCell {
             cell.setCapturing(true)
         }
@@ -329,9 +332,9 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
         delegate?.patientTableViewController?(self, didUpdatePriority: Priority.transported.rawValue)
     }
     
-    // MARK: - CLLocationManagerDelegate
+    // MARK: - LocationHelperDelegate
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             patient.lat = String(format: "%.6f", location.coordinate.latitude)
             patient.lng = String(format: "%.6f", location.coordinate.longitude)
@@ -342,8 +345,11 @@ class ObservationTableViewController: PatientTableViewController, CLLocationMana
         }
     }
 
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
+    func locationHelper(_ helper: LocationHelper, didFailWithError error: Error) {
+        if let cell = tableView.cellForRow(at: IndexPath(row: 3, section: Section.info.rawValue)) as? LocationTableViewCell {
+            cell.setCapturing(false)
+        }
+        presentAlert(error: error)
     }
 
     // MARK: - PatientViewDelegate
