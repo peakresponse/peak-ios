@@ -445,7 +445,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
                 }
             }
         }
-        if let cell = cell as? PatientTableViewCell {
+        if let cell = cell as? BasePatientTableViewCell {
             cell.configure(from: patient)
         }
         return cell

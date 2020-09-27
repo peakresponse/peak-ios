@@ -14,7 +14,7 @@ import UIKit
     @objc optional func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell)
 }
 
-class ObservationTableViewCell: PatientTableViewCell, ObservationViewDelegate, UITextViewDelegate {
+class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegate, UITextViewDelegate {
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         return ObservationView.heightForText(text, width: width - 44 /* left and right margins */) + 10 /* top and bottom margins*/
     }

@@ -14,7 +14,7 @@ import UIKit
 }
 
 class PatientTableHeaderView: UIView, PriorityViewDelegate {
-    let patientView = PatientView()
+    let portraitView = PortraitView()
     let nameLabel = UILabel()
     let updatedLabel = UILabel()
     let priorityLabel = UILabel()
@@ -26,8 +26,8 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
     var bottomConstraint: NSLayoutConstraint!
 
     var isEditing: Bool {
-        get { return patientView.isEditing }
-        set { patientView.isEditing = newValue }
+        get { return portraitView.isEditing }
+        set { portraitView.isEditing = newValue }
     }
     
     @IBOutlet weak var delegate: PatientTableHeaderViewDelegate?
@@ -43,13 +43,13 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
     }
 
     private func commonInit() {
-        patientView.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(patientView)
+        portraitView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(portraitView)
         NSLayoutConstraint.activate([
-            patientView.widthAnchor.constraint(equalToConstant: 100),
-            patientView.heightAnchor.constraint(equalToConstant: 100),
-            patientView.topAnchor.constraint(equalTo: topAnchor, constant: 18),
-            patientView.rightAnchor.constraint(equalTo: rightAnchor, constant: -22)
+            portraitView.widthAnchor.constraint(equalToConstant: 100),
+            portraitView.heightAnchor.constraint(equalToConstant: 100),
+            portraitView.topAnchor.constraint(equalTo: topAnchor, constant: 18),
+            portraitView.rightAnchor.constraint(equalTo: rightAnchor, constant: -22)
         ])
 
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -107,9 +107,9 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
         addSubview(stackView)
         bottomConstraint = bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 12)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: patientView.bottomAnchor, constant: 16),
+            stackView.topAnchor.constraint(equalTo: portraitView.bottomAnchor, constant: 16),
             stackView.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: patientView.rightAnchor),
+            stackView.rightAnchor.constraint(equalTo: portraitView.rightAnchor),
             bottomConstraint
         ])
         
@@ -125,7 +125,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
     func configure(from patient: Patient) {
         priority = patient.priority.value
         backgroundColor = PRIORITY_COLORS_LIGHTENED[priority ?? 5]
-        patientView.configure(from: patient)
+        portraitView.configure(from: patient)
         
         nameLabel.text = patient.fullName
         updatedLabel.text = patient.updatedAtRelativeString

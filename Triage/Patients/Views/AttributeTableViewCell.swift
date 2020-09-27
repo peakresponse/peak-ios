@@ -21,7 +21,7 @@ enum AttributeTableViewCellType {
     case object
 }
 
-class AttributeTableViewCell: PatientTableViewCell, FormFieldDelegate {
+class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate {
     let field = FormField()
 
     var attribute: String!
@@ -38,7 +38,7 @@ class AttributeTableViewCell: PatientTableViewCell, FormFieldDelegate {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     func commonInit() {
         layer.zPosition = -1
         backgroundColor = .clear

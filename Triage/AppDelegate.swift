@@ -41,7 +41,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let keys = TriageKeys()
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
-        
+
+        AppRealm.deleteAll()
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,
             .foregroundColor: UIColor.mainGrey

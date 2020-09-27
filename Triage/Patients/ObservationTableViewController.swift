@@ -10,7 +10,7 @@ import CoreLocation
 import Speech
 import UIKit
 
-class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PatientViewDelegate, RecordingViewControllerDelegate {
+class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate, RecordingViewControllerDelegate {
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
     
     let dispatchGroup = DispatchGroup()
@@ -32,9 +32,9 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         originalObservation = patient.asObservation()
 
         if let tableHeaderView = tableView.tableHeaderView as? PatientTableHeaderView {
-            tableHeaderView.patientView.isEditing = true
-            tableHeaderView.patientView.cameraHelper = cameraHelper
-            tableHeaderView.patientView.delegate = self
+            tableHeaderView.portraitView.isEditing = true
+            tableHeaderView.portraitView.cameraHelper = cameraHelper
+            tableHeaderView.portraitView.delegate = self
         }
     }
 
@@ -354,7 +354,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     // MARK: - PatientViewDelegate
 
-    func patientView(_ patientView: PatientView, didCapturePhoto fileURL: URL, withImage image: UIImage) {
+    func patientView(_ patientView: PortraitView, didCapturePhoto fileURL: URL, withImage image: UIImage) {
         dispatchGroup.enter()
         uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
             if let error = error {

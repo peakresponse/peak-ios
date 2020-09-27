@@ -9,24 +9,24 @@
 import AVFoundation
 import UIKit
 
-@objc protocol PatientViewDelegate {
-    @objc optional func patientView(_ patientView: PatientView, didCapturePhoto fileURL: URL, withImage image: UIImage)
+@objc protocol PortraitViewDelegate {
+    @objc optional func patientView(_ patientView: PortraitView, didCapturePhoto fileURL: URL, withImage image: UIImage)
 }
 
-class PatientViewCameraButton: UIButton {
+class PortraitViewCameraButton: UIButton {
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         return contentRect
     }
 }
 
-class PatientView: UIView, CameraHelperDelegate {
+class PortraitView: UIView, CameraHelperDelegate {
     weak var imageView: RoundImageView!
     weak var captureButton: UIButton!
     weak var activityIndicatorView: UIActivityIndicatorView!
 
     var imageViewURL: String?
 
-    weak var delegate: PatientViewDelegate?
+    weak var delegate: PortraitViewDelegate?
     
     var cameraHelper: CameraHelper?
     
