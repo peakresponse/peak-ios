@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Keys
 
 enum ApiClientError: Error {
     case csrf
@@ -17,7 +18,7 @@ enum ApiClientError: Error {
 }
 
 class ApiClient {
-    static var shared: ApiClient = ApiClient(baseURL: "https://peakresponse.net")! {
+    static var shared: ApiClient = ApiClient(baseURL: TriageKeys().apiClientServerUrl)! {
         willSet {
             shared.invalidate()
         }

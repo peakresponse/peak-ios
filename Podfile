@@ -4,6 +4,7 @@ platform :ios, '13.2'
 plugin 'cocoapods-keys', {
   :project => 'Triage',
   :keys => [
+    'ApiClientServerUrl',
     'GoogleMapsSdkApiKey'
   ]
 }
