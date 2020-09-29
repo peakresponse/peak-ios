@@ -19,7 +19,7 @@ class SortBar: UIView, DropdownButtonDelegate {
     let dropdownButton = DropdownButton()
 
     weak var delegate: SortBarDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -32,7 +32,7 @@ class SortBar: UIView, DropdownButtonDelegate {
 
     private func commonInit() {
         backgroundColor = .clear
-        
+
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .copySBold
         label.textColor = .lowPriorityGrey
@@ -58,7 +58,7 @@ class SortBar: UIView, DropdownButtonDelegate {
     }
 
     // MARK: - DropdownButtonDelegate
-    
+
     func dropdownWillAppear(_ button: DropdownButton) -> UIView? {
         return superview
     }

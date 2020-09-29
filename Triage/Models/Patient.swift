@@ -17,7 +17,7 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
     case dead
     case transported
     case unknown
-    
+
     var description: String {
         return "Patient.priority.\(rawValue)".localized
     }
@@ -28,7 +28,7 @@ enum Sort: Int, CaseIterable, CustomStringConvertible {
     case longest
     case az
     case za
-    
+
     var description: String {
         return "Patient.sort.\(rawValue)".localized
     }
@@ -87,7 +87,7 @@ class Patient: Base {
         static let transportFacility = "transportFacility"
         static let transportFacilityId = "transportFacilityId"
     }
-    
+
     @objc dynamic var sceneId: String?
     @objc dynamic var pin: String?
     let version = RealmOptional<Int>()
@@ -198,7 +198,7 @@ class Patient: Base {
         }
         super.setValue(value, forKey: key)
     }
-    
+
     override func update(from data: [String: Any]) {
         super.update(from: data)
         sceneId = data[Keys.sceneId] as? String
@@ -236,6 +236,7 @@ class Patient: Base {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = sceneId {

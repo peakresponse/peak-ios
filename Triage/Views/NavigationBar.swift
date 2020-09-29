@@ -27,17 +27,17 @@ class NavigationBar: UIView {
     override var tintColor: UIColor! {
         didSet { updateButtons() }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .greyPeakBlue
         tintColor = .white
@@ -55,7 +55,7 @@ class NavigationBar: UIView {
     deinit {
         removeObservers()
     }
-    
+
     private func removeObservers() {
         if let navigationItem = navigationItem {
             navigationItem.removeObserver(self, forKeyPath: "leftBarButtonItem")
@@ -74,15 +74,18 @@ class NavigationBar: UIView {
         }
     }
 
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?,
+                               change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         updateButtons()
     }
-    
+
     private func view(for item: UIBarButtonItem) -> UIView? {
         var view = item.customView
         if let subview = view {
-            /// clone the view- for some reason, this is necessary or the view will be removed by some other system action handling the navigation item
-            guard let subview = try! NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(NSKeyedArchiver.archivedData(withRootObject: subview, requiringSecureCoding: false)) as? UIView else { return nil }
+            // clone the view- for some reason, this is necessary or the view will be removed by some other system action
+            // handling the navigation item
+            guard let subview = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(
+                    NSKeyedArchiver.archivedData(withRootObject: subview, requiringSecureCoding: false)) as? UIView else { return nil }
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(subview)

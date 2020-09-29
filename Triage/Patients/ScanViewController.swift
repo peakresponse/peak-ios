@@ -24,31 +24,35 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         isModalInPresentation = true
 
         inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
-            UIBarButtonItem(title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
+            UIBarButtonItem(
+                title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
+            UIBarButtonItem(
+                title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
         ], animated: false)
 
-        /// labels and fields
+        // labels and fields
         cameraLabel.font = .copyMBold
         orLabel.font = .copyMBold
         pinFieldLabel.font = .copyMBold
-        
+
         setupCamera()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
 
-        /// re-enable camera
+        // re-enable camera
         if videoPreviewLayer != nil {
             captureSession.startRunning()
         }
@@ -56,24 +60,24 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     override func didPresentAnimated() {
         super.didPresentAnimated()
-        /// disable camera, if running
+        // disable camera, if running
         if videoPreviewLayer != nil {
             captureSession.stopRunning()
         }
     }
-    
+
     override func didDismissPresentation() {
         super.didDismissPresentation()
-        /// re-enable camera
+        // re-enable camera
         if videoPreviewLayer != nil {
             captureSession.startRunning()
         }
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
-        /// disable camera, if running
+        // disable camera, if running
         if videoPreviewLayer != nil {
             captureSession.stopRunning()
         }
@@ -83,12 +87,13 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.viewDidLayoutSubviews()
         videoPreviewLayer?.frame = cameraView.bounds
     }
-    
+
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let pinFieldFrame = pinField.superview?.convert(pinField.frame, to: nil),
             let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             if keyboardFrame.minY < pinFieldFrame.maxY {
-                UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+                let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+                UIView.animate(withDuration: duration) {
                     var bounds = self.view.bounds
                     bounds.origin.y = -floor(keyboardFrame.minY - pinFieldFrame.maxY)
                     self.view.bounds = bounds
@@ -146,17 +151,17 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     override var inputAccessoryView: UIView? {
         return inputToolbar
     }
-    
+
     @objc func inputCancelPressed() {
         _ = pinField.resignFirstResponder()
     }
 
     @objc func inputSearchPressed() {
-        /// hide keyboard
+        // hide keyboard
         _ = pinField.resignFirstResponder()
-        /// get input
+        // get input
         guard let pin = pinField.text else { return }
-        /// check if Patient record exists
+        // check if Patient record exists
         let realm = AppRealm.open()
         let results = realm.objects(Patient.self).filter("sceneId=%@ AND pin=%@", AppSettings.sceneId ?? "", pin)
         var vc: UIViewController?
@@ -178,24 +183,25 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             }
         }
         if let vc = vc {
-            /// present modally
+            // present modally
             presentAnimated(vc)
         }
-        /// clear pinfield
+        // clear pinfield
         pinField.text = nil
     }
-    
+
     // MARK: - AVCaptureMetadataOutputObjectsDelegate
 
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject],
+                        from connection: AVCaptureConnection) {
         // Check if the metadataObjects array is not nil and it contains at least one object.
         if metadataObjects.count == 0 {
             return
         }
-        
+
         // Get the metadata object.
-        let metadataObj = metadataObjects[0] as! AVMetadataMachineReadableCodeObject
-        if let pin = metadataObj.stringValue {
+        if let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
+           let pin = metadataObj.stringValue {
             pinField.text = pin
             inputSearchPressed()
         }
@@ -212,7 +218,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
 
     // MARK: - ObservationViewControllerDelegate
-    
+
     func observationViewControllerDidSave(_ vc: ObservationViewController) {
         dismissAnimated()
     }

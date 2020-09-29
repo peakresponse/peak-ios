@@ -13,7 +13,7 @@ class TableViewHeaderView: UITableViewHeaderFooterView {
     override var textLabel: UILabel? {
         return _textLabel
     }
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         commonInit()
@@ -26,7 +26,7 @@ class TableViewHeaderView: UITableViewHeaderFooterView {
 
     private func commonInit() {
         backgroundView = UIView()
-        
+
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .greyPeakBlue
@@ -37,7 +37,7 @@ class TableViewHeaderView: UITableViewHeaderFooterView {
             view.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             view.heightAnchor.constraint(equalToConstant: 34)
         ])
-        
+
         _textLabel.translatesAutoresizingMaskIntoConstraints = false
         _textLabel.font = .copySBold
         _textLabel.textColor = .white

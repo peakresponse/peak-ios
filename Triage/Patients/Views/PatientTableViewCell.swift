@@ -20,12 +20,12 @@ class PatientTableViewCell: BasePatientTableViewCell {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     func commonInit() {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .bgBackground
         self.backgroundView = backgroundView
-        
+
         let patientView = PatientView()
         patientView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(patientView)

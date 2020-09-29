@@ -34,31 +34,32 @@ class FormMultilineField: BaseField, UITextViewDelegate {
     var textViewTopConstraint: NSLayoutConstraint!
     var textViewHeightConstraint: NSLayoutConstraint!
     var bottomConstraint: NSLayoutConstraint!
-    
+
     @IBInspectable var isEnabled: Bool {
         get { return textView.isUserInteractionEnabled }
         set { textView.isUserInteractionEnabled = newValue }
     }
-    
+
     @IBInspectable override var text: String? {
         get { return textView.text }
         set { textView.text = newValue }
     }
-    
+
     private func heightForText(_ text: String, font: UIFont, width: CGFloat) -> CGFloat {
         let text = text as NSString
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
-        let rect = text.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
-            .font: font,
-            .paragraphStyle: paragraphStyle
-        ], context: nil)
+        let rect = text.boundingRect(with: CGSize(width: width, height: .greatestFiniteMagnitude),
+                                     options: .usesLineFragmentOrigin, attributes: [
+                                        .font: font,
+                                        .paragraphStyle: paragraphStyle
+                                     ], context: nil)
         return max(2 * font.lineHeight * 1.2, ceil(rect.height / (font.lineHeight * 1.2)) * font.lineHeight * 1.2)
     }
 
     override func commonInit() {
         super.commonInit()
-        
+
         textView.delegate = self
         (textView as? FormMultilineFieldTextView)?.formMultilineField = self
         textView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +113,7 @@ class FormMultilineField: BaseField, UITextViewDelegate {
     override var isFirstResponder: Bool {
         return textView.isFirstResponder
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         return textView.becomeFirstResponder()
     }
@@ -130,7 +131,7 @@ class FormMultilineField: BaseField, UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         delegate?.formFieldDidBeginEditing?(self)
     }
-    
+
     func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
         return delegate?.formFieldShouldEndEditing?(self) ?? true
     }
@@ -138,7 +139,7 @@ class FormMultilineField: BaseField, UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         delegate?.formFieldDidEndEditing?(self)
     }
-    
+
     func textViewDidChange(_ textView: UITextView) {
         textViewHeightConstraint.constant = heightForText(textView.text, font: textView.font!, width: textView.frame.width)
         let paragraphStyle = NSMutableParagraphStyle()
@@ -150,7 +151,7 @@ class FormMultilineField: BaseField, UITextViewDelegate {
         ])
         delegate?.formFieldDidChange?(self)
     }
-    
+
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" && !(delegate?.formFieldShouldReturn?(self) ?? true) {
             return false

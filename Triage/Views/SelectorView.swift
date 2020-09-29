@@ -15,7 +15,7 @@ class SelectorButton: UIButton {
         titleRect.origin.y = floor((contentRect.height - titleRect.height) / 2)
         return titleRect
     }
-    
+
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var imageRect = super.imageRect(forContentRect: contentRect)
         imageRect.origin.x = contentRect.width - imageRect.width - 16
@@ -73,7 +73,7 @@ class SelectorView: UIView {
         UIGraphicsEndImageContext()
         return image.resizableImage(withCapInsets: UIEdgeInsets(top: 1, left: 0, bottom: 0, right: 0))
     }
-    
+
     func addButton(title: String) {
         let button = SelectorButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false

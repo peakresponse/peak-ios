@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */; };
 		450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450A977D24DCAC7A007BCDD3 /* TabBar.swift */; };
 		452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC6243CF3F000A8F1FF /* Agency.swift */; };
 		452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC8243CF40600A8F1FF /* Facility.swift */; };
@@ -120,6 +119,7 @@
 		45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
 		6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */; };
+		E4D66A1D0105A373C715C6E8 /* libPods-TriageUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A45BB2E00A550D5F64272CCD /* libPods-TriageUITests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -259,7 +259,7 @@
 		45FD73E6243151C200FD7EDB /* ObservationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationView.swift; sourceTree = "<group>"; };
 		45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewCell.swift; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
-		A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TriageUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A45BB2E00A550D5F64272CCD /* libPods-TriageUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-TriageUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A608A45BFFA66C538FB6DCB4 /* Pods-TriageUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.debug.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		BCA45DA419B537F52EAD6F80 /* Pods-TriageTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.release.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.release.xcconfig"; sourceTree = "<group>"; };
 		C31BB00434B5BEE305700641 /* Pods-Triage.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Triage.release.xcconfig"; path = "Target Support Files/Pods-Triage/Pods-Triage.release.xcconfig"; sourceTree = "<group>"; };
@@ -289,7 +289,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				392562FB25F0D306D1467603 /* Pods_TriageUITests.framework in Frameworks */,
+				E4D66A1D0105A373C715C6E8 /* libPods-TriageUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -543,7 +543,7 @@
 			children = (
 				E3810588230AB5FE9D4DB0F2 /* Pods_Triage.framework */,
 				E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */,
-				A424B49324530AC28FF6F532 /* Pods_TriageUITests.framework */,
+				A45BB2E00A550D5F64272CCD /* libPods-TriageUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -556,6 +556,7 @@
 			buildConfigurationList = 4566F046236CCC5700A04C75 /* Build configuration list for PBXNativeTarget "Triage" */;
 			buildPhases = (
 				CED6EC528B4941D251B45C3C /* [CP] Check Pods Manifest.lock */,
+				454EEA682522FF3B00EB266A /* Run Script */,
 				4566F018236CCC5500A04C75 /* Sources */,
 				4566F019236CCC5500A04C75 /* Frameworks */,
 				4566F01A236CCC5500A04C75 /* Resources */,
@@ -725,6 +726,24 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		454EEA682522FF3B00EB266A /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 		5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1128,7 +1147,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Triage.app/Triage";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peak Response.app/Peak Response";
 			};
 			name = Debug;
 		};
@@ -1150,7 +1169,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Triage.app/Triage";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Peak Response.app/Peak Response";
 			};
 			name = Release;
 		};

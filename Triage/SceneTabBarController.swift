@@ -12,7 +12,7 @@ class SceneTabBarController: TabBarController {
     deinit {
         AppRealm.disconnectScene()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

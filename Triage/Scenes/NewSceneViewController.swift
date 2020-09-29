@@ -17,16 +17,16 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     @IBOutlet weak var approxPatientsField: FormField!
     @IBOutlet weak var urgencyField: FormMultilineField!
     @IBOutlet weak var startAndFillLaterButton: UIButton!
-    
+
     private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
 
     private var locationHelper: LocationHelper!
     private var scene: Scene!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         scene = Scene()
         scene.createdAt = Date()
 
@@ -34,7 +34,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         locationHelper.delegate = self
         locationHelper.requestLocation()
         locationView.activityIndicatorView.startAnimating()
-        
+
         if let title = startAndFillLaterButton.title(for: .normal) {
             var attributedTitle = NSAttributedString(string: title, attributes: [
                 .font: UIFont.copySBold,
@@ -48,31 +48,37 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
             ])
             startAndFillLaterButton.setAttributedTitle(attributedTitle, for: .highlighted)
         }
-        
+
         approxPatientsField.textField.keyboardType = .numberPad
 
         fields = [nameField, descField, approxPatientsField, urgencyField]
 
-        let prevItem = UIBarButtonItem(image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
+        let prevItem = UIBarButtonItem(
+            image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
         prevItem.width = 44
-        let nextItem = UIBarButtonItem(image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
+        let nextItem = UIBarButtonItem(
+            image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
         nextItem.width = 44
         inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             prevItem,
             nextItem,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self, action: #selector(inputDonePressed))
+            UIBarButtonItem(
+                title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self,
+                action: #selector(inputDonePressed))
         ], animated: false)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
@@ -81,7 +87,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     private func refresh() {
         locationView.configure(from: scene)
     }
-    
+
     @IBAction func startPressed() {
         AppRealm.createScene(scene: scene) { [weak self] (scene, error) in
             guard let self = self else { return }
@@ -100,7 +106,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     override var inputAccessoryView: UIView? {
         return inputToolbar
     }
-    
+
     @objc func inputPrevPressed() {
         if let index = fields.firstIndex(where: {$0.isFirstResponder}) {
             if index > 0 {
@@ -126,21 +132,20 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
             _ = fields[index].resignFirstResponder()
         }
     }
-    
+
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25, animations: {
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+            UIView.animate(withDuration: duration, animations: {
                 let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
                 self.scrollView.contentInset = insets
                 self.scrollView.scrollIndicatorInsets = insets
-            }) { (completed) in
-                for field in self.fields {
-                    if field.isFirstResponder {
-                        self.scrollView.scrollRectToVisible(self.scrollView.convert(field.bounds, from: field), animated: true)
-                        break
-                    }
+            }, completion: { (_) in
+                for field in self.fields where field.isFirstResponder {
+                    self.scrollView.scrollRectToVisible(self.scrollView.convert(field.bounds, from: field), animated: true)
+                    break
                 }
-            }
+            })
         }
     }
 
@@ -152,7 +157,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     }
 
     // MARK: - FormFieldDelegate
-    
+
     func formFieldDidChange(_ field: BaseField) {
         if let attributeKey = field.attributeKey {
             switch field.attributeKey {
@@ -163,7 +168,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
             }
         }
     }
-    
+
     func formFieldShouldReturn(_ field: BaseField) -> Bool {
         if let index = fields.firstIndex(where: {$0 == field}), index < (fields.count - 1) {
             _ = fields[index + 1].becomeFirstResponder()
@@ -172,9 +177,9 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         }
         return false
     }
-    
+
     // MARK: - LocationHelperDelegate
-    
+
     func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             scene.lat = String(format: "%.6f", location.coordinate.latitude)

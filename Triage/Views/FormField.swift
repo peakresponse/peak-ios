@@ -34,29 +34,29 @@ class FormField: BaseField, UITextFieldDelegate {
     var textFieldTopConstraint: NSLayoutConstraint!
     var textFieldHeightConstraint: NSLayoutConstraint!
     var bottomConstraint: NSLayoutConstraint!
-    
+
     @IBInspectable var isEnabled: Bool {
         get { return textField.isEnabled }
         set { textField.isEnabled = newValue }
     }
-    
+
     @IBInspectable override var text: String? {
         get { return textField.text }
         set { textField.text = newValue }
     }
-    
+
     @IBInspectable var isSecureTextEntry: Bool {
         get { return textField.isSecureTextEntry }
         set { textField.isSecureTextEntry = newValue }
     }
-    
+
     override func commonInit() {
         super.commonInit()
-        
+
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldChanged), for: .editingChanged)
         (textField as? FormFieldTextField)?.formField = self
-        textField.translatesAutoresizingMaskIntoConstraints = false;
+        textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textColor = .mainGrey
         textField.clearButtonMode = .never
         textField.rightViewMode = .whileEditing
@@ -116,7 +116,7 @@ class FormField: BaseField, UITextFieldDelegate {
     override var isFirstResponder: Bool {
         return textField.isFirstResponder
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         return textField.becomeFirstResponder()
     }
@@ -128,7 +128,7 @@ class FormField: BaseField, UITextFieldDelegate {
     @objc func textFieldChanged() {
         delegate?.formFieldDidChange?(self)
     }
-    
+
     // MARK: - UITextFieldDelegate
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {

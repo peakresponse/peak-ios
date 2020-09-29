@@ -19,7 +19,7 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
     deinit {
         activeScenesNotificationToken?.invalidate()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -33,12 +33,12 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
             self?.didObserveRealmChanges(changes)
         }
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Scene>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             updateActiveScenesViews()
-        case .update(_, _, _, _):
+        case .update:
             updateActiveScenesViews()
         case .error(let error):
             presentAlert(error: error)
@@ -57,7 +57,7 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
     }
 
     // MARK: - ActiveScenesViewDelegate
-    
+
     func activeScenesView(_ view: ActiveScenesView, didJoinScene scene: Scene) {
         let sceneId = scene.id
         AppRealm.joinScene(sceneId: sceneId) { [weak self] (error) in

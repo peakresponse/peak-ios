@@ -11,12 +11,12 @@ import UIKit
 @IBDesignable
 class BannerView: UIView {
     weak var label: UILabel!
-    
+
     @IBInspectable var l10nKey: String? {
         get { return nil }
         set { label.l10nKey = newValue }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -26,13 +26,13 @@ class BannerView: UIView {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .peakBlue
         NSLayoutConstraint.activate([
             heightAnchor.constraint(equalToConstant: 25)
         ])
-        
+
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .copySBold
@@ -45,4 +45,3 @@ class BannerView: UIView {
         self.label = label
     }
 }
-

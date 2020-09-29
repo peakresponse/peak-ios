@@ -60,7 +60,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
         super.viewDidAppear(animated)
         startRecording()
     }
-    
+
     func startRecording() {
         do {
             try audioHelper.startRecording()
@@ -81,15 +81,15 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
         activityIndicatorView.startAnimating()
         cancelButton.isHidden = true
     }
-    
+
     // MARK: - AudioHelperDelegate
 
     func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool) {
-        
+
     }
 
     func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String) {
-        
+
     }
 
     func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String) {
@@ -104,7 +104,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
     }
 
     func audioHelper(_ audioHelper: AudioHelper, didTransformBuffer input: [Float]) {
-        /// decimate the data into number of bars samples
+        // decimate the data into number of bars samples
         let filterLength = input.count / barHeightConstraints.count
         let filter = [Float](repeating: 16, count: filterLength)
         var output = [Float](repeating: 0, count: barHeightConstraints.count)
@@ -117,7 +117,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
             }
         }
     }
-    
+
     func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper) {
         dismissAnimated()
     }
@@ -132,7 +132,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
             }
         }
     }
-    
+
     func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
         if status == .authorized {
             startRecording()

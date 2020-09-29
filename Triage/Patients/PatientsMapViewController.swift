@@ -24,7 +24,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
     var results: Results<Patient>?
 
     // MARK: -
-    
+
     deinit {
         notificationToken?.invalidate()
     }
@@ -33,19 +33,19 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
         super.viewDidLoad()
 
         searchBar.delegate = self
-        
+
         mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "Patient")
-        
+
         // set up Realm query and observer
         performQuery()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // trigger additional refresh
         refresh()
     }
-    
+
     private func performQuery() {
         notificationToken?.invalidate()
         let realm = AppRealm.open()
@@ -88,18 +88,18 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
             mapView.showAnnotations(mapView.annotations, animated: true)
         }
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             addAnnotations()
-        case .update(_, _, _, _):
+        case .update:
             addAnnotations()
         case .error(let error):
             presentAlert(error: error)
         }
     }
-    
+
     @objc func refresh() {
         if let sceneId = AppSettings.sceneId {
             AppRealm.getPatients(sceneId: sceneId) { [weak self] (error) in
@@ -121,13 +121,15 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
     }
 
     private func navigate(to patient: Patient) {
-        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient") as? PatientViewController {
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient")
+        if let vc = vc as? PatientViewController {
             vc.patient = patient
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .done, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "NavigationBar.done".localized, style: .done, target: self, action: #selector(dismissAnimated))
             presentAnimated(vc)
         }
     }
-    
+
     // MARK: - MKMapViewDelegate
 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -162,31 +164,30 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
             }
             for annotation in annotations {
                 if let annotation = annotation as? PatientAnnotation, let patient = annotation.patient {
-                    let action = UIAlertAction(title: patient.fullName, style: .default, handler: { [weak self] (action) in
+                    let action = UIAlertAction(title: patient.fullName, style: .default, handler: { [weak self] (_) in
                         self?.navigate(to: patient)
                     })
                     action.setValue(patient.priorityColor, forKey: "titleTextColor")
-                    alert.addAction(action);
+                    alert.addAction(action)
                 }
             }
             alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
             presentAnimated(alert)
         }
     }
-    
+
     // MARK: - UISearchBarDelegate
-    
+
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
 
-    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if !searchBar.isFirstResponder {
             searchBarShouldBeginEditing = false
         }
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }

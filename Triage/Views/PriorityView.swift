@@ -33,8 +33,8 @@ class PriorityView: UIView {
     private func commonInit() {
         backgroundColor = .bgBackground
         addShadow(withOffset: CGSize(width: 4, height: 4), radius: 20, color: .black, opacity: 0.2)
-        
-        /// add a close button in upper right corner
+
+        // add a close button in upper right corner
         let closeButton = UIButton(type: .custom)
         closeButton.addTarget(self, action: #selector(closePressed), for: .touchUpInside)
         closeButton.setImage(UIImage(named: "Clear"), for: .normal)
@@ -46,8 +46,8 @@ class PriorityView: UIView {
             closeButton.widthAnchor.constraint(equalToConstant: 44),
             closeButton.heightAnchor.constraint(equalToConstant: 44)
         ])
-        
-        /// top row
+
+        // top row
         let topStackView = createButtonRow(from: 0, to: 3)
         NSLayoutConstraint.activate([
             topStackView.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 11),
@@ -63,7 +63,7 @@ class PriorityView: UIView {
             bottomAnchor.constraint(equalTo: bottomStackView.bottomAnchor, constant: 27)
         ])
     }
-    
+
     private func createButtonRow(from: Int, to: Int) -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -72,7 +72,7 @@ class PriorityView: UIView {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(stackView)
 
-        /// add the buttons, with containing views for sizing
+        // add the buttons, with containing views for sizing
         for index in from..<to {
             let view = UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
@@ -80,7 +80,7 @@ class PriorityView: UIView {
             NSLayoutConstraint.activate([
                 view.heightAnchor.constraint(equalTo: view.widthAnchor, multiplier: 89.0/103.0)
             ])
-            
+
             let button = UIButton(type: .custom)
             button.setTitle("Patient.priority.\(index)".localized, for: .normal)
             button.setTitleColor(PRIORITY_LABEL_COLORS[index], for: .normal)
@@ -103,7 +103,7 @@ class PriorityView: UIView {
     @objc func closePressed() {
         delegate?.priorityViewDidDismiss?(self)
     }
-    
+
     @objc func buttonPressed(_ button: UIButton) {
         if let priority = buttons.firstIndex(of: button) {
             if priority == selectedPriority {
@@ -113,7 +113,7 @@ class PriorityView: UIView {
             }
         }
     }
-    
+
     func select(priority: Int?) {
         for (index, button) in buttons.enumerated() {
             if index == priority {

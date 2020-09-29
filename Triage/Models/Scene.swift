@@ -33,7 +33,7 @@ class Scene: Base {
         static let incidentCommanderAgencyId = "incidentCommanderAgencyId"
         static let closedAt = "closedAt"
     }
-    
+
     @objc dynamic var name: String?
     @objc dynamic var desc: String?
     @objc dynamic var urgency: String?
@@ -86,8 +86,8 @@ class Scene: Base {
     override var description: String {
         return name ?? ""
     }
-    
-    override func update(from data: [String : Any]) {
+
+    override func update(from data: [String: Any]) {
         super.update(from: data)
         name = data[Keys.name] as? String
         desc = data[Keys.desc] as? String
@@ -113,7 +113,7 @@ class Scene: Base {
         incidentCommanderAgencyId = data[Keys.incidentCommanderAgencyId] as? String
     }
 
-    override func asJSON() -> [String : Any] {
+    override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = name {
             data[Keys.name] = value

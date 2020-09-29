@@ -10,10 +10,11 @@ import RealmSwift
 import UIKit
 
 class PatientsCollectionViewFlowLayout: UICollectionViewFlowLayout {
-    
+
 }
 
-class PatientsCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource, UISearchBarDelegate, SortBarDelegate {
+class PatientsCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource,
+                                        UISearchBarDelegate, SortBarDelegate {
     @IBOutlet weak var searchBar: SearchBar!
     private var searchBarShouldBeginEditing = true
     @IBOutlet weak var sortBar: SortBar!
@@ -35,7 +36,7 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        /// set up collection view
+        // set up collection view
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.alwaysBounceVertical = true
@@ -49,17 +50,17 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
         collectionView.addSubview(refreshControl)
         self.refreshControl = refreshControl
 
-        /// set up sort dropdown button
+        // set up sort dropdown button
         sortBar.delegate = self
         sortBar.dropdownButton.setTitle(sort.description, for: .normal)
-        
-        /// set up Realm query and observer
+
+        // set up Realm query and observer
         performQuery()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        /// trigger additional refresh
+        // trigger additional refresh
         refresh()
     }
 
@@ -95,14 +96,14 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             collectionView.reloadData()
             updateCounts()
         case .update(_, let deletions, let insertions, let modifications):
             collectionView.performBatchUpdates({
-                collectionView.deleteItems(at: deletions.map{ IndexPath(row: $0, section: 0) })
-                collectionView.insertItems(at: insertions.map{ IndexPath(row: $0, section: 0) })
-                collectionView.reloadItems(at: modifications.map{ IndexPath(row: $0, section: 0) })
+                collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+                collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
             }, completion: nil)
             updateCounts()
         case .error(let error):
@@ -137,7 +138,7 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
 //            priorityTabViews[priority]?.count = results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
 //        }
     }
-    
+
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
@@ -151,7 +152,8 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
             let indexPath = collectionView.indexPath(for: cell),
             let patient = results?[indexPath.row] {
             vc.patient = patient
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
         }
     }
 
@@ -172,19 +174,18 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
     }
 
     // MARK: - LoginViewControllerDelegate
-    
+
     override func loginViewControllerDidLogin(_ vc: LoginViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
         }
     }
-    
+
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return results?.count ?? 0
@@ -201,7 +202,8 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
 
     // MARK: - UICollectionViewDelegate
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         var frame = collectionView.frame
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             frame = frame.inset(by: layout.sectionInset)
@@ -209,9 +211,9 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
         frame.size.height = 70
         return frame.size
     }
-    
+
     // MARK: - UISearchBarDelegate
-    
+
     func position(for bar: UIBarPositioning) -> UIBarPosition {
         return .topAttached
     }
@@ -222,7 +224,7 @@ class PatientsCollectionViewController: UIViewController, UICollectionViewDelega
         }
         performQuery()
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }

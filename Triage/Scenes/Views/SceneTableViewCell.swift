@@ -31,6 +31,7 @@ class SceneTableViewCell: UITableViewCell {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         backgroundColor = .clear
 
@@ -60,7 +61,7 @@ class SceneTableViewCell: UITableViewCell {
             containerView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor)
         ])
         self.mapView = mapView
-        
+
         let mapMarkerView = UIImageView()
         mapMarkerView.translatesAutoresizingMaskIntoConstraints = false
         mapMarkerView.image = UIImage(named: "MapMarker")
@@ -95,7 +96,7 @@ class SceneTableViewCell: UITableViewCell {
             dateLabel.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -14)
         ])
         self.dateLabel = dateLabel
-        
+
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .copySBold
@@ -122,7 +123,7 @@ class SceneTableViewCell: UITableViewCell {
             headerView.bottomAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 8)
         ])
         self.descLabel = descLabel
-        
+
         let bodyView = UIView()
         bodyView.translatesAutoresizingMaskIntoConstraints = false
         bodyView.layer.cornerRadius = 4
@@ -148,7 +149,7 @@ class SceneTableViewCell: UITableViewCell {
             patientsLabel.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -14)
         ])
         self.patientsLabel = patientsLabel
-        
+
         let respondersLabel = UILabel()
         respondersLabel.translatesAutoresizingMaskIntoConstraints = false
         respondersLabel.font = .copyXSRegular

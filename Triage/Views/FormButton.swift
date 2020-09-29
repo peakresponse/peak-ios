@@ -84,7 +84,7 @@ class FormButton: UIControl {
     }
 
     weak var userData: NSObject?
-    
+
     private var heightConstraint: NSLayoutConstraint!
     var height: CGFloat {
         var height: CGFloat
@@ -125,7 +125,7 @@ class FormButton: UIControl {
         self.style = style ?? .priority
         updateButtonStyles()
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -158,7 +158,8 @@ class FormButton: UIControl {
         case .priority:
             button.setBackgroundImage(UIImage.resizableImage(withColor: color, cornerRadius: height / 2), for: state)
         case .lowPriority:
-            button.setBackgroundImage(UIImage.resizableImage(withColor: .clear, cornerRadius: height / 2, borderColor: color, borderWidth: size == .xxsmall ? 1 : 3), for: state)
+            button.setBackgroundImage(UIImage.resizableImage(withColor: .clear, cornerRadius: height / 2,
+                                                             borderColor: color, borderWidth: size == .xxsmall ? 1 : 3), for: state)
         }
     }
 
@@ -179,7 +180,7 @@ class FormButton: UIControl {
     }
 
     // MARK: - UIControl
-    
+
     override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
         button.addTarget(target, action: action, for: controlEvents)
     }

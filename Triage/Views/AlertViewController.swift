@@ -17,7 +17,7 @@ class AlertViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var stackView: UIStackView!
-    
+
     var alertTitle: String? {
         didSet { titleLabel?.text = alertTitle }
     }
@@ -25,13 +25,13 @@ class AlertViewController: UIViewController {
         didSet { messageLabel?.text = alertMessage }
     }
     var alertActions: [AlertViewControllerAction] = []
-    
+
     init() {
         super.init(nibName: "AlertViewController", bundle: nil)
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
@@ -41,7 +41,7 @@ class AlertViewController: UIViewController {
         containerView.addShadow(withOffset: CGSize(width: 0, height: 10), radius: 40, color: .black, opacity: 0.4)
         titleLabel.text = alertTitle
         messageLabel.text = alertMessage
-        
+
         for action in alertActions {
             let button = FormButton(size: .small, style: action.style == .cancel ? .lowPriority : .priority)
             button.buttonLabel = action.title
@@ -50,7 +50,7 @@ class AlertViewController: UIViewController {
             stackView.addArrangedSubview(button)
         }
     }
-    
+
     func addAlertAction(title: String?, style: UIAlertAction.Style, handler: ((UIAlertAction) -> Void)?) {
         let action = AlertViewControllerAction(title: title, style: style, handler: handler)
         action.handler = handler

@@ -14,7 +14,7 @@ class Agency: Base {
         static let number = "number"
         static let name = "name"
     }
-    
+
     @objc dynamic var stateNumber: String?
     @objc dynamic var number: String?
     @objc dynamic var name: String?
@@ -22,15 +22,15 @@ class Agency: Base {
     override var description: String {
         return name ?? ""
     }
-    
-    override func update(from data: [String : Any]) {
+
+    override func update(from data: [String: Any]) {
         super.update(from: data)
         stateNumber = data[Keys.stateNumber] as? String
         number = data[Keys.number] as? String
         name = data[Keys.name] as? String
     }
-    
-    override func asJSON() -> [String : Any] {
+
+    override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = stateNumber {
             data[Keys.stateNumber] = value

@@ -10,9 +10,10 @@ import CoreLocation
 import Speech
 import UIKit
 
-class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate, RecordingViewControllerDelegate {
+class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate,
+                                      RecordingViewControllerDelegate {
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
-    
+
     let dispatchGroup = DispatchGroup()
     var uploadTask: URLSessionTask?
 
@@ -25,10 +26,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
         locationHelper = LocationHelper()
         locationHelper.delegate = self
-        
+
         cameraHelper = CameraHelper()
-        
-        /// make a copy of the observation object before editing for comparison
+
+        // make a copy of the observation object before editing for comparison
         originalObservation = patient.asObservation()
 
         if let tableHeaderView = tableView.tableHeaderView as? PatientTableHeaderView {
@@ -47,10 +48,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        /// change editing state after layout prevents layout constraint warnings
+        // change editing state after layout prevents layout constraint warnings
         tableView.setEditing(true, animated: false)
     }
-    
+
     @IBAction func cancelPressed() {
         delegate?.patientTableViewControllerDidCancel?(self)
     }
@@ -68,7 +69,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
         let saveObservation = { [weak self] in
             guard let self = self, let observation = self.patient as? Observation else { return }
-            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (patient, error) in
+            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (_, error) in
                 DispatchQueue.main.async { [weak self] in
                     self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
                     if let error = error {
@@ -88,7 +89,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             saveObservation()
         }
     }
-    
+
     private func captureLocation() {
         locationHelper.requestLocation()
         if let cell = tableView.cellForRow(at: IndexPath(row: 3, section: Section.info.rawValue)) as? LocationTableViewCell {
@@ -96,11 +97,12 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func extractValues(text: String) {
         var tokens = text.components(separatedBy: .whitespacesAndNewlines)
         var extracted: [String] = []
-        var number: Int? = nil
-        var guess: String? = nil
+        var number: Int?
+        var guess: String?
         while tokens.count > 0 {
             let token = tokens.removeFirst()
             let lower = token.lowercased()
@@ -120,7 +122,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                 if let value = priority {
                     DispatchQueue.main.async { [weak self] in
                         self?.patient.priority.value = value
-                        self?.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
+                        self?.tableView.reloadSections(IndexSet([0, 1]), with: .none)
                     }
                     extracted.append(Patient.Keys.priority)
                 }
@@ -130,7 +132,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                 let value = lower == "expectant" ? 3 : 4
                 DispatchQueue.main.async { [weak self] in
                     self?.patient.priority.value = value
-                    self?.tableView.reloadSections(IndexSet(arrayLiteral: 0, 1), with: .none)
+                    self?.tableView.reloadSections(IndexSet([0, 1]), with: .none)
                 }
                 extracted.append(Patient.Keys.priority)
             } else if lower.contains("patient") && !extracted.contains(Patient.Keys.firstName) {
@@ -260,7 +262,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             vc.delegate = self
         }
     }
-    
+
     // MARK: - AttributeTableViewCellDelegate
 
     func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String) {
@@ -279,7 +281,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             tableView.reloadSections(IndexSet([Section.info.rawValue]), with: .none)
         }
     }
-    
+
     override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell) {
         if cell as? LocationTableViewCell != nil {
             if !patient.hasLatLng {
@@ -304,15 +306,15 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         }
         _ = resignFirstResponder()
     }
-    
+
     // MARK: - ConfirmTransportViewControllerDelegate
 
     override func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
         patient.priority.value = Priority.transported.rawValue
         patient.transportFacility = facility
         patient.transportAgency = agency
-        tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .none)
-        tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .none)
+        tableView.reloadSections(IndexSet([0]), with: .none)
+        tableView.reloadSections(IndexSet([0]), with: .none)
         if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
             tableViewHeader.configure(from: patient)
         }
@@ -325,15 +327,15 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         patient.priority.value = Priority.transported.rawValue
         patient.transportFacility = nil
         patient.transportAgency = nil
-        tableView.reloadSections(IndexSet(arrayLiteral: 0), with: .none)
+        tableView.reloadSections(IndexSet([0]), with: .none)
         if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
             tableViewHeader.configure(from: patient)
         }
         delegate?.patientTableViewController?(self, didUpdatePriority: Priority.transported.rawValue)
     }
-    
+
     // MARK: - LocationHelperDelegate
-    
+
     func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.last {
             patient.lat = String(format: "%.6f", location.coordinate.latitude)
@@ -377,7 +379,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         tableView.layoutIfNeeded()
         tableView.reloadData()
     }
-    
+
     override func priorityView(_ view: PriorityView, didSelect priority: Int) {
         patient.priority.value = priority
         if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
@@ -398,7 +400,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     }
 
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
-        /// start upload
+        // start upload
         dispatchGroup.enter()
         uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
             DispatchQueue.main.async {
@@ -416,14 +418,14 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             }
         }
         uploadTask?.resume()
-        /// hide the record button, user must clear current recording to continue
+        // hide the record button, user must clear current recording to continue
         updateButton.isHidden = true
     }
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
         switch error {
         case AudioHelperError.speechRecognitionNotAuthorized:
-            /// even with speech recognition off, we can still allow a recording...
+            // even with speech recognition off, we can still allow a recording...
             vc.startRecording()
         default:
             dismiss(animated: true) { [weak self] in
@@ -431,7 +433,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             }
         }
     }
-    
+
     // MARK: - ObservationTableViewCellDelegate
 
     func observationTableViewCell(_ cell: ObservationTableViewCell, didChange text: String) {
@@ -443,7 +445,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell) {
         _ = cell.resignFirstResponder()
     }
-    
+
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
@@ -453,54 +455,4 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     func tableView(_ tableView: UITableView, shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool {
         return false
     }
-
-//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        switch indexPath.section {
-//        case Section.location.rawValue:
-//            if patient.isTransported {
-//                if indexPath.row == 0 {
-//                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Agencies") as? AgenciesTableViewController,
-//                        let observation = patient as? Observation {
-//                        vc.observation = observation
-//                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CANCEL".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-//                        vc.handler = { [weak self] (vc) in
-//                            guard let self = self else { return }
-//                            self.dismiss(animated: true) { [weak self] in
-//                                guard let self = self else { return }
-//                                self.tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
-//                            }
-//                        }
-//                        let navVC = UINavigationController(rootViewController: vc)
-//                        presentAnimated(navVC)
-//                    }
-//                } else if indexPath.row == 1 {
-//                    if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities") as? FacilitiesTableViewController,
-//                        let observation = patient as? Observation {
-//                        vc.observation = observation
-//                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "CANCEL".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-//                        vc.handler = { [weak self] (vc) in
-//                            guard let self = self else { return }
-//                            self.dismiss(animated: true) { [weak self] in
-//                                guard let self = self else { return }
-//                                self.tableView.reloadSections(IndexSet([Section.location.rawValue]), with: .none)
-//                            }
-//                        }
-//                        let navVC = UINavigationController(rootViewController: vc)
-//                        presentAnimated(navVC)
-//                    }
-//                }
-//            } else {
-//                if indexPath.row == 1 {
-//                    if let lat = patient.lat, let lng = patient.lng, lat != "", lng != "" {
-//                        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
-//                            vc.patient = patient
-//                            navigationController?.pushViewController(vc, animated: true)
-//                        }
-//                    }
-//                }
-//            }
-//        default:
-//            super.tableView(tableView, didSelectRowAt: indexPath)
-//        }
-//    }
 }

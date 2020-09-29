@@ -18,7 +18,7 @@ private class TabBarButton: UIButton {
             setTitle(item?.title, for: .normal)
         }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -28,12 +28,12 @@ private class TabBarButton: UIButton {
         self.init(type: .custom)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         imageView?.tintColor = .lowPriorityGrey
 
@@ -41,7 +41,7 @@ private class TabBarButton: UIButton {
         titleLabel?.textAlignment = .center
         setTitleColor(.lowPriorityGrey, for: .normal)
     }
-    
+
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         let imageRect = super.imageRect(forContentRect: contentRect)
         var y: CGFloat = 10
@@ -73,13 +73,13 @@ class TabBarItem: UITabBarItem {
 }
 
 @IBDesignable
-class PlaceholderTabBar : UITabBar {
+class PlaceholderTabBar: UITabBar {
     @IBInspectable var height: CGFloat = 76
-    
+
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
         var sizeThatFits = super.sizeThatFits(size)
         sizeThatFits.height = height
-        /// adjust for safe area
+        // adjust for safe area
         if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
             let insets = window.safeAreaInsets
             sizeThatFits.height += insets.bottom
@@ -108,22 +108,22 @@ class TabBar: UIView {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .white
         addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .gray, opacity: 0.2)
-        
+
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fillEqually
         addSubview(stackView)
-        
+
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: topAnchor, constant: 4),
             stackView.leftAnchor.constraint(equalTo: leftAnchor),
@@ -131,13 +131,13 @@ class TabBar: UIView {
             bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
         ])
     }
-    
+
     private func updateSubviews() {
-        /// remove any existing views
+        // remove any existing views
         for view in stackView.arrangedSubviews {
             view.removeFromSuperview()
         }
-        /// add subviews for items
+        // add subviews for items
         guard let items = items else { return }
         for item in items {
             let itemView = TabBarButton()

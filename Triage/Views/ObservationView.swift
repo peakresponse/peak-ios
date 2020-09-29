@@ -12,17 +12,19 @@ import UIKit
     @objc optional func observationView(_ observationView: ObservationView, didThrowError error: Error)
 }
 
-class ObservationView: UIView, AudioHelperDelgate {        
+class ObservationView: UIView, AudioHelperDelgate {
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         let font = UIFont.copySBold
         let text = text as NSString
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 4
-        let rect = text.boundingRect(with: CGSize(width: width - 20 /* left and right margins */, height: .greatestFiniteMagnitude), options: .usesLineFragmentOrigin, attributes: [
-            .font: font,
-            .paragraphStyle: paragraphStyle
-        ], context: nil)
-        return max(font.lineHeight, round(rect.height)) + 18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
+        let rect = text.boundingRect(with: CGSize(width: width - 20 /* left and right margins */, height: .greatestFiniteMagnitude),
+                                     options: .usesLineFragmentOrigin, attributes: [
+                                        .font: font,
+                                        .paragraphStyle: paragraphStyle
+                                    ], context: nil)
+        return max(font.lineHeight, round(rect.height)) +
+            18 /* top and bottom margins */ + 40 /* First row label height and bottom margin */
     }
 
     let playButton = UIButton(type: .custom)
@@ -36,10 +38,10 @@ class ObservationView: UIView, AudioHelperDelgate {
     var timestampLabelTitleLabelConstraint: NSLayoutConstraint!
     var timestampLabelDurationLabelConstraint: NSLayoutConstraint!
     let textView = UITextView()
-    
+
     weak var delegate: ObservationViewDelegate?
     var audioHelper: AudioHelper?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -93,7 +95,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             durationLabel.leftAnchor.constraint(equalTo: titleLabel.leftAnchor),
             durationLabel.bottomAnchor.constraint(equalTo: playButton.bottomAnchor)
         ])
-        
+
         durationSeparatorLabel.translatesAutoresizingMaskIntoConstraints = false
         durationSeparatorLabel.font = .copySRegular
         durationSeparatorLabel.textColor = .peakBlue
@@ -151,7 +153,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             timestampLabelDurationLabelConstraint.isActive = false
         }
     }
-    
+
     func configure(from patient: Patient) {
         titleLabel.text = "Observation".localized
         timestampLabel.text = patient.updatedAt?.asLocalizedTime()
@@ -203,7 +205,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             }
         }
     }
-    
+
     @objc func playPressed(_ sender: Any) {
         guard let audioHelper = audioHelper else { return }
         if audioHelper.isPlaying {
@@ -220,7 +222,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             }
         }
     }
-        
+
     // MARK: - AudioHelperDelegate
 
     func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool) {

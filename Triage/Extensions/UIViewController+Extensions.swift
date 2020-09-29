@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {    
+extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
     func presentAlert(error: Error) {
         presentAlert(title: "Error".localized, message: error.localizedDescription)
     }
@@ -28,7 +28,7 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
             }
         }
     }
-    
+
     func presentLogin() {
         if let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController() as? LoginViewController {
             vc.loginDelegate = self
@@ -46,27 +46,27 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     }
 
     @objc func didPresentAnimated() {
-        
+
     }
-    
-    @IBAction @objc func dismissAnimated() {
+
+    @IBAction func dismissAnimated() {
         dismiss(animated: true, completion: { [weak self] in
             self?.didDismissPresentation()
         })
     }
-    
+
     @objc func didDismissPresentation() {
-        
+
     }
 
     // MARK: - LoginViewControllerDelegate
-    
+
     func loginViewControllerDidLogin(_ vc: LoginViewController) {
         dismissAnimated()
     }
 
     // MARK: - UIAdaptivePresentationControllerDelegate
-    
+
     public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
         didDismissPresentation()
     }

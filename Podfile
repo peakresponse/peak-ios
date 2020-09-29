@@ -17,17 +17,19 @@ target 'Triage' do
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'RealmSwift'
+  pod 'SwiftLint'
 
   target 'TriageTests' do
     inherit! :search_paths
     # Pods for testing
   end
+end
 
-  target 'TriageUITests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-
+# move UITests target out of main target to fix build issues as per
+# https://github.com/CocoaPods/CocoaPods/issues/5250#issuecomment-642289880
+target 'TriageUITests' do
+  inherit! :search_paths
+  # Pods for testing
 end
 
 # remove deployment target setting from pods

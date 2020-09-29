@@ -30,7 +30,7 @@ class ConfirmTransportViewController: UIViewController {
         facilityView.layer.borderColor = UIColor.greyPeakBlue.cgColor
         facilityView.layer.borderWidth = 2
         facilityView.configure(from: facility)
-        
+
         agencyView.layer.borderColor = UIColor.greyPeakBlue.cgColor
         agencyView.layer.borderWidth = 2
         agencyView.configure(from: agency)

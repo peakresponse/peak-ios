@@ -50,7 +50,7 @@ class Facility: Base {
         static let lat = "lat"
         static let lng = "lng"
     }
-    
+
     @objc dynamic var type: String?
     @objc dynamic var name: String?
     @objc dynamic var stateCode: String?
@@ -70,12 +70,12 @@ class Facility: Base {
         return nil
     }
     @objc dynamic var distance: Double = Double.greatestFiniteMagnitude
-    
+
     override var description: String {
         return name ?? ""
     }
 
-    override func update(from data: [String : Any]) {
+    override func update(from data: [String: Any]) {
         super.update(from: data)
         type = data[Keys.type] as? String
         name = data[Keys.name] as? String
@@ -90,8 +90,8 @@ class Facility: Base {
         lat = data[Keys.lat] as? String
         lng = data[Keys.lng] as? String
     }
-    
-    override func asJSON() -> [String : Any] {
+
+    override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = type {
             data[Keys.type] = value

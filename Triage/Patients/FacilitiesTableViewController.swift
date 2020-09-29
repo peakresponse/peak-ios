@@ -14,7 +14,8 @@ import UIKit
     @objc optional func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController)
 }
 
-class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, LocationHelperDelegate, UISearchBarDelegate, DropdownButtonDelegate {
+class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate,
+                                     DropdownButtonDelegate, LocationHelperDelegate {
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var headerViewTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var leavingView: UIView!
@@ -26,7 +27,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
     weak var selectorView: SelectorView?
 
     weak var delegate: FacilitiesTableViewControllerDelegate?
-    
+
     var locationHelper: LocationHelper!
 
     var observation: Observation!
@@ -38,7 +39,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
     var type: FacilityType = .hospital
 
     var debounceTimer: Timer?
-    
+
     // MARK: -
 
     deinit {
@@ -51,13 +52,15 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
 
         locationHelper = LocationHelper()
         locationHelper.delegate = self
-        
+
         headerView.addShadow(withOffset: CGSize(width: 4, height: 4), radius: 20, color: .black, opacity: 0.2)
-        
+
         transportSwitch.layer.borderColor = UIColor.greyPeakBlue.cgColor
         transportSwitch.layer.borderWidth = 2
-        transportSwitch.setBackgroundImage(UIImage.resizableImage(withColor: .bgBackground, cornerRadius: 0), for: .normal, barMetrics: .default)
-        transportSwitch.setBackgroundImage(UIImage.resizableImage(withColor: .greyPeakBlue, cornerRadius: 0), for: .selected, barMetrics: .default)
+        transportSwitch.setBackgroundImage(
+            UIImage.resizableImage(withColor: .bgBackground, cornerRadius: 0), for: .normal, barMetrics: .default)
+        transportSwitch.setBackgroundImage(
+            UIImage.resizableImage(withColor: .greyPeakBlue, cornerRadius: 0), for: .selected, barMetrics: .default)
         transportSwitch.setTitle("FacilitiesTableViewController.facilityTitle".localized, forSegmentAt: 0)
         transportSwitch.setTitle("FacilitiesTableViewController.leavingTitle".localized, forSegmentAt: 1)
         transportSwitch.setTitleTextAttributes([
@@ -78,7 +81,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
         tableView.register(FacilityTableViewCell.self, forCellReuseIdentifier: "Facility")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 88
-        
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
@@ -113,10 +116,10 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
             }
         }
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Facility>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             self.tableView.beginUpdates()
@@ -148,13 +151,15 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
+        // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
     }
@@ -167,7 +172,8 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             view.layoutIfNeeded()
-            UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+            UIView.animate(withDuration: duration) {
                 self.headerViewTopConstraint.constant = 0
                 self.tableView.contentInset.bottom = keyboardFrame.height
                 self.tableView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
@@ -209,13 +215,13 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
         delegate?.facilitiesTableViewControllerDidConfirmLeavingIndependently?(self)
         dismissAnimated()
     }
-    
+
     @IBAction func unwindToFacilities(_ segue: UIStoryboardSegue) {
         if let indexPath = tableView.indexPathForSelectedRow {
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
-    
+
     // MARK: - LocationHelper
 
     func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
@@ -224,7 +230,6 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
             let lng = String(format: "%.6f", location.coordinate.longitude)
             getFacilities(lat: lat, lng: lng)
         } else {
-            /// TODO: present error
             tableView.refreshControl?.endRefreshing()
         }
     }
@@ -233,34 +238,34 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
         tableView.refreshControl?.endRefreshing()
         presentAlert(error: error)
     }
-    
+
     // MARK: - DropdownButtonDelegate
 
     func dropdownWillAppear(_ button: DropdownButton) -> UIView? {
         return view
     }
-    
+
     func dropdown(_ button: DropdownButton, willShow selectorView: SelectorView) {
         for type in types {
             selectorView.addButton(title: type.description)
         }
     }
-    
+
     func dropdown(_ button: DropdownButton, selectorView: SelectorView, didSelectButtonAtIndex index: Int) {
         type = types[index]
         dropdownButton.setTitle(type.description, for: .normal)
         refresh()
     }
-    
+
     // MARK: - UISearchBarDelegate
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [weak self] (timer) in
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [weak self] (_) in
             self?.refresh()
         })
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }

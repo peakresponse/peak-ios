@@ -20,10 +20,10 @@ class NavigationController: UINavigationController {
         }
         set { super.tabBarItem = newValue }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         iconView = UIImageView(image: UIImage(named: "Icon"))
         if let iconView = iconView {
             iconView.translatesAutoresizingMaskIntoConstraints = false

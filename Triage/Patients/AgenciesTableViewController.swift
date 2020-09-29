@@ -17,7 +17,7 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: SearchBar!
     var debounceTimer: Timer?
-    
+
     var facility: Facility!
 
     var notificationToken: NotificationToken?
@@ -27,7 +27,7 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
         notificationToken?.invalidate()
         debounceTimer?.invalidate()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -38,28 +38,30 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
         selectLabel.font = .copySBold
         selectLabel.textColor = .mainGrey
         selectLabel.text = "AgenciesTableViewController.selectLabel".localized
-        
+
         tableView.register(FacilityTableViewCell.self, forCellReuseIdentifier: "Facility")
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 88
-        
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
 
         refresh()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
+        // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
     }
@@ -72,7 +74,8 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             view.layoutIfNeeded()
-            UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+            UIView.animate(withDuration: duration) {
                 self.headerViewTopConstraint.constant = 0
                 self.tableView.contentInset.bottom = keyboardFrame.height
                 self.tableView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
@@ -120,10 +123,10 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
             }
         }
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Agency>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             self.tableView.beginUpdates()
@@ -144,7 +147,7 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? ConfirmTransportViewController,
             let indexPath = tableView.indexPathForSelectedRow,
@@ -153,16 +156,16 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
             vc.agency = agency
         }
     }
-    
+
     // MARK: - UISearchBarDelegate
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         debounceTimer?.invalidate()
-        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [weak self] (timer) in
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: false, block: { [weak self] (_) in
             self?.refresh()
         })
     }
-    
+
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }

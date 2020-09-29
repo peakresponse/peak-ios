@@ -21,7 +21,7 @@ class Observation: Patient {
     @objc dynamic var photoFile: String?
     @objc dynamic var audioFile: String?
 
-    override func update(from data: [String : Any]) {
+    override func update(from data: [String: Any]) {
         super.update(from: data)
         patientId = data["patientId"] as? String
         portraitFile = data["portraitFile"] as? String
@@ -29,7 +29,7 @@ class Observation: Patient {
         audioFile = data["audioFile"] as? String
     }
 
-    override func asJSON() -> [String : Any] {
+    override func asJSON() -> [String: Any] {
         var json = super.asJSON()
         if let value = portraitFile {
             json[Keys.portraitFile] = value
@@ -43,6 +43,7 @@ class Observation: Patient {
         return json
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func changes(from source: Observation) -> Observation {
         let observation = Observation()
         observation.sceneId = source.sceneId

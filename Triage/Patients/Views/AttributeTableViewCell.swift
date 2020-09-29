@@ -54,7 +54,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate {
             contentView.bottomAnchor.constraint(equalTo: field.bottomAnchor, constant: 5)
         ])
     }
-    
+
     override func configure(from patient: Patient) {
         field.labelText = "Patient.\(attribute ?? "")".localized
         if let value = patient.value(forKey: attribute) {
@@ -78,11 +78,11 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate {
         field.alertLabel.addGestureRecognizer(recognizer)
         field.alertLabel.isUserInteractionEnabled = true
     }
-    
+
     @objc private func alertPressed() {
         delegate?.attributeTableViewCellDidPressAlert?(self)
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         return field.becomeFirstResponder()
     }
@@ -95,16 +95,16 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate {
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        
+
         field.textField.isUserInteractionEnabled = editing
         field.textField.rightViewMode = editing ? .always : .never
     }
-    
+
     // MARK: - FormFieldDelegate
 
     func formFieldShouldBeginEditing(_ field: BaseField) -> Bool {
         if attributeType == .object {
-            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { [weak self] (timer) in
+            timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: false, block: { [weak self] (_) in
                 guard let self = self else { return }
                 self.delegate?.attributeTableViewCellDidSelect?(self)
             })

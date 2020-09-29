@@ -17,16 +17,16 @@ import UIKit
 class ActiveSceneView: UIView {
     var scene: Scene!
     weak var delegate: ActiveSceneViewDelegate?
-    
+
     var isMaximized = false
     var bottomHeaderViewConstraint: NSLayoutConstraint!
     var bottomBodyViewConstraint: NSLayoutConstraint!
-    
+
     weak var headerView: UIView!
     weak var iconView: UIImageView!
     weak var nameLabel: UILabel!
     weak var descLabel: UILabel!
-    
+
     weak var bodyView: UIView!
     weak var mapView: GMSMapView!
     weak var dateLabel: UILabel!
@@ -37,7 +37,7 @@ class ActiveSceneView: UIView {
     weak var respondersCountLabel: UILabel!
     weak var respondersLabel: UILabel!
     weak var joinButton: FormButton!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -47,7 +47,8 @@ class ActiveSceneView: UIView {
         super.init(coder: coder)
         commonInit()
     }
-    
+
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         let headerView = UIView()
         headerView.backgroundColor = .orangeAccent
@@ -62,7 +63,7 @@ class ActiveSceneView: UIView {
 
         let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(headerPressed))
         headerView.addGestureRecognizer(tapGestureRecognizer)
-        
+
         let iconView = UIImageView(image: UIImage(named: "Maximize"), highlightedImage: UIImage(named: "Minimize"))
         iconView.tintColor = .white
         iconView.translatesAutoresizingMaskIntoConstraints = false
@@ -73,7 +74,7 @@ class ActiveSceneView: UIView {
             iconView.topAnchor.constraint(equalTo: headerView.topAnchor, constant: 10)
         ])
         self.iconView = iconView
-        
+
         let nameLabel = UILabel()
         nameLabel.font = .copyMBold
         nameLabel.numberOfLines = 1
@@ -137,7 +138,7 @@ class ActiveSceneView: UIView {
             joinButton.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20)
         ])
         self.joinButton = joinButton
-        
+
         let dateLabel = UILabel()
         dateLabel.font = .copySBold
         dateLabel.textColor = .greyPeakBlue
@@ -184,7 +185,7 @@ class ActiveSceneView: UIView {
             transportedCountLabel.topAnchor.constraint(equalTo: patientsCountLabel.bottomAnchor, constant: 10)
         ])
         self.transportedCountLabel = transportedCountLabel
-        
+
         let transportedLabel = UILabel()
         transportedLabel.text = "ActiveSceneView.transportedLabel".localized
         transportedLabel.font = .copySRegular
@@ -197,7 +198,7 @@ class ActiveSceneView: UIView {
             transportedLabel.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20)
         ])
         self.transportedLabel = transportedLabel
-        
+
         let respondersCountLabel = UILabel()
         respondersCountLabel.font = .copySBold
         respondersCountLabel.textColor = .mainGrey
@@ -208,7 +209,7 @@ class ActiveSceneView: UIView {
             respondersCountLabel.topAnchor.constraint(equalTo: transportedCountLabel.bottomAnchor, constant: 10)
         ])
         self.respondersCountLabel = respondersCountLabel
-        
+
         let respondersLabel = UILabel()
         respondersLabel.text = "ActiveSceneView.respondersLabel".localized
         respondersLabel.font = .copySRegular

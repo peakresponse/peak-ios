@@ -14,7 +14,7 @@ class SceneHeaderView: UIView {
     weak var descLabel: UILabel!
     weak var approxPatientsCountLabel: UILabel!
     weak var urgencyLabel: UILabel!
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -73,7 +73,7 @@ class SceneHeaderView: UIView {
             approxPatientsCountLabel.leftAnchor.constraint(equalTo: approxPatientsLabel.rightAnchor)
         ])
         self.approxPatientsCountLabel = approxPatientsCountLabel
-        
+
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .copySBold

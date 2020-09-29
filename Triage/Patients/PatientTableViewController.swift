@@ -21,7 +21,10 @@ let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .st
     @objc optional func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int)
 }
 
-class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate, FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate, AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate, ObservationTableViewCellDelegate, RecordButtonDelegate {
+class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,
+                                  FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate,
+                                  AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate,
+                                  ObservationTableViewCellDelegate, RecordButtonDelegate {
     enum Section: Int, CaseIterable {
         case info = 0
         case vitals
@@ -34,27 +37,31 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     private var inputToolbar: UIToolbar!
 
     weak var delegate: PatientTableViewControllerDelegate?
-    
+
     var patient: Patient!
     var notificationToken: NotificationToken?
-    
+
     deinit {
         notificationToken?.invalidate()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let prevItem = UIBarButtonItem(image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
+        let prevItem = UIBarButtonItem(
+            image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
         prevItem.width = 44
-        let nextItem = UIBarButtonItem(image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
+        let nextItem = UIBarButtonItem(
+            image: UIImage(named: "ChevronDown"), style: .plain, target: self, action: #selector(inputNextPressed))
         nextItem.width = 44
         inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([
             prevItem,
             nextItem,
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self, action: #selector(inputDonePressed))
+            UIBarButtonItem(
+                title: NSLocalizedString("InputAccessoryView.done", comment: ""), style: .plain, target: self,
+                action: #selector(inputDonePressed))
         ], animated: false)
 
         tableView.register(AttributeTableViewCell.self, forCellReuseIdentifier: "Attribute")
@@ -83,26 +90,29 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
+        // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        defaultNotificationCenter.addObserver(
+            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         NotificationCenter.default.removeObserver(self)
     }
-    
+
     @objc func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
+            let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
+            UIView.animate(withDuration: duration) {
                 var insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.height, right: 0)
                 if let window = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) {
                     insets.bottom -= window.safeAreaInsets.bottom
@@ -123,7 +133,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     override var inputAccessoryView: UIView? {
         return inputToolbar
     }
-    
+
     @objc func inputPrevPressed() {
         for cell in tableView.visibleCells {
             if cell.resignFirstResponder() {
@@ -181,7 +191,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     @IBAction func updatePressed() {
         performSegue(withIdentifier: "EditPatient", sender: self)
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? ObservationTableViewController {
             vc.delegate = self
@@ -192,7 +202,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_, _):
+        case .change:
             if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
                 tableViewHeader.configure(from: patient)
             }
@@ -205,7 +215,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func save(observation: Observation) {
-        AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (patient, error) in
+        AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
@@ -220,14 +230,15 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell) {
         if cell.attribute == Patient.Keys.location {
             if let lat = patient.lat, let lng = patient.lng, !lat.isEmpty, !lng.isEmpty {
-                if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map") as? PatientMapViewController {
+                let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map")
+                if let vc = vc as? PatientMapViewController {
                     vc.patient = patient
                     presentAnimated(vc)
                 }
             }
         }
     }
-    
+
     // MARK: - ConfirmTransportViewControllerDelegate
 
     func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
@@ -240,7 +251,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     // MARK: - FacilitiesTableViewControllerDelegate
-    
+
     func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController) {
         let observation = Observation()
         observation.pin = patient.pin
@@ -251,7 +262,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     // MARK: - UINavigationControllerDelegate
-    
+
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         if let vc = viewController as? ConfirmTransportViewController {
             vc.delegate = self
@@ -267,7 +278,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             self?.presentAlert(error: error)
         }
     }
-    
+
     // MARK: - PatientTableHeaderViewDelegate
 
     func patientTableHeaderView(_ view: PatientTableHeaderView, didPressStatusButton button: FormButton) {
@@ -276,7 +287,8 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func patientTableHeaderView(_ view: PatientTableHeaderView, didPressTransportButton button: FormButton) {
-        if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities") as? FacilitiesTableViewController {
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities")
+        if let vc = vc as? FacilitiesTableViewController {
             vc.observation = patient.asObservation()
             let navVC = UINavigationController(rootViewController: vc)
             navVC.delegate = self
@@ -284,10 +296,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             presentAnimated(navVC)
         }
     }
-    
 
     // MARK: - PatientTableViewControllerDelegate
-    
+
     func patientTableViewControllerDidCancel(_ vc: PatientTableViewController) {
         if vc as? ObservationTableViewController != nil {
             navigationController?.popViewController(animated: false)
@@ -297,11 +308,11 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int) {
         delegate?.patientTableViewController?(self, didUpdatePriority: priority)
     }
-    
+
     func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
         navigationController?.popViewController(animated: false)
     }
-    
+
     // MARK: - PriorityViewDelegate
 
     func priorityViewDidDismiss(_ view: PriorityView) {
@@ -309,7 +320,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         tableView.layoutIfNeeded()
         tableView.reloadData()
     }
-    
+
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
         let observation = Observation()
         observation.sceneId = patient.sceneId
@@ -320,11 +331,11 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     // MARK: - RecordButtonDelegate
-    
+
     func recordButton(_ button: RecordButton, willPresent alert: UIAlertController) -> UIViewController {
         return self
     }
-    
+
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -342,7 +353,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44
     }
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header")
     }
@@ -356,9 +367,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         view?.backgroundView = UIView()
         return view
     }
-    
+
     // MARK: - UITableViewDataSource
-    
+
     func numberOfSections(in tableView: UITableView) -> Int {
         return Section.allCases.count
     }

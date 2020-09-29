@@ -35,7 +35,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
         super.viewDidAppear(animated)
         _ = emailField.becomeFirstResponder()
     }
-    
+
     @IBAction func loginPressed(_ sender: FormButton) {
         let email = emailField.text
         let password = passwordField.text
@@ -56,7 +56,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                         }
                     } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
                         if agencies.count > 1 {
-                            /// TODO navigate to a selection screen
+                            // TODO navigate to a selection screen
                             self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                         }
                         if let subdomain = agencies[0]["subdomain"] as? String {
@@ -98,7 +98,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
     }
 
     // MARK: - FormFieldDelegate
-    
+
     func formFieldShouldReturn(_ field: BaseField) -> Bool {
         if field == emailField {
             _ = passwordField.becomeFirstResponder()

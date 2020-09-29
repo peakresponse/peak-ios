@@ -9,11 +9,12 @@
 import CoreLocation
 import RealmSwift
 
+// swiftlint:disable force_try
 class AppRealm {
     private static var main: Realm!
     private static var agencyTask: URLSessionWebSocketTask?
     private static var sceneTask: URLSessionWebSocketTask?
-    
+
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
             return AppRealm.main
@@ -28,7 +29,7 @@ class AppRealm {
         }
         return realm
     }
-    
+
     public static func deleteAll() {
         let realm = AppRealm.open()
         try! realm.write {
@@ -37,18 +38,18 @@ class AppRealm {
     }
 
     // MARK: - Agencies
-    
+
     public static func connect() {
-        /// cancel any existing task
+        // cancel any existing task
         agencyTask?.cancel(with: .normalClosure, reason: nil)
-        /// connect to scene socket
-        agencyTask = ApiClient.shared.connect() { (task, data, error) in
+        // connect to scene socket
+        agencyTask = ApiClient.shared.connect { (task, data, error) in
             guard task == agencyTask else { return }
             if error != nil {
-                /// close current connection
+                // close current connection
                 agencyTask?.cancel(with: .internalServerError, reason: nil)
                 agencyTask = nil
-                /// retry after 5 secs
+                // retry after 5 secs
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     connect()
                 }
@@ -64,7 +65,7 @@ class AppRealm {
         }
         agencyTask?.resume()
     }
-    
+
     public static func disconnect() {
         agencyTask?.cancel(with: .normalClosure, reason: nil)
         agencyTask = nil
@@ -88,7 +89,8 @@ class AppRealm {
 
     // MARK: - Facilities
 
-    public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil, completionHandler: @escaping (Error?) -> Void) {
+    public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,
+                                     completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (records, error) in
             if let error = error {
                 completionHandler(error)
@@ -146,8 +148,8 @@ class AppRealm {
         }
         task.resume()
     }
-    
-    public static func createOrUpdatePatient(observation: Observation, completionHandler: @escaping (Patient?, Error?) ->  Void) {
+
+    public static func createOrUpdatePatient(observation: Observation, completionHandler: @escaping (Patient?, Error?) -> Void) {
         let task = ApiClient.shared.createOrUpdatePatient(data: observation.asJSON()) { (record, error) in
             var patient: Patient?
             if let record = record {
@@ -243,7 +245,7 @@ class AppRealm {
         }
         task.resume()
     }
-    
+
     public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, error) in
             if let error = error {
@@ -256,16 +258,16 @@ class AppRealm {
     }
 
     public static func connect(sceneId: String) {
-        /// cancel any existing task
+        // cancel any existing task
         sceneTask?.cancel(with: .normalClosure, reason: nil)
-        /// connect to scene socket
+        // connect to scene socket
         sceneTask = ApiClient.shared.connect(sceneId: sceneId) { (task, data, error) in
             guard task == sceneTask else { return }
             if error != nil {
-                /// close current connection
+                // close current connection
                 sceneTask?.cancel(with: .internalServerError, reason: nil)
                 sceneTask = nil
-                /// retry after 5 secs
+                // retry after 5 secs
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     connect(sceneId: sceneId)
                 }
@@ -307,7 +309,7 @@ class AppRealm {
     }
 
     // MARK: - Users
-    
+
     public static func me(completionHandler: @escaping (User?, Agency?, Scene?, Error?) -> Void) {
         let task = ApiClient.shared.me { (data, error) in
             if let error = error {
@@ -350,6 +352,6 @@ class AppRealm {
                 }
             }
         }
-        task.resume();
+        task.resume()
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BasePatientTableViewCell: UITableViewCell {    
+class BasePatientTableViewCell: UITableViewCell {
     func configure(from patient: Patient) {
     }
 }

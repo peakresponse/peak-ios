@@ -13,7 +13,7 @@ extension UIButton: Localizable {
         get { return nil }
         set { setTitle(newValue?.localized, for: .normal) }
     }
-    
+
     @IBInspectable var customFont: String? {
         get { return nil }
         set { titleLabel?.font = UIFont.value(forKey: newValue ?? "") as? UIFont }

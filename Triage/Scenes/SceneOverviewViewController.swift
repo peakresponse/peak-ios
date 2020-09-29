@@ -21,7 +21,7 @@ class SceneOverviewViewController: UIViewController {
 
     private var scene: Scene!
     var notificationToken: NotificationToken?
-    
+
     deinit {
         notificationToken?.invalidate()
     }
@@ -37,7 +37,7 @@ class SceneOverviewViewController: UIViewController {
                 tableHeaderView.widthAnchor.constraint(equalTo: tableView.widthAnchor)
             ])
         }
-        
+
         guard let sceneId = AppSettings.sceneId else { return }
         AppRealm.getScene(sceneId: sceneId) { [weak self] (scene, error) in
             if let error = error {
@@ -51,7 +51,7 @@ class SceneOverviewViewController: UIViewController {
                     self.notificationToken = self.scene.observe { [weak self] (change) in
                         self?.didObserveChange(change)
                     }
-                    self.refresh();
+                    self.refresh()
                 }
             }
         }
@@ -59,15 +59,15 @@ class SceneOverviewViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        /// hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
+        // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
     }
-    
+
     func didObserveChange(_ change: ObjectChange<Scene>) {
         switch change {
-        case .change(_, _):
-            refresh();
+        case .change:
+            refresh()
         case .error(let error):
             presentAlert(error: error)
         case .deleted:
@@ -78,7 +78,7 @@ class SceneOverviewViewController: UIViewController {
     private func leaveScene() {
         AppDelegate.leaveScene()
     }
-    
+
     private func refresh() {
         sceneHeaderView.configure(from: scene)
         scenePatientsView.configure(from: scene)
@@ -93,13 +93,13 @@ class SceneOverviewViewController: UIViewController {
             transferButton.alpha = 0
         }
     }
-    
+
     @IBAction func editPressed(_ sender: Any) {
     }
 
     @IBAction func notePressed(_ sender: Any) {
     }
-    
+
     @IBAction func photoPressed(_ sender: Any) {
     }
 

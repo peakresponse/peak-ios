@@ -41,7 +41,7 @@ class AppSettings {
         AppSettings.agencyId = agencyId
         AppSettings.sceneId = sceneId
     }
-    
+
     static func logout() {
         AppSettings.userId = nil
         AppSettings.agencyId = nil

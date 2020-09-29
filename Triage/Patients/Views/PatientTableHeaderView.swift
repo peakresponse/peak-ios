@@ -29,7 +29,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
         get { return portraitView.isEditing }
         set { portraitView.isEditing = newValue }
     }
-    
+
     @IBOutlet weak var delegate: PatientTableHeaderViewDelegate?
 
     override init(frame: CGRect) {
@@ -60,7 +60,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
             nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 30),
             nameLabel.leftAnchor.constraint(equalTo: leftAnchor, constant: 22)
         ])
-        
+
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .copySBold
@@ -91,7 +91,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
             label.topAnchor.constraint(equalTo: updatedLabel.bottomAnchor, constant: 4),
             label.leftAnchor.constraint(equalTo: nameLabel.leftAnchor)
         ])
-        
+
         priorityLabel.translatesAutoresizingMaskIntoConstraints = false
         priorityLabel.font = .copySRegular
         priorityLabel.textColor = .mainGrey
@@ -112,11 +112,11 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
             stackView.rightAnchor.constraint(equalTo: portraitView.rightAnchor),
             bottomConstraint
         ])
-        
+
         transportButton.buttonLabel = "Transport".localized
         transportButton.addTarget(self, action: #selector(transportPressed), for: .touchUpInside)
         stackView.addArrangedSubview(transportButton)
-        
+
         statusButton.buttonLabel = "Update Status".localized
         statusButton.addTarget(self, action: #selector(statusPressed), for: .touchUpInside)
         stackView.addArrangedSubview(statusButton)
@@ -126,7 +126,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
         priority = patient.priority.value
         backgroundColor = PRIORITY_COLORS_LIGHTENED[priority ?? 5]
         portraitView.configure(from: patient)
-        
+
         nameLabel.text = patient.fullName
         updatedLabel.text = patient.updatedAtRelativeString
         priorityLabel.text = "Patient.priority.\(priority ?? 5)".localized
@@ -135,14 +135,14 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
     @objc func transportPressed() {
         delegate?.patientTableHeaderView?(self, didPressTransportButton: transportButton)
     }
-    
+
     @objc func statusPressed() {
         let priorityView = PriorityView()
         priorityView.delegate = self
         priorityView.selectedPriority = priority
         priorityView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(priorityView)
-        /// change bottom constraint
+        // change bottom constraint
         bottomConstraint.isActive = false
         bottomConstraint = bottomAnchor.constraint(equalTo: priorityView.bottomAnchor)
         NSLayoutConstraint.activate([
@@ -150,15 +150,15 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
             priorityView.leftAnchor.constraint(equalTo: leftAnchor),
             priorityView.rightAnchor.constraint(equalTo: rightAnchor),
             bottomConstraint
-        ])        
+        ])
         self.priorityView = priorityView
         delegate?.patientTableHeaderView?(self, didPressStatusButton: statusButton)
     }
-    
+
     // MARK: - PriorityViewDelegate
 
     func priorityViewDidDismiss(_ view: PriorityView) {
-        /// remove from view
+        // remove from view
         bottomConstraint.isActive = false
         view.removeFromSuperview()
         priorityView = nil
@@ -166,7 +166,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
         bottomConstraint.isActive = true
         delegate?.priorityViewDidDismiss?(view)
     }
-    
+
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
         delegate?.priorityView?(view, didSelect: priority)
         priorityViewDidDismiss(view)

@@ -44,7 +44,7 @@ class FacilityTableViewCell: UITableViewCell {
         super.setHighlighted(highlighted, animated: animated)
         facilityView.setSelected(highlighted)
     }
-    
+
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
         facilityView.setSelected(selected)

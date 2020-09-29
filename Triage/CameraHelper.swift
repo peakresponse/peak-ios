@@ -20,7 +20,7 @@ class CameraHelper: NSObject, AVCapturePhotoCaptureDelegate {
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
 
     weak var delegate: CameraHelperDelegate?
-    
+
     var isReady: Bool {
         return videoPreviewLayer != nil
     }
@@ -28,17 +28,18 @@ class CameraHelper: NSObject, AVCapturePhotoCaptureDelegate {
     var isRunning: Bool {
         return captureSession?.isRunning ?? false
     }
-    
+
     override init() {
         super.init()
         setupCamera()
     }
-    
+
     private func setupCamera() {
         DispatchQueue.global().async { [weak self] in
             // setup the camera
             let captureSession = AVCaptureSession()
-            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInWideAngleCamera], mediaType: AVMediaType.video, position: .back)
+            let deviceDiscoverySession = AVCaptureDevice.DiscoverySession(deviceTypes: [.builtInDualCamera, .builtInWideAngleCamera],
+                                                                          mediaType: AVMediaType.video, position: .back)
             guard let captureDevice = deviceDiscoverySession.devices.first else {
                 print("Failed to get the camera device")
                 return
@@ -75,15 +76,15 @@ class CameraHelper: NSObject, AVCapturePhotoCaptureDelegate {
     func startRunning() {
         captureSession?.startRunning()
     }
-    
+
     func capture() {
         let photoSettings = AVCapturePhotoSettings()
         photoSettings.flashMode = .auto
         photoOutput?.capturePhoto(with: photoSettings, delegate: self)
     }
-    
+
     // MARK: - AVCapturePhotoCaptureDelegate
-    
+
     func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
         captureSession?.stopRunning()
         if let error = error {

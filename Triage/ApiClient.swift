@@ -46,7 +46,8 @@ class ApiClient {
 
     // MARK: - HTTP request helpers
 
-    func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
+    func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil,
+                    method: String = "GET", body: Any? = nil) -> URLRequest {
         var components = URLComponents()
         components.path = path
         if let params = params {
@@ -62,6 +63,7 @@ class ApiClient {
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         if let body = body {
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            // swiftlint:disable:next force_try
             request.httpBody = try! JSONSerialization.data(withJSONObject: body, options: [])
         }
         if let subdomain = AppSettings.subdomain {
@@ -69,8 +71,9 @@ class ApiClient {
         }
         return request
     }
-    
-    private func completionHandler<T>(request: URLRequest, data: Data?, response: URLResponse?, error: Error?, completionHandler: @escaping (T?, Error?) -> Void) {
+
+    private func completionHandler<T>(request: URLRequest, data: Data?, response: URLResponse?, error: Error?,
+                                      completionHandler: @escaping (T?, Error?) -> Void) {
         if let error = error {
             completionHandler(nil, error)
         } else {
@@ -108,7 +111,8 @@ class ApiClient {
         }
     }
 
-    func WS<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) -> URLSessionWebSocketTask {
+    func WS<T>(path: String, params: [String: Any]? = nil,
+               completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) -> URLSessionWebSocketTask {
         var components = URLComponents()
         components.path = path
         if let params = params {
@@ -131,7 +135,8 @@ class ApiClient {
         return task
     }
 
-    private func pingWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
+    private func pingWebSocket<T>(task: URLSessionWebSocketTask,
+                                  completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
         guard task.closeCode == .invalid else { return }
         task.sendPing { [weak self] (error) in
             objc_sync_enter(task)
@@ -145,8 +150,9 @@ class ApiClient {
             objc_sync_exit(task)
         }
     }
-    
-    private func receiveFromWebSocket<T>(task: URLSessionWebSocketTask, completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
+
+    private func receiveFromWebSocket<T>(task: URLSessionWebSocketTask,
+                                         completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
         guard task.closeCode == .invalid else { return }
         task.receive { [weak self] (result) in
             objc_sync_enter(task)
@@ -180,28 +186,32 @@ class ApiClient {
         }
     }
 
-    func GET<T>(path: String, params: [String: Any]? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+    func GET<T>(path: String, params: [String: Any]? = nil,
+                completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, params: params)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
         })
     }
-    
-    func POST<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+
+    func POST<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
+                 completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "POST", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
         })
     }
-    
-    func PUT<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+
+    func PUT<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
+                completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "PUT", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
         })
     }
-    
-    func PATCH<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil, completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+
+    func PATCH<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
+                  completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "PATCH", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -209,7 +219,7 @@ class ApiClient {
     }
 
     // MARK: - Sessions
-    
+
     func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/login", body: [
             "email": email,
@@ -218,15 +228,15 @@ class ApiClient {
             completionHandler(data, error)
         }
     }
-    
+
     func logout(completionHandler: @escaping () -> Void) {
         session.reset(completionHandler: completionHandler)
     }
- 
+
     func me(completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/users/me", completionHandler: completionHandler)
     }
-    
+
     // MARK: - Agencies
 
     func connect(completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
@@ -243,7 +253,8 @@ class ApiClient {
 
     // MARK: - Facilities
 
-    func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,
+                       completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         var params = ["lat": lat, "lng": lng]
         if let search = search, !search.isEmpty {
             params["search"] = search
@@ -253,7 +264,7 @@ class ApiClient {
         }
         return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
-    
+
     // MARK: - Patients
 
     func getPatients(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
@@ -264,14 +275,15 @@ class ApiClient {
     func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
     }
-    
+
     func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/patients", body: data, completionHandler: completionHandler)
     }
 
     // MARK: - Scenes
 
-    func connect(sceneId: String, completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+    func connect(sceneId: String,
+                 completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
 
@@ -282,7 +294,7 @@ class ApiClient {
     func getScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
     }
-    
+
     func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes", completionHandler: completionHandler)
     }
@@ -294,7 +306,7 @@ class ApiClient {
     func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
     }
-    
+
     func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
     }
@@ -334,7 +346,7 @@ class ApiClient {
                 request.setValue(value as? String, forHTTPHeaderField: key)
             }
         }
-        return session.uploadTask(with: request, fromFile: fileURL) { (data, response, error) in
+        return session.uploadTask(with: request, fromFile: fileURL) { (_, _, error) in
             completionHandler(error)
         }
     }
@@ -360,7 +372,7 @@ class ApiClient {
     }
 
     // MARK: - Utils
-    
+
     func geocode(lat: String, lng: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/utils/geocode", params: ["lat": lat, "lng": lng], completionHandler: completionHandler)
     }

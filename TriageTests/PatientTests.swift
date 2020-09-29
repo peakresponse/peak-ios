@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Triage
+@testable import Peak_Response
 
 class PatientTests: XCTestCase {
 

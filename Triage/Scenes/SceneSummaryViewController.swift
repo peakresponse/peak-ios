@@ -11,7 +11,7 @@ import UIKit
 
 private class SectionHeaderView: UITableViewHeaderFooterView {
     weak var label: UILabel!
-    
+
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         commonInit()
@@ -26,7 +26,7 @@ private class SectionHeaderView: UITableViewHeaderFooterView {
         let backgroundView = UIView()
         backgroundView.backgroundColor = .bgBackground
         self.backgroundView = backgroundView
-        
+
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .copyMBold
@@ -55,7 +55,7 @@ private class SectionHeaderView: UITableViewHeaderFooterView {
 
 class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!
-    
+
     var scene: Scene!
     var notificationToken: NotificationToken?
     var results: Results<Patient>?
@@ -71,11 +71,11 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 84
         tableView.register(PatientTableViewCell.self, forCellReuseIdentifier: "Patient")
-        
+
         tableView.sectionHeaderHeight = UITableView.automaticDimension
         tableView.estimatedSectionHeaderHeight = 40
         tableView.register(SectionHeaderView.self, forHeaderFooterViewReuseIdentifier: "Header")
-        
+
         let realm = AppRealm.open()
         results = realm.objects(Patient.self)
         results = results?.filter("sceneId=%@", scene.id)
@@ -91,7 +91,7 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Patient>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             tableView.beginUpdates()
@@ -122,11 +122,11 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results?.count ?? 0
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Patient", for: indexPath)
         if let cell = cell as? PatientTableViewCell, let patient = results?[indexPath.row] {
@@ -136,7 +136,7 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
     }
 
     // MARK: - UITableViewDelegate
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header")
         if let headerView = headerView as? SectionHeaderView {
@@ -154,7 +154,8 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
         if let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Patient") as? PatientViewController,
             let patient = results?[indexPath.row] {
             vc.patient = patient
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(
+                title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
             presentAnimated(vc)
         }
         tableView.deselectRow(at: indexPath, animated: true)

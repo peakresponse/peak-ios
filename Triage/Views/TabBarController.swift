@@ -13,9 +13,9 @@ class TabBarController: UITabBarController, TabBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        /// hide system tab bar
+        // hide system tab bar
         tabBar.alpha = 0
-        /// set up custom tab bar, overlaying existing tab bar
+        // set up custom tab bar, overlaying existing tab bar
         let customTabBar = TabBar()
         customTabBar.translatesAutoresizingMaskIntoConstraints = false
         customTabBar.tabBar = tabBar
@@ -27,7 +27,7 @@ class TabBarController: UITabBarController, TabBarDelegate {
             customTabBar.topAnchor.constraint(equalTo: tabBar.topAnchor),
             customTabBar.leftAnchor.constraint(equalTo: tabBar.leftAnchor),
             customTabBar.rightAnchor.constraint(equalTo: tabBar.rightAnchor),
-            customTabBar.bottomAnchor.constraint(equalTo: tabBar.bottomAnchor),
+            customTabBar.bottomAnchor.constraint(equalTo: tabBar.bottomAnchor)
         ])
         self.customTabBar = customTabBar
     }

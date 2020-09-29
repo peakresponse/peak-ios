@@ -17,7 +17,7 @@ import UIKit
 class ActiveScenesView: UIView, ActiveSceneViewDelegate {
     weak var stackView: UIStackView!
     weak var delegate: ActiveScenesViewDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -27,7 +27,7 @@ class ActiveScenesView: UIView, ActiveSceneViewDelegate {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .white
 
@@ -45,7 +45,7 @@ class ActiveScenesView: UIView, ActiveSceneViewDelegate {
         ])
         self.stackView = stackView
     }
-    
+
     func configure(from results: Results<Scene>) {
         var views: [ActiveSceneView] = []
         for scene in results {

@@ -10,7 +10,7 @@ import UIKit
 
 class LocationTableViewCell: AttributeTableViewCell {
     var activityIndicatorView: UIActivityIndicatorView!
-    
+
     override func commonInit() {
         super.commonInit()
         field.alertLabel.textColor = .greyPeakBlue

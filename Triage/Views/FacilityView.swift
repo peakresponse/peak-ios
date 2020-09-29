@@ -31,7 +31,7 @@ class FacilityView: UIView {
         get { return addressLabel.text }
         set { addressLabel.text = newValue }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -43,7 +43,7 @@ class FacilityView: UIView {
     }
 
     private func commonInit() {
-        layer.cornerRadius = 5;
+        layer.cornerRadius = 5
         addShadow(withOffset: CGSize(width: 1, height: 2), radius: 2, color: .black, opacity: 0.1)
 
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -91,7 +91,7 @@ class FacilityView: UIView {
             bodyView.rightAnchor.constraint(equalTo: rightAnchor),
             bottomAnchor.constraint(equalTo: bodyView.bottomAnchor)
         ])
-        
+
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         addressLabel.font = .copySBold
         addressLabel.textColor = .lowPriorityGrey
@@ -103,7 +103,7 @@ class FacilityView: UIView {
             addressLabel.bottomAnchor.constraint(equalTo: bodyView.bottomAnchor)
         ])
     }
-    
+
     func configure(from facility: Facility) {
         name = facility.name
         address = facility.address

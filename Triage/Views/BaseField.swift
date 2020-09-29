@@ -32,17 +32,17 @@ class BaseField: UIView, Localizable {
     var statusViewWidthConstraint: NSLayoutConstraint!
     let label = UILabel()
     var labelTopConstraint: NSLayoutConstraint!
-    
+
     private var _detailLabel: UILabel!
     var detailLabel: UILabel {
-        if (_detailLabel == nil) {
+        if _detailLabel == nil {
             initDetailLabel()
         }
         return _detailLabel
     }
     private var _alertLabel: UILabel!
     var alertLabel: UILabel {
-        if (_alertLabel == nil) {
+        if _alertLabel == nil {
             initAlertLabel()
         }
         return _alertLabel
@@ -51,20 +51,20 @@ class BaseField: UIView, Localizable {
     var status: FormFieldStatus = .none {
         didSet { updateStyle() }
     }
-    
+
     var style: FormFieldStyle = .input {
         didSet { updateStyle() }
     }
 
     @objc var text: String?
-    
+
     @IBOutlet weak var delegate: FormFieldDelegate?
 
     @IBInspectable var Style: String {
         get { return style.rawValue }
         set { style = FormFieldStyle(rawValue: newValue) ?? .input }
     }
-    
+
     @IBInspectable var l10nKey: String? {
         get { return nil }
         set { label.l10nKey = newValue }
@@ -76,23 +76,23 @@ class BaseField: UIView, Localizable {
     }
 
     @IBInspectable var attributeKey: String?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
         updateStyle()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
         updateStyle()
     }
-    
+
     func commonInit() {
         backgroundColor = .clear
         layer.zPosition = -1
-        
+
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = .white
         contentView.addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
@@ -109,7 +109,7 @@ class BaseField: UIView, Localizable {
         statusView.backgroundColor = .middlePeakBlue
         contentView.addSubview(statusView)
 
-        label.translatesAutoresizingMaskIntoConstraints = false;
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lowPriorityGrey
         contentView.addSubview(label)
 

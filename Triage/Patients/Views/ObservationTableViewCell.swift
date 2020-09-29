@@ -18,7 +18,7 @@ class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegat
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         return ObservationView.heightForText(text, width: width - 44 /* left and right margins */) + 10 /* top and bottom margins*/
     }
-    
+
     let observationView = ObservationView()
 
     weak var delegate: ObservationTableViewCellDelegate?
@@ -32,7 +32,7 @@ class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegat
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundView = UIView()
         backgroundView?.backgroundColor = .bgBackground
@@ -46,18 +46,18 @@ class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegat
             observationView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
             observationView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 22),
             observationView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -22),
-            contentView.bottomAnchor.constraint(equalTo: observationView.bottomAnchor, constant: 5),
+            contentView.bottomAnchor.constraint(equalTo: observationView.bottomAnchor, constant: 5)
         ])
     }
-    
+
     override func configure(from patient: Patient) {
         observationView.configure(from: patient)
     }
-    
+
     override func becomeFirstResponder() -> Bool {
         return observationView.textView.becomeFirstResponder()
     }
-    
+
     override func resignFirstResponder() -> Bool {
         return observationView.textView.resignFirstResponder()
     }
@@ -67,9 +67,9 @@ class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegat
     func observationView(_ observationView: ObservationView, didThrowError error: Error) {
         delegate?.observationTableViewCell?(self, didThrowError: error)
     }
-    
+
     // MARK: - UITableViewCell
-    
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         observationView.textView.isUserInteractionEnabled = editing
@@ -81,7 +81,7 @@ class ObservationTableViewCell: BasePatientTableViewCell, ObservationViewDelegat
     func textViewDidChange(_ textView: UITextView) {
         delegate?.observationTableViewCell?(self, didChange: textView.text)
     }
-    
+
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if text == "\n" {
             delegate?.observationTableViewCellDidReturn?(self)

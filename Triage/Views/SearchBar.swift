@@ -23,7 +23,7 @@ class SearchBar: UISearchBar {
         get { return style.rawValue }
         set { style = SearchBarStyle(rawValue: newValue) ?? .navigation }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -35,21 +35,22 @@ class SearchBar: UISearchBar {
     }
 
     private func commonInit() {
-        /// hack to get rid of default bottom border: https://stackoverflow.com/questions/7620564/customize-uisearchbar-trying-to-get-rid-of-the-1px-black-line-underneath-the-se
+        // hack to get rid of default bottom border
+        // https://stackoverflow.com/questions/7620564/customize-uisearchbar-trying-to-get-rid-of-the-1px-black-line-underneath-the-se
         layer.borderWidth = 1
-        /// adjust padding/insets
+        // adjust padding/insets
         searchTextField.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             searchTextField.centerYAnchor.constraint(equalTo: centerYAnchor),
             searchTextField.leftAnchor.constraint(equalTo: leftAnchor, constant: 22),
             searchTextField.rightAnchor.constraint(equalTo: rightAnchor, constant: -22)
         ])
-        /// remove default search icon, add padding
+        // remove default search icon, add padding
         searchTextField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 6, height: 0))
-        /// change clear icon
+        // change clear icon
         setImage(UIImage(named: "Clear", in: Bundle(for: type(of: self)), with: nil), for: .clear, state: .normal)
         setPositionAdjustment(UIOffset(horizontal: -10, vertical: 0), for: .clear)
-        /// add custom search icon on right
+        // add custom search icon on right
         let imageView = UIImageView(image: UIImage(named: "Search", in: Bundle(for: type(of: self)), with: nil))
         imageView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(imageView)
@@ -60,13 +61,13 @@ class SearchBar: UISearchBar {
             imageView.rightAnchor.constraint(equalTo: searchTextField.rightAnchor, constant: -12)
         ])
         searchImageView = imageView
-        /// style text field per design
+        // style text field per design
         searchTextField.font = .copySBold
         searchTextField.textColor = .mainGrey
         searchTextField.layer.cornerRadius = 10
         searchTextField.addTarget(self, action: #selector(searchChanged(_:)), for: .editingChanged)
         searchTextField.returnKeyType = .done
-        /// style per context
+        // style per context
         updateStyle()
     }
 
@@ -89,9 +90,8 @@ class SearchBar: UISearchBar {
             searchTextField.addShadow(withOffset: CGSize(width: 0, height: 1), radius: 3, color: .black, opacity: 0.1)
         }
     }
-    
+
     @objc private func searchChanged(_ sender: Any) {
         searchImageView.isHidden = !(text?.isEmpty ?? true)
     }
 }
-

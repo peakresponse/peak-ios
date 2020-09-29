@@ -62,16 +62,16 @@ class PatientView: UIView {
             priorityLabel.centerYAnchor.constraint(equalTo: priorityView.centerYAnchor),
             priorityLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -6)
         ])
-        
+
         portraitView.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(portraitView)
         NSLayoutConstraint.activate([
             portraitView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 4),
             portraitView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 6),
             portraitView.widthAnchor.constraint(equalToConstant: 36),
-            portraitView.heightAnchor.constraint(equalToConstant: 36),
+            portraitView.heightAnchor.constraint(equalToConstant: 36)
         ])
-        
+
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .copyMBold
         nameLabel.textColor = .mainGrey
@@ -98,7 +98,7 @@ class PatientView: UIView {
             genderLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             genderLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor)
         ])
-        
+
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
         ageLabel.font = .copySRegular
         ageLabel.textColor = .mainGrey
@@ -107,7 +107,7 @@ class PatientView: UIView {
             ageLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
             ageLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor, constant: 60)
         ])
-        
+
         complaintLabel.translatesAutoresizingMaskIntoConstraints = false
         complaintLabel.font = .copySRegular
         complaintLabel.textColor = .mainGrey

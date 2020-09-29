@@ -35,7 +35,8 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
     var fileURL: URL!
     var recordingLength: TimeInterval = 0
     var recordingLengthFormatted: String {
-        return String(format: "%02.0f:%02.0f:%02.0f", recordingLength / 3600, recordingLength / 60, recordingLength.truncatingRemainder(dividingBy: 60))
+        return String(format: "%02.0f:%02.0f:%02.0f",
+                      recordingLength / 3600, recordingLength / 60, recordingLength.truncatingRemainder(dividingBy: 60))
     }
     var recordingStart: Date?
     var timer: Timer?
@@ -43,7 +44,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
     var isPlaying: Bool {
         return player?.isPlaying ?? false
     }
-    
+
     weak var delegate: AudioHelperDelgate?
 
     override init() {
@@ -56,23 +57,21 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         do {
             let audioSession = AVAudioSession.sharedInstance()
             try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.allowBluetooth, .defaultToSpeaker, .duckOthers])
-            for port in audioSession.availableInputs ?? [] {
-                if port.portType == .bluetoothHFP {
-                    inputs.append(port)
-                }
+            for port in audioSession.availableInputs ?? [] where port.portType == .bluetoothHFP {
+                inputs.append(port)
             }
         } catch {
             print(error)
         }
         return inputs
     }
-    
+
     func reset() {
         player = nil
         let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
         fileURL = tempDirURL.appendingPathComponent(UUID().uuidString).appendingPathExtension("mp4")
     }
-    
+
     func prepareToPlay() throws {
         player = try AVAudioPlayer(contentsOf: fileURL)
         recordingLength = player?.duration ?? 0
@@ -80,7 +79,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         player?.prepareToPlay()
         player?.volume = 1
     }
-    
+
     func playPressed() throws {
         let audioSession = AVAudioSession.sharedInstance()
         try audioSession.setCategory(.playAndRecord, mode: .default, options: [.defaultToSpeaker])
@@ -88,10 +87,11 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
             try prepareToPlay()
         }
         player?.play()
-        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
+        timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (_) in
             guard let self = self else { return }
             if let seconds = self.player?.currentTime {
-                let duration = String(format: "%02.0f:%02.0f:%02.0f", seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
+                let duration = String(format: "%02.0f:%02.0f:%02.0f",
+                                      seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
                 self.delegate?.audioHelper?(self, didPlay: seconds, formattedDuration: duration)
             }
         }
@@ -103,38 +103,36 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         timer?.invalidate()
         timer = nil
     }
-    
+
     func startRecording() throws {
         let audioSession = AVAudioSession.sharedInstance()
         if audioSession.recordPermission == .granted {
             if SFSpeechRecognizer.authorizationStatus() == .authorized {
                 if !audioEngine.isRunning {
-                    try audioSession.setCategory(.playAndRecord, mode: .measurement, options: [.allowBluetooth, .defaultToSpeaker, .duckOthers])
+                    try audioSession.setCategory(.playAndRecord, mode: .measurement,
+                                                 options: [.allowBluetooth, .defaultToSpeaker, .duckOthers])
                     var customInput = false
                     if let uid = AppSettings.audioInputPortUID {
-                        for port in audioSession.availableInputs ?? [] {
-                            if port.uid == uid {
-                                try audioSession.setPreferredInput(port)
-                                customInput = true
-                                break
-                            }
+                        for port in audioSession.availableInputs ?? [] where port.uid == uid {
+                            try audioSession.setPreferredInput(port)
+                            customInput = true
+                            break
                         }
                     }
                     if !customInput {
-                        for port in audioSession.availableInputs ?? [] {
-                            if port.portType == .builtInMic {
-                                try audioSession.setPreferredInput(port)
-                                break
-                            }
+                        for port in audioSession.availableInputs ?? [] where port.portType == .builtInMic {
+                            try audioSession.setPreferredInput(port)
+                            break
                         }
                     }
                     try audioSession.setActive(true, options: .notifyOthersOnDeactivation)
                     let inputNode = audioEngine.inputNode
 
                     recognitionRequest = SFSpeechAudioBufferRecognitionRequest()
-                    guard let recognitionRequest = recognitionRequest else { fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
+                    guard let recognitionRequest = recognitionRequest else {
+                        fatalError("Unable to create a SFSpeechAudioBufferRecognitionRequest object") }
                     recognitionRequest.shouldReportPartialResults = true
-                    
+
                     // Create a recognition task for the speech recognition session.
                     // Keep a reference to the task so that it can be canceled.
                     recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] (result, error) in
@@ -165,8 +163,10 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
 
                     // Configure the microphone input.
                     let recordingFormat = inputNode.outputFormat(forBus: 0)
-                    let audioFile = try AVAudioFile(forWriting: fileURL, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC], commonFormat: recordingFormat.commonFormat, interleaved: false)
-                    inputNode.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { [weak self] (buffer: AVAudioPCMBuffer, when: AVAudioTime) in
+                    let audioFile = try AVAudioFile(forWriting: fileURL, settings: [AVFormatIDKey: kAudioFormatMPEG4AAC],
+                                                    commonFormat: recordingFormat.commonFormat, interleaved: false)
+                    inputNode.installTap(onBus: 0, bufferSize: 1024,
+                                         format: recordingFormat) { [weak self] (buffer: AVAudioPCMBuffer, _: AVAudioTime) in
                         self?.recognitionRequest?.append(buffer)
                         self?.performFFT(buffer: buffer)
                         do {
@@ -180,12 +180,13 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
                     try audioEngine.start()
 
                     recordingStart = Date()
-                    timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (timer) in
+                    timer = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self] (_) in
                         guard let self = self else { return }
                         let now = Date()
                         if let start = self.recordingStart {
                             let seconds = self.recordingLength + start.distance(to: now)
-                            let duration = String(format: "%02.0f:%02.0f:%02.0f", seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
+                            let duration = String(format: "%02.0f:%02.0f:%02.0f",
+                                                  seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
                             self.delegate?.audioHelper?(self, didRecord: seconds, formattedDuration: duration)
                         }
                     }
@@ -238,30 +239,30 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         let transferBuffer = UnsafeMutablePointer<Float>.allocate(capacity: windowSize)
         let window = UnsafeMutablePointer<Float>.allocate(capacity: windowSize)
 
-        /// Hann windowing to reduce the frequency leakage
+        // Hann windowing to reduce the frequency leakage
         vDSP_hann_window(window, vDSP_Length(windowSize), Int32(vDSP_HANN_NORM))
         vDSP_vmul((buffer.floatChannelData?.pointee)!, 1, window,
                   1, transferBuffer, 1, vDSP_Length(windowSize))
 
-        /// Transforming the [Float] buffer into a UnsafePointer<Float> object for the vDSP_ctoz method
-        /// And then pack the input into the complex buffer (output)
+        // Transforming the [Float] buffer into a UnsafePointer<Float> object for the vDSP_ctoz method
+        // And then pack the input into the complex buffer (output)
         transferBuffer.withMemoryRebound(to: DSPComplex.self, capacity: windowSize) {
             vDSP_ctoz($0, 2, &output, 1, vDSP_Length(inputCount))
         }
 
-        /// Perform the FFT
+        // Perform the FFT
         vDSP_fft_zrip(fftSetup!, &output, 1, log2n, FFTDirection(FFT_FORWARD))
 
         let magnitudes = UnsafeMutablePointer<Float>.allocate(capacity: inputCount)
         vDSP_zvmags(&output, 1, magnitudes, 1, vDSP_Length(inputCount))
 
-        /// Normalising
+        // Normalising
         let normalizedMagnitudes = UnsafeMutablePointer<Float>.allocate(capacity: inputCount)
         vDSP_vsmul(sqrtq(Array(UnsafeBufferPointer(start: magnitudes, count: inputCount))), 1, [2.0 / Float(inputCount)],
                    normalizedMagnitudes, 1, vDSP_Length(inputCount))
 
         delegate?.audioHelper?(self, didTransformBuffer: Array(UnsafeBufferPointer(start: normalizedMagnitudes, count: inputCount)))
-        
+
         vDSP_destroy_fftsetup(fftSetup)
     }
 

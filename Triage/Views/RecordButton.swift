@@ -10,7 +10,7 @@ import UIKit
 
 class RecordIconButton: UIButton {
     var isBluetoothSelected = true
-    
+
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         var rect = super.imageRect(forContentRect: contentRect)
         rect.origin.x = 40
@@ -41,15 +41,15 @@ class RecordButton: UIControl {
     let bluetoothButton = UIButton(type: .custom)
 
     @IBOutlet weak var delegate: RecordButtonDelegate?
-    
+
     var recordState: RecordButtonState = .record {
-        didSet{ updateButtonStates() }
+        didSet { updateButtonStates() }
     }
     @IBInspectable var RecordState: String? {
         get { return nil }
         set { recordState = RecordButtonState(rawValue: newValue ?? "") ?? .record }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -62,7 +62,7 @@ class RecordButton: UIControl {
 
     private func commonInit() {
         backgroundColor = .clear
-        
+
         recordButton.translatesAutoresizingMaskIntoConstraints = false
         recordButton.titleLabel?.font = .copyLBold
         recordButton.setTitleColor(.white, for: .normal)
@@ -81,10 +81,18 @@ class RecordButton: UIControl {
             bottomAnchor.constraint(equalTo: recordButton.bottomAnchor)
         ])
 
-        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .lowPriorityGrey, cornerRadius: 27, borderColor: .clear, borderWidth: 3), for: .normal)
-        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .mainGrey, cornerRadius: 27, borderColor: .clear, borderWidth: 3), for: .highlighted)
-        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .greyPeakBlue, cornerRadius: 27, borderColor: .white, borderWidth: 3), for: .selected)
-        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 27, borderColor: .white, borderWidth: 3), for: [.selected, .highlighted])
+        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .lowPriorityGrey, cornerRadius: 27,
+                                                           borderColor: .clear, borderWidth: 3),
+                                           for: .normal)
+        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .mainGrey, cornerRadius: 27,
+                                                           borderColor: .clear, borderWidth: 3),
+                                           for: .highlighted)
+        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .greyPeakBlue, cornerRadius: 27,
+                                                           borderColor: .white, borderWidth: 3),
+                                           for: .selected)
+        bluetoothButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 27,
+                                                           borderColor: .white, borderWidth: 3),
+                                           for: [.selected, .highlighted])
         bluetoothButton.translatesAutoresizingMaskIntoConstraints = false
         bluetoothButton.adjustsImageWhenHighlighted = false
         bluetoothButton.setImage(UIImage(named: "Bluetooth"), for: .normal)
@@ -134,15 +142,15 @@ class RecordButton: UIControl {
 
     @objc func bluetoothPressed() {
         if AppSettings.audioInputPortUID != nil {
-            /// toggle Bluetooth off
+            // toggle Bluetooth off
             AppSettings.audioInputPortUID = nil
         } else {
-            /// select Bluetooth input, provide prompt if multiple
+            // select Bluetooth input, provide prompt if multiple
             let inputPorts = AudioHelper.bluetoothHFPInputs
             if inputPorts.count > 1 {
                 let alert = UIAlertController(title: "RecordButton.selectInputLabel".localized, message: nil, preferredStyle: .actionSheet)
                 for inputPort in inputPorts {
-                    alert.addAction(UIAlertAction(title: inputPort.portName, style: .default, handler: { [weak self] (action) in
+                    alert.addAction(UIAlertAction(title: inputPort.portName, style: .default, handler: { [weak self] (_) in
                         AppSettings.audioInputPortUID = inputPort.uid
                         self?.bluetoothButton.isSelected = true
                     }))
@@ -157,9 +165,9 @@ class RecordButton: UIControl {
         }
         updateButtonStates()
     }
-    
+
     // MARK: - UIControl
-    
+
     override func addTarget(_ target: Any?, action: Selector, for controlEvents: UIControl.Event) {
         recordButton.addTarget(target, action: action, for: controlEvents)
     }

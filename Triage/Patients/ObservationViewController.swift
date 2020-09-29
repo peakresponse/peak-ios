@@ -15,11 +15,11 @@ import UIKit
 
 class ObservationViewController: PatientViewController {
     weak var delegate: ObservationViewControllerDelegate?
-    
+
     func patientTableViewControllerDidCancel(_ vc: PatientTableViewController) {
         dismissAnimated()
     }
-    
+
     func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
         delegate?.observationViewControllerDidSave?(self)
     }

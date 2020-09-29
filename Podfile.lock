@@ -26,12 +26,14 @@ PODS:
   - Realm/Headers (5.4.2)
   - RealmSwift (5.4.2):
     - Realm (= 5.4.2)
+  - SwiftLint (0.40.3)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - Keys (from `Pods/CocoaPodsKeys`)
   - RealmSwift
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
@@ -39,6 +41,7 @@ SPEC REPOS:
     - GoogleMaps
     - Realm
     - RealmSwift
+    - SwiftLint
 
 EXTERNAL SOURCES:
   Keys:
@@ -50,7 +53,8 @@ SPEC CHECKSUMS:
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   Realm: ced868eb0254f8d33a21c06981355e5aa33bc005
   RealmSwift: aedc4363150f3c61f91ae0537ed116d2d080a4dd
+  SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
 
-PODFILE CHECKSUM: 50dba3f036bc0266e812a54e4eaa90732311184f
+PODFILE CHECKSUM: 90844e369e2a7b51a8ec480f3e14d3c7f654f82b
 
 COCOAPODS: 1.9.3

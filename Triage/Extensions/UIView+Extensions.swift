@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    
+
     func loadNib() {
         backgroundColor = UIColor.clear
         let nibName = type(of: self).description().components(separatedBy: ".").last!

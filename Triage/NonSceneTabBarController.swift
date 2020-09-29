@@ -12,10 +12,10 @@ class NonSceneTabBarController: TabBarController {
     deinit {
         AppRealm.disconnect()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        /// hit the server to check current log-in status
+        // hit the server to check current log-in status
         AppRealm.me { (user, agency, scene, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in

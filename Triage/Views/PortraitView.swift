@@ -27,24 +27,24 @@ class PortraitView: UIView, CameraHelperDelegate {
     var imageViewURL: String?
 
     weak var delegate: PortraitViewDelegate?
-    
+
     var cameraHelper: CameraHelper?
-    
+
     var isEditing: Bool {
         get { return !captureButton.isHidden }
         set { captureButton.isHidden = !newValue }
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         commonInit()
     }
-    
+
     private func commonInit() {
         let imageView = RoundImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -82,7 +82,7 @@ class PortraitView: UIView, CameraHelperDelegate {
         ])
         self.activityIndicatorView = activityIndicatorView
     }
-    
+
     func configure(from patient: Patient) {
         imageView.image = nil
         if let observation = patient as? Observation {
@@ -97,7 +97,7 @@ class PortraitView: UIView, CameraHelperDelegate {
                     print(error)
                 } else if let image = image {
                     DispatchQueue.main.async { [weak self] in
-                        if imageViewURL == self?.imageViewURL  {
+                        if imageViewURL == self?.imageViewURL {
                             self?.imageView.image = image
                         }
                     }
@@ -141,7 +141,7 @@ class PortraitView: UIView, CameraHelperDelegate {
     }
 
     // MARK: - CameraHelperDelegate
-    
+
     func cameraHelper(_ helper: CameraHelper, didCapturePhoto fileURL: URL, withImage image: UIImage) {
         self.imageView.image = image
         self.activityIndicatorView.stopAnimating()

@@ -57,12 +57,12 @@ class SceneSummaryHeaderView: UIView {
             descLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor)
         ])
         self.descLabel = descLabel
-        
+
         let dateLabel = createLabel()
         dateLabel.text = "SceneSummaryHeaderView.dateLabel".localized
         NSLayoutConstraint.activate([
             dateLabel.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 10),
-            dateLabel.leftAnchor.constraint(equalTo: descLabel.leftAnchor),
+            dateLabel.leftAnchor.constraint(equalTo: descLabel.leftAnchor)
         ])
         self.dateLabel = dateLabel
         self.dateValueLabel = createValueLabel(for: dateLabel)
@@ -75,7 +75,7 @@ class SceneSummaryHeaderView: UIView {
         ])
         self.timeLabel = timeLabel
         self.timeValueLabel = createValueLabel(for: timeLabel)
-        
+
         let locationLabel = createLabel()
         locationLabel.text = "SceneSummaryHeaderView.locationLabel".localized
         NSLayoutConstraint.activate([
@@ -84,7 +84,7 @@ class SceneSummaryHeaderView: UIView {
         ])
         self.locationLabel = locationLabel
         self.locationValueLabel = createValueLabel(for: locationLabel)
-        
+
         NSLayoutConstraint.activate([
             bottomAnchor.constraint(equalTo: locationLabel.bottomAnchor, constant: 22)
         ])
@@ -99,7 +99,7 @@ class SceneSummaryHeaderView: UIView {
         addSubview(label)
         return label
     }
-    
+
     private func createValueLabel(for label: UILabel) -> UILabel {
         let valueLabel = UILabel()
         valueLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +113,7 @@ class SceneSummaryHeaderView: UIView {
         ])
         return valueLabel
     }
-    
+
     func configure(from scene: Scene) {
         nameLabel.text = scene.name?.isEmpty ?? true ? " " : scene.name
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc

@@ -24,7 +24,7 @@ extension Date {
     func asTimeDateString() -> String {
         return DateFormatter.timeDateFormatter.string(from: self)
     }
-    
+
     func asTimeString() -> String {
         return DateFormatter.timeFormatter.string(from: self)
     }

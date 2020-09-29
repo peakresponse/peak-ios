@@ -28,11 +28,11 @@ class RoundImageView: UIImageView {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         layer.masksToBounds = true
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = frame.width / 2

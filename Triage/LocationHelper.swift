@@ -41,13 +41,13 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
             break
         }
     }
-    
+
     // MARK: - CLLocationManagerDelegate
-    
+
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         requestLocation()
     }
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         delegate?.locationHelper?(self, didUpdateLocations: locations)
     }

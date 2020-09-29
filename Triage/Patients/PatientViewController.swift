@@ -12,19 +12,19 @@ import UIKit
 class PatientViewController: UIViewController, PatientTableViewControllerDelegate, UINavigationControllerDelegate {
     @IBOutlet weak var navigationBar: NavigationBar!
     @IBOutlet weak var containerView: UIView!
-    
+
     var patient: Patient!
     var notificationToken: NotificationToken?
-    
+
     deinit {
         notificationToken?.invalidate()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         isModalInPresentation = true
-        
+
         if patient.realm != nil {
             notificationToken = patient.observe { [weak self] (change) in
                 self?.didObserveChange(change)
@@ -40,7 +40,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
             navigationBar.tintColor = PRIORITY_LABEL_COLORS[priority]
         }
     }
-    
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navVC = segue.destination as? UINavigationController,
             let vc = navVC.topViewController as? PatientTableViewController {
@@ -49,10 +49,10 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
             navVC.delegate = self
         }
     }
-    
+
     func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
-        case .change(_, _):
+        case .change:
             updateNavigationBarColor(priority: patient.priority.value)
         case .error(let error):
             presentAlert(error: error)
@@ -62,13 +62,13 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
     }
 
     // MARK: - PatientTableViewControllerDelegate
-    
+
     func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int) {
         updateNavigationBarColor(priority: priority)
     }
-    
+
     // MARK: - UINavigationControllerDelegate
-    
+
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         navigationBar.navigationItem = viewController.navigationItem
         if let priority = (viewController as? PatientTableViewController)?.patient.priority.value {

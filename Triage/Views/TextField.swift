@@ -21,7 +21,7 @@ class TextField: UITextField {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.insetBy(dx: padding.width, dy: padding.height)
     }

@@ -20,7 +20,7 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
 
         tableView.contentInset = UIEdgeInsets(top: 15, left: 0, bottom: 15, right: 0)
         tableView.register(SceneTableViewCell.self, forCellReuseIdentifier: "Scene")
-        
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
@@ -35,10 +35,10 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
 
         refresh()
     }
-    
+
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Scene>>) {
         switch changes {
-        case .initial(_):
+        case .initial:
             tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             self.tableView.beginUpdates()
@@ -81,7 +81,7 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
     }
 
     // MARK: - LoginViewControllerDelegate
-    
+
     override func loginViewControllerDidLogin(_ vc: LoginViewController) {
         super.loginViewControllerDidLogin(vc)
         refresh()
@@ -92,15 +92,15 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results?.count ?? 0
     }
-    
+
     // MARK: - UITableViewDelegate
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Scene", for: indexPath)
         if let cell = cell as? SceneTableViewCell, let scene = results?[indexPath.row] {
             cell.configure(from: scene)
         }
-        return cell;
+        return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

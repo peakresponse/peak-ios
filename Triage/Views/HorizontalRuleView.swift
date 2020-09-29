@@ -21,11 +21,11 @@ class HorizontalRuleView: UIView {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         backgroundColor = .clear
     }
-    
+
     override func draw(_ rect: CGRect) {
         let size = frame.size
         let scale = UIScreen.main.scale

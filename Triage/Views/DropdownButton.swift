@@ -18,7 +18,7 @@ import UIKit
 class DropdownButton: SelectorButton, SelectorViewDelegate {
     private weak var selectorView: SelectorView?
     @IBOutlet weak var delegate: DropdownButtonDelegate?
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -28,13 +28,18 @@ class DropdownButton: SelectorButton, SelectorViewDelegate {
         super.init(coder: coder)
         commonInit()
     }
-    
+
     private func commonInit() {
         titleLabel?.font = .copySBold
         setTitleColor(.mainGrey, for: .normal)
-        setBackgroundImage(UIImage.resizableImage(withColor: .white, cornerRadius: 2), for: .normal)
-        setBackgroundImage(UIImage.resizableImage(withColor: UIColor.white.colorWithBrightnessMultiplier(multiplier: 0.4), cornerRadius: 2), for: .highlighted)
-        setBackgroundImage(UIImage.resizableImage(withColor: UIColor.white.colorWithBrightnessMultiplier(multiplier: 0.4), cornerRadius: 2), for: [.selected, .highlighted])
+        setBackgroundImage(UIImage.resizableImage(withColor: .white, cornerRadius: 2),
+                           for: .normal)
+        setBackgroundImage(UIImage.resizableImage(withColor: UIColor.white.colorWithBrightnessMultiplier(multiplier: 0.4),
+                                                  cornerRadius: 2),
+                           for: .highlighted)
+        setBackgroundImage(UIImage.resizableImage(withColor: UIColor.white.colorWithBrightnessMultiplier(multiplier: 0.4),
+                                                  cornerRadius: 2),
+                           for: [.selected, .highlighted])
         setImage(UIImage(named: "ChevronDown"), for: .normal)
         setImage(UIImage(named: "ChevronUp"), for: .selected)
         setImage(UIImage(named: "ChevronUp"), for: [.selected, .highlighted])
@@ -44,13 +49,13 @@ class DropdownButton: SelectorButton, SelectorViewDelegate {
 
     @objc private func buttonPressed() {
         if let selectorView = selectorView {
-            /// toggle off dropdown without any selection
+            // toggle off dropdown without any selection
             selectorView.removeFromSuperview()
             self.selectorView = nil
         } else {
-            /// create and show dropdown
+            // create and show dropdown
             guard let view = delegate?.dropdownWillAppear?(self) ?? superview else { return }
-            let selectorView = SelectorView();
+            let selectorView = SelectorView()
             selectorView.translatesAutoresizingMaskIntoConstraints = false
             selectorView.delegate = self
             delegate?.dropdown?(self, willShow: selectorView)

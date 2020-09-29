@@ -21,7 +21,7 @@ class SceneLocationView: UIView {
         super.init(frame: frame)
         commonInit()
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         commonInit()
@@ -40,7 +40,8 @@ class SceneLocationView: UIView {
             label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
             addSubview(label)
             NSLayoutConstraint.activate([
-                label.topAnchor.constraint(equalTo: prevLabel == nil ? topAnchor : prevLabel.bottomAnchor, constant: prevLabel == nil ? 0 : 10),
+                label.topAnchor.constraint(equalTo: prevLabel == nil ? topAnchor : prevLabel.bottomAnchor,
+                                           constant: prevLabel == nil ? 0 : 10),
                 label.leftAnchor.constraint(equalTo: leftAnchor)
             ])
             prevLabel = label
@@ -59,14 +60,14 @@ class SceneLocationView: UIView {
         NSLayoutConstraint.activate([
             bottomAnchor.constraint(equalTo: prevLabel.bottomAnchor, constant: 10)
         ])
-        
+
         let activityIndicatorView = UIActivityIndicatorView(style: .medium)
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.color = .mainGrey
         addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([
             activityIndicatorView.leftAnchor.constraint(equalTo: gpsLabel.rightAnchor),
-            activityIndicatorView.topAnchor.constraint(equalTo: gpsLabel.topAnchor),
+            activityIndicatorView.topAnchor.constraint(equalTo: gpsLabel.topAnchor)
         ])
         self.activityIndicatorView = activityIndicatorView
     }

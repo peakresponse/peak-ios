@@ -14,7 +14,7 @@ extension DateFormatter {
         formatter.dateFormat = "MMM d, y"
         return formatter
     }()
-    
+
     static let timeDateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "h:mma - MMM d, y"

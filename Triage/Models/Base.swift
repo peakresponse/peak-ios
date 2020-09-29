@@ -8,7 +8,6 @@
 
 import RealmSwift
 
-
 class Base: Object {
     struct Keys {
         static let id = "id"
