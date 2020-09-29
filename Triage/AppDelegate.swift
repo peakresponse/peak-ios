@@ -42,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let keys = TriageKeys()
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
 
-        AppRealm.deleteAll()
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,
             .foregroundColor: UIColor.mainGrey
@@ -57,6 +56,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         ], for: .disabled)
         UILabel.appearance(whenContainedInInstancesOf: [UISegmentedControl.self]).numberOfLines = 0
         UIToolbar.appearance().backgroundColor = .bgBackground
+
         return true
     }
 

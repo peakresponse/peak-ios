@@ -36,6 +36,8 @@
 		454EE968251C62D800EB266A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE967251C62D800EB266A /* LocationHelper.swift */; };
 		454EE97C25202C7A00EB266A /* PatientView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE97B25202C7A00EB266A /* PatientView.swift */; };
 		454EE9872520305000EB266A /* PatientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE9862520305000EB266A /* PatientTableViewCell.swift */; };
+		454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */; };
+		454EEA542522F0EC00EB266A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA532522F0EC00EB266A /* ImageView.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
@@ -167,6 +169,8 @@
 		454EE967251C62D800EB266A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		454EE97B25202C7A00EB266A /* PatientView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientView.swift; sourceTree = "<group>"; };
 		454EE9862520305000EB266A /* PatientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTableViewCell.swift; sourceTree = "<group>"; };
+		454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
+		454EEA532522F0EC00EB266A /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -440,6 +444,7 @@
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
 				4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */,
 				4572BA8E237DE45400958A77 /* URL+Extensions.swift */,
+				454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -475,6 +480,7 @@
 				4563C74224DA763700217901 /* FormField.swift */,
 				45BA94302502C17F0098E9BD /* FormMultilineField.swift */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
+				454EEA532522F0EC00EB266A /* ImageView.swift */,
 				4543DD4D24DE20B100F9E50B /* NavigationBar.swift */,
 				45E2675724196E5C0010CDE9 /* NavigationController.swift */,
 				45FD73E6243151C200FD7EDB /* ObservationView.swift */,
@@ -800,6 +806,7 @@
 				45F218FE24E5BB510046A39B /* PatientTableViewController.swift in Sources */,
 				45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */,
 				4566F05A236CD26900A04C75 /* PatientsCollectionViewController.swift in Sources */,
+				454EEA542522F0EC00EB266A /* ImageView.swift in Sources */,
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				45B7A2E9250F2AAC00BCAAAE /* AlertViewController.swift in Sources */,
 				4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */,
@@ -876,6 +883,7 @@
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
+				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
 				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,

@@ -11,7 +11,8 @@ import UIKit
 
 class SceneTableViewCell: UITableViewCell {
     weak var containerView: UIView!
-    weak var mapView: GMSMapView!
+    weak var mapView: ImageView!
+    weak var mapMarkerView: UIImageView!
     weak var headerView: UIView!
     weak var bodyView: UIView!
     weak var dateLabel: UILabel!
@@ -46,7 +47,7 @@ class SceneTableViewCell: UITableViewCell {
         ])
         self.containerView = containerView
 
-        let mapView = GMSMapView()
+        let mapView = ImageView()
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.layer.cornerRadius = 4
         mapView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMinXMaxYCorner]
@@ -59,6 +60,16 @@ class SceneTableViewCell: UITableViewCell {
             containerView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor)
         ])
         self.mapView = mapView
+        
+        let mapMarkerView = UIImageView()
+        mapMarkerView.translatesAutoresizingMaskIntoConstraints = false
+        mapMarkerView.image = UIImage(named: "MapMarker")
+        containerView.addSubview(mapMarkerView)
+        NSLayoutConstraint.activate([
+            mapMarkerView.centerXAnchor.constraint(equalTo: mapView.centerXAnchor),
+            mapMarkerView.centerYAnchor.constraint(equalTo: mapView.centerYAnchor, constant: -(mapMarkerView.image?.size.height ?? 0) / 2)
+        ])
+        self.mapMarkerView = mapMarkerView
 
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
@@ -158,11 +169,10 @@ class SceneTableViewCell: UITableViewCell {
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc
 
         if let target = scene.latLng {
-            mapView.camera = GMSCameraPosition(target: target, zoom: 13.5)
-            mapView.clear()
-            let marker = GMSMarker(position: target)
-            marker.icon = GMSMarker.customMarkerImage
-            marker.map = mapView
+            mapView.imageURL = target.mapImageURL(size: CGSize(width: 115, height: 110))
+            mapMarkerView.isHidden = false
+        } else {
+            mapMarkerView.isHidden = true
         }
 
         patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized, scene.patientsCount.value ?? 0)
