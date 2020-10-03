@@ -1,5 +1,5 @@
 //
-//  PatientsCollectionViewController.swift
+//  PatientsViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 11/1/19.
@@ -9,11 +9,7 @@
 import RealmSwift
 import UIKit
 
-class PatientsCollectionViewFlowLayout: UICollectionViewFlowLayout {
-
-}
-
-class PatientsCollectionViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource,
+class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource,
                                         UISearchBarDelegate, SortBarDelegate {
     @IBOutlet weak var searchBar: SearchBar!
     private var searchBarShouldBeginEditing = true

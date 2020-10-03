@@ -77,6 +77,10 @@ class BaseField: UIView, Localizable {
 
     @IBInspectable var attributeKey: String?
 
+    @IBInspectable var isPlainText: Bool = false {
+        didSet { updateStyle() }
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -94,8 +98,6 @@ class BaseField: UIView, Localizable {
         layer.zPosition = -1
 
         contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.backgroundColor = .white
-        contentView.addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
         addSubview(contentView)
         contentViewConstraints = [
             contentView.topAnchor.constraint(equalTo: topAnchor),
@@ -151,6 +153,13 @@ class BaseField: UIView, Localizable {
     }
 
     func updateStyle() {
+        contentView.backgroundColor = isPlainText ? .clear : .white
+        if isPlainText {
+            contentView.removeShadow()
+        } else {
+            contentView.addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)
+        }
+
         switch style {
         case .input:
             label.font = .copyXSBold

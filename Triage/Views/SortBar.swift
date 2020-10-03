@@ -18,7 +18,7 @@ class SortBar: UIView, DropdownButtonDelegate {
     let label = UILabel()
     let dropdownButton = DropdownButton()
 
-    weak var delegate: SortBarDelegate?
+    @IBOutlet weak var delegate: SortBarDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -12,6 +12,11 @@ class ImageView: UIView {
     weak var imageView: UIImageView!
     weak var activityIndicatorView: UIActivityIndicatorView!
 
+    var image: UIImage? {
+        get { return imageView.image }
+        set { imageView.image = newValue }
+    }
+
     var imageURL: String? {
         didSet { loadImage() }
     }

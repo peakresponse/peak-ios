@@ -17,6 +17,7 @@ enum ApiClientError: Error {
     case notFound
 }
 
+// swiftlint:disable type_body_length
 class ApiClient {
     static var shared: ApiClient = ApiClient(baseURL: TriageKeys().apiClientServerUrl)! {
         willSet {
@@ -309,6 +310,12 @@ class ApiClient {
 
     func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
+    }
+
+    // MARK: - Responders
+
+    func getResponders(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/responders", params: ["sceneId": sceneId], completionHandler: completionHandler)
     }
 
     // MARK: - Uploads

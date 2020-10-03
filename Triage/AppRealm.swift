@@ -281,23 +281,19 @@ class AppRealm {
                     }
                 }
                 if let patients = data["patients"] as? [[String: Any]] {
-                    for patient in patients {
-                        if let patient = Patient.instantiate(from: patient) as? Patient {
-                            try! realm.write {
-                                realm.add(patient, update: .modified)
-                            }
-                        }
+                    let patients = patients.map({ Patient.instantiate(from: $0) })
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(patients, update: .modified)
                     }
                 }
-//                if let responders = data["responders"] as? [[String: Any]] {
-//                    for responder in responders {
-//                        if let responder = Responder.instantiate(from: responder) as? Responder {
-//                            try! realm.write {
-//                                realm.add(responder, update: .modified)
-//                            }
-//                        }
-//                    }
-//                }
+                if let responders = data["responders"] as? [[String: Any]] {
+                    let responders = responders.map({ Responder.instantiate(from: $0) })
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(responders, update: .modified)
+                    }
+                }
             }
         }
         sceneTask?.resume()
@@ -306,6 +302,24 @@ class AppRealm {
     public static func disconnectScene() {
         sceneTask?.cancel(with: .normalClosure, reason: nil)
         sceneTask = nil
+    }
+
+    // MARK: - Responders
+
+    public static func getResponders(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getResponders(sceneId: sceneId) { (responders, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let responders = responders {
+                let responders = responders.map({ Responder.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(responders, update: .modified)
+                }
+                completionHandler(nil)
+            }
+        }
+        task.resume()
     }
 
     // MARK: - Users

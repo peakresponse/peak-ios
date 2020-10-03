@@ -13,6 +13,10 @@ extension Date {
         return DateFormatter.dateFormatter.string(from: self)
     }
 
+    func asISO8601String() -> String {
+        return ISO8601DateFormatter.string(from: self)
+    }
+
     func asLocalizedTime() -> String {
         return DateFormatter.localizedString(from: self, dateStyle: .none, timeStyle: .short)
     }

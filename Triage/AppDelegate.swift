@@ -51,7 +51,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             .font: UIFont.copySBold,
             .foregroundColor: UIColor.lowPriorityGrey
         ], for: .disabled)
+
         UILabel.appearance(whenContainedInInstancesOf: [UISegmentedControl.self]).numberOfLines = 0
+
+        UINavigationBar.appearance().barTintColor = .white
+        UINavigationBar.appearance().tintColor = .mainGrey
+
+        UITabBar.appearance().barTintColor = .white
+
         UIToolbar.appearance().backgroundColor = .bgBackground
 
         return true

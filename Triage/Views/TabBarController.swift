@@ -13,23 +13,21 @@ class TabBarController: UITabBarController, TabBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // hide system tab bar
-        tabBar.alpha = 0
+
         // set up custom tab bar, overlaying existing tab bar
-        let customTabBar = TabBar()
-        customTabBar.translatesAutoresizingMaskIntoConstraints = false
+        let customTabBar = TabBar(frame: tabBar.bounds)
         customTabBar.tabBar = tabBar
         customTabBar.delegate = self
         customTabBar.items = viewControllers?.map({ $0.tabBarItem })
         customTabBar.selectedItem = customTabBar.items?.first
-        view.addSubview(customTabBar)
-        NSLayoutConstraint.activate([
-            customTabBar.topAnchor.constraint(equalTo: tabBar.topAnchor),
-            customTabBar.leftAnchor.constraint(equalTo: tabBar.leftAnchor),
-            customTabBar.rightAnchor.constraint(equalTo: tabBar.rightAnchor),
-            customTabBar.bottomAnchor.constraint(equalTo: tabBar.bottomAnchor)
-        ])
+        tabBar.addSubview(customTabBar)
         self.customTabBar = customTabBar
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tabBar.bringSubviewToFront(customTabBar)
+        customTabBar.frame = tabBar.bounds
     }
 
     // MARK: - TabBarDelegate

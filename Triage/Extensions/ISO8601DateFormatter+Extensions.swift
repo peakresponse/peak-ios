@@ -21,4 +21,8 @@ extension ISO8601DateFormatter {
         }
         return nil
     }
+
+    static func string(from date: Date) -> String {
+        return defaultFormatter.string(from: date)
+    }
 }

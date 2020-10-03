@@ -6,6 +6,8 @@
   Copyright © 2019 Francis Li. All rights reserved.
 */
 
+"Agency.name" = "Agency Name";
+
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
 "ActiveSceneView.patientsLabel" = " Patients on Scene";
@@ -122,6 +124,8 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
+"ResponderSort.az" = "Alphabetically";
+
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";
 
@@ -150,3 +154,7 @@
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer incident command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
+
+"User.firstName" = "First Name";
+"User.lastName" = "Last Name";
+"User.position" = "Position/Role";

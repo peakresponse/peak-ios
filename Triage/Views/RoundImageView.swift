@@ -8,19 +8,9 @@
 
 import UIKit
 
-class RoundImageView: UIImageView {
+class RoundImageView: ImageView {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        commonInit()
-    }
-
-    override init(image: UIImage?) {
-        super.init(image: image)
-        commonInit()
-    }
-
-    override init(image: UIImage?, highlightedImage: UIImage?) {
-        super.init(image: image, highlightedImage: highlightedImage)
         commonInit()
     }
 
