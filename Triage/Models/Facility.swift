@@ -91,6 +91,7 @@ class Facility: Base {
         lng = data[Keys.lng] as? String
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = type {

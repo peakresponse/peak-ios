@@ -86,12 +86,14 @@ class SceneOverviewViewController: UIViewController {
         if AppSettings.userId == scene.incidentCommanderId {
             closeButton.isHidden = false
             leaveButton.isHidden = true
-            transferButton.alpha = 1
+//            transferButton.alpha = 1
         } else {
             closeButton.isHidden = true
             leaveButton.isHidden = false
-            transferButton.alpha = 0
+//            transferButton.alpha = 0
         }
+        // for now, hide transfer button
+        transferButton.alpha = 0
     }
 
     @IBAction func editPressed(_ sender: Any) {

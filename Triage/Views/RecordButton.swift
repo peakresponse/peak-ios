@@ -60,6 +60,7 @@ class RecordButton: UIControl {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         backgroundColor = .clear
 

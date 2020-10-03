@@ -43,7 +43,7 @@ class Observation: Patient {
         return json
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func changes(from source: Observation) -> Observation {
         let observation = Observation()
         observation.sceneId = source.sceneId

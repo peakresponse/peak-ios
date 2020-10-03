@@ -21,6 +21,7 @@ let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .st
     @objc optional func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int)
 }
 
+// swiftlint:disable:next type_body_length
 class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                   FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate,
                                   AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate,

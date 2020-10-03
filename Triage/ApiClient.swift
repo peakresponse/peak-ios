@@ -312,6 +312,15 @@ class ApiClient {
         return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
     }
 
+    func transferScene(sceneId: String, userId: String, agencyId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes/\(sceneId)/transfer", body: [
+            "userId": userId,
+            "agencyId": agencyId
+        ], completionHandler: { (_: [String: Any]?, error: Error?) in
+            completionHandler(error)
+        })
+    }
+
     // MARK: - Responders
 
     func getResponders(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {

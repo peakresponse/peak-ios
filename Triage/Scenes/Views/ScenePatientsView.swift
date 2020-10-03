@@ -23,6 +23,7 @@ class ScenePatientsView: UIView {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         backgroundColor = .bgBackground
 

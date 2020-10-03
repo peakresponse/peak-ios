@@ -42,6 +42,7 @@ class FacilityView: UIView {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         layer.cornerRadius = 5
         addShadow(withOffset: CGSize(width: 1, height: 2), radius: 2, color: .black, opacity: 0.1)

@@ -9,7 +9,6 @@
 import UIKit
 
 class ResponderViewController: UIViewController {
-    @IBOutlet weak var navigationBar: UINavigationBar!
     @IBOutlet weak var imageView: RoundImageView!
     @IBOutlet weak var transferButton: FormButton!
     @IBOutlet weak var firstNameField: FormField!
@@ -33,7 +32,11 @@ class ResponderViewController: UIViewController {
             imageView.image = UIImage(named: "User")
         }
 
-        if scene.incidentCommanderId == user.id {
+        if scene.incidentCommanderId == AppSettings.userId {
+            if scene.incidentCommanderId == user.id {
+                transferButton.isHidden = true
+            }
+        } else {
             transferButton.isHidden = true
         }
 
@@ -45,5 +48,26 @@ class ResponderViewController: UIViewController {
         } else {
             agencyField.isHidden = true
         }
+    }
+
+    @IBAction func transferPressed(_ sender: Any) {
+        let vc = AlertViewController()
+        vc.alertTitle = String(format: "TransferCommandConfirmation.title".localized, user.fullName)
+        vc.alertMessage = "TransferCommandConfirmation.message".localized
+        vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
+        vc.addAlertAction(title: "Button.transfer".localized, style: .default) { [weak self] (_) in
+            guard let self = self, let sceneId = AppSettings.sceneId, let agencyId = self.agency?.id else { return }
+            AppRealm.transferScene(sceneId: sceneId, userId: self.user.id, agencyId: agencyId, completionHandler: { (error) in
+                DispatchQueue.main.async { [weak self] in
+                    if let error = error {
+                        self?.presentAlert(error: error)
+                    } else {
+                        self?.transferButton.isHidden = true
+                        self?.dismissAnimated()
+                    }
+                }
+            })
+        }
+        presentAnimated(vc)
     }
 }

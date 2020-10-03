@@ -52,6 +52,7 @@ class ObservationView: UIView, AudioHelperDelgate {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         backgroundColor = .white
         addShadow(withOffset: CGSize(width: 0, height: 2), radius: 3, color: .black, opacity: 0.15)

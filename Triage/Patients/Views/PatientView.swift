@@ -29,6 +29,7 @@ class PatientView: UIView {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .white

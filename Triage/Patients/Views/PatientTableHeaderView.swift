@@ -42,6 +42,7 @@ class PatientTableHeaderView: UIView, PriorityViewDelegate {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     private func commonInit() {
         portraitView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(portraitView)

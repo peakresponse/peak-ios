@@ -61,6 +61,7 @@ let PRIORITY_LABEL_COLORS = [
     UIColor.white
 ]
 
+// swiftlint:disable:next type_body_length
 class Patient: Base {
     struct Keys {
         static let sceneId = "sceneId"
@@ -236,7 +237,7 @@ class Patient: Base {
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = sceneId {

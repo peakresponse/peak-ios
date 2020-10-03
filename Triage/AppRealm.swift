@@ -9,7 +9,7 @@
 import CoreLocation
 import RealmSwift
 
-// swiftlint:disable force_try
+// swiftlint:disable force_try type_body_length
 class AppRealm {
     private static var main: Realm!
     private static var agencyTask: URLSessionWebSocketTask?
@@ -237,22 +237,21 @@ class AppRealm {
 
     public static func joinScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, error) in
-            if let error = error {
-                completionHandler(error)
-            } else {
-                completionHandler(nil)
-            }
+            completionHandler(error)
         }
         task.resume()
     }
 
     public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, error) in
-            if let error = error {
-                completionHandler(error)
-            } else {
-                completionHandler(nil)
-            }
+            completionHandler(error)
+        }
+        task.resume()
+    }
+
+    public static func transferScene(sceneId: String, userId: String, agencyId: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.transferScene(sceneId: sceneId, userId: userId, agencyId: agencyId) { (error) in
+            completionHandler(error)
         }
         task.resume()
     }
