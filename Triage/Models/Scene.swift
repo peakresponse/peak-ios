@@ -113,7 +113,7 @@ class Scene: Base {
         incidentCommanderAgencyId = data[Keys.incidentCommanderAgencyId] as? String
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
         if let value = name {

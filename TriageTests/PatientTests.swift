@@ -33,7 +33,9 @@ class PatientTests: XCTestCase {
           "respiratoryRate": 26,
           "pulse": 130,
           "capillaryRefill": 2,
-          "bloodPressure": "80/110",
+          "bpSystolic": 110,
+          "bpDiastolic": 80,
+          "gcsTotal": 15,
           "text": "Passes out and hits head on ground. Blood from mouth and ears.",
           "priority": 0,
           "location": "Triage Staging",
@@ -64,7 +66,9 @@ class PatientTests: XCTestCase {
         XCTAssertEqual(patient?.respiratoryRate.value, 26)
         XCTAssertEqual(patient?.pulse.value, 130)
         XCTAssertEqual(patient?.capillaryRefill.value, 2)
-        XCTAssertEqual(patient?.bloodPressure, "80/110")
+        XCTAssertEqual(patient?.bpSystolic.value, 110)
+        XCTAssertEqual(patient?.bpDiastolic.value, 80)
+        XCTAssertEqual(patient?.gcsTotal.value, 15)
         XCTAssertEqual(patient?.text, "Passes out and hits head on ground. Blood from mouth and ears.")
         XCTAssertEqual(patient?.priority.value, 0)
         XCTAssertEqual(patient?.location, "Triage Staging")
@@ -75,5 +79,12 @@ class PatientTests: XCTestCase {
         XCTAssertNil(patient?.audioUrl)
         XCTAssertEqual(patient?.createdAt?.description, "2019-11-01 19:13:54 +0000")
         XCTAssertEqual(patient?.updatedAt?.description, "2019-11-01 19:13:54 +0000")
+    }
+
+    func testBloodPressure() {
+        let patient = Patient()
+        patient.bloodPressure = "120/80"
+        XCTAssertEqual(patient.bpSystolic.value, 120)
+        XCTAssertEqual(patient.bpDiastolic.value, 80)
     }
 }

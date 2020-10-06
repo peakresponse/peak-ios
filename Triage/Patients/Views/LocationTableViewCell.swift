@@ -11,30 +11,31 @@ import UIKit
 class LocationTableViewCell: AttributeTableViewCell {
     var activityIndicatorView: UIActivityIndicatorView!
 
-    override func commonInit() {
-        super.commonInit()
-        field.alertLabel.textColor = .greyPeakBlue
-        addAlertLabelTapRecognizer()
-
-        activityIndicatorView = UIActivityIndicatorView(style: .medium)
-        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicatorView.color = .mainGrey
-        contentView.addSubview(activityIndicatorView)
-        NSLayoutConstraint.activate([
-            activityIndicatorView.centerYAnchor.constraint(equalTo: field.textField.centerYAnchor),
-            activityIndicatorView.rightAnchor.constraint(equalTo: field.textField.rightAnchor, constant: -22)
-        ])
-        activityIndicatorView.hidesWhenStopped = true
-    }
-
     override func configure(from patient: Patient) {
         super.configure(from: patient)
+
+        let field = fields[0]
+        if activityIndicatorView == nil {
+            field.alertLabel.textColor = .greyPeakBlue
+            addAlertLabelTapRecognizer(to: field)
+
+            activityIndicatorView = UIActivityIndicatorView(style: .medium)
+            activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicatorView.color = .mainGrey
+            contentView.addSubview(activityIndicatorView)
+            NSLayoutConstraint.activate([
+                activityIndicatorView.centerYAnchor.constraint(equalTo: field.textField.centerYAnchor),
+                activityIndicatorView.rightAnchor.constraint(equalTo: field.textField.rightAnchor, constant: -22)
+            ])
+            activityIndicatorView.hidesWhenStopped = true
+        }
         field.alertLabel.text = patient.hasLatLng ? "Location.viewOnMap".localized : (isEditing ? "Location.capture".localized : nil)
         field.alertLabel.isHidden = false
         field.detailLabel.text = patient.latLngString
     }
 
     func setCapturing(_ isCapturing: Bool) {
+        let field = fields[0]
         if isCapturing {
             activityIndicatorView.startAnimating()
             field.alertLabel.isHidden = true

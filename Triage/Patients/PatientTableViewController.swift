@@ -9,11 +9,11 @@
 import RealmSwift
 import UIKit
 
-let INFO = ["firstName", "lastName", "age"]
-let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .number]
+let INFO = ["firstName", "lastName", "complaint"]
+let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .string]
 
-let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure"]
-let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string]
+let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure", "gcsTotal"]
+let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string, .number]
 
 @objc protocol PatientTableViewControllerDelegate {
     @objc optional func patientTableViewControllerDidCancel(_ vc: PatientTableViewController)
@@ -21,18 +21,23 @@ let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .st
     @objc optional func patientTableViewController(_ vc: PatientTableViewController, didUpdatePriority priority: Int)
 }
 
+// swiftlint:disable file_length
 // swiftlint:disable:next type_body_length
 class PatientTableViewController: UIViewController, UINavigationControllerDelegate, UITableViewDataSource, UITableViewDelegate,
                                   FacilitiesTableViewControllerDelegate, ConfirmTransportViewControllerDelegate,
-                                  AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PatientTableHeaderViewDelegate,
+                                  AttributeTableViewCellDelegate, PatientTableViewControllerDelegate, PriorityTableViewCellDelegate,
                                   ObservationTableViewCellDelegate, RecordButtonDelegate {
     enum Section: Int, CaseIterable {
-        case info = 0
+        case ageAndGender = 0
+        case info
+        case priority
+        case location
         case vitals
         case observations
     }
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var updateButtonBackgroundView: UIView!
     @IBOutlet weak var updateButton: RecordButton!
 
     private var inputToolbar: UIToolbar!
@@ -46,8 +51,18 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         notificationToken?.invalidate()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let gradientLayer = CAGradientLayer()
+        gradientLayer.colors = [UIColor.bgBackground.withAlphaComponent(0).cgColor, UIColor.bgBackground.cgColor]
+        gradientLayer.startPoint = CGPoint(x: 0.5, y: 0.0)
+        gradientLayer.endPoint = CGPoint(x: 0.5, y: 11.0 / updateButtonBackgroundView.frame.height)
+        gradientLayer.locations = [0, 1]
+        gradientLayer.frame = updateButtonBackgroundView.bounds
+        updateButtonBackgroundView.layer.insertSublayer(gradientLayer, at: 0)
+        updateButtonBackgroundView.backgroundColor = .clear
 
         let prevItem = UIBarButtonItem(
             image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
@@ -68,13 +83,17 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         tableView.register(AttributeTableViewCell.self, forCellReuseIdentifier: "Attribute")
         tableView.register(LocationTableViewCell.self, forCellReuseIdentifier: "Location")
         tableView.register(ObservationTableViewCell.self, forCellReuseIdentifier: "Observation")
-        tableView.register(TableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: "Header")
-        tableView.register(UITableViewHeaderFooterView.self, forHeaderFooterViewReuseIdentifier: "Footer")
+        tableView.register(PriorityTableViewCell.self, forCellReuseIdentifier: "Priority")
+        tableView.register(SectionInfoTableViewCell.self, forCellReuseIdentifier: "Section")
 
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 85, right: 0)
+        tableView.register(PatientTableViewFooterView.self, forHeaderFooterViewReuseIdentifier: "Footer")
+        tableView.register(PatientTableViewHeaderView.self, forHeaderFooterViewReuseIdentifier: "Header")
+
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: updateButtonBackgroundView.frame.height, right: 0)
+        tableView.scrollIndicatorInsets = tableView.contentInset
         tableView.rowHeight = UITableView.automaticDimension
 
-        if let tableHeaderView = tableView.tableHeaderView as? PatientTableHeaderView {
+        if let tableHeaderView = tableView.tableHeaderView as? PatientHeaderView {
             tableHeaderView.configure(from: patient)
             tableHeaderView.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
@@ -94,6 +113,13 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
         tableView.tableHeaderView = tableView.tableHeaderView
         tableView.layoutIfNeeded()
+        // update background gradient layer for button
+        for layer in updateButtonBackgroundView.layer.sublayers ?? [] {
+            if let layer = layer as? CAGradientLayer {
+                layer.endPoint = CGPoint(x: 0.5, y: 11.0 / updateButtonBackgroundView.frame.height)
+                layer.frame = updateButtonBackgroundView.bounds
+            }
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -126,7 +152,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     @objc func keyboardWillHide(_ notification: NSNotification) {
         UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
-            self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 85, right: 0)
+            self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.updateButtonBackgroundView.frame.height, right: 0)
             self.tableView.scrollIndicatorInsets = .zero
         }
     }
@@ -136,48 +162,54 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     @objc func inputPrevPressed() {
-        for cell in tableView.visibleCells {
-            if cell.resignFirstResponder() {
-                if var indexPath = tableView.indexPath(for: cell) {
-                    if indexPath.row > 0 {
-                        indexPath.row -= 1
-                    } else if indexPath.section > 0 {
-                        indexPath.section -= 1
-                        indexPath.row = tableView.numberOfRows(inSection: indexPath.section) - 1
-                    } else {
-                        break
-                    }
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        if cell.becomeFirstResponder() {
-                            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                        }
-                    }
-                }
+        for cell in tableView.visibleCells where cell.isFirstResponder {
+            if let cell = cell as? AttributeTableViewCell, cell.focusPrev() {
                 break
             }
+            if var indexPath = tableView.indexPath(for: cell) {
+                if indexPath.row > 0 {
+                    indexPath.row -= 1
+                } else if indexPath.section > 0 {
+                    indexPath.section -= 1
+                    indexPath.row = tableView.numberOfRows(inSection: indexPath.section) - 1
+                } else {
+                    break
+                }
+                if let cell = tableView.cellForRow(at: indexPath) as? AttributeTableViewCell {
+                    if cell.focusPrev() {
+                        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                        break
+                    }
+                }
+            }
+            cell.resignFirstResponder()
+            break
         }
     }
 
     @objc func inputNextPressed() {
-        for cell in tableView.visibleCells {
-            if cell.resignFirstResponder() {
-                if var indexPath = tableView.indexPath(for: cell) {
-                    if indexPath.row < (tableView.numberOfRows(inSection: indexPath.section) - 1) {
-                        indexPath.row += 1
-                    } else if indexPath.section < (tableView.numberOfSections - 1) {
-                        indexPath.section += 1
-                        indexPath.row = 0
-                    } else {
-                        break
-                    }
-                    if let cell = tableView.cellForRow(at: indexPath) {
-                        if cell.becomeFirstResponder() {
-                            tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-                        }
-                    }
-                }
+        for cell in tableView.visibleCells where cell.isFirstResponder {
+            if let cell = cell as? AttributeTableViewCell, cell.focusNext() {
                 break
             }
+            if var indexPath = tableView.indexPath(for: cell) {
+                if indexPath.row < (tableView.numberOfRows(inSection: indexPath.section) - 1) {
+                    indexPath.row += 1
+                } else if indexPath.section < (tableView.numberOfSections - 1) {
+                    indexPath.section += 1
+                    indexPath.row = 0
+                } else {
+                    break
+                }
+                if let cell = tableView.cellForRow(at: indexPath) as? AttributeTableViewCell {
+                    if cell.focusNext() {
+                        tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+                        break
+                    }
+                }
+            }
+            cell.resignFirstResponder()
+            break
         }
     }
 
@@ -186,6 +218,17 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             if cell.resignFirstResponder() {
                 return
             }
+        }
+    }
+
+    @objc func transportPressed() {
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities")
+        if let vc = vc as? FacilitiesTableViewController {
+            vc.observation = patient.asObservation()
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.delegate = self
+            navVC.navigationBar.isHidden = true
+            presentAnimated(navVC)
         }
     }
 
@@ -204,7 +247,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
         case .change:
-            if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
+            if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
                 tableViewHeader.configure(from: patient)
             }
             tableView.reloadData()
@@ -228,8 +271,8 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     // MARK: - AttributeTableViewCellDelegate
 
-    func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell) {
-        if cell.attribute == Patient.Keys.location {
+    func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {
+        if attribute == Patient.Keys.location {
             if let lat = patient.lat, let lng = patient.lng, !lat.isEmpty, !lng.isEmpty {
                 let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Map")
                 if let vc = vc as? PatientMapViewController {
@@ -244,7 +287,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
         let observation = Observation()
+        observation.sceneId = patient.sceneId
         observation.pin = patient.pin
+        observation.version.value = (patient.version.value ?? 0) + 1
         observation.priority.value = Priority.transported.rawValue
         observation.transportFacility = facility
         observation.transportAgency = agency
@@ -255,7 +300,9 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController) {
         let observation = Observation()
+        observation.sceneId = patient.sceneId
         observation.pin = patient.pin
+        observation.version.value = (patient.version.value ?? 0) + 1
         observation.priority.value = Priority.transported.rawValue
         observation.transportFacility = nil
         observation.transportAgency = nil
@@ -280,24 +327,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    // MARK: - PatientTableHeaderViewDelegate
-
-    func patientTableHeaderView(_ view: PatientTableHeaderView, didPressStatusButton button: FormButton) {
-        tableView.tableHeaderView = tableView.tableHeaderView
-        tableView.layoutIfNeeded()
-    }
-
-    func patientTableHeaderView(_ view: PatientTableHeaderView, didPressTransportButton button: FormButton) {
-        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities")
-        if let vc = vc as? FacilitiesTableViewController {
-            vc.observation = patient.asObservation()
-            let navVC = UINavigationController(rootViewController: vc)
-            navVC.delegate = self
-            navVC.navigationBar.isHidden = true
-            presentAnimated(navVC)
-        }
-    }
-
     // MARK: - PatientTableViewControllerDelegate
 
     func patientTableViewControllerDidCancel(_ vc: PatientTableViewController) {
@@ -314,21 +343,22 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         navigationController?.popViewController(animated: false)
     }
 
-    // MARK: - PriorityViewDelegate
+    // MARK: - PriorityTableViewCellDelegate
 
-    func priorityViewDidDismiss(_ view: PriorityView) {
-        tableView.tableHeaderView = tableView.tableHeaderView
-        tableView.layoutIfNeeded()
-        tableView.reloadData()
+    func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
+        if priority != patient.priority.value {
+            let observation = Observation()
+            observation.sceneId = patient.sceneId
+            observation.pin = patient.pin
+            observation.version.value = (patient.version.value ?? 0) + 1
+            observation.priority.value = priority
+            save(observation: observation)
+        }
     }
 
-    func priorityView(_ view: PriorityView, didSelect priority: Int) {
-        let observation = Observation()
-        observation.sceneId = patient.sceneId
-        observation.pin = patient.pin
-        observation.version.value = (patient.version.value ?? 0) + 1
-        observation.priority.value = priority
-        save(observation: observation)
+    func priorityTableViewCellDidSetEditing(_ cell: PriorityTableViewCell) {
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 
     // MARK: - RecordButtonDelegate
@@ -352,20 +382,28 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 44
+        if section > Section.priority.rawValue {
+            return 44
+        }
+        return 0
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header")
+        if section > Section.priority.rawValue {
+            return tableView.dequeueReusableHeaderFooterView(withIdentifier: "Header")
+        }
+        return nil
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 15
+        if section > Section.info.rawValue {
+            return 15
+        }
+        return 0
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: "Footer")
-        view?.backgroundView = UIView()
         return view
     }
 
@@ -377,12 +415,12 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
-        case Section.info.rawValue:
-            return "Info".localized
+        case Section.location.rawValue:
+            return "PatientTableViewController.location".localized
         case Section.vitals.rawValue:
-            return "Vitals".localized
+            return "PatientTableViewController.vitals".localized
         case Section.observations.rawValue:
-            return "Observation".localized
+            return "PatientTableViewController.observations".localized
         default:
             return nil
         }
@@ -390,8 +428,14 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
+        case Section.ageAndGender.rawValue:
+            return 1
         case Section.info.rawValue:
-            return INFO.count + (patient.isTransported ? 2 : 1)
+            return INFO.count
+        case Section.priority.rawValue:
+            return 1
+        case Section.location.rawValue:
+            return 2
         case Section.vitals.rawValue:
             return VITALS.count
         case Section.observations.rawValue:
@@ -401,57 +445,71 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: UITableViewCell
         switch indexPath.section {
+        case Section.ageAndGender.rawValue:
+            cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+            if let cell = cell as? AttributeTableViewCell {
+                cell.delegate = self
+                cell.attributes = [Patient.Keys.age, Patient.Keys.gender]
+                cell.attributeTypes = [.age, .gender]
+            }
+        case Section.priority.rawValue:
+            cell = tableView.dequeueReusableCell(withIdentifier: "Priority", for: indexPath)
+            if let cell = cell as? PriorityTableViewCell {
+                cell.delegate = self
+            }
+        case Section.location.rawValue:
+            if patient.isTransported {
+                cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                if let cell = cell as? AttributeTableViewCell {
+                    cell.delegate = self
+                    switch indexPath.row {
+                    case 0:
+                        cell.attributes = [Patient.Keys.transportFacility]
+                    case 1:
+                        cell.attributes = [Patient.Keys.transportAgency]
+                    default:
+                        break
+                    }
+                    cell.attributeTypes = [.object]
+                }
+            } else {
+                if indexPath.row == 0 {
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Location", for: indexPath)
+                    if let cell = cell as? AttributeTableViewCell {
+                        cell.delegate = self
+                        cell.attributes = [Patient.Keys.location]
+                        cell.attributeTypes = [.string]
+                    }
+                } else {
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Section", for: indexPath)
+                    if let cell = cell as? SectionInfoTableViewCell {
+                        cell.button.buttonLabel = "Button.transport".localized
+                        cell.button.buttonImage = UIImage(named: "Transport")
+                        cell.button.addTarget(self, action: #selector(transportPressed), for: .touchUpInside)
+                    }
+                }
+            }
         case Section.observations.rawValue:
             cell = tableView.dequeueReusableCell(withIdentifier: "Observation", for: indexPath)
             if let cell = cell as? ObservationTableViewCell {
                 cell.delegate = self
                 cell.observationView.textView.returnKeyType = .done
             }
-        case Section.info.rawValue:
-            let index = indexPath.row - INFO.count
-            if index >= 0 {
-                if patient.isTransported {
-                    switch index {
-                    case 0:
-                        cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
-                        if let cell = cell as? AttributeTableViewCell {
-                            cell.delegate = self
-                            cell.attribute = Patient.Keys.transportAgency
-                            cell.attributeType = .object
-                        }
-                    default:
-                        cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
-                        if let cell = cell as? AttributeTableViewCell {
-                            cell.delegate = self
-                            cell.attribute = Patient.Keys.transportFacility
-                            cell.attributeType = .object
-                        }
-                    }
-                } else {
-                    cell = tableView.dequeueReusableCell(withIdentifier: "Location", for: indexPath)
-                    if let cell = cell as? AttributeTableViewCell {
-                        cell.delegate = self
-                        cell.attribute = Patient.Keys.location
-                        cell.attributeType = .string
-                    }
-                }
-                break
-            }
-            fallthrough
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
             if let cell = cell as? AttributeTableViewCell {
                 cell.delegate = self
                 switch indexPath.section {
                 case Section.info.rawValue:
-                    cell.attribute = INFO[indexPath.row]
-                    cell.attributeType = INFO_TYPES[indexPath.row]
+                    cell.attributes = [INFO[indexPath.row]]
+                    cell.attributeTypes = [INFO_TYPES[indexPath.row]]
                 case Section.vitals.rawValue:
-                    cell.attribute = VITALS[indexPath.row]
-                    cell.attributeType = VITALS_TYPES[indexPath.row]
+                    cell.attributes = [VITALS[indexPath.row]]
+                    cell.attributeTypes = [VITALS_TYPES[indexPath.row]]
                 default:
                     break
                 }

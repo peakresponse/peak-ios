@@ -206,13 +206,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
                                 <rect key="frame" x="0.0" y="38" width="414" height="804"/>
                                 <connections>
                                     <segue destination="VKI-7c-oCx" kind="embed" id="oiL-nl-Oms"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
@@ -521,20 +521,21 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="VkB-VA-XHr">
                                 <rect key="frame" x="0.0" y="88" width="414" height="716"/>
                                 <color key="backgroundColor" name="BgBackground"/>
-                                <view key="tableHeaderView" contentMode="scaleToFill" id="QjW-if-mkr" customClass="PatientTableHeaderView" customModule="Peak_Response" customModuleProvider="target">
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="QjW-if-mkr" customClass="PatientHeaderView" customModule="Peak_Response" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="9Hb-xL-yxQ" id="d07-yU-mfd"/>
-                                    </connections>
                                 </view>
                                 <connections>
                                     <outlet property="dataSource" destination="9Hb-xL-yxQ" id="CEo-rg-3W0"/>
                                     <outlet property="delegate" destination="9Hb-xL-yxQ" id="QTM-9s-ik8"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nxX-pb-cRP" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pAo-zC-dwa">
+                                <rect key="frame" x="0.0" y="688" width="414" height="116"/>
+                                <color key="backgroundColor" name="BgBackground"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nxX-pb-cRP" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="22" y="710" width="370" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <userDefinedRuntimeAttributes>
@@ -549,13 +550,17 @@
                         <viewLayoutGuide key="safeArea" id="hte-Xd-cxf"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="pAo-zC-dwa" firstAttribute="leading" secondItem="SuI-IW-Ntk" secondAttribute="leading" id="0Ob-Ie-dJT"/>
                             <constraint firstItem="nxX-pb-cRP" firstAttribute="trailing" secondItem="hte-Xd-cxf" secondAttribute="trailing" constant="-22" id="D4I-g4-8Vm"/>
                             <constraint firstItem="VkB-VA-XHr" firstAttribute="top" secondItem="hte-Xd-cxf" secondAttribute="top" id="NvO-PE-C0a"/>
+                            <constraint firstItem="pAo-zC-dwa" firstAttribute="bottom" secondItem="SuI-IW-Ntk" secondAttribute="bottom" id="PQr-sD-Kfd"/>
                             <constraint firstItem="VkB-VA-XHr" firstAttribute="bottom" secondItem="SuI-IW-Ntk" secondAttribute="bottom" id="SHU-9r-cgq"/>
                             <constraint firstItem="nxX-pb-cRP" firstAttribute="bottom" secondItem="hte-Xd-cxf" secondAttribute="bottom" constant="-22" id="ZZU-yM-dhg"/>
                             <constraint firstItem="nxX-pb-cRP" firstAttribute="leading" secondItem="hte-Xd-cxf" secondAttribute="leading" constant="22" id="hpt-dT-ura"/>
                             <constraint firstItem="VkB-VA-XHr" firstAttribute="leading" secondItem="hte-Xd-cxf" secondAttribute="leading" id="o5e-qU-jeh"/>
                             <constraint firstItem="VkB-VA-XHr" firstAttribute="trailing" secondItem="hte-Xd-cxf" secondAttribute="trailing" id="p6f-cZ-FBW"/>
+                            <constraint firstItem="pAo-zC-dwa" firstAttribute="trailing" secondItem="SuI-IW-Ntk" secondAttribute="trailing" id="s4a-CT-JAV"/>
+                            <constraint firstItem="pAo-zC-dwa" firstAttribute="top" secondItem="nxX-pb-cRP" secondAttribute="top" constant="-22" id="wMG-fO-j1j"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="9jP-BE-DmG">
@@ -579,6 +584,7 @@
                     <connections>
                         <outlet property="tableView" destination="VkB-VA-XHr" id="wc6-ub-NW1"/>
                         <outlet property="updateButton" destination="nxX-pb-cRP" id="Mxo-Sc-sOR"/>
+                        <outlet property="updateButtonBackgroundView" destination="pAo-zC-dwa" id="sEk-ai-xmo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gJa-8D-adZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -612,20 +618,21 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="5En-GW-83w">
                                 <rect key="frame" x="0.0" y="88" width="414" height="716"/>
                                 <color key="backgroundColor" name="BgBackground"/>
-                                <view key="tableHeaderView" contentMode="scaleToFill" id="B44-F5-NHy" customClass="PatientTableHeaderView" customModule="Peak_Response" customModuleProvider="target">
+                                <view key="tableHeaderView" contentMode="scaleToFill" id="B44-F5-NHy" customClass="PatientHeaderView" customModule="Peak_Response" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    <connections>
-                                        <outlet property="delegate" destination="wZS-XM-NNO" id="gJa-aD-l9v"/>
-                                    </connections>
                                 </view>
                                 <connections>
                                     <outlet property="dataSource" destination="wZS-XM-NNO" id="AwR-h5-pSb"/>
                                     <outlet property="delegate" destination="wZS-XM-NNO" id="dLt-xb-g5n"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HIQ-6o-wEJ">
+                                <rect key="frame" x="0.0" y="688" width="414" height="116"/>
+                                <color key="backgroundColor" name="BgBackground"/>
+                            </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="22" y="710" width="370" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
@@ -639,7 +646,11 @@
                             <constraint firstItem="5En-GW-83w" firstAttribute="top" secondItem="AdW-ua-EfJ" secondAttribute="top" id="23A-cG-i4C"/>
                             <constraint firstItem="Xm4-ki-lDz" firstAttribute="bottom" secondItem="AdW-ua-EfJ" secondAttribute="bottom" constant="-22" id="4Lj-YG-9gy"/>
                             <constraint firstItem="5En-GW-83w" firstAttribute="leading" secondItem="AdW-ua-EfJ" secondAttribute="leading" id="MeQ-Sk-Xxd"/>
+                            <constraint firstItem="HIQ-6o-wEJ" firstAttribute="bottom" secondItem="kb2-lF-GaI" secondAttribute="bottom" id="T26-0v-o5v"/>
                             <constraint firstItem="Xm4-ki-lDz" firstAttribute="leading" secondItem="AdW-ua-EfJ" secondAttribute="leading" constant="22" id="Vph-g8-kqg"/>
+                            <constraint firstItem="HIQ-6o-wEJ" firstAttribute="top" secondItem="Xm4-ki-lDz" secondAttribute="top" constant="-22" id="WdW-0H-mTX"/>
+                            <constraint firstItem="HIQ-6o-wEJ" firstAttribute="trailing" secondItem="kb2-lF-GaI" secondAttribute="trailing" id="agZ-KU-2qK"/>
+                            <constraint firstItem="HIQ-6o-wEJ" firstAttribute="leading" secondItem="kb2-lF-GaI" secondAttribute="leading" id="cP5-EY-bGE"/>
                             <constraint firstItem="5En-GW-83w" firstAttribute="trailing" secondItem="AdW-ua-EfJ" secondAttribute="trailing" id="iwE-63-OpS"/>
                             <constraint firstItem="5En-GW-83w" firstAttribute="bottom" secondItem="kb2-lF-GaI" secondAttribute="bottom" id="neo-G2-b0f"/>
                             <constraint firstItem="Xm4-ki-lDz" firstAttribute="trailing" secondItem="AdW-ua-EfJ" secondAttribute="trailing" constant="-22" id="xuR-eR-kPu"/>
@@ -667,6 +678,7 @@
                         <outlet property="saveBarButtonItem" destination="57b-Qd-hFP" id="gfo-Vr-2XD"/>
                         <outlet property="tableView" destination="5En-GW-83w" id="8fc-Tl-Riq"/>
                         <outlet property="updateButton" destination="Xm4-ki-lDz" id="PMI-XZ-ahN"/>
+                        <outlet property="updateButtonBackgroundView" destination="HIQ-6o-wEJ" id="Uvz-Ms-FEO"/>
                         <segue destination="4mS-Qx-VcP" kind="presentation" identifier="Record" id="QOh-oX-mfV"/>
                     </connections>
                 </viewController>
@@ -682,14 +694,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="750"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
                                 <rect key="frame" x="0.0" y="471" width="414" height="279"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
                                         <rect key="frame" x="188.5" y="202.5" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                         <rect key="frame" x="22" y="185" width="370" height="72"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <userDefinedRuntimeAttributes>
@@ -1154,10 +1166,10 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nE-o8-1lZ">
                                         <rect key="frame" x="0.0" y="235.5" width="414" height="432.5"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
                                                 <rect key="frame" x="107" y="146.5" width="200" height="140"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -1167,7 +1179,7 @@
                                                             <action selector="confirmPressed:" destination="AJM-DO-iCT" eventType="touchUpInside" id="sBc-0g-Chh"/>
                                                         </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="78" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -1273,7 +1285,7 @@
         </designable>
     </designables>
     <inferredMetricsTieBreakers>
-        <segue reference="31R-Jc-szW"/>
+        <segue reference="W1P-9o-e2Z"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Clear" width="15" height="15"/>

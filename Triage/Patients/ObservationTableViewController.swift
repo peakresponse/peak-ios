@@ -13,6 +13,7 @@ import UIKit
 class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate,
                                       RecordingViewControllerDelegate {
     @IBOutlet var saveBarButtonItem: UIBarButtonItem!
+    weak var scrollIndicatorView: ScrollIndicatorView!
 
     let dispatchGroup = DispatchGroup()
     var uploadTask: URLSessionTask?
@@ -24,6 +25,16 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let scrollIndicatorView = ScrollIndicatorView()
+        scrollIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollIndicatorView)
+        NSLayoutConstraint.activate([
+            scrollIndicatorView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            scrollIndicatorView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            scrollIndicatorView.bottomAnchor.constraint(equalTo: updateButtonBackgroundView.topAnchor, constant: 11)
+        ])
+        self.scrollIndicatorView = scrollIndicatorView
+
         locationHelper = LocationHelper()
         locationHelper.delegate = self
 
@@ -32,7 +43,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         // make a copy of the observation object before editing for comparison
         originalObservation = patient.asObservation()
 
-        if let tableHeaderView = tableView.tableHeaderView as? PatientTableHeaderView {
+        if let tableHeaderView = tableView.tableHeaderView as? PatientHeaderView {
             tableHeaderView.portraitView.isEditing = true
             tableHeaderView.portraitView.cameraHelper = cameraHelper
             tableHeaderView.portraitView.delegate = self
@@ -50,6 +61,8 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         super.viewDidLayoutSubviews()
         // change editing state after layout prevents layout constraint warnings
         tableView.setEditing(true, animated: false)
+        tableView.beginUpdates()
+        tableView.endUpdates()
     }
 
     @IBAction func cancelPressed() {
@@ -97,162 +110,6 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         }
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func extractValues(text: String) {
-        var tokens = text.components(separatedBy: .whitespacesAndNewlines)
-        var extracted: [String] = []
-        var number: Int?
-        var guess: String?
-        while tokens.count > 0 {
-            let token = tokens.removeFirst()
-            let lower = token.lowercased()
-            if lower.contains("priority") && !extracted.contains(Patient.Keys.priority) {
-                guess = nil
-                number = nil
-                let colors = ["red", "yellow", "green", "gray", "black"]
-                let priorities = ["immediate", "delayed", "minimal", "expectant", "deceased"]
-                var priority: Int?
-                if colors.contains(tokens.first?.lowercased() ?? "") {
-                    let token = tokens.removeFirst()
-                    priority = colors.firstIndex(of: token)
-                } else if priorities.contains(tokens.first?.lowercased() ?? "") {
-                    let token = tokens.removeFirst()
-                    priority = priorities.firstIndex(of: token)
-                }
-                if let value = priority {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.priority.value = value
-                        self?.tableView.reloadSections(IndexSet([0, 1]), with: .none)
-                    }
-                    extracted.append(Patient.Keys.priority)
-                }
-            } else if ["expectant", "deceased"].contains(lower) {
-                guess = nil
-                number = nil
-                let value = lower == "expectant" ? 3 : 4
-                DispatchQueue.main.async { [weak self] in
-                    self?.patient.priority.value = value
-                    self?.tableView.reloadSections(IndexSet([0, 1]), with: .none)
-                }
-                extracted.append(Patient.Keys.priority)
-            } else if lower.contains("patient") && !extracted.contains(Patient.Keys.firstName) {
-                guess = nil
-                number = nil
-                while ["name", "is"].contains(tokens.first?.lowercased() ?? "") {
-                    _ = tokens.removeFirst()
-                    guess = Patient.Keys.firstName
-                }
-            } else if lower.contains("age") && !extracted.contains(Patient.Keys.age) {
-                guess = Patient.Keys.age
-                number = nil
-            } else if lower.contains("year") && !extracted.contains(Patient.Keys.age) {
-                guess = nil
-                if tokens.first?.lowercased().contains("old") ?? false {
-                    _ = tokens.removeFirst()
-                    if let value = number {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.patient.age.value = value
-                            self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.info.rawValue)], with: .none)
-                        }
-                        extracted.append(Patient.Keys.age)
-                    }
-                }
-                number = nil
-            } else if lower.contains("blood") && !extracted.contains(Patient.Keys.bloodPressure) {
-                guess = nil
-                number = nil
-                if tokens.first?.lowercased().contains("pressure") ?? false {
-                    _ = tokens.removeFirst()
-                    guess = Patient.Keys.bloodPressure
-                }
-            } else if lower.contains("bp") && !extracted.contains(Patient.Keys.bloodPressure) {
-                guess = Patient.Keys.bloodPressure
-                number = nil
-            } else if lower.contains("capillary") && !extracted.contains(Patient.Keys.capillaryRefill) {
-                guess = nil
-                number = nil
-                if tokens.first?.lowercased().contains("refill") ?? false {
-                    _ = tokens.removeFirst()
-                    guess = Patient.Keys.capillaryRefill
-                }
-            } else if lower.contains("respiratory") && !extracted.contains(Patient.Keys.respiratoryRate) {
-                guess = nil
-                number = nil
-                if tokens.first?.lowercased().contains("rate") ?? false {
-                    _ = tokens.removeFirst()
-                    guess = Patient.Keys.respiratoryRate
-                }
-            } else if lower.contains("pulse") && !extracted.contains(Patient.Keys.pulse) {
-                guess = Patient.Keys.pulse
-                number = nil
-            } else if lower.range(of: #"\d+/\d+"#, options: .regularExpression) != nil {
-                if guess == Patient.Keys.bloodPressure {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.bloodPressure = lower
-                        self?.tableView.reloadRows(at: [IndexPath(row: 3, section: Section.vitals.rawValue)], with: .none)
-                    }
-                    extracted.append(Patient.Keys.bloodPressure)
-                }
-                guess = nil
-                number = nil
-            } else if let value = Int(lower) {
-                number = nil
-                switch guess {
-                case .some(Patient.Keys.age):
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.age.value = value
-                        self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.info.rawValue)], with: .none)
-                    }
-                    extracted.append(Patient.Keys.age)
-                case .some(Patient.Keys.respiratoryRate):
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.respiratoryRate.value = value
-                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: Section.vitals.rawValue)], with: .none)
-                    }
-                    guess = nil
-                    extracted.append(Patient.Keys.respiratoryRate)
-                case .some(Patient.Keys.pulse):
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.pulse.value = value
-                        self?.tableView.reloadRows(at: [IndexPath(row: 1, section: Section.vitals.rawValue)], with: .none)
-                    }
-                    guess = nil
-                    extracted.append(Patient.Keys.pulse)
-                case .some(Patient.Keys.capillaryRefill):
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.capillaryRefill.value = value
-                        self?.tableView.reloadRows(at: [IndexPath(row: 2, section: Section.vitals.rawValue)], with: .none)
-                    }
-                    guess = nil
-                    extracted.append(Patient.Keys.capillaryRefill)
-                default:
-                    number = value
-                }
-            } else if ["is"].contains(token) {
-                continue
-            } else {
-                number = nil
-                if guess == Patient.Keys.firstName {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.firstName = token
-                        self?.tableView.reloadRows(at: [IndexPath(row: 0, section: Section.info.rawValue)], with: .none)
-                    }
-                    guess = Patient.Keys.lastName
-                    extracted.append(Patient.Keys.firstName)
-                } else if guess == Patient.Keys.lastName {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.patient.lastName = token
-                        self?.tableView.reloadRows(at: [IndexPath(row: 1, section: Section.info.rawValue)], with: .none)
-                    }
-                    guess = nil
-                    extracted.append(Patient.Keys.lastName)
-                } else {
-                    guess = nil
-                }
-            }
-        }
-    }
-
     @IBAction override func updatePressed() {
         performSegue(withIdentifier: "Record", sender: self)
     }
@@ -265,31 +122,33 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     // MARK: - AttributeTableViewCellDelegate
 
-    func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String) {
-        if cell.attributeType == .object {
+    func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String,
+                                for attribute: String, with type: String) {
+        let attributeType = AttributeTableViewCellType(rawValue: type)
+        if attributeType == .object {
             if text.isEmpty {
-                patient.setValue(nil, forKey: cell.attribute)
+                patient.setValue(nil, forKey: attribute)
             }
         } else {
-            patient.setValue(text, forKey: cell.attribute)
-            if cell.attribute == Patient.Keys.location, text.isEmpty {
+            patient.setValue(text, forKey: attribute)
+            if attribute == Patient.Keys.location, text.isEmpty {
                 patient.clearLatLng()
                 cell.configure(from: patient)
             }
         }
-        if cell.attribute == Patient.Keys.transportAgency || cell.attribute == Patient.Keys.transportFacility {
+        if attribute == Patient.Keys.transportAgency || attribute == Patient.Keys.transportFacility {
             tableView.reloadSections(IndexSet([Section.info.rawValue]), with: .none)
         }
     }
 
-    override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell) {
+    override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {
         if cell as? LocationTableViewCell != nil {
             if !patient.hasLatLng {
                 captureLocation()
                 return
             }
         }
-        super.attributeTableViewCellDidPressAlert(cell)
+        super.attributeTableViewCellDidPressAlert(cell, for: attribute, with: type)
     }
 
     func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell) {
@@ -315,7 +174,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         patient.transportAgency = agency
         tableView.reloadSections(IndexSet([0]), with: .none)
         tableView.reloadSections(IndexSet([0]), with: .none)
-        if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
+        if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
             tableViewHeader.configure(from: patient)
         }
         delegate?.patientTableViewController?(self, didUpdatePriority: Priority.transported.rawValue)
@@ -328,7 +187,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         patient.transportFacility = nil
         patient.transportAgency = nil
         tableView.reloadSections(IndexSet([0]), with: .none)
-        if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
+        if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
             tableViewHeader.configure(from: patient)
         }
         delegate?.patientTableViewController?(self, didUpdatePriority: Priority.transported.rawValue)
@@ -372,21 +231,12 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         uploadTask?.resume()
     }
 
-    // MARK: - PriorityViewDelegate
+    // MARK: - PriorityTableViewCellDelegate
 
-    override func priorityViewDidDismiss(_ view: PriorityView) {
-        tableView.tableHeaderView = tableView.tableHeaderView
-        tableView.layoutIfNeeded()
-        tableView.reloadData()
-    }
-
-    override func priorityView(_ view: PriorityView, didSelect priority: Int) {
+    override func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
         patient.priority.value = priority
-        if let tableViewHeader = tableView.tableHeaderView as? PatientTableHeaderView {
-            tableViewHeader.configure(from: patient)
-        }
         delegate?.patientTableViewController?(self, didUpdatePriority: priority)
-        priorityViewDidDismiss(view)
+        tableView.reloadSections(IndexSet(integer: Section.priority.rawValue), with: .none)
     }
 
     // MARK: - RecordingViewControllerDelegate
@@ -394,8 +244,15 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String) {
         patient.text = text
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.extractValues(text: text)
+        if let patient = patient as? Observation {
+            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+                patient.extractValues(from: text)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.tableView.reloadData()
+                    self.delegate?.patientTableViewController?(self, didUpdatePriority: patient.priority.value ?? 5)
+                }
+            }
         }
     }
 
@@ -420,6 +277,8 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         uploadTask?.resume()
         // hide the record button, user must clear current recording to continue
         updateButton.isHidden = true
+        updateButtonBackgroundView.isHidden = true
+        scrollIndicatorView.isHidden = true
     }
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
@@ -444,6 +303,22 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     func observationTableViewCellDidReturn(_ cell: ObservationTableViewCell) {
         _ = cell.resignFirstResponder()
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        UIView.animate(withDuration: 0.5) {
+            self.scrollIndicatorView.alpha = 0
+        }
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y == 0 {
+            UIView.animate(withDuration: 0.25) {
+                self.scrollIndicatorView.alpha = 1
+            }
+        }
     }
 
     // MARK: - UITableViewDelegate

@@ -1,5 +1,5 @@
 //
-//  TableViewHeaderView.swift
+//  PatientTableViewHeaderView.swift
 //  Triage
 //
 //  Created by Francis Li on 3/20/20.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TableViewHeaderView: UITableViewHeaderFooterView {
+class PatientTableViewHeaderView: UITableViewHeaderFooterView {
     private let _textLabel = UILabel()
     override var textLabel: UILabel? {
         return _textLabel

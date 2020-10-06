@@ -1,5 +1,5 @@
 //
-//  PortraitTableViewCell.swift
+//  PatientHeaderView.swift
 //  Triage
 //
 //  Created by Francis Li on 11/2/19.

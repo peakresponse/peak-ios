@@ -43,6 +43,14 @@ class Observation: Patient {
         return json
     }
 
+    override func asObservation() -> Observation {
+        let observation = super.asObservation()
+        observation.portraitFile = portraitFile
+        observation.photoFile = photoFile
+        observation.audioFile = audioFile
+        return observation
+    }
+
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     func changes(from source: Observation) -> Observation {
         let observation = Observation()
@@ -55,11 +63,20 @@ class Observation: Patient {
         if firstName != source.firstName {
             observation.firstName = firstName
         }
+        if gender != source.gender {
+            observation.gender = gender
+        }
         if age.value != source.age.value {
             observation.age.value = age.value
         }
+        if ageUnits != source.ageUnits {
+            observation.ageUnits = ageUnits
+        }
         if dob != source.dob {
             observation.dob = dob
+        }
+        if complaint != source.complaint {
+            observation.complaint = complaint
         }
         if respiratoryRate.value != source.respiratoryRate.value {
             observation.respiratoryRate.value = respiratoryRate.value
@@ -70,8 +87,14 @@ class Observation: Patient {
         if capillaryRefill.value != source.capillaryRefill.value {
             observation.capillaryRefill.value = capillaryRefill.value
         }
-        if bloodPressure != source.bloodPressure {
-            observation.bloodPressure = bloodPressure
+        if bpSystolic.value != source.bpSystolic.value {
+            observation.bpSystolic.value = bpSystolic.value
+        }
+        if bpDiastolic.value != source.bpDiastolic.value {
+            observation.bpDiastolic.value = bpDiastolic.value
+        }
+        if gcsTotal.value != source.gcsTotal.value {
+            observation.gcsTotal.value = gcsTotal.value
         }
         if text != source.text {
             observation.text = text
@@ -87,15 +110,6 @@ class Observation: Patient {
         }
         if lng != source.lng {
             observation.lng = lng
-        }
-        if portraitUrl != source.portraitUrl {
-            observation.portraitUrl = portraitUrl
-        }
-        if photoUrl != source.photoUrl {
-            observation.photoUrl = photoUrl
-        }
-        if audioUrl != source.audioUrl {
-            observation.audioUrl = audioUrl
         }
         if portraitFile != source.portraitFile {
             observation.portraitFile = portraitFile

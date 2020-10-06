@@ -30,7 +30,7 @@ class FormIconButton: UIButton {
 
 @IBDesignable
 class FormButton: UIControl {
-    let button: FormIconButton = FormIconButton()
+    weak var button: FormIconButton!
 
     @IBInspectable override var isEnabled: Bool {
         get { return button.isEnabled }
@@ -138,9 +138,12 @@ class FormButton: UIControl {
 
     private func commonInit() {
         backgroundColor = .clear
-        button.formButton = self
+
+        let button = FormIconButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 5, color: .black, opacity: 0.06)
+        button.formButton = self
+        button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         addSubview(button)
         heightConstraint = button.heightAnchor.constraint(equalToConstant: height)
         NSLayoutConstraint.activate([
@@ -150,6 +153,7 @@ class FormButton: UIControl {
             heightConstraint,
             bottomAnchor.constraint(equalTo: button.bottomAnchor)
         ])
+        self.button = button
         updateButtonStyles()
     }
 

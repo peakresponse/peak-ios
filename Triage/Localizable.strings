@@ -32,7 +32,9 @@
 "Button.stopAndSave" = "Stop & Save";
 "Button.transfer" = "Transfer";
 "Button.transferCommand" = "Transfer Command";
+"Button.transport" = "Transport";
 "Button.update" = "Update";
+"Button.updateStatus" = "Update Status";
 
 "CloseSceneConfirmation.title" = "Are you sure you want to close the %@ scene?";
 "CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
@@ -89,17 +91,41 @@
 "NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";
 "NewSceneViewController.urgencyField" = "Description of Patient Urgency";
 
-"Patient.firstName" = "First name";
-"Patient.lastName" = "Last name";
 "Patient.age" = "Age";
-"Patient.ageString" = "%dy/o";
-"Patient.location" = "Location";
-"Patient.respiratoryRate" = "Respiratory Rate";
-"Patient.pulse" = "Pulse";
-"Patient.capillaryRefill" = "Capillary Refill";
 "Patient.bloodPressure" = "Blood Pressure";
-"Patient.transportAgency" = "Agency";
+"Patient.capillaryRefill" = "Capillary Refill";
+"Patient.complaint" = "Injury or C/O";
+"Patient.firstName" = "First name";
+"Patient.gender" = "Gender";
+"Patient.gcsTotal" = "Total Glasgow Coma Score";
+"Patient.lastName" = "Last name";
+"Patient.location" = "Location";
+"Patient.new" = "New Patient";
+"Patient.pin" = "Tag #: %@";
+"Patient.pulse" = "Pulse";
+"Patient.respiratoryRate" = "Respiratory Rate";
+"Patient.transportAgency" = "Transport Agency";
 "Patient.transportFacility" = "Facility";
+"Patient.updatedAt" = "Last Updated: %@";
+
+"Patient.ageUnits.2516001" = "days";
+"Patient.ageUnits.2516003" = "hours";
+"Patient.ageUnits.2516005" = "minutes";
+"Patient.ageUnits.2516007" = "months";
+"Patient.ageUnits.2516009" = "years";
+
+"Patient.ageUnits.abbr.2516001" = "d";
+"Patient.ageUnits.abbr.2516003" = "h";
+"Patient.ageUnits.abbr.2516005" = "min";
+"Patient.ageUnits.abbr.2516007" = "mo";
+"Patient.ageUnits.abbr.2516009" = "y";
+
+"Patient.gender.9906001" = "Female";
+"Patient.gender.9906003" = "Male";
+"Patient.gender.9906005" = "Unknown";
+"Patient.gender.9906007" = "Trans Male";
+"Patient.gender.9906009" = "Trans Female";
+"Patient.gender.9906011" = "Other";
 
 "Patient.priority.0" = "Immediate";
 "Patient.priority.1" = "Delayed";
@@ -119,6 +145,10 @@
 "Patient.sort.1" = "Longest Since Update";
 "Patient.sort.2" = "A-Z by Last Name";
 "Patient.sort.3" = "Z-A by Last Name";
+
+"PatientTableViewController.location" = "Location";
+"PatientTableViewController.vitals" = "Vitals";
+"PatientTableViewController.observations" = "Observations";
 
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
@@ -149,6 +179,8 @@
 
 "SceneTableViewCell.patientsLabel" = "%d Patients Total";
 "SceneTableViewCell.respondersLabel" = "%d First Responders";
+
+"ScrollIndicatorView.label" = "Scroll down to continue patient entry";
 
 "SortBar.sortBy" = "Sort By :";
 
