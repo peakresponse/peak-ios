@@ -48,7 +48,7 @@ class PortraitView: UIView, CameraHelperDelegate {
     private func commonInit() {
         let imageView = RoundImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
+        imageView.imageView.contentMode = .scaleAspectFill
         addSubview(imageView)
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: topAnchor),
@@ -104,7 +104,6 @@ class PortraitView: UIView, CameraHelperDelegate {
                 }
             }
         } else {
-            imageView.contentMode = .scaleAspectFill
             imageView.image = UIImage(named: "User")
             imageView.backgroundColor = .greyPeakBlue
         }

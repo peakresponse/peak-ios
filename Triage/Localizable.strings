@@ -95,6 +95,7 @@
 "Patient.bloodPressure" = "Blood Pressure";
 "Patient.capillaryRefill" = "Capillary Refill";
 "Patient.complaint" = "Injury or C/O";
+"Patient.complaint.abbr" = "C/O";
 "Patient.firstName" = "First name";
 "Patient.gender" = "Gender";
 "Patient.gcsTotal" = "Total Glasgow Coma Score";
@@ -106,7 +107,7 @@
 "Patient.respiratoryRate" = "Respiratory Rate";
 "Patient.transportAgency" = "Transport Agency";
 "Patient.transportFacility" = "Facility";
-"Patient.updatedAt" = "Last Updated: %@";
+"Patient.updatedAt" = "Last Update: %@";
 
 "Patient.ageUnits.2516001" = "days";
 "Patient.ageUnits.2516003" = "hours";
@@ -126,6 +127,13 @@
 "Patient.gender.9906007" = "Trans Male";
 "Patient.gender.9906009" = "Trans Female";
 "Patient.gender.9906011" = "Other";
+
+"Patient.gender.abbr.9906001" = "F";
+"Patient.gender.abbr.9906003" = "M";
+"Patient.gender.abbr.9906005" = "Unk";
+"Patient.gender.abbr.9906007" = "TM";
+"Patient.gender.abbr.9906009" = "TF";
+"Patient.gender.abbr.9906011" = "Oth";
 
 "Patient.priority.0" = "Immediate";
 "Patient.priority.1" = "Delayed";

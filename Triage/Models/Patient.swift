@@ -88,6 +88,10 @@ enum PatientGender: String, CaseIterable, CustomStringConvertible {
     var description: String {
         return "Patient.gender.\(rawValue)".localized
     }
+
+    var abbrDescription: String {
+        return "Patient.gender.abbr.\(rawValue)".localized
+    }
 }
 
 // swiftlint:disable:next type_body_length

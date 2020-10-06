@@ -204,7 +204,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             frame = frame.inset(by: layout.sectionInset)
         }
-        frame.size.height = 70
+        frame.size.height = 86
         return frame.size
     }
 
