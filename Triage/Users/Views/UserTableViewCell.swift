@@ -38,7 +38,7 @@ class UserTableViewCell: UITableViewCell {
         self.userView = userView
     }
 
-    func configure(from responder: Responder) {
-        userView.configure(from: responder)
+    func configure(from responder: Responder, isMGS: Bool = false) {
+        userView.configure(from: responder, isMGS: isMGS)
     }
 }

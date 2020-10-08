@@ -121,6 +121,22 @@ extension UIColor {
         return UIColor(r: 189, g: 189, b: 189)
     }
 
+    static var red: UIColor {
+        return UIColor(r: 235, g: 87, b: 87)
+    }
+
+    static var purple2: UIColor {
+        return UIColor(r: 187, g: 107, b: 217)
+    }
+
+    static var yellow: UIColor {
+        return UIColor(r: 242, g: 201, b: 76)
+    }
+
+    static var green3: UIColor {
+        return UIColor(r: 111, g: 207, b: 151)
+    }
+
     convenience public init(r: Int, g: Int, b: Int) {
         self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: 1.0)
     }

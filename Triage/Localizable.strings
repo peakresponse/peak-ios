@@ -162,7 +162,13 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
-"ResponderSort.az" = "Alphabetically";
+
+"Responder.sort.az" = "Alphabetically";
+
+"Responder.role.STAGING" = "Staging Officer";
+"Responder.role.TRANSPORT" = "Transport Officer";
+"Responder.role.TREATMENT" = "Treatment Officer";
+"Responder.role.TRIAGE" = "Triage Officer";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";
