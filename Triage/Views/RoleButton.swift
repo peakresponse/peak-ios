@@ -18,23 +18,12 @@ class RoleButton: FormButton {
     var isMGS: Bool = false {
         didSet { configure() }
     }
+    @IBInspectable var Role: String? {
+        get { role?.rawValue }
+        set { role = ResponderRole(rawValue: newValue ?? "") }
+    }
     var role: ResponderRole? {
         didSet { configure() }
-    }
-
-    override var font: UIFont {
-        switch size {
-        case .xxsmall:
-            return .copyXSBold
-        case .xsmall:
-            return .copyXSBold
-        case .small:
-            return .copySBold
-        case .medium:
-            return .copyMBold
-        default:
-            return .copyLBold
-        }
     }
 
     override func commonInit() {
@@ -46,6 +35,7 @@ class RoleButton: FormButton {
         let iconBackgroundView = RoundImageView()
         iconBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         iconBackgroundView.imageView.contentMode = .center
+        iconBackgroundView.isHidden = true
         button.addSubview(iconBackgroundView)
         NSLayoutConstraint.activate([
             iconBackgroundView.topAnchor.constraint(equalTo: button.topAnchor, constant: 2),
@@ -67,7 +57,9 @@ class RoleButton: FormButton {
             button.setTitleColor(.white, for: .highlighted)
             button.setTitleColor(.white, for: .selected)
             button.setTitleColor(.white, for: [.highlighted, .selected])
+            button.titleLabel?.font = .copyXSBold
             iconBackgroundView.image = buttonImage
+            iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? .peakBlue : .white
             iconBackgroundView.backgroundColor = isSelected ? .white : .peakBlue
         } else if let role = role {
@@ -78,20 +70,24 @@ class RoleButton: FormButton {
             button.setTitleColor(.white, for: .highlighted)
             button.setTitleColor(.white, for: .selected)
             button.setTitleColor(.white, for: [.highlighted, .selected])
+            button.titleLabel?.font = .copyXSBold
             iconBackgroundView.image = buttonImage
+            iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? role.color : .white
             iconBackgroundView.backgroundColor = isSelected ? .white : role.color
-        } else {
-            buttonLabel = "Button.assignRole".localized
         }
     }
 
     override func updateButtonBackgroundImage(color: UIColor, state: UIControl.State) {
+        if role == nil && !isMGS {
+            button.setBackgroundImage(UIImage.resizableImage(withColor: .bgBackground, cornerRadius: height / 2,
+                                                             borderColor: color, borderWidth: size == .xxsmall ? 1 : 3), for: state)
+            return
+        }
         switch state {
-        case .normal:
-            break
         case .highlighted:
-            button.setBackgroundImage(UIImage.resizableImage(withColor: color, cornerRadius: height / 2), for: state)
+            button.setBackgroundImage(nil, for: .normal)
+            button.setBackgroundImage(UIImage.resizableImage(withColor: color, cornerRadius: height / 2), for: .highlighted)
             button.setBackgroundImage(UIImage.resizableImage(withColor: color, cornerRadius: height / 2), for: .selected)
             button.setBackgroundImage(UIImage.resizableImage(withColor: color.colorWithBrightnessMultiplier(multiplier: 0.4),
                                                              cornerRadius: height / 2), for: [.highlighted, .selected])

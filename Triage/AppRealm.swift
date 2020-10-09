@@ -321,6 +321,27 @@ class AppRealm {
         task.resume()
     }
 
+    public static func assignResponder(responderId: String, role: ResponderRole?, completionHandler: @escaping (Error?) -> Void) {
+        let realm = open()
+        var prevRole: String?
+        try! realm.write {
+            let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId)
+            prevRole = responder?.role
+            responder?.role = role?.rawValue
+        }
+        let task = ApiClient.shared.assignResponder(responderId: responderId, role: role?.rawValue) { (error) in
+            if let error = error {
+                let realm = open()
+                try! realm.write {
+                    let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId)
+                    responder?.role = prevRole
+                }
+                completionHandler(error)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Users
 
     public static func me(completionHandler: @escaping (User?, Agency?, Scene?, Error?) -> Void) {
