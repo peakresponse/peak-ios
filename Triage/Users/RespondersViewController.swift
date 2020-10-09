@@ -174,8 +174,7 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
-            vc.user = responder.user
-            vc.agency = responder.agency
+            vc.responder = responder
             presentAnimated(vc)
             tableView.deselectRow(at: indexPath, animated: true)
         }

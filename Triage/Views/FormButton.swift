@@ -16,7 +16,7 @@ enum FormButtonStyle: String {
     case priority, lowPriority
 }
 
-class FormIconButton: UIButton {
+private class FormIconButton: UIButton {
     weak var formButton: FormButton?
 
     override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
@@ -30,11 +30,15 @@ class FormIconButton: UIButton {
 
 @IBDesignable
 class FormButton: UIControl {
-    weak var button: FormIconButton!
+    weak var button: UIButton!
 
     @IBInspectable override var isEnabled: Bool {
         get { return button.isEnabled }
         set { button.isEnabled = newValue }
+    }
+    override var isSelected: Bool {
+        get { return button.isSelected }
+        set { button.isSelected = newValue }
     }
     @IBInspectable var l10nKey: String? {
         get { return nil }
@@ -136,7 +140,7 @@ class FormButton: UIControl {
         commonInit()
     }
 
-    private func commonInit() {
+    func commonInit() {
         backgroundColor = .clear
 
         let button = FormIconButton()
@@ -157,7 +161,7 @@ class FormButton: UIControl {
         updateButtonStyles()
     }
 
-    private func updateButtonBackgroundImage(color: UIColor, state: UIButton.State) {
+    func updateButtonBackgroundImage(color: UIColor, state: UIButton.State) {
         switch style {
         case .priority:
             button.setBackgroundImage(UIImage.resizableImage(withColor: color, cornerRadius: height / 2), for: state)
@@ -167,7 +171,7 @@ class FormButton: UIControl {
         }
     }
 
-    private func updateButtonStyles() {
+    func updateButtonStyles() {
         button.layer.cornerRadius = height / 2
         button.titleLabel?.font = font
         button.tintColor = buttonColor
