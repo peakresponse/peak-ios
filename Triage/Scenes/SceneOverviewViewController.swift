@@ -59,7 +59,9 @@ class SceneOverviewViewController: UIViewController {
                     self.notificationToken = self.scene.observe { [weak self] (change) in
                         self?.didObserveChange(change)
                     }
-                    self.responders = realm.objects(Responder.self).filter("user.id=%@ AND departedAt=NULL", AppSettings.userId ?? "")
+                    self.responders = realm.objects(Responder.self).filter("scene.id=%@ AND user.id=%@ AND departedAt=NULL",
+                                                                           sceneId,
+                                                                           AppSettings.userId ?? "")
                     self.respondersNotificationToken = self.responders.observe { [weak self] (change) in
                         self?.didObserveRespondersChange(change)
                     }
@@ -128,8 +130,6 @@ class SceneOverviewViewController: UIViewController {
                 transferButton.isHidden = true
             }
         }
-        addNoteButton.isHidden = responders.count == 0
-        addPhotoButton.isHidden = responders.count == 0
     }
 
     @IBAction func editPressed(_ sender: Any) {
