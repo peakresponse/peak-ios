@@ -17,11 +17,9 @@ class ResponderViewController: UIViewController {
     @IBOutlet weak var positionLabel: UILabel!
     @IBOutlet weak var agencyLabel: UILabel!
     @IBOutlet weak var roleDropdownView: UIView!
-    @IBOutlet weak var triageButton: RoleButton!
-    @IBOutlet weak var treatmentButton: RoleButton!
-    @IBOutlet weak var stagingButton: RoleButton!
-    @IBOutlet weak var transportButton: RoleButton!
+    @IBOutlet weak var roleDropdownStackView: UIStackView!
 
+    var unassignButtons: [UIButton] = []
     var roleButtons: [RoleButton] = []
 
     var responder: Responder!
@@ -34,8 +32,37 @@ class ResponderViewController: UIViewController {
         sceneNotificationToken?.invalidate()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        // set up role dropdown
+        roleDropdownView.isHidden = true
+        roleDropdownView.layer.borderWidth = 3
+        roleDropdownView.layer.borderColor = UIColor.greyPeakBlue.cgColor
+        for role in ResponderRole.allCases {
+            let stackView = UIStackView()
+            stackView.axis = .horizontal
+            stackView.spacing = 4
+            roleDropdownStackView.addArrangedSubview(stackView)
+
+            let unassignButton = UIButton(type: .custom)
+            unassignButton.frame = CGRect(x: 0, y: 0, width: 15, height: 15)
+            unassignButton.setImage(UIImage(named: "Clear"), for: .normal)
+            unassignButton.addTarget(self, action: #selector(unassignPressed(_:)), for: .touchUpInside)
+            unassignButton.isHidden = true
+            unassignButton.setContentCompressionResistancePriority(.required, for: .horizontal)
+            unassignButton.setContentHuggingPriority(.required, for: .horizontal)
+            stackView.addArrangedSubview(unassignButton)
+            unassignButtons.append(unassignButton)
+
+            let roleButton = RoleButton(size: .xsmall, style: .lowPriority)
+            roleButton.role = role
+            roleButton.addTarget(self, action: #selector(rolePressed(_:)), for: .touchUpInside)
+            roleButton.setContentHuggingPriority(.defaultLow, for: .horizontal)
+            stackView.addArrangedSubview(roleButton)
+            roleButtons.append(roleButton)
+        }
 
         guard let sceneId = AppSettings.sceneId else { return }
         scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
@@ -72,29 +99,26 @@ class ResponderViewController: UIViewController {
             imageView.image = UIImage(named: "User")
         }
 
-        // configure role dropdown
-        roleDropdownView.isHidden = true
-        roleDropdownView.layer.borderWidth = 3
-        roleDropdownView.layer.borderColor = UIColor.greyPeakBlue.cgColor
-        roleButtons = [ triageButton, treatmentButton, stagingButton, transportButton ]
-        for (i, roleButton) in roleButtons.enumerated() {
-            roleButton.role = ResponderRole.allCases[i]
-            roleButton.buttonLabel = roleButton.buttonLabel?.replacingOccurrences(of: " ", with: "\n")
-            roleButton.button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -22)
-        }
-
         // configure Role button
         if scene.incidentCommanderId == responder.user?.id {
             roleButton.isMGS = true
             roleButton.isSelected = true
             roleButton.isUserInteractionEnabled = false
-        } else if let role = ResponderRole(rawValue: responder.role ?? "") {
+        } else {
+            let role = ResponderRole(rawValue: responder.role ?? "")
             roleButton.role = role
-            roleButton.isSelected = true
-            roleButton.isUserInteractionEnabled = scene.incidentCommanderId == AppSettings.userId
-            roleDropdownView.layer.borderColor = role.color.cgColor
-        } else if scene.incidentCommanderId != AppSettings.userId {
-            roleButton.isHidden = true
+            roleButton.isSelected = role != nil
+            roleDropdownView.layer.borderColor = role?.color.cgColor ?? UIColor.greyPeakBlue.cgColor
+            for (i, roleButton) in roleButtons.enumerated() {
+                roleButton.isSelected = roleButton.role == role
+                roleButton.buttonLabel = roleButton.buttonLabel?.replacingOccurrences(of: " ", with: "\n")
+                unassignButtons[i].isHidden = roleButton.role != role
+            }
+            if role != nil {
+                roleButton.isUserInteractionEnabled = scene.incidentCommanderId == AppSettings.userId
+            } else {
+                roleButton.isHidden = scene.incidentCommanderId != AppSettings.userId
+            }
         }
 
         // configure Transfer MGS Role button
@@ -125,9 +149,23 @@ class ResponderViewController: UIViewController {
         roleDropdownView.isHidden = !roleDropdownView.isHidden
     }
 
+    @IBAction func unassignPressed(_ sender: Any) {
+        AppRealm.assignResponder(responderId: responder.id, role: nil) { (error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            }
+        }
+        roleDropdownView.isHidden = true
+    }
+
     @IBAction func rolePressed(_ sender: Any) {
         if let index = roleButtons.firstIndex(where: { $0.button.isEqual(sender) }) {
-            let role = ResponderRole.allCases[index]
+            var role: ResponderRole? = ResponderRole.allCases[index]
+            if role?.rawValue == responder.role {
+                role = nil
+            }
             AppRealm.assignResponder(responderId: responder.id, role: role) { (error) in
                 if let error = error {
                     DispatchQueue.main.async { [weak self] in

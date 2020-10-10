@@ -18,23 +18,23 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Soi-f0-tbU">
-                                <rect key="frame" x="0.0" y="152.66666666666669" width="375" height="659.33333333333326"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Soi-f0-tbU">
+                                <rect key="frame" x="0.0" y="150" width="375" height="662"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                                 <connections>
                                     <outlet property="dataSource" destination="ujh-na-LxO" id="Dox-ek-jf1"/>
                                     <outlet property="delegate" destination="ujh-na-LxO" id="Yfr-u3-F6d"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1Lz-1o-PqR" customClass="SortBar" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="102.66666666666667" width="375" height="50.000000000000014"/>
+                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Lz-1o-PqR" customClass="SortBar" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="100" width="375" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="delegate" destination="ujh-na-LxO" id="tgy-fd-Y6a"/>
                                 </connections>
                             </view>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ocp-dB-TVf" customClass="SearchBar" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="375" height="58.666666666666657"/>
+                                <rect key="frame" x="0.0" y="44" width="375" height="56"/>
                                 <textInputTraits key="textInputTraits"/>
                                 <connections>
                                     <outlet property="delegate" destination="ujh-na-LxO" id="9Ax-ep-pJS"/>
@@ -91,7 +91,7 @@
                                         <rect key="frame" x="0.0" y="50" width="375" height="718"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="zr9-BS-nU0">
-                                                <rect key="frame" x="0.0" y="0.0" width="375" height="218"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="472"/>
                                                 <subviews>
                                                     <stackView opaque="NO" contentMode="scaleToFill" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="MU7-wO-kSy">
                                                         <rect key="frame" x="22" y="36" width="331" height="114"/>
@@ -142,76 +142,6 @@
                                                         <subviews>
                                                             <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" axis="vertical" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="gOQ-NY-d4C">
                                                                 <rect key="frame" x="15.000000000000007" y="35" width="125.66666666666669" height="236"/>
-                                                                <subviews>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RKE-K1-Q1W">
-                                                                        <rect key="frame" x="0.0" y="0.0" width="125.66666666666667" height="50"/>
-                                                                        <subviews>
-                                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FEE-gE-Qf6" customClass="RoleButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="125.66666666666667" height="50"/>
-                                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Role" value="TRIAGE"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                                <connections>
-                                                                                    <action selector="rolePressed:" destination="zYV-xE-D0k" eventType="touchUpInside" id="LT9-xM-dTw"/>
-                                                                                </connections>
-                                                                            </view>
-                                                                        </subviews>
-                                                                    </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pqr-YN-Jpz">
-                                                                        <rect key="frame" x="0.0" y="62" width="125.66666666666667" height="50"/>
-                                                                        <subviews>
-                                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0ol-qz-7bt" customClass="RoleButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="125.66666666666667" height="50"/>
-                                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Role" value="TREATMENT"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                                <connections>
-                                                                                    <action selector="rolePressed:" destination="zYV-xE-D0k" eventType="touchUpInside" id="QyN-Ml-NUi"/>
-                                                                                </connections>
-                                                                            </view>
-                                                                        </subviews>
-                                                                    </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6pk-eH-IG8">
-                                                                        <rect key="frame" x="0.0" y="124" width="125.66666666666667" height="50"/>
-                                                                        <subviews>
-                                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PIc-Hw-dO3" customClass="RoleButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="125.66666666666667" height="50"/>
-                                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Role" value="STAGING"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                                <connections>
-                                                                                    <action selector="rolePressed:" destination="zYV-xE-D0k" eventType="touchUpInside" id="lNd-ZE-J5d"/>
-                                                                                </connections>
-                                                                            </view>
-                                                                        </subviews>
-                                                                    </stackView>
-                                                                    <stackView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4yF-ZL-E1O">
-                                                                        <rect key="frame" x="0.0" y="186" width="125.66666666666667" height="50"/>
-                                                                        <subviews>
-                                                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hCH-HP-idk" customClass="RoleButton" customModule="Peak_Response" customModuleProvider="target">
-                                                                                <rect key="frame" x="0.0" y="0.0" width="125.66666666666667" height="50"/>
-                                                                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                                                <userDefinedRuntimeAttributes>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Size" value="xsmall"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="lowPriority"/>
-                                                                                    <userDefinedRuntimeAttribute type="string" keyPath="Role" value="TRANSPORT"/>
-                                                                                </userDefinedRuntimeAttributes>
-                                                                                <connections>
-                                                                                    <action selector="rolePressed:" destination="zYV-xE-D0k" eventType="touchUpInside" id="eAz-kY-zR1"/>
-                                                                                </connections>
-                                                                            </view>
-                                                                        </subviews>
-                                                                    </stackView>
-                                                                </subviews>
                                                             </stackView>
                                                         </subviews>
                                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -329,12 +259,9 @@
                         <outlet property="nameLabel" destination="GvK-e5-hvd" id="gE9-sU-cao"/>
                         <outlet property="positionLabel" destination="brv-qt-8Wr" id="uQF-Lv-f7i"/>
                         <outlet property="roleButton" destination="CJF-qg-JDc" id="89e-Uw-T0e"/>
+                        <outlet property="roleDropdownStackView" destination="gOQ-NY-d4C" id="HnA-qd-IJ4"/>
                         <outlet property="roleDropdownView" destination="aMq-Qa-QMx" id="lKC-Wl-ajQ"/>
-                        <outlet property="stagingButton" destination="PIc-Hw-dO3" id="93J-Ft-0Qb"/>
                         <outlet property="transferButton" destination="6bq-lt-W68" id="BSq-v9-jAV"/>
-                        <outlet property="transportButton" destination="hCH-HP-idk" id="sKb-Io-ojy"/>
-                        <outlet property="treatmentButton" destination="0ol-qz-7bt" id="kXU-gl-H3b"/>
-                        <outlet property="triageButton" destination="FEE-gE-Qf6" id="BsA-dh-co4"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kMF-NJ-VoI" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -344,7 +271,7 @@
     </scenes>
     <designables>
         <designable name="ocp-dB-TVf">
-            <size key="intrinsicContentSize" width="-1" height="58.666666666666664"/>
+            <size key="intrinsicContentSize" width="-1" height="56"/>
         </designable>
     </designables>
     <resources>

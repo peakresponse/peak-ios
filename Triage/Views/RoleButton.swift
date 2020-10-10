@@ -33,6 +33,7 @@ class RoleButton: FormButton {
         button.addTarget(self, action: #selector(buttonReleased), for: [.touchUpInside, .touchDragExit, .touchUpOutside, .touchCancel])
 
         let iconBackgroundView = RoundImageView()
+        iconBackgroundView.isUserInteractionEnabled = false
         iconBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         iconBackgroundView.imageView.contentMode = .center
         iconBackgroundView.isHidden = true
@@ -51,13 +52,15 @@ class RoleButton: FormButton {
         button.titleLabel?.textAlignment = .center
         if isMGS {
             highlightedButtonColor = .peakBlue
-            buttonImage = UIImage(named: "Star")?.withRenderingMode(.alwaysTemplate)
+            buttonImage = UIImage(named: "Star", in: Bundle(for: type(of: self)), with: nil)?.withRenderingMode(.alwaysTemplate)
             buttonLabel = "Responder.role.MGS".localized
             button.setTitleColor(.peakBlue, for: .normal)
             button.setTitleColor(.white, for: .highlighted)
             button.setTitleColor(.white, for: .selected)
             button.setTitleColor(.white, for: [.highlighted, .selected])
             button.titleLabel?.font = .copyXSBold
+            button.titleLabel?.numberOfLines = 0
+            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -22)
             iconBackgroundView.image = buttonImage
             iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? .peakBlue : .white
@@ -71,10 +74,22 @@ class RoleButton: FormButton {
             button.setTitleColor(.white, for: .selected)
             button.setTitleColor(.white, for: [.highlighted, .selected])
             button.titleLabel?.font = .copyXSBold
+            button.titleLabel?.numberOfLines = 0
+            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -22)
             iconBackgroundView.image = buttonImage
             iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? role.color : .white
             iconBackgroundView.backgroundColor = isSelected ? .white : role.color
+        } else {
+            iconBackgroundView.isHidden = true
+            buttonImage = nil
+            buttonLabel = "Button.assignRole".localized
+            buttonColor = .greyPeakBlue
+            highlightedButtonColor = UIColor.greyPeakBlue.colorWithBrightnessMultiplier(multiplier: 0.4)
+            button.titleLabel?.font = .copySBold
+            button.titleLabel?.numberOfLines = 1
+            button.titleEdgeInsets = .zero
+            updateButtonStyles()
         }
     }
 
