@@ -327,6 +327,14 @@ class ApiClient {
         return GET(path: "/api/responders", params: ["sceneId": sceneId], completionHandler: completionHandler)
     }
 
+    func assignResponder(responderId: String, role: String?, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/responders/\(responderId)/assign", body: [
+            "role": role != nil ? role as Any : NSNull()
+        ], completionHandler: { (_: [String: Any]?, error: Error?) in
+            completionHandler(error)
+        })
+    }
+
     // MARK: - Uploads
 
     func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

@@ -17,6 +17,7 @@ class UserView: UIView {
     weak var statusStackView: UIStackView!
     weak var statusLabel: UILabel!
     weak var dateLabel: UILabel!
+    weak var roleImageView: RoundImageView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -101,9 +102,21 @@ class UserView: UIView {
         dateLabel.textColor = .greyPeakBlue
         statusStackView.addArrangedSubview(dateLabel)
         self.dateLabel = dateLabel
+
+        let roleImageView = RoundImageView()
+        roleImageView.translatesAutoresizingMaskIntoConstraints = false
+        roleImageView.imageView.contentMode = .center
+        addSubview(roleImageView)
+        NSLayoutConstraint.activate([
+            roleImageView.widthAnchor.constraint(equalToConstant: 32),
+            roleImageView.heightAnchor.constraint(equalToConstant: 32),
+            roleImageView.rightAnchor.constraint(equalTo: rightAnchor, constant: -7),
+            roleImageView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -5)
+        ])
+        self.roleImageView = roleImageView
     }
 
-    func configure(from responder: Responder) {
+    func configure(from responder: Responder, isMGS: Bool = false) {
         if let imageURL = responder.user?.iconUrl {
             imageView.imageURL = imageURL
         } else {
@@ -112,5 +125,17 @@ class UserView: UIView {
         nameLabel.text = responder.user?.fullName
         positionLabel.text = responder.user?.position
         agencyLabel.text = responder.agency?.name
+
+        if isMGS {
+            roleImageView.isHidden = false
+            roleImageView.backgroundColor = .peakBlue
+            roleImageView.image = UIImage(named: "Star")
+        } else if let role = ResponderRole(rawValue: responder.role ?? "") {
+            roleImageView.isHidden = false
+            roleImageView.backgroundColor = role.color
+            roleImageView.image = role.image
+        } else {
+            roleImageView.isHidden = true
+        }
     }
 }

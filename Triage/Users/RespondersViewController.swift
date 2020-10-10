@@ -20,8 +20,12 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
     var results: Results<Responder>?
     var notificationToken: NotificationToken?
 
+    var scene: Scene!
+    var sceneNotificationToken: NotificationToken?
+
     deinit {
         notificationToken?.invalidate()
+        sceneNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
@@ -36,17 +40,21 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
 
         tableView.register(UserTableViewCell.self, forCellReuseIdentifier: "User")
 
+        guard let sceneId = AppSettings.sceneId else { return }
+        scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+        sceneNotificationToken = scene.observe { [weak self] (change) in
+            self?.didObserveSceneChange(change)
+        }
+
         performQuery()
         refresh()
     }
 
     private func performQuery() {
-        guard let sceneId = AppSettings.sceneId else { return }
-
         notificationToken?.invalidate()
 
         var predicates: [NSPredicate] = []
-        predicates.append(NSPredicate(format: "scene.id == %@", sceneId))
+        predicates.append(NSPredicate(format: "scene.id == %@", scene.id))
         if let text = searchBar.text, !text.isEmpty {
             predicates.append(NSPredicate(format: "user.firstName CONTAINS[cd] %@ OR user.lastName CONTAINS[cd] %@", text, text))
         }
@@ -63,11 +71,11 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
             .filter(predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
             .sorted(by: sorts)
         notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
+            self?.didObserveResultsChanges(changes)
         }
     }
 
-    private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
+    private func didObserveResultsChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
         switch changes {
         case .initial:
             tableView.reloadData()
@@ -82,10 +90,20 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
         }
     }
 
+    func didObserveSceneChange(_ change: ObjectChange<Scene>) {
+        switch change {
+        case .change:
+            tableView.reloadData()
+        case .error(let error):
+            presentAlert(error: error)
+        case .deleted:
+            break
+        }
+    }
+
     @objc func refresh() {
-        guard let sceneId = AppSettings.sceneId else { return }
         tableView.refreshControl?.beginRefreshing()
-        AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
+        AppRealm.getResponders(sceneId: scene.id) { [weak self] (error) in
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.refreshControl?.endRefreshing()
                 if let error = error {
@@ -146,7 +164,7 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "User", for: indexPath)
         if let cell = cell as? UserTableViewCell, let responder = results?[indexPath.row] {
-            cell.configure(from: responder)
+            cell.configure(from: responder, isMGS: responder.user?.id == scene.incidentCommanderId)
         }
         return cell
     }
@@ -156,8 +174,7 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
-            vc.user = responder.user
-            vc.agency = responder.agency
+            vc.responder = responder
             presentAnimated(vc)
             tableView.deselectRow(at: indexPath, animated: true)
         }

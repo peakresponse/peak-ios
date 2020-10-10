@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450A977D24DCAC7A007BCDD3 /* TabBar.swift */; };
+		451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A16FE252FD5FD00DC7705 /* RoleButton.swift */; };
 		452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */; };
 		452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */; };
 		452AFDF0252A5E6D00E5A84D /* PatientAgeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */; };
@@ -156,6 +157,7 @@
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		450A977D24DCAC7A007BCDD3 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		451A16FE252FD5FD00DC7705 /* RoleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleButton.swift; sourceTree = "<group>"; };
 		452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientGenderKeyboardView.swift; sourceTree = "<group>"; };
 		452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
 		452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientAgeKeyboardView.swift; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				45FD73E6243151C200FD7EDB /* ObservationView.swift */,
 				4566F06E236D2EBF00A04C75 /* PortraitView.swift */,
 				45E35A3724F06A8E005A8059 /* RecordButton.swift */,
+				451A16FE252FD5FD00DC7705 /* RoleButton.swift */,
 				4566F079236D486B00A04C75 /* RoundImageView.swift */,
 				45515A2E24DE26AB007BAE09 /* SearchBar.swift */,
 				452DDBD9243D819500A8F1FF /* SelectorView.swift */,
@@ -925,6 +928,7 @@
 				45F1305325269318001495C7 /* UserView.swift in Sources */,
 				45B7A2DA2508331500BCAAAE /* State.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
+				451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */,
 				45F130682526E797001495C7 /* ResponderViewController.swift in Sources */,
 				45B7A2EE250F3E7800BCAAAE /* SceneSummaryViewController.swift in Sources */,
 				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,

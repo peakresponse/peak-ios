@@ -19,6 +19,7 @@
 "Button.addNote" = "Add Note";
 "Button.addPhoto" = "Add Photo";
 "Button.addRecording" = "Add Recording";
+"Button.assignRole" = "Assign Role";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.close" = "Close";
@@ -31,7 +32,7 @@
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
 "Button.transfer" = "Transfer";
-"Button.transferCommand" = "Transfer Command";
+"Button.transferCommand" = "Transfer MGS Role";
 "Button.transport" = "Transport";
 "Button.update" = "Update";
 "Button.updateStatus" = "Update Status";
@@ -162,7 +163,14 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
-"ResponderSort.az" = "Alphabetically";
+
+"Responder.sort.az" = "Alphabetically";
+
+"Responder.role.MGS" = "Medical Group Supervisor";
+"Responder.role.STAGING" = "Staging Officer";
+"Responder.role.TRANSPORT" = "Transport Officer";
+"Responder.role.TREATMENT" = "Treatment Officer";
+"Responder.role.TRIAGE" = "Triage Officer";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";

@@ -9,11 +9,48 @@
 import Foundation
 import RealmSwift
 
+enum ResponderRole: String, CaseIterable, CustomStringConvertible {
+    case triage = "TRIAGE"
+    case treatment = "TREATMENT"
+    case staging = "STAGING"
+    case transport = "TRANSPORT"
+
+    var color: UIColor {
+        switch self {
+        case .triage:
+            return .red
+        case .treatment:
+            return .purple2
+        case .staging:
+            return .yellow
+        case .transport:
+            return .green3
+        }
+    }
+
+    var description: String {
+        return "Responder.role.\(rawValue)".localized
+    }
+
+    var image: UIImage {
+        switch self {
+        case .triage:
+            return UIImage(named: "CheckCircle", in: Bundle(for: Responder.self), with: nil)!
+        case .treatment:
+            return UIImage(named: "Heart", in: Bundle(for: Responder.self), with: nil)!
+        case .staging:
+            return UIImage(named: "Pause", in: Bundle(for: Responder.self), with: nil)!
+        case .transport:
+            return UIImage(named: "Truck", in: Bundle(for: Responder.self), with: nil)!
+        }
+    }
+}
+
 enum ResponderSort: String, CaseIterable, CustomStringConvertible {
     case az
 
     var description: String {
-        return "ResponderSort.\(rawValue)".localized
+        return "Responder.sort.\(rawValue)".localized
     }
 }
 
@@ -24,6 +61,7 @@ class Responder: Base {
         static let agency = "agency"
         static let userId = "userId"
         static let user = "user"
+        static let role = "role"
         static let arrivedAt = "arrivedAt"
         static let departedAt = "departedAt"
     }
@@ -31,6 +69,7 @@ class Responder: Base {
     @objc dynamic var scene: Scene?
     @objc dynamic var agency: Agency?
     @objc dynamic var user: User?
+    @objc dynamic var role: String?
     @objc dynamic var arrivedAt: Date?
     @objc dynamic var departedAt: Date?
 
@@ -50,6 +89,7 @@ class Responder: Base {
         } else if let userId = data[Keys.userId] as? String {
             user = realm.object(ofType: User.self, forPrimaryKey: userId)
         }
+        role = data[Keys.role] as? String
         arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
         departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
     }
@@ -61,6 +101,9 @@ class Responder: Base {
         }
         if let userId = user?.id {
             json[Keys.userId] = userId
+        }
+        if let role = role {
+            json[Keys.role] = role
         }
         if let arrivedAt = arrivedAt?.asISO8601String() {
             json[Keys.arrivedAt] = arrivedAt
