@@ -11,6 +11,7 @@ import UIKit
 
 @objc protocol ActiveScenesViewDelegate {
     @objc optional func activeScenesView(_ view: ActiveScenesView, didJoinScene scene: Scene)
+    @objc optional func activeScenesView(_ view: ActiveScenesView, didViewScene scene: Scene)
 }
 
 @IBDesignable
@@ -77,5 +78,9 @@ class ActiveScenesView: UIView, ActiveSceneViewDelegate {
 
     func activeSceneView(_ view: ActiveSceneView, didJoinScene scene: Scene) {
         delegate?.activeScenesView?(self, didJoinScene: scene)
+    }
+
+    func activeSceneView(_ view: ActiveSceneView, didViewScene scene: Scene) {
+        delegate?.activeScenesView?(self, didViewScene: scene)
     }
 }

@@ -12,7 +12,7 @@
 
 "ActiveSceneView.patientsLabel" = " Patients on Scene";
 "ActiveSceneView.transportedLabel" = " Patients Transported";
-"ActiveSceneView.respondersLabel" = " First Responders on Scene";
+"ActiveSceneView.respondersLabel" = " Responders on Scene";
 
 "Banner.noActiveScenes" = "No Active Scenes";
 
@@ -25,7 +25,9 @@
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.edit" = "Edit";
+"Button.exitScene" = "Exit Scene";
 "Button.joinScene" = "Join Scene";
+"Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
 "Button.startScene" = "Start Scene";
@@ -36,6 +38,7 @@
 "Button.transport" = "Transport";
 "Button.update" = "Update";
 "Button.updateStatus" = "Update Status";
+"Button.viewScene" = "View Scene";
 
 "CloseSceneConfirmation.title" = "Are you sure you want to close the %@ scene?";
 "CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
