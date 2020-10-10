@@ -20,6 +20,8 @@ class SceneOverviewViewController: UIViewController {
     @IBOutlet weak var transferButton: FormButton!
     @IBOutlet weak var scenePatientsView: ScenePatientsView!
     @IBOutlet weak var sceneRespondersView: SceneRespondersView!
+    @IBOutlet weak var addNoteButton: FormButton!
+    @IBOutlet weak var addPhotoButton: FormButton!
 
     private var scene: Scene!
     private var notificationToken: NotificationToken?
@@ -126,6 +128,8 @@ class SceneOverviewViewController: UIViewController {
                 transferButton.isHidden = true
             }
         }
+        addNoteButton.isHidden = responders.count == 0
+        addPhotoButton.isHidden = responders.count == 0
     }
 
     @IBAction func editPressed(_ sender: Any) {
