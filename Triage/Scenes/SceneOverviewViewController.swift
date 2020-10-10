@@ -15,15 +15,20 @@ class SceneOverviewViewController: UIViewController {
     @IBOutlet weak var sceneCommandsView: UIView!
     @IBOutlet weak var closeButton: FormButton!
     @IBOutlet weak var leaveButton: FormButton!
+    @IBOutlet weak var exitButton: FormButton!
+    @IBOutlet weak var joinButton: FormButton!
     @IBOutlet weak var transferButton: FormButton!
     @IBOutlet weak var scenePatientsView: ScenePatientsView!
     @IBOutlet weak var sceneRespondersView: SceneRespondersView!
 
     private var scene: Scene!
-    var notificationToken: NotificationToken?
+    private var notificationToken: NotificationToken?
+    private var responders: Results<Responder>!
+    private var respondersNotificationToken: NotificationToken?
 
     deinit {
         notificationToken?.invalidate()
+        respondersNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
@@ -47,11 +52,15 @@ class SceneOverviewViewController: UIViewController {
             } else if let sceneId = scene?.id {
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+                    let realm = AppRealm.open()
+                    self.scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
                     self.notificationToken = self.scene.observe { [weak self] (change) in
                         self?.didObserveChange(change)
                     }
-                    self.refresh()
+                    self.responders = realm.objects(Responder.self).filter("user.id=%@ AND departedAt=NULL", AppSettings.userId ?? "")
+                    self.respondersNotificationToken = self.responders.observe { [weak self] (change) in
+                        self?.didObserveRespondersChange(change)
+                    }
                 }
             }
         }
@@ -75,6 +84,17 @@ class SceneOverviewViewController: UIViewController {
         }
     }
 
+    func didObserveRespondersChange(_ change: RealmCollectionChange<Results<Responder>>) {
+        switch change {
+        case .initial:
+            refresh()
+        case .update(_, deletions: _, insertions: _, modifications: _):
+            refresh()
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
     private func leaveScene() {
         AppDelegate.leaveScene()
     }
@@ -86,14 +106,26 @@ class SceneOverviewViewController: UIViewController {
         if AppSettings.userId == scene.incidentCommanderId {
             closeButton.isHidden = false
             leaveButton.isHidden = true
-//            transferButton.alpha = 1
+            exitButton.isHidden = true
+            joinButton.isHidden = true
+            // for now, hide transfer button, leave space for sizing
+            transferButton.isHidden = false
+            transferButton.alpha = 0
         } else {
             closeButton.isHidden = true
-            leaveButton.isHidden = false
-//            transferButton.alpha = 0
+            if responders.count > 0 {
+                leaveButton.isHidden = false
+                exitButton.isHidden = true
+                joinButton.isHidden = true
+                transferButton.isHidden = false
+                transferButton.alpha = 0
+            } else {
+                leaveButton.isHidden = true
+                exitButton.isHidden = false
+                joinButton.isHidden = false
+                transferButton.isHidden = true
+            }
         }
-        // for now, hide transfer button
-        transferButton.alpha = 0
     }
 
     @IBAction func editPressed(_ sender: Any) {
@@ -103,6 +135,22 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func photoPressed(_ sender: Any) {
+    }
+
+    @IBAction func joinPressed(_ sender: Any) {
+        AppRealm.joinScene(sceneId: scene.id) { (error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            }
+        }
+    }
+
+    @IBAction func exitPressed(_ sender: Any) {
+        DispatchQueue.main.async {
+            AppDelegate.leaveScene()
+        }
     }
 
     @IBAction func closePressed(_ sender: Any) {

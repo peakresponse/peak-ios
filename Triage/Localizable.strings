@@ -25,6 +25,7 @@
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.edit" = "Edit";
+"Button.exitScene" = "Exit Scene";
 "Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";

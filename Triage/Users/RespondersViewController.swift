@@ -54,7 +54,7 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
         notificationToken?.invalidate()
 
         var predicates: [NSPredicate] = []
-        predicates.append(NSPredicate(format: "scene.id == %@", scene.id))
+        predicates.append(NSPredicate(format: "scene.id=%@", scene.id))
         if let text = searchBar.text, !text.isEmpty {
             predicates.append(NSPredicate(format: "user.firstName CONTAINS[cd] %@ OR user.lastName CONTAINS[cd] %@", text, text))
         }
@@ -62,14 +62,16 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
         var sorts: [SortDescriptor] = []
         switch sort {
         case .az:
-            sorts.append(SortDescriptor(keyPath: "user.firstName", ascending: false))
-            sorts.append(SortDescriptor(keyPath: "user.lastName", ascending: false))
+            sorts.append(SortDescriptor(keyPath: "user.firstName", ascending: true))
+            sorts.append(SortDescriptor(keyPath: "user.lastName", ascending: true))
         }
+        sorts.append(SortDescriptor(keyPath: "arrivedAt", ascending: false))
 
         let realm = AppRealm.open()
         results = realm.objects(Responder.self)
             .filter(predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates))
             .sorted(by: sorts)
+            .distinct(by: ["user.id"])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveResultsChanges(changes)
         }
