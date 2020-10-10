@@ -11,9 +11,11 @@ import UIKit
 
 @objc protocol ActiveSceneViewDelegate {
     @objc optional func activeSceneView(_ view: ActiveSceneView, didJoinScene scene: Scene)
+    @objc optional func activeSceneView(_ view: ActiveSceneView, didViewScene scene: Scene)
 }
 
 @IBDesignable
+// swiftlint:disable:next type_body_length
 class ActiveSceneView: UIView {
     var scene: Scene!
     weak var delegate: ActiveSceneViewDelegate?
@@ -36,6 +38,7 @@ class ActiveSceneView: UIView {
     weak var transportedLabel: UILabel!
     weak var respondersCountLabel: UILabel!
     weak var respondersLabel: UILabel!
+    weak var viewButton: FormButton!
     weak var joinButton: FormButton!
 
     override init(frame: CGRect) {
@@ -128,14 +131,27 @@ class ActiveSceneView: UIView {
         ])
         self.mapView = mapView
 
+        let viewButton = FormButton(size: .xsmall, style: .lowPriority)
+        viewButton.buttonLabel = "Button.viewScene".localized
+        viewButton.addTarget(self, action: #selector(viewPressed), for: .touchUpInside)
+        viewButton.translatesAutoresizingMaskIntoConstraints = false
+        bodyView.addSubview(viewButton)
+        NSLayoutConstraint.activate([
+            viewButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 10),
+            viewButton.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20),
+            viewButton.widthAnchor.constraint(equalToConstant: 150)
+        ])
+        self.viewButton = viewButton
+
         let joinButton = FormButton(size: .xsmall, style: .priority)
         joinButton.buttonLabel = "Button.joinScene".localized
-        joinButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        joinButton.addTarget(self, action: #selector(joinPressed), for: .touchUpInside)
         joinButton.translatesAutoresizingMaskIntoConstraints = false
         bodyView.addSubview(joinButton)
         NSLayoutConstraint.activate([
-            joinButton.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 10),
-            joinButton.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20)
+            joinButton.topAnchor.constraint(equalTo: viewButton.bottomAnchor, constant: 10),
+            joinButton.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20),
+            joinButton.widthAnchor.constraint(equalTo: viewButton.widthAnchor)
         ])
         self.joinButton = joinButton
 
@@ -147,7 +163,7 @@ class ActiveSceneView: UIView {
         NSLayoutConstraint.activate([
             dateLabel.topAnchor.constraint(equalTo: mapView.bottomAnchor, constant: 10),
             dateLabel.leftAnchor.constraint(equalTo: bodyView.leftAnchor, constant: 20),
-            dateLabel.rightAnchor.constraint(equalTo: joinButton.leftAnchor, constant: -22)
+            dateLabel.rightAnchor.constraint(equalTo: viewButton.leftAnchor, constant: -22)
         ])
         self.dateLabel = dateLabel
 
@@ -195,7 +211,7 @@ class ActiveSceneView: UIView {
         NSLayoutConstraint.activate([
             transportedLabel.leftAnchor.constraint(equalTo: transportedCountLabel.rightAnchor),
             transportedLabel.firstBaselineAnchor.constraint(equalTo: transportedCountLabel.firstBaselineAnchor),
-            transportedLabel.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20)
+            transportedLabel.rightAnchor.constraint(equalTo: dateLabel.rightAnchor)
         ])
         self.transportedLabel = transportedLabel
 
@@ -219,7 +235,7 @@ class ActiveSceneView: UIView {
         NSLayoutConstraint.activate([
             respondersLabel.leftAnchor.constraint(equalTo: respondersCountLabel.rightAnchor),
             respondersLabel.firstBaselineAnchor.constraint(equalTo: respondersCountLabel.firstBaselineAnchor),
-            respondersLabel.rightAnchor.constraint(equalTo: bodyView.rightAnchor, constant: -20),
+            respondersLabel.rightAnchor.constraint(equalTo: dateLabel.rightAnchor),
             bodyView.bottomAnchor.constraint(equalTo: respondersCountLabel.bottomAnchor, constant: 44)
         ])
         self.respondersLabel = respondersLabel
@@ -242,8 +258,12 @@ class ActiveSceneView: UIView {
         }
     }
 
-    @objc func buttonPressed() {
+    @objc func joinPressed() {
         delegate?.activeSceneView?(self, didJoinScene: scene)
+    }
+
+    @objc func viewPressed() {
+        delegate?.activeSceneView?(self, didViewScene: scene)
     }
 
     func configure(from scene: Scene) {

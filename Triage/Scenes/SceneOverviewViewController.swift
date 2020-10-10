@@ -134,7 +134,7 @@ class SceneOverviewViewController: UIViewController {
         vc.alertTitle = String(format: "LeaveSceneConfirmation.title".localized, scene.name ?? "")
         vc.alertMessage = "LeaveSceneConfirmation.message".localized
         vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
-        vc.addAlertAction(title: "Button.close".localized, style: .default) { [weak self] (_) in
+        vc.addAlertAction(title: "Button.leave".localized, style: .default) { [weak self] (_) in
             guard let self = self else { return }
             AppRealm.leaveScene(sceneId: sceneId) { [weak self] (error) in
                 if let error = error {

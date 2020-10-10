@@ -72,4 +72,11 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
             }
         }
     }
+
+    func activeScenesView(_ view: ActiveScenesView, didViewScene scene: Scene) {
+        let sceneId = scene.id
+        DispatchQueue.main.async {
+            AppDelegate.enterScene(id: sceneId)
+        }
+    }
 }
