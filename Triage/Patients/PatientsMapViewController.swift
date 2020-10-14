@@ -15,26 +15,56 @@ class PatientAnnotation: MKPointAnnotation {
     var patient: Patient!
 }
 
-class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapViewDelegate {
+class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapViewDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     private var searchBarShouldBeginEditing = true
-    @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var mapContainerView: UIView!
+    weak var mapView: GMSMapView!
 
-    var notificationToken: NotificationToken?
-    var results: Results<Patient>?
+    weak var selectedPinMarker: GMSMarker?
+    weak var selectedPinInfoView: ScenePinInfoView?
+
+    var scene: Scene!
+    var sceneNotificationToken: NotificationToken?
+
+    var patients: Results<Patient>?
+    var patientsNotificationToken: NotificationToken?
+
+    var pins: Results<ScenePin>?
+    var pinsNotificationToken: NotificationToken?
 
     // MARK: -
 
     deinit {
-        notificationToken?.invalidate()
+        sceneNotificationToken?.invalidate()
+        patientsNotificationToken?.invalidate()
+        pinsNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        searchBar.delegate = self
+        // get a reference to the Scene and listen for changes
+        guard let sceneId = AppSettings.sceneId else { return }
+        scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+        guard scene != nil else { return }
+        sceneNotificationToken = scene?.observe { [weak self] (_) in
+            self?.refresh()
+        }
 
-        mapView.register(MKMarkerAnnotationView.self, forAnnotationViewWithReuseIdentifier: "Patient")
+        // set up Google Map
+        var mapView: GMSMapView
+        if let target = scene.latLng {
+            let camera = GMSCameraPosition(target: target, zoom: 16)
+            mapView = GMSMapView(frame: mapContainerView.bounds, camera: camera)
+        } else {
+            mapView = GMSMapView(frame: mapContainerView.bounds)
+        }
+        mapView.delegate = self
+        mapView.isMyLocationEnabled = true
+        mapView.settings.myLocationButton = true
+        mapContainerView.addSubview(mapView)
+        self.mapView = mapView
 
         // set up Realm query and observer
         performQuery()
@@ -47,45 +77,90 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
     }
 
     private func performQuery() {
-        notificationToken?.invalidate()
+        patientsNotificationToken?.invalidate()
         let realm = AppRealm.open()
         var predicates: [NSPredicate] = []
+        var predicate: NSPredicate
         if let sceneId = AppSettings.sceneId {
             predicates.append(NSPredicate(format: "sceneId=%@", sceneId))
         }
         if let text = searchBar.text, !text.isEmpty {
             predicates.append(NSPredicate(format: "firstName CONTAINS[cd] %@ OR lastName CONTAINS[cd] %@", text, text))
         }
-        let predicate = predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
-        results = realm.objects(Patient.self).filter(predicate)
-        notificationToken = results?.observe { [weak self] (changes) in
+        predicate = predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        patients = realm.objects(Patient.self).filter(predicate)
+        patientsNotificationToken = patients?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
+        }
+
+        predicates = []
+        predicates.append(NSPredicate(format: "deletedAt=NULL"))
+        if let sceneId = AppSettings.sceneId {
+            predicates.append(NSPredicate(format: "scene.id=%@", sceneId))
+        }
+        if let text = searchBar.text, !text.isEmpty {
+            predicates.append(NSPredicate(format: "type CONTAINS[cd] %@ OR name CONTAINS[cd] %@ OR desc CONTAINS[cd] %@", text, text))
+        }
+        predicate = predicates.count == 1 ? predicates[0] : NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
+        pins = realm.objects(ScenePin.self).filter(predicate)
+        pinsNotificationToken = pins?.observe { [weak self] (changes) in
+            switch changes {
+            case .initial:
+                self?.addAnnotations()
+            case .update:
+                self?.addAnnotations()
+            case .error(let error):
+                self?.presentAlert(error: error)
+            }
         }
     }
 
-    private func createAnnotation(for patient: Patient) -> MKAnnotation? {
-        if let lat = Double(patient.lat ?? ""), let lng = Double(patient.lng ?? "") {
-            let location = CLLocation(latitude: lat, longitude: lng)
-            let annotation = PatientAnnotation()
-            annotation.patient = patient
-            annotation.coordinate = location.coordinate
-            annotation.title = patient.fullName
-            annotation.subtitle = patient.pin
-            return annotation
+    private func createMarker(for patient: Patient) -> GMSMarker? {
+        if let position = patient.latLng, let priority = patient.priority.value, priority < 5 {
+            let marker = GMSMarker(position: position)
+            marker.userData = patient
+            marker.title = String(format: "Patient.pin".localized, patient.pin ?? "")
+            marker.icon = GMSMarker.priorityMarkerImages[priority]
+            return marker
+        }
+        return nil
+    }
+
+    private func createMarker(for pin: ScenePin) -> GMSMarker? {
+        if let position = pin.latLng, let type = ScenePinType(rawValue: pin.type ?? "") {
+            let marker = GMSMarker(position: position)
+            marker.userData = pin
+            marker.icon = type.markerImage.scaledBy(0.666)
+            return marker
         }
         return nil
     }
 
     private func addAnnotations() {
         // for now, just brute force remove and re-add annotations
-        mapView.removeAnnotations(mapView.annotations)
-        if let results = results {
-            for patient in results {
-                if let annotation = createAnnotation(for: patient) {
-                    mapView.addAnnotation(annotation)
+        mapView.clear()
+        var bounds = GMSCoordinateBounds()
+        if let patients = patients {
+            for patient in patients {
+                if let marker = createMarker(for: patient) {
+                    marker.map = mapView
+                    bounds = bounds.includingCoordinate(marker.position)
                 }
             }
-            mapView.showAnnotations(mapView.annotations, animated: true)
+        }
+        if let pins = pins {
+            for pin in pins {
+                if let marker = createMarker(for: pin) {
+                    marker.map = mapView
+                    bounds = bounds.includingCoordinate(marker.position)
+                }
+            }
+        }
+        if bounds.isValid {
+            mapView.setMinZoom(1, maxZoom: 18)
+            let update = GMSCameraUpdate.fit(bounds, withPadding: 50)
+            mapView.animate(with: update)
+            mapView.setMinZoom(1, maxZoom: 20)
         }
     }
 
@@ -130,49 +205,49 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
         }
     }
 
-    // MARK: - MKMapViewDelegate
-
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let view = mapView.dequeueReusableAnnotationView(withIdentifier: "Patient", for: annotation)
-        if let view = view as? MKMarkerAnnotationView, let annotation = annotation as? PatientAnnotation {
-            view.markerTintColor = annotation.patient.priorityColor
-            view.glyphTintColor = annotation.patient.priorityLabelColor
-            view.clusteringIdentifier = "Patient"
-            if let priority = annotation.patient.priority.value {
-                if priority < 2 {
-                    view.displayPriority = .defaultHigh
-                } else {
-                    view.displayPriority = .defaultLow
-                }
-            } else {
-                view.displayPriority = .required
-            }
+    private func deselectPin() -> Bool {
+        var result = false
+        if let selectedPinMarker = selectedPinMarker,
+           let selectedPin = selectedPinMarker.userData as? ScenePin,
+           let selectedType = ScenePinType(rawValue: selectedPin.type ?? "") {
+            selectedPinMarker.icon = selectedType.markerImage.scaledBy(0.666)
+            var result = true
         }
-        return view
+        selectedPinMarker = nil
+        selectedPinInfoView?.removeFromSuperview()
+        selectedPinInfoView = nil
+        return result
     }
 
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        if let annotation = view.annotation as? PatientAnnotation {
-            navigate(to: annotation.patient)
-        } else if let cluster = view.annotation as? MKClusterAnnotation {
-            let alert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            let annotations = cluster.memberAnnotations.sorted { (annotationA, annotationB) -> Bool in
-                if let annotationA = annotationA as? PatientAnnotation, let annotationB = annotationB as? PatientAnnotation {
-                    return annotationA.patient.priority.value ?? 0 > annotationB.patient.priority.value ?? 0
-                }
-                return false
-            }
-            for annotation in annotations {
-                if let annotation = annotation as? PatientAnnotation, let patient = annotation.patient {
-                    let action = UIAlertAction(title: patient.fullName, style: .default, handler: { [weak self] (_) in
-                        self?.navigate(to: patient)
-                    })
-                    action.setValue(patient.priorityColor, forKey: "titleTextColor")
-                    alert.addAction(action)
-                }
-            }
-            alert.addAction(UIAlertAction(title: "Cancel".localized, style: .cancel, handler: nil))
-            presentAnimated(alert)
+    // MARK: - GMSMapViewDelegate
+
+    func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        if let patient = marker.userData as? Patient {
+            navigate(to: patient)
+            return true
+        } else if let pin = marker.userData as? ScenePin, let type = ScenePinType(rawValue: pin.type ?? "") {
+            _ = deselectPin()
+
+            marker.icon = type.markerImage
+            selectedPinMarker = marker
+
+            let pinInfoView = ScenePinInfoView()
+            pinInfoView.translatesAutoresizingMaskIntoConstraints = false
+            pinInfoView.configure(from: pin)
+            view.addSubview(pinInfoView)
+            NSLayoutConstraint.activate([
+                pinInfoView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+                pinInfoView.leftAnchor.constraint(equalTo: view.leftAnchor),
+                pinInfoView.rightAnchor.constraint(equalTo: view.rightAnchor)
+            ])
+            self.selectedPinInfoView = pinInfoView
+        }
+        return false
+    }
+
+    func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
+        if !deselectPin() {
+            // TODO start new pin flow at this location
         }
     }
 
@@ -186,6 +261,8 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, MKMapVie
         if !searchBar.isFirstResponder {
             searchBarShouldBeginEditing = false
         }
+        _ = deselectPin()
+        performQuery()
     }
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

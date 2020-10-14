@@ -150,7 +150,8 @@ class Patient: Base {
     @objc dynamic var ageUnits: String?
     @objc var ageString: String {
         if let value = age.value {
-            return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+            return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")"
+                .trimmingCharacters(in: .whitespacesAndNewlines)
         }
         return ""
     }

@@ -47,6 +47,7 @@ class RoleButton: FormButton {
         self.iconBackgroundView = iconBackgroundView
     }
 
+    // swiftlint:disable:next function_body_length
     private func configure() {
         button.titleLabel?.numberOfLines = 0
         button.titleLabel?.textAlignment = .center
@@ -60,7 +61,7 @@ class RoleButton: FormButton {
             button.setTitleColor(.white, for: [.highlighted, .selected])
             button.titleLabel?.font = .copyXSBold
             button.titleLabel?.numberOfLines = 0
-            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -22)
+            button.titleEdgeInsets = .zero
             iconBackgroundView.image = buttonImage
             iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? .peakBlue : .white
@@ -75,7 +76,7 @@ class RoleButton: FormButton {
             button.setTitleColor(.white, for: [.highlighted, .selected])
             button.titleLabel?.font = .copyXSBold
             button.titleLabel?.numberOfLines = 0
-            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: -22)
+            button.titleEdgeInsets = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: -22)
             iconBackgroundView.image = buttonImage
             iconBackgroundView.isHidden = false
             iconBackgroundView.tintColor = isSelected ? role.color : .white

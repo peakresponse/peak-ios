@@ -347,34 +347,35 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xcK-J9-YWf">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UfQ-2c-rQ4">
                                 <rect key="frame" x="0.0" y="103" width="414" height="710"/>
-                                <connections>
-                                    <outlet property="delegate" destination="dTA-jy-ch9" id="LDj-Nw-g6g"/>
-                                </connections>
-                            </mapView>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                             <searchBar contentMode="redraw" searchBarStyle="prominent" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="AYI-hP-fU2" customClass="SearchBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44" width="414" height="59"/>
                                 <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="dTA-jy-ch9" id="En5-0O-5gK"/>
+                                </connections>
                             </searchBar>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ILX-Ak-94l"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="xcK-J9-YWf" firstAttribute="trailing" secondItem="ILX-Ak-94l" secondAttribute="trailing" id="2gv-DO-N8l"/>
-                            <constraint firstItem="xcK-J9-YWf" firstAttribute="top" secondItem="AYI-hP-fU2" secondAttribute="bottom" id="89W-C5-SfR"/>
                             <constraint firstItem="AYI-hP-fU2" firstAttribute="trailing" secondItem="ILX-Ak-94l" secondAttribute="trailing" id="8Ae-IJ-xsZ"/>
                             <constraint firstItem="AYI-hP-fU2" firstAttribute="leading" secondItem="ILX-Ak-94l" secondAttribute="leading" id="AYp-lG-dZV"/>
                             <constraint firstItem="AYI-hP-fU2" firstAttribute="top" secondItem="ILX-Ak-94l" secondAttribute="top" id="BFC-eM-RMH"/>
-                            <constraint firstItem="xcK-J9-YWf" firstAttribute="leading" secondItem="ILX-Ak-94l" secondAttribute="leading" id="UzW-N1-1fG"/>
-                            <constraint firstItem="xcK-J9-YWf" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" id="fL3-f9-K4M"/>
+                            <constraint firstItem="UfQ-2c-rQ4" firstAttribute="trailing" secondItem="ILX-Ak-94l" secondAttribute="trailing" id="BFl-64-UQg"/>
+                            <constraint firstItem="UfQ-2c-rQ4" firstAttribute="leading" secondItem="ILX-Ak-94l" secondAttribute="leading" id="ZXb-QL-K1C"/>
+                            <constraint firstItem="UfQ-2c-rQ4" firstAttribute="top" secondItem="AYI-hP-fU2" secondAttribute="bottom" id="xdo-Ya-M8B"/>
+                            <constraint firstItem="UfQ-2c-rQ4" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" id="yih-3A-hW9"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="Map" selectedImage="MapSelected" id="h5q-TU-XJf"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="mapView" destination="xcK-J9-YWf" id="Lf0-br-Kan"/>
+                        <outlet property="mapContainerView" destination="UfQ-2c-rQ4" id="Avw-i2-Lr5"/>
                         <outlet property="searchBar" destination="AYI-hP-fU2" id="0uP-5L-dog"/>
                     </connections>
                 </viewController>
@@ -390,13 +391,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="O2X-e2-cL8">
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="O2X-e2-cL8">
                                 <rect key="frame" x="0.0" y="38" width="414" height="804"/>
                                 <connections>
                                     <segue destination="t3w-T6-qhM" kind="embed" id="Z3V-nt-F7z"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-c6-9Q3" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k3D-c6-9Q3" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>

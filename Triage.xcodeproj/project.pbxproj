@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450A977D24DCAC7A007BCDD3 /* TabBar.swift */; };
 		451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A16FE252FD5FD00DC7705 /* RoleButton.swift */; };
+		451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A178A25364E1E00DC7705 /* ScenePin.swift */; };
+		451A17932536B97A00DC7705 /* ScenePinInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A17922536B97A00DC7705 /* ScenePinInfoView.swift */; };
 		452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */; };
 		452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */; };
 		452AFDF0252A5E6D00E5A84D /* PatientAgeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */; };
@@ -158,6 +160,8 @@
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		450A977D24DCAC7A007BCDD3 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		451A16FE252FD5FD00DC7705 /* RoleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleButton.swift; sourceTree = "<group>"; };
+		451A178A25364E1E00DC7705 /* ScenePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePin.swift; sourceTree = "<group>"; };
+		451A17922536B97A00DC7705 /* ScenePinInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinInfoView.swift; sourceTree = "<group>"; };
 		452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientGenderKeyboardView.swift; sourceTree = "<group>"; };
 		452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
 		452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientAgeKeyboardView.swift; sourceTree = "<group>"; };
@@ -505,6 +509,7 @@
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 				454E17B824FFF5C900F9EB8B /* Responder.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
+				451A178A25364E1E00DC7705 /* ScenePin.swift */,
 				45B7A2D92508331500BCAAAE /* State.swift */,
 				454E17B624FFF5BF00F9EB8B /* User.swift */,
 			);
@@ -561,6 +566,7 @@
 				454EE97B25202C7A00EB266A /* PatientView.swift */,
 				4566F07D236D57FA00A04C75 /* PriorityView.swift */,
 				452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */,
+				451A17922536B97A00DC7705 /* ScenePinInfoView.swift */,
 				45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */,
 				452AFE05252A6C0100E5A84D /* SectionInfoTableViewCell.swift */,
 			);
@@ -891,6 +897,7 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				45B7A2E9250F2AAC00BCAAAE /* AlertViewController.swift in Sources */,
 				4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */,
+				451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */,
 				4566F096236E11B000A04C75 /* PatientHeaderView.swift in Sources */,
 				45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */,
 				452AFDFE252A662200E5A84D /* PatientTableViewFooterView.swift in Sources */,
@@ -935,6 +942,7 @@
 				45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */,
+				451A17932536B97A00DC7705 /* ScenePinInfoView.swift in Sources */,
 				454E17BD250022C700F9EB8B /* SceneHeaderView.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				45F2190424E5ECC10046A39B /* String+Extensions.swift in Sources */,

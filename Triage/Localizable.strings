@@ -186,6 +186,13 @@
 
 "ScenePatientsView.patientsLabel" = "# Patients Recorded";
 
+"ScenePin.type.MGS" = "MGS";
+"ScenePin.type.TRIAGE" = "Triage";
+"ScenePin.type.TREATMENT" = "Treatment";
+"ScenePin.type.TRANSPORT" = "Transport";
+"ScenePin.type.STAGING" = "Staging";
+"ScenePin.type.OTHER" = "Other";
+
 "SceneRespondersView.respondersLabel" = "First Responders";
 
 "SceneSummaryHeaderView.dateLabel" = "Date: ";
@@ -203,7 +210,7 @@
 
 "SortBar.sortBy" = "Sort By :";
 
-"TransferCommandConfirmation.title" = "Are you sure you want to transfer incident command to %@?";
+"TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
 
 "User.firstName" = "First Name";

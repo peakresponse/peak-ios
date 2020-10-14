@@ -286,6 +286,13 @@ class AppRealm {
                         realm.add(patients, update: .modified)
                     }
                 }
+                if let pins = data["pins"] as? [[String: Any]] {
+                    let pins = pins.map({ ScenePin.instantiate(from: $0) })
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        realm.add(pins, update: .modified)
+                    }
+                }
                 if let responders = data["responders"] as? [[String: Any]] {
                     let responders = responders.map({ Responder.instantiate(from: $0) })
                     let realm = AppRealm.open()

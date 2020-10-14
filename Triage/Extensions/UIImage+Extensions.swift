@@ -9,6 +9,21 @@
 import UIKit
 
 extension UIImage {
+    func resizedTo(_ size: CGSize) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+        draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage!
+    }
+
+    func scaledBy(_ scale: CGFloat) -> UIImage {
+        var size = self.size
+        size.width = floor(size.width * scale)
+        size.height = floor(size.height * scale)
+        return resizedTo(size)
+    }
+
     static func resizableImage(withColor color: UIColor, cornerRadius: CGFloat,
                                borderColor: UIColor? = nil, borderWidth: CGFloat? = nil, corners: UIRectCorner = .allCorners) -> UIImage {
         let size = 2 * cornerRadius + 1
