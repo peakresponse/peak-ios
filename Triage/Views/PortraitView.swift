@@ -84,6 +84,7 @@ class PortraitView: UIView, CameraHelperDelegate {
     }
 
     func configure(from patient: Patient) {
+        imageViewURL = nil
         imageView.image = nil
         if let observation = patient as? Observation {
             imageViewURL = observation.portraitFile
@@ -92,10 +93,8 @@ class PortraitView: UIView, CameraHelperDelegate {
             imageViewURL = patient.portraitUrl
         }
         if let imageViewURL = imageViewURL {
-            AppCache.cachedImage(from: imageViewURL) { [weak self] (image, error) in
-                if let error = error {
-                    print(error)
-                } else if let image = image {
+            AppCache.cachedImage(from: imageViewURL) { [weak self] (image, _) in
+                if let image = image {
                     DispatchQueue.main.async { [weak self] in
                         if imageViewURL == self?.imageViewURL {
                             self?.imageView.image = image

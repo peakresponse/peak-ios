@@ -17,7 +17,7 @@ enum ApiClientError: Error {
     case notFound
 }
 
-// swiftlint:disable type_body_length
+// swiftlint:disable type_body_length file_length
 class ApiClient {
     static var shared: ApiClient = ApiClient(baseURL: TriageKeys().apiClientServerUrl)! {
         willSet {
@@ -219,6 +219,10 @@ class ApiClient {
         })
     }
 
+    func download(request: URLRequest, completionHandler: @escaping (URL?, URLResponse?, Error?) -> Void) -> URLSessionDownloadTask {
+        return session.downloadTask(with: request, completionHandler: completionHandler)
+    }
+
     // MARK: - Sessions
 
     func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
@@ -338,7 +342,7 @@ class ApiClient {
     // MARK: - Uploads
 
     func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/uploads", body: [
+        return POST(path: "/api/assets", body: [
             "blob": [
                 "content_type": contentType
             ]

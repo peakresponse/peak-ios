@@ -26,13 +26,36 @@ class AppCache {
                     let destURL = cacheDirURL.appendingPathComponent(url.lastPathComponent, isDirectory: false)
                     if !fileManager.fileExists(atPath: destURL.path) {
                         // download into cache location
-                        let data = try Data(contentsOf: url)
-                        fileManager.createFile(atPath: destURL.path, contents: data, attributes: nil)
+                        if urlString.starts(with: "/") {
+                            let request = ApiClient.shared.urlRequest(for: urlString)
+                            let task = ApiClient.shared.download(request: request) { (url, response, error) in
+                                guard let response = response as? HTTPURLResponse else { return }
+                                if let error = error {
+                                    completionHandler(nil, error)
+                                } else if let url = url, response.statusCode == 200 {
+                                    do {
+                                        try fileManager.moveItem(at: url, to: destURL)
+                                        completionHandler(destURL, nil)
+                                    } catch {
+                                        completionHandler(nil, error)
+                                    }
+                                } else {
+                                    completionHandler(nil, ApiClientError.unexpected)
+                                }
+                            }
+                            task.resume()
+                        } else {
+                            let data = try Data(contentsOf: url)
+                            fileManager.createFile(atPath: destURL.path, contents: data, attributes: nil)
+                            completionHandler(destURL, nil)
+                        }
+                    } else {
+                        completionHandler(destURL, nil)
                     }
-                    completionHandler(destURL, nil)
                 } catch {
                     completionHandler(nil, error)
                 }
+                return
             }
             completionHandler(nil, nil)
         }

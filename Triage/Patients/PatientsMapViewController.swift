@@ -211,7 +211,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
            let selectedPin = selectedPinMarker.userData as? ScenePin,
            let selectedType = ScenePinType(rawValue: selectedPin.type ?? "") {
             selectedPinMarker.icon = selectedType.markerImage.scaledBy(0.666)
-            var result = true
+            result = true
         }
         selectedPinMarker = nil
         selectedPinInfoView?.removeFromSuperview()
