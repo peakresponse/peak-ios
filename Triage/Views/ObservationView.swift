@@ -167,7 +167,7 @@ class ObservationView: UIView, AudioHelperDelgate {
         ])
         setAudioControlsVisible(false)
         var audioUrl: String?
-        if let observation = patient as? Observation {
+        if let observation = patient as? PatientObservation {
             audioUrl = observation.audioFile
         } else {
             audioUrl = patient.audioUrl

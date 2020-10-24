@@ -20,7 +20,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     var locationHelper: LocationHelper!
     var cameraHelper: CameraHelper!
-    var originalObservation: Observation!
+    var originalObservation: PatientObservation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +81,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
 
         let saveObservation = { [weak self] in
-            guard let self = self, let observation = self.patient as? Observation else { return }
+            guard let self = self, let observation = self.patient as? PatientObservation else { return }
             AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (_, error) in
                 DispatchQueue.main.async { [weak self] in
                     self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
@@ -221,7 +221,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             if let error = error {
                 print(error)
             } else if let response = response, let signedId = response["signed_id"] as? String {
-                if let observation = self?.patient as? Observation {
+                if let observation = self?.patient as? PatientObservation {
                     observation.portraitFile = signedId
                 }
                 AppCache.cache(fileURL: fileURL, filename: signedId)
@@ -244,7 +244,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String) {
         patient.text = text
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        if let patient = patient as? Observation {
+        if let patient = patient as? PatientObservation {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
                 patient.extractValues(from: text)
                 DispatchQueue.main.async { [weak self] in
@@ -266,7 +266,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                     self.presentAlert(error: error)
                 } else if let response = response, let signedId = response["signed_id"] as? String {
                     AppCache.cache(fileURL: fileURL, filename: signedId)
-                    if let observation = self.patient as? Observation {
+                    if let observation = self.patient as? PatientObservation {
                         observation.audioFile = signedId
                     }
                     self.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)

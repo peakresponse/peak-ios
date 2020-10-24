@@ -126,6 +126,7 @@ class Patient: Base {
         static let transportAgencyId = "transportAgencyId"
         static let transportFacility = "transportFacility"
         static let transportFacilityId = "transportFacilityId"
+        static let preditions = "predictions"
     }
 
     @objc dynamic var sceneId: String?
@@ -261,6 +262,23 @@ class Patient: Base {
 
     var isTransported: Bool {
         return transportAgency != nil || transportFacility != nil
+    }
+
+    @objc dynamic var _predictions: Data?
+    var predictions: [String: Any]? {
+        get {
+            if let _predictions = _predictions {
+                return try? JSONSerialization.jsonObject(with: _predictions, options: []) as? [String: Any]
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _predictions = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _predictions = nil
+            }
+        }
     }
 
     override var updatedAtRelativeString: String {
@@ -433,8 +451,8 @@ class Patient: Base {
         return data
     }
 
-    func asObservation() -> Observation {
-        let observation = Observation()
+    func asObservation() -> PatientObservation {
+        let observation = PatientObservation()
         observation.sceneId = sceneId
         observation.pin = pin
         observation.version.value = version.value

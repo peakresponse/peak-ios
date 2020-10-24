@@ -1,5 +1,5 @@
 //
-//  Observation+Parser.swift
+//  PatientObservation+Parser.swift
 //  Triage
 //
 //  Created by Francis Li on 10/4/20.
@@ -116,15 +116,15 @@ private let MATCHERS: [Matcher] = [
 ]
 // swiftlint:enable force_try line_length
 
-extension Observation {
+extension PatientObservation {
     func extractValues(from text: String) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         for matcher in MATCHERS {
             if let match = matcher.expr.firstMatch(in: text, options: [], range: range) {
                 for group in matcher.groups {
                     let range = match.range(withName: group)
-                    if range.location != NSNotFound, let range = Range(range, in: text) {
-                        let substr = String(text[range])
+                    if range.location != NSNotFound, let swiftRange = Range(range, in: text) {
+                        let substr = String(text[swiftRange])
                         var value: Any = substr
                         if let mappings = matcher.mappings?[group] {
                             let key = substr.lowercased()
@@ -133,6 +133,20 @@ extension Observation {
                             }
                         }
                         setValue(value, forKey: group)
+                        var predictions = self.predictions ?? [:]
+                        predictions[group] = [
+                            "source": "_speech",
+                            "range": [
+                                "location": range.location,
+                                "length": range.length
+                            ],
+                            "value": value,
+                            "state": "UNCONFIRMED"
+                        ]
+                        predictions["_speech"] = [
+                            "text": text
+                        ]
+                        self.predictions = predictions
                     }
                 }
             }

@@ -1,5 +1,5 @@
 //
-//  ObservationTests.swift
+//  PatientObservationTests.swift
 //  TriageTests
 //
 //  Created by Francis Li on 10/4/20.
@@ -9,7 +9,7 @@
 import XCTest
 @testable import Peak_Response
 
-class ObservationTests: XCTestCase {
+class PatientObservationTests: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -31,10 +31,29 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.firstName, "Mary", "firstName failed for: \(sample)")
             XCTAssertEqual(observation.lastName, "Thomas", "lastName failed for: \(sample)")
+
+            var prediction = observation.predictions?["_speech"] as? [String: Any]
+            XCTAssertEqual(prediction?["text"] as? String, sample)
+
+            prediction = observation.predictions?["firstName"] as? [String: Any]
+            XCTAssertEqual(prediction?["source"] as? String, "_speech")
+            XCTAssertEqual(prediction?["value"] as? String, "Mary")
+            XCTAssertEqual(prediction?["state"] as? String, "UNCONFIRMED")
+            var range = NSRange(sample.range(of: "Mary")!, in: sample)
+            XCTAssertEqual((prediction?["range"] as? [String: Int])?["location"], range.location)
+            XCTAssertEqual((prediction?["range"] as? [String: Int])?["length"], range.length)
+
+            prediction = observation.predictions?["lastName"] as? [String: Any]
+            XCTAssertEqual(prediction?["source"] as? String, "_speech")
+            XCTAssertEqual(prediction?["value"] as? String, "Thomas")
+            XCTAssertEqual(prediction?["state"] as? String, "UNCONFIRMED")
+            range = NSRange(sample.range(of: "Thomas")!, in: sample)
+            XCTAssertEqual((prediction?["range"] as? [String: Int])?["location"], range.location)
+            XCTAssertEqual((prediction?["range"] as? [String: Int])?["length"], range.length)
         }
     }
 
@@ -49,7 +68,7 @@ class ObservationTests: XCTestCase {
             "28-years-old"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.age.value, 28, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
@@ -62,7 +81,7 @@ class ObservationTests: XCTestCase {
             "two-months-old"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.age.value, 2, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
@@ -76,7 +95,7 @@ class ObservationTests: XCTestCase {
             "male"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.gender, PatientGender.male.rawValue)
         }
@@ -85,7 +104,7 @@ class ObservationTests: XCTestCase {
             "female"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.gender, PatientGender.female.rawValue)
         }
@@ -95,7 +114,7 @@ class ObservationTests: XCTestCase {
             "transgender male"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.gender, PatientGender.transMale.rawValue)
         }
@@ -105,7 +124,7 @@ class ObservationTests: XCTestCase {
             "transgender female"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.gender, PatientGender.transFemale.rawValue)
         }
@@ -124,7 +143,7 @@ class ObservationTests: XCTestCase {
             "priority is read"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.priority.value, Priority.immediate.rawValue, "Priority failed for: \(sample)")
         }
@@ -137,7 +156,7 @@ class ObservationTests: XCTestCase {
             "priority is delayed"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.priority.value, Priority.delayed.rawValue, "Priority failed for: \(sample)")
         }
@@ -150,7 +169,7 @@ class ObservationTests: XCTestCase {
             "priority is minimal"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.priority.value, Priority.minimal.rawValue, "Priority failed for: \(sample)")
         }
@@ -162,7 +181,7 @@ class ObservationTests: XCTestCase {
             "patient is expectant"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.priority.value, Priority.expectant.rawValue, "Priority failed for: \(sample)")
         }
@@ -174,7 +193,7 @@ class ObservationTests: XCTestCase {
             "patient is dead"
         ]
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.priority.value, Priority.dead.rawValue, "Priority failed for: \(sample)")
         }
@@ -193,7 +212,7 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.bpSystolic.value, 120, "Blood Pressure failed for: \(sample)")
             XCTAssertEqual(observation.bpDiastolic.value, 80, "Blood Pressure failed for: \(sample)")
@@ -237,7 +256,7 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.capillaryRefill.value, 2, "Capillary Refill failed for: \(sample)")
         }
@@ -254,7 +273,7 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.gcsTotal.value, 3, "GCS total failed for: \(sample)")
         }
@@ -271,7 +290,7 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.pulse.value, 80, "Pulse failed for: \(sample)")
         }
@@ -288,7 +307,7 @@ class ObservationTests: XCTestCase {
         ]
 
         for sample in samples {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.extractValues(from: sample)
             XCTAssertEqual(observation.respiratoryRate.value, 20, "Respiratory Rate failed for: \(sample)")
         }

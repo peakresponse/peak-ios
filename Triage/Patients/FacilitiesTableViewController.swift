@@ -30,7 +30,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
 
     var locationHelper: LocationHelper!
 
-    var observation: Observation!
+    var observation: PatientObservation!
 
     var notificationToken: NotificationToken?
     var results: Results<Facility>?
