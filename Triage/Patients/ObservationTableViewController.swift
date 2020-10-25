@@ -241,12 +241,12 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     // MARK: - RecordingViewControllerDelegate
 
-    func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String) {
+    func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String, withMetadata metadata: [String: Any]) {
         patient.text = text
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
         if let patient = patient as? PatientObservation {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                patient.extractValues(from: text)
+                patient.extractValues(from: text, withMetadata: metadata)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.tableView.reloadData()

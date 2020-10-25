@@ -126,7 +126,7 @@ class Patient: Base {
         static let transportAgencyId = "transportAgencyId"
         static let transportFacility = "transportFacility"
         static let transportFacilityId = "transportFacilityId"
-        static let preditions = "predictions"
+        static let predictions = "predictions"
     }
 
     @objc dynamic var sceneId: String?
@@ -361,6 +361,7 @@ class Patient: Base {
             let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
             transportFacility = facility
         }
+        predictions = data[Keys.predictions] as? [String: Any]
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -447,6 +448,9 @@ class Patient: Base {
             data[Keys.transportFacilityId] = obj.id
         } else if transportFacilityRemoved {
             data[Keys.transportFacilityId] = NSNull()
+        }
+        if let predictions = predictions {
+            data[Keys.predictions] = predictions
         }
         return data
     }

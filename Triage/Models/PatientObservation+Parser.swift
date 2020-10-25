@@ -117,7 +117,7 @@ private let MATCHERS: [Matcher] = [
 // swiftlint:enable force_try line_length
 
 extension PatientObservation {
-    func extractValues(from text: String) {
+    func extractValues(from text: String, withMetadata metadata: [String: Any]) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         for matcher in MATCHERS {
             if let match = matcher.expr.firstMatch(in: text, options: [], range: range) {
@@ -144,7 +144,8 @@ extension PatientObservation {
                             "state": "UNCONFIRMED"
                         ]
                         predictions["_speech"] = [
-                            "text": text
+                            "text": text,
+                            "metadata": metadata
                         ]
                         self.predictions = predictions
                     }
