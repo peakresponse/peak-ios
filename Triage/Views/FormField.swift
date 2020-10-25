@@ -50,6 +50,13 @@ class FormField: BaseField, UITextFieldDelegate {
         set { textField.isSecureTextEntry = newValue }
     }
 
+    override var isEditing: Bool {
+        didSet {
+            textField.isUserInteractionEnabled = isEditing
+            textField.rightViewMode = isEditing ? .always : .never
+        }
+    }
+
     override func commonInit() {
         super.commonInit()
 

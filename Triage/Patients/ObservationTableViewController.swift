@@ -60,7 +60,12 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // change editing state after layout prevents layout constraint warnings
-        tableView.setEditing(true, animated: false)
+        setEditing(true, animated: false)
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: animated)
         tableView.beginUpdates()
         tableView.endUpdates()
     }

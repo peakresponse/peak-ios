@@ -516,6 +516,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             }
         }
         if let cell = cell as? BasePatientTableViewCell {
+            cell.isEditing = isEditing
             cell.configure(from: patient)
         }
         return cell

@@ -80,6 +80,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
         }
         for (i, attribute) in attributes.enumerated() {
             let field = fields[i]
+            field.isEditing = isEditing
             stackView.addArrangedSubview(field)
 
             field.labelText = "Patient.\(attribute)".localized
@@ -174,8 +175,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
         super.setEditing(editing, animated: animated)
 
         for field in fields {
-            field.textField.isUserInteractionEnabled = editing
-            field.textField.rightViewMode = editing ? .always : .never
+            field.isEditing = editing
         }
     }
 

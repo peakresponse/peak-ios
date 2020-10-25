@@ -85,6 +85,8 @@ class BaseField: UIView, Localizable {
         didSet { updateStyle() }
     }
 
+    var isEditing = true
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -193,14 +195,14 @@ class BaseField: UIView, Localizable {
         case .input:
             label.font = .copyXSBold
             statusButton.backgroundColor = status == .unconfirmed ? UIColor.orangeAccent.withAlphaComponent(0.3) : UIColor.middlePeakBlue
-            statusButton.isUserInteractionEnabled = status == .unconfirmed
-            statusButton.setImage(status == .unconfirmed ? UIImage(named: "Unconfirmed") : nil, for: .normal)
+            statusButton.isUserInteractionEnabled = isEditing && status == .unconfirmed
+            statusButton.setImage(isEditing && status == .unconfirmed ? UIImage(named: "Unconfirmed") : nil, for: .normal)
             _statusLabel?.isHidden = true
             _alertLabel?.alpha = 1
             if isFirstResponder {
                 if status == .none || text?.isEmpty ?? true {
                     statusButtonWidthConstraint.constant = 0
-                } else if status == .unconfirmed {
+                } else if isEditing && status == .unconfirmed {
                     statusButtonWidthConstraint.constant = 47
                     statusLabel.isHidden = false
                     _alertLabel?.alpha = 0
@@ -214,7 +216,7 @@ class BaseField: UIView, Localizable {
             } else {
                 if status == .none || text?.isEmpty ?? true {
                     statusButtonWidthConstraint.constant = 0
-                } else if status == .unconfirmed {
+                } else if isEditing && status == .unconfirmed {
                     statusButtonWidthConstraint.constant = 33
                 } else {
                     statusButtonWidthConstraint.constant = 8
