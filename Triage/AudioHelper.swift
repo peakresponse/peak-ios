@@ -13,7 +13,8 @@ import Speech
 @objc protocol AudioHelperDelgate {
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String)
-    @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String, withMetadata metadata: [String: Any])
+    @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String,
+                                    sourceId: String, metadata: [String: Any], isFinal: Bool)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didTransformBuffer data: [Float])
     @objc optional func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper)
@@ -104,7 +105,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         timer = nil
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func startRecording() throws {
         let audioSession = AVAudioSession.sharedInstance()
         if audioSession.recordPermission == .granted {
@@ -159,12 +160,15 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
                                 ]
                                 segmentsMetadata.append(segmentMetadata)
                             }
+                            let sourceId = UUID().uuidString
                             let metadata: [String: Any] = [
+                                "type": "SPEECH",
                                 "provider": "APPLE",
                                 "segments": segmentsMetadata
                             ]
                             if let self = self {
-                                self.delegate?.audioHelper?(self, didRecognizeText: text, withMetadata: metadata)
+                                self.delegate?.audioHelper?(self, didRecognizeText: text,
+                                                            sourceId: sourceId, metadata: metadata, isFinal: isFinal)
                             }
                         }
 

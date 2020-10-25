@@ -10,6 +10,8 @@ import XCTest
 @testable import Peak_Response
 
 class PatientObservationTests: XCTestCase {
+    var sourceId = UUID().uuidString
+    var metadata = ["provider": "test"]
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -17,6 +19,24 @@ class PatientObservationTests: XCTestCase {
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func testPredictionSourceCleanup() {
+        let observation = PatientObservation()
+        let source1 = UUID().uuidString
+        observation.extractValues(from: "Patients name is Mary", sourceId: source1, metadata: metadata, isFinal: false)
+        var sources = observation.predictions?["_sources"] as? [String: Any]
+        XCTAssertEqual(sources?.count, 1)
+
+        let source2 = UUID().uuidString
+        observation.extractValues(from: "Patients name is Mary Thomas", sourceId: source2, metadata: metadata, isFinal: false)
+        sources = observation.predictions?["_sources"] as? [String: Any]
+        XCTAssertEqual(sources?.count, 2)
+
+        let source3 = UUID().uuidString
+        observation.extractValues(from: "Patients name is Mary Thomas.", sourceId: source3, metadata: metadata, isFinal: true)
+        sources = observation.predictions?["_sources"] as? [String: Any]
+        XCTAssertEqual(sources?.count, 1)
     }
 
     func testExtractName() {
@@ -32,17 +52,18 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.firstName, "Mary", "firstName failed for: \(sample)")
             XCTAssertEqual(observation.lastName, "Thomas", "lastName failed for: \(sample)")
 
-            var prediction = observation.predictions?["_speech"] as? [String: Any]
-            XCTAssertEqual(prediction?["text"] as? String, sample)
-            let metadata = prediction?["metadata"] as? [String: Any]
+            let sources = observation.predictions?["_sources"] as? [String: Any]
+            let source = sources?[sourceId] as? [String: Any]
+            XCTAssertEqual(source?["text"] as? String, sample)
+            let metadata = source?["metadata"] as? [String: Any]
             XCTAssertEqual(metadata?["provider"] as? String, "test")
 
-            prediction = observation.predictions?["firstName"] as? [String: Any]
-            XCTAssertEqual(prediction?["source"] as? String, "_speech")
+            var prediction = observation.predictions?["firstName"] as? [String: Any]
+            XCTAssertEqual(prediction?["sourceId"] as? String, sourceId)
             XCTAssertEqual(prediction?["value"] as? String, "Mary")
             XCTAssertEqual(prediction?["status"] as? String, "UNCONFIRMED")
             var range = NSRange(sample.range(of: "Mary")!, in: sample)
@@ -50,7 +71,7 @@ class PatientObservationTests: XCTestCase {
             XCTAssertEqual((prediction?["range"] as? [String: Int])?["length"], range.length)
 
             prediction = observation.predictions?["lastName"] as? [String: Any]
-            XCTAssertEqual(prediction?["source"] as? String, "_speech")
+            XCTAssertEqual(prediction?["sourceId"] as? String, sourceId)
             XCTAssertEqual(prediction?["value"] as? String, "Thomas")
             XCTAssertEqual(prediction?["status"] as? String, "UNCONFIRMED")
             range = NSRange(sample.range(of: "Thomas")!, in: sample)
@@ -71,7 +92,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.age.value, 28, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
         }
@@ -84,7 +105,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.age.value, 2, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
         }
@@ -98,7 +119,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.male.rawValue)
         }
 
@@ -107,7 +128,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.female.rawValue)
         }
 
@@ -117,7 +138,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.transMale.rawValue)
         }
 
@@ -127,7 +148,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.transFemale.rawValue)
         }
     }
@@ -146,7 +167,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.priority.value, Priority.immediate.rawValue, "Priority failed for: \(sample)")
         }
 
@@ -159,7 +180,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.priority.value, Priority.delayed.rawValue, "Priority failed for: \(sample)")
         }
 
@@ -172,7 +193,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.priority.value, Priority.minimal.rawValue, "Priority failed for: \(sample)")
         }
 
@@ -184,7 +205,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.priority.value, Priority.expectant.rawValue, "Priority failed for: \(sample)")
         }
 
@@ -196,7 +217,7 @@ class PatientObservationTests: XCTestCase {
         ]
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.priority.value, Priority.dead.rawValue, "Priority failed for: \(sample)")
         }
     }
@@ -215,7 +236,7 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.bpSystolic.value, 120, "Blood Pressure failed for: \(sample)")
             XCTAssertEqual(observation.bpDiastolic.value, 80, "Blood Pressure failed for: \(sample)")
         }
@@ -259,7 +280,7 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.capillaryRefill.value, 2, "Capillary Refill failed for: \(sample)")
         }
     }
@@ -276,7 +297,7 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gcsTotal.value, 3, "GCS total failed for: \(sample)")
         }
     }
@@ -293,7 +314,7 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.pulse.value, 80, "Pulse failed for: \(sample)")
         }
     }
@@ -310,7 +331,7 @@ class PatientObservationTests: XCTestCase {
 
         for sample in samples {
             let observation = PatientObservation()
-            observation.extractValues(from: sample, withMetadata: ["provider": "test"])
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.respiratoryRate.value, 20, "Respiratory Rate failed for: \(sample)")
         }
     }

@@ -12,7 +12,7 @@ import Speech
 
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
-                                                withMetadata metadata: [String: Any])
+                                                sourceId: String, metadata: [String: Any], isFinal: Bool)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error)
 }
@@ -93,10 +93,12 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
 
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String, withMetadata metadata: [String: Any]) {
+    func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String,
+                     sourceId: String, metadata: [String: Any], isFinal: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.delegate?.recordingViewController?(self, didRecognizeText: text, withMetadata: metadata)
+            self.delegate?.recordingViewController?(self, didRecognizeText: text,
+                                                    sourceId: sourceId, metadata: metadata, isFinal: isFinal)
         }
     }
 

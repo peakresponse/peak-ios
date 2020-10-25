@@ -117,7 +117,7 @@ private let MATCHERS: [Matcher] = [
 // swiftlint:enable force_try line_length
 
 extension PatientObservation {
-    func extractValues(from text: String, withMetadata metadata: [String: Any]) {
+    func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         for matcher in MATCHERS {
             if let match = matcher.expr.firstMatch(in: text, options: [], range: range) {
@@ -135,7 +135,7 @@ extension PatientObservation {
                         setValue(value, forKey: group)
                         var predictions = self.predictions ?? [:]
                         predictions[group] = [
-                            "source": "_speech",
+                            "sourceId": sourceId,
                             "range": [
                                 "location": range.location,
                                 "length": range.length
@@ -143,14 +143,35 @@ extension PatientObservation {
                             "value": value,
                             "status": PredictionStatus.unconfirmed.rawValue
                         ]
-                        predictions["_speech"] = [
+                        var sources = predictions["_sources"] as? [String: Any] ?? [:]
+                        sources[sourceId] = [
+                            "id": sourceId,
                             "text": text,
                             "metadata": metadata
                         ]
+                        predictions["_sources"] = sources
                         self.predictions = predictions
                     }
                 }
             }
+        }
+        if isFinal {
+            // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
+            var predictions = self.predictions ?? [:]
+            var sourceIds: [String] = []
+            for (key, value) in predictions {
+                if key != "_sources", let value = value as? [String: Any], let sourceId = value["sourceId"] as? String {
+                    sourceIds.append(sourceId)
+                }
+            }
+            var sources = predictions["_sources"] as? [String: Any] ?? [:]
+            for key in sources.keys {
+                if sourceIds.firstIndex(of: key) == nil {
+                    sources.removeValue(forKey: key)
+                }
+            }
+            predictions["_sources"] = sources
+            self.predictions = predictions
         }
     }
 }
