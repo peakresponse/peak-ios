@@ -47,6 +47,13 @@ class BaseField: UIView, Localizable {
         }
         return _alertLabel
     }
+    private var _statusLabel: UILabel!
+    var statusLabel: UILabel {
+        if _statusLabel == nil {
+            initStatusLabel()
+        }
+        return _statusLabel
+    }
 
     var status: FormFieldStatus = .none {
         didSet { updateStyle() }
@@ -147,6 +154,22 @@ class BaseField: UIView, Localizable {
         ])
     }
 
+    private func initStatusLabel() {
+        _statusLabel = UILabel()
+        _statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        _statusLabel.font = .copyXSBold
+        _statusLabel.text = "BaseField.statusLabel.unconfirmed".localized
+        _statusLabel.textAlignment = .right
+        _statusLabel.textColor = .orangeAccent
+        _statusLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        addSubview(_statusLabel)
+        NSLayoutConstraint.activate([
+            _statusLabel.firstBaselineAnchor.constraint(equalTo: label.firstBaselineAnchor),
+            _statusLabel.leftAnchor.constraint(equalTo: label.rightAnchor, constant: 10),
+            _statusLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10)
+        ])
+    }
+
     private func initDetailLabel() {
         _detailLabel = UILabel()
         _detailLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -173,15 +196,13 @@ class BaseField: UIView, Localizable {
             statusButton.backgroundColor = status == .unconfirmed ? UIColor.orangeAccent.withAlphaComponent(0.3) : UIColor.middlePeakBlue
             statusButton.isUserInteractionEnabled = status == .unconfirmed
             statusButton.setImage(status == .unconfirmed ? UIImage(named: "Unconfirmed") : nil, for: .normal)
+            _statusLabel?.isHidden = true
             if isFirstResponder {
-                if status == .none {
-                    if text?.isEmpty ?? true {
-                        statusButtonWidthConstraint.constant = 0
-                    } else {
-                        statusButtonWidthConstraint.constant = 8
-                    }
+                if status == .none && text?.isEmpty ?? true {
+                    statusButtonWidthConstraint.constant = 0
                 } else if status == .unconfirmed {
                     statusButtonWidthConstraint.constant = 47
+                    statusLabel.isHidden = false
                 } else {
                     statusButtonWidthConstraint.constant = 22
                 }
