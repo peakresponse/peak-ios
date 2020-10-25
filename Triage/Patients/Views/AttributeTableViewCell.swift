@@ -19,6 +19,8 @@ enum AttributeTableViewCellType: String {
 @objc protocol AttributeTableViewCellDelegate {
     @objc optional func attributeTableViewCell(_ cell: AttributeTableViewCell, didChange text: String,
                                                for attribute: String, with type: String)
+    @objc optional func attributeTableViewCellDidConfirmStatus(_ cell: AttributeTableViewCell,
+                                                               for attribute: String, with type: String)
     @objc optional func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell,
                                                             for attribute: String, with type: String)
     @objc optional func attributeTableViewCellDidReturn(_ cell: AttributeTableViewCell)
@@ -78,6 +80,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
         }
         for (i, attribute) in attributes.enumerated() {
             let field = fields[i]
+            field.isEditing = isEditing
             stackView.addArrangedSubview(field)
 
             field.labelText = "Patient.\(attribute)".localized
@@ -86,6 +89,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
             } else {
                 field.text = nil
             }
+            field.status = patient.predictionStatus(for: attribute)
 
             field.textField.inputView = nil
             switch attributeTypes[i] {
@@ -171,8 +175,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
         super.setEditing(editing, animated: animated)
 
         for field in fields {
-            field.textField.isUserInteractionEnabled = editing
-            field.textField.rightViewMode = editing ? .always : .never
+            field.isEditing = editing
         }
     }
 
@@ -206,6 +209,11 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
     func formFieldDidChange(_ field: BaseField) {
         guard let field = field as? FormField, let i = fields.firstIndex(of: field) else { return }
         delegate?.attributeTableViewCell?(self, didChange: field.text ?? "", for: attributes[i], with: attributeTypes[i].rawValue)
+    }
+
+    func formFieldDidConfirmStatus(_ field: BaseField) {
+        guard let field = field as? FormField, let i = fields.firstIndex(of: field) else { return }
+        delegate?.attributeTableViewCellDidConfirmStatus?(self, for: attributes[i], with: attributeTypes[i].rawValue)
     }
 
     // MARK: - PatientAgeKeyboardViewDelegate

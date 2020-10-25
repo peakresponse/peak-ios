@@ -171,7 +171,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
                 vc.patient = results[0]
             }
         } else {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.sceneId = AppSettings.sceneId
             observation.pin = pin
             observation.version.value = 1

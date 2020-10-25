@@ -8,10 +8,6 @@
 
 import UIKit
 
-enum FormFieldStatus: String {
-    case none, unverified, verified
-}
-
 enum FormFieldStyle: String {
     case input, onboarding
 }
@@ -23,14 +19,15 @@ enum FormFieldStyle: String {
     @objc optional func formFieldDidEndEditing(_ field: BaseField)
     @objc optional func formFieldShouldReturn(_ field: BaseField) -> Bool
     @objc optional func formFieldDidChange(_ field: BaseField)
+    @objc optional func formFieldDidConfirmStatus(_ field: BaseField)
 }
 
 class BaseField: UIView, Localizable {
-    let contentView = UIView()
+    weak var contentView: UIView!
     var contentViewConstraints: [NSLayoutConstraint]!
-    let statusView = UIView()
-    var statusViewWidthConstraint: NSLayoutConstraint!
-    let label = UILabel()
+    weak var statusButton: UIButton!
+    var statusButtonWidthConstraint: NSLayoutConstraint!
+    weak var label: UILabel!
     var labelTopConstraint: NSLayoutConstraint!
 
     private var _detailLabel: UILabel!
@@ -47,8 +44,15 @@ class BaseField: UIView, Localizable {
         }
         return _alertLabel
     }
+    private var _statusLabel: UILabel!
+    var statusLabel: UILabel {
+        if _statusLabel == nil {
+            initStatusLabel()
+        }
+        return _statusLabel
+    }
 
-    var status: FormFieldStatus = .none {
+    var status: PredictionStatus = .none {
         didSet { updateStyle() }
     }
 
@@ -81,6 +85,8 @@ class BaseField: UIView, Localizable {
         didSet { updateStyle() }
     }
 
+    var isEditing = true
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -93,10 +99,12 @@ class BaseField: UIView, Localizable {
         updateStyle()
     }
 
+    // swiftlin:disable:next function_body_length
     func commonInit() {
         backgroundColor = .clear
         layer.zPosition = -1
 
+        let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentView)
         contentViewConstraints = [
@@ -106,26 +114,32 @@ class BaseField: UIView, Localizable {
             bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ]
         NSLayoutConstraint.activate(contentViewConstraints)
+        self.contentView = contentView
 
-        statusView.translatesAutoresizingMaskIntoConstraints = false
-        statusView.backgroundColor = .middlePeakBlue
-        contentView.addSubview(statusView)
+        let statusButton = UIButton()
+        statusButton.translatesAutoresizingMaskIntoConstraints = false
+        statusButton.addTarget(self, action: #selector(statusPressed), for: .touchUpInside)
+        statusButton.backgroundColor = .middlePeakBlue
+        contentView.addSubview(statusButton)
+        statusButtonWidthConstraint = statusButton.widthAnchor.constraint(equalToConstant: 8)
+        NSLayoutConstraint.activate([
+            statusButton.topAnchor.constraint(equalTo: contentView.topAnchor),
+            statusButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            statusButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            statusButtonWidthConstraint
+        ])
+        self.statusButton = statusButton
 
+        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = .lowPriorityGrey
         contentView.addSubview(label)
-
-        statusViewWidthConstraint = statusView.widthAnchor.constraint(equalToConstant: 8)
         labelTopConstraint = label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6)
-
         NSLayoutConstraint.activate([
-            statusView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            statusView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            statusView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            statusViewWidthConstraint,
             labelTopConstraint,
-            label.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10)
+            label.leftAnchor.constraint(equalTo: statusButton.rightAnchor, constant: 10)
         ])
+        self.label = label
     }
 
     private func initAlertLabel() {
@@ -137,6 +151,22 @@ class BaseField: UIView, Localizable {
         NSLayoutConstraint.activate([
             _alertLabel.firstBaselineAnchor.constraint(equalTo: label.firstBaselineAnchor),
             _alertLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10)
+        ])
+    }
+
+    private func initStatusLabel() {
+        _statusLabel = UILabel()
+        _statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        _statusLabel.font = .copyXSBold
+        _statusLabel.text = "BaseField.statusLabel.unconfirmed".localized
+        _statusLabel.textAlignment = .right
+        _statusLabel.textColor = .orangeAccent
+        _statusLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        addSubview(_statusLabel)
+        NSLayoutConstraint.activate([
+            _statusLabel.firstBaselineAnchor.constraint(equalTo: label.firstBaselineAnchor),
+            _statusLabel.leftAnchor.constraint(equalTo: label.rightAnchor, constant: 10),
+            _statusLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10)
         ])
     }
 
@@ -152,6 +182,7 @@ class BaseField: UIView, Localizable {
         ])
     }
 
+    // swiftlint:disable:next function_body_length
     func updateStyle() {
         contentView.backgroundColor = isPlainText ? .clear : .white
         if isPlainText {
@@ -163,21 +194,32 @@ class BaseField: UIView, Localizable {
         switch style {
         case .input:
             label.font = .copyXSBold
+            statusButton.backgroundColor = status == .unconfirmed ? UIColor.orangeAccent.withAlphaComponent(0.3) : UIColor.middlePeakBlue
+            statusButton.isUserInteractionEnabled = isEditing && status == .unconfirmed
+            statusButton.setImage(isEditing && status == .unconfirmed ? UIImage(named: "Unconfirmed") : nil, for: .normal)
+            _statusLabel?.isHidden = true
+            _alertLabel?.alpha = 1
             if isFirstResponder {
-                if status == .none {
-                    statusViewWidthConstraint.constant = 0
+                if status == .none || text?.isEmpty ?? true {
+                    statusButtonWidthConstraint.constant = 0
+                } else if isEditing && status == .unconfirmed {
+                    statusButtonWidthConstraint.constant = 47
+                    statusLabel.isHidden = false
+                    _alertLabel?.alpha = 0
                 } else {
-                    statusViewWidthConstraint.constant = 22
+                    statusButtonWidthConstraint.constant = 22
                 }
                 labelTopConstraint.constant = 8
                 contentViewConstraints[1].constant = -8
                 contentViewConstraints[2].constant = -8
                 layer.zPosition = 0
             } else {
-                if status == .none {
-                    statusViewWidthConstraint.constant = 0
+                if status == .none || text?.isEmpty ?? true {
+                    statusButtonWidthConstraint.constant = 0
+                } else if isEditing && status == .unconfirmed {
+                    statusButtonWidthConstraint.constant = 33
                 } else {
-                    statusViewWidthConstraint.constant = 8
+                    statusButtonWidthConstraint.constant = 8
                 }
                 labelTopConstraint.constant = 4
 
@@ -187,8 +229,14 @@ class BaseField: UIView, Localizable {
             }
         case .onboarding:
             label.font = .copySBold
-            statusViewWidthConstraint.constant = 0
+            statusButtonWidthConstraint.constant = 0
             labelTopConstraint.constant = 8
         }
+    }
+
+    @objc func statusPressed() {
+        delegate?.formFieldDidConfirmStatus?(self)
+        status = .confirmed
+        updateStyle()
     }
 }

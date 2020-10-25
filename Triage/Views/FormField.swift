@@ -50,6 +50,13 @@ class FormField: BaseField, UITextFieldDelegate {
         set { textField.isSecureTextEntry = newValue }
     }
 
+    override var isEditing: Bool {
+        didSet {
+            textField.isUserInteractionEnabled = isEditing
+            textField.rightViewMode = isEditing ? .always : .never
+        }
+    }
+
     override func commonInit() {
         super.commonInit()
 
@@ -72,7 +79,7 @@ class FormField: BaseField, UITextFieldDelegate {
 
         NSLayoutConstraint.activate([
             textFieldTopConstraint,
-            textField.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10),
+            textField.leftAnchor.constraint(equalTo: statusButton.rightAnchor, constant: 10),
             textField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             textFieldHeightConstraint,
             bottomConstraint
@@ -82,6 +89,7 @@ class FormField: BaseField, UITextFieldDelegate {
     @objc private func clearPressed() {
         if textField.delegate?.textFieldShouldClear?(textField) ?? true {
             textField.text = nil
+            textField.sendActions(for: .editingChanged)
         }
     }
 
@@ -127,6 +135,10 @@ class FormField: BaseField, UITextFieldDelegate {
 
     @objc func textFieldChanged() {
         delegate?.formFieldDidChange?(self)
+        if status == .unconfirmed {
+            status = .corrected
+            updateStyle()
+        }
     }
 
     // MARK: - UITextFieldDelegate

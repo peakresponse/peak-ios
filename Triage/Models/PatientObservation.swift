@@ -1,5 +1,5 @@
 //
-//  Observation.swift
+//  PatientObservation.swift
 //  Triage
 //
 //  Created by Francis Li on 11/2/19.
@@ -8,7 +8,7 @@
 
 import RealmSwift
 
-class Observation: Patient {
+class PatientObservation: Patient {
     struct Keys {
         static let patientId = "patientId"
         static let portraitFile = "portraitFile"
@@ -43,7 +43,7 @@ class Observation: Patient {
         return json
     }
 
-    override func asObservation() -> Observation {
+    override func asObservation() -> PatientObservation {
         let observation = super.asObservation()
         observation.portraitFile = portraitFile
         observation.photoFile = photoFile
@@ -52,8 +52,8 @@ class Observation: Patient {
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func changes(from source: Observation) -> Observation {
-        let observation = Observation()
+    func changes(from source: PatientObservation) -> PatientObservation {
+        let observation = PatientObservation()
         observation.sceneId = source.sceneId
         observation.pin = source.pin
         observation.version.value = source.version.value
@@ -127,6 +127,9 @@ class Observation: Patient {
         if transportFacility != source.transportFacility {
             observation.transportFacility = transportFacility
             observation.transportFacilityRemoved = transportFacilityRemoved
+        }
+        if !NSDictionary(dictionary: predictions ?? [:]).isEqual(to: source.predictions ?? [:]) {
+            observation.predictions = predictions
         }
         return observation
     }

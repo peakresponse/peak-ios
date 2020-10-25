@@ -258,7 +258,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    func save(observation: Observation) {
+    func save(observation: PatientObservation) {
         AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
@@ -286,7 +286,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     // MARK: - ConfirmTransportViewControllerDelegate
 
     func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
-        let observation = Observation()
+        let observation = PatientObservation()
         observation.sceneId = patient.sceneId
         observation.pin = patient.pin
         observation.version.value = (patient.version.value ?? 0) + 1
@@ -299,7 +299,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     // MARK: - FacilitiesTableViewControllerDelegate
 
     func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController) {
-        let observation = Observation()
+        let observation = PatientObservation()
         observation.sceneId = patient.sceneId
         observation.pin = patient.pin
         observation.version.value = (patient.version.value ?? 0) + 1
@@ -347,7 +347,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
         if priority != patient.priority.value {
-            let observation = Observation()
+            let observation = PatientObservation()
             observation.sceneId = patient.sceneId
             observation.pin = patient.pin
             observation.version.value = (patient.version.value ?? 0) + 1
@@ -516,6 +516,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             }
         }
         if let cell = cell as? BasePatientTableViewCell {
+            cell.isEditing = isEditing
             cell.configure(from: patient)
         }
         return cell

@@ -13,7 +13,8 @@ import Speech
 @objc protocol AudioHelperDelgate {
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String)
-    @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String)
+    @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String,
+                                    sourceId: String, metadata: [String: Any], isFinal: Bool)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String)
     @objc optional func audioHelper(_ audioHelper: AudioHelper, didTransformBuffer data: [Float])
     @objc optional func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper)
@@ -104,6 +105,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
         timer = nil
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func startRecording() throws {
         let audioSession = AVAudioSession.sharedInstance()
         if audioSession.recordPermission == .granted {
@@ -142,8 +144,31 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
                             // Update the text view with the results.
                             isFinal = result.isFinal
                             let text = result.bestTranscription.formattedString
+                            // convert the transcription segments into a metadata payload
+                            var segmentsMetadata: [[String: Any]] = []
+                            for segment in result.bestTranscription.segments {
+                                let segmentMetadata: [String: Any] = [
+                                    "substring": segment.substring,
+                                    "substringRange": [
+                                        "location": segment.substringRange.location,
+                                        "length": segment.substringRange.length
+                                    ],
+                                    "alternativeSubstrings": segment.alternativeSubstrings,
+                                    "confidence": segment.confidence,
+                                    "timestamp": segment.timestamp,
+                                    "duration": segment.duration
+                                ]
+                                segmentsMetadata.append(segmentMetadata)
+                            }
+                            let sourceId = UUID().uuidString
+                            let metadata: [String: Any] = [
+                                "type": "SPEECH",
+                                "provider": "APPLE",
+                                "segments": segmentsMetadata
+                            ]
                             if let self = self {
-                                self.delegate?.audioHelper?(self, didRecognizeText: text)
+                                self.delegate?.audioHelper?(self, didRecognizeText: text,
+                                                            sourceId: sourceId, metadata: metadata, isFinal: isFinal)
                             }
                         }
 

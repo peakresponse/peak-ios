@@ -20,7 +20,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     var locationHelper: LocationHelper!
     var cameraHelper: CameraHelper!
-    var originalObservation: Observation!
+    var originalObservation: PatientObservation!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,7 +60,12 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // change editing state after layout prevents layout constraint warnings
-        tableView.setEditing(true, animated: false)
+        setEditing(true, animated: false)
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: animated)
         tableView.beginUpdates()
         tableView.endUpdates()
     }
@@ -81,7 +86,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
 
         let saveObservation = { [weak self] in
-            guard let self = self, let observation = self.patient as? Observation else { return }
+            guard let self = self, let observation = self.patient as? PatientObservation else { return }
             AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (_, error) in
                 DispatchQueue.main.async { [weak self] in
                     self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
@@ -128,9 +133,11 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         if attributeType == .object {
             if text.isEmpty {
                 patient.setValue(nil, forKey: attribute)
+                patient.setPredictionStatus(.corrected, for: attribute)
             }
         } else {
             patient.setValue(text, forKey: attribute)
+            patient.setPredictionStatus(.corrected, for: attribute)
             if attribute == Patient.Keys.location, text.isEmpty {
                 patient.clearLatLng()
                 cell.configure(from: patient)
@@ -139,6 +146,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         if attribute == Patient.Keys.transportAgency || attribute == Patient.Keys.transportFacility {
             tableView.reloadSections(IndexSet([Section.info.rawValue]), with: .none)
         }
+    }
+
+    func attributeTableViewCellDidConfirmStatus(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {
+        patient.setPredictionStatus(.confirmed, for: attribute)
     }
 
     override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {
@@ -221,7 +232,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             if let error = error {
                 print(error)
             } else if let response = response, let signedId = response["signed_id"] as? String {
-                if let observation = self?.patient as? Observation {
+                if let observation = self?.patient as? PatientObservation {
                     observation.portraitFile = signedId
                 }
                 AppCache.cache(fileURL: fileURL, filename: signedId)
@@ -241,12 +252,13 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     // MARK: - RecordingViewControllerDelegate
 
-    func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String) {
+    func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
+                                 sourceId: String, metadata: [String: Any], isFinal: Bool) {
         patient.text = text
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        if let patient = patient as? Observation {
+        if let patient = patient as? PatientObservation {
             DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                patient.extractValues(from: text)
+                patient.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.tableView.reloadData()
@@ -266,7 +278,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                     self.presentAlert(error: error)
                 } else if let response = response, let signedId = response["signed_id"] as? String {
                     AppCache.cache(fileURL: fileURL, filename: signedId)
-                    if let observation = self.patient as? Observation {
+                    if let observation = self.patient as? PatientObservation {
                         observation.audioFile = signedId
                     }
                     self.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)

@@ -126,6 +126,7 @@ class Patient: Base {
         static let transportAgencyId = "transportAgencyId"
         static let transportFacility = "transportFacility"
         static let transportFacilityId = "transportFacilityId"
+        static let predictions = "predictions"
     }
 
     @objc dynamic var sceneId: String?
@@ -263,6 +264,41 @@ class Patient: Base {
         return transportAgency != nil || transportFacility != nil
     }
 
+    @objc dynamic var _predictions: Data?
+    var predictions: [String: Any]? {
+        get {
+            if let _predictions = _predictions {
+                return try? JSONSerialization.jsonObject(with: _predictions, options: []) as? [String: Any]
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _predictions = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _predictions = nil
+            }
+        }
+    }
+
+    func predictionStatus(for attribute: String) -> PredictionStatus {
+        if let prediction = predictions?[attribute] as? [String: Any] {
+            return PredictionStatus(rawValue: prediction["status"] as? String ?? "") ?? .none
+        }
+        return .none
+    }
+
+    func setPredictionStatus(_ status: PredictionStatus, for attribute: String) {
+        guard status != .none else { return }
+        if var predictions = self.predictions {
+            if var prediction = predictions[attribute] as? [String: Any] {
+                prediction["status"] = status.rawValue
+                predictions[attribute] = prediction
+                self.predictions = predictions
+            }
+        }
+    }
+
     override var updatedAtRelativeString: String {
         return updatedAt?.asRelativeString() ?? "Patient.new".localized
     }
@@ -343,6 +379,7 @@ class Patient: Base {
             let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
             transportFacility = facility
         }
+        predictions = data[Keys.predictions] as? [String: Any]
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -430,11 +467,14 @@ class Patient: Base {
         } else if transportFacilityRemoved {
             data[Keys.transportFacilityId] = NSNull()
         }
+        if let predictions = predictions {
+            data[Keys.predictions] = predictions
+        }
         return data
     }
 
-    func asObservation() -> Observation {
-        let observation = Observation()
+    func asObservation() -> PatientObservation {
+        let observation = PatientObservation()
         observation.sceneId = sceneId
         observation.pin = pin
         observation.version.value = version.value
@@ -461,6 +501,7 @@ class Patient: Base {
         observation.audioUrl = nil
         observation.transportAgency = transportAgency
         observation.transportFacility = transportFacility
+        observation.predictions = predictions
         observation.createdAt = createdAt
         observation.updatedAt = updatedAt
         return observation

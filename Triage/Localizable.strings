@@ -16,6 +16,8 @@
 
 "Banner.noActiveScenes" = "No Active Scenes";
 
+"BaseField.statusLabel.unconfirmed" = "Tap the mic icon to verify this information.";
+
 "Button.addNote" = "Add Note";
 "Button.addPhoto" = "Add Photo";
 "Button.addRecording" = "Add Recording";
