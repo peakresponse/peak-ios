@@ -44,7 +44,7 @@ class PatientObservationTests: XCTestCase {
             prediction = observation.predictions?["firstName"] as? [String: Any]
             XCTAssertEqual(prediction?["source"] as? String, "_speech")
             XCTAssertEqual(prediction?["value"] as? String, "Mary")
-            XCTAssertEqual(prediction?["state"] as? String, "UNCONFIRMED")
+            XCTAssertEqual(prediction?["status"] as? String, "UNCONFIRMED")
             var range = NSRange(sample.range(of: "Mary")!, in: sample)
             XCTAssertEqual((prediction?["range"] as? [String: Int])?["location"], range.location)
             XCTAssertEqual((prediction?["range"] as? [String: Int])?["length"], range.length)
@@ -52,7 +52,7 @@ class PatientObservationTests: XCTestCase {
             prediction = observation.predictions?["lastName"] as? [String: Any]
             XCTAssertEqual(prediction?["source"] as? String, "_speech")
             XCTAssertEqual(prediction?["value"] as? String, "Thomas")
-            XCTAssertEqual(prediction?["state"] as? String, "UNCONFIRMED")
+            XCTAssertEqual(prediction?["status"] as? String, "UNCONFIRMED")
             range = NSRange(sample.range(of: "Thomas")!, in: sample)
             XCTAssertEqual((prediction?["range"] as? [String: Int])?["location"], range.location)
             XCTAssertEqual((prediction?["range"] as? [String: Int])?["length"], range.length)

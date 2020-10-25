@@ -281,6 +281,16 @@ class Patient: Base {
         }
     }
 
+    func predictionStatus(for attribute: String) -> FormFieldStatus {
+        if let prediction = predictions?[attribute] as? [String: Any] {
+            if prediction["status"] as? String == "UNCONFIRMED" {
+                return .unconfirmed
+            }
+            return .confirmed
+        }
+        return .none
+    }
+
     override var updatedAtRelativeString: String {
         return updatedAt?.asRelativeString() ?? "Patient.new".localized
     }

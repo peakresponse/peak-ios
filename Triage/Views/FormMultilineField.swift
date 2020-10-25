@@ -76,7 +76,7 @@ class FormMultilineField: BaseField, UITextViewDelegate {
 
         NSLayoutConstraint.activate([
             textViewTopConstraint,
-            textView.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10),
+            textView.leftAnchor.constraint(equalTo: statusButton.rightAnchor, constant: 10),
             textView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             textViewHeightConstraint,
             bottomConstraint

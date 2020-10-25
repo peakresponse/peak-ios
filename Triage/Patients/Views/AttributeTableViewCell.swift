@@ -86,6 +86,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
             } else {
                 field.text = nil
             }
+            field.status = patient.predictionStatus(for: attribute)
 
             field.textField.inputView = nil
             switch attributeTypes[i] {

@@ -72,7 +72,7 @@ class FormField: BaseField, UITextFieldDelegate {
 
         NSLayoutConstraint.activate([
             textFieldTopConstraint,
-            textField.leftAnchor.constraint(equalTo: statusView.rightAnchor, constant: 10),
+            textField.leftAnchor.constraint(equalTo: statusButton.rightAnchor, constant: 10),
             textField.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -10),
             textFieldHeightConstraint,
             bottomConstraint
