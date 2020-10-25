@@ -128,9 +128,11 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         if attributeType == .object {
             if text.isEmpty {
                 patient.setValue(nil, forKey: attribute)
+                patient.setPredictionStatus(.corrected, for: attribute)
             }
         } else {
             patient.setValue(text, forKey: attribute)
+            patient.setPredictionStatus(.corrected, for: attribute)
             if attribute == Patient.Keys.location, text.isEmpty {
                 patient.clearLatLng()
                 cell.configure(from: patient)
@@ -139,6 +141,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         if attribute == Patient.Keys.transportAgency || attribute == Patient.Keys.transportFacility {
             tableView.reloadSections(IndexSet([Section.info.rawValue]), with: .none)
         }
+    }
+
+    func attributeTableViewCellDidConfirmStatus(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {
+        patient.setPredictionStatus(.confirmed, for: attribute)
     }
 
     override func attributeTableViewCellDidPressAlert(_ cell: AttributeTableViewCell, for attribute: String, with type: String) {

@@ -11,6 +11,7 @@
 		451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A16FE252FD5FD00DC7705 /* RoleButton.swift */; };
 		451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A178A25364E1E00DC7705 /* ScenePin.swift */; };
 		451A17932536B97A00DC7705 /* ScenePinInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A17922536B97A00DC7705 /* ScenePinInfoView.swift */; };
+		451ABAFD2545E68500580115 /* PredictionStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451ABAFC2545E68500580115 /* PredictionStatus.swift */; };
 		452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */; };
 		452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */; };
 		452AFDF0252A5E6D00E5A84D /* PatientAgeKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */; };
@@ -162,6 +163,7 @@
 		451A16FE252FD5FD00DC7705 /* RoleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleButton.swift; sourceTree = "<group>"; };
 		451A178A25364E1E00DC7705 /* ScenePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePin.swift; sourceTree = "<group>"; };
 		451A17922536B97A00DC7705 /* ScenePinInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinInfoView.swift; sourceTree = "<group>"; };
+		451ABAFC2545E68500580115 /* PredictionStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PredictionStatus.swift; sourceTree = "<group>"; };
 		452AFDDF2529AC0A00E5A84D /* PatientGenderKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientGenderKeyboardView.swift; sourceTree = "<group>"; };
 		452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityTableViewCell.swift; sourceTree = "<group>"; };
 		452AFDEF252A5E6D00E5A84D /* PatientAgeKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientAgeKeyboardView.swift; sourceTree = "<group>"; };
@@ -343,6 +345,15 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		451ABAFB2545E66B00580115 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				45F2190124E5EC640046A39B /* Localizable.swift */,
+				451ABAFC2545E68500580115 /* PredictionStatus.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -394,8 +405,9 @@
 		4566F01E236CCC5500A04C75 /* Triage */ = {
 			isa = PBXGroup;
 			children = (
-				4566F061236CE17900A04C75 /* Models */,
+				451ABAFB2545E66B00580115 /* Types */,
 				4566F05D236CD56200A04C75 /* Extensions */,
+				4566F061236CE17900A04C75 /* Models */,
 				4566F04F236CCF5C00A04C75 /* Login */,
 				4566F056236CD1E000A04C75 /* Patients */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
@@ -475,12 +487,12 @@
 		4566F05D236CD56200A04C75 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
+				454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */,
 				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
 				45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */,
 				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
 				45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */,
 				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
-				45F2190124E5EC640046A39B /* Localizable.swift */,
 				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
 				45F2190324E5ECC10046A39B /* String+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
@@ -492,7 +504,6 @@
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
 				4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */,
 				4572BA8E237DE45400958A77 /* URL+Extensions.swift */,
-				454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -939,6 +950,7 @@
 				45F130682526E797001495C7 /* ResponderViewController.swift in Sources */,
 				45B7A2EE250F3E7800BCAAAE /* SceneSummaryViewController.swift in Sources */,
 				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,
+				451ABAFD2545E68500580115 /* PredictionStatus.swift in Sources */,
 				45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */,

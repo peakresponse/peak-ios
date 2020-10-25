@@ -281,14 +281,22 @@ class Patient: Base {
         }
     }
 
-    func predictionStatus(for attribute: String) -> FormFieldStatus {
+    func predictionStatus(for attribute: String) -> PredictionStatus {
         if let prediction = predictions?[attribute] as? [String: Any] {
-            if prediction["status"] as? String == "UNCONFIRMED" {
-                return .unconfirmed
-            }
-            return .confirmed
+            return PredictionStatus(rawValue: prediction["status"] as? String ?? "") ?? .none
         }
         return .none
+    }
+
+    func setPredictionStatus(_ status: PredictionStatus, for attribute: String) {
+        guard status != .none else { return }
+        if var predictions = self.predictions {
+            if var prediction = predictions[attribute] as? [String: Any] {
+                prediction["status"] = status.rawValue
+                predictions[attribute] = prediction
+                self.predictions = predictions
+            }
+        }
     }
 
     override var updatedAtRelativeString: String {
@@ -493,6 +501,7 @@ class Patient: Base {
         observation.audioUrl = nil
         observation.transportAgency = transportAgency
         observation.transportFacility = transportFacility
+        observation.predictions = predictions
         observation.createdAt = createdAt
         observation.updatedAt = updatedAt
         return observation

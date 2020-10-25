@@ -8,10 +8,6 @@
 
 import UIKit
 
-enum FormFieldStatus: String {
-    case none, unconfirmed, confirmed
-}
-
 enum FormFieldStyle: String {
     case input, onboarding
 }
@@ -23,6 +19,7 @@ enum FormFieldStyle: String {
     @objc optional func formFieldDidEndEditing(_ field: BaseField)
     @objc optional func formFieldShouldReturn(_ field: BaseField) -> Bool
     @objc optional func formFieldDidChange(_ field: BaseField)
+    @objc optional func formFieldDidConfirmStatus(_ field: BaseField)
 }
 
 class BaseField: UIView, Localizable {
@@ -55,7 +52,7 @@ class BaseField: UIView, Localizable {
         return _statusLabel
     }
 
-    var status: FormFieldStatus = .none {
+    var status: PredictionStatus = .none {
         didSet { updateStyle() }
     }
 
@@ -119,6 +116,7 @@ class BaseField: UIView, Localizable {
 
         let statusButton = UIButton()
         statusButton.translatesAutoresizingMaskIntoConstraints = false
+        statusButton.addTarget(self, action: #selector(statusPressed), for: .touchUpInside)
         statusButton.backgroundColor = .middlePeakBlue
         contentView.addSubview(statusButton)
         statusButtonWidthConstraint = statusButton.widthAnchor.constraint(equalToConstant: 8)
@@ -182,6 +180,7 @@ class BaseField: UIView, Localizable {
         ])
     }
 
+    // swiftlint:disable:next function_body_length
     func updateStyle() {
         contentView.backgroundColor = isPlainText ? .clear : .white
         if isPlainText {
@@ -197,12 +196,14 @@ class BaseField: UIView, Localizable {
             statusButton.isUserInteractionEnabled = status == .unconfirmed
             statusButton.setImage(status == .unconfirmed ? UIImage(named: "Unconfirmed") : nil, for: .normal)
             _statusLabel?.isHidden = true
+            _alertLabel?.alpha = 1
             if isFirstResponder {
-                if status == .none && text?.isEmpty ?? true {
+                if status == .none || text?.isEmpty ?? true {
                     statusButtonWidthConstraint.constant = 0
                 } else if status == .unconfirmed {
                     statusButtonWidthConstraint.constant = 47
                     statusLabel.isHidden = false
+                    _alertLabel?.alpha = 0
                 } else {
                     statusButtonWidthConstraint.constant = 22
                 }
@@ -211,7 +212,7 @@ class BaseField: UIView, Localizable {
                 contentViewConstraints[2].constant = -8
                 layer.zPosition = 0
             } else {
-                if status == .none && text?.isEmpty ?? true {
+                if status == .none || text?.isEmpty ?? true {
                     statusButtonWidthConstraint.constant = 0
                 } else if status == .unconfirmed {
                     statusButtonWidthConstraint.constant = 33
@@ -229,5 +230,11 @@ class BaseField: UIView, Localizable {
             statusButtonWidthConstraint.constant = 0
             labelTopConstraint.constant = 8
         }
+    }
+
+    @objc func statusPressed() {
+        delegate?.formFieldDidConfirmStatus?(self)
+        status = .confirmed
+        updateStyle()
     }
 }

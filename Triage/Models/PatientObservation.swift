@@ -128,6 +128,9 @@ class PatientObservation: Patient {
             observation.transportFacility = transportFacility
             observation.transportFacilityRemoved = transportFacilityRemoved
         }
+        if !NSDictionary(dictionary: predictions ?? [:]).isEqual(to: source.predictions ?? [:]) {
+            observation.predictions = predictions
+        }
         return observation
     }
 }

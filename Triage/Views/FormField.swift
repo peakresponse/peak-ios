@@ -82,6 +82,7 @@ class FormField: BaseField, UITextFieldDelegate {
     @objc private func clearPressed() {
         if textField.delegate?.textFieldShouldClear?(textField) ?? true {
             textField.text = nil
+            textField.sendActions(for: .editingChanged)
         }
     }
 
@@ -127,6 +128,10 @@ class FormField: BaseField, UITextFieldDelegate {
 
     @objc func textFieldChanged() {
         delegate?.formFieldDidChange?(self)
+        if status == .unconfirmed {
+            status = .corrected
+            updateStyle()
+        }
     }
 
     // MARK: - UITextFieldDelegate

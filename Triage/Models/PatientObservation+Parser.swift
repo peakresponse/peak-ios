@@ -141,7 +141,7 @@ extension PatientObservation {
                                 "length": range.length
                             ],
                             "value": value,
-                            "status": "UNCONFIRMED" // , CONFIRMED, CORRECTED
+                            "status": PredictionStatus.unconfirmed.rawValue
                         ]
                         predictions["_speech"] = [
                             "text": text,
