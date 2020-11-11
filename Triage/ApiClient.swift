@@ -219,6 +219,14 @@ class ApiClient {
         })
     }
 
+    func DELETE<T>(path: String, params: [String: Any]? = nil,
+                   completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+        let request = urlRequest(for: path, params: params, method: "DELETE")
+        return session.dataTask(with: request, completionHandler: { (data, response, error) in
+            self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
+        })
+    }
+
     func download(request: URLRequest, completionHandler: @escaping (URL?, URLResponse?, Error?) -> Void) -> URLSessionDownloadTask {
         return session.downloadTask(with: request, completionHandler: completionHandler)
     }
@@ -310,6 +318,17 @@ class ApiClient {
 
     func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
+    }
+
+    func addScenePin(sceneId: String, data: [String: Any],
+                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: completionHandler)
+    }
+
+    func removeScenePin(sceneId: String, scenePinId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+        return DELETE(path: "/api/scenes/\(sceneId)/pins/\(scenePinId)") { (_: [String: Any]?, error) in
+            completionHandler(error)
+        }
     }
 
     func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {

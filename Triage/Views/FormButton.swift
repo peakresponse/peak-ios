@@ -26,6 +26,18 @@ private class FormIconButton: UIButton {
         }
         return rect
     }
+
+    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+        var rect = super.titleRect(forContentRect: contentRect)
+        if let iconButton = formButton as? IconButton, iconButton.iconBackgroundView?.image != nil {
+            rect = iconButton.bounds
+            rect.origin.y = 2
+            rect.size.height -= 4
+            rect.origin.x += rect.height + 5
+            rect.size.width -= rect.height + 10
+        }
+        return rect
+    }
 }
 
 @IBDesignable
@@ -65,6 +77,16 @@ class FormButton: UIControl {
             updateButtonBackgroundImage(color: highlightedButtonColor, state: .highlighted)
             let buttonImage = self.buttonImage
             self.buttonImage = buttonImage
+        }
+    }
+    @IBInspectable var selectedButtonColor: UIColor = .greyPeakBlue {
+        didSet {
+            updateButtonBackgroundImage(color: selectedButtonColor, state: .selected)
+        }
+    }
+    @IBInspectable var selectedHighlightedButtonColor: UIColor = .darkPeakBlue {
+        didSet {
+            updateButtonBackgroundImage(color: selectedHighlightedButtonColor, state: [.selected, .highlighted])
         }
     }
 
@@ -184,6 +206,8 @@ class FormButton: UIControl {
         }
         updateButtonBackgroundImage(color: buttonColor, state: .normal)
         updateButtonBackgroundImage(color: highlightedButtonColor, state: .highlighted)
+        updateButtonBackgroundImage(color: selectedButtonColor, state: .selected)
+        updateButtonBackgroundImage(color: selectedHighlightedButtonColor, state: [.selected, .highlighted])
         heightConstraint.constant = height
     }
 

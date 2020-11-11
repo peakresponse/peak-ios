@@ -18,4 +18,10 @@ extension UILabel: Localizable {
         get { return nil }
         set { font = UIFont.value(forKey: newValue ?? "") as? UIFont }
     }
+
+    func setBoldPrefixedText(boldFont: UIFont, prefix: String, text: String) {
+        let attributedText = NSMutableAttributedString(string: "\(prefix)\(text)")
+        attributedText.addAttribute(.font, value: boldFont, range: NSRange(prefix.startIndex..<prefix.endIndex, in: prefix))
+        self.attributedText = attributedText
+    }
 }

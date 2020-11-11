@@ -48,12 +48,15 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     var notificationToken: NotificationToken?
 
     deinit {
+        removeKeyboardListener()
         notificationToken?.invalidate()
     }
 
     // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        addKeyboardListener()
 
         let gradientLayer = CAGradientLayer()
         gradientLayer.colors = [UIColor.bgBackground.withAlphaComponent(0).cgColor, UIColor.bgBackground.cgColor]
@@ -122,21 +125,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc func keyboardWillShow(_ notification: NSNotification) {
+    @objc override func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
             UIView.animate(withDuration: duration) {
@@ -150,7 +139,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    @objc func keyboardWillHide(_ notification: NSNotification) {
+    @objc override func keyboardWillHide(_ notification: NSNotification) {
         UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
             self.tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: self.updateButtonBackgroundView.frame.height, right: 0)
             self.tableView.scrollIndicatorInsets = .zero

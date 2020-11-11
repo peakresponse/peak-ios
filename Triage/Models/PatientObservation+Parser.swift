@@ -117,6 +117,7 @@ private let MATCHERS: [Matcher] = [
 // swiftlint:enable force_try line_length
 
 extension PatientObservation {
+    // swiftlint:disable:next cyclomatic_complexity
     func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         for matcher in MATCHERS {

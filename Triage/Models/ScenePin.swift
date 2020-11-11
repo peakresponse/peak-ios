@@ -77,6 +77,7 @@ enum ScenePinType: String, CaseIterable, CustomStringConvertible {
 class ScenePin: Base {
     struct Keys {
         static let sceneId = "sceneId"
+        static let prevPinId = "prevPinId"
         static let type = "type"
         static let name = "name"
         static let desc = "desc"
@@ -86,6 +87,7 @@ class ScenePin: Base {
     }
 
     @objc dynamic var scene: Scene?
+    @objc dynamic var prevPinId: String?
     @objc dynamic var type: String?
     @objc dynamic var name: String?
     @objc dynamic var desc: String?
@@ -99,10 +101,21 @@ class ScenePin: Base {
         return false
     }
     var latLng: CLLocationCoordinate2D? {
-        if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
-            return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+        get {
+            if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
+                return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+            }
+            return nil
         }
-        return nil
+        set {
+            if let newValue = newValue {
+                lat = "\(newValue.latitude)"
+                lng = "\(newValue.longitude)"
+            } else {
+                lat = nil
+                lng = nil
+            }
+        }
     }
     var latLngString: String? {
         if let lat = lat, let lng = lng {
@@ -129,9 +142,11 @@ class ScenePin: Base {
         deletedAt = ISO8601DateFormatter.date(from: data[Keys.deletedAt])
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        if let value = prevPinId {
+            data[Keys.prevPinId] = value
+        }
         if let value = type {
             data[Keys.type] = value
         }

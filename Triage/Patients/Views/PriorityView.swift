@@ -89,6 +89,7 @@ class PriorityView: UIView {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func select(priority: Int?) {
         for (index, button) in buttons.enumerated() {
             if index == priority {

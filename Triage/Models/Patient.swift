@@ -9,6 +9,8 @@
 import CoreLocation
 import RealmSwift
 
+// swiftlint:disable file_length
+
 enum Priority: Int, CustomStringConvertible, CaseIterable {
     case immediate
     case delayed

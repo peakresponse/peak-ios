@@ -87,6 +87,11 @@
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
+		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
+		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
+		45917FEC254CB896002E03E7 /* ScenePinTypeButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FEB254CB896002E03E7 /* ScenePinTypeButton.swift */; };
+		45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */; };
+		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
 		45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */; };
@@ -245,6 +250,11 @@
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
+		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
+		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
+		45917FEB254CB896002E03E7 /* ScenePinTypeButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinTypeButton.swift; sourceTree = "<group>"; };
+		45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
+		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
 		45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
@@ -437,6 +447,7 @@
 		4566F035236CCC5700A04C75 /* TriageTests */ = {
 			isa = PBXGroup;
 			children = (
+				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				4566F06A236CE8A800A04C75 /* PatientTests.swift */,
 				45D6357D252ADAA40045C7CC /* PatientObservationTests.swift */,
 				45F130472525A062001495C7 /* ResponderTests.swift */,
@@ -501,6 +512,7 @@
 				4563C74624DB7B3500217901 /* UIFont+Extensions.swift */,
 				45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */,
 				45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */,
+				45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */,
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
 				4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */,
 				4572BA8E237DE45400958A77 /* URL+Extensions.swift */,
@@ -541,6 +553,7 @@
 				4563C74224DA763700217901 /* FormField.swift */,
 				45BA94302502C17F0098E9BD /* FormMultilineField.swift */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
+				45917FE3254C8A4D002E03E7 /* IconButton.swift */,
 				454EEA532522F0EC00EB266A /* ImageView.swift */,
 				4543DD4D24DE20B100F9E50B /* NavigationBar.swift */,
 				45E2675724196E5C0010CDE9 /* NavigationController.swift */,
@@ -549,6 +562,7 @@
 				45E35A3724F06A8E005A8059 /* RecordButton.swift */,
 				451A16FE252FD5FD00DC7705 /* RoleButton.swift */,
 				4566F079236D486B00A04C75 /* RoundImageView.swift */,
+				45917FEB254CB896002E03E7 /* ScenePinTypeButton.swift */,
 				45515A2E24DE26AB007BAE09 /* SearchBar.swift */,
 				452DDBD9243D819500A8F1FF /* SelectorView.swift */,
 				45515A3024DF682A007BAE09 /* SortBar.swift */,
@@ -580,6 +594,7 @@
 				451A17922536B97A00DC7705 /* ScenePinInfoView.swift */,
 				45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */,
 				452AFE05252A6C0100E5A84D /* SectionInfoTableViewCell.swift */,
+				45917FDE254C8241002E03E7 /* NewScenePinView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -893,6 +908,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				454E17B224FF159C00F9EB8B /* Scene.swift in Sources */,
+				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
 				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
 				45515A3124DF682A007BAE09 /* SortBar.swift in Sources */,
 				458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */,
@@ -911,6 +927,7 @@
 				451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */,
 				4566F096236E11B000A04C75 /* PatientHeaderView.swift in Sources */,
 				45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */,
+				45917FEC254CB896002E03E7 /* ScenePinTypeButton.swift in Sources */,
 				452AFDFE252A662200E5A84D /* PatientTableViewFooterView.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
@@ -930,6 +947,7 @@
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
 				452DDBCD243D22E300A8F1FF /* AgenciesTableViewController.swift in Sources */,
 				452AFDF0252A5E6D00E5A84D /* PatientAgeKeyboardView.swift in Sources */,
+				45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */,
 				450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */,
 				4543DD4C24DDE62100F9E50B /* TabBarController.swift in Sources */,
 				45E35A3424EF8E8B005A8059 /* FacilityView.swift in Sources */,
@@ -1002,6 +1020,7 @@
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
 				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,
+				45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */,
 				45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */,
 				45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */,
 				45E267522418B2510010CDE9 /* Button.swift in Sources */,
@@ -1012,6 +1031,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,
 				45D6357E252ADAA40045C7CC /* PatientObservationTests.swift in Sources */,
@@ -1114,7 +1134,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1172,7 +1192,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.7;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1193,7 +1213,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4575KXUFK2;
 				INFOPLIST_FILE = Triage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1216,7 +1235,6 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4575KXUFK2;
 				INFOPLIST_FILE = Triage/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.2;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

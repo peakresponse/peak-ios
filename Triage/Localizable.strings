@@ -26,12 +26,14 @@
 "Button.cancel" = "Cancel";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
+"Button.delete" = "Delete";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
 "Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
+"Button.save" = "Save";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
@@ -90,6 +92,10 @@
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
+
+"NewScenePinView.nameField.label" = "Pin Name";
+"NewScenePinView.descField.label" = "Description";
+"NewScenePinView.label" = "Select pin type or select Other to create your own.";
 
 "NewSceneViewController.title" = "New Scene Set-Up";
 "NewSceneViewController.nameField" = "Incident Name";
@@ -164,6 +170,9 @@
 "PatientTableViewController.vitals" = "Vitals";
 "PatientTableViewController.observations" = "Observations";
 
+"PatientsMapViewController.deletePin.title" = "Delete pin?";
+"PatientsMapViewController.deletePin.message" = "Are you sure you wish to delete this pin from the map?";
+
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
@@ -194,6 +203,9 @@
 "ScenePin.type.TRANSPORT" = "Transport";
 "ScenePin.type.STAGING" = "Staging";
 "ScenePin.type.OTHER" = "Other";
+
+"ScenePinInfoView.desc" = "Description: ";
+"ScenePinInfoView.change" = "Change location by tapping on the map where you want the pin to move to.";
 
 "SceneRespondersView.respondersLabel" = "First Responders";
 

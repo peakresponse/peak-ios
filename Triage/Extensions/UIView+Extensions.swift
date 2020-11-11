@@ -10,18 +10,6 @@ import UIKit
 
 extension UIView {
 
-    func loadNib() {
-        backgroundColor = UIColor.clear
-        let nibName = type(of: self).description().components(separatedBy: ".").last!
-        let nib = UINib(nibName: nibName, bundle: Bundle(for: type(of: self)))
-        if let view = nib.instantiate(withOwner: self, options: nil).first as? UIView {
-            view.frame = bounds
-            view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            view.translatesAutoresizingMaskIntoConstraints = true
-            addSubview(view)
-        }
-    }
-
     func addShadow(withOffset offset: CGSize, radius: CGFloat, color: UIColor, opacity: Float) {
         layer.shadowOffset = offset
         layer.shadowRadius = radius

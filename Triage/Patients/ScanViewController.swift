@@ -22,8 +22,14 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
 
+    deinit {
+        removeKeyboardListener()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        addKeyboardListener()
 
         isModalInPresentation = true
 
@@ -46,12 +52,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-
         // re-enable camera
         if videoPreviewLayer != nil {
             captureSession.startRunning()
@@ -76,7 +76,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
         // disable camera, if running
         if videoPreviewLayer != nil {
             captureSession.stopRunning()
@@ -88,7 +87,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         videoPreviewLayer?.frame = cameraView.bounds
     }
 
-    @objc func keyboardWillShow(_ notification: NSNotification) {
+    @objc override func keyboardWillShow(_ notification: NSNotification) {
         if let pinFieldFrame = pinField.superview?.convert(pinField.frame, to: nil),
             let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             if keyboardFrame.minY < pinFieldFrame.maxY {
@@ -102,7 +101,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         }
     }
 
-    @objc func keyboardWillHide(_ notification: NSNotification) {
+    @objc override func keyboardWillHide(_ notification: NSNotification) {
         UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
             var bounds = self.view.bounds
             bounds.origin.y = 0

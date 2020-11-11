@@ -15,11 +15,20 @@ class Base: Object {
         static let updatedAt = "updatedAt"
     }
 
-    @objc dynamic var id: String = UUID().uuidString
+    @objc dynamic var id: String = UUID().uuidString.lowercased()
     @objc dynamic var createdAt: Date?
     @objc dynamic var updatedAt: Date?
     var updatedAtRelativeString: String {
         return updatedAt?.asRelativeString() ?? "Unknown".localized
+    }
+
+    override required init() {
+        super.init()
+    }
+
+    convenience init(clone: Any) {
+        self.init(value: clone)
+        id = UUID().uuidString.lowercased()
     }
 
     override public class func primaryKey() -> String? {

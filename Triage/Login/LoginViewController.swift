@@ -36,6 +36,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
         _ = emailField.becomeFirstResponder()
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     @IBAction func loginPressed(_ sender: FormButton) {
         let email = emailField.text
         let password = passwordField.text

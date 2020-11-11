@@ -24,12 +24,15 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
     var results: Results<Agency>?
 
     deinit {
+        removeKeyboardListener()
         notificationToken?.invalidate()
         debounceTimer?.invalidate()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        addKeyboardListener()
 
         facilityView.configure(from: facility)
         facilityView.layer.borderColor = UIColor.greyPeakBlue.cgColor
@@ -50,15 +53,6 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
         refresh()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        let defaultNotificationCenter = NotificationCenter.default
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        defaultNotificationCenter.addObserver(
-            self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
@@ -66,12 +60,7 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
         tableView.layoutIfNeeded()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self)
-    }
-
-    @objc func keyboardWillShow(_ notification: NSNotification) {
+    @objc override func keyboardWillShow(_ notification: NSNotification) {
         if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
             view.layoutIfNeeded()
             let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
@@ -84,7 +73,7 @@ class AgenciesTableViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
 
-    @objc func keyboardWillHide(_ notification: NSNotification) {
+    @objc override func keyboardWillHide(_ notification: NSNotification) {
         view.layoutIfNeeded()
         UIView.animate(withDuration: notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25) {
             self.headerViewTopConstraint.constant = 140

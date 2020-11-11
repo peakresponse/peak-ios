@@ -9,7 +9,7 @@
 import CoreLocation
 import RealmSwift
 
-// swiftlint:disable force_try type_body_length
+// swiftlint:disable file_length force_try type_body_length
 class AppRealm {
     private static var main: Realm!
     private static var agencyTask: URLSessionWebSocketTask?
@@ -239,6 +239,41 @@ class AppRealm {
         let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, error) in
             completionHandler(error)
         }
+        task.resume()
+    }
+
+    public static func createOrUpdateScenePin(sceneId: String, pin: ScenePin, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        try! realm.write {
+            pin.scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+            realm.add(pin, update: .modified)
+            if let prevPinId = pin.prevPinId, let prevPin = realm.object(ofType: ScenePin.self, forPrimaryKey: prevPinId) {
+                prevPin.deletedAt = Date()
+            }
+        }
+        let task = ApiClient.shared.addScenePin(sceneId: sceneId, data: pin.asJSON()) { (_, error) in
+            completionHandler(error)
+        }
+        task.resume()
+    }
+
+    public static func removeScenePin(_ pin: ScenePin, completionHandler: @escaping (Error?) -> Void) {
+        guard let sceneId = pin.scene?.id else {
+            completionHandler(ApiClientError.unexpected)
+            return
+        }
+        let scenePinId = pin.id
+        let task = ApiClient.shared.removeScenePin(sceneId: sceneId, scenePinId: scenePinId, completionHandler: { (error) in
+            if error == nil {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    if let pin = realm.object(ofType: ScenePin.self, forPrimaryKey: scenePinId) {
+                        realm.delete(pin)
+                    }
+                }
+            }
+            completionHandler(error)
+        })
         task.resume()
     }
 

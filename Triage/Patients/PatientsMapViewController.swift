@@ -15,14 +15,24 @@ class PatientAnnotation: MKPointAnnotation {
     var patient: Patient!
 }
 
-class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapViewDelegate {
+// swiftlint:disable file_length
+// swiftlint:disable:next type_body_length
+class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapViewDelegate, NewScenePinViewDelegate,
+                                 ScenePinInfoViewDelegate {
     @IBOutlet weak var searchBar: UISearchBar!
     private var searchBarShouldBeginEditing = true
     @IBOutlet weak var mapContainerView: UIView!
     weak var mapView: GMSMapView!
+    var isMapViewInitialzed = false
 
-    weak var selectedPinMarker: GMSMarker?
+    var selectedPinMarker: GMSMarker?
     weak var selectedPinInfoView: ScenePinInfoView?
+
+    weak var newPin: ScenePin?
+    weak var newPinMarker: GMSMarker?
+    weak var newPinView: NewScenePinView?
+
+    var isMGS = false
 
     var scene: Scene!
     var sceneNotificationToken: NotificationToken?
@@ -48,6 +58,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
         guard let sceneId = AppSettings.sceneId else { return }
         scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
         guard scene != nil else { return }
+        isMGS = AppSettings.userId == scene.incidentCommanderId
         sceneNotificationToken = scene?.observe { [weak self] (_) in
             self?.refresh()
         }
@@ -127,10 +138,10 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     }
 
     private func createMarker(for pin: ScenePin) -> GMSMarker? {
-        if let position = pin.latLng, let type = ScenePinType(rawValue: pin.type ?? "") {
+        if let position = pin.latLng {
             let marker = GMSMarker(position: position)
             marker.userData = pin
-            marker.icon = type.markerImage.scaledBy(0.666)
+            marker.icon = (ScenePinType(rawValue: pin.type ?? "")?.markerImage ?? UIImage(named: "MapMarkerNew"))?.scaledBy(0.666)
             return marker
         }
         return nil
@@ -156,11 +167,12 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
                 }
             }
         }
-        if bounds.isValid {
+        if bounds.isValid && !isMapViewInitialzed {
             mapView.setMinZoom(1, maxZoom: 18)
             let update = GMSCameraUpdate.fit(bounds, withPadding: 50)
             mapView.animate(with: update)
             mapView.setMinZoom(1, maxZoom: 20)
+            isMapViewInitialzed = true
         }
     }
 
@@ -176,15 +188,14 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     }
 
     @objc func refresh() {
-        if let sceneId = AppSettings.sceneId {
-            AppRealm.getPatients(sceneId: sceneId) { [weak self] (error) in
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        if let error = error as? ApiClientError, error == .unauthorized {
-                            self?.presentLogin()
-                        } else {
-                            self?.presentAlert(error: error)
-                        }
+        isMGS = AppSettings.userId == scene.incidentCommanderId
+        AppRealm.getPatients(sceneId: scene.id) { [weak self] (error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    if let error = error as? ApiClientError, error == .unauthorized {
+                        self?.presentLogin()
+                    } else {
+                        self?.presentAlert(error: error)
                     }
                 }
             }
@@ -206,6 +217,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     }
 
     private func deselectPin() -> Bool {
+        guard newPin == nil else { return false }
         var result = false
         if let selectedPinMarker = selectedPinMarker,
            let selectedPin = selectedPinMarker.userData as? ScenePin,
@@ -222,6 +234,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     // MARK: - GMSMapViewDelegate
 
     func mapView(_ mapView: GMSMapView, didTap marker: GMSMarker) -> Bool {
+        guard newPin == nil else { return true }
         if let patient = marker.userData as? Patient {
             navigate(to: patient)
             return true
@@ -233,7 +246,8 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
 
             let pinInfoView = ScenePinInfoView()
             pinInfoView.translatesAutoresizingMaskIntoConstraints = false
-            pinInfoView.configure(from: pin)
+            pinInfoView.configure(from: pin, isMGS: isMGS)
+            pinInfoView.delegate = self
             view.addSubview(pinInfoView)
             NSLayoutConstraint.activate([
                 pinInfoView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
@@ -241,13 +255,159 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
                 pinInfoView.rightAnchor.constraint(equalTo: view.rightAnchor)
             ])
             self.selectedPinInfoView = pinInfoView
+            return true
         }
         return false
     }
 
     func mapView(_ mapView: GMSMapView, didTapAt coordinate: CLLocationCoordinate2D) {
         if !deselectPin() {
-            // TODO start new pin flow at this location
+            if let newPin = newPin {
+                newPin.latLng = coordinate
+                newPinMarker?.position = coordinate
+            } else {
+                let newPin = ScenePin()
+                newPin.latLng = coordinate
+                self.newPin = newPin
+
+                let newPinMarker = createMarker(for: newPin)
+                newPinMarker?.icon = UIImage(named: "MapMarkerNew")
+                newPinMarker?.map = mapView
+                self.newPinMarker = newPinMarker
+
+                let newPinView = NewScenePinView()
+                newPinView.translatesAutoresizingMaskIntoConstraints = false
+                newPinView.delegate = self
+                newPinView.newPin = newPin
+                view.addSubview(newPinView)
+                NSLayoutConstraint.activate([
+                    newPinView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
+                    newPinView.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    newPinView.rightAnchor.constraint(equalTo: view.rightAnchor)
+                ])
+                self.newPinView = newPinView
+            }
+        }
+    }
+
+    // MARK: - NewScenePinViewDelegate
+
+    func newScenePinView(_ view: NewScenePinView, didSelect pinType: ScenePinType) {
+        guard let newPin = newPin else { return }
+        newPin.type = pinType.rawValue
+        newPinMarker?.map = nil
+        let newPinMarker = createMarker(for: newPin)
+        newPinMarker?.icon = pinType.markerImage
+        newPinMarker?.map = mapView
+        self.newPinMarker = newPinMarker
+    }
+
+    func newScenePinView(_ view: NewScenePinView, didChangeName name: String) {
+        guard let newPin = newPin else { return }
+        newPin.name = name
+    }
+
+    func newScenePinView(_ view: NewScenePinView, didChangeDesc desc: String) {
+        guard let newPin = newPin else { return }
+        newPin.desc = desc
+    }
+
+    func newScenePinViewDidCancel(_ view: NewScenePinView) {
+        newPin = nil
+        newPinMarker?.map = nil
+        newPinMarker = nil
+        newPinView?.removeFromSuperview()
+        newPinView = nil
+    }
+
+    func newScenePinViewDidSave(_ view: NewScenePinView) {
+        guard let newPin = newPin else { return }
+        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin) { (error) in
+            if let error = error {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAlert(error: error)
+                }
+            }
+        }
+        self.newScenePinViewDidCancel(view)
+    }
+
+    // MARK: - ScenePinInfoViewDelegate
+
+    func scenePinInfoViewDidEdit(_ view: ScenePinInfoView) {
+        guard let pin = selectedPinMarker?.userData as? ScenePin else { return }
+        // clone the selected pin for editing
+        let newPin = ScenePin(clone: pin)
+        newPin.prevPinId = pin.id
+        self.newPin = newPin
+
+        // create a marker for the cloned pin
+        let newPinMarker = createMarker(for: newPin)
+        newPinMarker?.icon = ScenePinType(rawValue: newPin.type ?? "")?.markerImage
+        newPinMarker?.map = mapView
+        self.newPinMarker = newPinMarker
+
+        // remove the source pin marker from the map while editing
+        selectedPinMarker?.map = nil
+    }
+
+    func scenePinInfoViewDidCancel(_ view: ScenePinInfoView) {
+        // discard the cloned pin
+        newPinMarker?.map = nil
+        newPinMarker = nil
+        newPin = nil
+
+        // add the original source pin back to map
+        selectedPinMarker?.map = mapView
+
+        // discard any edited changes in the info view
+        guard let pin = selectedPinMarker?.userData as? ScenePin else { return }
+        selectedPinInfoView?.configure(from: pin, isMGS: isMGS)
+    }
+
+    func scenePinInfoViewDidDelete(_ view: ScenePinInfoView) {
+        guard let pin = selectedPinMarker?.userData as? ScenePin else { return }
+        let vc = AlertViewController()
+        vc.alertTitle = "PatientsMapViewController.deletePin.title".localized
+        vc.alertMessage = "PatientsMapViewController.deletePin.message".localized
+        vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
+        vc.addAlertAction(title: "Button.delete".localized, style: .default) { [weak self] (_) in
+            AppRealm.removeScenePin(pin) { [weak self] (error) in
+                DispatchQueue.main.async { [weak self] in
+                    if let error = error {
+                        self?.presentAlert(error: error)
+                    } else {
+                        self?.selectedPinInfoView?.removeFromSuperview()
+                        self?.selectedPinMarker = nil
+                        self?.dismissAnimated()
+                    }
+                }
+            }
+        }
+        presentAnimated(vc)
+    }
+
+    func scenePinInfoView(_ view: ScenePinInfoView, didChangeDesc desc: String) {
+        guard let newPin = newPin else { return }
+        newPin.desc = desc
+    }
+
+    func scenePinInfoViewDidSave(_ view: ScenePinInfoView) {
+        guard let newPin = newPin else { return }
+        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin) { (error) in
+            DispatchQueue.main.async { [weak self] in
+                if let error = error {
+                    self?.presentAlert(error: error)
+                } else {
+                    // discard the cloned pin
+                    self?.newPinMarker?.map = nil
+                    self?.newPinMarker = nil
+                    self?.newPin = nil
+                    // as well as the original selected pin and view
+                    self?.selectedPinInfoView?.removeFromSuperview()
+                    self?.selectedPinMarker = nil
+                }
+            }
         }
     }
 
