@@ -13,7 +13,6 @@ class SceneHeaderView: UIView {
     weak var nameLabel: UILabel!
     weak var descLabel: UILabel!
     weak var approxPatientsCountLabel: UILabel!
-    weak var urgencyLabel: UILabel!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -71,40 +70,15 @@ class SceneHeaderView: UIView {
         addSubview(approxPatientsCountLabel)
         NSLayoutConstraint.activate([
             approxPatientsCountLabel.firstBaselineAnchor.constraint(equalTo: approxPatientsLabel.firstBaselineAnchor),
-            approxPatientsCountLabel.leftAnchor.constraint(equalTo: approxPatientsLabel.rightAnchor)
+            approxPatientsCountLabel.leftAnchor.constraint(equalTo: approxPatientsLabel.rightAnchor),
+            bottomAnchor.constraint(equalTo: approxPatientsCountLabel.bottomAnchor, constant: 10)
         ])
         self.approxPatientsCountLabel = approxPatientsCountLabel
-
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .copySBold
-        label.text = "SceneHeaderView.urgencyLabel".localized
-        label.textColor = .mainGrey
-        addSubview(label)
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: approxPatientsLabel.bottomAnchor, constant: 14),
-            label.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-            label.rightAnchor.constraint(equalTo: nameLabel.rightAnchor)
-        ])
-
-        let urgencyLabel = UILabel()
-        urgencyLabel.translatesAutoresizingMaskIntoConstraints = false
-        urgencyLabel.font = .copySRegular
-        urgencyLabel.textColor = .mainGrey
-        addSubview(urgencyLabel)
-        NSLayoutConstraint.activate([
-            urgencyLabel.topAnchor.constraint(equalTo: label.bottomAnchor),
-            urgencyLabel.leftAnchor.constraint(equalTo: label.leftAnchor),
-            urgencyLabel.rightAnchor.constraint(equalTo: label.rightAnchor),
-            bottomAnchor.constraint(equalTo: urgencyLabel.bottomAnchor, constant: 10)
-        ])
-        self.urgencyLabel = urgencyLabel
     }
 
     func configure(from scene: Scene) {
         nameLabel.text = scene.name?.isEmpty ?? true ? " " : scene.name
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc
         approxPatientsCountLabel.text = scene.approxPatients.value != nil ? "\(scene.approxPatients.value ?? 0)" : "-"
-        urgencyLabel.text = scene.urgency?.isEmpty ?? true ? " " : scene.urgency
     }
 }

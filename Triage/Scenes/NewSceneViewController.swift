@@ -15,7 +15,6 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     @IBOutlet weak var nameField: FormField!
     @IBOutlet weak var descField: FormMultilineField!
     @IBOutlet weak var approxPatientsField: FormField!
-    @IBOutlet weak var urgencyField: FormMultilineField!
     @IBOutlet weak var startAndFillLaterButton: UIButton!
 
     private var fields: [BaseField]!
@@ -57,7 +56,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
 
         approxPatientsField.textField.keyboardType = .numberPad
 
-        fields = [nameField, descField, approxPatientsField, urgencyField]
+        fields = [nameField, descField, approxPatientsField]
 
         let prevItem = UIBarButtonItem(
             image: UIImage(named: "ChevronUp"), style: .plain, target: self, action: #selector(inputPrevPressed))
