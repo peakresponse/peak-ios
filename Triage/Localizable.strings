@@ -97,7 +97,8 @@
 "NewScenePinView.descField.label" = "Description";
 "NewScenePinView.label" = "Select pin type or select Other to create your own.";
 
-"NewSceneViewController.title" = "New Scene Set-Up";
+"NewSceneViewController.title" = "New Scene Set Up";
+"NewSceneViewController.subtitle" = "You can start the scene without filling anything in. You can always update this information later.";
 "NewSceneViewController.nameField" = "Incident Name";
 "NewSceneViewController.descField" = "Description";
 "NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";

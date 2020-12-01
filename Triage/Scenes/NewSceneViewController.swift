@@ -15,7 +15,6 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
     @IBOutlet weak var nameField: FormField!
     @IBOutlet weak var descField: FormMultilineField!
     @IBOutlet weak var approxPatientsField: FormField!
-    @IBOutlet weak var startAndFillLaterButton: UIButton!
 
     private var fields: [BaseField]!
     private var inputToolbar: UIToolbar!
@@ -39,20 +38,6 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         locationHelper.delegate = self
         locationHelper.requestLocation()
         locationView.activityIndicatorView.startAnimating()
-
-        if let title = startAndFillLaterButton.title(for: .normal) {
-            var attributedTitle = NSAttributedString(string: title, attributes: [
-                .font: UIFont.copySBold,
-                .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue)
-            ])
-            startAndFillLaterButton.setAttributedTitle(attributedTitle, for: .normal)
-            attributedTitle = NSAttributedString(string: title, attributes: [
-                .font: UIFont.copySBold,
-                .underlineStyle: NSNumber(value: NSUnderlineStyle.single.rawValue),
-                .foregroundColor: UIColor.lowPriorityGrey
-            ])
-            startAndFillLaterButton.setAttributedTitle(attributedTitle, for: .highlighted)
-        }
 
         approxPatientsField.textField.keyboardType = .numberPad
 
