@@ -13,6 +13,7 @@ class SceneOverviewViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var sceneHeaderView: SceneHeaderView!
     @IBOutlet weak var sceneCommandsView: UIView!
+    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var closeButton: FormButton!
     @IBOutlet weak var leaveButton: FormButton!
     @IBOutlet weak var exitButton: FormButton!
@@ -37,6 +38,10 @@ class SceneOverviewViewController: UIViewController {
         super.viewDidLoad()
 
         sceneCommandsView.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 20, color: .black, opacity: 0.1)
+
+        editButton.isHidden = true
+        addNoteButton.isHidden = true
+        addPhotoButton.isHidden = true
 
         if let tableHeaderView = tableView.tableHeaderView {
             tableHeaderView.translatesAutoresizingMaskIntoConstraints = false
