@@ -15,6 +15,11 @@ class NonSceneTabBarController: TabBarController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // temporarily hide other options
+        for (i, view) in customTabBar.stackView.arrangedSubviews.enumerated() where i != 2 {
+            view.alpha = 0
+            view.isUserInteractionEnabled = false
+        }
         // hit the server to check current log-in status
         AppRealm.me { (user, agency, scene, error) in
             if let error = error {
