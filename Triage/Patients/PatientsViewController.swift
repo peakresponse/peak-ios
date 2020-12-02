@@ -62,18 +62,18 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
 
     private func performQuery() {
         notificationToken?.invalidate()
-        var sorts = [
-            SortDescriptor(keyPath: "priority", ascending: true)
-        ]
+        var sorts: [SortDescriptor] = []
         switch sort {
         case .recent:
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: false))
         case .longest:
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: true))
-        case .az:
-            sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
-        case .za:
-            sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
+//        case .az:
+//            sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
+//        case .za:
+//            sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
+        case .priority:
+            sorts.append(SortDescriptor(keyPath: "priority", ascending: true))
         }
         let realm = AppRealm.open()
         var predicates: [NSPredicate] = []

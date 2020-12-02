@@ -28,8 +28,9 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
 enum Sort: Int, CaseIterable, CustomStringConvertible {
     case recent = 0
     case longest
-    case az
-    case za
+//    case az
+//    case za
+    case priority
 
     var description: String {
         return "Patient.sort.\(rawValue)".localized
