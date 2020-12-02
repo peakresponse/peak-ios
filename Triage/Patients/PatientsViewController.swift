@@ -68,13 +68,13 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: false))
         case .longest:
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: true))
-//        case .az:
-//            sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
-//        case .za:
-//            sorts.append(SortDescriptor(keyPath: "lastName", ascending: false))
+        case .az:
+            sorts.append(SortDescriptor(keyPath: "firstName", ascending: true))
+            sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
         case .priority:
             sorts.append(SortDescriptor(keyPath: "priority", ascending: true))
         }
+        sorts.append(SortDescriptor(keyPath: "pin", ascending: true))
         let realm = AppRealm.open()
         var predicates: [NSPredicate] = []
         if let sceneId = AppSettings.sceneId {
@@ -204,7 +204,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
         if let layout = collectionViewLayout as? UICollectionViewFlowLayout {
             frame = frame.inset(by: layout.sectionInset)
         }
-        frame.size.height = 86
+        frame.size.height = 115
         return frame.size
     }
 

@@ -110,6 +110,7 @@
 "Patient.complaint" = "Chief Complaint";
 "Patient.complaint.abbr" = "C/O";
 "Patient.firstName" = "First name";
+"Patient.fullName" = "Name";
 "Patient.gender" = "Gender";
 "Patient.gcsTotal" = "Total Glasgow Coma Score";
 "Patient.lastName" = "Last name";
@@ -164,9 +165,8 @@
 
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
-//"Patient.sort.2" = "A-Z by Last Name";
-//"Patient.sort.3" = "Z-A by Last Name";
-"Patient.sort.2" = "Triage Priority (High to Low)";
+"Patient.sort.2" = "Alphabetically";
+"Patient.sort.3" = "Triage Priority (High to Low)";
 
 "PatientTableViewController.location" = "Location";
 "PatientTableViewController.vitals" = "Vitals";

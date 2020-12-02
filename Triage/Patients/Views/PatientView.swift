@@ -15,6 +15,7 @@ class PatientView: UIView {
     weak var portraitView: PortraitView!
     weak var tagLabel: UILabel!
     weak var updatedLabel: UILabel!
+    weak var nameLabel: UILabel!
     weak var genderLabel: UILabel!
     weak var ageLabel: UILabel!
     weak var complaintLabel: UILabel!
@@ -41,7 +42,7 @@ class PatientView: UIView {
             containerView.topAnchor.constraint(equalTo: topAnchor),
             containerView.leftAnchor.constraint(equalTo: leftAnchor),
             containerView.rightAnchor.constraint(equalTo: rightAnchor),
-            containerView.heightAnchor.constraint(equalToConstant: 86),
+            containerView.heightAnchor.constraint(equalToConstant: 115),
             bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
         self.containerView = containerView
@@ -124,15 +125,39 @@ class PatientView: UIView {
             detailsView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
         ])
 
+        let nameLabel = UILabel()
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = .copySBold
+        nameLabel.text = "\("Patient.fullName".localized): "
+        nameLabel.textColor = .mainGrey
+        nameLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        detailsView.addSubview(nameLabel)
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: detailsView.topAnchor, constant: 9),
+            nameLabel.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 6)
+        ])
+
+        let nameValueLabel = UILabel()
+        nameValueLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameValueLabel.font = .copySRegular
+        nameValueLabel.textColor = .mainGrey
+        detailsView.addSubview(nameValueLabel)
+        NSLayoutConstraint.activate([
+            nameValueLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
+            nameValueLabel.leftAnchor.constraint(equalTo: nameLabel.rightAnchor)
+        ])
+        self.nameLabel = nameValueLabel
+
         let genderLabel = UILabel()
         genderLabel.translatesAutoresizingMaskIntoConstraints = false
         genderLabel.font = .copySBold
         genderLabel.text = "\("Patient.gender".localized): "
         genderLabel.textColor = .mainGrey
+        genderLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailsView.addSubview(genderLabel)
         NSLayoutConstraint.activate([
-            genderLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
-            genderLabel.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 6)
+            genderLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
+            genderLabel.leftAnchor.constraint(equalTo: nameValueLabel.rightAnchor, constant: 6)
         ])
 
         let genderValueLabel = UILabel()
@@ -141,8 +166,9 @@ class PatientView: UIView {
         genderValueLabel.textColor = .mainGrey
         detailsView.addSubview(genderValueLabel)
         NSLayoutConstraint.activate([
-            genderValueLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
-            genderValueLabel.leftAnchor.constraint(equalTo: genderLabel.rightAnchor)
+            genderValueLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
+            genderValueLabel.leftAnchor.constraint(equalTo: genderLabel.rightAnchor),
+            genderValueLabel.widthAnchor.constraint(equalToConstant: 32)
         ])
         self.genderLabel = genderValueLabel
 
@@ -151,10 +177,11 @@ class PatientView: UIView {
         ageLabel.font = .copySBold
         ageLabel.text = "\("Patient.age".localized): "
         ageLabel.textColor = .mainGrey
+        ageLabel.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         detailsView.addSubview(ageLabel)
         NSLayoutConstraint.activate([
-            ageLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
-            ageLabel.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 94)
+            ageLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
+            ageLabel.leftAnchor.constraint(equalTo: genderValueLabel.rightAnchor)
         ])
 
         let ageValueLabel = UILabel()
@@ -163,10 +190,22 @@ class PatientView: UIView {
         ageValueLabel.textColor = .mainGrey
         detailsView.addSubview(ageValueLabel)
         NSLayoutConstraint.activate([
-            ageValueLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
-            ageValueLabel.leftAnchor.constraint(equalTo: ageLabel.rightAnchor)
+            ageValueLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
+            ageValueLabel.leftAnchor.constraint(equalTo: ageLabel.rightAnchor),
+            ageValueLabel.widthAnchor.constraint(equalToConstant: 32),
+            ageValueLabel.rightAnchor.constraint(equalTo: detailsView.rightAnchor, constant: -6)
         ])
         self.ageLabel = ageValueLabel
+
+        let separatorView = HorizontalRuleView()
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        detailsView.addSubview(separatorView)
+        NSLayoutConstraint.activate([
+            separatorView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 9),
+            separatorView.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 6),
+            separatorView.rightAnchor.constraint(equalTo: detailsView.rightAnchor, constant: -6),
+            separatorView.heightAnchor.constraint(equalToConstant: 1)
+        ])
 
         let complaintLabel = UILabel()
         complaintLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -175,17 +214,18 @@ class PatientView: UIView {
         complaintLabel.textColor = .mainGrey
         containerView.addSubview(complaintLabel)
         NSLayoutConstraint.activate([
-            complaintLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
-            complaintLabel.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 170)
+            complaintLabel.topAnchor.constraint(equalTo: separatorView.bottomAnchor, constant: 9),
+            complaintLabel.leftAnchor.constraint(equalTo: detailsView.leftAnchor, constant: 6)
         ])
 
         let complaintValueLabel = UILabel()
         complaintValueLabel.translatesAutoresizingMaskIntoConstraints = false
         complaintValueLabel.font = .copySRegular
         complaintValueLabel.textColor = .mainGrey
+        complaintValueLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         containerView.addSubview(complaintValueLabel)
         NSLayoutConstraint.activate([
-            complaintValueLabel.centerYAnchor.constraint(equalTo: detailsView.centerYAnchor),
+            complaintValueLabel.firstBaselineAnchor.constraint(equalTo: complaintLabel.firstBaselineAnchor),
             complaintValueLabel.leftAnchor.constraint(equalTo: complaintLabel.rightAnchor),
             complaintValueLabel.rightAnchor.constraint(equalTo: detailsView.rightAnchor, constant: -6)
         ])
@@ -198,6 +238,7 @@ class PatientView: UIView {
         portraitView.configure(from: patient)
         tagLabel.text = patient.pin
         updatedLabel.text = String(format: "Patient.updatedAt".localized, patient.updatedAtRelativeString)
+        nameLabel.text = patient.fullName
         genderLabel.text = PatientGender(rawValue: patient.gender ?? "")?.abbrDescription ?? ""
         ageLabel.text = patient.ageString
         complaintLabel.text = patient.complaint

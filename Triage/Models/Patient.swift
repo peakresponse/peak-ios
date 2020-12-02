@@ -28,8 +28,7 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
 enum Sort: Int, CaseIterable, CustomStringConvertible {
     case recent = 0
     case longest
-//    case az
-//    case za
+    case az
     case priority
 
     var description: String {

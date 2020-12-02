@@ -69,7 +69,7 @@ class SceneSummaryViewController: BaseNonSceneViewController, UITableViewDataSou
         tableView.tableHeaderView = headerView
 
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 84
+        tableView.estimatedRowHeight = 129
         tableView.register(PatientTableViewCell.self, forCellReuseIdentifier: "Patient")
 
         tableView.sectionHeaderHeight = UITableView.automaticDimension
