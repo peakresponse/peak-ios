@@ -107,7 +107,7 @@
 "Patient.age" = "Age";
 "Patient.bloodPressure" = "Blood Pressure";
 "Patient.capillaryRefill" = "Capillary Refill";
-"Patient.complaint" = "Injury or C/O";
+"Patient.complaint" = "Chief Complaint";
 "Patient.complaint.abbr" = "C/O";
 "Patient.firstName" = "First name";
 "Patient.gender" = "Gender";
