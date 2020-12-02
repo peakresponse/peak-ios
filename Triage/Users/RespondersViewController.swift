@@ -33,6 +33,8 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
 
         // set initial sort
         sortBar.dropdownButton.setTitle(sort.description, for: .normal)
+        // hide until sorts implemented
+        sortBar.isHidden = true
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
