@@ -60,6 +60,8 @@ class PortraitView: UIView, CameraHelperDelegate {
         self.imageView = imageView
 
         let captureButton = UIButton(type: .custom)
+        captureButton.alpha = 0
+        captureButton.isUserInteractionEnabled = false
         captureButton.translatesAutoresizingMaskIntoConstraints = false
         captureButton.setImage(UIImage(named: "Camera")?.withRenderingMode(.alwaysTemplate), for: .normal)
         captureButton.tintColor = .mainGrey
