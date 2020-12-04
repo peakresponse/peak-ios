@@ -80,6 +80,7 @@
 
 "InputAccessoryView.cancel" = "Cancel";
 "InputAccessoryView.done" = "Done";
+"InputAccessoryView.go" = "Go";
 "InputAccessoryView.search" = "Search";
 
 "LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";

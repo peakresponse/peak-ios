@@ -39,7 +39,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
                 title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
             UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
             UIBarButtonItem(
-                title: "InputAccessoryView.search".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
+                title: "InputAccessoryView.go".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
         ], animated: false)
 
         // labels and fields
