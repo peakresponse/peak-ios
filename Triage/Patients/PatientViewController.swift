@@ -23,7 +23,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        isModalInPresentation = true
+        isModal = true
 
         if patient.realm != nil {
             notificationToken = patient.observe { [weak self] (change) in

@@ -180,7 +180,6 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
-
 "Responder.sort.az" = "Alphabetically";
 
 "Responder.role.MGS" = "Medical Group Supervisor";
@@ -224,6 +223,8 @@
 "SceneTableViewCell.respondersLabel" = "%d First Responders";
 
 "ScrollIndicatorView.label" = "Scroll down to continue patient entry";
+
+"SearchBar.placeholder" = "Search";
 
 "SortBar.sortBy" = "Sort By :";
 

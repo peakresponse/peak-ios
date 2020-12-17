@@ -61,7 +61,7 @@ class SceneLocationView: UIView {
             bottomAnchor.constraint(equalTo: prevLabel.bottomAnchor, constant: 10)
         ])
 
-        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        let activityIndicatorView = UIActivityIndicatorView.withMediumStyle()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.color = .mainGrey
         addSubview(activityIndicatorView)

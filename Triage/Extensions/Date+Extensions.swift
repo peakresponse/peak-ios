@@ -22,7 +22,11 @@ extension Date {
     }
 
     func asRelativeString() -> String {
-        return RelativeDateTimeFormatter.localizedString(for: self)
+        if #available(iOS 13.0, *) {
+            return RelativeDateTimeFormatter.localizedString(for: self)
+        } else {
+            return asTimeString()
+        }
     }
 
     func asTimeDateString() -> String {
@@ -31,5 +35,13 @@ extension Date {
 
     func asTimeString() -> String {
         return DateFormatter.timeFormatter.string(from: self)
+    }
+
+    func dist(to other: Date) -> TimeInterval {
+        if #available(iOS 13.0, *) {
+            return distance(to: other)
+        } else {
+            return other.timeIntervalSinceReferenceDate - timeIntervalSinceReferenceDate
+        }
     }
 }

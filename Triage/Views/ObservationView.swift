@@ -28,7 +28,7 @@ class ObservationView: UIView, AudioHelperDelgate {
     }
 
     let playButton = UIButton(type: .custom)
-    let activityIndicatorView = UIActivityIndicatorView()
+    let activityIndicatorView = UIActivityIndicatorView.withMediumStyle()
     let titleLabel = UILabel()
     var titleLabelLeftConstraint: NSLayoutConstraint!
     var titleLabelPlayButtonConstraint: NSLayoutConstraint!

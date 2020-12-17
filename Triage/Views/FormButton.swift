@@ -64,7 +64,9 @@ class FormButton: UIControl {
         get { return button.image(for: .normal) }
         set {
             button.setImage(newValue, for: .normal)
-            button.setImage(newValue?.withTintColor(highlightedButtonColor), for: .highlighted)
+            if #available(iOS 13.0, *) {
+                button.setImage(newValue?.withTintColor(highlightedButtonColor), for: .highlighted)
+            }
         }
     }
     @IBInspectable var buttonColor: UIColor = .greyPeakBlue {

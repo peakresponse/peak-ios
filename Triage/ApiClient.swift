@@ -8,6 +8,7 @@
 
 import Foundation
 import Keys
+import Starscream
 
 enum ApiClientError: Error {
     case csrf
@@ -15,6 +16,7 @@ enum ApiClientError: Error {
     case forbidden
     case unexpected
     case notFound
+    case disconnected
 }
 
 // swiftlint:disable type_body_length file_length
@@ -112,8 +114,9 @@ class ApiClient {
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func WS<T>(path: String, params: [String: Any]? = nil,
-               completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) -> URLSessionWebSocketTask {
+               completionHandler: @escaping (WebSocket, T?, Error?) -> Void) -> WebSocket {
         var components = URLComponents()
         components.path = path
         if let params = params {
@@ -130,61 +133,58 @@ class ApiClient {
         if let subdomain = AppSettings.subdomain {
             request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
         }
-        let task = session.webSocketTask(with: request)
-        pingWebSocket(task: task, completionHandler: completionHandler)
-        receiveFromWebSocket(task: task, completionHandler: completionHandler)
-        return task
-    }
-
-    private func pingWebSocket<T>(task: URLSessionWebSocketTask,
-                                  completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
-        guard task.closeCode == .invalid else { return }
-        task.sendPing { [weak self] (error) in
-            objc_sync_enter(task)
-            if let error = error {
-                completionHandler(task, nil, error)
-            } else {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-                    self?.pingWebSocket(task: task, completionHandler: completionHandler)
-                }
+        let socket = WebSocket(request: request)
+        socket.onEvent = { [weak self] event in
+            objc_sync_enter(socket)
+            var data: Data?
+            switch event {
+            case .connected(let headers):
+                print("websocket is connected: \(headers)")
+                self?.pingWebSocket(socket: socket)
+            case .disconnected(let reason, let code):
+                print("websocket is disconnected: \(reason) with code: \(code)")
+                completionHandler(socket, nil, ApiClientError.disconnected)
+            case .text(let text):
+                data = text.data(using: .utf8)
+            case .binary(let payload):
+                data = payload
+            case .ping:
+                break
+            case .pong:
+                break
+            case .viabilityChanged:
+                break
+            case .reconnectSuggested:
+                break
+            case .cancelled:
+                break
+            case .error(let error):
+                completionHandler(socket, nil, error)
             }
-            objc_sync_exit(task)
-        }
-    }
-
-    private func receiveFromWebSocket<T>(task: URLSessionWebSocketTask,
-                                         completionHandler: @escaping (URLSessionWebSocketTask, T?, Error?) -> Void) {
-        guard task.closeCode == .invalid else { return }
-        task.receive { [weak self] (result) in
-            objc_sync_enter(task)
-            switch result {
-            case .failure(let error):
-                completionHandler(task, nil, error)
-            case .success(let message):
-                var data: Data?
-                switch message {
-                case .string(let text):
-                    data = text.data(using: .utf8)
-                case .data(data):
-                    break
-                default:
-                    break
-                }
-                if let data = data {
-                    do {
-                        if let json = try JSONSerialization.jsonObject(with: data, options: []) as? T {
-                            completionHandler(task, json, nil)
-                        } else {
-                            completionHandler(task, nil, ApiClientError.unexpected)
-                        }
-                    } catch {
-                        completionHandler(task, nil, error)
+            if let data = data {
+                do {
+                    if let json = try JSONSerialization.jsonObject(with: data, options: []) as? T {
+                        completionHandler(socket, json, nil)
+                    } else {
+                        completionHandler(socket, nil, ApiClientError.unexpected)
                     }
+                } catch {
+                    completionHandler(socket, nil, error)
                 }
-                self?.receiveFromWebSocket(task: task, completionHandler: completionHandler)
             }
-            objc_sync_exit(task)
+            objc_sync_exit(socket)
         }
+        return socket
+    }
+
+    private func pingWebSocket(socket: WebSocket) {
+        objc_sync_enter(socket)
+        socket.write(ping: Data()) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+                self?.pingWebSocket(socket: socket)
+            }
+        }
+        objc_sync_exit(socket)
     }
 
     func GET<T>(path: String, params: [String: Any]? = nil,
@@ -252,7 +252,7 @@ class ApiClient {
 
     // MARK: - Agencies
 
-    func connect(completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+    func connect(completionHandler: @escaping (WebSocket, [String: Any]?, Error?) -> Void) -> WebSocket {
         return WS(path: "/agency", completionHandler: completionHandler)
     }
 
@@ -296,7 +296,7 @@ class ApiClient {
     // MARK: - Scenes
 
     func connect(sceneId: String,
-                 completionHandler: @escaping (URLSessionWebSocketTask, [String: Any]?, Error?) -> Void) -> URLSessionWebSocketTask {
+                 completionHandler: @escaping (WebSocket, [String: Any]?, Error?) -> Void) -> WebSocket {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
 

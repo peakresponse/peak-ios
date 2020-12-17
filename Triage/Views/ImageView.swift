@@ -45,7 +45,7 @@ class ImageView: UIView {
         ])
         self.imageView = imageView
 
-        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        let activityIndicatorView = UIActivityIndicatorView.withMediumStyle()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([

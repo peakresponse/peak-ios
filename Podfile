@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '13.7'
+platform :ios, '12.4'
 
 plugin 'cocoapods-keys', {
   :project => 'Triage',
@@ -17,6 +17,7 @@ target 'Triage' do
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'RealmSwift'
+  pod 'Starscream'
   pod 'SwiftLint'
 
   target 'TriageTests' do

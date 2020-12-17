@@ -35,13 +35,13 @@ enum ResponderRole: String, CaseIterable, CustomStringConvertible {
     var image: UIImage {
         switch self {
         case .triage:
-            return UIImage(named: "CheckCircle", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "CheckCircle", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .treatment:
-            return UIImage(named: "Heart", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Heart", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .staging:
-            return UIImage(named: "Pause", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Pause", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .transport:
-            return UIImage(named: "Truck", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Truck", in: Bundle(for: Responder.self), compatibleWith: nil)!
         }
     }
 }

@@ -8,12 +8,14 @@
 
 import CoreLocation
 import RealmSwift
+import Starscream
 
 // swiftlint:disable file_length force_try type_body_length
 class AppRealm {
     private static var main: Realm!
-    private static var agencyTask: URLSessionWebSocketTask?
-    private static var sceneTask: URLSessionWebSocketTask?
+
+    private static var agencySocket: WebSocket?
+    private static var sceneSocket: WebSocket?
 
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
@@ -40,15 +42,13 @@ class AppRealm {
     // MARK: - Agencies
 
     public static func connect() {
-        // cancel any existing task
-        agencyTask?.cancel(with: .normalClosure, reason: nil)
-        // connect to scene socket
-        agencyTask = ApiClient.shared.connect { (task, data, error) in
-            guard task == agencyTask else { return }
+        agencySocket?.disconnect()
+        agencySocket = ApiClient.shared.connect(completionHandler: { (socket, data, error) in
+            guard socket == agencySocket else { return }
             if error != nil {
                 // close current connection
-                agencyTask?.cancel(with: .internalServerError, reason: nil)
-                agencyTask = nil
+                agencySocket?.forceDisconnect()
+                agencySocket = nil
                 // retry after 5 secs
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     connect()
@@ -62,13 +62,13 @@ class AppRealm {
                     }
                 }
             }
-        }
-        agencyTask?.resume()
+        })
+        agencySocket?.connect()
     }
 
     public static func disconnect() {
-        agencyTask?.cancel(with: .normalClosure, reason: nil)
-        agencyTask = nil
+        agencySocket?.disconnect()
+        agencySocket = nil
     }
 
     public static func getAgencies(search: String? = nil, completionHandler: @escaping (Error?) -> Void) {
@@ -293,14 +293,14 @@ class AppRealm {
 
     public static func connect(sceneId: String) {
         // cancel any existing task
-        sceneTask?.cancel(with: .normalClosure, reason: nil)
+        sceneSocket?.disconnect()
         // connect to scene socket
-        sceneTask = ApiClient.shared.connect(sceneId: sceneId) { (task, data, error) in
-            guard task == sceneTask else { return }
+        sceneSocket = ApiClient.shared.connect(sceneId: sceneId) { (socket, data, error) in
+            guard socket == sceneSocket else { return }
             if error != nil {
                 // close current connection
-                sceneTask?.cancel(with: .internalServerError, reason: nil)
-                sceneTask = nil
+                sceneSocket?.forceDisconnect()
+                sceneSocket = nil
                 // retry after 5 secs
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     connect(sceneId: sceneId)
@@ -337,12 +337,12 @@ class AppRealm {
                 }
             }
         }
-        sceneTask?.resume()
+        sceneSocket?.connect()
     }
 
     public static func disconnectScene() {
-        sceneTask?.cancel(with: .normalClosure, reason: nil)
-        sceneTask = nil
+        sceneSocket?.disconnect()
+        sceneSocket = nil
     }
 
     // MARK: - Responders

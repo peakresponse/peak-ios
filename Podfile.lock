@@ -26,6 +26,7 @@ PODS:
   - Realm/Headers (10.1.1)
   - RealmSwift (10.1.1):
     - Realm (= 10.1.1)
+  - Starscream (4.0.4)
   - SwiftLint (0.40.3)
 
 DEPENDENCIES:
@@ -33,6 +34,7 @@ DEPENDENCIES:
   - GoogleMaps
   - Keys (from `Pods/CocoaPodsKeys`)
   - RealmSwift
+  - Starscream
   - SwiftLint
 
 SPEC REPOS:
@@ -41,6 +43,7 @@ SPEC REPOS:
     - GoogleMaps
     - Realm
     - RealmSwift
+    - Starscream
     - SwiftLint
 
 EXTERNAL SOURCES:
@@ -53,8 +56,9 @@ SPEC CHECKSUMS:
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   Realm: 784ca1da1453e31a9c9adc14445421a81f316119
   RealmSwift: cc52fe0dcea56387274dff36e19219e055a3bb84
+  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
 
-PODFILE CHECKSUM: d0b96fc9a03bfaf5c904a93febcae6064df86c89
+PODFILE CHECKSUM: abda9b17a0a7598fe0d35bd2d78b0e7fc7577195
 
 COCOAPODS: 1.10.0

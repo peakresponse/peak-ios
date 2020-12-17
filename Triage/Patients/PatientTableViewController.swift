@@ -211,7 +211,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     @objc func transportPressed() {
-        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(identifier: "Facilities")
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Facilities")
         if let vc = vc as? FacilitiesTableViewController {
             vc.observation = patient.asObservation()
             let navVC = UINavigationController(rootViewController: vc)

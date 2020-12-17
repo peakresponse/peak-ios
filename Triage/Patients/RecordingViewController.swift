@@ -34,7 +34,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        isModalInPresentation = true
+        isModal = true
 
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.layer.cornerRadius = 10

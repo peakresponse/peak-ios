@@ -209,7 +209,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
                         guard let self = self else { return }
                         let now = Date()
                         if let start = self.recordingStart {
-                            let seconds = self.recordingLength + start.distance(to: now)
+                            let seconds = self.recordingLength + start.dist(to: now)
                             let duration = String(format: "%02.0f:%02.0f:%02.0f",
                                                   seconds / 3600, seconds / 60, seconds.truncatingRemainder(dividingBy: 60))
                             self.delegate?.audioHelper?(self, didRecord: seconds, formattedDuration: duration)
@@ -240,7 +240,7 @@ class AudioHelper: NSObject, AVAudioPlayerDelegate {
             timer = nil
             let now = Date()
             if let start = recordingStart {
-                recordingLength += start.distance(to: now)
+                recordingLength += start.dist(to: now)
             }
             recordingStart = nil
         }

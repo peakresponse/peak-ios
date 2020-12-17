@@ -42,17 +42,17 @@ enum ScenePinType: String, CaseIterable, CustomStringConvertible {
     var image: UIImage {
         switch self {
         case .mgs:
-            return UIImage(named: "Star", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Star", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .triage:
-            return UIImage(named: "CheckCircle", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "CheckCircle", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .treatment:
-            return UIImage(named: "Heart", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Heart", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .staging:
-            return UIImage(named: "Pause", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Pause", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .transport:
-            return UIImage(named: "Truck", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "Truck", in: Bundle(for: Responder.self), compatibleWith: nil)!
         case .other:
-            return UIImage(named: "HelpCircle", in: Bundle(for: Responder.self), with: nil)!
+            return UIImage(named: "HelpCircle", in: Bundle(for: Responder.self), compatibleWith: nil)!
         }
     }
 

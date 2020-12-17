@@ -31,7 +31,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
         addKeyboardListener()
 
-        isModalInPresentation = true
+        isModal = true
 
         inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
         inputToolbar.setItems([

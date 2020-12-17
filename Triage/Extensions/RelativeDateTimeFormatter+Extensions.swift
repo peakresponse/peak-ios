@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
 extension RelativeDateTimeFormatter {
     static let defaultFormatter: RelativeDateTimeFormatter = {
         let formatter = RelativeDateTimeFormatter()

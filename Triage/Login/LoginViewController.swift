@@ -24,7 +24,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        isModalInPresentation = true
+        isModal = true
 
         emailField.textField.keyboardType = .emailAddress
         emailField.textField.autocorrectionType = .no

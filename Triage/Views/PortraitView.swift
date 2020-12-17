@@ -74,7 +74,7 @@ class PortraitView: UIView, CameraHelperDelegate {
         ])
         self.captureButton = captureButton
 
-        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        let activityIndicatorView = UIActivityIndicatorView.withLargeStyle()
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.tintColor = .mainGrey
         addSubview(activityIndicatorView)

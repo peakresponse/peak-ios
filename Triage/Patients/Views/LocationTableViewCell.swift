@@ -19,7 +19,7 @@ class LocationTableViewCell: AttributeTableViewCell {
             field.alertLabel.textColor = .greyPeakBlue
             addAlertLabelTapRecognizer(to: field)
 
-            activityIndicatorView = UIActivityIndicatorView(style: .medium)
+            activityIndicatorView = .withMediumStyle()
             activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
             activityIndicatorView.color = .mainGrey
             contentView.addSubview(activityIndicatorView)

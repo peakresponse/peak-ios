@@ -63,7 +63,7 @@ class RoleButton: IconButton {
             selectedButtonColor = highlightedButtonColor
             selectedHighlightedButtonColor = selectedButtonColor.colorWithBrightnessMultiplier(multiplier: 0.4)
             buttonImage = role?.image.withRenderingMode(.alwaysTemplate) ??
-                UIImage(named: "Star", in: Bundle(for: type(of: self)), with: nil)?.withRenderingMode(.alwaysTemplate)
+                UIImage(named: "Star", in: Bundle(for: type(of: self)), compatibleWith: nil)?.withRenderingMode(.alwaysTemplate)
             buttonLabel = role?.description ?? "Responder.role.MGS".localized
             button.setTitleColor(role?.color ?? .peakBlue, for: .normal)
             button.setTitleColor(.white, for: .highlighted)

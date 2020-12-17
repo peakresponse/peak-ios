@@ -9,6 +9,21 @@
 import UIKit
 
 extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+    var isModal: Bool {
+        get {
+            if #available(iOS 13.0, *) {
+                return isModalInPresentation
+            } else {
+                return true
+            }
+        }
+        set {
+            if #available(iOS 13.0, *) {
+                isModalInPresentation = newValue
+            }
+        }
+    }
+
     func presentAlert(error: Error) {
         presentAlert(title: "Error".localized, message: error.localizedDescription)
     }

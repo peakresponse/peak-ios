@@ -80,7 +80,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             return
         }
 
-        let activityView = UIActivityIndicatorView(style: .medium)
+        let activityView = UIActivityIndicatorView.withMediumStyle()
         activityView.color = patient.priorityLabelColor
         activityView.startAnimating()
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
