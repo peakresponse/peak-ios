@@ -192,7 +192,7 @@ class PatientView: UIView {
         NSLayoutConstraint.activate([
             ageValueLabel.firstBaselineAnchor.constraint(equalTo: nameLabel.firstBaselineAnchor),
             ageValueLabel.leftAnchor.constraint(equalTo: ageLabel.rightAnchor),
-            ageValueLabel.widthAnchor.constraint(equalToConstant: 32),
+            ageValueLabel.widthAnchor.constraint(equalToConstant: 36),
             ageValueLabel.rightAnchor.constraint(equalTo: detailsView.rightAnchor, constant: -6)
         ])
         self.ageLabel = ageValueLabel
