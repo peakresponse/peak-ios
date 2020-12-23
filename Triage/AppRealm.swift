@@ -10,9 +10,64 @@ import CoreLocation
 import RealmSwift
 import Starscream
 
+class RequestOperation: Operation {
+    override var isAsynchronous: Bool {
+        return true
+    }
+
+    private var _isExecuting = false
+    override var isExecuting: Bool {
+        return _isExecuting
+    }
+
+    private var _isFinished = false
+    override var isFinished: Bool {
+        return _isFinished
+    }
+
+    override var isReady: Bool {
+        return true
+    }
+
+    private var retryTime: TimeInterval = 0.5
+
+    var request: ((@escaping (Error?) -> Void) -> URLSessionTask)!
+    var requestCompletionHandler: ((Error?) -> Void)!
+
+    override func start() {
+        willChangeValue(forKey: "isExecuting")
+        _isExecuting = true
+        didChangeValue(forKey: "isExecuting")
+
+        performRequest()
+    }
+
+    private func performRequest() {
+        let task = request(completionHandler)
+        task.resume()
+    }
+
+    private func completionHandler(error: Error?) {
+        if error != nil {
+            DispatchQueue.main.asyncAfter(deadline: .now() + retryTime) { [weak self] in
+                self?.performRequest()
+            }
+            if retryTime < 4 {
+                retryTime *= 2
+            }
+        } else {
+            requestCompletionHandler(error)
+            willChangeValue(forKey: "isFinished")
+            _isFinished = true
+            didChangeValue(forKey: "isFinished")
+        }
+    }
+}
+
 // swiftlint:disable file_length force_try type_body_length
 class AppRealm {
     private static var main: Realm!
+    private static let queue = OperationQueue()
 
     private static var agencySocket: WebSocket?
     private static var sceneSocket: WebSocket?
@@ -251,7 +306,7 @@ class AppRealm {
                 prevPin.deletedAt = Date()
             }
         }
-        let task = ApiClient.shared.addScenePin(sceneId: sceneId, data: pin.asJSON()) { (_, error) in
+        let task = ApiClient.shared.addScenePin(sceneId: sceneId, data: pin.asJSON()) { (error) in
             completionHandler(error)
         }
         task.resume()
@@ -262,16 +317,12 @@ class AppRealm {
             completionHandler(ApiClientError.unexpected)
             return
         }
+        let realm = AppRealm.open()
+        try! realm.write {
+            pin.deletedAt = Date()
+        }
         let scenePinId = pin.id
         let task = ApiClient.shared.removeScenePin(sceneId: sceneId, scenePinId: scenePinId, completionHandler: { (error) in
-            if error == nil {
-                let realm = AppRealm.open()
-                try! realm.write {
-                    if let pin = realm.object(ofType: ScenePin.self, forPrimaryKey: scenePinId) {
-                        realm.delete(pin)
-                    }
-                }
-            }
             completionHandler(error)
         })
         task.resume()
@@ -371,7 +422,11 @@ class AppRealm {
             prevRole = responder?.role
             responder?.role = role?.rawValue
         }
-        let task = ApiClient.shared.assignResponder(responderId: responderId, role: role?.rawValue) { (error) in
+        var op = RequestOperation()
+        op.request = { (completionHandler) in
+            return ApiClient.shared.assignResponder(responderId: responderId, role: role?.rawValue, completionHandler: completionHandler)
+        }
+        op.requestCompletionHandler = { (error) in
             if let error = error {
                 let realm = open()
                 try! realm.write {
@@ -381,7 +436,7 @@ class AppRealm {
                 completionHandler(error)
             }
         }
-        task.resume()
+        queue.addOperation(op)
     }
 
     // MARK: - Users
