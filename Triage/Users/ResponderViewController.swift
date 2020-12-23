@@ -150,13 +150,7 @@ class ResponderViewController: UIViewController {
     }
 
     @IBAction func unassignPressed(_ sender: Any) {
-        AppRealm.assignResponder(responderId: responder.id, role: nil) { (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            }
-        }
+        AppRealm.assignResponder(responderId: responder.id, role: nil)
         roleDropdownView.isHidden = true
     }
 
@@ -166,13 +160,7 @@ class ResponderViewController: UIViewController {
             if role?.rawValue == responder.role {
                 role = nil
             }
-            AppRealm.assignResponder(responderId: responder.id, role: role) { (error) in
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.presentAlert(error: error)
-                    }
-                }
-            }
+            AppRealm.assignResponder(responderId: responder.id, role: role)
         }
         roleDropdownView.isHidden = true
     }
