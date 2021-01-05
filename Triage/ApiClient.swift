@@ -321,8 +321,10 @@ class ApiClient {
     }
 
     func addScenePin(sceneId: String, data: [String: Any],
-                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: completionHandler)
+                     completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: { (_: [String: Any]?, error) in
+            completionHandler(error)
+        })
     }
 
     func removeScenePin(sceneId: String, scenePinId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {

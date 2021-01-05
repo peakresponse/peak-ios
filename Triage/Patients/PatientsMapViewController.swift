@@ -322,13 +322,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
 
     func newScenePinViewDidSave(_ view: NewScenePinView) {
         guard let newPin = newPin else { return }
-        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin) { (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            }
-        }
+        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin)
         self.newScenePinViewDidCancel(view)
     }
 
@@ -372,17 +366,10 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
         vc.alertMessage = "PatientsMapViewController.deletePin.message".localized
         vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
         vc.addAlertAction(title: "Button.delete".localized, style: .default) { [weak self] (_) in
-            AppRealm.removeScenePin(pin) { [weak self] (error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    } else {
-                        self?.selectedPinInfoView?.removeFromSuperview()
-                        self?.selectedPinMarker = nil
-                        self?.dismissAnimated()
-                    }
-                }
-            }
+            AppRealm.removeScenePin(pin)
+            self?.selectedPinInfoView?.removeFromSuperview()
+            self?.selectedPinMarker = nil
+            self?.dismissAnimated()
         }
         presentAnimated(vc)
     }
@@ -394,21 +381,14 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
 
     func scenePinInfoViewDidSave(_ view: ScenePinInfoView) {
         guard let newPin = newPin else { return }
-        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin) { (error) in
-            DispatchQueue.main.async { [weak self] in
-                if let error = error {
-                    self?.presentAlert(error: error)
-                } else {
-                    // discard the cloned pin
-                    self?.newPinMarker?.map = nil
-                    self?.newPinMarker = nil
-                    self?.newPin = nil
-                    // as well as the original selected pin and view
-                    self?.selectedPinInfoView?.removeFromSuperview()
-                    self?.selectedPinMarker = nil
-                }
-            }
-        }
+        AppRealm.createOrUpdateScenePin(sceneId: scene.id, pin: newPin)
+        // discard the cloned pin
+        newPinMarker?.map = nil
+        newPinMarker = nil
+        self.newPin = nil
+        // as well as the original selected pin and view
+        selectedPinInfoView?.removeFromSuperview()
+        selectedPinMarker = nil
     }
 
     // MARK: - UISearchBarDelegate
