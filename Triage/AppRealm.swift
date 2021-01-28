@@ -29,7 +29,8 @@ class RequestOperation: Operation {
         return true
     }
 
-    private var retryTime: TimeInterval = 0.5
+    var retryTime: TimeInterval = 0
+    var data: [String: Any]?
 
     var request: ((@escaping (Error?) -> Void) -> URLSessionTask)!
 
@@ -51,7 +52,9 @@ class RequestOperation: Operation {
             DispatchQueue.main.asyncAfter(deadline: .now() + retryTime) { [weak self] in
                 self?.performRequest()
             }
-            if retryTime < 4 {
+            if retryTime == 0 {
+                retryTime = 0.5
+            } else if retryTime < 4 {
                 retryTime *= 2
             }
         } else {
@@ -243,7 +246,25 @@ class AppRealm {
         let op = RequestOperation()
         op.queuePriority = .veryHigh
         op.request = { (completionHandler) in
-            return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL, completionHandler: completionHandler)
+            if let data = op.data,
+               let directUpload = data["direct_upload"] as? [String: Any],
+               let urlString = directUpload["url"] as? String,
+               let url = URL(string: urlString),
+               let headers = directUpload["headers"] as? [String: Any] {
+                return ApiClient.shared.upload(fileURL: cacheFileURL ?? fileURL, toURL: url, headers: headers) { (error) in
+                    completionHandler(error)
+                }
+            } else {
+                return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (response, error) in
+                    if let error = error {
+                        completionHandler(error)
+                    } else if let response = response {
+                        op.data = response
+                        op.retryTime = 0
+                        completionHandler(ApiClientError.unexpected)
+                    }
+                }
+            }
         }
         queue.addOperation(op)
     }

@@ -39,8 +39,8 @@ class Base: Object {
         if let value = data[Keys.id] as? String {
             id = value
         }
-        createdAt = ISO8601DateFormatter.date(from: data[Keys.createdAt])
-        updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt])
+        createdAt = ISO8601DateFormatter.date(from: data[Keys.createdAt]) ?? Date()
+        updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt]) ?? Date()
     }
 
     func asJSON() -> [String: Any] {

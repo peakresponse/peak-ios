@@ -166,13 +166,7 @@ class ObservationView: UIView, AudioHelperDelgate {
             .foregroundColor: textView.textColor!
         ])
         setAudioControlsVisible(false)
-        var audioUrl: String?
-        if let observation = patient as? PatientObservation {
-            audioUrl = observation.audioFile
-        } else {
-            audioUrl = patient.audioUrl
-        }
-        if let audioUrl = audioUrl {
+        if let audioUrl = patient.audioFile ?? patient.audioUrl {
             setAudioControlsVisible(true)
             activityIndicatorView.startAnimating()
             AppCache.cachedFile(from: audioUrl) { [weak self] (url, error) in

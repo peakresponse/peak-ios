@@ -383,6 +383,10 @@ class ApiClient {
         }
     }
 
+    func upload(fileName: String, fileURL: URL, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return upload(fileName: fileName, contentType: fileURL.contentType, completionHandler: completionHandler)
+    }
+
     func upload(fileURL: URL, toURL: URL, headers: [String: Any]? = nil, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
         var request = URLRequest(url: toURL)
         request.httpMethod = "PUT"
@@ -398,26 +402,6 @@ class ApiClient {
         }
         return session.uploadTask(with: request, fromFile: fileURL) { (_, _, error) in
             completionHandler(error)
-        }
-    }
-
-    func upload(fileName: String, fileURL: URL, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return upload(fileName: fileName, contentType: fileURL.contentType) { [weak self] (response, error) in
-            if let error = error {
-                completionHandler(error)
-            } else if let response = response,
-                let directUpload = response["direct_upload"] as? [String: Any],
-                let urlString = directUpload["url"] as? String, let url = URL(string: urlString),
-                let headers = directUpload["headers"] as? [String: Any] {
-                let task = self?.upload(fileURL: fileURL, toURL: url, headers: headers) { (error) in
-                    if let error = error {
-                        completionHandler(error)
-                    } else {
-                        completionHandler(nil)
-                    }
-                }
-                task?.resume()
-            }
         }
     }
 
