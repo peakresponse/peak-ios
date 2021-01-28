@@ -134,8 +134,20 @@ class Patient: Base {
         static let predictions = "predictions"
     }
 
-    @objc dynamic var sceneId: String?
-    @objc dynamic var pin: String?
+    @objc dynamic var compoundPrimaryKey: String?
+    func updateCompoundPrimaryKey() {
+        compoundPrimaryKey = "\(sceneId ?? "")|\(pin ?? "")"
+    }
+    @objc dynamic var sceneId: String? {
+        didSet { updateCompoundPrimaryKey() }
+    }
+    @objc dynamic var pin: String? {
+        didSet { updateCompoundPrimaryKey() }
+    }
+    override public class func primaryKey() -> String? {
+        return "compoundPrimaryKey"
+    }
+
     let version = RealmOptional<Int>()
 
     @objc dynamic var lastName: String?

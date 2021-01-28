@@ -202,21 +202,30 @@ class AppRealm {
         task.resume()
     }
 
-    public static func createOrUpdatePatient(observation: PatientObservation, completionHandler: @escaping (Patient?, Error?) -> Void) {
-        let task = ApiClient.shared.createOrUpdatePatient(data: observation.asJSON()) { (record, error) in
-            var patient: Patient?
-            if let record = record {
-                patient = Patient.instantiate(from: record) as? Patient
-                if let patient = patient {
-                    let realm = AppRealm.open()
-                    try! realm.write {
-                        realm.add(patient, update: .modified)
+    public static func createOrUpdatePatient(observation: PatientObservation) {
+        let data = observation.asJSON()
+        let realm = AppRealm.open()
+        try! realm.write {
+            let patient = realm.object(ofType: Patient.self, forPrimaryKey: observation.compoundPrimaryKey) ?? Patient()
+            patient.update(from: data)
+            realm.add(patient, update: .modified)
+        }
+        let op = RequestOperation()
+        op.queuePriority = .veryHigh
+        op.request = { (completionHandler) in
+            return ApiClient.shared.createOrUpdatePatient(data: data) { (record, error) in
+                if let record = record {
+                    if let patient = Patient.instantiate(from: record) as? Patient {
+                        let realm = AppRealm.open()
+                        try! realm.write {
+                            realm.add(patient, update: .modified)
+                        }
                     }
                 }
+                completionHandler(error)
             }
-            completionHandler(patient, error)
         }
-        task.resume()
+        queue.addOperation(op)
     }
 
     public static func uploadPatientAsset(observation: PatientObservation, key: String, fileURL: URL) {
@@ -232,6 +241,7 @@ class AppRealm {
         /// move to the local app file cache
         let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
         let op = RequestOperation()
+        op.queuePriority = .veryHigh
         op.request = { (completionHandler) in
             return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL, completionHandler: completionHandler)
         }

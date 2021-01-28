@@ -80,32 +80,11 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             return
         }
 
-        let activityView = UIActivityIndicatorView.withMediumStyle()
-        activityView.color = patient.priorityLabelColor
-        activityView.startAnimating()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
-
-        let saveObservation = { [weak self] in
-            guard let self = self, let observation = self.patient as? PatientObservation else { return }
-            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (_, error) in
-                DispatchQueue.main.async { [weak self] in
-                    self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    } else if let self = self {
-                        self.delegate?.patientTableViewControllerDidSave?(self)
-                    }
-                }
-            }
+        if let observation = self.patient as? PatientObservation {
+            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation))
         }
 
-        if uploadTask != nil {
-            dispatchGroup.notify(queue: DispatchQueue.main) {
-                saveObservation()
-            }
-        } else {
-            saveObservation()
-        }
+        delegate?.patientTableViewControllerDidSave?(self)
     }
 
     private func captureLocation() {
