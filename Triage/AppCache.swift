@@ -78,14 +78,18 @@ class AppCache {
         }
     }
 
-    static func cache(fileURL: URL, filename: String) {
-        do {
-            let fileManager = FileManager.default
-            let cacheDirURL = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
-            let destURL = cacheDirURL.appendingPathComponent(filename, isDirectory: false)
-            try fileManager.moveItem(at: fileURL, to: destURL)
-        } catch {
-            print(error)
+    static func cache(fileURL: URL, filename: String) -> URL? {
+        if let cacheFileURL = URL(string: filename) {
+            do {
+                let fileManager = FileManager.default
+                let cacheDirURL = try fileManager.url(for: .cachesDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+                let destURL = cacheDirURL.appendingPathComponent(cacheFileURL.lastPathComponent, isDirectory: false)
+                try fileManager.moveItem(at: fileURL, to: destURL)
+                return destURL
+            } catch {
+                print(error)
+            }
         }
+        return nil
     }
 }

@@ -219,6 +219,25 @@ class AppRealm {
         task.resume()
     }
 
+    public static func uploadPatientAsset(observation: PatientObservation, key: String, fileURL: URL) {
+        /// ensure a unique upload filename by prepending the user uuid
+        let fileName = "\(AppSettings.userId ?? "")/\(fileURL.lastPathComponent)"
+        if let realm = observation.realm {
+            try! realm.write {
+                observation.setValue(fileName, forKey: key)
+            }
+        } else {
+            observation.setValue(fileName, forKey: key)
+        }
+        /// move to the local app file cache
+        let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
+        let op = RequestOperation()
+        op.request = { (completionHandler) in
+            return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL, completionHandler: completionHandler)
+        }
+        queue.addOperation(op)
+    }
+
     // MARK: - Scene
 
     public static func getScenes(completionHandler: @escaping (Error?) -> Void) {
