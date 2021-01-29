@@ -121,8 +121,11 @@ class Patient: Base {
         static let location = "location"
         static let lat = "lat"
         static let lng = "lng"
+        static let portraitFile = "portraitFile"
         static let portraitUrl = "portraitUrl"
+        static let photoFile = "photoFile"
         static let photoUrl = "photoUrl"
+        static let audioFile = "audioFile"
         static let audioUrl = "audioUrl"
         static let transportAgency = "transportAgency"
         static let transportAgencyId = "transportAgencyId"
@@ -131,8 +134,20 @@ class Patient: Base {
         static let predictions = "predictions"
     }
 
-    @objc dynamic var sceneId: String?
-    @objc dynamic var pin: String?
+    @objc dynamic var compoundPrimaryKey: String?
+    func updateCompoundPrimaryKey() {
+        compoundPrimaryKey = "\(sceneId ?? "")|\(pin ?? "")"
+    }
+    @objc dynamic var sceneId: String? {
+        didSet { updateCompoundPrimaryKey() }
+    }
+    @objc dynamic var pin: String? {
+        didSet { updateCompoundPrimaryKey() }
+    }
+    override public class func primaryKey() -> String? {
+        return "compoundPrimaryKey"
+    }
+
     let version = RealmOptional<Int>()
 
     @objc dynamic var lastName: String?
@@ -236,8 +251,11 @@ class Patient: Base {
         lng = nil
     }
 
+    @objc dynamic var portraitFile: String?
     @objc dynamic var portraitUrl: String?
+    @objc dynamic var photoFile: String?
     @objc dynamic var photoUrl: String?
+    @objc dynamic var audioFile: String?
     @objc dynamic var audioUrl: String?
 
     @objc dynamic var transportAgency: Agency? {
@@ -364,8 +382,11 @@ class Patient: Base {
         location = data[Keys.location] as? String
         lat = data[Keys.lat] as? String
         lng = data[Keys.lng] as? String
+        portraitFile = data[Keys.portraitFile] as? String
         portraitUrl = data[Keys.portraitUrl] as? String
+        photoFile = data[Keys.photoFile] as? String
         photoUrl = data[Keys.photoUrl] as? String
+        audioFile = data[Keys.audioFile] as? String
         audioUrl = data[Keys.audioUrl] as? String
         if let data = data[Keys.transportAgency] as? [String: Any],
             let agency = Agency.instantiate(from: data) as? Agency {
@@ -450,11 +471,20 @@ class Patient: Base {
         if let value = lng {
             data[Keys.lng] = value
         }
+        if let value = portraitFile {
+            data[Keys.portraitFile] = value
+        }
         if let value = portraitUrl {
             data[Keys.portraitUrl] = value
         }
+        if let value = photoFile {
+            data[Keys.photoFile] = value
+        }
         if let value = photoUrl {
             data[Keys.photoUrl] = value
+        }
+        if let value = audioFile {
+            data[Keys.audioFile] = value
         }
         if let value = audioUrl {
             data[Keys.audioUrl] = value
@@ -498,9 +528,12 @@ class Patient: Base {
         observation.location = location
         observation.lat = lat
         observation.lng = lng
-        observation.portraitUrl = nil
-        observation.photoUrl = nil
-        observation.audioUrl = nil
+        observation.portraitFile = portraitFile
+        observation.photoFile = photoFile
+        observation.audioFile = audioFile
+        observation.portraitUrl = portraitUrl
+        observation.photoUrl = photoUrl
+        observation.audioUrl = audioUrl
         observation.transportAgency = transportAgency
         observation.transportFacility = transportFacility
         observation.predictions = predictions

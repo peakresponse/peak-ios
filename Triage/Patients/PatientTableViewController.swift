@@ -248,15 +248,8 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func save(observation: PatientObservation) {
-        AppRealm.createOrUpdatePatient(observation: observation) { [weak self] (_, error) in
-            guard let self = self else { return }
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            }
-        }
-}
+        AppRealm.createOrUpdatePatient(observation: observation)
+    }
 
     // MARK: - AttributeTableViewCellDelegate
 

@@ -362,10 +362,11 @@ class ApiClient {
 
     // MARK: - Uploads
 
-    func upload(contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func upload(fileName: String, contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/assets", body: [
             "blob": [
-                "content_type": contentType
+                "content_type": contentType,
+                "signed_id": fileName
             ]
         ]) { [weak self] (response: [String: Any]?, error: Error?) in
             var response = response
@@ -380,6 +381,10 @@ class ApiClient {
             }
             completionHandler(response, error)
         }
+    }
+
+    func upload(fileName: String, fileURL: URL, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return upload(fileName: fileName, contentType: fileURL.contentType, completionHandler: completionHandler)
     }
 
     func upload(fileURL: URL, toURL: URL, headers: [String: Any]? = nil, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
@@ -397,26 +402,6 @@ class ApiClient {
         }
         return session.uploadTask(with: request, fromFile: fileURL) { (_, _, error) in
             completionHandler(error)
-        }
-    }
-
-    func upload(fileURL: URL, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return upload(contentType: fileURL.contentType) { [weak self] (response, error) in
-            if let error = error {
-                completionHandler(nil, error)
-            } else if let response = response,
-                let directUpload = response["direct_upload"] as? [String: Any],
-                let urlString = directUpload["url"] as? String, let url = URL(string: urlString),
-                let headers = directUpload["headers"] as? [String: Any] {
-                let task = self?.upload(fileURL: fileURL, toURL: url, headers: headers) { (error) in
-                    if let error = error {
-                        completionHandler(nil, error)
-                    } else {
-                        completionHandler(response, nil)
-                    }
-                }
-                task?.resume()
-            }
         }
     }
 

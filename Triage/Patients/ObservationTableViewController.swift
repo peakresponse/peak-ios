@@ -80,32 +80,11 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             return
         }
 
-        let activityView = UIActivityIndicatorView.withMediumStyle()
-        activityView.color = patient.priorityLabelColor
-        activityView.startAnimating()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: activityView)
-
-        let saveObservation = { [weak self] in
-            guard let self = self, let observation = self.patient as? PatientObservation else { return }
-            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation)) { (_, error) in
-                DispatchQueue.main.async { [weak self] in
-                    self?.navigationItem.rightBarButtonItem = self?.saveBarButtonItem
-                    if let error = error {
-                        self?.presentAlert(error: error)
-                    } else if let self = self {
-                        self.delegate?.patientTableViewControllerDidSave?(self)
-                    }
-                }
-            }
+        if let observation = self.patient as? PatientObservation {
+            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation))
         }
 
-        if uploadTask != nil {
-            dispatchGroup.notify(queue: DispatchQueue.main) {
-                saveObservation()
-            }
-        } else {
-            saveObservation()
-        }
+        delegate?.patientTableViewControllerDidSave?(self)
     }
 
     private func captureLocation() {
@@ -227,19 +206,9 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     // MARK: - PatientViewDelegate
 
     func patientView(_ patientView: PortraitView, didCapturePhoto fileURL: URL, withImage image: UIImage) {
-        dispatchGroup.enter()
-        uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
-            if let error = error {
-                print(error)
-            } else if let response = response, let signedId = response["signed_id"] as? String {
-                if let observation = self?.patient as? PatientObservation {
-                    observation.portraitFile = signedId
-                }
-                AppCache.cache(fileURL: fileURL, filename: signedId)
-            }
-            self?.dispatchGroup.leave()
+        if let observation = patient as? PatientObservation {
+            AppRealm.uploadPatientAsset(observation: observation, key: Patient.Keys.portraitFile, fileURL: fileURL)
         }
-        uploadTask?.resume()
     }
 
     // MARK: - PriorityTableViewCellDelegate
@@ -269,24 +238,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     }
 
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
-        // start upload
-        dispatchGroup.enter()
-        uploadTask = ApiClient.shared.upload(fileURL: fileURL) { [weak self] (response, error) in
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                if let error = error {
-                    self.presentAlert(error: error)
-                } else if let response = response, let signedId = response["signed_id"] as? String {
-                    AppCache.cache(fileURL: fileURL, filename: signedId)
-                    if let observation = self.patient as? PatientObservation {
-                        observation.audioFile = signedId
-                    }
-                    self.tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-                }
-                self.dispatchGroup.leave()
-            }
+        if let observation = patient as? PatientObservation {
+            AppRealm.uploadPatientAsset(observation: observation, key: Patient.Keys.audioFile, fileURL: fileURL)
+            tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
         }
-        uploadTask?.resume()
         // hide the record button, user must clear current recording to continue
         updateButton.isHidden = true
         updateButtonBackgroundView.isHidden = true

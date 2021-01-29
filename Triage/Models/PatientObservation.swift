@@ -11,44 +11,17 @@ import RealmSwift
 class PatientObservation: Patient {
     struct Keys {
         static let patientId = "patientId"
-        static let portraitFile = "portraitFile"
-        static let photoFile = "photoFile"
-        static let audioFile = "audioFile"
     }
 
     @objc dynamic var patientId: String?
-    @objc dynamic var portraitFile: String?
-    @objc dynamic var photoFile: String?
-    @objc dynamic var audioFile: String?
+
+    override public class func primaryKey() -> String? {
+        return "id"
+    }
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
-        patientId = data["patientId"] as? String
-        portraitFile = data["portraitFile"] as? String
-        photoFile = data["photoFile"] as? String
-        audioFile = data["audioFile"] as? String
-    }
-
-    override func asJSON() -> [String: Any] {
-        var json = super.asJSON()
-        if let value = portraitFile {
-            json[Keys.portraitFile] = value
-        }
-        if let value = photoFile {
-            json[Keys.photoFile] = value
-        }
-        if let value = audioFile {
-            json[Keys.audioFile] = value
-        }
-        return json
-    }
-
-    override func asObservation() -> PatientObservation {
-        let observation = super.asObservation()
-        observation.portraitFile = portraitFile
-        observation.photoFile = photoFile
-        observation.audioFile = audioFile
-        return observation
+        patientId = data[Keys.patientId] as? String
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
