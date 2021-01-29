@@ -15,6 +15,10 @@ class PatientObservation: Patient {
 
     @objc dynamic var patientId: String?
 
+    override public class func primaryKey() -> String? {
+        return "id"
+    }
+
     override func update(from data: [String: Any]) {
         super.update(from: data)
         patientId = data[Keys.patientId] as? String
