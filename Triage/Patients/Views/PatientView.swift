@@ -233,8 +233,8 @@ class PatientView: UIView {
     }
 
     func configure(from patient: Patient) {
-        priorityView.backgroundColor = PRIORITY_COLORS_LIGHTENED[patient.priority.value ?? Priority.unknown.rawValue]
-        priorityLabel.text = Priority(rawValue: patient.priority.value ?? Priority.unknown.rawValue)?.description ?? ""
+        priorityView.backgroundColor = PRIORITY_COLORS_LIGHTENED[patient.filterPriority.value ?? Priority.unknown.rawValue]
+        priorityLabel.text = Priority(rawValue: patient.filterPriority.value ?? Priority.unknown.rawValue)?.description ?? ""
         portraitView.configure(from: patient)
         tagLabel.text = patient.pin
         updatedLabel.text = String(format: "Patient.updatedAt".localized, patient.updatedAtRelativeString)

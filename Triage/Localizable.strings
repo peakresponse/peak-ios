@@ -24,6 +24,7 @@
 "Button.assignRole" = "Assign Role";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
+"Button.cancelTransport" = "Cancel Transport";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.delete" = "Delete";
@@ -40,6 +41,7 @@
 "Button.transfer" = "Transfer";
 "Button.transferCommand" = "Transfer MGS Role";
 "Button.transport" = "Transport";
+"Button.transportPatient" = "Transport Patient";
 "Button.update" = "Update";
 "Button.updateStatus" = "Update Status";
 "Button.viewScene" = "View Scene";
@@ -170,11 +172,17 @@
 "Patient.sort.3" = "Triage Priority (High to Low)";
 
 "PatientTableViewController.location" = "Location";
+"PatientTableViewController.transport" = "Transport";
+"PatientTableViewController.transport.leftIndependently" = "This patient left the scene independently.";
 "PatientTableViewController.vitals" = "Vitals";
 "PatientTableViewController.observations" = "Observations";
+"PatientTableViewController.confirmCancelTransport.title" = "Confirm Cancel Transport";
+"PatientTableViewController.confirmCancelTransport.message" = "Are you sure you wish to cancel the transport status for this patient?";
 
 "PatientsMapViewController.deletePin.title" = "Delete pin?";
 "PatientsMapViewController.deletePin.message" = "Are you sure you wish to delete this pin from the map?";
+
+"PriorityTableViewCell.statusBeforeTransportLabel" = "Triage Status Before Transport";
 
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 

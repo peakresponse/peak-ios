@@ -31,7 +31,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
             }
         }
 
-        updateNavigationBarColor(priority: patient.priority.value)
+        updateNavigationBarColor(priority: patient.filterPriority.value)
     }
 
     private func updateNavigationBarColor(priority: Int?) {
@@ -53,7 +53,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
     func didObserveChange(_ change: ObjectChange<Patient>) {
         switch change {
         case .change:
-            updateNavigationBarColor(priority: patient.priority.value)
+            updateNavigationBarColor(priority: patient.filterPriority.value)
         case .error(let error):
             presentAlert(error: error)
         case .deleted:
@@ -71,7 +71,7 @@ class PatientViewController: UIViewController, PatientTableViewControllerDelegat
 
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
         navigationBar.navigationItem = viewController.navigationItem
-        if let priority = (viewController as? PatientTableViewController)?.patient.priority.value {
+        if let priority = (viewController as? PatientTableViewController)?.patient.filterPriority.value {
             updateNavigationBarColor(priority: priority)
         }
     }

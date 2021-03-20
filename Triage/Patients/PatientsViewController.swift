@@ -21,7 +21,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
     var notificationToken: NotificationToken?
     var results: Results<Patient>?
     var priority: Priority?
-    var sort: Sort = .recent
+    var sort: Sort = .priority
 
     // MARK: -
 
@@ -72,7 +72,8 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
             sorts.append(SortDescriptor(keyPath: "firstName", ascending: true))
             sorts.append(SortDescriptor(keyPath: "lastName", ascending: true))
         case .priority:
-            sorts.append(SortDescriptor(keyPath: "priority", ascending: true))
+            sorts.append(SortDescriptor(keyPath: "filterPriority", ascending: true))
+            sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: true))
         }
         sorts.append(SortDescriptor(keyPath: "pin", ascending: true))
         let realm = AppRealm.open()
@@ -94,14 +95,12 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
         switch changes {
         case .initial:
             collectionView.reloadData()
-            updateCounts()
         case .update(_, let deletions, let insertions, let modifications):
             collectionView.performBatchUpdates({
                 collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
                 collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
                 collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
             }, completion: nil)
-            updateCounts()
         case .error(let error):
             presentAlert(error: error)
         }
@@ -129,19 +128,13 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
         }
     }
 
-    func updateCounts() {
-//        for priority in Priority.allCases {
-//            priorityTabViews[priority]?.count = results?.reduce(into: 0) { $0 += $1.priority.value == priority.rawValue ? 1 : 0 } ?? 0
-//        }
-    }
-
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using [segue destinationViewController].
         // Pass the selected object to the new view controller.
         var results = self.results
         if let priority = priority {
-            results = results?.filter("priority=%@", priority.rawValue)
+            results = results?.filter("filterPriority=%@", priority.rawValue)
         }
         if let vc = segue.destination as? PatientViewController,
             let cell = sender as? PatientsCollectionViewCell,

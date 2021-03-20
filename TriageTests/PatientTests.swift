@@ -70,7 +70,7 @@ class PatientTests: XCTestCase {
         XCTAssertEqual(patient?.bpDiastolic.value, 80)
         XCTAssertEqual(patient?.gcsTotal.value, 15)
         XCTAssertEqual(patient?.text, "Passes out and hits head on ground. Blood from mouth and ears.")
-        XCTAssertEqual(patient?.priority.value, 0)
+        XCTAssertEqual(patient?.priority.value, Priority.immediate.rawValue)
         XCTAssertEqual(patient?.location, "Triage Staging")
         XCTAssertNil(patient?.lat)
         XCTAssertNil(patient?.lng)
@@ -86,5 +86,50 @@ class PatientTests: XCTestCase {
         patient.bloodPressure = "120/80"
         XCTAssertEqual(patient.bpSystolic.value, 120)
         XCTAssertEqual(patient.bpDiastolic.value, 80)
+    }
+
+    func testSetPriorityAndTransported() {
+        let patient = Patient()
+        patient.setPriority(.immediate)
+        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
+
+        patient.setTransported(true)
+        patient.transportAgency = Agency()
+        patient.transportFacility = Facility()
+        XCTAssertTrue(patient.isTransported)
+        XCTAssertNotNil(patient.transportAgency)
+        XCTAssertNotNil(patient.transportFacility)
+        XCTAssertFalse(patient.isTransportedLeftIndependently)
+        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority.value, Priority.transported.rawValue)
+
+        patient.setTransported(false)
+        XCTAssertFalse(patient.isTransported)
+        XCTAssertFalse(patient.isTransportedLeftIndependently)
+        XCTAssertNil(patient.transportAgency)
+        XCTAssertNil(patient.transportFacility)
+        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
+
+        patient.setTransported(true)
+        patient.transportAgency = Agency()
+        patient.transportFacility = Facility()
+
+        patient.setTransported(true, isTransportedLeftIndependently: true)
+        XCTAssertTrue(patient.isTransported)
+        XCTAssertTrue(patient.isTransportedLeftIndependently)
+        XCTAssertNil(patient.transportAgency)
+        XCTAssertNil(patient.transportFacility)
+        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority.value, Priority.transported.rawValue)
+
+        patient.setTransported(false)
+        XCTAssertFalse(patient.isTransported)
+        XCTAssertFalse(patient.isTransportedLeftIndependently)
+        XCTAssertNil(patient.transportAgency)
+        XCTAssertNil(patient.transportFacility)
+        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
     }
 }

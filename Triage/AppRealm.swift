@@ -206,7 +206,8 @@ class AppRealm {
     }
 
     public static func createOrUpdatePatient(observation: PatientObservation) {
-        let data = observation.asJSON()
+        var data = observation.asJSON()
+        data.removeValue(forKey: Base.Keys.id)
         let realm = AppRealm.open()
         try! realm.write {
             let patient = realm.object(ofType: Patient.self, forPrimaryKey: observation.compoundPrimaryKey) ?? Patient()

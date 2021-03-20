@@ -118,6 +118,7 @@ class Patient: Base {
         static let gcsTotal = "gcsTotal"
         static let text = "text"
         static let priority = "priority"
+        static let filterPriority = "filterPriority"
         static let location = "location"
         static let lat = "lat"
         static let lng = "lng"
@@ -127,6 +128,8 @@ class Patient: Base {
         static let photoUrl = "photoUrl"
         static let audioFile = "audioFile"
         static let audioUrl = "audioUrl"
+        static let isTransported = "isTransported"
+        static let isTransportedLeftIndependently = "isTransportedLeftIndependently"
         static let transportAgency = "transportAgency"
         static let transportAgencyId = "transportAgencyId"
         static let transportFacility = "transportFacility"
@@ -224,6 +227,19 @@ class Patient: Base {
         }
         return PRIORITY_LABEL_COLORS[5]
     }
+    let filterPriority = RealmOptional<Int>()
+    var filterPriorityColor: UIColor {
+        if let priority = filterPriority.value, priority >= 0 && priority < 5 {
+            return PRIORITY_COLORS[priority]
+        }
+        return PRIORITY_COLORS[5]
+    }
+    var filterPriorityLabelColor: UIColor {
+        if let priority = filterPriority.value, priority >= 0 && priority < 5 {
+            return PRIORITY_LABEL_COLORS[priority]
+        }
+        return PRIORITY_LABEL_COLORS[5]
+    }
 
     @objc dynamic var location: String?
     @objc dynamic var lat: String?
@@ -258,6 +274,8 @@ class Patient: Base {
     @objc dynamic var audioFile: String?
     @objc dynamic var audioUrl: String?
 
+    @objc dynamic var isTransported = false
+    @objc dynamic var isTransportedLeftIndependently = false
     @objc dynamic var transportAgency: Agency? {
         didSet {
             if transportAgency != nil {
@@ -279,10 +297,6 @@ class Patient: Base {
         }
     }
     @objc dynamic var transportFacilityRemoved = false
-
-    var isTransported: Bool {
-        return transportAgency != nil || transportFacility != nil
-    }
 
     @objc dynamic var _predictions: Data?
     var predictions: [String: Any]? {
@@ -323,6 +337,30 @@ class Patient: Base {
         return updatedAt?.asRelativeString() ?? "Patient.new".localized
     }
 
+    func setPriority(_ priority: Priority) {
+        self.priority.value = priority.rawValue
+        if !isTransported {
+            filterPriority.value = priority.rawValue
+        }
+    }
+
+    func setTransported(_ isTransported: Bool, isTransportedLeftIndependently: Bool = false) {
+        self.isTransported = isTransported
+        if isTransported {
+            filterPriority.value = Priority.transported.rawValue
+            self.isTransportedLeftIndependently = isTransportedLeftIndependently
+            if isTransportedLeftIndependently {
+                transportAgency = nil
+                transportFacility = nil
+            }
+        } else {
+            filterPriority.value = priority.value
+            self.isTransportedLeftIndependently = false
+            transportAgency = nil
+            transportFacility = nil
+        }
+    }
+
     // swiftlint:disable:next cyclomatic_complexity
     override func setValue(_ value: Any?, forKey key: String) {
         if [Keys.age, Keys.bpDiastolic, Keys.bpSystolic, Keys.capillaryRefill, Keys.gcsTotal,
@@ -348,7 +386,9 @@ class Patient: Base {
             case Keys.pulse:
                 pulse.value = value as? Int
             case Keys.priority:
-                priority.value = value as? Int
+                if let value = value as? Int, let priority = Priority(rawValue: value) {
+                    setPriority(priority)
+                }
             case Keys.respiratoryRate:
                 respiratoryRate.value = value as? Int
             default:
@@ -359,35 +399,99 @@ class Patient: Base {
         super.setValue(value, forKey: key)
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func update(from data: [String: Any]) {
         super.update(from: data)
-        sceneId = data[Keys.sceneId] as? String
-        pin = data[Keys.pin] as? String
-        version.value = data[Keys.version] as? Int
-        lastName = data[Keys.lastName] as? String
-        firstName = data[Keys.firstName] as? String
-        gender = data[Keys.gender] as? String
-        age.value = data[Keys.age] as? Int
-        ageUnits = data[Keys.ageUnits] as? String
-        dob = data[Keys.dob] as? String
-        complaint = data[Keys.complaint] as? String
-        respiratoryRate.value = data[Keys.respiratoryRate] as? Int
-        pulse.value = data[Keys.pulse] as? Int
-        capillaryRefill.value = data[Keys.capillaryRefill] as? Int
-        bpSystolic.value = data[Keys.bpSystolic] as? Int
-        bpDiastolic.value = data[Keys.bpDiastolic] as? Int
-        gcsTotal.value = data[Keys.gcsTotal] as? Int
-        text = data[Keys.text] as? String
-        priority.value = data[Keys.priority] as? Int
-        location = data[Keys.location] as? String
-        lat = data[Keys.lat] as? String
-        lng = data[Keys.lng] as? String
-        portraitFile = data[Keys.portraitFile] as? String
-        portraitUrl = data[Keys.portraitUrl] as? String
-        photoFile = data[Keys.photoFile] as? String
-        photoUrl = data[Keys.photoUrl] as? String
-        audioFile = data[Keys.audioFile] as? String
-        audioUrl = data[Keys.audioUrl] as? String
+        if data.index(forKey: Keys.sceneId) != nil {
+            sceneId = data[Keys.sceneId] as? String
+        }
+        if data.index(forKey: Keys.pin) != nil {
+            pin = data[Keys.pin] as? String
+        }
+        if data.index(forKey: Keys.version) != nil {
+            version.value = data[Keys.version] as? Int
+        }
+        if data.index(forKey: Keys.lastName) != nil {
+            lastName = data[Keys.lastName] as? String
+        }
+        if data.index(forKey: Keys.firstName) != nil {
+            firstName = data[Keys.firstName] as? String
+        }
+        if data.index(forKey: Keys.gender) != nil {
+            gender = data[Keys.gender] as? String
+        }
+        if data.index(forKey: Keys.age) != nil {
+            age.value = data[Keys.age] as? Int
+        }
+        if data.index(forKey: Keys.ageUnits) != nil {
+            ageUnits = data[Keys.ageUnits] as? String
+        }
+        if data.index(forKey: Keys.dob) != nil {
+            dob = data[Keys.dob] as? String
+        }
+        if data.index(forKey: Keys.complaint) != nil {
+            complaint = data[Keys.complaint] as? String
+        }
+        if data.index(forKey: Keys.respiratoryRate) != nil {
+            respiratoryRate.value = data[Keys.respiratoryRate] as? Int
+        }
+        if data.index(forKey: Keys.pulse) != nil {
+            pulse.value = data[Keys.pulse] as? Int
+        }
+        if data.index(forKey: Keys.capillaryRefill) != nil {
+            capillaryRefill.value = data[Keys.capillaryRefill] as? Int
+        }
+        if data.index(forKey: Keys.bpSystolic) != nil {
+            bpSystolic.value = data[Keys.bpSystolic] as? Int
+        }
+        if data.index(forKey: Keys.bpDiastolic) != nil {
+            bpDiastolic.value = data[Keys.bpDiastolic] as? Int
+        }
+        if data.index(forKey: Keys.gcsTotal) != nil {
+            gcsTotal.value = data[Keys.gcsTotal] as? Int
+        }
+        if data.index(forKey: Keys.text) != nil {
+            text = data[Keys.text] as? String
+        }
+        if data.index(forKey: Keys.priority) != nil {
+            priority.value = data[Keys.priority] as? Int
+        }
+        if data.index(forKey: Keys.filterPriority) != nil {
+            filterPriority.value = data[Keys.filterPriority] as? Int
+        }
+        if data.index(forKey: Keys.location) != nil {
+            location = data[Keys.location] as? String
+        }
+        if data.index(forKey: Keys.lat) != nil {
+            lat = data[Keys.lat] as? String
+        }
+        if data.index(forKey: Keys.lng) != nil {
+            lng = data[Keys.lng] as? String
+        }
+        if data.index(forKey: Keys.portraitFile) != nil {
+            portraitFile = data[Keys.portraitFile] as? String
+        }
+        if data.index(forKey: Keys.portraitUrl) != nil {
+            portraitUrl = data[Keys.portraitUrl] as? String
+        }
+        if data.index(forKey: Keys.photoFile) != nil {
+            photoFile = data[Keys.photoFile] as? String
+        }
+        if data.index(forKey: Keys.photoUrl) != nil {
+            photoUrl = data[Keys.photoUrl] as? String
+        }
+        if data.index(forKey: Keys.audioFile) != nil {
+            audioFile = data[Keys.audioFile] as? String
+        }
+        if data.index(forKey: Keys.audioUrl) != nil {
+            audioUrl = data[Keys.audioUrl] as? String
+        }
+        if data.index(forKey: Keys.isTransported) != nil {
+            isTransported = data[Keys.isTransported] as? Bool ?? false
+        }
+        if data.index(forKey: Keys.isTransportedLeftIndependently) != nil {
+            isTransportedLeftIndependently = data[Keys.isTransportedLeftIndependently] as? Bool ?? false
+        }
         if let data = data[Keys.transportAgency] as? [String: Any],
             let agency = Agency.instantiate(from: data) as? Agency {
             transportAgency = agency
@@ -402,7 +506,9 @@ class Patient: Base {
             let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
             transportFacility = facility
         }
-        predictions = data[Keys.predictions] as? [String: Any]
+        if data.index(forKey: Keys.predictions) != nil {
+            predictions = data[Keys.predictions] as? [String: Any]
+        }
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -462,6 +568,9 @@ class Patient: Base {
         if let value = priority.value {
             data[Keys.priority] = value
         }
+        if let value = filterPriority.value {
+            data[Keys.filterPriority] = value
+        }
         if let value = location {
             data[Keys.location] = value
         }
@@ -489,6 +598,8 @@ class Patient: Base {
         if let value = audioUrl {
             data[Keys.audioUrl] = value
         }
+        data[Keys.isTransported] = isTransported
+        data[Keys.isTransportedLeftIndependently] = isTransportedLeftIndependently
         if let obj = transportAgency {
             data[Keys.transportAgencyId] = obj.id
         } else if transportAgencyRemoved {
@@ -525,6 +636,7 @@ class Patient: Base {
         observation.gcsTotal.value = gcsTotal.value
         observation.text = text
         observation.priority.value = priority.value
+        observation.filterPriority.value = filterPriority.value
         observation.location = location
         observation.lat = lat
         observation.lng = lng
@@ -534,6 +646,8 @@ class Patient: Base {
         observation.portraitUrl = portraitUrl
         observation.photoUrl = photoUrl
         observation.audioUrl = audioUrl
+        observation.isTransported = isTransported
+        observation.isTransportedLeftIndependently = isTransportedLeftIndependently
         observation.transportAgency = transportAgency
         observation.transportFacility = transportFacility
         observation.predictions = predictions

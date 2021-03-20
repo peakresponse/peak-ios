@@ -21,6 +21,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     var locationHelper: LocationHelper!
     var cameraHelper: CameraHelper!
     var originalObservation: PatientObservation!
+    var startingOffsetY: CGFloat = -1
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,9 +66,22 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        tableView.setEditing(editing, animated: animated)
-        tableView.beginUpdates()
-        tableView.endUpdates()
+        if startingOffsetY >= 0 {
+            tableView.setEditing(editing, animated: animated)
+            tableView.setContentOffset(CGPoint(x: 0, y: startingOffsetY), animated: false)
+            startingOffsetY = -1
+        }
+    }
+
+    override func cancelTransport() {
+        patient.setTransported(false)
+        tableView.reloadSections(IndexSet([Section.priority.rawValue, Section.location.rawValue]), with: .none)
+        if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
+            tableViewHeader.configure(from: patient)
+        }
+        if let priority = patient.filterPriority.value {
+            delegate?.patientTableViewController?(self, didUpdatePriority: priority)
+        }
     }
 
     @IBAction func cancelPressed() {
@@ -159,11 +173,10 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     // MARK: - ConfirmTransportViewControllerDelegate
 
     override func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
-        patient.priority.value = Priority.transported.rawValue
+        patient.setTransported(true)
         patient.transportFacility = facility
         patient.transportAgency = agency
-        tableView.reloadSections(IndexSet([0]), with: .none)
-        tableView.reloadSections(IndexSet([0]), with: .none)
+        tableView.reloadSections(IndexSet([Section.priority.rawValue, Section.location.rawValue]), with: .none)
         if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
             tableViewHeader.configure(from: patient)
         }
@@ -173,10 +186,8 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     // MARK: - FacilitiesTableViewControllerDelegate
 
     override func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController) {
-        patient.priority.value = Priority.transported.rawValue
-        patient.transportFacility = nil
-        patient.transportAgency = nil
-        tableView.reloadSections(IndexSet([0]), with: .none)
+        patient.setTransported(true, isTransportedLeftIndependently: true)
+        tableView.reloadSections(IndexSet([Section.priority.rawValue, Section.location.rawValue]), with: .none)
         if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
             tableViewHeader.configure(from: patient)
         }
@@ -214,9 +225,11 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     // MARK: - PriorityTableViewCellDelegate
 
     override func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
-        patient.priority.value = priority
-        delegate?.patientTableViewController?(self, didUpdatePriority: priority)
-        tableView.reloadSections(IndexSet(integer: Section.priority.rawValue), with: .none)
+        if let priority = Priority(rawValue: priority) {
+            patient.setPriority(priority)
+            delegate?.patientTableViewController?(self, didUpdatePriority: priority.rawValue)
+            tableView.reloadSections(IndexSet(integer: Section.priority.rawValue), with: .none)
+        }
     }
 
     // MARK: - RecordingViewControllerDelegate
@@ -231,7 +244,9 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.tableView.reloadData()
-                    self.delegate?.patientTableViewController?(self, didUpdatePriority: patient.priority.value ?? 5)
+                    if let priority = patient.filterPriority.value {
+                        self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
+                    }
                 }
             }
         }

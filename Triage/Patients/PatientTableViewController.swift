@@ -210,17 +210,6 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         }
     }
 
-    @objc func transportPressed() {
-        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Facilities")
-        if let vc = vc as? FacilitiesTableViewController {
-            vc.observation = patient.asObservation()
-            let navVC = UINavigationController(rootViewController: vc)
-            navVC.delegate = self
-            navVC.navigationBar.isHidden = true
-            presentAnimated(navVC)
-        }
-    }
-
     @IBAction func updatePressed() {
         performSegue(withIdentifier: "EditPatient", sender: self)
     }
@@ -230,6 +219,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             vc.delegate = self
             vc.patient = patient.asObservation()
             vc.patient.version.value = (vc.patient.version.value ?? 0) + 1
+            vc.startingOffsetY = tableView.contentOffset.y
         }
     }
 
@@ -245,6 +235,15 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         case .deleted:
             dismissAnimated()
         }
+    }
+
+    func cancelTransport() {
+        let observation = PatientObservation()
+        observation.sceneId = patient.sceneId
+        observation.pin = patient.pin
+        observation.version.value = (patient.version.value ?? 0) + 1
+        observation.setTransported(false)
+        save(observation: observation)
     }
 
     func save(observation: PatientObservation) {
@@ -272,7 +271,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         observation.sceneId = patient.sceneId
         observation.pin = patient.pin
         observation.version.value = (patient.version.value ?? 0) + 1
-        observation.priority.value = Priority.transported.rawValue
+        observation.setTransported(true)
         observation.transportFacility = facility
         observation.transportAgency = agency
         save(observation: observation)
@@ -285,9 +284,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         observation.sceneId = patient.sceneId
         observation.pin = patient.pin
         observation.version.value = (patient.version.value ?? 0) + 1
-        observation.priority.value = Priority.transported.rawValue
-        observation.transportFacility = nil
-        observation.transportAgency = nil
+        observation.setTransported(true, isTransportedLeftIndependently: true)
         save(observation: observation)
     }
 
@@ -313,6 +310,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func patientTableViewControllerDidCancel(_ vc: PatientTableViewController) {
         if vc as? ObservationTableViewController != nil {
+            tableView.setContentOffset(vc.tableView.contentOffset, animated: false)
             navigationController?.popViewController(animated: false)
         }
     }
@@ -328,13 +326,36 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     // MARK: - PriorityTableViewCellDelegate
 
     func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
-        if priority != patient.priority.value {
+        if priority != patient.priority.value, let priority = Priority(rawValue: priority) {
             let observation = PatientObservation()
             observation.sceneId = patient.sceneId
             observation.pin = patient.pin
             observation.version.value = (patient.version.value ?? 0) + 1
-            observation.priority.value = priority
+            observation.setPriority(priority)
             save(observation: observation)
+        }
+    }
+
+    func priorityTableViewCellDidPressCancelTransport(_ cell: PriorityTableViewCell) {
+        let alert = UIAlertController(title: "PatientTableViewController.confirmCancelTransport.title".localized,
+                                      message: "PatientTableViewController.confirmCancelTransport.message".localized,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Button.confirm".localized, style: .destructive, handler: { [weak self] (_) in
+            guard let self = self else { return }
+            self.cancelTransport()
+        }))
+        presentAnimated(alert)
+    }
+
+    func priorityTableViewCellDidPressTransport(_ cell: PriorityTableViewCell) {
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Facilities")
+        if let vc = vc as? FacilitiesTableViewController {
+            vc.observation = patient.asObservation()
+            let navVC = UINavigationController(rootViewController: vc)
+            navVC.delegate = self
+            navVC.navigationBar.isHidden = true
+            presentAnimated(navVC)
         }
     }
 
@@ -398,7 +419,11 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         switch section {
         case Section.location.rawValue:
-            return "PatientTableViewController.location".localized
+            if patient.isTransported {
+                return "PatientTableViewController.transport".localized
+            } else {
+                return "PatientTableViewController.location".localized
+            }
         case Section.vitals.rawValue:
             return "PatientTableViewController.vitals".localized
         case Section.observations.rawValue:
@@ -417,7 +442,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         case Section.priority.rawValue:
             return 1
         case Section.location.rawValue:
-            return 2
+            return patient.isTransported ? (patient.isTransportedLeftIndependently ? 1 : 2) : 1
         case Section.vitals.rawValue:
             return VITALS.count
         case Section.observations.rawValue:
@@ -445,34 +470,33 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
             }
         case Section.location.rawValue:
             if patient.isTransported {
-                cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
-                if let cell = cell as? AttributeTableViewCell {
-                    cell.delegate = self
-                    switch indexPath.row {
-                    case 0:
-                        cell.attributes = [Patient.Keys.transportFacility]
-                    case 1:
-                        cell.attributes = [Patient.Keys.transportAgency]
-                    default:
-                        break
-                    }
-                    cell.attributeTypes = [.object]
-                }
-            } else {
-                if indexPath.row == 0 {
-                    cell = tableView.dequeueReusableCell(withIdentifier: "Location", for: indexPath)
-                    if let cell = cell as? AttributeTableViewCell {
-                        cell.delegate = self
-                        cell.attributes = [Patient.Keys.location]
-                        cell.attributeTypes = [.string]
-                    }
-                } else {
+                if patient.isTransportedLeftIndependently {
                     cell = tableView.dequeueReusableCell(withIdentifier: "Section", for: indexPath)
                     if let cell = cell as? SectionInfoTableViewCell {
-                        cell.button.buttonLabel = "Button.transport".localized
-                        cell.button.buttonImage = UIImage(named: "Transport")
-                        cell.button.addTarget(self, action: #selector(transportPressed), for: .touchUpInside)
+                        cell.button.isHidden = true
+                        cell.label.text = "PatientTableViewController.transport.leftIndependently".localized
                     }
+                } else {
+                    cell = tableView.dequeueReusableCell(withIdentifier: "Attribute", for: indexPath)
+                    if let cell = cell as? AttributeTableViewCell {
+                        cell.delegate = self
+                        switch indexPath.row {
+                        case 0:
+                            cell.attributes = [Patient.Keys.transportFacility]
+                        case 1:
+                            cell.attributes = [Patient.Keys.transportAgency]
+                        default:
+                            break
+                        }
+                        cell.attributeTypes = [.object]
+                    }
+                }
+            } else {
+                cell = tableView.dequeueReusableCell(withIdentifier: "Location", for: indexPath)
+                if let cell = cell as? AttributeTableViewCell {
+                    cell.delegate = self
+                    cell.attributes = [Patient.Keys.location]
+                    cell.attributeTypes = [.string]
                 }
             }
         case Section.observations.rawValue:

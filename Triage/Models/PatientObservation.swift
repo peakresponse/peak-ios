@@ -75,6 +75,9 @@ class PatientObservation: Patient {
         if priority.value != source.priority.value {
             observation.priority.value = priority.value
         }
+        if filterPriority.value != source.filterPriority.value {
+            observation.filterPriority.value = filterPriority.value
+        }
         if location != source.location {
             observation.location = location
         }
@@ -92,6 +95,12 @@ class PatientObservation: Patient {
         }
         if audioFile != source.audioFile {
             observation.audioFile = audioFile
+        }
+        if isTransported != source.isTransported {
+            observation.isTransported = isTransported
+        }
+        if isTransportedLeftIndependently != source.isTransportedLeftIndependently {
+            observation.isTransportedLeftIndependently = isTransportedLeftIndependently
         }
         if transportAgency != source.transportAgency {
             observation.transportAgency = transportAgency

@@ -10,15 +10,20 @@ import UIKit
 
 @objc protocol PriorityTableViewCellDelegate {
     @objc optional func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int)
+    @objc optional func priorityTableViewCellDidPressCancelTransport(_ cell: PriorityTableViewCell)
+    @objc optional func priorityTableViewCellDidPressTransport(_ cell: PriorityTableViewCell)
     @objc optional func priorityTableViewCellDidSetEditing(_ cell: PriorityTableViewCell)
 }
 
 class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
-    var isEditingOverride = false
     weak var stackView: UIStackView!
     var stackViewBottomConstraint: NSLayoutConstraint!
     weak var statusButton: UIButton!
     weak var updateButton: FormButton!
+    weak var transportButton: FormButton!
+    weak var cancelTransportButton: FormButton!
+    weak var statusBeforeTransportView: UIView!
+    weak var statusBeforeTransportButton: UIButton!
     weak var priorityView: PriorityView!
     var priorityViewBottomConstraint: NSLayoutConstraint!
     weak var delegate: PriorityTableViewCellDelegate?
@@ -43,9 +48,10 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
 
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.alignment = .leading
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
         stackView.axis = .horizontal
-        stackView.spacing = 7
+        stackView.spacing = 11
         contentView.addSubview(stackView)
         stackViewBottomConstraint = contentView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10)
         NSLayoutConstraint.activate([
@@ -61,29 +67,78 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
         statusButton.isUserInteractionEnabled = false
         statusButton.titleLabel?.font = .copySBold
         stackView.addArrangedSubview(statusButton)
-        NSLayoutConstraint.activate([
-            statusButton.heightAnchor.constraint(equalToConstant: 46)
-        ])
         self.statusButton = statusButton
 
-        let updateButtonView = UIView()
-        updateButtonView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(updateButtonView)
-        NSLayoutConstraint.activate([
-            updateButtonView.widthAnchor.constraint(equalTo: statusButton.widthAnchor, multiplier: 2)
-        ])
+        let buttonStackView = UIStackView()
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.axis = .vertical
+        buttonStackView.spacing = 7
+        stackView.addArrangedSubview(buttonStackView)
 
         let updateButton = FormButton(size: .xsmall, style: .lowPriority)
         updateButton.translatesAutoresizingMaskIntoConstraints = false
         updateButton.addTarget(self, action: #selector(updatePressed), for: .touchUpInside)
         updateButton.buttonLabel = "Button.updateStatus".localized
-        updateButtonView.addSubview(updateButton)
+        buttonStackView.addArrangedSubview(updateButton)
         NSLayoutConstraint.activate([
-            updateButton.topAnchor.constraint(equalTo: updateButtonView.topAnchor),
-            updateButton.leftAnchor.constraint(equalTo: updateButtonView.leftAnchor),
-            updateButtonView.bottomAnchor.constraint(equalTo: updateButton.bottomAnchor)
+            updateButton.widthAnchor.constraint(equalTo: buttonStackView.widthAnchor)
         ])
         self.updateButton = updateButton
+
+        let transportButton = FormButton(size: .xsmall, style: .lowPriority)
+        transportButton.translatesAutoresizingMaskIntoConstraints = false
+        transportButton.addTarget(self, action: #selector(transportPressed), for: .touchUpInside)
+        transportButton.buttonLabel = "Button.transportPatient".localized
+        buttonStackView.addArrangedSubview(transportButton)
+        NSLayoutConstraint.activate([
+            transportButton.widthAnchor.constraint(equalTo: buttonStackView.widthAnchor)
+        ])
+        self.transportButton = transportButton
+
+        let cancelTransportButton = FormButton(size: .xsmall, style: .lowPriority)
+        cancelTransportButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelTransportButton.addTarget(self, action: #selector(cancelTransportPressed), for: .touchUpInside)
+        cancelTransportButton.buttonLabel = "Button.cancelTransport".localized
+        cancelTransportButton.isHidden = true
+        buttonStackView.addArrangedSubview(cancelTransportButton)
+        NSLayoutConstraint.activate([
+            cancelTransportButton.widthAnchor.constraint(equalTo: buttonStackView.widthAnchor)
+        ])
+        self.cancelTransportButton = cancelTransportButton
+
+        let statusBeforeTransportView = UIView()
+        statusBeforeTransportView.translatesAutoresizingMaskIntoConstraints = false
+        statusBeforeTransportView.isHidden = true
+        buttonStackView.addArrangedSubview(statusBeforeTransportView)
+        NSLayoutConstraint.activate([
+            statusBeforeTransportView.heightAnchor.constraint(equalTo: cancelTransportButton.heightAnchor),
+            statusBeforeTransportView.widthAnchor.constraint(equalTo: buttonStackView.widthAnchor)
+        ])
+        self.statusBeforeTransportView = statusBeforeTransportView
+
+        let statusBeforeTransportLabel = UILabel()
+        statusBeforeTransportLabel.translatesAutoresizingMaskIntoConstraints = false
+        statusBeforeTransportLabel.font = .copyXSRegular
+        statusBeforeTransportLabel.textColor = .mainGrey
+        statusBeforeTransportLabel.text = "PriorityTableViewCell.statusBeforeTransportLabel".localized
+        statusBeforeTransportView.addSubview(statusBeforeTransportLabel)
+        NSLayoutConstraint.activate([
+            statusBeforeTransportLabel.topAnchor.constraint(equalTo: statusBeforeTransportView.topAnchor),
+            statusBeforeTransportLabel.centerXAnchor.constraint(equalTo: statusBeforeTransportView.centerXAnchor)
+        ])
+
+        let statusBeforeTransportButton = UIButton()
+        statusBeforeTransportButton.translatesAutoresizingMaskIntoConstraints = false
+        statusBeforeTransportButton.isUserInteractionEnabled = false
+        statusBeforeTransportButton.titleLabel?.font = .copySBold
+        statusBeforeTransportButton.alpha = 0.6
+        statusBeforeTransportView.addSubview(statusBeforeTransportButton)
+        NSLayoutConstraint.activate([
+            statusBeforeTransportButton.topAnchor.constraint(equalTo: statusBeforeTransportLabel.bottomAnchor, constant: 4),
+            statusBeforeTransportButton.widthAnchor.constraint(equalTo: statusBeforeTransportView.widthAnchor),
+            statusBeforeTransportButton.bottomAnchor.constraint(equalTo: statusBeforeTransportView.bottomAnchor)
+        ])
+        self.statusBeforeTransportButton = statusBeforeTransportButton
 
         let priorityView = PriorityView()
         priorityView.translatesAutoresizingMaskIntoConstraints = false
@@ -103,18 +158,36 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
         priorityView.select(priority: patient.priority.value)
 
         if let priority = patient.priority.value {
+            statusBeforeTransportButton.setTitle("Patient.priority.\(priority)".localized, for: .normal)
+            statusBeforeTransportButton.setTitleColor(PRIORITY_LABEL_COLORS[priority], for: .normal)
+            statusBeforeTransportButton.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[priority], cornerRadius: 5),
+                                                           for: .normal)
+        }
+        if let priority = patient.filterPriority.value {
             statusButton.setTitle("Patient.priority.\(priority)".localized, for: .normal)
             statusButton.setTitleColor(PRIORITY_LABEL_COLORS[priority], for: .normal)
             statusButton.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[priority], cornerRadius: 5), for: .normal)
         }
+
+        if patient.isTransported {
+            updateButton.isHidden = true
+            transportButton.isHidden = true
+            cancelTransportButton.isHidden = false
+            statusBeforeTransportView.isHidden = false
+        } else {
+            updateButton.isHidden = false
+            transportButton.isHidden = false
+            cancelTransportButton.isHidden = true
+            statusBeforeTransportView.isHidden = true
+        }
+
+        setPriorityViewVisible(patient.priority.value == nil)
     }
 
-    override func setEditing(_ editing: Bool, animated: Bool) {
-        super.setEditing(editing, animated: animated)
-
+    func setPriorityViewVisible(_ isVisible: Bool) {
         stackViewBottomConstraint.isActive = false
         priorityViewBottomConstraint.isActive = false
-        if editing || isEditingOverride {
+        if isVisible {
             stackView.isHidden = true
             priorityView.isHidden = false
             priorityViewBottomConstraint.isActive = true
@@ -125,21 +198,24 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
         }
     }
 
+    @objc func cancelTransportPressed() {
+        delegate?.priorityTableViewCellDidPressCancelTransport?(self)
+    }
+
+    @objc func transportPressed() {
+        delegate?.priorityTableViewCellDidPressTransport?(self)
+    }
+
     @objc func updatePressed() {
-        isEditingOverride = true
-        setEditing(true, animated: false)
+        setPriorityViewVisible(true)
         delegate?.priorityTableViewCellDidSetEditing?(self)
     }
 
     // MARK: - PriorityViewDelegate
 
     func priorityView(_ view: PriorityView, didSelect priority: Int) {
-        let isEditingOverride = self.isEditingOverride
-        self.isEditingOverride = false
         delegate?.priorityTableViewCell?(self, didSelect: priority)
-        if isEditingOverride {
-            setEditing(false, animated: false)
-            delegate?.priorityTableViewCellDidSetEditing?(self)
-        }
+        setPriorityViewVisible(false)
+        delegate?.priorityTableViewCellDidSetEditing?(self)
     }
 }

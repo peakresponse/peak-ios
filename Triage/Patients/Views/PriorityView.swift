@@ -64,21 +64,23 @@ class PriorityView: UIView {
                 view.heightAnchor.constraint(equalToConstant: 46)
             ])
 
-            let button = UIButton(type: .custom)
-            button.setTitle("Patient.priority.\(index)".localized, for: .normal)
-            button.setTitleColor(PRIORITY_LABEL_COLORS[index], for: .normal)
-            button.titleLabel?.font = .copySBold
-            button.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[index], cornerRadius: 5), for: .normal)
-            button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(button)
-            NSLayoutConstraint.activate([
-                button.topAnchor.constraint(equalTo: view.topAnchor),
-                button.leftAnchor.constraint(equalTo: view.leftAnchor),
-                button.rightAnchor.constraint(equalTo: view.rightAnchor),
-                button.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            ])
-            buttons.append(button)
+            if index < 5 {
+                let button = UIButton(type: .custom)
+                button.setTitle("Patient.priority.\(index)".localized, for: .normal)
+                button.setTitleColor(PRIORITY_LABEL_COLORS[index], for: .normal)
+                button.titleLabel?.font = .copySBold
+                button.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[index], cornerRadius: 5), for: .normal)
+                button.addTarget(self, action: #selector(buttonPressed(_:)), for: .touchUpInside)
+                button.translatesAutoresizingMaskIntoConstraints = false
+                view.addSubview(button)
+                NSLayoutConstraint.activate([
+                    button.topAnchor.constraint(equalTo: view.topAnchor),
+                    button.leftAnchor.constraint(equalTo: view.leftAnchor),
+                    button.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    button.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+                ])
+                buttons.append(button)
+            }
         }
         return stackView
     }

@@ -15,7 +15,7 @@ class Base: Object {
         static let updatedAt = "updatedAt"
     }
 
-    @objc dynamic var id: String = UUID().uuidString.lowercased()
+    @objc dynamic var id = UUID().uuidString.lowercased()
     @objc dynamic var createdAt: Date?
     @objc dynamic var updatedAt: Date?
     var updatedAtRelativeString: String {
@@ -39,8 +39,12 @@ class Base: Object {
         if let value = data[Keys.id] as? String {
             id = value
         }
-        createdAt = ISO8601DateFormatter.date(from: data[Keys.createdAt]) ?? Date()
-        updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt]) ?? Date()
+        if data.index(forKey: Keys.createdAt) != nil {
+            createdAt = ISO8601DateFormatter.date(from: data[Keys.createdAt]) ?? Date()
+        }
+        if data.index(forKey: Keys.updatedAt) != nil {
+            updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt]) ?? Date()
+        }
     }
 
     func asJSON() -> [String: Any] {
