@@ -39,6 +39,16 @@ class PatientObservationTests: XCTestCase {
         XCTAssertEqual(sources?.count, 1)
     }
 
+    func testExtractComplaint() {
+        let sample =
+            "Patients name is Mary Thomas 28 years old female she has a gunshot wound to the abdomen respiratory rate 20 total gcs score 3"
+        let observation = PatientObservation()
+        let source = UUID().uuidString
+        observation.extractValues(from: sample, sourceId: source, metadata: metadata, isFinal: true)
+        let prediction = observation.predictions?["complaint"] as? [String: Any]
+        XCTAssertEqual(prediction?["value"] as? String, "she has a gunshot wound to the abdomen")
+    }
+
     func testExtractName() {
         let samples = [
             "Patients name is Mary Thomas",

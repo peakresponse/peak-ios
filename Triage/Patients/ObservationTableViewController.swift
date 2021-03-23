@@ -66,8 +66,8 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
+        tableView.setEditing(editing, animated: animated)
         if startingOffsetY >= 0 {
-            tableView.setEditing(editing, animated: animated)
             tableView.setContentOffset(CGPoint(x: 0, y: startingOffsetY), animated: false)
             startingOffsetY = -1
         }

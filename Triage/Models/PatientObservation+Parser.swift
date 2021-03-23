@@ -81,7 +81,7 @@ private let MAPPINGS_PRIORITY = [
 ]
 
 private let MATCHERS: [Matcher] = [
-    Matcher(pattern: #"name(?: is)? (?<firstName>[^ .,]+)(?: (?<lastName>[^ .,]+))?"#),
+    Matcher(pattern: #"(?:patient(?:s|'s)? )?name(?: is)? (?<firstName>[^ .,]+)(?: (?<lastName>[^ .,]+))?"#),
     Matcher(pattern: #"first name(?: is)? (?<firstName>[^ .,]+)"#),
     Matcher(pattern: #"last name(?: is)? (?<lastName>[^ .,]+)"#),
     Matcher(pattern: #"age (?<age>"# + PATTERN_NUMBERS + #")"#),
@@ -109,7 +109,7 @@ private let MATCHERS: [Matcher] = [
                 "capillaryRefill": MAPPINGS_NUMBERS
             ]),
     Matcher(pattern: #"(?:(?:blood pressure)|bp) (?:is )?(?<bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
-    Matcher(pattern: #"(?:(?:glasgow coma scale|score)|gcs) (?:is )?(?<gcsTotal>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is )?(?<gcsTotal>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "gcsTotal": MAPPINGS_NUMBERS
             ])
@@ -117,9 +117,10 @@ private let MATCHERS: [Matcher] = [
 // swiftlint:enable force_try line_length
 
 extension PatientObservation {
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
+        // apply every matcher across the full text
         for matcher in MATCHERS {
             if let match = matcher.expr.firstMatch(in: text, options: [], range: range) {
                 for group in matcher.groups {
@@ -141,6 +142,10 @@ extension PatientObservation {
                                 "location": range.location,
                                 "length": range.length
                             ],
+                            "sourceRange": [
+                                "location": match.range.location,
+                                "length": match.range.length
+                            ],
                             "value": value,
                             "status": PredictionStatus.unconfirmed.rawValue
                         ]
@@ -160,10 +165,32 @@ extension PatientObservation {
             // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
             var predictions = self.predictions ?? [:]
             var sourceIds: [String] = []
-            for (key, value) in predictions {
-                if key != "_sources", let value = value as? [String: Any], let sourceId = value["sourceId"] as? String {
-                    sourceIds.append(sourceId)
+            // also try to extract remainder of transcript as the chief complaint
+            var complaint: NSString = text as NSString
+            for (key, value) in predictions where key != "_sources" {
+                if let value = value as? [String: Any] {
+                    if let sourceId = value["sourceId"] as? String {
+                        sourceIds.append(sourceId)
+                    }
+                    if let range = value["sourceRange"] as? [String: Any],
+                       let location = range["location"] as? Int, let length = range["length"] as? Int {
+                        let range = NSRange(location: location, length: length)
+                        complaint = complaint.replacingCharacters(in: range, with: String(repeating: " ", count: length)) as NSString
+                    }
                 }
+            }
+            // swiftlint:disable:next force_try
+            let spacesExpr = try! NSRegularExpression(pattern: " {2,}")
+            complaint = spacesExpr.stringByReplacingMatches(in: complaint as String,
+                                                            options: [],
+                                                            range: NSRange(location: 0, length: complaint.length),
+                                                            withTemplate: "").trimmingCharacters(in: .whitespacesAndNewlines) as NSString
+            if complaint != "" {
+                predictions["complaint"] = [
+                    "value": complaint,
+                    "status": PredictionStatus.unconfirmed.rawValue
+                ]
+                setValue(complaint, forKey: Patient.Keys.complaint)
             }
             var sources = predictions["_sources"] as? [String: Any] ?? [:]
             for key in sources.keys {
