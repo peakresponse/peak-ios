@@ -119,6 +119,8 @@ private let MATCHERS: [Matcher] = [
 extension PatientObservation {
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
+        // extract remainder of transcript as the chief complaint
+        var complaint: NSString = text as NSString
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         // apply every matcher across the full text
         for matcher in MATCHERS {
@@ -157,16 +159,35 @@ extension PatientObservation {
                         ]
                         predictions["_sources"] = sources
                         self.predictions = predictions
+                        // erase this match from the complaint text
+                        complaint = complaint.replacingCharacters(in: match.range,
+                                                                  with: String(repeating: " ", count: match.range.length)) as NSString
                     }
                 }
             }
         }
-        if isFinal {
-            // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
+        // assign the complain text
+        // swiftlint:disable:next force_try
+        let spacesExpr = try! NSRegularExpression(pattern: " {2,}")
+        complaint = spacesExpr.stringByReplacingMatches(in: complaint as String,
+                                                        options: [],
+                                                        range: NSRange(location: 0, length: complaint.length),
+                                                        withTemplate: "").trimmingCharacters(in: .whitespacesAndNewlines) as NSString
+        if complaint != "" {
             var predictions = self.predictions ?? [:]
+            predictions["complaint"] = [
+                "sourceId": sourceId,
+                "value": complaint,
+                "status": PredictionStatus.unconfirmed.rawValue
+            ]
+            setValue(complaint, forKey: Patient.Keys.complaint)
+        }
+        if isFinal {
+            var predictions = self.predictions ?? [:]
+            // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
             var sourceIds: [String] = []
-            // also try to extract remainder of transcript as the chief complaint
-            var complaint: NSString = text as NSString
+            // create a final complaint extraction
+            complaint = text as NSString
             for (key, value) in predictions where key != "_sources" {
                 if let value = value as? [String: Any] {
                     if let sourceId = value["sourceId"] as? String {
@@ -179,8 +200,6 @@ extension PatientObservation {
                     }
                 }
             }
-            // swiftlint:disable:next force_try
-            let spacesExpr = try! NSRegularExpression(pattern: " {2,}")
             complaint = spacesExpr.stringByReplacingMatches(in: complaint as String,
                                                             options: [],
                                                             range: NSRange(location: 0, length: complaint.length),
