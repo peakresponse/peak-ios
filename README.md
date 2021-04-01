@@ -64,7 +64,8 @@ through Apple Business Manager or for source code dual-licensing options.
 ## License
 
 Peak Response
-Copyright (C) 2019-2020 Peak Response Inc
+
+Copyright (C) 2019-2021 Peak Response Inc
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
