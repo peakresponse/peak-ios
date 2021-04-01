@@ -46,17 +46,20 @@ Peak Response (formerly NaT/NaTriage) was developed as part of the 2019 Tech to 
 ## Distribution
 
 This source code is licensed under the GNU General Public License, which is
-_incompatible_ with the terms of the Apple App Store. There is no authorized
-distribution of this app in the App Store, and any such listing should be
-considered fraudulent malware.
+_incompatible_ with the terms of the Apple App Store. Only Peak Response,
+as the original copyright holder, maintains an official release in the
+App Store at the following link:
 
-For evaluation purposes, I will be distributing an expiring beta build
-of this app using TestFlight, from my own personal App Store account.
+https://apps.apple.com/us/app/peak-response/id1532180261
 
-An organization interested in this software should sign up for the Apple
-Developer Enterprise Program. The app can then be customized, built, and
-directly distributed within the organization using any iOS compatible
-MDM (Mobile Device Management) solution.
+An organization interested in deploying this software for private internal
+use can sign up for the Apple Developer Enterprise Program. The app can then
+be customized, built, and directly distributed within the organization using
+an iOS compatible MDM (Mobile Device Management) solution, bypassing the
+Apple App Store.
+
+Other interested parties can contact Peak Response for custom apps distributed
+through Apple Business Manager or for source code dual-licensing options.
 
 ## License
 
