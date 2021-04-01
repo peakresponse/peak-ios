@@ -63,8 +63,7 @@ through Apple Business Manager or for source code dual-licensing options.
 
 ## License
 
-Peak Response
-
+Peak Response  
 Copyright (C) 2019-2021 Peak Response Inc
 
 This program is free software: you can redistribute it and/or modify
