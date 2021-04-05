@@ -126,22 +126,22 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
     }
 
     func audioHelper(_ audioHelper: AudioHelper, didRequestRecordAuthorization status: AVAudioSession.RecordPermission) {
-        if status == .granted {
-            startRecording()
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if status == .granted {
+                self.startRecording()
+            } else {
                 self.delegate?.recordingViewController?(self, didThrowError: AudioHelperError.recordNotAuthorized)
             }
         }
     }
 
     func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
-        if status == .authorized {
-            startRecording()
-        } else {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if status == .authorized {
+                self.startRecording()
+            } else {
                 self.delegate?.recordingViewController?(self, didThrowError: AudioHelperError.speechRecognitionNotAuthorized)
             }
         }
