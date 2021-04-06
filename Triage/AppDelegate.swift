@@ -26,11 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static func leaveScene() {
         AppSettings.sceneId = nil
-        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController() {
-            for window in UIApplication.shared.windows where window.isKeyWindow {
-                window.rootViewController = vc
-                break
-            }
+        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NoActiveScene")
+        for window in UIApplication.shared.windows where window.isKeyWindow {
+            window.rootViewController = vc
+            break
         }
     }
 
