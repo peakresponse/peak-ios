@@ -1,24 +1,27 @@
 PODS:
-  - Google-Maps-iOS-Utils (3.4.1):
-    - Google-Maps-iOS-Utils/Clustering (= 3.4.1)
-    - Google-Maps-iOS-Utils/Geometry (= 3.4.1)
-    - Google-Maps-iOS-Utils/Heatmap (= 3.4.1)
-    - Google-Maps-iOS-Utils/QuadTree (= 3.4.1)
+  - Google-Maps-iOS-Utils (3.9.0):
+    - Google-Maps-iOS-Utils/Clustering (= 3.9.0)
+    - Google-Maps-iOS-Utils/Geometry (= 3.9.0)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 3.9.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.9.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.9.0)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (3.4.1):
+  - Google-Maps-iOS-Utils/Clustering (3.9.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (3.4.1):
+  - Google-Maps-iOS-Utils/Geometry (3.9.0):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (3.4.1):
+  - Google-Maps-iOS-Utils/GeometryUtils (3.9.0):
+    - GoogleMaps
+  - Google-Maps-iOS-Utils/Heatmap (3.9.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (3.4.1):
+  - Google-Maps-iOS-Utils/QuadTree (3.9.0):
     - GoogleMaps
-  - GoogleMaps (4.0.0):
-    - GoogleMaps/Maps (= 4.0.0)
-  - GoogleMaps/Base (4.0.0)
-  - GoogleMaps/Maps (4.0.0):
+  - GoogleMaps (4.2.0):
+    - GoogleMaps/Maps (= 4.2.0)
+  - GoogleMaps/Base (4.2.0)
+  - GoogleMaps/Maps (4.2.0):
     - GoogleMaps/Base
   - Keys (1.0.1)
   - Realm (10.1.1):
@@ -51,8 +54,8 @@ EXTERNAL SOURCES:
     :path: Pods/CocoaPodsKeys
 
 SPEC CHECKSUMS:
-  Google-Maps-iOS-Utils: 9a3bfc50dab84dda55ab7fd1c3af39120798ea57
-  GoogleMaps: b7f7fc569a9b354a3af0d9729dbec40957b7d41e
+  Google-Maps-iOS-Utils: ae3b4e74b2d734454be32cf62ba8d6ad7283e0c1
+  GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   Realm: 784ca1da1453e31a9c9adc14445421a81f316119
   RealmSwift: cc52fe0dcea56387274dff36e19219e055a3bb84
