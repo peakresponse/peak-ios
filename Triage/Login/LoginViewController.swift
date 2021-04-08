@@ -73,10 +73,6 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                                     } else if let userId = userId, let agencyId = agencyId {
                                         // check if the user or scene has changed since last login
                                         if userId != AppSettings.userId || sceneId != AppSettings.sceneId {
-                                            // if agency has changed, ensure all data deleted
-                                            if agencyId != AppSettings.agencyId {
-                                                AppRealm.deleteAll()
-                                            }
                                             // set new login ids, and navigate as needed
                                             AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
                                             if let sceneId = sceneId {
