@@ -34,6 +34,7 @@
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
 "Button.record" = "Record";
+"Button.retry" = "Retry";
 "Button.save" = "Save";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";

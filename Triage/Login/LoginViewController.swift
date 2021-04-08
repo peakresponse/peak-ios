@@ -71,13 +71,22 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                                     if let error = error {
                                         self.presentAlert(error: error)
                                     } else if let userId = userId, let agencyId = agencyId {
-                                        AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
-                                        if let sceneId = sceneId {
-                                            AppDelegate.enterScene(id: sceneId)
+                                        // check if the user or scene has changed since last login
+                                        if userId != AppSettings.userId || sceneId != AppSettings.sceneId {
+                                            // if agency has changed, ensure all data deleted
+                                            if agencyId != AppSettings.agencyId {
+                                                AppRealm.deleteAll()
+                                            }
+                                            // set new login ids, and navigate as needed
+                                            AppSettings.login(userId: userId, agencyId: agencyId, sceneId: sceneId)
+                                            if let sceneId = sceneId {
+                                                AppDelegate.enterScene(id: sceneId)
+                                            } else {
+                                                AppDelegate.leaveScene()
+                                            }
                                         } else {
-                                            AppRealm.connect()
+                                            self.loginDelegate?.loginViewControllerDidLogin?(self)
                                         }
-                                        self.loginDelegate?.loginViewControllerDidLogin?(self)
                                     } else {
                                         self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                                     }

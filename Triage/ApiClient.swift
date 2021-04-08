@@ -151,7 +151,7 @@ class ApiClient {
             case .ping:
                 break
             case .pong:
-                break
+                completionHandler(socket, nil, nil)
             case .viabilityChanged:
                 break
             case .reconnectSuggested:

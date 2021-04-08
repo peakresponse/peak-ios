@@ -26,9 +26,19 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "agencyId") }
     }
 
+    static var lastPingDate: Date? {
+        get { return defaults.object(forKey: "lastPingDate") as? Date }
+        set { defaults.set(newValue, forKey: "lastPingDate") }
+    }
+
     static var sceneId: String? {
         get { return defaults.string(forKey: "sceneId") }
         set { defaults.set(newValue, forKey: "sceneId") }
+    }
+
+    static var lastScenePingDate: Date? {
+        get { return defaults.object(forKey: "lastScenePingDate") as? Date }
+        set { defaults.set(newValue, forKey: "lastScenePingDate") }
     }
 
     static var subdomain: String? {

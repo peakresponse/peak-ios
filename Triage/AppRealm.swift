@@ -117,6 +117,8 @@ class AppRealm {
                         realm.add(scenes, update: .modified)
                     }
                 }
+            } else {
+                AppSettings.lastPingDate = Date()
             }
         })
         agencySocket?.connect()
@@ -435,6 +437,10 @@ class AppRealm {
                         realm.add(responders, update: .modified)
                     }
                 }
+            } else {
+                let now = Date()
+                AppSettings.lastPingDate = now
+                AppSettings.lastScenePingDate = now
             }
         }
         sceneSocket?.connect()

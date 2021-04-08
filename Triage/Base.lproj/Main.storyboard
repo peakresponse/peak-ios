@@ -162,9 +162,23 @@
                                     <constraint firstAttribute="width" secondItem="41s-A0-psR" secondAttribute="height" multiplier="332:88" id="r0b-oe-yRf"/>
                                 </constraints>
                             </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="MJL-BI-ndK">
-                                <rect key="frame" x="188.5" y="547" width="37" height="37"/>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MJL-BI-ndK">
+                                <rect key="frame" x="188.5" y="572" width="37" height="37"/>
+                                <color key="color" name="MainGrey"/>
                             </activityIndicatorView>
+                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xiw-Me-j7d" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="87" y="501" width="240" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="cc0-4Y-hSn"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.retry"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="retryPressed:" destination="eh9-7l-CQq" eventType="touchUpInside" id="19P-oI-Tvf"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Fu-hY-Rw9"/>
                         <color key="backgroundColor" name="BgBackground"/>
@@ -173,10 +187,16 @@
                             <constraint firstItem="41s-A0-psR" firstAttribute="centerY" secondItem="6Fu-hY-Rw9" secondAttribute="centerY" id="QHj-cd-wvT"/>
                             <constraint firstItem="41s-A0-psR" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="T0r-Jw-2rl"/>
                             <constraint firstItem="MJL-BI-ndK" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="Taj-oq-Kw9"/>
-                            <constraint firstItem="MJL-BI-ndK" firstAttribute="top" secondItem="41s-A0-psR" secondAttribute="bottom" constant="50" id="npF-up-kCG"/>
+                            <constraint firstItem="Xiw-Me-j7d" firstAttribute="centerY" secondItem="MJL-BI-ndK" secondAttribute="centerY" id="XYc-DO-cZg"/>
+                            <constraint firstItem="Xiw-Me-j7d" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="czt-jV-D0a"/>
+                            <constraint firstItem="MJL-BI-ndK" firstAttribute="top" secondItem="41s-A0-psR" secondAttribute="bottom" constant="75" id="npF-up-kCG"/>
                             <constraint firstItem="41s-A0-psR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Fu-hY-Rw9" secondAttribute="leading" constant="22" id="ztI-bf-wP6"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="activityIndicatorView" destination="MJL-BI-ndK" id="63v-yb-sxf"/>
+                        <outlet property="retryButton" destination="Xiw-Me-j7d" id="phl-Z1-ljI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qbg-E4-dCP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -248,14 +268,6 @@
             <point key="canvasLocation" x="1323" y="0.0"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="W28-zg-YXA">
-            <size key="intrinsicContentSize" width="-1" height="83"/>
-        </designable>
-        <designable name="hum-RW-fwI">
-            <size key="intrinsicContentSize" width="-1" height="83"/>
-        </designable>
-    </designables>
     <resources>
         <image name="Agency" width="30" height="32"/>
         <image name="AgencySelected" width="30" height="32"/>
@@ -270,6 +282,9 @@
         <image name="UsersSelected" width="36" height="32"/>
         <namedColor name="BgBackground">
             <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="MainGrey">
+            <color red="0.23899999260902405" green="0.31400001049041748" blue="0.3449999988079071" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
