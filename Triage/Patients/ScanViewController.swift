@@ -218,6 +218,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
 
     // MARK: - ObservationViewControllerDelegate
 
+    func observationViewControllerDidCancel(_ vc: ObservationViewController) {
+        dismissAnimated()
+    }
+
     func observationViewControllerDidSave(_ vc: ObservationViewController) {
         dismissAnimated()
     }

@@ -10,6 +10,7 @@ import Speech
 import UIKit
 
 @objc protocol ObservationViewControllerDelegate {
+    @objc optional func observationViewControllerDidCancel(_ vc: ObservationViewController)
     @objc optional func observationViewControllerDidSave(_ vc: ObservationViewController)
 }
 
@@ -17,7 +18,7 @@ class ObservationViewController: PatientViewController {
     weak var delegate: ObservationViewControllerDelegate?
 
     func patientTableViewControllerDidCancel(_ vc: PatientTableViewController) {
-        dismissAnimated()
+        delegate?.observationViewControllerDidCancel?(self)
     }
 
     func patientTableViewControllerDidSave(_ vc: PatientTableViewController) {
