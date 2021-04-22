@@ -268,6 +268,14 @@
             <point key="canvasLocation" x="1323" y="0.0"/>
         </scene>
     </scenes>
+    <designables>
+        <designable name="W28-zg-YXA">
+            <size key="intrinsicContentSize" width="-1" height="83"/>
+        </designable>
+        <designable name="hum-RW-fwI">
+            <size key="intrinsicContentSize" width="-1" height="83"/>
+        </designable>
+    </designables>
     <resources>
         <image name="Agency" width="30" height="32"/>
         <image name="AgencySelected" width="30" height="32"/>

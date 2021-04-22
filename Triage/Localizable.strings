@@ -33,6 +33,7 @@
 "Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.ok" = "OK";
 "Button.record" = "Record";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
@@ -227,6 +228,9 @@
 "SceneSummaryViewController.patients" = "Patients";
 "SceneSummaryViewController.notes" = "Notes";
 "SceneSummaryViewController.photos" = "Photos";
+
+"SceneTabBarController.closed.title" = "This scene has been closed by MGS";
+"SceneTabBarController.closed.message" = "You will be able to add and update information for the next 24 hours.";
 
 "SceneTableViewCell.patientsLabel" = "%d Patients Total";
 "SceneTableViewCell.respondersLabel" = "%d First Responders";

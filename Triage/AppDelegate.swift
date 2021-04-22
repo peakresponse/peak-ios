@@ -24,13 +24,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
     }
 
-    static func leaveScene() {
+    static func leaveScene() -> UIViewController {
         AppSettings.sceneId = nil
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NoActiveScene")
         for window in UIApplication.shared.windows where window.isKeyWindow {
             window.rootViewController = vc
             break
         }
+        return vc
     }
 
     func application(_ application: UIApplication,
