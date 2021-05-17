@@ -73,6 +73,8 @@ class AppRealm {
     private static var agencySocket: WebSocket?
     private static var sceneSocket: WebSocket?
 
+    private static var locationHelper: LocationHelper?
+
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
             return AppRealm.main
@@ -273,6 +275,31 @@ class AppRealm {
     }
 
     // MARK: - Scene
+
+    public static func captureLocation(sceneId: String) {
+        DispatchQueue.main.async {
+            let locationHelper = LocationHelper()
+            locationHelper.didUpdateLocations = { (locations) in
+                if let location = locations.last {
+                    let lat = String(format: "%.6f", location.coordinate.latitude)
+                    let lng = String(format: "%.6f", location.coordinate.longitude)
+                    let op = RequestOperation()
+                    op.request = { (completionHandler) in
+                        return ApiClient.shared.updateScene(sceneId: sceneId, data: ["lat": lat, "lng": lng]) { (_, error) in
+                            completionHandler(error)
+                        }
+                    }
+                    AppRealm.queue.addOperation(op)
+                }
+                AppRealm.locationHelper = nil
+            }
+            locationHelper.didFailWithError = { (error) in
+                AppRealm.locationHelper = nil
+            }
+            AppRealm.locationHelper = locationHelper
+            locationHelper.requestLocation()
+        }
+    }
 
     public static func getScenes(completionHandler: @escaping (Error?) -> Void) {
         let task = ApiClient.shared.getScenes { (records, error) in

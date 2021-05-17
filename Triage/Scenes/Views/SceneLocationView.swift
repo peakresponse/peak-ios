@@ -75,6 +75,6 @@ class SceneLocationView: UIView {
     func configure(from scene: Scene) {
         gpsLabel.text = scene.latLngString
         zipLabel.text = scene.zip
-        startLabel.text = scene.createdAt?.description
+        startLabel.text = scene.createdAt?.asTimeDateString()
     }
 }

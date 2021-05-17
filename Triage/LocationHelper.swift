@@ -17,6 +17,8 @@ import Foundation
 class LocationHelper: NSObject, CLLocationManagerDelegate {
     var locationManager: CLLocationManager!
     weak var delegate: LocationHelperDelegate?
+    var didUpdateLocations: (([CLLocation]) -> Void)?
+    var didFailWithError: ((Error) -> Void)?
 
     override init() {
         super.init()
@@ -50,9 +52,11 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         delegate?.locationHelper?(self, didUpdateLocations: locations)
+        didUpdateLocations?(locations)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         delegate?.locationHelper?(self, didFailWithError: error)
+        didFailWithError?(error)
     }
 }

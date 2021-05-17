@@ -37,6 +37,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         locationHelper = LocationHelper()
         locationHelper.delegate = self
         locationHelper.requestLocation()
+        locationView.configure(from: scene)
         locationView.activityIndicatorView.startAnimating()
 
         approxPatientsField.textField.keyboardType = .numberPad
@@ -71,6 +72,9 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
                 self.presentAlert(error: error)
             } else if let scene = scene {
                 let sceneId = scene.id
+                if !scene.hasLatLng {
+                    AppRealm.captureLocation(sceneId: sceneId)
+                }
                 DispatchQueue.main.async {
                     AppRealm.open().refresh()
                     AppDelegate.enterScene(id: sceneId)
