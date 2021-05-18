@@ -45,8 +45,7 @@ class PatientObservationTests: XCTestCase {
         let observation = PatientObservation()
         let source = UUID().uuidString
         observation.extractValues(from: sample, sourceId: source, metadata: metadata, isFinal: true)
-        let prediction = observation.predictions?["complaint"] as? [String: Any]
-        XCTAssertEqual(prediction?["value"] as? String, "she has a gunshot wound to the abdomen")
+        XCTAssertEqual(observation.complaint, "she has a gunshot wound to the abdomen")
     }
 
     func testExtractName() {
@@ -105,6 +104,7 @@ class PatientObservationTests: XCTestCase {
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.age.value, 28, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
+            XCTAssertEqual(observation.complaint, "")
         }
 
         samples = [
@@ -125,21 +125,27 @@ class PatientObservationTests: XCTestCase {
         var samples: [String]!
 
         samples = [
-            "male"
+            "male",
+            "gender male",
+            "gender is male"
         ]
         for sample in samples {
             let observation = PatientObservation()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.male.rawValue)
+            XCTAssertEqual(observation.complaint, "")
         }
 
         samples = [
-            "female"
+            "female",
+            "gender female",
+            "gender is female"
         ]
         for sample in samples {
             let observation = PatientObservation()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(observation.gender, PatientGender.female.rawValue)
+            XCTAssertEqual(observation.complaint, "")
         }
 
         samples = [

@@ -90,7 +90,7 @@ private let MATCHERS: [Matcher] = [
                 "age": MAPPINGS_NUMBERS,
                 "ageUnits": MAPPINGS_AGE_UNITS
             ]),
-    Matcher(pattern: #"(?<gender>male|female|trans(?:gender)? male|trans(?:gender)? female)"#,
+    Matcher(pattern: #"(?:gender (?:is )?)?(?<gender>male|female|trans(?:gender)? male|trans(?:gender)? female)"#,
             mappings: [
                 "gender": MAPPINGS_GENDER
             ]),
@@ -173,15 +173,14 @@ extension PatientObservation {
                                                         options: [],
                                                         range: NSRange(location: 0, length: complaint.length),
                                                         withTemplate: "").trimmingCharacters(in: .whitespacesAndNewlines) as NSString
-        if complaint != "" {
-            var predictions = self.predictions ?? [:]
-            predictions["complaint"] = [
-                "sourceId": sourceId,
-                "value": complaint,
-                "status": PredictionStatus.unconfirmed.rawValue
-            ]
-            setValue(complaint, forKey: Patient.Keys.complaint)
-        }
+        var predictions = self.predictions ?? [:]
+        predictions["complaint"] = [
+            "sourceId": sourceId,
+            "value": complaint,
+            "status": PredictionStatus.unconfirmed.rawValue
+        ]
+        setValue(complaint, forKey: Patient.Keys.complaint)
+
         if isFinal {
             var predictions = self.predictions ?? [:]
             // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
@@ -204,13 +203,12 @@ extension PatientObservation {
                                                             options: [],
                                                             range: NSRange(location: 0, length: complaint.length),
                                                             withTemplate: "").trimmingCharacters(in: .whitespacesAndNewlines) as NSString
-            if complaint != "" {
-                predictions["complaint"] = [
-                    "value": complaint,
-                    "status": PredictionStatus.unconfirmed.rawValue
-                ]
-                setValue(complaint, forKey: Patient.Keys.complaint)
-            }
+            predictions["complaint"] = [
+                "sourceId": sourceId,
+                "value": complaint,
+                "status": PredictionStatus.unconfirmed.rawValue
+            ]
+            setValue(complaint, forKey: Patient.Keys.complaint)
             var sources = predictions["_sources"] as? [String: Any] ?? [:]
             for key in sources.keys {
                 if sourceIds.firstIndex(of: key) == nil {
