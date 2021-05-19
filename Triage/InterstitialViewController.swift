@@ -42,7 +42,7 @@ class InterstitialViewController: UIViewController {
                 if userId != nil && agencyId != nil {
                     if let lastPingDate = AppSettings.lastPingDate, lastPingDate > threshold {
                         DispatchQueue.main.async {
-                            AppDelegate.leaveScene()
+                            _ = AppDelegate.leaveScene()
                         }
                         return
                     }
@@ -67,7 +67,7 @@ class InterstitialViewController: UIViewController {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        AppDelegate.leaveScene()
+                        _ = AppDelegate.leaveScene()
                     }
                 }
             }

@@ -29,7 +29,12 @@ class PatientTests: XCTestCase {
           "lastName": "Thomas",
           "firstName": "Mary",
           "age": 23,
+          "ageUnits": "2516009",
           "dob": null,
+          "gender": "9906001",
+          "complaint": "Passes out and hits head on ground. Blood from mouth and ears.",
+          "triagePerfusion": "301155005",
+          "triageMentalStatus": "372089002",
           "respiratoryRate": 26,
           "pulse": 130,
           "capillaryRefill": 2,
@@ -62,7 +67,12 @@ class PatientTests: XCTestCase {
         XCTAssertEqual(patient?.lastName, "Thomas")
         XCTAssertEqual(patient?.firstName, "Mary")
         XCTAssertEqual(patient?.age.value, 23)
+        XCTAssertEqual(patient?.ageUnits, PatientAgeUnits.years.rawValue)
         XCTAssertNil(patient?.dob)
+        XCTAssertEqual(patient?.gender, PatientGender.female.rawValue)
+        XCTAssertEqual(patient?.complaint, "Passes out and hits head on ground. Blood from mouth and ears.")
+        XCTAssertEqual(patient?.triagePerfusion, PatientTriagePerfusion.radialPulsePresent.rawValue)
+        XCTAssertEqual(patient?.triageMentalStatus, PatientTriageMentalStatus.unableToComply.rawValue)
         XCTAssertEqual(patient?.respiratoryRate.value, 26)
         XCTAssertEqual(patient?.pulse.value, 130)
         XCTAssertEqual(patient?.capillaryRefill.value, 2)

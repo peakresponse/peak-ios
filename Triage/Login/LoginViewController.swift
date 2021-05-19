@@ -78,7 +78,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                                             if let sceneId = sceneId {
                                                 AppDelegate.enterScene(id: sceneId)
                                             } else {
-                                                AppDelegate.leaveScene()
+                                                _ = AppDelegate.leaveScene()
                                             }
                                         } else {
                                             self.loginDelegate?.loginViewControllerDidLogin?(self)

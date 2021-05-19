@@ -351,4 +351,89 @@ class PatientObservationTests: XCTestCase {
             XCTAssertEqual(observation.respiratoryRate.value, 20, "Respiratory Rate failed for: \(sample)")
         }
     }
+
+    func testExtractTriagePerfusion() {
+        var samples = [
+            "has pulse",
+            "has a pulse",
+            "have pulse",
+            "have a pulse",
+            "got pulse",
+            "got a pulse",
+            "pulse present",
+            "pulse is present",
+            "radial pulse present",
+            "radio pulses present",
+            "radial pulse is present"
+        ]
+
+        for sample in samples {
+            let observation = PatientObservation()
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(observation.triagePerfusion,
+                           PatientTriagePerfusion.radialPulsePresent.rawValue, "Perfusion failed for: \(sample)")
+        }
+
+        samples = [
+            "no pulse",
+            "pulse absent",
+            "pulse is absent",
+            "radial pulse absent",
+            "radio pulses absent",
+            "radial pulse is absent"
+        ]
+
+        for sample in samples {
+            let observation = PatientObservation()
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(observation.triagePerfusion,
+                           PatientTriagePerfusion.radialPulseAbsent.rawValue, "Perfusion failed for: \(sample)")
+        }
+    }
+
+    func testExtractTriageMentalStatus() {
+        var samples = [
+            "unresponsive",
+            "unresponsive to command",
+            "unresponsive to commands",
+            "not responsive",
+            "not responsive to command",
+            "not responsive to commands",
+            "can't follow commands",
+            "unable to follow commands"
+        ]
+
+        for sample in samples {
+            let observation = PatientObservation()
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(observation.triageMentalStatus,
+                           PatientTriageMentalStatus.unableToComply.rawValue, "Triage Mental Status failed for: \(sample)")
+        }
+
+        samples = [
+            "confused"
+        ]
+
+        for sample in samples {
+            let observation = PatientObservation()
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(observation.triageMentalStatus,
+                           PatientTriageMentalStatus.difficultyComplying.rawValue, "Triage Mental Status failed for: \(sample)")
+        }
+
+        samples = [
+            "responsive",
+            "responsive to command",
+            "responsive to commands",
+            "can follow commands"
+        ]
+
+        for sample in samples {
+            let observation = PatientObservation()
+            observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(observation.triageMentalStatus,
+                           PatientTriageMentalStatus.ableToComply.rawValue, "Triage Mental Status failed for: \(sample)")
+        }
+    }
+// swiftlint:disable:next file_length
 }

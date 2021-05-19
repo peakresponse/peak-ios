@@ -105,7 +105,7 @@ class SceneOverviewViewController: UIViewController {
     }
 
     private func leaveScene() {
-        AppDelegate.leaveScene()
+        _ = AppDelegate.leaveScene()
     }
 
     private func refresh() {
@@ -158,7 +158,7 @@ class SceneOverviewViewController: UIViewController {
 
     @IBAction func exitPressed(_ sender: Any) {
         DispatchQueue.main.async {
-            AppDelegate.leaveScene()
+            _ = AppDelegate.leaveScene()
         }
     }
 
@@ -177,7 +177,7 @@ class SceneOverviewViewController: UIViewController {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        AppDelegate.leaveScene()
+                        _ = AppDelegate.leaveScene()
                     }
                 }
             }
@@ -200,7 +200,7 @@ class SceneOverviewViewController: UIViewController {
                     }
                 } else {
                     DispatchQueue.main.async {
-                        AppDelegate.leaveScene()
+                        _ = AppDelegate.leaveScene()
                     }
                 }
             }

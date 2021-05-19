@@ -14,6 +14,8 @@ enum AttributeTableViewCellType: String {
     case object
     case age
     case gender
+    case triagePerfusion
+    case triageMentalStatus
 }
 
 @objc protocol AttributeTableViewCellDelegate {
@@ -28,7 +30,8 @@ enum AttributeTableViewCellType: String {
 }
 
 class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
-                              PatientAgeKeyboardViewDelegate, PatientGenderKeyboardViewDelegate {
+                              PatientAgeKeyboardViewDelegate, PatientGenderKeyboardViewDelegate,
+                              PatientTriageMentalStatusKeyboardViewDelegate, PatientTriagePerfusionKeyboardViewDelegate {
     weak var stackView: UIStackView!
     var fields: [FormField] = []
 
@@ -67,6 +70,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
         self.stackView = stackView
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func configure(from patient: Patient) {
         for field in fields {
             field.removeFromSuperview()
@@ -104,6 +108,16 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
                 let genderKeyboardView = PatientGenderKeyboardView(textField: field.textField, value: patient.gender)
                 genderKeyboardView.delegate = self
                 field.textField.inputView = genderKeyboardView
+            case .triageMentalStatus:
+                let triageMentalStatusKeyboardView = PatientTriageMentalStatusKeyboardView(textField: field.textField,
+                                                                                           value: patient.triageMentalStatus)
+                triageMentalStatusKeyboardView.delegate = self
+                field.textField.inputView = triageMentalStatusKeyboardView
+            case .triagePerfusion:
+                let triagePerfusionKeyboardView = PatientTriagePerfusionKeyboardView(textField: field.textField,
+                                                                                     value: patient.triagePerfusion)
+                triagePerfusionKeyboardView.delegate = self
+                field.textField.inputView = triagePerfusionKeyboardView
             default:
                 field.textField.keyboardType = .default
             }
@@ -234,5 +248,19 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
     func patientGenderKeyboardView(_ view: PatientGenderKeyboardView, didSelect gender: String?) {
         delegate?.attributeTableViewCell?(self, didChange: gender ?? "",
                                           for: Patient.Keys.gender, with: AttributeTableViewCellType.string.rawValue)
+    }
+
+    // MARK: - PatientTriageMentalStatusKeyboardViewDelegate
+
+    func patientTriageMentalStatusKeyboardView(_ view: PatientTriageMentalStatusKeyboardView, didSelect mentalStatus: String?) {
+        delegate?.attributeTableViewCell?(self, didChange: mentalStatus ?? "",
+                                          for: Patient.Keys.triageMentalStatus, with: AttributeTableViewCellType.string.rawValue)
+    }
+
+    // MARK: - PatientTriagePerfusionKeyboardViewDelegate
+
+    func patientTriagePerfusionKeyboardView(_ view: PatientTriagePerfusionKeyboardView, didSelect perfusion: String?) {
+        delegate?.attributeTableViewCell?(self, didChange: perfusion ?? "",
+                                          for: Patient.Keys.triagePerfusion, with: AttributeTableViewCellType.string.rawValue)
     }
 }

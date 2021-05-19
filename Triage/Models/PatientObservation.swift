@@ -51,6 +51,12 @@ class PatientObservation: Patient {
         if complaint != source.complaint {
             observation.complaint = complaint
         }
+        if triageMentalStatus != source.triageMentalStatus {
+            observation.triageMentalStatus = triageMentalStatus
+        }
+        if triagePerfusion != source.triagePerfusion {
+            observation.triagePerfusion = triagePerfusion
+        }
         if respiratoryRate.value != source.respiratoryRate.value {
             observation.respiratoryRate.value = respiratoryRate.value
         }

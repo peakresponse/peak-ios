@@ -12,8 +12,8 @@ import UIKit
 let INFO = ["firstName", "lastName", "complaint"]
 let INFO_TYPES: [AttributeTableViewCellType] = [.string, .string, .string]
 
-let VITALS = ["respiratoryRate", "pulse", "capillaryRefill", "bloodPressure", "gcsTotal"]
-let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .number, .number, .string, .number]
+let VITALS = ["respiratoryRate", "triagePerfusion", "pulse", "capillaryRefill", "triageMentalStatus", "bloodPressure", "gcsTotal"]
+let VITALS_TYPES: [AttributeTableViewCellType] = [.number, .triagePerfusion, .number, .number, .triageMentalStatus, .string, .number]
 
 @objc protocol PatientTableViewControllerDelegate {
     @objc optional func patientTableViewControllerDidCancel(_ vc: PatientTableViewController)
@@ -31,8 +31,8 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
         case ageAndGender = 0
         case info
         case priority
-        case location
         case vitals
+        case location
         case observations
     }
 

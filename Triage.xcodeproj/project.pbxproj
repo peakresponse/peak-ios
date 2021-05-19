@@ -28,6 +28,8 @@
 		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
 		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
+		4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */; };
+		4543BF6E26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543BF6D26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift */; };
 		4543DD4C24DDE62100F9E50B /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543DD4B24DDE62100F9E50B /* TabBarController.swift */; };
 		4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543DD4D24DE20B100F9E50B /* NavigationBar.swift */; };
 		454A020B2589E48A00B83D36 /* WebSocket+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A020A2589E48A00B83D36 /* WebSocket+Extensions.swift */; };
@@ -188,6 +190,8 @@
 		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTriagePerfusionKeyboardView.swift; sourceTree = "<group>"; };
+		4543BF6D26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTriageMentalStatusKeyboardView.swift; sourceTree = "<group>"; };
 		4543DD4B24DDE62100F9E50B /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		4543DD4D24DE20B100F9E50B /* NavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBar.swift; sourceTree = "<group>"; };
 		454A020A2589E48A00B83D36 /* WebSocket+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WebSocket+Extensions.swift"; sourceTree = "<group>"; };
@@ -597,6 +601,8 @@
 				454EE9862520305000EB266A /* PatientTableViewCell.swift */,
 				452AFDFD252A662200E5A84D /* PatientTableViewFooterView.swift */,
 				45E5BEED2425DA010013D78D /* PatientTableViewHeaderView.swift */,
+				4543BF6D26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift */,
+				4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */,
 				454EE97B25202C7A00EB266A /* PatientView.swift */,
 				4566F07D236D57FA00A04C75 /* PriorityView.swift */,
 				452AFDE7252A35F000E5A84D /* PriorityTableViewCell.swift */,
@@ -943,6 +949,7 @@
 				454A020B2589E48A00B83D36 /* WebSocket+Extensions.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
+				4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */,
 				45B7A2F2251038D200BCAAAE /* PatientsCollectionViewCell.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
@@ -967,6 +974,7 @@
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
 				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
 				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,
+				4543BF6E26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
 				454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */,
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,

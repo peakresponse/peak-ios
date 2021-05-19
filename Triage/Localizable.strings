@@ -124,6 +124,8 @@
 "Patient.pin" = "Tag #: %@";
 "Patient.pulse" = "Pulse";
 "Patient.respiratoryRate" = "Respiratory Rate";
+"Patient.triagePerfusion" = "Radial Pulse?";
+"Patient.triageMentalStatus" = "Mental Status";
 "Patient.transportAgency" = "Transport Agency";
 "Patient.transportFacility" = "Facility";
 "Patient.updatedAt" = "Last Update: %@";
@@ -173,6 +175,14 @@
 "Patient.sort.2" = "Alphabetically";
 "Patient.sort.3" = "Triage Priority (High to Low)";
 
+"Patient.triagePerfusion.301165004" = "Radial Pulse Absent";
+"Patient.triagePerfusion.301155005" = "Radial Pulse Present";
+
+"Patient.triageMentalStatus.304898005" = "Able to comply";
+"Patient.triageMentalStatus.304900007" = "Difficulty complying";
+"Patient.triageMentalStatus.372089002" = "Unable to comply";
+
+"PatientTableViewController.triage" = "Triage";
 "PatientTableViewController.location" = "Location";
 "PatientTableViewController.transport" = "Transport";
 "PatientTableViewController.transport.leftIndependently" = "This patient left the scene independently.";

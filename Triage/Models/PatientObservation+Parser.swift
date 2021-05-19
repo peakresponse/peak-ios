@@ -66,6 +66,27 @@ private let MAPPINGS_GENDER = [
     "transgender female": PatientGender.transFemale.rawValue
 ]
 
+private let MAPPINGS_TRIAGE_MENTAL_STATUS = [
+    "responsive": PatientTriageMentalStatus.ableToComply.rawValue,
+    "can": PatientTriageMentalStatus.ableToComply.rawValue,
+    "unresponsive": PatientTriageMentalStatus.unableToComply.rawValue,
+    "not responsive": PatientTriageMentalStatus.unableToComply.rawValue,
+    "non-responsive": PatientTriageMentalStatus.unableToComply.rawValue,
+    "nonresponsive": PatientTriageMentalStatus.unableToComply.rawValue,
+    "can't": PatientTriageMentalStatus.unableToComply.rawValue,
+    "unable to": PatientTriageMentalStatus.unableToComply.rawValue,
+    "confused": PatientTriageMentalStatus.difficultyComplying.rawValue
+]
+
+private let MAPPINGS_TRIAGE_PERFUSION = [
+    "absent": PatientTriagePerfusion.radialPulseAbsent.rawValue,
+    "no": PatientTriagePerfusion.radialPulseAbsent.rawValue,
+    "present": PatientTriagePerfusion.radialPulsePresent.rawValue,
+    "got": PatientTriagePerfusion.radialPulsePresent.rawValue,
+    "has": PatientTriagePerfusion.radialPulsePresent.rawValue,
+    "have": PatientTriagePerfusion.radialPulsePresent.rawValue
+]
+
 private let MAPPINGS_PRIORITY = [
     "read": Priority.immediate.rawValue,
     "red": Priority.immediate.rawValue,
@@ -104,6 +125,22 @@ private let MATCHERS: [Matcher] = [
             ]),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?) (?:is )?(?<respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate)) (?:is )?(?<pulse>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:^| )(?<triageMentalStatus>responsive|unresponsive|not responsive|non-responsive|nonresponsive|confused)(?: to commands?)?)"#,
+            mappings: [
+                "triageMentalStatus": MAPPINGS_TRIAGE_MENTAL_STATUS
+            ]),
+    Matcher(pattern: #"(?:(?<triageMentalStatus>can|can't|unable to)(?: follow commands?))"#,
+            mappings: [
+                "triageMentalStatus": MAPPINGS_TRIAGE_MENTAL_STATUS
+            ]),
+    Matcher(pattern: #"(?:(?:radial |radio )?(?:pulses?) (?:is )?(?<triagePerfusion>absent|presents?))"#,
+            mappings: [
+                "triagePerfusion": MAPPINGS_TRIAGE_PERFUSION
+            ]),
+    Matcher(pattern: #"(?:(?<triagePerfusion>no|got|has|have) (?:a )?(?:pulse))"#,
+            mappings: [
+                "triagePerfusion": MAPPINGS_TRIAGE_PERFUSION
+            ]),
     Matcher(pattern: #"(?:capri|(?:temp refill)|(?:tap refill)|(?:cap(?:illary)? refill))(?: time)? (?:is )?(?:less than )?(?<capillaryRefill>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "capillaryRefill": MAPPINGS_NUMBERS

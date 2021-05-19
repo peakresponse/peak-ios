@@ -96,6 +96,25 @@ enum PatientGender: String, CaseIterable, CustomStringConvertible {
     }
 }
 
+enum PatientTriagePerfusion: String, CaseIterable, CustomStringConvertible {
+    case radialPulseAbsent = "301165004"
+    case radialPulsePresent = "301155005"
+
+    var description: String {
+        return "Patient.triagePerfusion.\(rawValue)".localized
+    }
+}
+
+enum PatientTriageMentalStatus: String, CaseIterable, CustomStringConvertible {
+    case ableToComply = "304898005"
+    case difficultyComplying = "304900007"
+    case unableToComply = "372089002"
+
+    var description: String {
+        return "Patient.triageMentalStatus.\(rawValue)".localized
+    }
+}
+
 // swiftlint:disable:next type_body_length
 class Patient: Base {
     struct Keys {
@@ -109,6 +128,8 @@ class Patient: Base {
         static let ageUnits = "ageUnits"
         static let dob = "dob"
         static let complaint = "complaint"
+        static let triagePerfusion = "triagePerfusion"
+        static let triageMentalStatus = "triageMentalStatus"
         static let respiratoryRate = "respiratoryRate"
         static let pulse = "pulse"
         static let capillaryRefill = "capillaryRefill"
@@ -179,6 +200,9 @@ class Patient: Base {
     @objc dynamic var dob: String?
 
     @objc dynamic var complaint: String?
+
+    @objc dynamic var triagePerfusion: String?
+    @objc dynamic var triageMentalStatus: String?
 
     let respiratoryRate = RealmOptional<Int>()
     let pulse = RealmOptional<Int>()
@@ -432,6 +456,12 @@ class Patient: Base {
         if data.index(forKey: Keys.complaint) != nil {
             complaint = data[Keys.complaint] as? String
         }
+        if data.index(forKey: Keys.triagePerfusion) != nil {
+            triagePerfusion = data[Keys.triagePerfusion] as? String
+        }
+        if data.index(forKey: Keys.triageMentalStatus) != nil {
+            triageMentalStatus = data[Keys.triageMentalStatus] as? String
+        }
         if data.index(forKey: Keys.respiratoryRate) != nil {
             respiratoryRate.value = data[Keys.respiratoryRate] as? Int
         }
@@ -544,6 +574,12 @@ class Patient: Base {
         if let value = complaint {
             data[Keys.complaint] = value
         }
+        if let value = triagePerfusion {
+            data[Keys.triagePerfusion] = value
+        }
+        if let value = triageMentalStatus {
+            data[Keys.triageMentalStatus] = value
+        }
         if let value = respiratoryRate.value {
             data[Keys.respiratoryRate] = value
         }
@@ -628,6 +664,8 @@ class Patient: Base {
         observation.ageUnits = ageUnits
         observation.dob = dob
         observation.complaint = complaint
+        observation.triagePerfusion = triagePerfusion
+        observation.triageMentalStatus = triageMentalStatus
         observation.respiratoryRate.value = respiratoryRate.value
         observation.pulse.value = pulse.value
         observation.capillaryRefill.value = capillaryRefill.value

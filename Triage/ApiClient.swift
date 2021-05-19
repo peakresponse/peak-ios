@@ -320,7 +320,8 @@ class ApiClient {
         return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
     }
 
-    func updateScene(sceneId: String, data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func updateScene(sceneId: String, data: [String: Any],
+                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)", body: data, completionHandler: completionHandler)
     }
 
