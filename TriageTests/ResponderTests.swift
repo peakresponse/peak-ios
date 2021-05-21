@@ -18,7 +18,7 @@ class ResponderTests: XCTestCase {
             let data: [String: Any] = [
                 "id": "7b8ddcc3-63e6-4e6e-a47e-d553289912d1",
                 "name": "Closed Scene",
-                "approxPatients": 0,
+                "approxPatientsCount": 10,
                 "patientsCount": 0,
                 "priorityPatientsCounts": [0, 0, 0, 0, 0, 0],
                 "respondersCount": 2,

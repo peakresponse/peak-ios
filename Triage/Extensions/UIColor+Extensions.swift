@@ -91,6 +91,10 @@ extension UIColor {
         return UIColor.named("LowPriorityGrey")
     }
 
+    static var lightGreyBlue: UIColor {
+        return UIColor.named("LightGreyBlue")
+    }
+
     // deprecated legacy colors -------------------
 
     static var backgroundBlueGray: UIColor {

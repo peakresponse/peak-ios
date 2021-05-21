@@ -15,7 +15,8 @@ class Scene: Base {
         static let name = "name"
         static let desc = "desc"
         static let urgency = "urgency"
-        static let approxPatients = "approxPatients"
+        static let approxPatientsCount = "approxPatientsCount"
+        static let approxPriorityPatientsCounts = "approxPriorityPatientsCounts"
         static let patientsCount = "patientsCount"
         static let priorityPatientsCounts = "priorityPatientsCounts"
         static let respondersCount = "respondersCount"
@@ -37,14 +38,31 @@ class Scene: Base {
     @objc dynamic var name: String?
     @objc dynamic var desc: String?
     @objc dynamic var urgency: String?
-    let approxPatients = RealmOptional<Int>()
+    let approxPatientsCount = RealmOptional<Int>()
+    @objc dynamic var _approxPriorityPatientsCounts: String?
+    var approxPriorityPatientsCounts: [Int]? {
+        get {
+            if let _approxPriorityPatientsCounts = _approxPriorityPatientsCounts {
+                return _approxPriorityPatientsCounts.split(separator: ",").map({ Int($0) ?? 0 })
+            }
+            return nil
+        }
+        set {
+            _approxPriorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
+        }
+    }
     let patientsCount = RealmOptional<Int>()
     @objc dynamic var _priorityPatientsCounts: String?
     var priorityPatientsCounts: [Int]? {
-        if let _priorityPatientsCounts = _priorityPatientsCounts {
-            return _priorityPatientsCounts.split(separator: ",").map({ Int($0) ?? 0 })
+        get {
+            if let _priorityPatientsCounts = _priorityPatientsCounts {
+                return _priorityPatientsCounts.split(separator: ",").map({ Int($0) ?? 0 })
+            }
+            return nil
         }
-        return nil
+        set {
+            _priorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
+        }
     }
     let respondersCount = RealmOptional<Int>()
     @objc dynamic var isActive: Bool = false
@@ -92,12 +110,11 @@ class Scene: Base {
         name = data[Keys.name] as? String
         desc = data[Keys.desc] as? String
         urgency = data[Keys.urgency] as? String
-        approxPatients.value = data[Keys.approxPatients] as? Int
+        approxPatientsCount.value = data[Keys.approxPatientsCount] as? Int
+        approxPriorityPatientsCounts = data[Keys.approxPriorityPatientsCounts] as? [Int]
         patientsCount.value = data[Keys.patientsCount] as? Int
+        priorityPatientsCounts = data[Keys.priorityPatientsCounts] as? [Int]
         respondersCount.value = data[Keys.respondersCount] as? Int
-        if let _priorityPatientsCounts = data[Keys.priorityPatientsCounts] as? [Int] {
-            self._priorityPatientsCounts = _priorityPatientsCounts.map({ String($0) }).joined(separator: ",")
-        }
         isActive = data[Keys.isActive] as? Bool ?? false
         isMCI = data[Keys.isMCI] as? Bool ?? false
         lat = data[Keys.lat] as? String
@@ -125,9 +142,10 @@ class Scene: Base {
         if let value = urgency {
             data[Keys.urgency] = value
         }
-        if let value = approxPatients.value {
-            data[Keys.approxPatients] = value
+        if let value = approxPatientsCount.value {
+            data[Keys.approxPatientsCount] = value
         }
+        data[Keys.approxPriorityPatientsCounts] = approxPriorityPatientsCounts
         data[Keys.isMCI] = isMCI
         if let value = lat {
             data[Keys.lat] = value

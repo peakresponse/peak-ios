@@ -163,12 +163,12 @@
 "Patient.priority.4" = "Dead";
 "Patient.priority.5" = "Transported";
 
-"Patient.priority.abbrev.0" = "Imm.";
-"Patient.priority.abbrev.1" = "Del.";
-"Patient.priority.abbrev.2" = "Min.";
-"Patient.priority.abbrev.3" = "Exp.";
-"Patient.priority.abbrev.4" = "Dead";
-"Patient.priority.abbrev.5" = "Tra.";
+"Patient.priority.abbr.0" = "Imm.";
+"Patient.priority.abbr.1" = "Del.";
+"Patient.priority.abbr.2" = "Min.";
+"Patient.priority.abbr.3" = "Exp.";
+"Patient.priority.abbr.4" = "Dead";
+"Patient.priority.abbr.5" = "Tra.";
 
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
@@ -217,7 +217,12 @@
 "SceneLocationView.zipLabel" = "Zipcode: ";
 "SceneLocationView.startLabel" = "Start Time: ";
 
-"ScenePatientsView.patientsLabel" = "# Patients Recorded";
+"ScenePatientsView.approxLabel" = "Approximate #s";
+"ScenePatientsView.patientsLabel" = "Recorded #s";
+"ScenePatientsView.titleLabel" = "Patient Numbers";
+
+"ScenePatientCountView.total" = "Total";
+"ScenePatientCountView.triageTotal" = "Total from Triage #s";
 
 "ScenePin.type.MGS" = "MGS";
 "ScenePin.type.TRIAGE" = "Triage";

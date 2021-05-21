@@ -23,6 +23,18 @@ enum Priority: Int, CustomStringConvertible, CaseIterable {
     var description: String {
         return "Patient.priority.\(rawValue)".localized
     }
+
+    var abbrDescription: String {
+        return "Patient.priority.abbr.\(rawValue)".localized
+    }
+
+    var color: UIColor {
+        return PRIORITY_COLORS[rawValue]
+    }
+
+    var lightenedColor: UIColor {
+        return PRIORITY_COLORS_LIGHTENED[rawValue]
+    }
 }
 
 enum Sort: Int, CaseIterable, CustomStringConvertible {

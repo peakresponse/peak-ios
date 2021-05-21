@@ -38,6 +38,10 @@ class SceneOverviewViewController: UIViewController {
         super.viewDidLoad()
 
         sceneCommandsView.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 20, color: .black, opacity: 0.1)
+        scenePatientsView.didUpdateApproxPatientsCounts = { [weak self] (priority, delta) in
+            self?.updateApproxPatientsCounts(priority: priority, delta: delta)
+        }
+        sceneRespondersView.isHidden = true
 
         editButton.isHidden = true
         addNoteButton.isHidden = true
@@ -112,7 +116,9 @@ class SceneOverviewViewController: UIViewController {
         sceneHeaderView.configure(from: scene)
         scenePatientsView.configure(from: scene)
         sceneRespondersView.configure(from: scene)
-        if AppSettings.userId == scene.incidentCommanderId {
+        let isMGS = AppSettings.userId == scene.incidentCommanderId
+        let role = ResponderRole(rawValue: responders.first?.role ?? "")
+        if isMGS {
             closeButton.isHidden = false
             leaveButton.isHidden = true
             exitButton.isHidden = true
@@ -135,6 +141,7 @@ class SceneOverviewViewController: UIViewController {
                 transferButton.isHidden = true
             }
         }
+        scenePatientsView.isEditing = isMGS || role == .triage || role == .treatment
     }
 
     @IBAction func editPressed(_ sender: Any) {
@@ -209,5 +216,9 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func transferPressed(_ sender: Any) {
+    }
+
+    func updateApproxPatientsCounts(priority: Priority?, delta: Int) {
+        AppRealm.updateApproxPatientsCounts(sceneId: scene.id, priority: priority, delta: delta)
     }
 }

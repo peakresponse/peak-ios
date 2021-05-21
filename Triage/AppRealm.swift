@@ -478,6 +478,44 @@ class AppRealm {
         sceneSocket = nil
     }
 
+    public static func updateApproxPatientsCounts(sceneId: String, priority: Priority?, delta: Int) {
+        let realm = AppRealm.open()
+        try! realm.write {
+            if let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId) {
+                if let priority = priority, var approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
+                    if approxPriorityPatientsCounts.count > priority.rawValue {
+                        approxPriorityPatientsCounts[priority.rawValue] += delta
+                        scene.approxPriorityPatientsCounts = approxPriorityPatientsCounts
+                    }
+                } else {
+                    scene.approxPatientsCount.value = (scene.approxPatientsCount.value ?? 0) + delta
+                }
+                struct Debounce {
+                    static var timer: Timer?
+                }
+                if let timer = Debounce.timer {
+                    timer.invalidate()
+                }
+                var data: [String: Any] = [:]
+                if let approxPatientsCount = scene.approxPatientsCount.value {
+                    data["approxPatientsCount"] = approxPatientsCount
+                }
+                if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
+                    data["approxPriorityPatientsCounts"] = approxPriorityPatientsCounts
+                }
+                Debounce.timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { (_) in
+                    let op = RequestOperation()
+                    op.request = { (completionHandler) in
+                        return ApiClient.shared.updateScene(sceneId: sceneId, data: data) { (_, error) in
+                            completionHandler(error)
+                        }
+                    }
+                    AppRealm.queue.addOperation(op)
+                })
+            }
+        }
+    }
+
     // MARK: - Responders
 
     public static func getResponders(sceneId: String, completionHandler: @escaping (Error?) -> Void) {

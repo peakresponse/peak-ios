@@ -12,7 +12,6 @@ import UIKit
 class SceneHeaderView: UIView {
     weak var nameLabel: UILabel!
     weak var descLabel: UILabel!
-    weak var approxPatientsCountLabel: UILabel!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,37 +46,14 @@ class SceneHeaderView: UIView {
         NSLayoutConstraint.activate([
             descLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
             descLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-            descLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor)
+            descLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor),
+            bottomAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 10)
         ])
         self.descLabel = descLabel
-
-        let approxPatientsLabel = UILabel()
-        approxPatientsLabel.translatesAutoresizingMaskIntoConstraints = false
-        approxPatientsLabel.font = .copySBold
-        approxPatientsLabel.text = "SceneHeaderView.approxPatientsLabel".localized
-        approxPatientsLabel.textColor = .mainGrey
-        addSubview(approxPatientsLabel)
-        NSLayoutConstraint.activate([
-            approxPatientsLabel.topAnchor.constraint(equalTo: descLabel.bottomAnchor, constant: 14),
-            approxPatientsLabel.leftAnchor.constraint(equalTo: descLabel.leftAnchor)
-        ])
-
-        let approxPatientsCountLabel = UILabel()
-        approxPatientsCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        approxPatientsCountLabel.font = .copySRegular
-        approxPatientsCountLabel.textColor = .mainGrey
-        addSubview(approxPatientsCountLabel)
-        NSLayoutConstraint.activate([
-            approxPatientsCountLabel.firstBaselineAnchor.constraint(equalTo: approxPatientsLabel.firstBaselineAnchor),
-            approxPatientsCountLabel.leftAnchor.constraint(equalTo: approxPatientsLabel.rightAnchor),
-            bottomAnchor.constraint(equalTo: approxPatientsCountLabel.bottomAnchor, constant: 10)
-        ])
-        self.approxPatientsCountLabel = approxPatientsCountLabel
     }
 
     func configure(from scene: Scene) {
         nameLabel.text = scene.name?.isEmpty ?? true ? " " : scene.name
         descLabel.text = scene.desc?.isEmpty ?? true ? " " : scene.desc
-        approxPatientsCountLabel.text = scene.approxPatients.value != nil ? "\(scene.approxPatients.value ?? 0)" : "-"
     }
 }
