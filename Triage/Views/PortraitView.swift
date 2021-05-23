@@ -21,6 +21,7 @@ class PortraitViewCameraButton: UIButton {
 
 class PortraitView: UIView, CameraHelperDelegate {
     weak var imageView: RoundImageView!
+    weak var initialsLabel: UILabel!
     weak var captureButton: UIButton!
     weak var activityIndicatorView: UIActivityIndicatorView!
 
@@ -58,6 +59,18 @@ class PortraitView: UIView, CameraHelperDelegate {
             bottomAnchor.constraint(equalTo: imageView.bottomAnchor)
         ])
         self.imageView = imageView
+
+        let initialsLabel = UILabel()
+        initialsLabel.translatesAutoresizingMaskIntoConstraints = false
+        initialsLabel.font = .copyMBold
+        initialsLabel.textColor = .white
+        initialsLabel.textAlignment = .center
+        addSubview(initialsLabel)
+        NSLayoutConstraint.activate([
+            initialsLabel.centerXAnchor.constraint(equalTo: imageView.centerXAnchor),
+            initialsLabel.centerYAnchor.constraint(equalTo: imageView.centerYAnchor)
+        ])
+        self.initialsLabel = initialsLabel
 
         let captureButton = UIButton(type: .custom)
         captureButton.alpha = 0
@@ -107,6 +120,25 @@ class PortraitView: UIView, CameraHelperDelegate {
         } else {
             imageView.image = UIImage(named: "User")
             imageView.backgroundColor = .greyPeakBlue
+        }
+    }
+
+    func configure(from user: User?) {
+        imageViewURL = user?.iconUrl
+        imageView.image = nil
+        if let imageViewURL = imageViewURL {
+            AppCache.cachedImage(from: imageViewURL) { [weak self] (image, _) in
+                if let image = image {
+                    DispatchQueue.main.async { [weak self] in
+                        if imageViewURL == self?.imageViewURL {
+                            self?.imageView.image = image
+                        }
+                    }
+                }
+            }
+        } else {
+            imageView.image = UIImage.resizableImage(withColor: .greyPeakBlue, cornerRadius: 44)
+            initialsLabel.text = user?.initials
         }
     }
 

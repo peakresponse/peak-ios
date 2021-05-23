@@ -18,6 +18,9 @@
 
 "BaseField.statusLabel.unconfirmed" = "Tap the mic icon to verify this information.";
 
+"BaseNonSceneViewController.logout.title" = "Log out";
+"BaseNonSceneViewController.logout.message" = "Are you sure you wish to log out?";
+
 "Button.addNote" = "Add Note";
 "Button.addPhoto" = "Add Photo";
 "Button.addRecording" = "Add Recording";
@@ -33,6 +36,7 @@
 "Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.no" = "No";
 "Button.ok" = "OK";
 "Button.record" = "Record";
 "Button.retry" = "Retry";
@@ -47,6 +51,7 @@
 "Button.update" = "Update";
 "Button.updateStatus" = "Update Status";
 "Button.viewScene" = "View Scene";
+"Button.yes" = "Yes";
 
 "CloseSceneConfirmation.title" = "Are you sure you want to close the %@ scene?";
 "CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
