@@ -114,25 +114,14 @@ class ResponderViewController: UIViewController {
                 roleButton.buttonLabel = roleButton.buttonLabel?.replacingOccurrences(of: " ", with: "\n")
                 unassignButtons[i].isHidden = roleButton.role != role
             }
-            if role != nil {
-                roleButton.isUserInteractionEnabled = scene.incidentCommanderId == AppSettings.userId
-            } else {
-                roleButton.isHidden = scene.incidentCommanderId != AppSettings.userId
-            }
+            roleButton.isUserInteractionEnabled = true
+            roleButton.isHidden = false
         }
 
         // configure Transfer MGS Role button
         transferButton.button.titleLabel?.numberOfLines = 0
         transferButton.button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 17, bottom: 0, right: 17)
-        if responder.role == nil && scene.incidentCommanderId == AppSettings.userId {
-            if scene.incidentCommanderId == responder.user?.id {
-                transferButton.isHidden = true
-            }
-        } else {
-            transferButton.isHidden = true
-        }
         transferButton.isHidden = responder.role != nil ||
-            scene.incidentCommanderId != AppSettings.userId ||
             scene.incidentCommanderId == responder.user?.id
 
         // configure info labels
@@ -168,7 +157,6 @@ class ResponderViewController: UIViewController {
     @IBAction func transferPressed(_ sender: Any) {
         let vc = AlertViewController()
         vc.alertTitle = String(format: "TransferCommandConfirmation.title".localized, responder.user?.fullName ?? "")
-        vc.alertMessage = "TransferCommandConfirmation.message".localized
         vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
         vc.addAlertAction(title: "Button.transfer".localized, style: .default) { [weak self] (_) in
             guard let self = self, let sceneId = AppSettings.sceneId,

@@ -117,7 +117,6 @@ class SceneOverviewViewController: UIViewController {
         scenePatientsView.configure(from: scene)
         sceneRespondersView.configure(from: scene)
         let isMGS = AppSettings.userId == scene.incidentCommanderId
-        let role = ResponderRole(rawValue: responders.first?.role ?? "")
         if isMGS {
             closeButton.isHidden = false
             leaveButton.isHidden = true
@@ -141,7 +140,7 @@ class SceneOverviewViewController: UIViewController {
                 transferButton.isHidden = true
             }
         }
-        scenePatientsView.isEditing = isMGS || role == .triage || role == .treatment
+        scenePatientsView.isEditing = true
     }
 
     @IBAction func editPressed(_ sender: Any) {
