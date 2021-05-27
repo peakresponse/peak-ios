@@ -33,7 +33,7 @@
 "Button.delete" = "Delete";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
-"Button.joinScene" = "Join Scene";
+"Button.joinScene" = "Arrived on Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
 "Button.no" = "No";

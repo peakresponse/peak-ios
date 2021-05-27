@@ -69,8 +69,13 @@ class ActiveScenesView: UIView, ActiveSceneViewDelegate {
         for view in stackView.arrangedSubviews {
             view.removeFromSuperview()
         }
+        var isMaximized = false
         for view in views {
+            isMaximized = isMaximized || view.isMaximized
             stackView.addArrangedSubview(view)
+        }
+        if !isMaximized && views.count > 0 {
+            views[0].isMaximized = true
         }
     }
 
@@ -82,5 +87,13 @@ class ActiveScenesView: UIView, ActiveSceneViewDelegate {
 
     func activeSceneView(_ view: ActiveSceneView, didViewScene scene: Scene) {
         delegate?.activeScenesView?(self, didViewScene: scene)
+    }
+
+    func activeSceneViewDidMaximize(_ view: ActiveSceneView) {
+        for subview in stackView.arrangedSubviews where subview != view {
+            if let subview = subview as? ActiveSceneView {
+                subview.isMaximized = false
+            }
+        }
     }
 }
