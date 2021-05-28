@@ -22,6 +22,9 @@ class SceneTabBarController: TabBarController {
         super.viewDidLoad()
 
         if let sceneId = AppSettings.sceneId {
+            // disconnect from agency updates
+            AppRealm.disconnect()
+            // conenct to scene updates
             AppRealm.connect(sceneId: sceneId)
 
             let realm = AppRealm.open()

@@ -26,6 +26,14 @@ class InterstitialViewController: UIViewController {
         // hit the server to check current log-in status
         AppRealm.me { (user, agency, scene, error) in
             if let error = error {
+                // if an explicit server error, log out to force re-login
+                if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.logout()
+                    }
+                    return
+                }
                 // check if we've previously logged in within a threshold of time
                 let threshold = Date(timeIntervalSinceNow: -60 * 60) // one hour?
                 let userId = AppSettings.userId
@@ -50,12 +58,8 @@ class InterstitialViewController: UIViewController {
                 // otherwise, display error and force re-login on next retry
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
-                        self.logout()
-                    } else {
-                        self.presentAlert(error: error)
-                        self.retryButton.isHidden = false
-                    }
+                    self.presentAlert(error: error)
+                    self.retryButton.isHidden = false
                 }
             } else {
                 AppSettings.userId = user?.id

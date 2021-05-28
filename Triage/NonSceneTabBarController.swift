@@ -9,10 +9,6 @@
 import UIKit
 
 class NonSceneTabBarController: TabBarController {
-    deinit {
-        AppRealm.disconnect()
-    }
-
     override func viewDidLoad() {
         super.viewDidLoad()
         // temporarily hide other options
