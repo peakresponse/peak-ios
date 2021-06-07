@@ -68,7 +68,14 @@ class RequestOperation: Operation {
 // swiftlint:disable file_length force_try type_body_length
 class AppRealm {
     private static var main: Realm!
-    private static let queue = OperationQueue()
+    private static var _queue: OperationQueue!
+    private static var queue: OperationQueue {
+        if _queue == nil {
+            _queue = OperationQueue()
+            _queue.maxConcurrentOperationCount = 1
+        }
+        return _queue
+    }
 
     private static var agencySocket: WebSocket?
     private static var sceneSocket: WebSocket?
