@@ -24,11 +24,21 @@ PODS:
   - GoogleMaps/Maps (4.2.0):
     - GoogleMaps/Base
   - Keys (1.0.1)
+  - PLCrashReporter (1.8.1)
   - Realm (10.7.6):
     - Realm/Headers (= 10.7.6)
   - Realm/Headers (10.7.6)
   - RealmSwift (10.7.6):
     - Realm (= 10.7.6)
+  - RollbarCommon (2.0.0-beta.22)
+  - RollbarNotifier (2.0.0-beta.22):
+    - RollbarCommon (~> 2.0.0-beta.22)
+  - RollbarPLCrashReporter (2.0.0-beta.22):
+    - PLCrashReporter (~> 1.8.1)
+    - RollbarCommon (~> 2.0.0-beta.22)
+  - RollbarSwift (2.0.0-beta.22):
+    - RollbarCommon (~> 2.0.0-beta.22)
+    - RollbarNotifier (~> 2.0.0-beta.22)
   - Starscream (4.0.4)
   - SwiftLint (0.40.3)
 
@@ -37,6 +47,9 @@ DEPENDENCIES:
   - GoogleMaps
   - Keys (from `Pods/CocoaPodsKeys`)
   - RealmSwift
+  - RollbarNotifier (= 2.0.0-beta.22)
+  - RollbarPLCrashReporter (= 2.0.0-beta.22)
+  - RollbarSwift (= 2.0.0-beta.22)
   - Starscream
   - SwiftLint
 
@@ -44,8 +57,13 @@ SPEC REPOS:
   trunk:
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - PLCrashReporter
     - Realm
     - RealmSwift
+    - RollbarCommon
+    - RollbarNotifier
+    - RollbarPLCrashReporter
+    - RollbarSwift
     - Starscream
     - SwiftLint
 
@@ -57,11 +75,16 @@ SPEC CHECKSUMS:
   Google-Maps-iOS-Utils: ae3b4e74b2d734454be32cf62ba8d6ad7283e0c1
   GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
+  PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
   Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
   RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
+  RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
+  RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
+  RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
+  RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
 
-PODFILE CHECKSUM: abda9b17a0a7598fe0d35bd2d78b0e7fc7577195
+PODFILE CHECKSUM: 937195b25d267c0f03068605237e78b8d67aa6d0
 
 COCOAPODS: 1.10.1

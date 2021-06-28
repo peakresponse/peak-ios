@@ -5,7 +5,9 @@ plugin 'cocoapods-keys', {
   :project => 'Triage',
   :keys => [
     'ApiClientServerUrl',
-    'GoogleMapsSdkApiKey'
+    'GoogleMapsSdkApiKey',
+    'RollbarEnvironment',
+    'RollbarPostClientItemAccessToken'
   ]
 }
 
@@ -17,6 +19,9 @@ target 'Triage' do
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'RealmSwift'
+  pod 'RollbarNotifier', '2.0.0-beta.22'
+  pod 'RollbarPLCrashReporter', '2.0.0-beta.22'
+  pod 'RollbarSwift', '2.0.0-beta.22'
   pod 'Starscream'
   pod 'SwiftLint'
 

@@ -8,6 +8,8 @@
 
 import GoogleMaps
 import Keys
+import RollbarNotifier
+import RollbarPLCrashReporter
 import UIKit
 
 @UIApplicationMain
@@ -37,6 +39,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let keys = TriageKeys()
+
+        let rollbarConfig = RollbarConfig()
+        rollbarConfig.destination.accessToken = keys.rollbarPostClientItemAccessToken
+        rollbarConfig.destination.environment = keys.rollbarEnvironment
+        rollbarConfig.developerOptions.suppressSdkInfoLogging = true
+        let rollbarCrashCollector = RollbarPLCrashCollector()
+        Rollbar.initWithConfiguration(rollbarConfig, crashCollector: rollbarCrashCollector)
+
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
 
         UIBarButtonItem.appearance().setTitleTextAttributes([
