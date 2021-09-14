@@ -128,7 +128,7 @@ enum PatientTriageMentalStatus: String, CaseIterable, CustomStringConvertible {
 }
 
 // swiftlint:disable:next type_body_length
-class Patient: Base {
+class Patient: BaseVersioned {
     struct Keys {
         static let sceneId = "sceneId"
         static let pin = "pin"
@@ -170,19 +170,8 @@ class Patient: Base {
         static let predictions = "predictions"
     }
 
-    @objc dynamic var compoundPrimaryKey: String?
-    func updateCompoundPrimaryKey() {
-        compoundPrimaryKey = "\(sceneId ?? "")|\(pin ?? "")"
-    }
-    @objc dynamic var sceneId: String? {
-        didSet { updateCompoundPrimaryKey() }
-    }
-    @objc dynamic var pin: String? {
-        didSet { updateCompoundPrimaryKey() }
-    }
-    override public class func primaryKey() -> String? {
-        return "compoundPrimaryKey"
-    }
+    @objc dynamic var sceneId: String?
+    @objc dynamic var pin: String?
 
     let version = RealmOptional<Int>()
 
@@ -544,7 +533,7 @@ class Patient: Base {
         if let data = data[Keys.transportFacility] as? [String: Any],
             let facility = Facility.instantiate(from: data) as? Facility {
             transportFacility = facility
-        } else if let facilityId = data[Keys.transportFacilityId]	 as? String,
+        } else if let facilityId = data[Keys.transportFacilityId] as? String,
             let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
             transportFacility = facility
         }
@@ -664,45 +653,106 @@ class Patient: Base {
         return data
     }
 
-    func asObservation() -> PatientObservation {
-        let observation = PatientObservation()
-        observation.sceneId = sceneId
-        observation.pin = pin
-        observation.version.value = version.value
-        observation.lastName = lastName
-        observation.firstName = firstName
-        observation.gender = gender
-        observation.age.value = age.value
-        observation.ageUnits = ageUnits
-        observation.dob = dob
-        observation.complaint = complaint
-        observation.triagePerfusion = triagePerfusion
-        observation.triageMentalStatus = triageMentalStatus
-        observation.respiratoryRate.value = respiratoryRate.value
-        observation.pulse.value = pulse.value
-        observation.capillaryRefill.value = capillaryRefill.value
-        observation.bpSystolic.value = bpSystolic.value
-        observation.bpDiastolic.value = bpDiastolic.value
-        observation.gcsTotal.value = gcsTotal.value
-        observation.text = text
-        observation.priority.value = priority.value
-        observation.filterPriority.value = filterPriority.value
-        observation.location = location
-        observation.lat = lat
-        observation.lng = lng
-        observation.portraitFile = portraitFile
-        observation.photoFile = photoFile
-        observation.audioFile = audioFile
-        observation.portraitUrl = portraitUrl
-        observation.photoUrl = photoUrl
-        observation.audioUrl = audioUrl
-        observation.isTransported = isTransported
-        observation.isTransportedLeftIndependently = isTransportedLeftIndependently
-        observation.transportAgency = transportAgency
-        observation.transportFacility = transportFacility
-        observation.predictions = predictions
-        observation.createdAt = createdAt
-        observation.updatedAt = updatedAt
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    func changes(from source: Patient) -> Patient {
+        let observation = Patient()
+        if let currentId = source.currentId {
+            observation.parentId = currentId
+        } else if let canonicalId = source.canonicalId {
+            observation.canonicalId = canonicalId
+            observation.sceneId = source.sceneId
+            observation.pin = source.pin
+            observation.createdAt = source.createdAt
+        }
+        if lastName != source.lastName {
+            observation.lastName = lastName
+        }
+        if firstName != source.firstName {
+            observation.firstName = firstName
+        }
+        if gender != source.gender {
+            observation.gender = gender
+        }
+        if age.value != source.age.value {
+            observation.age.value = age.value
+        }
+        if ageUnits != source.ageUnits {
+            observation.ageUnits = ageUnits
+        }
+        if dob != source.dob {
+            observation.dob = dob
+        }
+        if complaint != source.complaint {
+            observation.complaint = complaint
+        }
+        if triageMentalStatus != source.triageMentalStatus {
+            observation.triageMentalStatus = triageMentalStatus
+        }
+        if triagePerfusion != source.triagePerfusion {
+            observation.triagePerfusion = triagePerfusion
+        }
+        if respiratoryRate.value != source.respiratoryRate.value {
+            observation.respiratoryRate.value = respiratoryRate.value
+        }
+        if pulse.value != source.pulse.value {
+            observation.pulse.value = pulse.value
+        }
+        if capillaryRefill.value != source.capillaryRefill.value {
+            observation.capillaryRefill.value = capillaryRefill.value
+        }
+        if bpSystolic.value != source.bpSystolic.value {
+            observation.bpSystolic.value = bpSystolic.value
+        }
+        if bpDiastolic.value != source.bpDiastolic.value {
+            observation.bpDiastolic.value = bpDiastolic.value
+        }
+        if gcsTotal.value != source.gcsTotal.value {
+            observation.gcsTotal.value = gcsTotal.value
+        }
+        if text != source.text {
+            observation.text = text
+        }
+        if priority.value != source.priority.value {
+            observation.priority.value = priority.value
+        }
+        if filterPriority.value != source.filterPriority.value {
+            observation.filterPriority.value = filterPriority.value
+        }
+        if location != source.location {
+            observation.location = location
+        }
+        if lat != source.lat {
+            observation.lat = lat
+        }
+        if lng != source.lng {
+            observation.lng = lng
+        }
+        if portraitFile != source.portraitFile {
+            observation.portraitFile = portraitFile
+        }
+        if photoFile != source.photoFile {
+            observation.photoFile = photoFile
+        }
+        if audioFile != source.audioFile {
+            observation.audioFile = audioFile
+        }
+        if isTransported != source.isTransported {
+            observation.isTransported = isTransported
+        }
+        if isTransportedLeftIndependently != source.isTransportedLeftIndependently {
+            observation.isTransportedLeftIndependently = isTransportedLeftIndependently
+        }
+        if transportAgency != source.transportAgency {
+            observation.transportAgency = transportAgency
+            observation.transportAgencyRemoved = transportAgencyRemoved
+        }
+        if transportFacility != source.transportFacility {
+            observation.transportFacility = transportFacility
+            observation.transportFacilityRemoved = transportFacilityRemoved
+        }
+        if !NSDictionary(dictionary: predictions ?? [:]).isEqual(to: source.predictions ?? [:]) {
+            observation.predictions = predictions
+        }
         return observation
     }
 }

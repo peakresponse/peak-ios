@@ -30,7 +30,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
 
     var locationHelper: LocationHelper!
 
-    var observation: PatientObservation!
+    var patient: Patient!
 
     var notificationToken: NotificationToken?
     var results: Results<Facility>?
@@ -112,7 +112,7 @@ class FacilitiesTableViewController: UIViewController, UITableViewDataSource, UI
                 self?.didObserveRealmChanges(changes)
             }
 
-            if let lat = observation?.lat, let lng = observation?.lng {
+            if let lat = patient?.lat, let lng = patient?.lng {
                 getFacilities(lat: lat, lng: lng)
             } else {
                 locationHelper.requestLocation()

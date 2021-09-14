@@ -82,7 +82,6 @@
 		4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F07D236D57FA00A04C75 /* PriorityView.swift */; };
 		4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F081236DE94400A04C75 /* ScanViewController.swift */; };
 		4566F088236E0A5800A04C75 /* ObservationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F087236E0A5800A04C75 /* ObservationViewController.swift */; };
-		4566F08A236E0C8200A04C75 /* PatientObservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F089236E0C8200A04C75 /* PatientObservation.swift */; };
 		4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */; };
 		4566F096236E11B000A04C75 /* PatientHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F094236E11B000A04C75 /* PatientHeaderView.swift */; };
 		4566F099236E12A600A04C75 /* BasePatientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F098236E12A600A04C75 /* BasePatientTableViewCell.swift */; };
@@ -119,8 +118,7 @@
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
-		45D63576252AD0AE0045C7CC /* PatientObservation+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63575252AD0AE0045C7CC /* PatientObservation+Parser.swift */; };
-		45D6357E252ADAA40045C7CC /* PatientObservationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D6357D252ADAA40045C7CC /* PatientObservationTests.swift */; };
+		45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63575252AD0AE0045C7CC /* Patient+Parser.swift */; };
 		45E267502418AFAD0010CDE9 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2674F2418AFAD0010CDE9 /* TextField.swift */; };
 		45E267522418B2510010CDE9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267512418B2510010CDE9 /* Button.swift */; };
 		45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */; };
@@ -251,7 +249,6 @@
 		4566F07D236D57FA00A04C75 /* PriorityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriorityView.swift; sourceTree = "<group>"; };
 		4566F081236DE94400A04C75 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		4566F087236E0A5800A04C75 /* ObservationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationViewController.swift; sourceTree = "<group>"; };
-		4566F089236E0C8200A04C75 /* PatientObservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientObservation.swift; sourceTree = "<group>"; };
 		4566F08C236E117300A04C75 /* AttributeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributeTableViewCell.swift; sourceTree = "<group>"; };
 		4566F094236E11B000A04C75 /* PatientHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientHeaderView.swift; sourceTree = "<group>"; };
 		4566F098236E12A600A04C75 /* BasePatientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePatientTableViewCell.swift; sourceTree = "<group>"; };
@@ -289,8 +286,7 @@
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
-		45D63575252AD0AE0045C7CC /* PatientObservation+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PatientObservation+Parser.swift"; sourceTree = "<group>"; };
-		45D6357D252ADAA40045C7CC /* PatientObservationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientObservationTests.swift; sourceTree = "<group>"; };
+		45D63575252AD0AE0045C7CC /* Patient+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+Parser.swift"; sourceTree = "<group>"; };
 		45E2674F2418AFAD0010CDE9 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		45E267512418B2510010CDE9 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
@@ -463,7 +459,6 @@
 			children = (
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				4566F06A236CE8A800A04C75 /* PatientTests.swift */,
-				45D6357D252ADAA40045C7CC /* PatientObservationTests.swift */,
 				45F130472525A062001495C7 /* ResponderTests.swift */,
 				4566F038236CCC5700A04C75 /* Info.plist */,
 			);
@@ -544,8 +539,7 @@
 				45B7A2D72508330600BCAAAE /* City.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
-				4566F089236E0C8200A04C75 /* PatientObservation.swift */,
-				45D63575252AD0AE0045C7CC /* PatientObservation+Parser.swift */,
+				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
 				454E17B824FFF5C900F9EB8B /* Responder.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
 				451A178A25364E1E00DC7705 /* ScenePin.swift */,
@@ -1017,7 +1011,6 @@
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				454EEAA12524075D00EB266A /* RespondersViewController.swift in Sources */,
 				45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */,
-				4566F08A236E0C8200A04C75 /* PatientObservation.swift in Sources */,
 				45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
@@ -1035,7 +1028,7 @@
 				453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */,
 				452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
-				45D63576252AD0AE0045C7CC /* PatientObservation+Parser.swift in Sources */,
+				45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
@@ -1058,7 +1051,6 @@
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,
-				45D6357E252ADAA40045C7CC /* PatientObservationTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

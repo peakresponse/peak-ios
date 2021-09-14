@@ -10,7 +10,7 @@ import CoreLocation
 import Foundation
 import RealmSwift
 
-class Scene: Base {
+class Scene: BaseVersioned {
     struct Keys {
         static let name = "name"
         static let desc = "desc"

@@ -217,8 +217,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? ObservationTableViewController {
             vc.delegate = self
-            vc.patient = patient.asObservation()
-            vc.patient.version.value = (vc.patient.version.value ?? 0) + 1
+            vc.patient = Patient(clone: patient!)
             vc.startingOffsetY = tableView.contentOffset.y
         }
     }
@@ -238,16 +237,14 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     }
 
     func cancelTransport() {
-        let observation = PatientObservation()
-        observation.sceneId = patient.sceneId
-        observation.pin = patient.pin
-        observation.version.value = (patient.version.value ?? 0) + 1
+        let observation = Patient(clone: patient!)
+        observation.parentId = patient.currentId
         observation.setTransported(false)
-        save(observation: observation)
+        save(patient: observation.changes(from: patient))
     }
 
-    func save(observation: PatientObservation) {
-        AppRealm.createOrUpdatePatient(observation: observation)
+    func save(patient: Patient) {
+        AppRealm.createOrUpdatePatient(patient: patient)
     }
 
     // MARK: - AttributeTableViewCellDelegate
@@ -267,25 +264,21 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     // MARK: - ConfirmTransportViewControllerDelegate
 
     func confirmTransportViewControllerDidConfirm(_ vc: ConfirmTransportViewController, facility: Facility, agency: Agency) {
-        let observation = PatientObservation()
-        observation.sceneId = patient.sceneId
-        observation.pin = patient.pin
-        observation.version.value = (patient.version.value ?? 0) + 1
+        let observation = Patient()
+        observation.parentId = patient.currentId
         observation.setTransported(true)
         observation.transportFacility = facility
         observation.transportAgency = agency
-        save(observation: observation)
+        save(patient: observation)
     }
 
     // MARK: - FacilitiesTableViewControllerDelegate
 
     func facilitiesTableViewControllerDidConfirmLeavingIndependently(_ vc: FacilitiesTableViewController) {
-        let observation = PatientObservation()
-        observation.sceneId = patient.sceneId
-        observation.pin = patient.pin
-        observation.version.value = (patient.version.value ?? 0) + 1
+        let observation = Patient()
+        observation.parentId = patient.currentId
         observation.setTransported(true, isTransportedLeftIndependently: true)
-        save(observation: observation)
+        save(patient: observation)
     }
 
     // MARK: - UINavigationControllerDelegate
@@ -327,12 +320,10 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
 
     func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
         if priority != patient.priority.value, let priority = Priority(rawValue: priority) {
-            let observation = PatientObservation()
-            observation.sceneId = patient.sceneId
-            observation.pin = patient.pin
-            observation.version.value = (patient.version.value ?? 0) + 1
+            let observation = Patient()
+            observation.parentId = patient.currentId
             observation.setPriority(priority)
-            save(observation: observation)
+            save(patient: observation)
         }
     }
 
@@ -351,7 +342,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     func priorityTableViewCellDidPressTransport(_ cell: PriorityTableViewCell) {
         let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Facilities")
         if let vc = vc as? FacilitiesTableViewController {
-            vc.observation = patient.asObservation()
+            vc.patient = Patient(clone: patient!)
             let navVC = UINavigationController(rootViewController: vc)
             navVC.delegate = self
             navVC.navigationBar.isHidden = true

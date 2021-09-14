@@ -304,6 +304,11 @@ class ApiClient {
         return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 
+    func updateScene(data: [String: Any],
+                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/scenes", body: data, completionHandler: completionHandler)
+    }
+
     func getScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
     }
@@ -318,11 +323,6 @@ class ApiClient {
 
     func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
-    }
-
-    func updateScene(sceneId: String, data: [String: Any],
-                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes/\(sceneId)", body: data, completionHandler: completionHandler)
     }
 
     func addScenePin(sceneId: String, data: [String: Any],

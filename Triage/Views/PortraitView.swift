@@ -101,9 +101,7 @@ class PortraitView: UIView, CameraHelperDelegate {
     func configure(from patient: Patient) {
         imageViewURL = nil
         imageView.image = nil
-        if let observation = patient as? PatientObservation {
-            imageViewURL = observation.portraitFile
-        }
+        imageViewURL = patient.portraitFile
         if imageViewURL == nil {
             imageViewURL = patient.portraitUrl
         }

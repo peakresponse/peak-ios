@@ -77,7 +77,9 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
         }
         sorts.append(SortDescriptor(keyPath: "pin", ascending: true))
         let realm = AppRealm.open()
-        var predicates: [NSPredicate] = []
+        var predicates: [NSPredicate] = [
+            NSPredicate(format: "canonicalId == NULL")
+        ]
         if let sceneId = AppSettings.sceneId {
             predicates.append(NSPredicate(format: "sceneId=%@", sceneId))
         }

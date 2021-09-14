@@ -20,7 +20,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     var locationHelper: LocationHelper!
     var cameraHelper: CameraHelper!
-    var originalObservation: PatientObservation!
+    var originalPatient: Patient!
     var startingOffsetY: CGFloat = -1
 
     override func viewDidLoad() {
@@ -42,7 +42,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         cameraHelper = CameraHelper()
 
         // make a copy of the observation object before editing for comparison
-        originalObservation = patient.asObservation()
+        originalPatient = Patient(clone: patient!)
 
         if let tableHeaderView = tableView.tableHeaderView as? PatientHeaderView {
             tableHeaderView.portraitView.isEditing = true
@@ -94,9 +94,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             return
         }
 
-        if let observation = self.patient as? PatientObservation {
-            AppRealm.createOrUpdatePatient(observation: observation.changes(from: self.originalObservation))
-        }
+        AppRealm.createOrUpdatePatient(patient: patient.changes(from: self.originalPatient))
 
         delegate?.patientTableViewControllerDidSave?(self)
     }
@@ -217,9 +215,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     // MARK: - PatientViewDelegate
 
     func patientView(_ patientView: PortraitView, didCapturePhoto fileURL: URL, withImage image: UIImage) {
-        if let observation = patient as? PatientObservation {
-            AppRealm.uploadPatientAsset(observation: observation, key: Patient.Keys.portraitFile, fileURL: fileURL)
-        }
+        AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.portraitFile, fileURL: fileURL)
     }
 
     // MARK: - PriorityTableViewCellDelegate
@@ -238,25 +234,21 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
                                  sourceId: String, metadata: [String: Any], isFinal: Bool) {
         patient.text = text
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        if let patient = patient as? PatientObservation {
-            DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-                patient.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    self.tableView.reloadData()
-                    if let priority = patient.filterPriority.value {
-                        self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
-                    }
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.patient.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.tableView.reloadData()
+                if let priority = self.patient.filterPriority.value {
+                    self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
                 }
             }
         }
     }
 
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
-        if let observation = patient as? PatientObservation {
-            AppRealm.uploadPatientAsset(observation: observation, key: Patient.Keys.audioFile, fileURL: fileURL)
-            tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
-        }
+        AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
+        tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
         // hide the record button, user must clear current recording to continue
         updateButton.isHidden = true
         updateButtonBackgroundView.isHidden = true

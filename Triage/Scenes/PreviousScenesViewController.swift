@@ -27,7 +27,7 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
 
         let realm = AppRealm.open()
         results = realm.objects(Scene.self)
-            .filter("closedAt != NULL")
+            .filter("canonicalId == NULL AND closedAt != NULL")
             .sorted(by: [SortDescriptor(keyPath: "closedAt", ascending: false)])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)

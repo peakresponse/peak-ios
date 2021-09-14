@@ -1,5 +1,5 @@
 //
-//  PatientObservation+Parser.swift
+//  Patient+Parser.swift
 //  Triage
 //
 //  Created by Francis Li on 10/4/20.
@@ -153,7 +153,7 @@ private let MATCHERS: [Matcher] = [
 ]
 // swiftlint:enable force_try line_length
 
-extension PatientObservation {
+extension Patient {
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
         // extract remainder of transcript as the chief complaint

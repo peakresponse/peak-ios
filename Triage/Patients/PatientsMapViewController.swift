@@ -90,7 +90,9 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     private func performQuery() {
         patientsNotificationToken?.invalidate()
         let realm = AppRealm.open()
-        var predicates: [NSPredicate] = []
+        var predicates: [NSPredicate] = [
+            NSPredicate(format: "canonicalId == NULL")
+        ]
         var predicate: NSPredicate
         if let sceneId = AppSettings.sceneId {
             predicates.append(NSPredicate(format: "sceneId=%@", sceneId))

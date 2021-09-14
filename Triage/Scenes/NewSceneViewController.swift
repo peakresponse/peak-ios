@@ -32,6 +32,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         addKeyboardListener()
 
         scene = Scene()
+        scene.new()
         scene.createdAt = Date()
 
         locationHelper = LocationHelper()
@@ -70,14 +71,13 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
             guard let self = self else { return }
             if let error = error {
                 self.presentAlert(error: error)
-            } else if let scene = scene {
-                let sceneId = scene.id
+            } else if let scene = scene, let canonicalId = scene.canonicalId {
                 if !scene.hasLatLng {
-                    AppRealm.captureLocation(sceneId: sceneId)
+                    AppRealm.captureLocation(sceneId: canonicalId)
                 }
                 DispatchQueue.main.async {
                     AppRealm.open().refresh()
-                    AppDelegate.enterScene(id: sceneId)
+                    AppDelegate.enterScene(id: canonicalId)
                 }
             }
         }

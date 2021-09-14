@@ -59,3 +59,46 @@ class Base: Object {
         return obj
     }
 }
+
+class BaseVersioned: Base {
+    struct Keys {
+        static let canonicalId = "canonicalId"
+        static let currentId = "currentId"
+        static let parentId = "parentId"
+        static let secondParentId = "secondParentId"
+    }
+
+    @objc dynamic var canonicalId: String?
+    @objc dynamic var currentId: String?
+    @objc dynamic var parentId: String?
+    @objc dynamic var secondParentId: String?
+
+    func new() {
+        canonicalId = UUID().uuidString.lowercased()
+    }
+
+    override func update(from data: [String: Any]) {
+        super.update(from: data)
+        canonicalId = data[Keys.canonicalId] as? String
+        currentId = data[Keys.currentId] as? String
+        parentId = data[Keys.parentId] as? String
+        secondParentId = data[Keys.secondParentId] as? String
+    }
+
+    override func asJSON() -> [String: Any] {
+        var data = super.asJSON()
+        if let value = canonicalId {
+            data[Keys.canonicalId] = value
+        }
+        if let value = currentId {
+            data[Keys.currentId] = value
+        }
+        if let value = parentId {
+            data[Keys.parentId] = value
+        }
+        if let value = secondParentId {
+            data[Keys.secondParentId] = value
+        }
+        return data
+    }
+}

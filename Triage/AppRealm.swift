@@ -216,17 +216,14 @@ class AppRealm {
         task.resume()
     }
 
-    public static func createOrUpdatePatient(observation: PatientObservation) {
-        var data = observation.asJSON()
-        data.removeValue(forKey: Base.Keys.id)
+    public static func createOrUpdatePatient(patient: Patient) {
         let realm = AppRealm.open()
         try! realm.write {
-            let patient = realm.object(ofType: Patient.self, forPrimaryKey: observation.compoundPrimaryKey) ?? Patient()
-            patient.update(from: data)
             realm.add(patient, update: .modified)
         }
         let op = RequestOperation()
         op.queuePriority = .veryHigh
+        let data = patient.asJSON()
         op.request = { (completionHandler) in
             return ApiClient.shared.createOrUpdatePatient(data: data) { (record, error) in
                 if let record = record {
@@ -243,15 +240,15 @@ class AppRealm {
         queue.addOperation(op)
     }
 
-    public static func uploadPatientAsset(observation: PatientObservation, key: String, fileURL: URL) {
+    public static func uploadPatientAsset(patient: Patient, key: String, fileURL: URL) {
         /// ensure a unique upload filename by prepending the user uuid
         let fileName = "\(AppSettings.userId ?? "")/\(fileURL.lastPathComponent)"
-        if let realm = observation.realm {
+        if let realm = patient.realm {
             try! realm.write {
-                observation.setValue(fileName, forKey: key)
+                patient.setValue(fileName, forKey: key)
             }
         } else {
-            observation.setValue(fileName, forKey: key)
+            patient.setValue(fileName, forKey: key)
         }
         /// move to the local app file cache
         let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
@@ -292,9 +289,18 @@ class AppRealm {
                     let lng = String(format: "%.6f", location.coordinate.longitude)
                     let op = RequestOperation()
                     op.request = { (completionHandler) in
-                        return ApiClient.shared.updateScene(sceneId: sceneId, data: ["lat": lat, "lng": lng]) { (_, error) in
-                            completionHandler(error)
+                        if let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId),
+                           let parentSceneId = scene.currentId {
+                            return ApiClient.shared.updateScene(data: [
+                                "id": UUID().uuidString.lowercased(),
+                                "parentId": parentSceneId,
+                                "lat": lat,
+                                "lng": lng
+                            ]) { (_, error) in
+                                completionHandler(error)
+                            }
                         }
+                        fatalError()
                     }
                     AppRealm.queue.addOperation(op)
                 }
@@ -325,6 +331,13 @@ class AppRealm {
     }
 
     public static func createScene(scene: Scene, completionHandler: @escaping (Scene?, Error?) -> Void) {
+        let canonical = Scene(clone: scene)
+        canonical.id = canonical.canonicalId!
+        canonical.canonicalId = nil
+        let realm = AppRealm.open()
+        try! realm.write {
+            realm.add([scene, canonical], update: .modified)
+        }
         let task = ApiClient.shared.createScene(data: scene.asJSON()) { (data, error) in
             if let error = error {
                 completionHandler(nil, error)
@@ -488,7 +501,8 @@ class AppRealm {
     public static func updateApproxPatientsCounts(sceneId: String, priority: Priority?, delta: Int) {
         let realm = AppRealm.open()
         try! realm.write {
-            if let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId) {
+            if let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId),
+               let parentSceneId = scene.currentId {
                 if let priority = priority, var approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
                     if approxPriorityPatientsCounts.count > priority.rawValue {
                         approxPriorityPatientsCounts[priority.rawValue] += delta
@@ -503,7 +517,10 @@ class AppRealm {
                 if let timer = Debounce.timer {
                     timer.invalidate()
                 }
-                var data: [String: Any] = [:]
+                var data: [String: Any] = [
+                    "id": UUID().uuidString.lowercased(),
+                    "parentId": parentSceneId
+                ]
                 if let approxPatientsCount = scene.approxPatientsCount.value {
                     data["approxPatientsCount"] = approxPatientsCount
                 }
@@ -513,7 +530,7 @@ class AppRealm {
                 Debounce.timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { (_) in
                     let op = RequestOperation()
                     op.request = { (completionHandler) in
-                        return ApiClient.shared.updateScene(sceneId: sceneId, data: data) { (_, error) in
+                        return ApiClient.shared.updateScene(data: data) { (_, error) in
                             completionHandler(error)
                         }
                     }

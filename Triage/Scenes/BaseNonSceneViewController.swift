@@ -44,7 +44,7 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
 
         let realm = AppRealm.open()
         activeScenesResults = realm.objects(Scene.self)
-            .filter("closedAt == NULL")
+            .filter("canonicalId == NULL AND closedAt == NULL")
             .sorted(by: [SortDescriptor(keyPath: "createdAt", ascending: false)])
         activeScenesNotificationToken = activeScenesResults?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
