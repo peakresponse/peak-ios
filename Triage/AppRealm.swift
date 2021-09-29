@@ -306,7 +306,7 @@ class AppRealm {
                 }
                 AppRealm.locationHelper = nil
             }
-            locationHelper.didFailWithError = { (error) in
+            locationHelper.didFailWithError = { (_) in
                 AppRealm.locationHelper = nil
             }
             AppRealm.locationHelper = locationHelper

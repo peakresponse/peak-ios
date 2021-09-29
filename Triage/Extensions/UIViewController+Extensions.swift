@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
-    var isModal: Bool {
+    @IBInspectable var isModal: Bool {
         get {
             if #available(iOS 13.0, *) {
                 return isModalInPresentation
@@ -47,8 +47,8 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     }
 
     func presentLogin() {
-        if let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController() as? LoginViewController {
-            vc.loginDelegate = self
+        if let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController() as? AuthViewController {
+//            vc.loginDelegate = self
             presentAnimated(vc)
         }
     }

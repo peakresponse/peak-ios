@@ -38,7 +38,7 @@ class Scene: BaseVersioned {
     @objc dynamic var name: String?
     @objc dynamic var desc: String?
     @objc dynamic var urgency: String?
-    let approxPatientsCount = RealmOptional<Int>()
+    let approxPatientsCount = RealmProperty<Int?>()
     @objc dynamic var _approxPriorityPatientsCounts: String?
     var approxPriorityPatientsCounts: [Int]? {
         get {
@@ -51,7 +51,7 @@ class Scene: BaseVersioned {
             _approxPriorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
         }
     }
-    let patientsCount = RealmOptional<Int>()
+    let patientsCount = RealmProperty<Int?>()
     @objc dynamic var _priorityPatientsCounts: String?
     var priorityPatientsCounts: [Int]? {
         get {
@@ -64,7 +64,7 @@ class Scene: BaseVersioned {
             _priorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
         }
     }
-    let respondersCount = RealmOptional<Int>()
+    let respondersCount = RealmProperty<Int?>()
     @objc dynamic var isActive: Bool = false
     @objc dynamic var isMCI: Bool = false
     @objc dynamic var lat: String?

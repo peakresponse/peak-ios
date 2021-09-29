@@ -26,6 +26,7 @@ PODS:
   - GoogleMaps/Base (5.1.0)
   - GoogleMaps/Maps (5.1.0):
     - GoogleMaps/Base
+  - Keyboardy (0.2.7)
   - Keys (1.0.1)
   - PLCrashReporter (1.8.1)
   - PRKit (0.1.0):
@@ -52,6 +53,7 @@ PODS:
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - Keyboardy
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift
@@ -66,6 +68,7 @@ SPEC REPOS:
     - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - Keyboardy
     - PLCrashReporter
     - Realm
     - RealmSwift
@@ -86,13 +89,14 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: cfda2ade0b5d687322ba207133c1be8d58f7a548
+    :commit: 2581da214b504c86e9429c04d97d258075bf8353
     :git: https://github.com/peakresponse/peak-ios-prkit.git
 
 SPEC CHECKSUMS:
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
+  Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
   PRKit: 57aef9444b83c849cb4b02ac07ec0f4663642526
@@ -106,6 +110,6 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
 
-PODFILE CHECKSUM: b3639efd265ac3bc83ba1cd30fb0f6a5aea7d882
+PODFILE CHECKSUM: 5e25789b8b37588c6452cc0df182fe4ac68e31d0
 
 COCOAPODS: 1.11.2

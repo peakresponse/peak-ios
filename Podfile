@@ -18,6 +18,7 @@ target 'Triage' do
   # Pods for Triage
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
+  pod 'Keyboardy'
   pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
   pod 'RealmSwift'
   pod 'RollbarNotifier', '2.0.0-beta.22'

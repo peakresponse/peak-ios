@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		450A977E24DCAC7A007BCDD3 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 450A977D24DCAC7A007BCDD3 /* TabBar.swift */; };
+		45150BCE270511C30085132C /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45150BCD270511C30085132C /* AuthViewController.swift */; };
 		451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A16FE252FD5FD00DC7705 /* RoleButton.swift */; };
 		451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A178A25364E1E00DC7705 /* ScenePin.swift */; };
 		451A17932536B97A00DC7705 /* ScenePinInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A17922536B97A00DC7705 /* ScenePinInfoView.swift */; };
@@ -169,6 +170,7 @@
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		450A977D24DCAC7A007BCDD3 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
+		45150BCD270511C30085132C /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		451A16FE252FD5FD00DC7705 /* RoleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleButton.swift; sourceTree = "<group>"; };
 		451A178A25364E1E00DC7705 /* ScenePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePin.swift; sourceTree = "<group>"; };
 		451A17922536B97A00DC7705 /* ScenePinInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePinInfoView.swift; sourceTree = "<group>"; };
@@ -479,6 +481,7 @@
 			children = (
 				4566F052236CD05200A04C75 /* Login.storyboard */,
 				4566F054236CD0C100A04C75 /* LoginViewController.swift */,
+				45150BCD270511C30085132C /* AuthViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -849,7 +852,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --fix\n";
 		};
 		5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -920,6 +923,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				454E17B224FF159C00F9EB8B /* Scene.swift in Sources */,
+				45150BCE270511C30085132C /* AuthViewController.swift in Sources */,
 				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
 				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
 				45515A3124DF682A007BAE09 /* SortBar.swift in Sources */,
@@ -1233,11 +1237,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -1255,11 +1260,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 2.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

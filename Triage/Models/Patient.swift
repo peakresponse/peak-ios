@@ -173,7 +173,7 @@ class Patient: BaseVersioned {
     @objc dynamic var sceneId: String?
     @objc dynamic var pin: String?
 
-    let version = RealmOptional<Int>()
+    let version = RealmProperty<Int?>()
 
     @objc dynamic var lastName: String?
     @objc dynamic var firstName: String?
@@ -189,7 +189,7 @@ class Patient: BaseVersioned {
         return ""
     }
 
-    let age = RealmOptional<Int>()
+    let age = RealmProperty<Int?>()
     @objc dynamic var ageUnits: String?
     @objc var ageString: String {
         if let value = age.value {
@@ -205,12 +205,12 @@ class Patient: BaseVersioned {
     @objc dynamic var triagePerfusion: String?
     @objc dynamic var triageMentalStatus: String?
 
-    let respiratoryRate = RealmOptional<Int>()
-    let pulse = RealmOptional<Int>()
-    let capillaryRefill = RealmOptional<Int>()
+    let respiratoryRate = RealmProperty<Int?>()
+    let pulse = RealmProperty<Int?>()
+    let capillaryRefill = RealmProperty<Int?>()
 
-    let bpSystolic = RealmOptional<Int>()
-    let bpDiastolic = RealmOptional<Int>()
+    let bpSystolic = RealmProperty<Int?>()
+    let bpDiastolic = RealmProperty<Int?>()
     // swiftlint:disable:next force_try
     static let bloodPressureExpr = try! NSRegularExpression(pattern: #"(?<bpSystolic>\d*)(?:(?:/|(?: over ))(?<bpDiastolic>\d*))?"#,
                                                             options: [.caseInsensitive])
@@ -235,11 +235,11 @@ class Patient: BaseVersioned {
         }
     }
 
-    let gcsTotal = RealmOptional<Int>()
+    let gcsTotal = RealmProperty<Int?>()
 
     @objc dynamic var text: String?
 
-    let priority = RealmOptional<Int>()
+    let priority = RealmProperty<Int?>()
     var priorityColor: UIColor {
         if let priority = priority.value, priority >= 0 && priority < 5 {
             return PRIORITY_COLORS[priority]
@@ -252,7 +252,7 @@ class Patient: BaseVersioned {
         }
         return PRIORITY_LABEL_COLORS[5]
     }
-    let filterPriority = RealmOptional<Int>()
+    let filterPriority = RealmProperty<Int?>()
     var filterPriorityColor: UIColor {
         if let priority = filterPriority.value, priority >= 0 && priority < 5 {
             return PRIORITY_COLORS[priority]

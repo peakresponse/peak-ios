@@ -14,6 +14,11 @@
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
+"AuthViewController.email" = "Email";
+"AuthViewController.password" = "Password";
+"AuthViewController.createAccount" = "CREATE NEW ACCOUNT";
+"AuthViewController.forgotPassword" = "FORGOT PASSWORD";
+
 "Banner.noActiveScenes" = "No Active Scenes";
 
 "BaseField.statusLabel.unconfirmed" = "Tap the mic icon to verify this information.";
@@ -41,6 +46,7 @@
 "Button.record" = "Record";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
+"Button.signIn" = "Sign In";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
