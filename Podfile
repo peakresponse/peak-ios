@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '12.4'
+platform :ios, '12.5'
 
 plugin 'cocoapods-keys', {
   :project => 'Triage',
@@ -18,6 +18,7 @@ target 'Triage' do
   # Pods for Triage
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
+  pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
   pod 'RealmSwift'
   pod 'RollbarNotifier', '2.0.0-beta.22'
   pod 'RollbarPLCrashReporter', '2.0.0-beta.22'

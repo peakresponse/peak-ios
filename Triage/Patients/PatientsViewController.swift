@@ -62,7 +62,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
 
     private func performQuery() {
         notificationToken?.invalidate()
-        var sorts: [SortDescriptor] = []
+        var sorts: [RealmSwift.SortDescriptor] = []
         switch sort {
         case .recent:
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: false))

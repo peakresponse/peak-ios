@@ -1,35 +1,40 @@
 PODS:
-  - Google-Maps-iOS-Utils (3.9.0):
-    - Google-Maps-iOS-Utils/Clustering (= 3.9.0)
-    - Google-Maps-iOS-Utils/Geometry (= 3.9.0)
-    - Google-Maps-iOS-Utils/GeometryUtils (= 3.9.0)
-    - Google-Maps-iOS-Utils/Heatmap (= 3.9.0)
-    - Google-Maps-iOS-Utils/QuadTree (= 3.9.0)
+  - CocoaLumberjack (3.7.2):
+    - CocoaLumberjack/Core (= 3.7.2)
+  - CocoaLumberjack/Core (3.7.2)
+  - Google-Maps-iOS-Utils (3.10.3):
+    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
+    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (3.9.0):
+  - Google-Maps-iOS-Utils/Clustering (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (3.9.0):
+  - Google-Maps-iOS-Utils/Geometry (3.10.3):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/GeometryUtils (3.9.0):
+  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (3.9.0):
+  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (3.9.0):
+  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
     - GoogleMaps
-  - GoogleMaps (4.2.0):
-    - GoogleMaps/Maps (= 4.2.0)
-  - GoogleMaps/Base (4.2.0)
-  - GoogleMaps/Maps (4.2.0):
+  - GoogleMaps (5.1.0):
+    - GoogleMaps/Maps (= 5.1.0)
+  - GoogleMaps/Base (5.1.0)
+  - GoogleMaps/Maps (5.1.0):
     - GoogleMaps/Base
   - Keys (1.0.1)
   - PLCrashReporter (1.8.1)
-  - Realm (10.7.6):
-    - Realm/Headers (= 10.7.6)
-  - Realm/Headers (10.7.6)
-  - RealmSwift (10.7.6):
-    - Realm (= 10.7.6)
+  - PRKit (0.1.0):
+    - SVGKit (~> 3.0)
+  - Realm (10.15.1):
+    - Realm/Headers (= 10.15.1)
+  - Realm/Headers (10.15.1)
+  - RealmSwift (10.15.1):
+    - Realm (= 10.15.1)
   - RollbarCommon (2.0.0-beta.22)
   - RollbarNotifier (2.0.0-beta.22):
     - RollbarCommon (~> 2.0.0-beta.22)
@@ -40,12 +45,15 @@ PODS:
     - RollbarCommon (~> 2.0.0-beta.22)
     - RollbarNotifier (~> 2.0.0-beta.22)
   - Starscream (4.0.4)
-  - SwiftLint (0.40.3)
+  - SVGKit (3.0.0):
+    - CocoaLumberjack (~> 3.0)
+  - SwiftLint (0.44.0)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - Keys (from `Pods/CocoaPodsKeys`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift
   - RollbarNotifier (= 2.0.0-beta.22)
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
@@ -55,6 +63,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
     - PLCrashReporter
@@ -65,26 +74,38 @@ SPEC REPOS:
     - RollbarPLCrashReporter
     - RollbarSwift
     - Starscream
+    - SVGKit
     - SwiftLint
 
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
+  PRKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-prkit.git
+
+CHECKOUT OPTIONS:
+  PRKit:
+    :commit: cfda2ade0b5d687322ba207133c1be8d58f7a548
+    :git: https://github.com/peakresponse/peak-ios-prkit.git
 
 SPEC CHECKSUMS:
-  Google-Maps-iOS-Utils: ae3b4e74b2d734454be32cf62ba8d6ad7283e0c1
-  GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
+  CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
+  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
+  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
-  Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
-  RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
+  PRKit: 57aef9444b83c849cb4b02ac07ec0f4663642526
+  Realm: fbcbde2620d51623cc5b18e28f5b165c39abef52
+  RealmSwift: e4bea8e42efad3d543aea23b56504069c6faaea2
   RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
   RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
   RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
+  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+  SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
 
-PODFILE CHECKSUM: 937195b25d267c0f03068605237e78b8d67aa6d0
+PODFILE CHECKSUM: b3639efd265ac3bc83ba1cd30fb0f6a5aea7d882
 
 COCOAPODS: 1.11.2
