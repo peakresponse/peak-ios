@@ -166,7 +166,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
 
     // MARK: - LoginViewControllerDelegate
 
-    override func loginViewControllerDidLogin(_ vc: LoginViewController) {
+    override func authViewControllerDidLogin(_ vc: AuthViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
         }

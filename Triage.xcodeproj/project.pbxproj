@@ -64,8 +64,7 @@
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
 		4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */; };
 		4566F042236CCC5700A04C75 /* TriageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F041236CCC5700A04C75 /* TriageUITests.swift */; };
-		4566F053236CD05200A04C75 /* Login.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F052236CD05200A04C75 /* Login.storyboard */; };
-		4566F055236CD0C100A04C75 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F054236CD0C100A04C75 /* LoginViewController.swift */; };
+		4566F053236CD05200A04C75 /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F052236CD05200A04C75 /* Auth.storyboard */; };
 		4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F057236CD1EE00A04C75 /* Patients.storyboard */; };
 		4566F05A236CD26900A04C75 /* PatientsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F059236CD26900A04C75 /* PatientsViewController.swift */; };
 		4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F05B236CD2DB00A04C75 /* ApiClient.swift */; };
@@ -232,8 +231,7 @@
 		4566F03D236CCC5700A04C75 /* TriageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TriageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F041236CCC5700A04C75 /* TriageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageUITests.swift; sourceTree = "<group>"; };
 		4566F043236CCC5700A04C75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4566F052236CD05200A04C75 /* Login.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Login.storyboard; sourceTree = "<group>"; };
-		4566F054236CD0C100A04C75 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		4566F052236CD05200A04C75 /* Auth.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Auth.storyboard; sourceTree = "<group>"; };
 		4566F057236CD1EE00A04C75 /* Patients.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Patients.storyboard; sourceTree = "<group>"; };
 		4566F059236CD26900A04C75 /* PatientsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsViewController.swift; sourceTree = "<group>"; };
 		4566F05B236CD2DB00A04C75 /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
@@ -429,7 +427,7 @@
 				451ABAFB2545E66B00580115 /* Types */,
 				4566F05D236CD56200A04C75 /* Extensions */,
 				4566F061236CE17900A04C75 /* Models */,
-				4566F04F236CCF5C00A04C75 /* Login */,
+				4566F04F236CCF5C00A04C75 /* Auth */,
 				4566F056236CD1E000A04C75 /* Patients */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
 				454EEA9F2524073300EB266A /* Users */,
@@ -476,14 +474,13 @@
 			path = TriageUITests;
 			sourceTree = "<group>";
 		};
-		4566F04F236CCF5C00A04C75 /* Login */ = {
+		4566F04F236CCF5C00A04C75 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				4566F052236CD05200A04C75 /* Login.storyboard */,
-				4566F054236CD0C100A04C75 /* LoginViewController.swift */,
+				4566F052236CD05200A04C75 /* Auth.storyboard */,
 				45150BCD270511C30085132C /* AuthViewController.swift */,
 			);
-			path = Login;
+			path = Auth;
 			sourceTree = "<group>";
 		};
 		4566F056236CD1E000A04C75 /* Patients */ = {
@@ -768,7 +765,7 @@
 			files = (
 				454EEAA92524078C00EB266A /* Users.storyboard in Resources */,
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
-				4566F053236CD05200A04C75 /* Login.storyboard in Resources */,
+				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
 				45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */,
@@ -1000,7 +997,6 @@
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				452AFE06252A6C0100E5A84D /* SectionInfoTableViewCell.swift in Sources */,
 				45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */,
-				4566F055236CD0C100A04C75 /* LoginViewController.swift in Sources */,
 				452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */,
 				454EE97C25202C7A00EB266A /* PatientView.swift in Sources */,
 				45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */,

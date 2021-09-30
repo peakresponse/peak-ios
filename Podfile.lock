@@ -89,7 +89,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 2581da214b504c86e9429c04d97d258075bf8353
+    :commit: f78ce694b04093a4e7c599e7d2a5756c11b6558d
     :git: https://github.com/peakresponse/peak-ios-prkit.git
 
 SPEC CHECKSUMS:

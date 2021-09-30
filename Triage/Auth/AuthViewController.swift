@@ -1,54 +1,61 @@
 //
-//  LoginViewController.swift
+//  AuthViewController.swift
 //  Triage
 //
-//  Created by Francis Li on 11/1/19.
-//  Copyright © 2019 Francis Li. All rights reserved.
+//  Created by Francis Li on 9/29/21.
+//  Copyright © 2021 Francis Li. All rights reserved.
 //
 
 import UIKit
+import Keyboardy
+import PRKit
 
-@objc protocol LoginViewControllerDelegate {
-    @objc optional func loginViewControllerDidLogin(_ vc: LoginViewController)
+@objc protocol AuthViewControllerDelegate {
+    @objc optional func authViewControllerDidLogin(_ vc: AuthViewController)
 }
 
-class LoginViewController: UIViewController, FormFieldDelegate {
-    @IBOutlet weak var loginFormView: UIView!
-    @IBOutlet weak var emailField: FormField!
-    @IBOutlet weak var passwordField: FormField!
-    @IBOutlet weak var loginButton: FormButton!
-    @IBOutlet weak var activityView: UIActivityIndicatorView!
+class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardStateDelegate {
+    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
 
-    weak var loginDelegate: LoginViewControllerDelegate?
+    @IBOutlet weak var emailField: PRKit.TextField!
+    @IBOutlet weak var passwordField: PRKit.PasswordField!
+    @IBOutlet weak var signInButton: PRKit.Button!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+
+    weak var delegate: AuthViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        isModal = true
-
-        emailField.textField.keyboardType = .emailAddress
-        emailField.textField.autocorrectionType = .no
-        emailField.textField.autocapitalizationType = .none
+        emailField.textView.keyboardType = .emailAddress
+        emailField.textView.autocorrectionType = .no
+        emailField.textView.autocapitalizationType = .none
     }
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+
         _ = emailField.becomeFirstResponder()
     }
 
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
-    @IBAction func loginPressed(_ sender: FormButton) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
+    }
+
+    @IBAction func signInPressed(_ sender: PRKit.Button) {
         let email = emailField.text
         let password = passwordField.text
         if let email = email, let password = password, !email.isEmpty && !password.isEmpty {
-            emailField.isEnabled = false
-            passwordField.isEnabled = false
-            loginButton.isEnabled = false
-            activityView.startAnimating()
+            emailField.isUserInteractionEnabled = false
+            passwordField.isUserInteractionEnabled = false
+            signInButton.isUserInteractionEnabled = false
+            activityIndicatorView.startAnimating()
             let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.activityView.stopAnimating()
+                    self.activityIndicatorView.stopAnimating()
                     if let error = error {
                         if let error = error as? ApiClientError, error == .unauthorized {
                             self.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
@@ -81,7 +88,7 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                                                 _ = AppDelegate.leaveScene()
                                             }
                                         } else {
-                                            self.loginDelegate?.loginViewControllerDidLogin?(self)
+                                            self.delegate?.authViewControllerDidLogin?(self)
                                         }
                                     } else {
                                         self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
@@ -94,9 +101,9 @@ class LoginViewController: UIViewController, FormFieldDelegate {
                     } else {
                         self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
-                    self.emailField.isEnabled = true
-                    self.passwordField.isEnabled = true
-                    self.loginButton.isEnabled = true
+                    self.emailField.isUserInteractionEnabled = true
+                    self.passwordField.isUserInteractionEnabled = true
+                    self.signInButton.isUserInteractionEnabled = true
                 }
             }
             task.resume()
@@ -105,13 +112,31 @@ class LoginViewController: UIViewController, FormFieldDelegate {
 
     // MARK: - FormFieldDelegate
 
-    func formFieldShouldReturn(_ field: BaseField) -> Bool {
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
         if field == emailField {
             _ = passwordField.becomeFirstResponder()
         } else if field == passwordField {
             _ = passwordField.resignFirstResponder()
-            loginPressed(loginButton)
+            signInPressed(signInButton)
         }
         return false
+    }
+
+    // MARK: - KeyboardStateDelegate
+
+    public func keyboardWillTransition(_ state: KeyboardState) {
+    }
+
+    public func keyboardTransitionAnimation(_ state: KeyboardState) {
+        switch state {
+        case .activeWithHeight(let height):
+            scrollViewBottomConstraint.constant = -height
+        case .hidden:
+            scrollViewBottomConstraint.constant = 0
+        }
+        view.layoutIfNeeded()
+    }
+
+    public func keyboardDidTransition(_ state: KeyboardState) {
     }
 }
