@@ -89,7 +89,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 9828ff69d1283d391d5b10a4542b02a2f57492e7
+    :commit: 2e2b39c03538fb89a90dcd1dd5528444c7ac67a4
     :git: https://github.com/peakresponse/peak-ios-prkit.git
 
 SPEC CHECKSUMS:
@@ -99,7 +99,7 @@ SPEC CHECKSUMS:
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
-  PRKit: bc6ed01fcbc75d095a14731498b2dd01ada61784
+  PRKit: d551541ef51933be2b2cbdbb108ab38c87176674
   Realm: b6027801398f3743fc222f096faa85281b506e6c
   RealmSwift: b02a3d0e4947955da960b642c98ad3a461fc4e70
   RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
