@@ -53,6 +53,7 @@
 		454EEA542522F0EC00EB266A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA532522F0EC00EB266A /* ImageView.swift */; };
 		454EEAA12524075D00EB266A /* RespondersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEAA02524075D00EB266A /* RespondersViewController.swift */; };
 		454EEAA92524078C00EB266A /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 454EEAA82524078C00EB266A /* Users.storyboard */; };
+		4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
@@ -121,7 +122,6 @@
 		45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63575252AD0AE0045C7CC /* Patient+Parser.swift */; };
 		45E267502418AFAD0010CDE9 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2674F2418AFAD0010CDE9 /* TextField.swift */; };
 		45E267522418B2510010CDE9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267512418B2510010CDE9 /* Button.swift */; };
-		45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */; };
 		45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2675724196E5C0010CDE9 /* NavigationController.swift */; };
 		45E35A3224ECE7CA005A8059 /* UILabel+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */; };
 		45E35A3424EF8E8B005A8059 /* FacilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3324EF8E8B005A8059 /* FacilityView.swift */; };
@@ -214,6 +214,7 @@
 		454EEA532522F0EC00EB266A /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		454EEAA02524075D00EB266A /* RespondersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersViewController.swift; sourceTree = "<group>"; };
 		454EEAA82524078C00EB266A /* Users.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
+		4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -289,7 +290,6 @@
 		45D63575252AD0AE0045C7CC /* Patient+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+Parser.swift"; sourceTree = "<group>"; };
 		45E2674F2418AFAD0010CDE9 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
 		45E267512418B2510010CDE9 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
-		45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		45E2675724196E5C0010CDE9 /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extensions.swift"; sourceTree = "<group>"; };
 		45E35A3324EF8E8B005A8059 /* FacilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityView.swift; sourceTree = "<group>"; };
@@ -479,6 +479,7 @@
 			children = (
 				4566F052236CD05200A04C75 /* Auth.storyboard */,
 				45150BCD270511C30085132C /* AuthViewController.swift */,
+				4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -518,7 +519,6 @@
 				4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
-				45E267532418B3A70010CDE9 /* UIColor+Extensions.swift */,
 				4563C74624DB7B3500217901 /* UIFont+Extensions.swift */,
 				45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */,
 				45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */,
@@ -930,6 +930,7 @@
 				454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */,
 				4566F088236E0A5800A04C75 /* ObservationViewController.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PortraitView.swift in Sources */,
+				4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */,
 				45F218FE24E5BB510046A39B /* PatientTableViewController.swift in Sources */,
 				45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */,
 				4566F05A236CD26900A04C75 /* PatientsViewController.swift in Sources */,
@@ -951,7 +952,6 @@
 				4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */,
 				45B7A2F2251038D200BCAAAE /* PatientsCollectionViewCell.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
-				45E267542418B3A70010CDE9 /* UIColor+Extensions.swift in Sources */,
 				45E5BEEE2425DA010013D78D /* PatientTableViewHeaderView.swift in Sources */,
 				45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */,
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,

@@ -35,7 +35,7 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         registerForKeyboardNotifications(self)
-
+        presentAnimated(UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "Assignment"))
         _ = emailField.becomeFirstResponder()
     }
 

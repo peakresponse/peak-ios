@@ -14,6 +14,8 @@
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
+"AssignmentViewController.select" = "Please select your unit:";
+
 "AuthViewController.email" = "Email";
 "AuthViewController.password" = "Password";
 "AuthViewController.createAccount" = "CREATE NEW ACCOUNT";
@@ -35,6 +37,7 @@
 "Button.cancelTransport" = "Cancel Transport";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
+"Button.continue" = "Continue";
 "Button.delete" = "Delete";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
@@ -47,6 +50,7 @@
 "Button.retry" = "Retry";
 "Button.save" = "Save";
 "Button.signIn" = "Sign In";
+"Button.skip" = "Skip";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
