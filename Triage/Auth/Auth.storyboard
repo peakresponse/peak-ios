@@ -178,6 +178,13 @@
                                         <rect key="frame" x="20" y="36.333333333333314" width="388" height="245"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                     </view>
+                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="LTc-RD-9v1" customClass="TextField" customModule="PRKit">
+                                        <rect key="frame" x="20" y="311.33333333333331" width="388" height="50"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AssignmentViewController.other"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="J6c-DA-S38">
                                         <rect key="frame" x="195.66666666666666" y="56.333333333333329" width="37" height="37"/>
                                         <color key="color" name="Base800"/>
@@ -185,15 +192,18 @@
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="3r6-6w-ARK" firstAttribute="top" secondItem="EbZ-ea-QiJ" secondAttribute="bottom" id="2Cu-ug-j8z"/>
+                                    <constraint firstItem="LTc-RD-9v1" firstAttribute="leading" secondItem="3r6-6w-ARK" secondAttribute="leading" id="3iT-OZ-Qok"/>
                                     <constraint firstItem="3r6-6w-ARK" firstAttribute="leading" secondItem="IOI-yd-xC0" secondAttribute="leading" constant="20" id="6Da-Pw-4wr"/>
                                     <constraint firstItem="EbZ-ea-QiJ" firstAttribute="top" secondItem="Xjk-Xx-s3l" secondAttribute="top" constant="16" id="MqA-kR-Gdo"/>
-                                    <constraint firstItem="Xjk-Xx-s3l" firstAttribute="bottom" secondItem="3r6-6w-ARK" secondAttribute="bottom" id="Qra-pI-ODQ"/>
                                     <constraint firstItem="3r6-6w-ARK" firstAttribute="trailing" secondItem="IOI-yd-xC0" secondAttribute="trailing" constant="-20" id="UIt-Qe-DxW"/>
                                     <constraint firstAttribute="width" relation="lessThanOrEqual" constant="730" id="ZhI-KD-ihf"/>
                                     <constraint firstItem="EbZ-ea-QiJ" firstAttribute="leading" secondItem="IOI-yd-xC0" secondAttribute="leading" constant="20" id="afW-HH-iJa"/>
                                     <constraint firstItem="J6c-DA-S38" firstAttribute="centerX" secondItem="IOI-yd-xC0" secondAttribute="centerX" id="gtG-bH-fdb"/>
                                     <constraint firstItem="Xjk-Xx-s3l" firstAttribute="trailing" secondItem="3r6-6w-ARK" secondAttribute="trailing" id="ktH-5I-dLw"/>
                                     <constraint firstItem="J6c-DA-S38" firstAttribute="top" secondItem="EbZ-ea-QiJ" secondAttribute="bottom" constant="20" id="qOF-ia-SPv"/>
+                                    <constraint firstItem="LTc-RD-9v1" firstAttribute="width" secondItem="3r6-6w-ARK" secondAttribute="width" id="qho-EI-oNO"/>
+                                    <constraint firstItem="LTc-RD-9v1" firstAttribute="bottom" secondItem="Xjk-Xx-s3l" secondAttribute="bottom" constant="-30" id="rNL-8K-nYU"/>
+                                    <constraint firstItem="LTc-RD-9v1" firstAttribute="top" secondItem="3r6-6w-ARK" secondAttribute="bottom" constant="30" id="ynS-aF-SxV"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="Xjk-Xx-s3l"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="IOI-yd-xC0"/>
@@ -250,6 +260,8 @@
                         <outlet property="commandFooter" destination="vIM-aN-FPe" id="uL9-7Z-LLq"/>
                         <outlet property="containerView" destination="3r6-6w-ARK" id="Pmm-3a-qQk"/>
                         <outlet property="continueButton" destination="eze-ch-Blg" id="TgH-mW-Jdi"/>
+                        <outlet property="otherTextField" destination="LTc-RD-9v1" id="B43-QQ-PBj"/>
+                        <outlet property="otherTextFieldWidthConstraint" destination="qho-EI-oNO" id="zA2-ZY-6rd"/>
                         <outlet property="scrollView" destination="1iv-yg-HzC" id="Rwh-tF-1hw"/>
                         <outlet property="scrollViewBottomConstraint" destination="VfP-Tz-Wp1" id="q2r-jI-Bc5"/>
                         <outlet property="welcomeHeader" destination="ycX-FD-H1F" id="3Zg-Xk-sY7"/>

@@ -15,6 +15,7 @@
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
 "AssignmentViewController.select" = "Please select your unit:";
+"AssignmentViewController.other" = "Other:";
 
 "AuthViewController.email" = "Email";
 "AuthViewController.password" = "Password";

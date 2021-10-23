@@ -15,6 +15,8 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var otherTextField: UIView!
+    @IBOutlet weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var continueButton: PRKit.Button!
 
@@ -22,8 +24,13 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
         super.viewDidLoad()
 
         welcomeHeader.labelText = "Welcome Captain John Doe."
-        commandFooter.addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .base800, opacity: 0.2)
 
+        if view.traitCollection.horizontalSizeClass == .regular {
+            otherTextFieldWidthConstraint.isActive = false
+            let widthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5)
+            widthConstraint.isActive = true
+            otherTextFieldWidthConstraint = widthConstraint
+        }
         let columns = view.traitCollection.horizontalSizeClass == .regular ? 4 : 2
         var stackView: UIStackView?
         let count = 49
@@ -52,7 +59,7 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
             }
         }
         if let bottomAnchor = stackView?.bottomAnchor {
-            containerView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 20).isActive = true
+            containerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         }
         commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
     }
