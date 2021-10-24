@@ -8,17 +8,20 @@
 
 import UIKit
 import PRKit
+import Keyboardy
 
-class AssignmentViewController: UIViewController, CommandFooterDelegate {
+class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
     @IBOutlet weak var welcomeHeader: WelcomeHeader!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var otherTextField: UIView!
+    @IBOutlet weak var otherTextField: PRKit.TextField!
     @IBOutlet weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var continueButton: PRKit.Button!
+
+    var checkboxes: [Checkbox] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,8 +53,11 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
                 stackView = newStackView
             }
             let checkbox = Checkbox()
+            checkbox.tag = i
+            checkbox.delegate = self
             checkbox.labelText = "\(i)"
             stackView?.addArrangedSubview(checkbox)
+            checkboxes.append(checkbox)
         }
         if count % columns > 0 {
             for _ in 0..<(columns - count % columns) {
@@ -64,7 +70,30 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
         commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
     }
 
-    // MARK: -
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
+   }
+
+    // MARK: - CheckboxDelegate
+
+    func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
+        if isChecked {
+            for otherCheckbox in checkboxes {
+                if otherCheckbox != checkbox {
+                    otherCheckbox.isChecked = false
+                }
+            }
+            otherTextField.text = nil
+        }
+    }
+
+    // MARK: - CommandFooterDelegate
 
     func commandFooterDidUpdateLayout(_ commandFooter: CommandFooter, isOverlapping: Bool) {
         scrollViewBottomConstraint.isActive = false
@@ -77,5 +106,39 @@ class AssignmentViewController: UIViewController, CommandFooterDelegate {
             constraint.isActive = true
         }
         scrollViewBottomConstraint = constraint
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        if !(field.text?.isEmpty ?? true) {
+            for checkbox in checkboxes {
+                checkbox.isChecked = false
+            }
+        }
+    }
+
+    // MARK: - KeyboardStateDelegate
+
+    public func keyboardWillTransition(_ state: KeyboardState) {
+    }
+
+    public func keyboardTransitionAnimation(_ state: KeyboardState) {
+        switch state {
+        case .activeWithHeight(let height):
+            scrollViewBottomConstraint.constant = -height + commandFooter.frame.height
+        case .hidden:
+            scrollViewBottomConstraint.constant = 0
+        }
+        view.layoutIfNeeded()
+    }
+
+    public func keyboardDidTransition(_ state: KeyboardState) {
+        switch state {
+        case .activeWithHeight:
+            scrollView.scrollRectToVisible(otherTextField.frame.insetBy(dx: 0, dy: -20), animated: true)
+        default:
+            break
+        }
     }
 }

@@ -184,6 +184,9 @@
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AssignmentViewController.other"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <outlet property="delegate" destination="IMw-jY-phY" id="IrF-7d-IqQ"/>
+                                        </connections>
                                     </view>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="J6c-DA-S38">
                                         <rect key="frame" x="195.66666666666666" y="56.333333333333329" width="37" height="37"/>
@@ -273,6 +276,9 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="LTc-RD-9v1">
+            <size key="intrinsicContentSize" width="388" height="50"/>
+        </designable>
         <designable name="cEJ-de-7Dm">
             <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
