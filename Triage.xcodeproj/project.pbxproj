@@ -118,6 +118,8 @@
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
+		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
+		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
 		45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63575252AD0AE0045C7CC /* Patient+Parser.swift */; };
 		45E267502418AFAD0010CDE9 /* TextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E2674F2418AFAD0010CDE9 /* TextField.swift */; };
@@ -286,6 +288,8 @@
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
+		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
+		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
 		45D63575252AD0AE0045C7CC /* Patient+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+Parser.swift"; sourceTree = "<group>"; };
 		45E2674F2418AFAD0010CDE9 /* TextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextField.swift; sourceTree = "<group>"; };
@@ -535,6 +539,7 @@
 			isa = PBXGroup;
 			children = (
 				452DDBC6243CF3F000A8F1FF /* Agency.swift */,
+				45D3E94527276C8D00E5382D /* Assignment.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
 				45B7A2D72508330600BCAAAE /* City.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
@@ -545,6 +550,7 @@
 				451A178A25364E1E00DC7705 /* ScenePin.swift */,
 				45B7A2D92508331500BCAAAE /* State.swift */,
 				454E17B624FFF5BF00F9EB8B /* User.swift */,
+				45D3E943272767A200E5382D /* Vehicle.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -955,6 +961,7 @@
 				45E5BEEE2425DA010013D78D /* PatientTableViewHeaderView.swift in Sources */,
 				45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */,
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
+				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
 				45F2190024E5D7B50046A39B /* ObservationTableViewController.swift in Sources */,
 				454EE968251C62D800EB266A /* LocationHelper.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
@@ -970,6 +977,7 @@
 				45E35A3424EF8E8B005A8059 /* FacilityView.swift in Sources */,
 				45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */,
 				4566F099236E12A600A04C75 /* BasePatientTableViewCell.swift in Sources */,
+				45D3E944272767A200E5382D /* Vehicle.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
 				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
 				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,

@@ -26,6 +26,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "agencyId") }
     }
 
+    static var assignmentId: String? {
+        get { return defaults.string(forKey: "assignmentId") }
+        set { defaults.set(newValue, forKey: "assignmentId") }
+    }
+
     static var lastPingDate: Date? {
         get { return defaults.object(forKey: "lastPingDate") as? Date }
         set { defaults.set(newValue, forKey: "lastPingDate") }
@@ -46,15 +51,17 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "subdomain") }
     }
 
-    static func login(userId: String, agencyId: String, sceneId: String?) {
+    static func login(userId: String, agencyId: String, assignmentId: String?, sceneId: String?) {
         AppSettings.userId = userId
         AppSettings.agencyId = agencyId
+        AppSettings.assignmentId = assignmentId
         AppSettings.sceneId = sceneId
     }
 
     static func logout() {
         AppSettings.userId = nil
         AppSettings.agencyId = nil
+        AppSettings.assignmentId = nil
         AppSettings.sceneId = nil
         AppSettings.subdomain = nil
     }
