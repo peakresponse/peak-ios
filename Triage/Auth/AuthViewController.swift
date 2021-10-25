@@ -55,8 +55,8 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
             let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.activityIndicatorView.stopAnimating()
                     if let error = error {
+                        self.activityIndicatorView.stopAnimating()
                         if let error = error as? ApiClientError, error == .unauthorized {
                             self.presentAlert(title: "Error.title".localized, message: "Invalid email and/or password.".localized)
                         } else {
@@ -65,6 +65,7 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
                     } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
                         if agencies.count > 1 {
                             // TODO navigate to a selection screen
+                            self.activityIndicatorView.stopAnimating()
                             self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                         }
                         if let subdomain = agencies[0]["subdomain"] as? String {
@@ -76,6 +77,7 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
                                 DispatchQueue.main.async { [weak self] in
                                     guard let self = self else { return }
                                     if let error = error {
+                                        self.activityIndicatorView.stopAnimating()
                                         self.presentAlert(error: error)
                                     } else if let userId = userId, let agencyId = agencyId {
                                         // check if the user or scene has changed since last login
@@ -91,14 +93,17 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
                                             self.delegate?.authViewControllerDidLogin?(self)
                                         }
                                     } else {
+                                        self.activityIndicatorView.stopAnimating()
                                         self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                                     }
                                 }
                             }
                         } else {
+                            self.activityIndicatorView.stopAnimating()
                             self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                         }
                     } else {
+                        self.activityIndicatorView.stopAnimating()
                         self.presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
                     }
                     self.emailField.isUserInteractionEnabled = true

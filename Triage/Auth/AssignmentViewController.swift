@@ -68,6 +68,8 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         }
         commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
+
+        continueButton.isEnabled = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -90,7 +92,9 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
                 }
             }
             otherTextField.text = nil
+            _ = otherTextField.resignFirstResponder()
         }
+        continueButton.isEnabled = isChecked
     }
 
     // MARK: - CommandFooterDelegate
@@ -115,6 +119,9 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
             for checkbox in checkboxes {
                 checkbox.isChecked = false
             }
+            continueButton.isEnabled = true
+        } else {
+            continueButton.isEnabled = false
         }
     }
 
@@ -126,7 +133,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     public func keyboardTransitionAnimation(_ state: KeyboardState) {
         switch state {
         case .activeWithHeight(let height):
-            scrollViewBottomConstraint.constant = -height + commandFooter.frame.height
+            scrollViewBottomConstraint.constant = -height + (commandFooter.isOverlapping ? commandFooter.frame.height : 0)
         case .hidden:
             scrollViewBottomConstraint.constant = 0
         }
@@ -136,7 +143,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     public func keyboardDidTransition(_ state: KeyboardState) {
         switch state {
         case .activeWithHeight:
-            scrollView.scrollRectToVisible(otherTextField.frame.insetBy(dx: 0, dy: -20), animated: true)
+            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentSize.height - scrollView.frame.height), animated: true)
         default:
             break
         }
