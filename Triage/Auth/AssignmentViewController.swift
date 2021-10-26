@@ -21,6 +21,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     @IBOutlet weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var continueButton: PRKit.Button!
+    @IBOutlet weak var skipButton: PRKit.Button!
 
     var checkboxes: [Checkbox] = []
     var notificationToken: NotificationToken?
@@ -138,6 +139,43 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unregisterFromKeyboardNotifications()
+    }
+
+    @IBAction func skipPressed() {
+        createAssignment(number: nil, vehicleId: nil)
+    }
+
+    @IBAction func continuePressed() {
+        var number: String?
+        var vehicleId: String?
+        if let text = otherTextField.text, !text.isEmpty {
+            number = text
+        } else {
+            for checkbox in checkboxes {
+                if checkbox.isChecked {
+                    let vehicle = results?[checkbox.tag]
+                    vehicleId = vehicle?.id
+                    break
+                }
+            }
+        }
+        createAssignment(number: number, vehicleId: vehicleId)
+    }
+
+    func createAssignment(number: String?, vehicleId: String?) {
+        commandFooter.isLoading = true
+        AppRealm.createAssignment(number: number, vehicleId: vehicleId) { [weak self] (assignment, error) in
+            let assignmentId = assignment?.id
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.commandFooter.isLoading = false
+                if let error = error {
+                    self.presentAlert(error: error)
+                } else {
+                    AppSettings.assignmentId = assignmentId
+                }
+            }
+        }
     }
 
     // MARK: - CheckboxDelegate

@@ -155,6 +155,32 @@ class AppRealm {
         task.resume()
     }
 
+    // MARK: - Assignments
+
+    public static func createAssignment(number: String?, vehicleId: String?, completionHandler: @escaping (Assignment?, Error?) -> Void) {
+        var data: [String: Any] = [:]
+        if let number = number {
+            data["number"] = number
+        } else if let vehicleId = vehicleId {
+            data["vehicleId"] = vehicleId
+        } else {
+            data["vehicleId"] = NSNull()
+        }
+        let task = ApiClient.shared.createAssignment(data: data) { (data, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let data = data {
+                let assignment = Assignment.instantiate(from: data)
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(assignment, update: .modified)
+                }
+                completionHandler(assignment as? Assignment, nil)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Facilities
 
     public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,

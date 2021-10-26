@@ -264,6 +264,12 @@ class ApiClient {
         return GET(path: "/api/agencies", params: params, completionHandler: completionHandler)
     }
 
+    // MARK: - Assignments
+
+    func createAssignment(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/assignments", body: data, completionHandler: completionHandler)
+    }
+
     // MARK: - Facilities
 
     func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,

@@ -237,6 +237,9 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="Style" value="secondary"/>
                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.skip"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="skipPressed" destination="IMw-jY-phY" eventType="touchUpInside" id="JQ4-8t-RlB"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eze-ch-Blg" customClass="Button" customModule="PRKit">
                                         <rect key="frame" x="20" y="37" width="388" height="34"/>
@@ -247,6 +250,9 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="Style" value="primary"/>
                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.continue"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="continuePressed" destination="IMw-jY-phY" eventType="touchUpInside" id="QJe-er-c2O"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -279,6 +285,7 @@
                         <outlet property="otherTextFieldWidthConstraint" destination="yxo-TX-gsW" id="ZKD-oq-Fqf"/>
                         <outlet property="scrollView" destination="1iv-yg-HzC" id="Rwh-tF-1hw"/>
                         <outlet property="scrollViewBottomConstraint" destination="VfP-Tz-Wp1" id="q2r-jI-Bc5"/>
+                        <outlet property="skipButton" destination="giv-Sb-Cls" id="J2q-4h-CIQ"/>
                         <outlet property="welcomeHeader" destination="ycX-FD-H1F" id="3Zg-Xk-sY7"/>
                     </connections>
                 </viewController>
