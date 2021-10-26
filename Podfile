@@ -20,7 +20,7 @@ target 'Triage' do
   pod 'GoogleMaps'
   pod 'Keyboardy'
   pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
-  pod 'RealmSwift'
+  pod 'RealmSwift', '10.11.0'
   pod 'RollbarNotifier', '2.0.0-beta.22'
   pod 'RollbarPLCrashReporter', '2.0.0-beta.22'
   pod 'RollbarSwift', '2.0.0-beta.22'

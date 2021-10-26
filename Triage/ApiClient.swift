@@ -415,4 +415,10 @@ class ApiClient {
     func geocode(lat: String, lng: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/utils/geocode", params: ["lat": lat, "lng": lng], completionHandler: completionHandler)
     }
+
+    // MARK: - Vehicles
+
+    func getVehicles(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/demographics/vehicles", completionHandler: completionHandler)
+    }
 }

@@ -7,8 +7,9 @@
 //
 
 import UIKit
-import PRKit
 import Keyboardy
+import PRKit
+import RealmSwift
 
 class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
     @IBOutlet weak var welcomeHeader: WelcomeHeader!
@@ -22,11 +23,15 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     @IBOutlet weak var continueButton: PRKit.Button!
 
     var checkboxes: [Checkbox] = []
+    var notificationToken: NotificationToken?
+    var results: Results<Vehicle>?
+
+    deinit {
+        notificationToken?.invalidate()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        welcomeHeader.labelText = "Welcome Captain John Doe."
 
         if view.traitCollection.horizontalSizeClass == .regular {
             otherTextFieldWidthConstraint.isActive = false
@@ -34,10 +39,66 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
             widthConstraint.isActive = true
             otherTextFieldWidthConstraint = widthConstraint
         }
+        commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
+
+        otherTextField.isHidden = true
+        continueButton.isEnabled = false
+
+        guard let userId = AppSettings.userId, let agencyId = AppSettings.agencyId else {
+            return
+        }
+
+        let realm = AppRealm.open()
+        if let user = realm.object(ofType: User.self, forPrimaryKey: userId) {
+            let nameAndPosition = "\(user.position ?? "") \(user.fullName)".trimmingCharacters(in: .whitespaces)
+            welcomeHeader.labelText = String(format: "AssignmentViewController.welcome".localized, nameAndPosition)
+            welcomeHeader.imageURL = user.iconUrl
+        }
+
+        results = realm.objects(Vehicle.self)
+            .filter("createdByAgencyId=%@", agencyId)
+            .sorted(by: [SortDescriptor(keyPath: "number", ascending: true)])
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+
+        AppRealm.getVehicles { [weak self] (error) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.activityIndicatorView.stopAnimating()
+                self.otherTextField.isHidden = false
+                if let error = error {
+                    self.presentAlert(error: error)
+                }
+            }
+        }
+    }
+
+    private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Vehicle>>) {
+        switch changes {
+        case .initial:
+            fallthrough
+        case .update:
+            addCheckboxes()
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    func addCheckboxes() {
+        // remove all existing views
+        for subview in containerView.subviews {
+            subview.removeFromSuperview()
+        }
+        checkboxes.removeAll()
+
+        guard let results = results else { return }
+        // re-add all
         let columns = view.traitCollection.horizontalSizeClass == .regular ? 4 : 2
         var stackView: UIStackView?
-        let count = 49
+        let count = results.count
         for i in 0..<count {
+            let vehicle = results[i]
             if i % columns == 0 {
                 let newStackView = UIStackView()
                 newStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +116,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
             let checkbox = Checkbox()
             checkbox.tag = i
             checkbox.delegate = self
-            checkbox.labelText = "\(i)"
+            checkbox.labelText = "\(vehicle.number ?? "")"
             stackView?.addArrangedSubview(checkbox)
             checkboxes.append(checkbox)
         }
@@ -67,9 +128,6 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         if let bottomAnchor = stackView?.bottomAnchor {
             containerView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         }
-        commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
-
-        continueButton.isEnabled = false
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -80,7 +138,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unregisterFromKeyboardNotifications()
-   }
+    }
 
     // MARK: - CheckboxDelegate
 
@@ -143,7 +201,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     public func keyboardDidTransition(_ state: KeyboardState) {
         switch state {
         case .activeWithHeight:
-            scrollView.setContentOffset(CGPoint(x: 0, y: scrollView.contentSize.height - scrollView.frame.height), animated: true)
+            scrollView.setContentOffset(CGPoint(x: 0, y: max(0, scrollView.contentSize.height - scrollView.frame.height)), animated: true)
         default:
             break
         }

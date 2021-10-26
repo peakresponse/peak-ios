@@ -14,8 +14,9 @@
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
-"AssignmentViewController.select" = "Please select your unit:";
 "AssignmentViewController.other" = "Other:";
+"AssignmentViewController.select" = "Please select your unit:";
+"AssignmentViewController.welcome" = "Welcome %@.";
 
 "AuthViewController.email" = "Email";
 "AuthViewController.password" = "Password";

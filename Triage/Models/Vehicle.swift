@@ -14,11 +14,13 @@ class Vehicle: Base {
         static let vin = "vin"
         static let callSign = "callSign"
         static let type = "type"
+        static let createdByAgencyId = "createdByAgencyId"
     }
     @objc dynamic var number: String?
     @objc dynamic var vin: String?
     @objc dynamic var callSign: String?
     @objc dynamic var type: String?
+    @objc dynamic var createdByAgencyId: String?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
@@ -26,6 +28,7 @@ class Vehicle: Base {
         vin = data[Keys.vin] as? String
         callSign = data[Keys.callSign] as? String
         type = data[Keys.type] as? String
+        createdByAgencyId = data[Keys.createdByAgencyId] as? String
     }
 
     override func asJSON() -> [String: Any] {
@@ -41,6 +44,9 @@ class Vehicle: Base {
         }
         if let type = type {
             json[Keys.type] = type
+        }
+        if let createdByAgencyId = createdByAgencyId {
+            json[Keys.createdByAgencyId] = createdByAgencyId
         }
         return json
     }

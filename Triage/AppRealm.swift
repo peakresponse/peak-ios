@@ -84,6 +84,7 @@ class AppRealm {
 
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
+            AppRealm.main.refresh()
             return AppRealm.main
         }
         let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
@@ -627,6 +628,24 @@ class AppRealm {
                 DispatchQueue.main.async {
                     completionHandler(nil, nil, nil, nil, ApiClientError.unexpected)
                 }
+            }
+        }
+        task.resume()
+    }
+
+    // MARK: - Vehicles
+
+    public static func getVehicles(completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getVehicles { (records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                let vehicles = records.map({ Vehicle.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(vehicles, update: .modified)
+                }
+                completionHandler(nil)
             }
         }
         task.resume()

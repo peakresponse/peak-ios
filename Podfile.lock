@@ -31,11 +31,11 @@ PODS:
   - PLCrashReporter (1.8.1)
   - PRKit (0.1.0):
     - SVGKit (~> 3.0)
-  - Realm (10.16.0):
-    - Realm/Headers (= 10.16.0)
-  - Realm/Headers (10.16.0)
-  - RealmSwift (10.16.0):
-    - Realm (= 10.16.0)
+  - Realm (10.11.0):
+    - Realm/Headers (= 10.11.0)
+  - Realm/Headers (10.11.0)
+  - RealmSwift (10.11.0):
+    - Realm (= 10.11.0)
   - RollbarCommon (2.0.0-beta.22)
   - RollbarNotifier (2.0.0-beta.22):
     - RollbarCommon (~> 2.0.0-beta.22)
@@ -56,7 +56,7 @@ DEPENDENCIES:
   - Keyboardy
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
-  - RealmSwift
+  - RealmSwift (= 10.11.0)
   - RollbarNotifier (= 2.0.0-beta.22)
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
   - RollbarSwift (= 2.0.0-beta.22)
@@ -89,7 +89,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: e0ee799e67fcafdb89a8f482d614ff329ca27769
+    :commit: 245e485e35010994dcfa586477bfde2eb43d78a9
     :git: https://github.com/peakresponse/peak-ios-prkit.git
 
 SPEC CHECKSUMS:
@@ -100,8 +100,8 @@ SPEC CHECKSUMS:
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
   PRKit: d551541ef51933be2b2cbdbb108ab38c87176674
-  Realm: b6027801398f3743fc222f096faa85281b506e6c
-  RealmSwift: b02a3d0e4947955da960b642c98ad3a461fc4e70
+  Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
+  RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
   RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
   RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
@@ -110,6 +110,6 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
 
-PODFILE CHECKSUM: d9d56e30fdd43aa726a9dbdf3183c62e19abaf56
+PODFILE CHECKSUM: 946e4fb27ab8721a4438ba90d4e3f2a81d9abe51
 
 COCOAPODS: 1.11.2
