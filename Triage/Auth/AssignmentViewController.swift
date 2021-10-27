@@ -11,6 +11,10 @@ import Keyboardy
 import PRKit
 import RealmSwift
 
+@objc protocol AssignmentViewControllerDelegate {
+    @objc optional func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String)
+}
+
 class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
     @IBOutlet weak var welcomeHeader: WelcomeHeader!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -22,6 +26,8 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var continueButton: PRKit.Button!
     @IBOutlet weak var skipButton: PRKit.Button!
+
+    weak var delegate: AssignmentViewControllerDelegate?
 
     var checkboxes: [Checkbox] = []
     var notificationToken: NotificationToken?
@@ -173,6 +179,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
                     self.presentAlert(error: error)
                 } else {
                     AppSettings.assignmentId = assignmentId
+                    self.delegate?.assignmentViewController?(self, didCreate: assignmentId ?? "")
                 }
             }
         }

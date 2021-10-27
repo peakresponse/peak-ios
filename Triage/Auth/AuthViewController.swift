@@ -14,7 +14,7 @@ import PRKit
     @objc optional func authViewControllerDidLogin(_ vc: AuthViewController)
 }
 
-class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardStateDelegate {
+class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var emailField: PRKit.TextField!
@@ -87,6 +87,9 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
                                             if assignmentId == nil {
                                                 let vc = UIStoryboard(name: "Auth",
                                                                       bundle: nil).instantiateViewController(withIdentifier: "Assignment")
+                                                if let vc = vc as? AssignmentViewController {
+                                                    vc.delegate = self
+                                                }
                                                 self.presentAnimated(vc)
                                             } else if let sceneId = sceneId {
                                                 AppDelegate.enterScene(id: sceneId)
@@ -116,6 +119,16 @@ class AuthViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardSta
                 }
             }
             task.resume()
+        }
+    }
+
+    // MARK: - AssignmentViewControllerDelegate
+
+    func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
+        if let sceneId = AppSettings.sceneId {
+            AppDelegate.enterScene(id: sceneId)
+        } else {
+            _ = AppDelegate.leaveScene()
         }
     }
 
