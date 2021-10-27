@@ -51,16 +51,21 @@ class ApiClient {
 
     func urlRequest(for path: String, data: Data? = nil, params: [String: Any]? = nil,
                     method: String = "GET", body: Any? = nil) -> URLRequest {
-        var components = URLComponents()
-        components.path = path
-        if let params = params {
-            var queryItems = [URLQueryItem]()
-            for (name, value) in params {
-                queryItems.append(URLQueryItem(name: name, value: String(describing: value)))
+        var url: URL
+        if path.starts(with: "http") {
+            url = URL(string: path)!
+        } else {
+            var components = URLComponents()
+            components.path = path
+            if let params = params {
+                var queryItems = [URLQueryItem]()
+                for (name, value) in params {
+                    queryItems.append(URLQueryItem(name: name, value: String(describing: value)))
+                }
+                components.queryItems = queryItems
             }
-            components.queryItems = queryItems
+            url = components.url(relativeTo: baseURL)!
         }
-        let url = components.url(relativeTo: baseURL)!
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Accept")
@@ -76,40 +81,40 @@ class ApiClient {
     }
 
     private func completionHandler<T>(request: URLRequest, data: Data?, response: URLResponse?, error: Error?,
-                                      completionHandler: @escaping (T?, Error?) -> Void) {
+                                      completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) {
         if let error = error {
-            completionHandler(nil, error)
+            completionHandler(request, response, nil, error)
         } else {
             if let response = response as? HTTPURLResponse {
                 if response.statusCode >= 200 && response.statusCode < 300 {
                     if let data = data, data.count > 0 {
                         if let dataBlob = data as? T {
-                            completionHandler(dataBlob, error)
+                            completionHandler(request, response, dataBlob, error)
                         } else {
                             do {
                                 if let json = try JSONSerialization.jsonObject(with: data, options: []) as? T {
-                                    completionHandler(json, nil)
+                                    completionHandler(request, response, json, nil)
                                 } else {
-                                    completionHandler(nil, ApiClientError.unexpected)
+                                    completionHandler(request, response, nil, ApiClientError.unexpected)
                                 }
                             } catch {
-                                completionHandler(nil, error)
+                                completionHandler(request, response, nil, error)
                             }
                         }
                     } else {
-                        completionHandler(nil, nil)
+                        completionHandler(request, response, nil, nil)
                     }
                 } else if response.statusCode == 401 {
-                    completionHandler(nil, ApiClientError.unauthorized)
+                    completionHandler(request, response, nil, ApiClientError.unauthorized)
                 } else if response.statusCode == 403 {
-                    completionHandler(nil, ApiClientError.forbidden)
+                    completionHandler(request, response, nil, ApiClientError.forbidden)
                 } else if response.statusCode == 404 {
-                    completionHandler(nil, ApiClientError.notFound)
+                    completionHandler(request, response, nil, ApiClientError.notFound)
                 } else {
-                    completionHandler(nil, ApiClientError.unexpected)
+                    completionHandler(request, response, nil, ApiClientError.unexpected)
                 }
             } else {
-                completionHandler(nil, ApiClientError.unexpected)
+                completionHandler(request, response, nil, ApiClientError.unexpected)
             }
         }
     }
@@ -188,7 +193,7 @@ class ApiClient {
     }
 
     func GET<T>(path: String, params: [String: Any]? = nil,
-                completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+                completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, params: params)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -196,7 +201,7 @@ class ApiClient {
     }
 
     func POST<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
-                 completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+                 completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "POST", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -204,7 +209,7 @@ class ApiClient {
     }
 
     func PUT<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
-                completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+                completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "PUT", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -212,7 +217,7 @@ class ApiClient {
     }
 
     func PATCH<T>(path: String, params: [String: Any]? = nil, data: Data? = nil, body: Any? = nil,
-                  completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+                  completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, data: data, params: params, method: "PATCH", body: body)
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -220,7 +225,7 @@ class ApiClient {
     }
 
     func DELETE<T>(path: String, params: [String: Any]? = nil,
-                   completionHandler: @escaping (T?, Error?) -> Void) -> URLSessionTask {
+                   completionHandler: @escaping (URLRequest, URLResponse?, T?, Error?) -> Void) -> URLSessionTask {
         let request = urlRequest(for: path, params: params, method: "DELETE")
         return session.dataTask(with: request, completionHandler: { (data, response, error) in
             self.completionHandler(request: request, data: data, response: response, error: error, completionHandler: completionHandler)
@@ -231,14 +236,35 @@ class ApiClient {
         return session.downloadTask(with: request, completionHandler: completionHandler)
     }
 
+    // swiftlint:disable:next force_try
+    static let linkRE = try! NSRegularExpression(pattern: #"<([^>]+)>; rel="([^"]+)""#,
+                                                 options: [.caseInsensitive])
+
+    static func parseLinkHeader(from response: URLResponse?) -> [String: String]? {
+        if let response = response as? HTTPURLResponse, let link = response.allHeaderFields["Link"] as? String {
+            let matches = linkRE.matches(in: link, options: [], range: NSRange(location: 0, length: link.count))
+            var links: [String: String] = [:]
+            for match in matches {
+                if let urlRange = Range(match.range(at: 1), in: link),
+                   let typeRange = Range(match.range(at: 2), in: link) {
+                    let url = String(link[urlRange])
+                    let type = String(link[typeRange])
+                    links[type] = url
+                }
+            }
+            return links
+        }
+        return nil
+    }
+
     // MARK: - Sessions
 
-    func login(email: String, password: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func login(email: String, password: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/login", body: [
             "email": email,
             "password": password
-        ]) { (data, error) in
-            completionHandler(data, error)
+        ]) { (request, response, data, error) in
+            completionHandler(request, response, data, error)
         }
     }
 
@@ -246,7 +272,7 @@ class ApiClient {
         session.reset(completionHandler: completionHandler)
     }
 
-    func me(completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func me(completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/users/me", completionHandler: completionHandler)
     }
 
@@ -256,7 +282,7 @@ class ApiClient {
         return WS(path: "/agency", completionHandler: completionHandler)
     }
 
-    func getAgencies(search: String? = nil, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getAgencies(search: String? = nil, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: String] = [:]
         if let search = search, !search.isEmpty {
             params["search"] = search
@@ -266,14 +292,14 @@ class ApiClient {
 
     // MARK: - Assignments
 
-    func createAssignment(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func createAssignment(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/assignments", body: data, completionHandler: completionHandler)
     }
 
     // MARK: - Facilities
 
     func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,
-                       completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+                       completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         var params = ["lat": lat, "lng": lng]
         if let search = search, !search.isEmpty {
             params["search"] = search
@@ -286,16 +312,16 @@ class ApiClient {
 
     // MARK: - Patients
 
-    func getPatients(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getPatients(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         let params = ["sceneId": sceneId]
         return GET(path: "/api/patients", params: params, completionHandler: completionHandler)
     }
 
-    func getPatient(idOrPin: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func getPatient(idOrPin: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/patients/\(idOrPin)", completionHandler: completionHandler)
     }
 
-    func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/patients", body: data, completionHandler: completionHandler)
     }
 
@@ -306,45 +332,45 @@ class ApiClient {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
 
-    func createScene(data: [String: Any], completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func createScene(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 
     func updateScene(data: [String: Any],
-                     completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+                     completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 
-    func getScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func getScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
     }
 
-    func getScenes(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getScenes(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/scenes", completionHandler: completionHandler)
     }
 
-    func closeScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func closeScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/close", completionHandler: completionHandler)
     }
 
-    func joinScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func joinScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
     }
 
     func addScenePin(sceneId: String, data: [String: Any],
                      completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: { (_: [String: Any]?, error) in
+        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: { (_, _, _: [String: Any]?, error) in
             completionHandler(error)
         })
     }
 
     func removeScenePin(sceneId: String, scenePinId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return DELETE(path: "/api/scenes/\(sceneId)/pins/\(scenePinId)") { (_: [String: Any]?, error) in
+        return DELETE(path: "/api/scenes/\(sceneId)/pins/\(scenePinId)") { (_, _, _: [String: Any]?, error) in
             completionHandler(error)
         }
     }
 
-    func leaveScene(sceneId: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func leaveScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
     }
 
@@ -352,49 +378,49 @@ class ApiClient {
         return PATCH(path: "/api/scenes/\(sceneId)/transfer", body: [
             "userId": userId,
             "agencyId": agencyId
-        ], completionHandler: { (_: [String: Any]?, error: Error?) in
+        ], completionHandler: { (_, _, _: [String: Any]?, error: Error?) in
             completionHandler(error)
         })
     }
 
     // MARK: - Responders
 
-    func getResponders(sceneId: String, completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getResponders(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/responders", params: ["sceneId": sceneId], completionHandler: completionHandler)
     }
 
     func assignResponder(responderId: String, role: String?, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
         return PATCH(path: "/api/responders/\(responderId)/assign", body: [
             "role": role != nil ? role as Any : NSNull()
-        ], completionHandler: { (_: [String: Any]?, error: Error?) in
+        ], completionHandler: { (_, _, _: [String: Any]?, error: Error?) in
             completionHandler(error)
         })
     }
 
     // MARK: - Uploads
 
-    func upload(fileName: String, contentType: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func upload(fileName: String, contentType: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/assets", body: [
             "blob": [
                 "content_type": contentType,
                 "signed_id": fileName
             ]
-        ]) { [weak self] (response: [String: Any]?, error: Error?) in
-            var response = response
-            if var directUpload = response?["direct_upload"] as? [String: Any], let url = directUpload["url"] as? String {
+        ]) { [weak self] (request, response, data: [String: Any]?, error: Error?) in
+            var data = data
+            if var directUpload = data?["direct_upload"] as? [String: Any], let url = directUpload["url"] as? String {
                 if url.starts(with: "/") {
                     let request = self?.urlRequest(for: url)
                     if let url = request?.url {
                         directUpload["url"] = url.absoluteString
-                        response?["direct_upload"] = directUpload
+                        data?["direct_upload"] = directUpload
                     }
                 }
             }
-            completionHandler(response, error)
+            completionHandler(request, response, data, error)
         }
     }
 
-    func upload(fileName: String, fileURL: URL, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func upload(fileName: String, fileURL: URL, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return upload(fileName: fileName, contentType: fileURL.contentType, completionHandler: completionHandler)
     }
 
@@ -418,13 +444,13 @@ class ApiClient {
 
     // MARK: - Utils
 
-    func geocode(lat: String, lng: String, completionHandler: @escaping ([String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func geocode(lat: String, lng: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/utils/geocode", params: ["lat": lat, "lng": lng], completionHandler: completionHandler)
     }
 
     // MARK: - Vehicles
 
-    func getVehicles(completionHandler: @escaping ([[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+    func getVehicles(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
         return GET(path: "/api/demographics/vehicles", completionHandler: completionHandler)
     }
 }

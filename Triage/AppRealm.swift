@@ -140,7 +140,7 @@ class AppRealm {
     }
 
     public static func getAgencies(search: String? = nil, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getAgencies(search: search, completionHandler: { (records, error) in
+        let task = ApiClient.shared.getAgencies(search: search, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -166,7 +166,7 @@ class AppRealm {
         } else {
             data["vehicleId"] = NSNull()
         }
-        let task = ApiClient.shared.createAssignment(data: data) { (data, error) in
+        let task = ApiClient.shared.createAssignment(data: data) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
@@ -185,7 +185,7 @@ class AppRealm {
 
     public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,
                                      completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (records, error) in
+        let task = ApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -213,7 +213,7 @@ class AppRealm {
     // MARK: - Patients
 
     public static func getPatients(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getPatients(sceneId: sceneId, completionHandler: { (records, error) in
+        let task = ApiClient.shared.getPatients(sceneId: sceneId, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -229,7 +229,7 @@ class AppRealm {
     }
 
     public static func getPatient(idOrPin: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getPatient(idOrPin: idOrPin) { (record, error) in
+        let task = ApiClient.shared.getPatient(idOrPin: idOrPin) { (_, _, record, error) in
             if let record = record {
                 if let patient = Patient.instantiate(from: record) as? Patient {
                     let realm = AppRealm.open()
@@ -252,7 +252,7 @@ class AppRealm {
         op.queuePriority = .veryHigh
         let data = patient.asJSON()
         op.request = { (completionHandler) in
-            return ApiClient.shared.createOrUpdatePatient(data: data) { (record, error) in
+            return ApiClient.shared.createOrUpdatePatient(data: data) { (_, _, record, error) in
                 if let record = record {
                     if let patient = Patient.instantiate(from: record) as? Patient {
                         let realm = AppRealm.open()
@@ -291,7 +291,7 @@ class AppRealm {
                     completionHandler(error)
                 }
             } else {
-                return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (response, error) in
+                return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (_, _, response, error) in
                     if let error = error {
                         completionHandler(error)
                     } else if let response = response {
@@ -323,7 +323,7 @@ class AppRealm {
                                 "parentId": parentSceneId,
                                 "lat": lat,
                                 "lng": lng
-                            ]) { (_, error) in
+                            ]) { (_, _, _, error) in
                                 completionHandler(error)
                             }
                         }
@@ -342,7 +342,7 @@ class AppRealm {
     }
 
     public static func getScenes(completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getScenes { (records, error) in
+        let task = ApiClient.shared.getScenes { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -365,7 +365,7 @@ class AppRealm {
         try! realm.write {
             realm.add([scene, canonical], update: .modified)
         }
-        let task = ApiClient.shared.createScene(data: scene.asJSON()) { (data, error) in
+        let task = ApiClient.shared.createScene(data: scene.asJSON()) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -382,7 +382,7 @@ class AppRealm {
     }
 
     public static func getScene(sceneId: String, completionHandler: @escaping (Scene?, Error?) -> Void) {
-        let task = ApiClient.shared.getScene(sceneId: sceneId) { (data, error) in
+        let task = ApiClient.shared.getScene(sceneId: sceneId) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -399,7 +399,7 @@ class AppRealm {
     }
 
     public static func closeScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.closeScene(sceneId: sceneId) { (data, error) in
+        let task = ApiClient.shared.closeScene(sceneId: sceneId) { (_, _, data, error) in
             if let error = error {
                 completionHandler(error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -416,7 +416,7 @@ class AppRealm {
     }
 
     public static func joinScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, error) in
+        let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, _, _, error) in
             completionHandler(error)
         }
         task.resume()
@@ -454,7 +454,7 @@ class AppRealm {
     }
 
     public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, error) in
+        let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, _, _, error) in
             completionHandler(error)
         }
         task.resume()
@@ -557,7 +557,7 @@ class AppRealm {
                 Debounce.timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { (_) in
                     let op = RequestOperation()
                     op.request = { (completionHandler) in
-                        return ApiClient.shared.updateScene(data: data) { (_, error) in
+                        return ApiClient.shared.updateScene(data: data) { (_, _, _, error) in
                             completionHandler(error)
                         }
                     }
@@ -570,7 +570,7 @@ class AppRealm {
     // MARK: - Responders
 
     public static func getResponders(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getResponders(sceneId: sceneId) { (responders, error) in
+        let task = ApiClient.shared.getResponders(sceneId: sceneId) { (_, _, responders, error) in
             if let error = error {
                 completionHandler(error)
             } else if let responders = responders {
@@ -601,7 +601,7 @@ class AppRealm {
     // MARK: - Users
 
     public static func me(completionHandler: @escaping (User?, Agency?, Assignment?, Scene?, Error?) -> Void) {
-        let task = ApiClient.shared.me { (data, error) in
+        let task = ApiClient.shared.me { (_, _, data, error) in
             if let error = error {
                 DispatchQueue.main.async {
                     completionHandler(nil, nil, nil, nil, error)
@@ -662,7 +662,8 @@ class AppRealm {
     // MARK: - Vehicles
 
     public static func getVehicles(completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getVehicles { (records, error) in
+        var vehiclesCompletionHandler: ((URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void)!
+        vehiclesCompletionHandler = { (_, response, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -671,9 +672,15 @@ class AppRealm {
                 try! realm.write {
                     realm.add(vehicles, update: .modified)
                 }
-                completionHandler(nil)
+                if let links = ApiClient.parseLinkHeader(from: response), let next = links["next"] {
+                    let task = ApiClient.shared.GET(path: next, params: nil, completionHandler: vehiclesCompletionHandler)
+                    task.resume()
+                } else {
+                    completionHandler(nil)
+                }
             }
         }
+        let task = ApiClient.shared.getVehicles(completionHandler: vehiclesCompletionHandler)
         task.resume()
     }
 }

@@ -51,7 +51,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             passwordField.isUserInteractionEnabled = false
             signInButton.isUserInteractionEnabled = false
             activityIndicatorView.startAnimating()
-            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (data, error) in
+            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (_, _, data, error) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     if let error = error {
