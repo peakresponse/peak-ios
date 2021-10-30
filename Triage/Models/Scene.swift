@@ -94,9 +94,21 @@ class Scene: BaseVersioned {
     @objc dynamic var address1: String?
     @objc dynamic var address2: String?
     @objc dynamic var cityId: String?
+    var city: City? {
+        return realm?.object(ofType: City.self, forPrimaryKey: cityId)
+    }
     @objc dynamic var countyId: String?
     @objc dynamic var stateId: String?
+    var state: State? {
+        return realm?.object(ofType: State.self, forPrimaryKey: stateId)
+    }
     @objc dynamic var zip: String?
+    var address: String {
+        return "\(address1?.capitalized ?? "")\n\(address2?.capitalized ?? "")\n\(city?.name ?? ""), \(state?.abbr ?? "") \(zip ?? "")"
+            .replacingOccurrences(of: "\n\n", with: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     @objc dynamic var closedAt: Date?
     @objc dynamic var incidentCommanderId: String?
     @objc dynamic var incidentCommanderAgencyId: String?

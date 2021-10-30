@@ -59,7 +59,6 @@
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
 		4563C74124DA6FB200217901 /* Barlow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73F24DA6FB100217901 /* Barlow-Regular.ttf */; };
 		4563C74324DA763700217901 /* FormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4563C74224DA763700217901 /* FormField.swift */; };
-		4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4563C74624DB7B3500217901 /* UIFont+Extensions.swift */; };
 		4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F01F236CCC5500A04C75 /* AppDelegate.swift */; };
 		4566F027236CCC5500A04C75 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F025236CCC5500A04C75 /* Main.storyboard */; };
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
@@ -118,6 +117,11 @@
 		45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942C2501C6A60098E9BD /* SceneLocationView.swift */; };
 		45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA942E2502BE2B0098E9BD /* BaseField.swift */; };
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
+		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
+		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
+		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
+		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
+		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
 		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
 		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
@@ -222,7 +226,6 @@
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
 		4563C73F24DA6FB100217901 /* Barlow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Regular.ttf"; sourceTree = "<group>"; };
 		4563C74224DA763700217901 /* FormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormField.swift; sourceTree = "<group>"; };
-		4563C74624DB7B3500217901 /* UIFont+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+Extensions.swift"; sourceTree = "<group>"; };
 		4566F01C236CCC5500A04C75 /* Peak Response.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Peak Response.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F01F236CCC5500A04C75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4566F026236CCC5500A04C75 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -288,6 +291,11 @@
 		45BA942C2501C6A60098E9BD /* SceneLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneLocationView.swift; sourceTree = "<group>"; };
 		45BA942E2502BE2B0098E9BD /* BaseField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseField.swift; sourceTree = "<group>"; };
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
+		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
+		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
+		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
+		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
+		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
 		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
@@ -432,6 +440,7 @@
 				4566F05D236CD56200A04C75 /* Extensions */,
 				4566F061236CE17900A04C75 /* Models */,
 				4566F04F236CCF5C00A04C75 /* Auth */,
+				45C007C7272A023A0072FF18 /* Incidents */,
 				4566F056236CD1E000A04C75 /* Patients */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
 				454EEA9F2524073300EB266A /* Users */,
@@ -523,7 +532,6 @@
 				4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
-				4563C74624DB7B3500217901 /* UIFont+Extensions.swift */,
 				45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */,
 				45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */,
 				45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */,
@@ -542,7 +550,9 @@
 				45D3E94527276C8D00E5382D /* Assignment.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
 				45B7A2D72508330600BCAAAE /* City.swift */,
+				45C757D1272CC3A200386F07 /* Dispatch.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
+				45C757CC272CAFB000386F07 /* Incident.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
 				454E17B824FFF5C900F9EB8B /* Responder.swift */,
@@ -613,6 +623,24 @@
 				45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */,
 				452AFE05252A6C0100E5A84D /* SectionInfoTableViewCell.swift */,
 				45917FDE254C8241002E03E7 /* NewScenePinView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		45C007C7272A023A0072FF18 /* Incidents */ = {
+			isa = PBXGroup;
+			children = (
+				45C757CE272CB9CC00386F07 /* Views */,
+				45C007C8272A02530072FF18 /* Incidents.storyboard */,
+				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
+			);
+			path = Incidents;
+			sourceTree = "<group>";
+		};
+		45C757CE272CB9CC00386F07 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -769,6 +797,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
 				454EEAA92524078C00EB266A /* Users.storyboard in Resources */,
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
 				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,
@@ -944,16 +973,19 @@
 				4566F07E236D57FA00A04C75 /* PriorityView.swift in Sources */,
 				45B7A2E9250F2AAC00BCAAAE /* AlertViewController.swift in Sources */,
 				4543DD4E24DE20B100F9E50B /* NavigationBar.swift in Sources */,
+				45C757CD272CAFB000386F07 /* Incident.swift in Sources */,
 				451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */,
 				4566F096236E11B000A04C75 /* PatientHeaderView.swift in Sources */,
 				45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */,
 				45917FEC254CB896002E03E7 /* ScenePinTypeButton.swift in Sources */,
 				452AFDFE252A662200E5A84D /* PatientTableViewFooterView.swift in Sources */,
+				45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
 				4543BF9B265705A700B72132 /* ScenePatientCountView.swift in Sources */,
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				454A020B2589E48A00B83D36 /* WebSocket+Extensions.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
+				45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */,
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
 				4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */,
 				45B7A2F2251038D200BCAAAE /* PatientsCollectionViewCell.swift in Sources */,
@@ -993,7 +1025,6 @@
 				451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */,
 				45F130682526E797001495C7 /* ResponderViewController.swift in Sources */,
 				45B7A2EE250F3E7800BCAAAE /* SceneSummaryViewController.swift in Sources */,
-				4563C74724DB7B3500217901 /* UIFont+Extensions.swift in Sources */,
 				451ABAFD2545E68500580115 /* PredictionStatus.swift in Sources */,
 				45BA942D2501C6A60098E9BD /* SceneLocationView.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
@@ -1033,6 +1064,7 @@
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
 				454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
+				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,
 				453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */,
 				452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,

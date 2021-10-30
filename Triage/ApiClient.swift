@@ -310,6 +310,20 @@ class ApiClient {
         return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
 
+    // MARK: - Incidents
+
+    func getIncidents(vehicleId: String? = nil, search: String? = nil,
+                      completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        var params: [String: Any] = [:]
+        if let vehicleId = vehicleId {
+            params["vehicleId"] = vehicleId
+        }
+        if let search = search {
+            params["search"] = search
+        }
+        return GET(path: "/api/incidents", params: params, completionHandler: completionHandler)
+    }
+
     // MARK: - Patients
 
     func getPatients(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {

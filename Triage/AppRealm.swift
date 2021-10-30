@@ -210,6 +210,45 @@ class AppRealm {
         task.resume()
     }
 
+    // MARK: - Incidents
+
+    public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
+                                    completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = ApiClient.shared.getIncidents(vehicleId: vehicleId, search: search) { (_, response, records, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let records = records {
+                var dependencies: [Base] = []
+                let incidents = records.map({ (record) -> Base in
+                    if let scene = record["scene"] as? [String: Any] {
+                        if let city = scene["city"] as? [String: Any] {
+                            dependencies.append(City.instantiate(from: city))
+                        }
+                        if let state = scene["state"] as? [String: Any] {
+                            dependencies.append(State.instantiate(from: state))
+                        }
+                        dependencies.append(Scene.instantiate(from: scene))
+                    }
+                    if let dispatches = record["dispatches"] as? [[String: Any]] {
+                        dependencies.append(contentsOf: dispatches.map { Dispatch.instantiate(from: $0) })
+                    }
+                    return Incident.instantiate(from: record)
+                })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(dependencies, update: .modified)
+                    realm.add(incidents, update: .modified)
+                }
+                var nextUrl: String?
+                if let links = ApiClient.parseLinkHeader(from: response) {
+                    nextUrl = links["next"]
+                }
+                completionHandler(nextUrl, nil)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Patients
 
     public static func getPatients(sceneId: String, completionHandler: @escaping (Error?) -> Void) {

@@ -271,6 +271,9 @@
 
 "SearchBar.placeholder" = "Search";
 
+"Sidebar.item.switch" = "Change Unit/Vehicle";
+"Sidebar.item.logOut" = "Log out";
+
 "SortBar.sortBy" = "Sort By :";
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
