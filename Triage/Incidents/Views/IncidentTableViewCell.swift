@@ -13,6 +13,7 @@ class IncidentTableViewCell: UITableViewCell {
     weak var addressLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var timeLabel: UILabel!
+    weak var chevronImageView: UIImageView!
 
     var number: String? {
         get { return numberLabel.text }
@@ -132,6 +133,16 @@ class IncidentTableViewCell: UITableViewCell {
             ])
         }
         self.timeLabel = timeLabel
+
+        let chevronImageView = UIImageView()
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        chevronImageView.image = UIImage(named: "ChevronRight40px")
+        chevronImageView.tintColor = .base500
+        containerView.addSubview(chevronImageView)
+        NSLayoutConstraint.activate([
+            chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor),
+            chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
+        ])
 
         if isCompact {
             NSLayoutConstraint.activate([
