@@ -129,7 +129,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     }
 
     private func createMarker(for patient: Patient) -> GMSMarker? {
-        if let position = patient.latLng, let priority = patient.filterPriority.value, priority < Priority.transported.rawValue {
+        if let position = patient.latLng, let priority = patient.filterPriority, priority < Priority.transported.rawValue {
             let marker = GMSMarker(position: position)
             marker.userData = patient
             marker.title = String(format: "Patient.pin".localized, patient.pin ?? "")

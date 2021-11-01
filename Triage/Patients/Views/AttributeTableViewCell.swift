@@ -101,7 +101,7 @@ class AttributeTableViewCell: BasePatientTableViewCell, FormFieldDelegate,
                 field.textField.keyboardType = .numberPad
             case .age:
                 let ageKeyboardView = PatientAgeKeyboardView(textField: field.textField,
-                                                             age: patient.age.value, units: patient.ageUnits)
+                                                             age: patient.age, units: patient.ageUnits)
                 ageKeyboardView.delegate = self
                 field.textField.inputView = ageKeyboardView
             case .gender:

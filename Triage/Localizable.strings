@@ -99,6 +99,9 @@
 "Facility.type.1701033" = "Drug and/or Alcohol Rehabilitation Facility";
 "Facility.type.1701035" = "Skilled Nursing Facility";
 
+"IncidentsViewController.mine" = "My Dispatches";
+"IncidentsViewController.all" = "All Incidents";
+
 "InputAccessoryView.cancel" = "Cancel";
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.go" = "Go";

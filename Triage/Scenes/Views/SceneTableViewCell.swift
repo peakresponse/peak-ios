@@ -176,7 +176,7 @@ class SceneTableViewCell: UITableViewCell {
             mapMarkerView.isHidden = true
         }
 
-        patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized, scene.patientsCount.value ?? 0)
-        respondersLabel.text = String(format: "SceneTableViewCell.respondersLabel".localized, scene.respondersCount.value ?? 0)
+        patientsLabel.text = String(format: "SceneTableViewCell.patientsLabel".localized, scene.patientsCount ?? 0)
+        respondersLabel.text = String(format: "SceneTableViewCell.respondersLabel".localized, scene.respondersCount ?? 0)
     }
 }

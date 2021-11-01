@@ -6,13 +6,13 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
 
 class City: Base {
     struct Keys {
         static let featureName = "featureName"
     }
-    @objc dynamic var featureName: String?
+    @Persisted var featureName: String?
     var name: String? {
         if featureName?.starts(with: "City of ") ?? false {
             return String(featureName!.dropFirst(8))

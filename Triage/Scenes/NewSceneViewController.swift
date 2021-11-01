@@ -142,7 +142,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         if let attributeKey = field.attributeKey {
             switch field.attributeKey {
             case "approxPatients":
-                scene.approxPatientsCount.value = Int(field.text ?? "")
+                scene.approxPatientsCount = Int(field.text ?? "")
             default:
                 scene.setValue(field.text, forKey: attributeKey)
             }

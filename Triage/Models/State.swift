@@ -6,15 +6,15 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
 
 class State: Base {
     struct Keys {
         static let name = "name"
         static let abbr = "abbr"
     }
-    @objc dynamic var name: String?
-    @objc dynamic var abbr: String?
+    @Persisted var name: String?
+    @Persisted var abbr: String?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)

@@ -218,26 +218,31 @@ class AppRealm {
             if let error = error {
                 completionHandler(nil, error)
             } else if let records = records {
-                var dependencies: [Base] = []
-                let incidents = records.map({ (record) -> Base in
+                var cities: [Base] = []
+                var states: [Base] = []
+                var scenes: [[String: Any]] = []
+                var dispatches: [[String: Any]] = []
+                for record in records {
                     if let scene = record["scene"] as? [String: Any] {
                         if let city = scene["city"] as? [String: Any] {
-                            dependencies.append(City.instantiate(from: city))
+                            cities.append(City.instantiate(from: city))
                         }
                         if let state = scene["state"] as? [String: Any] {
-                            dependencies.append(State.instantiate(from: state))
+                            states.append(State.instantiate(from: state))
                         }
-                        dependencies.append(Scene.instantiate(from: scene))
+                        scenes.append(scene)
                     }
-                    if let dispatches = record["dispatches"] as? [[String: Any]] {
-                        dependencies.append(contentsOf: dispatches.map { Dispatch.instantiate(from: $0) })
+                    if let newDispatches = record["dispatches"] as? [[String: Any]] {
+                        dispatches.append(contentsOf: newDispatches)
                     }
-                    return Incident.instantiate(from: record)
-                })
+                }
                 let realm = AppRealm.open()
                 try! realm.write {
-                    realm.add(dependencies, update: .modified)
-                    realm.add(incidents, update: .modified)
+                    realm.add(cities, update: .modified)
+                    realm.add(states, update: .modified)
+                    realm.add(scenes.map { Scene.instantiate(from: $0) }, update: .modified)
+                    realm.add(records.map { Incident.instantiate(from: $0) }, update: .modified)
+                    realm.add(dispatches.map { Dispatch.instantiate(from: $0) }, update: .modified)
                 }
                 var nextUrl: String?
                 if let links = ApiClient.parseLinkHeader(from: response) {
@@ -575,7 +580,7 @@ class AppRealm {
                         scene.approxPriorityPatientsCounts = approxPriorityPatientsCounts
                     }
                 } else {
-                    scene.approxPatientsCount.value = (scene.approxPatientsCount.value ?? 0) + delta
+                    scene.approxPatientsCount = (scene.approxPatientsCount ?? 0) + delta
                 }
                 struct Debounce {
                     static var timer: Timer?
@@ -587,7 +592,7 @@ class AppRealm {
                     "id": UUID().uuidString.lowercased(),
                     "parentId": parentSceneId
                 ]
-                if let approxPatientsCount = scene.approxPatientsCount.value {
+                if let approxPatientsCount = scene.approxPatientsCount {
                     data["approxPatientsCount"] = approxPatientsCount
                 }
                 if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {

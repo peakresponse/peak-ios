@@ -6,15 +6,15 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
 
 class Assignment: Base {
     struct Keys {
         static let userId = "userId"
         static let vehicleId = "vehicleId"
     }
-    @objc dynamic var userId: String?
-    @objc dynamic var vehicleId: String?
+    @Persisted var userId: String?
+    @Persisted var vehicleId: String?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)

@@ -319,7 +319,7 @@ class PatientTableViewController: UIViewController, UINavigationControllerDelega
     // MARK: - PriorityTableViewCellDelegate
 
     func priorityTableViewCell(_ cell: PriorityTableViewCell, didSelect priority: Int) {
-        if priority != patient.priority.value, let priority = Priority(rawValue: priority) {
+        if priority != patient.priority, let priority = Priority(rawValue: priority) {
             let observation = Patient()
             observation.parentId = patient.currentId
             observation.setPriority(priority)

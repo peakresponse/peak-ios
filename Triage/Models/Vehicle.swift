@@ -6,7 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
 
 class Vehicle: Base {
     struct Keys {
@@ -16,11 +16,11 @@ class Vehicle: Base {
         static let type = "type"
         static let createdByAgencyId = "createdByAgencyId"
     }
-    @objc dynamic var number: String?
-    @objc dynamic var vin: String?
-    @objc dynamic var callSign: String?
-    @objc dynamic var type: String?
-    @objc dynamic var createdByAgencyId: String?
+    @Persisted var number: String?
+    @Persisted var vin: String?
+    @Persisted var callSign: String?
+    @Persisted var type: String?
+    @Persisted var createdByAgencyId: String?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)

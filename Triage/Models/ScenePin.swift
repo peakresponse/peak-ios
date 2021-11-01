@@ -86,14 +86,14 @@ class ScenePin: Base {
         static let deletedAt = "deletedAt"
     }
 
-    @objc dynamic var scene: Scene?
-    @objc dynamic var prevPinId: String?
-    @objc dynamic var type: String?
-    @objc dynamic var name: String?
-    @objc dynamic var desc: String?
-    @objc dynamic var deletedAt: Date?
-    @objc dynamic var lat: String?
-    @objc dynamic var lng: String?
+    @Persisted var scene: Scene?
+    @Persisted var prevPinId: String?
+    @Persisted var type: String?
+    @Persisted var name: String?
+    @Persisted var desc: String?
+    @Persisted var deletedAt: Date?
+    @Persisted var lat: String?
+    @Persisted var lng: String?
     var hasLatLng: Bool {
         if let lat = lat, let lng = lng, lat != "", lng != "" {
             return true

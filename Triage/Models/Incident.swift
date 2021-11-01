@@ -16,24 +16,19 @@ class Incident: Base {
         static let calledAt = "calledAt"
         static let dispatchNotifiedAt = "dispatchNotifiedAt"
     }
-    @objc dynamic var psapId: String?
-    @objc dynamic var sceneId: String?
-    var scene: Scene? {
-        get { realm?.object(ofType: Scene.self, forPrimaryKey: sceneId) }
-        set { sceneId = newValue?.id }
-    }
-    @objc dynamic var number: String?
-    @objc dynamic var calledAt: Date?
-    @objc dynamic var dispatchNotifiedAt: Date?
-
-    var dispatches: Results<Dispatch>? {
-        return realm?.objects(Dispatch.self).filter("incidentId=%@", id).sorted(byKeyPath: "dispatchedAt", ascending: true)
-    }
+    @Persisted var psapId: String?
+    @Persisted var scene: Scene?
+    @Persisted var number: String?
+    @Persisted var calledAt: Date?
+    @Persisted var dispatchNotifiedAt: Date?
+    @Persisted(originProperty: "incident") var dispatches: LinkingObjects<Dispatch>
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
         psapId = data[Keys.psapId] as? String
-        sceneId = data[Keys.sceneId] as? String
+        if let sceneId = data[Keys.sceneId] as? String {
+            scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: sceneId)
+        }
         number = data[Keys.number] as? String
         calledAt = ISO8601DateFormatter.date(from: data[Keys.calledAt])
         dispatchNotifiedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchNotifiedAt])
@@ -44,8 +39,8 @@ class Incident: Base {
         if let psapId = psapId {
             json[Keys.psapId] = psapId
         }
-        if let sceneId = sceneId {
-            json[Keys.sceneId] = sceneId
+        if let scene = scene {
+            json[Keys.sceneId] = scene.id
         }
         if let number = number {
             json[Keys.number] = number

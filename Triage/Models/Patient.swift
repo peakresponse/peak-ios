@@ -170,18 +170,18 @@ class Patient: BaseVersioned {
         static let predictions = "predictions"
     }
 
-    @objc dynamic var sceneId: String?
-    @objc dynamic var pin: String?
+    @Persisted var sceneId: String?
+    @Persisted var pin: String?
 
-    let version = RealmProperty<Int?>()
+    @Persisted var version: Int?
 
-    @objc dynamic var lastName: String?
-    @objc dynamic var firstName: String?
+    @Persisted var lastName: String?
+    @Persisted var firstName: String?
     var fullName: String {
         return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    @objc dynamic var gender: String?
+    @Persisted var gender: String?
     @objc var genderString: String {
         if let value = gender {
             return PatientGender(rawValue: value)?.description ?? ""
@@ -189,34 +189,34 @@ class Patient: BaseVersioned {
         return ""
     }
 
-    let age = RealmProperty<Int?>()
-    @objc dynamic var ageUnits: String?
+    @Persisted var age: Int?
+    @Persisted var ageUnits: String?
     @objc var ageString: String {
-        if let value = age.value {
+        if let value = age {
             return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")"
                 .trimmingCharacters(in: .whitespacesAndNewlines)
         }
         return ""
     }
-    @objc dynamic var dob: String?
+    @Persisted var dob: String?
 
-    @objc dynamic var complaint: String?
+    @Persisted var complaint: String?
 
-    @objc dynamic var triagePerfusion: String?
-    @objc dynamic var triageMentalStatus: String?
+    @Persisted var triagePerfusion: String?
+    @Persisted var triageMentalStatus: String?
 
-    let respiratoryRate = RealmProperty<Int?>()
-    let pulse = RealmProperty<Int?>()
-    let capillaryRefill = RealmProperty<Int?>()
+    @Persisted var respiratoryRate: Int?
+    @Persisted var pulse: Int?
+    @Persisted var capillaryRefill: Int?
 
-    let bpSystolic = RealmProperty<Int?>()
-    let bpDiastolic = RealmProperty<Int?>()
+    @Persisted var bpSystolic: Int?
+    @Persisted var bpDiastolic: Int?
     // swiftlint:disable:next force_try
     static let bloodPressureExpr = try! NSRegularExpression(pattern: #"(?<bpSystolic>\d*)(?:(?:/|(?: over ))(?<bpDiastolic>\d*))?"#,
                                                             options: [.caseInsensitive])
     @objc var bloodPressure: String? {
         get {
-            return "\(bpSystolic.value?.description ?? "")\(bpDiastolic.value != nil ? "/" : "")\(bpDiastolic.value?.description ?? "")"
+            return "\(bpSystolic?.description ?? "")\(bpDiastolic != nil ? "/" : "")\(bpDiastolic?.description ?? "")"
         }
         set {
             if let newValue = newValue,
@@ -229,46 +229,46 @@ class Patient: BaseVersioned {
                     }
                 }
             } else {
-                bpSystolic.value = nil
-                bpDiastolic.value = nil
+                bpSystolic = nil
+                bpDiastolic = nil
             }
         }
     }
 
-    let gcsTotal = RealmProperty<Int?>()
+    @Persisted var gcsTotal: Int?
 
-    @objc dynamic var text: String?
+    @Persisted var text: String?
 
-    let priority = RealmProperty<Int?>()
+    @Persisted var priority: Int?
     var priorityColor: UIColor {
-        if let priority = priority.value, priority >= 0 && priority < 5 {
+        if let priority = priority, priority >= 0 && priority < 5 {
             return PRIORITY_COLORS[priority]
         }
         return PRIORITY_COLORS[5]
     }
     var priorityLabelColor: UIColor {
-        if let priority = priority.value, priority >= 0 && priority < 5 {
+        if let priority = priority, priority >= 0 && priority < 5 {
             return PRIORITY_LABEL_COLORS[priority]
         }
         return PRIORITY_LABEL_COLORS[5]
     }
-    let filterPriority = RealmProperty<Int?>()
+    @Persisted var filterPriority: Int?
     var filterPriorityColor: UIColor {
-        if let priority = filterPriority.value, priority >= 0 && priority < 5 {
+        if let priority = filterPriority, priority >= 0 && priority < 5 {
             return PRIORITY_COLORS[priority]
         }
         return PRIORITY_COLORS[5]
     }
     var filterPriorityLabelColor: UIColor {
-        if let priority = filterPriority.value, priority >= 0 && priority < 5 {
+        if let priority = filterPriority, priority >= 0 && priority < 5 {
             return PRIORITY_LABEL_COLORS[priority]
         }
         return PRIORITY_LABEL_COLORS[5]
     }
 
-    @objc dynamic var location: String?
-    @objc dynamic var lat: String?
-    @objc dynamic var lng: String?
+    @Persisted var location: String?
+    @Persisted var lat: String?
+    @Persisted var lng: String?
     var hasLatLng: Bool {
         if let lat = lat, let lng = lng, lat != "", lng != "" {
             return true
@@ -292,16 +292,16 @@ class Patient: BaseVersioned {
         lng = nil
     }
 
-    @objc dynamic var portraitFile: String?
-    @objc dynamic var portraitUrl: String?
-    @objc dynamic var photoFile: String?
-    @objc dynamic var photoUrl: String?
-    @objc dynamic var audioFile: String?
-    @objc dynamic var audioUrl: String?
+    @Persisted var portraitFile: String?
+    @Persisted var portraitUrl: String?
+    @Persisted var photoFile: String?
+    @Persisted var photoUrl: String?
+    @Persisted var audioFile: String?
+    @Persisted var audioUrl: String?
 
-    @objc dynamic var isTransported = false
-    @objc dynamic var isTransportedLeftIndependently = false
-    @objc dynamic var transportAgency: Agency? {
+    @Persisted var isTransported = false
+    @Persisted var isTransportedLeftIndependently = false
+    @Persisted var transportAgency: Agency? {
         didSet {
             if transportAgency != nil {
                 transportAgencyRemoved = false
@@ -310,9 +310,9 @@ class Patient: BaseVersioned {
             }
         }
     }
-    @objc dynamic var transportAgencyRemoved = false
+    @Persisted var transportAgencyRemoved = false
 
-    @objc dynamic var transportFacility: Facility? {
+    @Persisted var transportFacility: Facility? {
         didSet {
             if transportFacility != nil {
                 transportFacilityRemoved = false
@@ -321,9 +321,9 @@ class Patient: BaseVersioned {
             }
         }
     }
-    @objc dynamic var transportFacilityRemoved = false
+    @Persisted var transportFacilityRemoved = false
 
-    @objc dynamic var _predictions: Data?
+    @Persisted var _predictions: Data?
     var predictions: [String: Any]? {
         get {
             if let _predictions = _predictions {
@@ -363,23 +363,23 @@ class Patient: BaseVersioned {
     }
 
     func setPriority(_ priority: Priority) {
-        self.priority.value = priority.rawValue
+        self.priority = priority.rawValue
         if !isTransported {
-            filterPriority.value = priority.rawValue
+            filterPriority = priority.rawValue
         }
     }
 
     func setTransported(_ isTransported: Bool, isTransportedLeftIndependently: Bool = false) {
         self.isTransported = isTransported
         if isTransported {
-            filterPriority.value = Priority.transported.rawValue
+            filterPriority = Priority.transported.rawValue
             self.isTransportedLeftIndependently = isTransportedLeftIndependently
             if isTransportedLeftIndependently {
                 transportAgency = nil
                 transportFacility = nil
             }
         } else {
-            filterPriority.value = priority.value
+            filterPriority = priority
             self.isTransportedLeftIndependently = false
             transportAgency = nil
             transportFacility = nil
@@ -396,26 +396,26 @@ class Patient: BaseVersioned {
             }
             switch key {
             case Keys.age:
-                age.value = value as? Int
+                age = value as? Int
                 if ageUnits == nil {
                     ageUnits = PatientAgeUnits.years.rawValue
                 }
             case Keys.bpDiastolic:
-                bpDiastolic.value = value as? Int
+                bpDiastolic = value as? Int
             case Keys.bpSystolic:
-                bpSystolic.value = value as? Int
+                bpSystolic = value as? Int
             case Keys.capillaryRefill:
-                capillaryRefill.value = value as? Int
+                capillaryRefill = value as? Int
             case Keys.gcsTotal:
-                gcsTotal.value = value as? Int
+                gcsTotal = value as? Int
             case Keys.pulse:
-                pulse.value = value as? Int
+                pulse = value as? Int
             case Keys.priority:
                 if let value = value as? Int, let priority = Priority(rawValue: value) {
                     setPriority(priority)
                 }
             case Keys.respiratoryRate:
-                respiratoryRate.value = value as? Int
+                respiratoryRate = value as? Int
             default:
                 break
             }
@@ -434,7 +434,7 @@ class Patient: BaseVersioned {
             pin = data[Keys.pin] as? String
         }
         if data.index(forKey: Keys.version) != nil {
-            version.value = data[Keys.version] as? Int
+            version = data[Keys.version] as? Int
         }
         if data.index(forKey: Keys.lastName) != nil {
             lastName = data[Keys.lastName] as? String
@@ -446,7 +446,7 @@ class Patient: BaseVersioned {
             gender = data[Keys.gender] as? String
         }
         if data.index(forKey: Keys.age) != nil {
-            age.value = data[Keys.age] as? Int
+            age = data[Keys.age] as? Int
         }
         if data.index(forKey: Keys.ageUnits) != nil {
             ageUnits = data[Keys.ageUnits] as? String
@@ -464,31 +464,31 @@ class Patient: BaseVersioned {
             triageMentalStatus = data[Keys.triageMentalStatus] as? String
         }
         if data.index(forKey: Keys.respiratoryRate) != nil {
-            respiratoryRate.value = data[Keys.respiratoryRate] as? Int
+            respiratoryRate = data[Keys.respiratoryRate] as? Int
         }
         if data.index(forKey: Keys.pulse) != nil {
-            pulse.value = data[Keys.pulse] as? Int
+            pulse = data[Keys.pulse] as? Int
         }
         if data.index(forKey: Keys.capillaryRefill) != nil {
-            capillaryRefill.value = data[Keys.capillaryRefill] as? Int
+            capillaryRefill = data[Keys.capillaryRefill] as? Int
         }
         if data.index(forKey: Keys.bpSystolic) != nil {
-            bpSystolic.value = data[Keys.bpSystolic] as? Int
+            bpSystolic = data[Keys.bpSystolic] as? Int
         }
         if data.index(forKey: Keys.bpDiastolic) != nil {
-            bpDiastolic.value = data[Keys.bpDiastolic] as? Int
+            bpDiastolic = data[Keys.bpDiastolic] as? Int
         }
         if data.index(forKey: Keys.gcsTotal) != nil {
-            gcsTotal.value = data[Keys.gcsTotal] as? Int
+            gcsTotal = data[Keys.gcsTotal] as? Int
         }
         if data.index(forKey: Keys.text) != nil {
             text = data[Keys.text] as? String
         }
         if data.index(forKey: Keys.priority) != nil {
-            priority.value = data[Keys.priority] as? Int
+            priority = data[Keys.priority] as? Int
         }
         if data.index(forKey: Keys.filterPriority) != nil {
-            filterPriority.value = data[Keys.filterPriority] as? Int
+            filterPriority = data[Keys.filterPriority] as? Int
         }
         if data.index(forKey: Keys.location) != nil {
             location = data[Keys.location] as? String
@@ -551,7 +551,7 @@ class Patient: BaseVersioned {
         if let value = pin {
             data[Keys.pin] = value
         }
-        if let value = version.value {
+        if let value = version {
             data[Keys.version] = value
         }
         if let value = lastName {
@@ -563,7 +563,7 @@ class Patient: BaseVersioned {
         if let value = gender {
             data[Keys.gender] = value
         }
-        if let value = age.value {
+        if let value = age {
             data[Keys.age] = value
         }
         if let value = ageUnits {
@@ -581,31 +581,31 @@ class Patient: BaseVersioned {
         if let value = triageMentalStatus {
             data[Keys.triageMentalStatus] = value
         }
-        if let value = respiratoryRate.value {
+        if let value = respiratoryRate {
             data[Keys.respiratoryRate] = value
         }
-        if let value = pulse.value {
+        if let value = pulse {
             data[Keys.pulse] = value
         }
-        if let value = capillaryRefill.value {
+        if let value = capillaryRefill {
             data[Keys.capillaryRefill] = value
         }
-        if let value = bpSystolic.value {
+        if let value = bpSystolic {
             data[Keys.bpSystolic] = value
         }
-        if let value = bpDiastolic.value {
+        if let value = bpDiastolic {
             data[Keys.bpDiastolic] = value
         }
-        if let value = gcsTotal.value {
+        if let value = gcsTotal {
             data[Keys.gcsTotal] = value
         }
         if let value = text {
             data[Keys.text] = value
         }
-        if let value = priority.value {
+        if let value = priority {
             data[Keys.priority] = value
         }
-        if let value = filterPriority.value {
+        if let value = filterPriority {
             data[Keys.filterPriority] = value
         }
         if let value = location {
@@ -673,8 +673,8 @@ class Patient: BaseVersioned {
         if gender != source.gender {
             observation.gender = gender
         }
-        if age.value != source.age.value {
-            observation.age.value = age.value
+        if age != source.age {
+            observation.age = age
         }
         if ageUnits != source.ageUnits {
             observation.ageUnits = ageUnits
@@ -691,32 +691,32 @@ class Patient: BaseVersioned {
         if triagePerfusion != source.triagePerfusion {
             observation.triagePerfusion = triagePerfusion
         }
-        if respiratoryRate.value != source.respiratoryRate.value {
-            observation.respiratoryRate.value = respiratoryRate.value
+        if respiratoryRate != source.respiratoryRate {
+            observation.respiratoryRate = respiratoryRate
         }
-        if pulse.value != source.pulse.value {
-            observation.pulse.value = pulse.value
+        if pulse != source.pulse {
+            observation.pulse = pulse
         }
-        if capillaryRefill.value != source.capillaryRefill.value {
-            observation.capillaryRefill.value = capillaryRefill.value
+        if capillaryRefill != source.capillaryRefill {
+            observation.capillaryRefill = capillaryRefill
         }
-        if bpSystolic.value != source.bpSystolic.value {
-            observation.bpSystolic.value = bpSystolic.value
+        if bpSystolic != source.bpSystolic {
+            observation.bpSystolic = bpSystolic
         }
-        if bpDiastolic.value != source.bpDiastolic.value {
-            observation.bpDiastolic.value = bpDiastolic.value
+        if bpDiastolic != source.bpDiastolic {
+            observation.bpDiastolic = bpDiastolic
         }
-        if gcsTotal.value != source.gcsTotal.value {
-            observation.gcsTotal.value = gcsTotal.value
+        if gcsTotal != source.gcsTotal {
+            observation.gcsTotal = gcsTotal
         }
         if text != source.text {
             observation.text = text
         }
-        if priority.value != source.priority.value {
-            observation.priority.value = priority.value
+        if priority != source.priority {
+            observation.priority = priority
         }
-        if filterPriority.value != source.filterPriority.value {
-            observation.filterPriority.value = filterPriority.value
+        if filterPriority != source.filterPriority {
+            observation.filterPriority = filterPriority
         }
         if location != source.location {
             observation.location = location

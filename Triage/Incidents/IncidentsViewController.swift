@@ -15,6 +15,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    weak var segmentedControl: SegmentedControl!
 
     var notificationToken: NotificationToken?
     var results: Results<Incident>?
@@ -27,6 +28,17 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         commandHeader.userLabelText = "Captain John Doe"
+
+        let segmentedControl = SegmentedControl()
+        segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
+        segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+        if traitCollection.horizontalSizeClass == .regular {
+            commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
+        } else {
+            tableView.tableHeaderView = segmentedControl
+        }
+        self.segmentedControl = segmentedControl
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -59,6 +71,10 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         case .error(let error):
             presentAlert(error: error)
         }
+    }
+
+    @objc func segmentedControlValueChanged() {
+
     }
 
     @objc func refresh() {
@@ -148,8 +164,8 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
             cell.number = "#\(incident.number ?? "")"
             cell.address = incident.scene?.address
-            if let dispatches = incident.dispatches, dispatches.count > 0 {
-                let dispatch = dispatches[0]
+            if incident.dispatches.count > 0 {
+                let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
                 cell.date = dispatch.dispatchedAt?.asDateString()
                 cell.time = dispatch.dispatchedAt?.asTimeString()
             }

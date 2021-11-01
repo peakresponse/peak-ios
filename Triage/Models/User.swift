@@ -16,10 +16,10 @@ class User: Base {
         static let position = "position"
         static let iconUrl = "iconUrl"
     }
-    @objc dynamic var firstName: String?
-    @objc dynamic var lastName: String?
-    @objc dynamic var position: String?
-    @objc dynamic var iconUrl: String?
+    @Persisted var firstName: String?
+    @Persisted var lastName: String?
+    @Persisted var position: String?
+    @Persisted var iconUrl: String?
 
     var fullName: String {
         return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)

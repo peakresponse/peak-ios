@@ -293,8 +293,8 @@ class ActiveSceneView: UIView {
             marker.map = mapView
         }
         dateLabel.text = scene.createdAt?.asTimeDateString()
-        patientsCountLabel.text = "\(scene.patientsCount.value ?? 0)"
+        patientsCountLabel.text = "\(scene.patientsCount ?? 0)"
         transportedCountLabel.text = "\(scene.priorityPatientsCounts?[5] ?? 0)"
-        respondersCountLabel.text = "\(scene.respondersCount.value ?? 0)"
+        respondersCountLabel.text = "\(scene.respondersCount ?? 0)"
     }
 }

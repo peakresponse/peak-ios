@@ -6,7 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import Foundation
+import RealmSwift
 
 class Dispatch: BaseVersioned {
     struct Keys {
@@ -15,14 +15,16 @@ class Dispatch: BaseVersioned {
         static let dispatchedAt = "dispatchedAt"
         static let acknowledgedAt = "acknowledgedAt"
     }
-    @objc dynamic var incidentId: String?
-    @objc dynamic var vehicleId: String?
-    @objc dynamic var dispatchedAt: Date?
-    @objc dynamic var acknowledgedAt: Date?
+    @Persisted var incident: Incident?
+    @Persisted var vehicleId: String?
+    @Persisted var dispatchedAt: Date?
+    @Persisted var acknowledgedAt: Date?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
-        incidentId = data[Keys.incidentId] as? String
+        if let incidentId = data[Keys.incidentId] as? String {
+            incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: incidentId)
+        }
         vehicleId = data[Keys.vehicleId] as? String
         dispatchedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchedAt])
         acknowledgedAt = ISO8601DateFormatter.date(from: data[Keys.acknowledgedAt])
@@ -30,8 +32,8 @@ class Dispatch: BaseVersioned {
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
-        if let incidentId = incidentId {
-            json[Keys.incidentId] = incidentId
+        if let incident = incident {
+            json[Keys.incidentId] = incident.id
         }
         if let vehicleId = vehicleId {
             json[Keys.vehicleId] = vehicleId
