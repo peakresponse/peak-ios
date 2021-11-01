@@ -32,7 +32,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         let segmentedControl = SegmentedControl()
         segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
         segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
-        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+        segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
         if traitCollection.horizontalSizeClass == .regular {
             commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
         } else {
@@ -45,14 +45,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         tableView.refreshControl = refreshControl
         tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
 
-        let realm = AppRealm.open()
-        results = realm.objects(Incident.self)
-            .sorted(by: [SortDescriptor(keyPath: "number", ascending: false)])
-        notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
-        }
-
-        refresh()
+        performQuery()
     }
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Incident>>) {
@@ -73,8 +66,22 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         }
     }
 
-    @objc func segmentedControlValueChanged() {
+    @objc func performQuery() {
+        notificationToken?.invalidate()
 
+        let realm = AppRealm.open()
+        results = realm.objects(Incident.self)
+            .sorted(by: [SortDescriptor(keyPath: "number", ascending: false)])
+        if segmentedControl.selectedIndex == 0, let assignmentId = AppSettings.assignmentId {
+            if let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
+               let vehicleId = assignment.vehicleId {
+                results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+            }
+        }
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+        refresh()
     }
 
     @objc func refresh() {
@@ -98,6 +105,17 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         })
     }
 
+    func toggleSidebar() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            if self?.sidebarTableViewLeadingConstraint.constant == 0 {
+                self?.sidebarTableViewLeadingConstraint.constant = -300
+            } else {
+                self?.sidebarTableViewLeadingConstraint.constant = 0
+            }
+            self?.view.layoutIfNeeded()
+        }
+    }
+
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
@@ -107,14 +125,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     // MARK: - CommandHeaderDelegate
 
     func commandHeaderDidPressUser(_ header: CommandHeader) {
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            if self?.sidebarTableViewLeadingConstraint.constant == 0 {
-                self?.sidebarTableViewLeadingConstraint.constant = -300
-            } else {
-                self?.sidebarTableViewLeadingConstraint.constant = 0
-            }
-            self?.view.layoutIfNeeded()
-        }
+        toggleSidebar()
     }
 
     // MARK: - UITableViewDataSource
@@ -136,7 +147,9 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
                 if let vc = vc as? AssignmentViewController {
                     vc.delegate = self
                 }
-                presentAnimated(vc)
+                present(vc, animated: true) { [weak self] in
+                    self?.toggleSidebar()
+                }
             case 1:
                 logout()
             default:
