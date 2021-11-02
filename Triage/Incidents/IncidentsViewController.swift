@@ -27,7 +27,18 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        commandHeader.userLabelText = "Captain John Doe"
+
+        if let userId = AppSettings.userId {
+            let realm = AppRealm.open()
+            let user = realm.object(ofType: User.self, forPrimaryKey: userId)
+            commandHeader.userImageURL = user?.iconUrl
+            if let assignmentId = AppSettings.assignmentId,
+               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
+               let vehicleId = assignment.vehicleId,
+               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+                commandHeader.userLabelText = "\(vehicle.number ?? ""): \(user?.fullName ?? "")"
+            }
+        }
 
         let segmentedControl = SegmentedControl()
         segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
