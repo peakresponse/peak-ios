@@ -97,22 +97,26 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             vehicleId = assignment?.vehicleId
         }
         AppRealm.getIncidents(vehicleId: vehicleId, search: nil, completionHandler: { [weak self] (nextUrl, error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.refreshControl?.endRefreshing()
-                    if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden {
-                        self?.presentLogin()
-                    } else {
-                        self?.presentAlert(error: error)
-                    }
-                }
-            } else {
-                self?.nextUrl = nextUrl
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.refreshControl?.endRefreshing()
+            self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
+        })
+    }
+
+    func handleIncidentsResponse(nextUrl: String?, error: Error?) {
+        if let error = error {
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.refreshControl?.endRefreshing()
+                if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden {
+                    self?.presentLogin()
+                } else {
+                    self?.presentAlert(error: error)
                 }
             }
-        })
+        } else {
+            self.nextUrl = nextUrl
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.refreshControl?.endRefreshing()
+            }
+        }
     }
 
     func toggleSidebar() {
@@ -137,6 +141,19 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     func commandHeaderDidPressUser(_ header: CommandHeader) {
         toggleSidebar()
+    }
+
+    // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView == tableView && scrollView.contentOffset.y >= scrollView.contentSize.height / 2 {
+            if let nextUrl = nextUrl {
+                self.nextUrl = nil
+                AppRealm.getNextIncidents(url: nextUrl) { [weak self] (nextUrl, error) in
+                    self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
+                }
+            }
+        }
     }
 
     // MARK: - UITableViewDataSource

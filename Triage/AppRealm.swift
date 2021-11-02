@@ -215,43 +215,57 @@ class AppRealm {
     public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
                                     completionHandler: @escaping (String?, Error?) -> Void) {
         let task = ApiClient.shared.getIncidents(vehicleId: vehicleId, search: search) { (_, response, records, error) in
-            if let error = error {
-                completionHandler(nil, error)
-            } else if let records = records {
-                var cities: [Base] = []
-                var states: [Base] = []
-                var scenes: [[String: Any]] = []
-                var dispatches: [[String: Any]] = []
-                for record in records {
-                    if let scene = record["scene"] as? [String: Any] {
-                        if let city = scene["city"] as? [String: Any] {
-                            cities.append(City.instantiate(from: city))
-                        }
-                        if let state = scene["state"] as? [String: Any] {
-                            states.append(State.instantiate(from: state))
-                        }
-                        scenes.append(scene)
-                    }
-                    if let newDispatches = record["dispatches"] as? [[String: Any]] {
-                        dispatches.append(contentsOf: newDispatches)
-                    }
-                }
-                let realm = AppRealm.open()
-                try! realm.write {
-                    realm.add(cities, update: .modified)
-                    realm.add(states, update: .modified)
-                    realm.add(scenes.map { Scene.instantiate(from: $0) }, update: .modified)
-                    realm.add(records.map { Incident.instantiate(from: $0) }, update: .modified)
-                    realm.add(dispatches.map { Dispatch.instantiate(from: $0) }, update: .modified)
-                }
-                var nextUrl: String?
-                if let links = ApiClient.parseLinkHeader(from: response) {
-                    nextUrl = links["next"]
-                }
-                completionHandler(nextUrl, nil)
-            }
+            AppRealm.handleIncidentsResponse(response: response, records: records, error: error,
+                                             completionHandler: completionHandler)
         }
         task.resume()
+    }
+
+    public static func getNextIncidents(url: String, completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = ApiClient.shared.GET(path: url, params: nil) { (_, response, records: [[String: Any]]?, error) in
+            AppRealm.handleIncidentsResponse(response: response, records: records, error: error,
+                                             completionHandler: completionHandler)
+        }
+        task.resume()
+    }
+
+    private static func handleIncidentsResponse(response: URLResponse?, records: [[String: Any]]?, error: Error?,
+                                                completionHandler: @escaping (String?, Error?) -> Void) {
+        if let error = error {
+            completionHandler(nil, error)
+        } else if let records = records {
+            var cities: [Base] = []
+            var states: [Base] = []
+            var scenes: [[String: Any]] = []
+            var dispatches: [[String: Any]] = []
+            for record in records {
+                if let scene = record["scene"] as? [String: Any] {
+                    if let city = scene["city"] as? [String: Any] {
+                        cities.append(City.instantiate(from: city))
+                    }
+                    if let state = scene["state"] as? [String: Any] {
+                        states.append(State.instantiate(from: state))
+                    }
+                    scenes.append(scene)
+                }
+                if let newDispatches = record["dispatches"] as? [[String: Any]] {
+                    dispatches.append(contentsOf: newDispatches)
+                }
+            }
+            let realm = AppRealm.open()
+            try! realm.write {
+                realm.add(cities, update: .modified)
+                realm.add(states, update: .modified)
+                realm.add(scenes.map { Scene.instantiate(from: $0) }, update: .modified)
+                realm.add(records.map { Incident.instantiate(from: $0) }, update: .modified)
+                realm.add(dispatches.map { Dispatch.instantiate(from: $0) }, update: .modified)
+            }
+            var nextUrl: String?
+            if let links = ApiClient.parseLinkHeader(from: response) {
+                nextUrl = links["next"]
+            }
+            completionHandler(nextUrl, nil)
+        }
     }
 
     // MARK: - Patients
