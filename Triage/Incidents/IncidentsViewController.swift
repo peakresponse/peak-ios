@@ -72,10 +72,15 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         let realm = AppRealm.open()
         results = realm.objects(Incident.self)
             .sorted(by: [SortDescriptor(keyPath: "number", ascending: false)])
-        if segmentedControl.selectedIndex == 0, let assignmentId = AppSettings.assignmentId {
-            if let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
-               let vehicleId = assignment.vehicleId {
-                results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+        if let assignmentId = AppSettings.assignmentId {
+            let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId)
+            if let vehicleId = assignment?.vehicleId {
+                if segmentedControl.selectedIndex == 0 {
+                    results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+                }
+                segmentedControl.isHidden = false
+            } else {
+                segmentedControl.isHidden = true
             }
         }
         notificationToken = results?.observe { [weak self] (changes) in
@@ -86,7 +91,12 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     @objc func refresh() {
         tableView.refreshControl?.beginRefreshing()
-        AppRealm.getIncidents(vehicleId: nil, search: nil, completionHandler: { [weak self] (nextUrl, error) in
+        var vehicleId: String?
+        if segmentedControl.selectedIndex == 0, let assignmentId = AppSettings.assignmentId {
+            let assignment = AppRealm.open().object(ofType: Assignment.self, forPrimaryKey: assignmentId)
+            vehicleId = assignment?.vehicleId
+        }
+        AppRealm.getIncidents(vehicleId: vehicleId, search: nil, completionHandler: { [weak self] (nextUrl, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.tableView.refreshControl?.endRefreshing()
@@ -119,6 +129,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
+        performQuery()
         dismissAnimated()
     }
 
