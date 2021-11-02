@@ -31,7 +31,12 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         if let userId = AppSettings.userId {
             let realm = AppRealm.open()
             let user = realm.object(ofType: User.self, forPrimaryKey: userId)
-            commandHeader.userImageURL = user?.iconUrl
+            AppCache.cachedImage(from: user?.iconUrl) { [weak self] (image, _) in
+                let image = image?.rounded()
+                DispatchQueue.main.async { [weak self] in
+                    self?.commandHeader.userImage = image
+                }
+            }
             if let assignmentId = AppSettings.assignmentId,
                let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
                let vehicleId = assignment.vehicleId,

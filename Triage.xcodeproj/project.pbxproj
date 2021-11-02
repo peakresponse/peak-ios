@@ -97,7 +97,6 @@
 		45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */; };
 		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
-		45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCA237E75ED00C99EBB /* AudioHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */; };
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
@@ -270,7 +269,6 @@
 		45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
-		45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extensions.swift"; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDC9237E75ED00C99EBB /* AudioHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioHelper.swift; sourceTree = "<group>"; };
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
@@ -532,7 +530,6 @@
 				4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
-				45A3F14324203EEB009D6818 /* UIImage+Extensions.swift */,
 				45E35A3124ECE7CA005A8059 /* UILabel+Extensions.swift */,
 				45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */,
 				4566F072236D2FB100A04C75 /* UIView+Extensions.swift */,
@@ -1073,7 +1070,6 @@
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
-				45A3F14424203EEB009D6818 /* UIImage+Extensions.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
 				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,

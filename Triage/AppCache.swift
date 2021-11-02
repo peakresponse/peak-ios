@@ -9,7 +9,8 @@
 import UIKit
 
 class AppCache {
-    static func cachedFile(from urlString: String, completionHandler: @escaping (URL?, Error?) -> Void) {
+    static func cachedFile(from urlString: String?, completionHandler: @escaping (URL?, Error?) -> Void) {
+        guard let urlString = urlString else { return }
         DispatchQueue.global().async {
             var url: URL?
             if urlString.starts(with: "/") {
@@ -61,7 +62,8 @@ class AppCache {
         }
     }
 
-    static func cachedImage(from urlString: String, completionHandler: @escaping (UIImage?, Error?) -> Void) {
+    static func cachedImage(from urlString: String?, completionHandler: @escaping (UIImage?, Error?) -> Void) {
+        guard let urlString = urlString else { return }
         cachedFile(from: urlString) { (url, error) in
             if let error = error {
                 completionHandler(nil, error)
@@ -73,8 +75,9 @@ class AppCache {
                 } catch {
                     completionHandler(nil, error)
                 }
+            } else {
+                completionHandler(nil, nil)
             }
-            completionHandler(nil, nil)
         }
     }
 
