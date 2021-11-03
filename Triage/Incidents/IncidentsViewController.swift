@@ -10,7 +10,8 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class IncidentsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, UITableViewDataSource, UITableViewDelegate {
+class IncidentsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+                               UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
@@ -44,6 +45,8 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
                 commandHeader.userLabelText = "\(vehicle.number ?? ""): \(user?.fullName ?? "")"
             }
         }
+
+        commandHeader.searchField.delegate = self
 
         let segmentedControl = SegmentedControl()
         segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
@@ -99,6 +102,10 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
                 segmentedControl.isHidden = true
             }
         }
+        if let text = commandHeader.searchField.text, !text.isEmpty {
+            results = results?.filter("(number CONTAINS[cd] %@) OR (scene.address1 CONTAINS[cd] %@) OR (scene.address2 CONTAINS[cd] %@)",
+                                      text, text, text)
+        }
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
@@ -112,7 +119,8 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             let assignment = AppRealm.open().object(ofType: Assignment.self, forPrimaryKey: assignmentId)
             vehicleId = assignment?.vehicleId
         }
-        AppRealm.getIncidents(vehicleId: vehicleId, search: nil, completionHandler: { [weak self] (nextUrl, error) in
+        AppRealm.getIncidents(vehicleId: vehicleId, search: commandHeader.searchField.text,
+                              completionHandler: { [weak self] (nextUrl, error) in
             self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
         })
     }
@@ -157,6 +165,17 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     func commandHeaderDidPressUser(_ header: CommandHeader) {
         toggleSidebar()
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        performQuery()
+    }
+
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
+        field.resignFirstResponder()
+        return false
     }
 
     // MARK: - UIScrollViewDelegate
