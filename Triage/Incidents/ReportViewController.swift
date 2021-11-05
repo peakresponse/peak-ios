@@ -145,9 +145,20 @@ class ReportViewController: UIViewController {
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             cols.widthAnchor.constraint(equalTo: containerView.widthAnchor),
-            containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor)
+            containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40)
         ])
+        addCheckbox(labelText: "COVID-19 suspected", to: colA)
+        addCheckbox(labelText: "ETOH suspected", to: colA)
+        addCheckbox(labelText: "Drugs suspected", to: colA)
+        addCheckbox(labelText: "Behavioral patient", to: colA)
+        addCheckbox(labelText: "Combative", to: colA)
         addTextField(labelText: "Other Notes", to: colB)
+    }
+
+    func addCheckbox(labelText: String, to col: UIStackView) {
+        let checkbox = PRKit.Checkbox()
+        checkbox.labelText = labelText
+        col.addArrangedSubview(checkbox)
     }
 
     func addTextField(labelText: String, to col: UIStackView) {
