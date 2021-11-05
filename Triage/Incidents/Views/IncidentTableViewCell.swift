@@ -128,6 +128,17 @@ class IncidentTableViewCell: UITableViewCell {
             chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
 
+        let separatorView = UIView()
+        separatorView.translatesAutoresizingMaskIntoConstraints = false
+        separatorView.backgroundColor = .base300
+        contentView.addSubview(separatorView)
+        NSLayoutConstraint.activate([
+            separatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            separatorView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            separatorView.heightAnchor.constraint(equalToConstant: 1)
+        ])
+
         if isCompact {
             NSLayoutConstraint.activate([
                 containerView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor)
