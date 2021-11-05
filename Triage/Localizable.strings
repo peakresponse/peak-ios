@@ -102,6 +102,10 @@
 "IncidentsViewController.mine" = "My Dispatches";
 "IncidentsViewController.all" = "All Incidents";
 
+"IncidentViewController.tab.incident" = "Incident";
+"IncidentViewController.tab.ringdown" = "Ringdown";
+"IncidentViewController.tab.refusal" = "Refusal";
+
 "InputAccessoryView.cancel" = "Cancel";
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.go" = "Go";
@@ -117,6 +121,7 @@
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
+"NavigationBar.saveAndExit" = "Save & Exit";
 
 "NewScenePinView.nameField.label" = "Pin Name";
 "NewScenePinView.descField.label" = "Description";

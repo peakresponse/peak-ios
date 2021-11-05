@@ -120,6 +120,7 @@
 		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
 		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
+		45C757DC27349FD500386F07 /* IncidentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DB27349FD500386F07 /* IncidentViewController.swift */; };
 		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
 		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
@@ -290,6 +291,7 @@
 		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
 		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
+		45C757DB27349FD500386F07 /* IncidentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentViewController.swift; sourceTree = "<group>"; };
 		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
@@ -621,6 +623,7 @@
 				45C757CE272CB9CC00386F07 /* Views */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
+				45C757DB27349FD500386F07 /* IncidentViewController.swift */,
 			);
 			path = Incidents;
 			sourceTree = "<group>";
@@ -1006,6 +1009,7 @@
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				454EE9872520305000EB266A /* PatientTableViewCell.swift in Sources */,
 				45F1305325269318001495C7 /* UserView.swift in Sources */,
+				45C757DC27349FD500386F07 /* IncidentViewController.swift in Sources */,
 				45B7A2DA2508331500BCAAAE /* State.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */,
