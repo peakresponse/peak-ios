@@ -121,6 +121,9 @@
 		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
 		45C757DC27349FD500386F07 /* IncidentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DB27349FD500386F07 /* IncidentViewController.swift */; };
+		45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DD2734AFC400386F07 /* RingdownViewController.swift */; };
+		45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DF2734AFE400386F07 /* RefusalViewController.swift */; };
+		45C757E22734B00000386F07 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757E12734B00000386F07 /* ReportViewController.swift */; };
 		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
 		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
@@ -292,6 +295,9 @@
 		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
 		45C757DB27349FD500386F07 /* IncidentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentViewController.swift; sourceTree = "<group>"; };
+		45C757DD2734AFC400386F07 /* RingdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownViewController.swift; sourceTree = "<group>"; };
+		45C757DF2734AFE400386F07 /* RefusalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefusalViewController.swift; sourceTree = "<group>"; };
+		45C757E12734B00000386F07 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
@@ -624,6 +630,9 @@
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
 				45C757DB27349FD500386F07 /* IncidentViewController.swift */,
+				45C757DF2734AFE400386F07 /* RefusalViewController.swift */,
+				45C757E12734B00000386F07 /* ReportViewController.swift */,
+				45C757DD2734AFC400386F07 /* RingdownViewController.swift */,
 			);
 			path = Incidents;
 			sourceTree = "<group>";
@@ -946,6 +955,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				454E17B224FF159C00F9EB8B /* Scene.swift in Sources */,
+				45C757E22734B00000386F07 /* ReportViewController.swift in Sources */,
 				45150BCE270511C30085132C /* AuthViewController.swift in Sources */,
 				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
 				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
@@ -1034,6 +1044,7 @@
 				45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */,
 				45E35A3624EF9ECC005A8059 /* ConfirmTransportViewController.swift in Sources */,
 				4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */,
+				45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */,
 				45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */,
 				4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
@@ -1061,6 +1072,7 @@
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
+				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
