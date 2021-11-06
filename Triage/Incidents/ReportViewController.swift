@@ -45,7 +45,8 @@ class ReportViewController: UIViewController {
         addTextField(labelText: "Location", to: colA)
         addTextField(labelText: "First Medical Contact", to: colB)
         addTextField(labelText: "Unit #", to: colB)
-        addTextField(labelText: "Patient Disposition", to: colA)
+        addTextField(labelText: "Narrative", to: colA)
+        addTextField(labelText: "Disposition", to: colB)
 
         var header = newHeader("Patient Information", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -65,8 +66,8 @@ class ReportViewController: UIViewController {
         addTextField(labelText: "First Name", to: colA)
         addTextField(labelText: "Last Name", to: colB)
         addTextField(labelText: "D.O.B", to: colA)
-        addTextField(labelText: "Age", to: colB)
-        addTextField(labelText: "Gender", to: colB)
+        addAgeAndGender(to: colB)
+        addPatientButtons(to: colA)
 
         header = newHeader("Medical Information", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -112,6 +113,7 @@ class ReportViewController: UIViewController {
         addTextField(labelText: "SPO2", to: colA)
         addTextField(labelText: "EtCO2", to: colB)
         addTextField(labelText: "CO", to: colA)
+        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
 
         header = newHeader("Interventions", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -130,6 +132,7 @@ class ReportViewController: UIViewController {
         ])
         addTextField(labelText: "Treatment/Dose/Route", to: colA)
         addTextField(labelText: "Patient Response", to: colB)
+        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Add Intervention"))
 
         header = newHeader("Additional Notes", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -150,21 +153,67 @@ class ReportViewController: UIViewController {
         addCheckbox(labelText: "COVID-19 suspected", to: colA)
         addCheckbox(labelText: "ETOH suspected", to: colA)
         addCheckbox(labelText: "Drugs suspected", to: colA)
-        addCheckbox(labelText: "Behavioral patient", to: colA)
+        addCheckbox(labelText: "Psych patient", to: colA)
         addCheckbox(labelText: "Combative", to: colA)
         addTextField(labelText: "Other Notes", to: colB)
     }
 
     func addCheckbox(labelText: String, to col: UIStackView) {
-        let checkbox = PRKit.Checkbox()
-        checkbox.labelText = labelText
+        let checkbox = newCheckbox(labelText: labelText)
         col.addArrangedSubview(checkbox)
     }
 
     func addTextField(labelText: String, to col: UIStackView) {
-        let textField = PRKit.TextField()
-        textField.labelText = labelText
+        let textField = newTextField(labelText: labelText)
         col.addArrangedSubview(textField)
+    }
+
+    func addAgeAndGender(to col: UIStackView) {
+        let stackView = newColumns()
+        let age = newTextField(labelText: "Age")
+        stackView.addArrangedSubview(age)
+        let gender = newTextField(labelText: "Gender")
+        stackView.addArrangedSubview(gender)
+        col.addArrangedSubview(stackView)
+    }
+
+    func addPatientButtons(to col: UIStackView) {
+        let stackView = newColumns()
+        stackView.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Scan License"))
+        stackView.addArrangedSubview(newButton(bundleImage: "PatientAdd24px", title: "Add Patient"))
+        col.addArrangedSubview(stackView)
+    }
+
+    func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
+        let button = PRKit.Button()
+        button.size = .small
+        button.style = .primary
+        button.bundleImage = bundleImage
+        button.setTitle(title, for: .normal)
+        return button
+    }
+
+    func newColumns() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 20
+        return stackView
+    }
+
+    func newCheckbox(labelText: String) -> PRKit.Checkbox {
+        let checkbox = PRKit.Checkbox()
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
+        checkbox.labelText = labelText
+        return checkbox
+    }
+
+    func newTextField(labelText: String) -> PRKit.TextField {
+        let textField = PRKit.TextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.labelText = labelText
+        return textField
     }
 
     func newHeader(_ text: String, subheaderText: String?) -> UIView {
