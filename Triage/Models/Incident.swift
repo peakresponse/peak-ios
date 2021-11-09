@@ -15,12 +15,14 @@ class Incident: Base {
         static let number = "number"
         static let calledAt = "calledAt"
         static let dispatchNotifiedAt = "dispatchNotifiedAt"
+        static let reportsCount = "reportsCount"
     }
     @Persisted var psapId: String?
     @Persisted var scene: Scene?
     @Persisted var number: String?
     @Persisted var calledAt: Date?
     @Persisted var dispatchNotifiedAt: Date?
+    @Persisted var reportsCount: Int?
     @Persisted(originProperty: "incident") var dispatches: LinkingObjects<Dispatch>
 
     override func update(from data: [String: Any]) {
@@ -32,6 +34,7 @@ class Incident: Base {
         number = data[Keys.number] as? String
         calledAt = ISO8601DateFormatter.date(from: data[Keys.calledAt])
         dispatchNotifiedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchNotifiedAt])
+        reportsCount = data[Keys.reportsCount] as? Int
     }
 
     override func asJSON() -> [String: Any] {
@@ -50,6 +53,9 @@ class Incident: Base {
         }
         if let dispatchNotifiedAt = dispatchNotifiedAt?.asISO8601String() {
             json[Keys.dispatchNotifiedAt] = dispatchNotifiedAt
+        }
+        if let reportsCount = reportsCount {
+            json[Keys.reportsCount] = reportsCount
         }
         return json
     }

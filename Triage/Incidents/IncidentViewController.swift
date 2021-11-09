@@ -12,22 +12,48 @@ import PRKit
 class IncidentViewController: UIViewController {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var segmentedControl: SegmentedControl!
+    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+
+    var incidentId: String?
+    var incident: Incident?
+    var report: Report?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        segmentedControl.addSegment(title: "IncidentViewController.tab.incident".localized)
+        segmentedControl.addSegment(title: "IncidentViewController.tab.ringdown".localized)
+        segmentedControl.addSegment(title: "IncidentViewController.tab.refusal".localized)
 
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
                                                           style: .plain,
                                                           target: self,
                                                           action: #selector(cancelPressed))
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.saveAndExit".localized,
-                                                           style: .done,
-                                                           target: self,
-                                                           action: #selector(savePressed))
 
-        segmentedControl.addSegment(title: "IncidentViewController.tab.incident".localized)
-        segmentedControl.addSegment(title: "IncidentViewController.tab.ringdown".localized)
-        segmentedControl.addSegment(title: "IncidentViewController.tab.refusal".localized)
+        guard let incidentId = incidentId else { return }
+        incident = AppRealm.open().object(ofType: Incident.self, forPrimaryKey: incidentId)
+
+        guard let incident = incident else { return }
+
+        if incident.reportsCount == 0 {
+            let report = Report.new()
+            report.incident = incident
+            report.scene = incident.scene
+            report.response = Response.new()
+            report.time = Time.new()
+            report.patient = Patient.new()
+            report.situation = Situation.new()
+            report.history = History.new()
+            report.disposition = Disposition.new()
+            report.narrative = Narrative.new()
+            showReport(report)
+        }
+//        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.saveAndExit".localized,
+//                                                           style: .done,
+//                                                           target: self,
+//                                                           action: #selector(savePressed))
+
     }
 
     @objc func cancelPressed() {
@@ -36,5 +62,22 @@ class IncidentViewController: UIViewController {
 
     @objc func savePressed() {
 
+    }
+
+    func showReport(_ report: Report) {
+        self.report = report
+
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
+        if let vc = vc as? ReportViewController {
+            vc.report = report
+        }
+        addChild(vc)
+        containerView.addSubview(vc.view)
+        vc.view.frame = containerView.bounds
+        vc.didMove(toParent: self)
+
+        activityIndicatorView.isHidden = true
+        segmentedControl.isHidden = false
+        containerView.isHidden = false
     }
 }

@@ -4,6 +4,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -103,38 +104,50 @@
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="126"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="56" translatesAutoresizingMaskIntoConstraints="NO" id="agm-ti-evy" customClass="SegmentedControl" customModule="PRKit">
-                                <rect key="frame" x="20" y="126" width="374" height="56"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Jb5-2I-CNd">
+                                <rect key="frame" x="0.0" y="126" width="414" height="770"/>
+                                <subviews>
+                                    <view hidden="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="56" translatesAutoresizingMaskIntoConstraints="NO" id="agm-ti-evy" customClass="SegmentedControl" customModule="PRKit">
+                                        <rect key="frame" x="20" y="0.0" width="374" height="56"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" priority="750" constant="690" id="kYa-hc-GDo"/>
+                                        </constraints>
+                                    </view>
+                                    <containerView hidden="YES" opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8eT-j4-X6e">
+                                        <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
+                                    </containerView>
+                                </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="width" priority="750" constant="690" id="kYa-hc-GDo"/>
+                                    <constraint firstItem="agm-ti-evy" firstAttribute="trailing" secondItem="Jb5-2I-CNd" secondAttribute="trailing" constant="-20" id="E49-4W-cqd"/>
+                                    <constraint firstItem="agm-ti-evy" firstAttribute="leading" secondItem="Jb5-2I-CNd" secondAttribute="leading" constant="20" id="qEl-Bb-AGl"/>
                                 </constraints>
-                            </view>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8eT-j4-X6e">
-                                <rect key="frame" x="0.0" y="202" width="414" height="694"/>
-                                <connections>
-                                    <segue destination="XxD-by-Nsu" kind="embed" id="pib-ns-MN4"/>
-                                </connections>
-                            </containerView>
+                            </stackView>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="odb-1w-YL3">
+                                <rect key="frame" x="188.5" y="434.5" width="37" height="37"/>
+                                <color key="color" name="Base800"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="c4X-Xr-42l"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="jui-7z-no6" firstAttribute="leading" secondItem="l5e-zz-e9E" secondAttribute="leading" id="2oW-E2-E7J"/>
-                            <constraint firstItem="8eT-j4-X6e" firstAttribute="trailing" secondItem="l5e-zz-e9E" secondAttribute="trailing" id="FQf-51-TKw"/>
-                            <constraint firstItem="agm-ti-evy" firstAttribute="centerX" secondItem="c4X-Xr-42l" secondAttribute="centerX" id="IF7-aU-flo"/>
-                            <constraint firstItem="agm-ti-evy" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="l5e-zz-e9E" secondAttribute="trailing" constant="-20" id="KCR-F9-xd7"/>
+                            <constraint firstItem="odb-1w-YL3" firstAttribute="centerX" secondItem="c4X-Xr-42l" secondAttribute="centerX" id="4wh-T7-ylN"/>
+                            <constraint firstItem="Jb5-2I-CNd" firstAttribute="top" secondItem="jui-7z-no6" secondAttribute="bottom" id="5Kc-AA-jV7"/>
+                            <constraint firstItem="8eT-j4-X6e" firstAttribute="width" secondItem="l5e-zz-e9E" secondAttribute="width" id="Aad-G0-fbF"/>
+                            <constraint firstItem="Jb5-2I-CNd" firstAttribute="trailing" secondItem="c4X-Xr-42l" secondAttribute="trailing" id="C1K-NG-7RZ"/>
                             <constraint firstItem="jui-7z-no6" firstAttribute="top" secondItem="l5e-zz-e9E" secondAttribute="top" id="KuI-Fh-KGC"/>
                             <constraint firstItem="jui-7z-no6" firstAttribute="trailing" secondItem="l5e-zz-e9E" secondAttribute="trailing" id="M3r-Np-XFr"/>
-                            <constraint firstItem="8eT-j4-X6e" firstAttribute="bottom" secondItem="l5e-zz-e9E" secondAttribute="bottom" id="Naz-dR-XiE"/>
-                            <constraint firstItem="8eT-j4-X6e" firstAttribute="top" secondItem="agm-ti-evy" secondAttribute="bottom" constant="20" id="QeU-c6-hV6"/>
-                            <constraint firstItem="agm-ti-evy" firstAttribute="top" secondItem="jui-7z-no6" secondAttribute="bottom" id="XvW-zl-hBX"/>
-                            <constraint firstItem="8eT-j4-X6e" firstAttribute="leading" secondItem="l5e-zz-e9E" secondAttribute="leading" id="bWr-Vv-8BY"/>
-                            <constraint firstItem="agm-ti-evy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="l5e-zz-e9E" secondAttribute="leading" constant="20" id="hjE-un-Ho9"/>
+                            <constraint firstItem="Jb5-2I-CNd" firstAttribute="bottom" secondItem="l5e-zz-e9E" secondAttribute="bottom" id="RON-Bf-GfL"/>
+                            <constraint firstItem="agm-ti-evy" firstAttribute="centerX" secondItem="c4X-Xr-42l" secondAttribute="centerX" id="TAj-B0-pEm"/>
+                            <constraint firstItem="Jb5-2I-CNd" firstAttribute="leading" secondItem="l5e-zz-e9E" secondAttribute="leading" id="ajp-Ho-51z"/>
+                            <constraint firstItem="odb-1w-YL3" firstAttribute="centerY" secondItem="c4X-Xr-42l" secondAttribute="centerY" id="gpI-WP-djk"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicatorView" destination="odb-1w-YL3" id="1UQ-YT-MSR"/>
                         <outlet property="commandHeader" destination="jui-7z-no6" id="JA9-4Y-gxj"/>
+                        <outlet property="containerView" destination="8eT-j4-X6e" id="vUv-8D-fld"/>
                         <outlet property="segmentedControl" destination="agm-ti-evy" id="phX-iX-6EB"/>
                     </connections>
                 </viewController>
@@ -145,9 +158,9 @@
         <!--Report View Controller-->
         <scene sceneID="Mpb-BL-2BK">
             <objects>
-                <viewController id="XxD-by-Nsu" customClass="ReportViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Report" id="XxD-by-Nsu" customClass="ReportViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="TLt-cm-djY">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="694"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziP-ge-wPm">
@@ -156,6 +169,7 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
                             </scrollView>
                         </subviews>
+                        <viewLayoutGuide key="safeArea" id="igN-42-GkM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="top" secondItem="TLt-cm-djY" secondAttribute="top" id="B3r-HQ-EDc"/>
@@ -170,7 +184,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f1j-Je-euw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1289.8550724637682" y="783.48214285714278"/>
+            <point key="canvasLocation" x="1288" y="791"/>
         </scene>
     </scenes>
     <designables>
@@ -185,6 +199,9 @@
         </designable>
     </designables>
     <resources>
+        <namedColor name="Base800">
+            <color red="0.18431372549019609" green="0.29019607843137257" blue="0.33725490196078434" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

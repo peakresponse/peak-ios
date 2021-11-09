@@ -24,8 +24,10 @@ target 'Triage' do
   pod 'RollbarNotifier', '2.0.0-beta.22'
   pod 'RollbarPLCrashReporter', '2.0.0-beta.22'
   pod 'RollbarSwift', '2.0.0-beta.22'
+  pod 'RMJSONPatch', :git => 'https://github.com/raymccrae/swift-jsonpatch.git', :tag => 'v1.0.4'
   pod 'Starscream'
   pod 'SwiftLint'
+  pod 'SwiftPath'
 
   target 'TriageTests' do
     inherit! :search_paths

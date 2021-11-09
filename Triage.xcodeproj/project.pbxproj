@@ -148,6 +148,17 @@
 		45F2190024E5D7B50046A39B /* ObservationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F218FF24E5D7B50046A39B /* ObservationTableViewController.swift */; };
 		45F2190224E5EC640046A39B /* Localizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190124E5EC640046A39B /* Localizable.swift */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
+		45F7BAC22739E37300FBD31F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC12739E37300FBD31F /* Report.swift */; };
+		45F7BAC4273AEBE100FBD31F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC3273AEBE100FBD31F /* Response.swift */; };
+		45F7BAC6273AEBF100FBD31F /* Time.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC5273AEBF100FBD31F /* Time.swift */; };
+		45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC7273AEBFD00FBD31F /* Situation.swift */; };
+		45F7BACA273AEC0800FBD31F /* History.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC9273AEC0800FBD31F /* History.swift */; };
+		45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BACB273AEC1600FBD31F /* Disposition.swift */; };
+		45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BACD273AEC2000FBD31F /* Narrative.swift */; };
+		45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BACF273AEC2B00FBD31F /* Medication.swift */; };
+		45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAD1273AEC3500FBD31F /* Procedure.swift */; };
+		45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAD3273AEC3D00FBD31F /* Vital.swift */; };
+		45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAD7273B04BF00FBD31F /* TimeTests.swift */; };
 		45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD73E6243151C200FD7EDB /* ObservationView.swift */; };
 		45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */; };
 		4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E594164AB6C3CA01C6206DB5 /* Pods_TriageTests.framework */; };
@@ -322,6 +333,17 @@
 		45F218FF24E5D7B50046A39B /* ObservationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewController.swift; sourceTree = "<group>"; };
 		45F2190124E5EC640046A39B /* Localizable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localizable.swift; sourceTree = "<group>"; };
 		45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Extensions.swift"; sourceTree = "<group>"; };
+		45F7BAC12739E37300FBD31F /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
+		45F7BAC3273AEBE100FBD31F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
+		45F7BAC5273AEBF100FBD31F /* Time.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time.swift; sourceTree = "<group>"; };
+		45F7BAC7273AEBFD00FBD31F /* Situation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Situation.swift; sourceTree = "<group>"; };
+		45F7BAC9273AEC0800FBD31F /* History.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = History.swift; sourceTree = "<group>"; };
+		45F7BACB273AEC1600FBD31F /* Disposition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disposition.swift; sourceTree = "<group>"; };
+		45F7BACD273AEC2000FBD31F /* Narrative.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Narrative.swift; sourceTree = "<group>"; };
+		45F7BACF273AEC2B00FBD31F /* Medication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medication.swift; sourceTree = "<group>"; };
+		45F7BAD1273AEC3500FBD31F /* Procedure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Procedure.swift; sourceTree = "<group>"; };
+		45F7BAD3273AEC3D00FBD31F /* Vital.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vital.swift; sourceTree = "<group>"; };
+		45F7BAD7273B04BF00FBD31F /* TimeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTests.swift; sourceTree = "<group>"; };
 		45FD73E6243151C200FD7EDB /* ObservationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationView.swift; sourceTree = "<group>"; };
 		45FD73EA243158B900FD7EDB /* ObservationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservationTableViewCell.swift; sourceTree = "<group>"; };
 		857F9B5CBD4C8C73020A114C /* Pods-TriageTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageTests.debug.xcconfig"; path = "Target Support Files/Pods-TriageTests/Pods-TriageTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -473,6 +495,7 @@
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				4566F06A236CE8A800A04C75 /* PatientTests.swift */,
 				45F130472525A062001495C7 /* ResponderTests.swift */,
+				45F7BAD7273B04BF00FBD31F /* TimeTests.swift */,
 				4566F038236CCC5700A04C75 /* Info.plist */,
 			);
 			path = TriageTests;
@@ -547,16 +570,26 @@
 				4566F064236CE3B500A04C75 /* Base.swift */,
 				45B7A2D72508330600BCAAAE /* City.swift */,
 				45C757D1272CC3A200386F07 /* Dispatch.swift */,
+				45F7BACB273AEC1600FBD31F /* Disposition.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
+				45F7BAC9273AEC0800FBD31F /* History.swift */,
 				45C757CC272CAFB000386F07 /* Incident.swift */,
+				45F7BACF273AEC2B00FBD31F /* Medication.swift */,
+				45F7BACD273AEC2000FBD31F /* Narrative.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
+				45F7BAD1273AEC3500FBD31F /* Procedure.swift */,
+				45F7BAC12739E37300FBD31F /* Report.swift */,
 				454E17B824FFF5C900F9EB8B /* Responder.swift */,
+				45F7BAC3273AEBE100FBD31F /* Response.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
 				451A178A25364E1E00DC7705 /* ScenePin.swift */,
+				45F7BAC7273AEBFD00FBD31F /* Situation.swift */,
 				45B7A2D92508331500BCAAAE /* State.swift */,
+				45F7BAC5273AEBF100FBD31F /* Time.swift */,
 				454E17B624FFF5BF00F9EB8B /* User.swift */,
 				45D3E943272767A200E5382D /* Vehicle.swift */,
+				45F7BAD3273AEC3D00FBD31F /* Vital.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -958,6 +991,7 @@
 				45C757E22734B00000386F07 /* ReportViewController.swift in Sources */,
 				45150BCE270511C30085132C /* AuthViewController.swift in Sources */,
 				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
+				45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */,
 				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
 				45515A3124DF682A007BAE09 /* SortBar.swift in Sources */,
 				458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */,
@@ -965,6 +999,7 @@
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
 				454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */,
 				4566F088236E0A5800A04C75 /* ObservationViewController.swift in Sources */,
+				45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PortraitView.swift in Sources */,
 				4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */,
 				45F218FE24E5BB510046A39B /* PatientTableViewController.swift in Sources */,
@@ -979,12 +1014,14 @@
 				4566F096236E11B000A04C75 /* PatientHeaderView.swift in Sources */,
 				45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */,
 				45917FEC254CB896002E03E7 /* ScenePinTypeButton.swift in Sources */,
+				45F7BAC4273AEBE100FBD31F /* Response.swift in Sources */,
 				452AFDFE252A662200E5A84D /* PatientTableViewFooterView.swift in Sources */,
 				45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */,
 				4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */,
 				4543BF9B265705A700B72132 /* ScenePatientCountView.swift in Sources */,
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				454A020B2589E48A00B83D36 /* WebSocket+Extensions.swift in Sources */,
+				45F7BAC6273AEBF100FBD31F /* Time.swift in Sources */,
 				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */,
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
@@ -1034,6 +1071,7 @@
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				452AFE06252A6C0100E5A84D /* SectionInfoTableViewCell.swift in Sources */,
+				45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */,
 				45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */,
 				452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */,
 				454EE97C25202C7A00EB266A /* PatientView.swift in Sources */,
@@ -1053,8 +1091,11 @@
 				45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
+				45F7BAC22739E37300FBD31F /* Report.swift in Sources */,
+				45F7BACA273AEC0800FBD31F /* History.swift in Sources */,
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
 				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
+				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
@@ -1063,6 +1104,7 @@
 				454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
 				454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */,
+				45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* ApiClient.swift in Sources */,
 				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,
 				453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */,
@@ -1073,6 +1115,7 @@
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
+				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
@@ -1088,6 +1131,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */,
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,

@@ -7,6 +7,8 @@
 //
 
 import RealmSwift
+import JSONPatch
+import SwiftPath
 
 class Base: Object {
     struct Keys {
@@ -69,6 +71,12 @@ class BaseVersioned: Base {
     @Persisted var parentId: String?
     @Persisted var secondParentId: String?
 
+    static func new() -> Self {
+        let obj = self.init()
+        obj.canonicalId = UUID().uuidString.lowercased()
+        return obj
+    }
+
     func new() {
         canonicalId = UUID().uuidString.lowercased()
     }
@@ -96,5 +104,39 @@ class BaseVersioned: Base {
             data[Keys.secondParentId] = value
         }
         return data
+    }
+}
+
+protocol NemsisBacked: AnyObject {
+    var _data: Data? { get set }
+
+    func addNemsisValue(_ newValue: String, forJSONPath jsonPath: String)
+    func setNemsisValue(_ newValue: String, forJSONPath jsonPath: String)
+    func getFirstNemsisValue(forJSONPath jsonPath: String) -> String?
+}
+
+extension NemsisBacked {
+    func addNemsisValue(_ newValue: String, forJSONPath jsonPath: String) {
+
+    }
+
+    func setNemsisValue(_ newValue: String, forJSONPath jsonPath: String) {
+        let patch = try! JSONPatch(jsonArray: [
+            [
+                "op": "replace",
+                "path": jsonPath,
+                "value": newValue
+            ]
+        ])
+        let _data = self._data ?? Data()
+        self._data = try! patch.apply(to: _data)
+    }
+
+    func getFirstNemsisValue(forJSONPath jsonPath: String) -> String? {
+        if let _data = _data, let path = SwiftPath(jsonPath) {
+            let result = try? path.evaluate(with: _data)
+            return result as? String
+        }
+        return nil
     }
 }

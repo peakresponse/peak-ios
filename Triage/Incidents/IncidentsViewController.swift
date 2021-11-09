@@ -232,6 +232,9 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             }
         } else {
             let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Incident")
+            if let vc = vc as? IncidentViewController {
+                vc.incidentId = results?[indexPath.row].id
+            }
             present(vc, animated: true) {
                 tableView.deselectRow(at: indexPath, animated: false)
             }

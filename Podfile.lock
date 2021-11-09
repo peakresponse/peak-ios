@@ -36,6 +36,7 @@ PODS:
   - Realm/Headers (10.11.0)
   - RealmSwift (10.11.0):
     - Realm (= 10.11.0)
+  - RMJSONPatch (1.0.4)
   - RollbarCommon (2.0.0-beta.22)
   - RollbarNotifier (2.0.0-beta.22):
     - RollbarCommon (~> 2.0.0-beta.22)
@@ -49,6 +50,7 @@ PODS:
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
+  - SwiftPath (0.3.1)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
@@ -57,11 +59,13 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
+  - RMJSONPatch (from `https://github.com/raymccrae/swift-jsonpatch.git`, tag `v1.0.4`)
   - RollbarNotifier (= 2.0.0-beta.22)
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
   - RollbarSwift (= 2.0.0-beta.22)
   - Starscream
   - SwiftLint
+  - SwiftPath
 
 SPEC REPOS:
   trunk:
@@ -79,6 +83,7 @@ SPEC REPOS:
     - Starscream
     - SVGKit
     - SwiftLint
+    - SwiftPath
 
 EXTERNAL SOURCES:
   Keys:
@@ -86,11 +91,17 @@ EXTERNAL SOURCES:
   PRKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-prkit.git
+  RMJSONPatch:
+    :git: https://github.com/raymccrae/swift-jsonpatch.git
+    :tag: v1.0.4
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 6b71ecb768ddb1bc42a8c889ed9ed375123802ca
+    :commit: c30ab99fd9b8a4118689b5ee27fa34bddec08e6b
     :git: https://github.com/peakresponse/peak-ios-prkit.git
+  RMJSONPatch:
+    :git: https://github.com/raymccrae/swift-jsonpatch.git
+    :tag: v1.0.4
 
 SPEC CHECKSUMS:
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
@@ -102,6 +113,7 @@ SPEC CHECKSUMS:
   PRKit: d551541ef51933be2b2cbdbb108ab38c87176674
   Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
   RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
+  RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
   RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
@@ -109,7 +121,8 @@ SPEC CHECKSUMS:
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
+  SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: 946e4fb27ab8721a4438ba90d4e3f2a81d9abe51
+PODFILE CHECKSUM: 8d6c1a50bdd19bad074a3318321888a0ccf676d9
 
 COCOAPODS: 1.11.2

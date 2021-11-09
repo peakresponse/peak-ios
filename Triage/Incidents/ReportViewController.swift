@@ -9,12 +9,21 @@
 import PRKit
 import UIKit
 
-class ReportViewController: UIViewController {
+class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     weak var containerView: UIView!
 
+    var report: Report!
+    var incident: Incident!
+    var scene: Scene!
+    var time: Time!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        incident = report.incident
+        scene = report.scene
+        time = report.time
 
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +49,7 @@ class ReportViewController: UIViewController {
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
         ])
-        addTextField(labelText: "Incident #", to: colA)
+        addTextField(source: incident, target: nil, attributeKey: "number", to: colA)
         addTextField(labelText: "Date", to: colB)
         addTextField(labelText: "Location", to: colA)
         addTextField(labelText: "First Medical Contact", to: colB)
@@ -168,6 +177,11 @@ class ReportViewController: UIViewController {
         col.addArrangedSubview(textField)
     }
 
+    func addTextField(source: AnyObject, target: AnyObject?, attributeKey: String, to col: UIStackView) {
+        let textField = newTextField(source: source, target: target, attributeKey: attributeKey)
+        col.addArrangedSubview(textField)
+    }
+
     func addAgeAndGender(to col: UIStackView) {
         let stackView = newColumns()
         let age = newTextField(labelText: "Age")
@@ -207,6 +221,19 @@ class ReportViewController: UIViewController {
         checkbox.translatesAutoresizingMaskIntoConstraints = false
         checkbox.labelText = labelText
         return checkbox
+    }
+
+    func newTextField(source: AnyObject, target: AnyObject?, attributeKey: String) -> PRKit.TextField {
+        let textField = PRKit.TextField()
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.source = source
+        textField.target = target
+        textField.attributeKey = attributeKey
+        textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
+        textField.text = source.value(forKey: attributeKey) as? String
+        textField.isUserInteractionEnabled = target != nil
+        textField.delegate = self
+        return textField
     }
 
     func newTextField(labelText: String) -> PRKit.TextField {
