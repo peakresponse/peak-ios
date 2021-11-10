@@ -8,5 +8,15 @@
 
 import RealmSwift
 
-class Narrative: BaseVersioned {
+class Narrative: BaseVersioned, NemsisBacked {
+    @Persisted var _data: Data?
+
+    @objc var text: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eNarrative/eNarrative.01")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eNarrative/eNarrative.01")
+        }
+    }
 }

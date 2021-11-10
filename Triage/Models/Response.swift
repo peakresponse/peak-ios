@@ -8,5 +8,24 @@
 
 import RealmSwift
 
-class Response: BaseVersioned {
+class Response: BaseVersioned, NemsisBacked {
+    @Persisted var _data: Data?
+
+    @objc var incidentNumber: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.03")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eResponse/eResponse.03")
+        }
+    }
+
+    @objc var unitNumber: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.13")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eResponse/eResponse.13")
+        }
+    }
 }

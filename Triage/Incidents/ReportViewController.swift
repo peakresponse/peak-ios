@@ -17,6 +17,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     var incident: Incident!
     var scene: Scene!
     var time: Time!
+    var response: Response!
+    var narrative: Narrative!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +26,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         incident = report.incident
         scene = report.scene
         time = report.time
+        response = report.response
+        narrative = report.narrative
 
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,12 +53,12 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
         ])
-        addTextField(source: incident, target: nil, attributeKey: "number", to: colA)
-        addTextField(labelText: "Date", to: colB)
-        addTextField(labelText: "Location", to: colA)
-        addTextField(labelText: "First Medical Contact", to: colB)
-        addTextField(labelText: "Unit #", to: colB)
-        addTextField(labelText: "Narrative", to: colA)
+        addTextField(source: response, target: nil, attributeKey: "incidentNumber", to: colA)
+        addTextField(source: scene, target: nil, attributeKey: "address", to: colA)
+        addTextField(source: response, target: nil, attributeKey: "unitNumber", to: colB)
+        addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, to: colB)
+        addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, to: colB)
+        addTextField(source: narrative, target: nil, attributeKey: "text", to: colA)
         addTextField(labelText: "Disposition", to: colB)
 
         var header = newHeader("Patient Information", subheaderText: " (optional)")
@@ -177,8 +181,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         col.addArrangedSubview(textField)
     }
 
-    func addTextField(source: AnyObject, target: AnyObject?, attributeKey: String, to col: UIStackView) {
-        let textField = newTextField(source: source, target: target, attributeKey: attributeKey)
+    func addTextField(source: AnyObject, target: AnyObject?,
+                      attributeKey: String, attributeType: FormFieldAttributeType = .text,
+                      to col: UIStackView) {
+        let textField = newTextField(source: source, target: target, attributeKey: attributeKey, attributeType: attributeType)
         col.addArrangedSubview(textField)
     }
 
@@ -223,14 +229,19 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         return checkbox
     }
 
-    func newTextField(source: AnyObject, target: AnyObject?, attributeKey: String) -> PRKit.TextField {
+    func newTextField(source: AnyObject, target: AnyObject?,
+                      attributeKey: String, attributeType: FormFieldAttributeType = .text) -> PRKit.TextField {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.source = source
         textField.target = target
         textField.attributeKey = attributeKey
+        textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
         textField.text = source.value(forKey: attributeKey) as? String
+        if attributeType != .text {
+            textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
+        }
         textField.isUserInteractionEnabled = target != nil
         textField.delegate = self
         return textField

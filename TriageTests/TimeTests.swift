@@ -21,6 +21,10 @@ class TimeTests: XCTestCase {
 
     func testNemsisBackedProperties() {
         let time = Time.new()
+        let now = Date()
+        time.unitNotifiedByDispatch = now
+        XCTAssertEqual(time.unitNotifiedByDispatch?.asISO8601String(), now.asISO8601String())
+
         time._data = """
         {
             "eTimes": {
@@ -29,12 +33,14 @@ class TimeTests: XCTestCase {
                 }
             }
         }
-        """.data(using: .utf8)
+        """.data(using: .utf8)!
         XCTAssertNotNil(time.unitNotifiedByDispatch)
         XCTAssertEqual(time.unitNotifiedByDispatch, ISO8601DateFormatter.date(from: "2020-04-06T21:22:10.102Z"))
 
-        let now = Date()
         time.unitNotifiedByDispatch = now
         XCTAssertEqual(time.unitNotifiedByDispatch?.asISO8601String(), now.asISO8601String())
+
+        time.unitNotifiedByDispatch = nil
+        XCTAssertNil(time.unitNotifiedByDispatch)
     }
 }

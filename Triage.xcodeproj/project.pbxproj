@@ -26,8 +26,6 @@
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD9243D819500A8F1FF /* SelectorView.swift */; };
 		453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* NonSceneTabBarController.swift */; };
-		4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */; };
-		4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4538CE362420992B00E276A4 /* Date+Extensions.swift */; };
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
 		4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */; };
 		4543BF6E26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543BF6D26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift */; };
@@ -71,7 +69,6 @@
 		4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */; };
 		4566F063236CE18E00A04C75 /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F062236CE18E00A04C75 /* Patient.swift */; };
 		4566F065236CE3B500A04C75 /* Base.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F064236CE3B500A04C75 /* Base.swift */; };
-		4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */; };
 		4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F068236CE82A00A04C75 /* AppRealm.swift */; };
 		4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F06A236CE8A800A04C75 /* PatientTests.swift */; };
 		4566F06F236D2EBF00A04C75 /* PortraitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F06E236D2EBF00A04C75 /* PortraitView.swift */; };
@@ -105,7 +102,6 @@
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E0250E9EFD00BCAAAE /* ActiveScenesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */; };
 		45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */; };
-		45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */; };
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45B7A2E9250F2AAC00BCAAAE /* AlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E7250F2AAC00BCAAAE /* AlertViewController.swift */; };
 		45B7A2EA250F2AAC00BCAAAE /* AlertViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 45B7A2E8250F2AAC00BCAAAE /* AlertViewController.xib */; };
@@ -204,8 +200,6 @@
 		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		452DDBD9243D819500A8F1FF /* SelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
 		453877BC236FA47300E19880 /* NonSceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonSceneTabBarController.swift; sourceTree = "<group>"; };
-		4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RelativeDateTimeFormatter+Extensions.swift"; sourceTree = "<group>"; };
-		4538CE362420992B00E276A4 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTriagePerfusionKeyboardView.swift; sourceTree = "<group>"; };
 		4543BF6D26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTriageMentalStatusKeyboardView.swift; sourceTree = "<group>"; };
@@ -255,7 +249,6 @@
 		4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		4566F062236CE18E00A04C75 /* Patient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
 		4566F064236CE3B500A04C75 /* Base.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Base.swift; sourceTree = "<group>"; };
-		4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ISO8601DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		4566F068236CE82A00A04C75 /* AppRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRealm.swift; sourceTree = "<group>"; };
 		4566F06A236CE8A800A04C75 /* PatientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTests.swift; sourceTree = "<group>"; };
 		4566F06E236D2EBF00A04C75 /* PortraitView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PortraitView.swift; sourceTree = "<group>"; };
@@ -289,7 +282,6 @@
 		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
 		45B7A2DF250E9EFD00BCAAAE /* ActiveScenesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveScenesView.swift; sourceTree = "<group>"; };
 		45B7A2E1250EE11300BCAAAE /* ActiveSceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveSceneView.swift; sourceTree = "<group>"; };
-		45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2E7250F2AAC00BCAAAE /* AlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertViewController.swift; sourceTree = "<group>"; };
 		45B7A2E8250F2AAC00BCAAAE /* AlertViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AlertViewController.xib; sourceTree = "<group>"; };
@@ -545,12 +537,8 @@
 			isa = PBXGroup;
 			children = (
 				454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */,
-				4538CE362420992B00E276A4 /* Date+Extensions.swift */,
-				45B7A2E3250EE7D000BCAAAE /* DateFormatter+Extensions.swift */,
 				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
 				45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */,
-				4566F066236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift */,
-				4538CE34242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift */,
 				4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
@@ -1022,7 +1010,6 @@
 				45F2190224E5EC640046A39B /* Localizable.swift in Sources */,
 				454A020B2589E48A00B83D36 /* WebSocket+Extensions.swift in Sources */,
 				45F7BAC6273AEBF100FBD31F /* Time.swift in Sources */,
-				4566F067236CE6D700A04C75 /* ISO8601DateFormatter+Extensions.swift in Sources */,
 				45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */,
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
 				4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */,
@@ -1081,7 +1068,6 @@
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
 				45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */,
 				45E35A3624EF9ECC005A8059 /* ConfirmTransportViewController.swift in Sources */,
-				4538CE372420992B00E276A4 /* Date+Extensions.swift in Sources */,
 				45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */,
 				45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */,
 				4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */,
@@ -1119,10 +1105,8 @@
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
-				4538CE35242098B300E276A4 /* RelativeDateTimeFormatter+Extensions.swift in Sources */,
 				45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */,
 				45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */,
-				45B7A2E4250EE7D000BCAAAE /* DateFormatter+Extensions.swift in Sources */,
 				45E267522418B2510010CDE9 /* Button.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

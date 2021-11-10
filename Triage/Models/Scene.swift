@@ -103,7 +103,7 @@ class Scene: BaseVersioned {
         return realm?.object(ofType: State.self, forPrimaryKey: stateId)
     }
     @Persisted var zip: String?
-    var address: String {
+    @objc var address: String {
         return "\(address1?.capitalized ?? "")\n\(address2?.capitalized ?? "")\n\(city?.name ?? ""), \(state?.abbr ?? "") \(zip ?? "")"
             .replacingOccurrences(of: "\n\n", with: "\n")
             .trimmingCharacters(in: .whitespacesAndNewlines)

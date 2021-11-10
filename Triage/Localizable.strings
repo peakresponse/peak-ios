@@ -119,6 +119,8 @@
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
 
+"Narrative.text" = "Narrative";
+
 "NavigationBar.cancel" = "Cancel";
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
@@ -235,6 +237,11 @@
 "Responder.role.TREATMENT" = "Treatment Officer";
 "Responder.role.TRIAGE" = "Triage Officer";
 
+"Response.incidentNumber" = "Incident #";
+"Response.unitNumber" = "Unit #";
+
+"Scene.address" = "Location";
+
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";
 
@@ -285,6 +292,9 @@
 "Sidebar.item.logOut" = "Log out";
 
 "SortBar.sortBy" = "Sort By :";
+
+"Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
+"Time.arrivedAtPatient" = "Arrived at Patient";
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";

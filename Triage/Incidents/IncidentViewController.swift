@@ -32,7 +32,9 @@ class IncidentViewController: UIViewController {
                                                           action: #selector(cancelPressed))
 
         guard let incidentId = incidentId else { return }
-        incident = AppRealm.open().object(ofType: Incident.self, forPrimaryKey: incidentId)
+
+        let realm = AppRealm.open()
+        incident = realm.object(ofType: Incident.self, forPrimaryKey: incidentId)
 
         guard let incident = incident else { return }
 
@@ -47,13 +49,20 @@ class IncidentViewController: UIViewController {
             report.history = History.new()
             report.disposition = Disposition.new()
             report.narrative = Narrative.new()
+
+            report.response?.incidentNumber = incident.number
+            if let assignmentId = AppSettings.assignmentId,
+               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {
+                if let dispatch = incident.dispatches.first(where: { $0.vehicleId == assignment.vehicleId }) {
+                    report.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
+                }
+                if let vehicleId = assignment.vehicleId, let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+                    report.response?.unitNumber = vehicle.number
+                }
+            }
+
             showReport(report)
         }
-//        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.saveAndExit".localized,
-//                                                           style: .done,
-//                                                           target: self,
-//                                                           action: #selector(savePressed))
-
     }
 
     @objc func cancelPressed() {
@@ -79,5 +88,10 @@ class IncidentViewController: UIViewController {
         activityIndicatorView.isHidden = true
         segmentedControl.isHidden = false
         containerView.isHidden = false
+
+        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.saveAndExit".localized,
+                                                           style: .done,
+                                                           target: self,
+                                                           action: #selector(savePressed))
     }
 }
