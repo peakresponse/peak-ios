@@ -20,7 +20,7 @@ class TimeTests: XCTestCase {
     }
 
     func testNemsisBackedProperties() {
-        let time = Time.new()
+        let time = Time.newRecord()
         let now = Date()
         time.unitNotifiedByDispatch = now
         XCTAssertEqual(time.unitNotifiedByDispatch?.asISO8601String(), now.asISO8601String())

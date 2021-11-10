@@ -71,9 +71,9 @@ class BaseVersioned: Base {
     @Persisted var parentId: String?
     @Persisted var secondParentId: String?
 
-    static func new() -> Self {
+    static func newRecord() -> Self {
         let obj = self.init()
-        obj.canonicalId = UUID().uuidString.lowercased()
+        obj.new()
         return obj
     }
 

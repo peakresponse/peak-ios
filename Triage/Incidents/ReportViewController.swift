@@ -14,7 +14,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     weak var containerView: UIView!
 
     var report: Report!
-    var incident: Incident!
     var scene: Scene!
     var time: Time!
     var response: Response!
@@ -23,7 +22,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        incident = report.incident
         scene = report.scene
         time = report.time
         response = report.response

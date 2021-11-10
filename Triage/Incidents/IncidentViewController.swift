@@ -39,17 +39,9 @@ class IncidentViewController: UIViewController {
         guard let incident = incident else { return }
 
         if incident.reportsCount == 0 {
-            let report = Report.new()
+            let report = Report.newRecord()
             report.incident = incident
             report.scene = incident.scene
-            report.response = Response.new()
-            report.time = Time.new()
-            report.patient = Patient.new()
-            report.situation = Situation.new()
-            report.history = History.new()
-            report.disposition = Disposition.new()
-            report.narrative = Narrative.new()
-
             report.response?.incidentNumber = incident.number
             if let assignmentId = AppSettings.assignmentId,
                let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {

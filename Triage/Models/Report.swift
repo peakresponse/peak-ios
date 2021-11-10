@@ -18,4 +18,16 @@ class Report: BaseVersioned {
     @Persisted var history: History?
     @Persisted var disposition: Disposition?
     @Persisted var narrative: Narrative?
+
+    override func new() {
+        super.new()
+        scene = Scene.newRecord()
+        response = Response.newRecord()
+        time = Time.newRecord()
+        patient = Patient.newRecord()
+        situation = Situation.newRecord()
+        history = History.newRecord()
+        disposition = Disposition.newRecord()
+        narrative = Narrative.newRecord()
+    }
 }
