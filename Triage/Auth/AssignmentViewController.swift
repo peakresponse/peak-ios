@@ -15,7 +15,8 @@ import RealmSwift
     @objc optional func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String)
 }
 
-class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
+class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate,
+                                PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     @IBOutlet weak var welcomeHeader: WelcomeHeader!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
@@ -230,9 +231,6 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
     // MARK: - KeyboardStateDelegate
 
-    public func keyboardWillTransition(_ state: KeyboardState) {
-    }
-
     public func keyboardTransitionAnimation(_ state: KeyboardState) {
         switch state {
         case .activeWithHeight(let height):
@@ -241,14 +239,5 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
             scrollViewBottomConstraint.constant = 0
         }
         view.layoutIfNeeded()
-    }
-
-    public func keyboardDidTransition(_ state: KeyboardState) {
-        switch state {
-        case .activeWithHeight:
-            scrollView.setContentOffset(CGPoint(x: 0, y: max(0, scrollView.contentSize.height - scrollView.frame.height)), animated: true)
-        default:
-            break
-        }
     }
 }

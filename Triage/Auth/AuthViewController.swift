@@ -14,7 +14,8 @@ import PRKit
     @objc optional func authViewControllerDidLogin(_ vc: AuthViewController)
 }
 
-class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardStateDelegate {
+class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
 
     @IBOutlet weak var emailField: PRKit.TextField!
@@ -142,23 +143,5 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             signInPressed(signInButton)
         }
         return false
-    }
-
-    // MARK: - KeyboardStateDelegate
-
-    public func keyboardWillTransition(_ state: KeyboardState) {
-    }
-
-    public func keyboardTransitionAnimation(_ state: KeyboardState) {
-        switch state {
-        case .activeWithHeight(let height):
-            scrollViewBottomConstraint.constant = -height
-        case .hidden:
-            scrollViewBottomConstraint.constant = 0
-        }
-        view.layoutIfNeeded()
-    }
-
-    public func keyboardDidTransition(_ state: KeyboardState) {
     }
 }

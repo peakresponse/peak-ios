@@ -39,7 +39,7 @@
                                                             <userDefinedRuntimeAttribute type="string" keyPath="Variant" value="dark"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-wC-R4I" userLabel="Email Field" customClass="TextField" customModule="PRKit">
+                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="72.666666666666686" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-wC-R4I" userLabel="Email Field" customClass="TextField" customModule="PRKit">
                                                         <rect key="frame" x="0.0" y="100" width="388" height="72.666666666666686"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -50,8 +50,8 @@
                                                             <outlet property="delegate" destination="uxH-ap-OfM" id="6vt-d9-enY"/>
                                                         </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6EK-b5-Szf" userLabel="Password Field" customClass="PasswordField" customModule="PRKit">
-                                                        <rect key="frame" x="0.0" y="188.66666666666669" width="388" height="73"/>
+                                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="117.33333333333331" translatesAutoresizingMaskIntoConstraints="NO" id="6EK-b5-Szf" userLabel="Password Field" customClass="PasswordField" customModule="PRKit">
+                                                        <rect key="frame" x="0.0" y="188.66666666666669" width="388" height="117.33333333333331"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AuthViewController.password"/>
@@ -114,12 +114,12 @@
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Ruh-iu-iUb" firstAttribute="bottom" secondItem="GRv-gv-rr8" secondAttribute="bottom" id="3nV-A2-4V4"/>
+                                    <constraint firstItem="GRv-gv-rr8" firstAttribute="bottom" secondItem="Ruh-iu-iUb" secondAttribute="bottom" id="3nV-A2-4V4"/>
                                     <constraint firstItem="Ruh-iu-iUb" firstAttribute="height" secondItem="nG8-0e-MQ1" secondAttribute="height" priority="750" id="96j-19-aEM"/>
                                     <constraint firstItem="Ruh-iu-iUb" firstAttribute="width" secondItem="nG8-0e-MQ1" secondAttribute="width" id="HM7-lG-W6T"/>
                                     <constraint firstItem="Ruh-iu-iUb" firstAttribute="leading" secondItem="GRv-gv-rr8" secondAttribute="leading" id="OfV-DH-qc2"/>
                                     <constraint firstItem="Ruh-iu-iUb" firstAttribute="top" secondItem="GRv-gv-rr8" secondAttribute="top" id="WlJ-AX-mkm"/>
-                                    <constraint firstItem="Ruh-iu-iUb" firstAttribute="trailing" secondItem="GRv-gv-rr8" secondAttribute="trailing" id="lg0-Bz-aMi"/>
+                                    <constraint firstItem="GRv-gv-rr8" firstAttribute="trailing" secondItem="Ruh-iu-iUb" secondAttribute="trailing" id="lg0-Bz-aMi"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="GRv-gv-rr8"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="nG8-0e-MQ1"/>
@@ -141,6 +141,7 @@
                         <outlet property="activityIndicatorView" destination="UFK-H6-Gq4" id="iaI-vZ-n1S"/>
                         <outlet property="emailField" destination="9rW-wC-R4I" id="CC1-e3-gNP"/>
                         <outlet property="passwordField" destination="6EK-b5-Szf" id="83W-bd-eRj"/>
+                        <outlet property="scrollView" destination="ZHo-dn-dp0" id="ZNQ-Bm-EMp"/>
                         <outlet property="scrollViewBottomConstraint" destination="Hli-rn-IPH" id="aoP-2g-Ro3"/>
                         <outlet property="signInButton" destination="cEJ-de-7Dm" id="DHp-X0-ayY"/>
                     </connections>
@@ -161,7 +162,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="428" height="64"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1iv-yg-HzC">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1iv-yg-HzC">
                                 <rect key="frame" x="0.0" y="64" width="428" height="754"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-DX-pxj">
@@ -192,7 +193,7 @@
                                                 </connections>
                                             </view>
                                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="J6c-DA-S38">
-                                                <rect key="frame" x="195.66666666666666" y="70.333333333333343" width="37" height="37"/>
+                                                <rect key="frame" x="195.33333333333334" y="70.333333333333343" width="37" height="37"/>
                                                 <color key="color" name="Base800"/>
                                             </activityIndicatorView>
                                         </subviews>
@@ -220,12 +221,13 @@
                                     <constraint firstItem="Xjk-Xx-s3l" firstAttribute="bottom" secondItem="yTi-DX-pxj" secondAttribute="bottom" id="NhI-t3-MIV"/>
                                     <constraint firstItem="yTi-DX-pxj" firstAttribute="top" secondItem="Xjk-Xx-s3l" secondAttribute="top" id="Pln-Cr-cK3"/>
                                     <constraint firstItem="yTi-DX-pxj" firstAttribute="width" secondItem="IOI-yd-xC0" secondAttribute="width" priority="750" id="STT-cd-0Ck"/>
+                                    <constraint firstItem="Xjk-Xx-s3l" firstAttribute="trailing" secondItem="yTi-DX-pxj" secondAttribute="trailing" id="ocg-kr-bpG"/>
                                     <constraint firstItem="yTi-DX-pxj" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="IOI-yd-xC0" secondAttribute="trailing" id="yS3-i9-J1h"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="Xjk-Xx-s3l"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="IOI-yd-xC0"/>
                             </scrollView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vIM-aN-FPe" customClass="CommandFooter" customModule="PRKit">
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="428" placeholderIntrinsicHeight="108" translatesAutoresizingMaskIntoConstraints="NO" id="vIM-aN-FPe" customClass="CommandFooter" customModule="PRKit">
                                 <rect key="frame" x="0.0" y="818" width="428" height="108"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="giv-Sb-Cls" userLabel="Skip Button" customClass="Button" customModule="PRKit">
@@ -295,6 +297,12 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="6EK-b5-Szf">
+            <size key="intrinsicContentSize" width="388" height="117.33333333333331"/>
+        </designable>
+        <designable name="9rW-wC-R4I">
+            <size key="intrinsicContentSize" width="388" height="72.666666666666686"/>
+        </designable>
         <designable name="LTc-RD-9v1">
             <size key="intrinsicContentSize" width="388" height="50"/>
         </designable>
@@ -306,6 +314,9 @@
         </designable>
         <designable name="giv-Sb-Cls">
             <size key="intrinsicContentSize" width="54" height="34"/>
+        </designable>
+        <designable name="vIM-aN-FPe">
+            <size key="intrinsicContentSize" width="428" height="108"/>
         </designable>
         <designable name="ycX-FD-H1F">
             <size key="intrinsicContentSize" width="428" height="64"/>
