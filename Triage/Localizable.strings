@@ -70,6 +70,8 @@
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
 
+"Disposition.unitDisposition" = "Unit Disposition";
+
 "Error.title" = "An error has occurred";
 "Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
 
@@ -298,6 +300,13 @@
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
+
+"UnitDisposition.4227001" = "Patient Contact Made";
+"UnitDisposition.4227003" = "Cancelled on Scene";
+"UnitDisposition.4227005" = "Cancelled Prior to Arrival at Scene";
+"UnitDisposition.4227007" = "No Patient Contact";
+"UnitDisposition.4227009" = "No Patient Found";
+"UnitDisposition.4227011" = "Non-Patient Incident";
 
 "User.firstName" = "First Name";
 "User.lastName" = "Last Name";

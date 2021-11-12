@@ -18,6 +18,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     var time: Time!
     var response: Response!
     var narrative: Narrative!
+    var disposition: Disposition!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         time = report.time
         response = report.response
         narrative = report.narrative
+        disposition = report.disposition
 
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,7 +59,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, to: colB)
         addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, to: colB)
         addTextField(source: narrative, target: nil, attributeKey: "text", to: colA)
-        addTextField(labelText: "Disposition", to: colB)
+        addTextField(source: disposition, target: nil,
+                     attributeKey: "unitDisposition",
+                     attributeType: .picker(PickerKeyboardSourceWrapper<UnitDisposition>()),
+                     to: colB)
 
         var header = newHeader("Patient Information", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -236,11 +241,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
-        textField.text = source.value(forKey: attributeKey) as? String
-        if attributeType != .text {
-            textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
-        }
-        textField.isUserInteractionEnabled = target != nil
+        textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
         textField.delegate = self
         return textField
     }
