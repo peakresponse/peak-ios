@@ -8,9 +8,11 @@
 
 import PRKit
 import UIKit
+import Keyboardy
 
-class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
+class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardStateDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     weak var containerView: UIView!
 
     var report: Report!
@@ -19,6 +21,16 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
     var response: Response!
     var narrative: Narrative!
     var disposition: Disposition!
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -322,5 +334,28 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate {
             cols.addArrangedSubview(colB)
         }
         return (cols, colA, colB)
+    }
+
+    // MARK: - KeyboardStateDelegate
+
+    public func keyboardWillTransition(_ state: KeyboardState) {
+    }
+
+    public func keyboardTransitionAnimation(_ state: KeyboardState) {
+        switch state {
+        case .activeWithHeight(let height):
+            scrollViewBottomConstraint.constant = -height
+        case .hidden:
+            scrollViewBottomConstraint.constant = 0
+        }
+        view.layoutIfNeeded()
+    }
+
+    public func keyboardDidTransition(_ state: KeyboardState) {
+        if let firstResponder = scrollView.firstResponder, let superview = firstResponder.superview {
+            var rect = superview.convert(firstResponder.frame, to: scrollView)
+            rect.origin.y += 20
+            scrollView.scrollRectToVisible(rect, animated: true)
+        }
     }
 }
