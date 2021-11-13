@@ -97,7 +97,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: f5be85632f4394c3cb61e55da8a6cc890c3d58de
+    :commit: 9d6536c6b8d44351cd123f3033ff01dc2c49a668
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
