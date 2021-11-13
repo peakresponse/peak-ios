@@ -28,9 +28,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        emailField.textView.keyboardType = .emailAddress
-        emailField.textView.autocorrectionType = .no
-        emailField.textView.autocapitalizationType = .none
+        emailField.keyboardType = .emailAddress
     }
 
     override func viewWillAppear(_ animated: Bool) {

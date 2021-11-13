@@ -68,9 +68,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         ])
         var tag = 1
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
-        addTextField(source: response, target: nil, attributeKey: "incidentNumber", tag: &tag, to: colA)
+        addTextField(source: response, target: nil, attributeKey: "incidentNumber",
+                     keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
         addTextField(source: scene, target: nil, attributeKey: "address", tag: &tag, to: colA)
-        addTextField(source: response, target: nil, attributeKey: "unitNumber", tag: &tag, to: colB)
+        addTextField(source: response, target: nil, attributeKey: "unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
         addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
         addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
         addTextField(source: narrative, target: nil, attributeKey: "text", tag: &tag, to: colA)
@@ -201,9 +202,12 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
 
     func addTextField(source: AnyObject, target: AnyObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
-                      tag: inout Int,
-                      to col: UIStackView) {
-        let textField = newTextField(source: source, target: target, attributeKey: attributeKey, attributeType: attributeType, tag: &tag)
+                      keyboardType: UIKeyboardType = .default,
+                      tag: inout Int, to col: UIStackView) {
+        let textField = newTextField(source: source, target: target,
+                                     attributeKey: attributeKey, attributeType: attributeType,
+                                     keyboardType: keyboardType,
+                                     tag: &tag)
         col.addArrangedSubview(textField)
     }
 
@@ -250,6 +254,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
 
     func newTextField(source: AnyObject, target: AnyObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
+                      keyboardType: UIKeyboardType = .default,
                       tag: inout Int) -> PRKit.TextField {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -260,6 +265,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
         textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
         textField.inputAccessoryView = formInputAccessoryView
+        textField.keyboardType = keyboardType
         textField.tag = tag
         tag += 1
         textField.delegate = self
