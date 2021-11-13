@@ -14,6 +14,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     weak var containerView: UIView!
+    var formInputAccessoryView: UIView!
 
     var report: Report!
     var scene: Scene!
@@ -65,16 +66,18 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
         ])
-        addTextField(source: response, target: nil, attributeKey: "incidentNumber", to: colA)
-        addTextField(source: scene, target: nil, attributeKey: "address", to: colA)
-        addTextField(source: response, target: nil, attributeKey: "unitNumber", to: colB)
-        addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, to: colB)
-        addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, to: colB)
-        addTextField(source: narrative, target: nil, attributeKey: "text", to: colA)
+        var tag = 1
+        formInputAccessoryView = FormInputAccessoryView(rootView: view)
+        addTextField(source: response, target: nil, attributeKey: "incidentNumber", tag: &tag, to: colA)
+        addTextField(source: scene, target: nil, attributeKey: "address", tag: &tag, to: colA)
+        addTextField(source: response, target: nil, attributeKey: "unitNumber", tag: &tag, to: colB)
+        addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
+        addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
+        addTextField(source: narrative, target: nil, attributeKey: "text", tag: &tag, to: colA)
         addTextField(source: disposition, target: nil,
                      attributeKey: "unitDisposition",
                      attributeType: .picker(PickerKeyboardSourceWrapper<UnitDisposition>()),
-                     to: colB)
+                     tag: &tag, to: colB)
 
         var header = newHeader("Patient Information", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -198,8 +201,9 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
 
     func addTextField(source: AnyObject, target: AnyObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
+                      tag: inout Int,
                       to col: UIStackView) {
-        let textField = newTextField(source: source, target: target, attributeKey: attributeKey, attributeType: attributeType)
+        let textField = newTextField(source: source, target: target, attributeKey: attributeKey, attributeType: attributeType, tag: &tag)
         col.addArrangedSubview(textField)
     }
 
@@ -221,10 +225,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
         let button = PRKit.Button()
-        button.size = .small
-        button.style = .primary
         button.bundleImage = bundleImage
         button.setTitle(title, for: .normal)
+        button.size = .small
+        button.style = .primary
         return button
     }
 
@@ -245,7 +249,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     }
 
     func newTextField(source: AnyObject, target: AnyObject?,
-                      attributeKey: String, attributeType: FormFieldAttributeType = .text) -> PRKit.TextField {
+                      attributeKey: String, attributeType: FormFieldAttributeType = .text,
+                      tag: inout Int) -> PRKit.TextField {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.source = source
@@ -254,6 +259,9 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
         textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
+        textField.inputAccessoryView = formInputAccessoryView
+        textField.tag = tag
+        tag += 1
         textField.delegate = self
         return textField
     }

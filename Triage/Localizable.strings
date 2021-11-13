@@ -41,6 +41,7 @@
 "Button.closeScene" = "Close Scene";
 "Button.continue" = "Continue";
 "Button.delete" = "Delete";
+"Button.done" = "Done";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
 "Button.joinScene" = "Arrived on Scene";
