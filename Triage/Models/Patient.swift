@@ -8,6 +8,7 @@
 
 import CoreLocation
 import RealmSwift
+import PRKit
 
 // swiftlint:disable file_length
 
@@ -75,7 +76,7 @@ let PRIORITY_LABEL_COLORS = [
     UIColor.white
 ]
 
-enum PatientAgeUnits: String, CaseIterable, CustomStringConvertible {
+enum PatientAgeUnits: String, PickerKeyboardSourceEnum {
     case years = "2516009"
     case months = "2516007"
     case days = "2516001"
@@ -91,11 +92,11 @@ enum PatientAgeUnits: String, CaseIterable, CustomStringConvertible {
     }
 }
 
-enum PatientGender: String, CaseIterable, CustomStringConvertible {
+enum PatientGender: String, PickerKeyboardSourceEnum {
     case female = "9906001"
     case male = "9906003"
-    case transMale = "9906007"
     case transFemale = "9906009"
+    case transMale = "9906007"
     case other = "9906011"
     case unknown = "9906005"
 

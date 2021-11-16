@@ -22,6 +22,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     var response: Response!
     var narrative: Narrative!
     var disposition: Disposition!
+    var patient: Patient!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -41,6 +42,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         response = report.response
         narrative = report.narrative
         disposition = report.disposition
+        patient = report.patient
 
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -95,10 +97,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
             cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
         ])
-        addTextField(labelText: "First Name", to: colA)
-        addTextField(labelText: "Last Name", to: colB)
-        addTextField(labelText: "D.O.B", to: colA)
-        addAgeAndGender(to: colB)
+        addTextField(source: patient, target: nil, attributeKey: "firstName", tag: &tag, to: colA)
+        addTextField(source: patient, target: nil, attributeKey: "lastName", tag: &tag, to: colB)
+        addTextField(source: patient, target: nil, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
+        addAgeAndGender(tag: &tag, to: colB)
         addPatientButtons(to: colA)
 
         header = newHeader("Medical Information", subheaderText: " (optional)")
@@ -211,12 +213,13 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         col.addArrangedSubview(textField)
     }
 
-    func addAgeAndGender(to col: UIStackView) {
+    func addAgeAndGender(tag: inout Int, to col: UIStackView) {
         let stackView = newColumns()
-        let age = newTextField(labelText: "Age")
-        stackView.addArrangedSubview(age)
-        let gender = newTextField(labelText: "Gender")
-        stackView.addArrangedSubview(gender)
+        addTextField(source: patient, target: nil, attributeKey: "age", tag: &tag, to: stackView)
+        addTextField(source: patient, target: nil,
+                     attributeKey: "gender",
+                     attributeType: .picker(PickerKeyboardSourceWrapper<PatientGender>()),
+                     tag: &tag, to: stackView)
         col.addArrangedSubview(stackView)
     }
 

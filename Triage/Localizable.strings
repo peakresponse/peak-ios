@@ -141,6 +141,7 @@
 "NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";
 "NewSceneViewController.urgencyField" = "Description of Patient Urgency";
 
+"Patient.dob" = "Date of Birth";
 "Patient.age" = "Age";
 "Patient.bloodPressure" = "Blood Pressure";
 "Patient.capillaryRefill" = "Capillary Refill";
