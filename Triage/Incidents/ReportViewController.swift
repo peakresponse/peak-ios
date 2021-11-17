@@ -9,6 +9,7 @@
 import PRKit
 import UIKit
 import Keyboardy
+import RealmSwift
 
 class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
@@ -23,6 +24,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     var narrative: Narrative!
     var disposition: Disposition!
     var patient: Patient!
+    var vitals: List<Vital>!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -43,6 +45,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         narrative = report.narrative
         disposition = report.disposition
         patient = report.patient
+        vitals = report.vitals
 
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,30 +126,48 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(labelText: "Medical History", to: colA)
         addTextField(labelText: "Allergies", to: colB)
 
-        header = newHeader("Vitals", subheaderText: " (optional)")
-        containerView.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-            header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-            header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-        ])
-        (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
-        ])
-        addTextField(labelText: "BP", to: colA)
-        addTextField(labelText: "PR", to: colB)
-        addTextField(labelText: "RR", to: colA)
-        addTextField(labelText: "BGL", to: colB)
-        addTextField(labelText: "EKG", to: colA)
-        addTextField(labelText: "GCS", to: colB)
-        addTextField(labelText: "SPO2", to: colA)
-        addTextField(labelText: "EtCO2", to: colB)
-        addTextField(labelText: "CO", to: colA)
+        for vital in vitals {
+            header = newHeader("Vitals", subheaderText: " (optional)")
+            containerView.addSubview(header)
+            NSLayoutConstraint.activate([
+                header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
+                header.leftAnchor.constraint(equalTo: cols.leftAnchor),
+                header.rightAnchor.constraint(equalTo: cols.rightAnchor)
+            ])
+            (cols, colA, colB) = newSection()
+            containerView.addSubview(cols)
+            NSLayoutConstraint.activate([
+                cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
+                cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+                cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+            ])
+            addTextField(source: vital, target: nil, attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
+            let stackView = newColumns()
+            stackView.distribution = .fillProportionally
+            addTextField(source: vital, target: nil,
+                         attributeKey: "bpSystolic",
+                         attributeType: .integer,
+                         tag: &tag, to: stackView)
+            let label = UILabel()
+            label.font = .h3SemiBold
+            label.textColor = .base800
+            label.text = "/"
+            stackView.addArrangedSubview(label)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "bpDiastolic",
+                         attributeType: .integer,
+                         tag: &tag, to: stackView)
+            colB.addArrangedSubview(stackView)
+            addTextField(source: vital, target: nil, attributeKey: "heartRate", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil, attributeKey: "respiratoryRate", attributeType: .integer, tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil, attributeKey: "cardiacRhythm", tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil, attributeKey: "pulseOximetry", attributeType: .integer, tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil, attributeKey: "carbonMonoxide", attributeType: .decimal, tag: &tag, to: colB)
+        }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
 
         header = newHeader("Interventions", subheaderText: " (optional)")
@@ -269,7 +290,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
-        textField.attributeValue = source.value(forKey: attributeKey) as AnyObject
+        textField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
         textField.tag = tag

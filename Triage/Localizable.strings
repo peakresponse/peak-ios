@@ -313,3 +313,15 @@
 "User.firstName" = "First Name";
 "User.lastName" = "Last Name";
 "User.position" = "Position/Role";
+
+"Vital.vitalSignsTakenAt" = "Vitals Taken At";
+"Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
+"Vital.bpSystolic" = "BP Systolic";
+"Vital.bpDiastolic" = "Diastolic   ";
+"Vital.heartRate" = "Heart Rate";
+"Vital.pulseOximetry" = "O2";
+"Vital.respiratoryRate" = "Respiratory Rate";
+"Vital.endTidalCarbonDioxide" = "ETCO2";
+"Vital.carbonMonoxide" = "CO";
+"Vital.bloodGlucoseLevel" = "Blood Glucose Level";
+"Vital.totalGlasgowComaScore" = "Total GCS";

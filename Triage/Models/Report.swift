@@ -18,6 +18,7 @@ class Report: BaseVersioned {
     @Persisted var history: History?
     @Persisted var disposition: Disposition?
     @Persisted var narrative: Narrative?
+    @Persisted var vitals: List<Vital>
 
     override func new() {
         super.new()
@@ -29,5 +30,6 @@ class Report: BaseVersioned {
         history = History.newRecord()
         disposition = Disposition.newRecord()
         narrative = Narrative.newRecord()
+        vitals.append(Vital.newRecord())
     }
 }

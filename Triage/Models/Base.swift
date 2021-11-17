@@ -111,9 +111,10 @@ protocol NemsisBacked: AnyObject {
     var _data: Data? { get set }
     var data: [String: Any] { get }
 
-    func addNemsisValue(_ newValue: String, forJSONPath jsonPath: String)
     func setNemsisValue(_ newValue: String?, forJSONPath jsonPath: String, isOptional: Bool)
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> String?
+    func setNemsisValues(_ newValue: [String]?, forJSONPath jsonPath: String)
+    func getNemsisValues(forJSONPath jsonPath: String) -> [String]?
 }
 
 extension NemsisBacked {
@@ -122,10 +123,6 @@ extension NemsisBacked {
             return (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any]) ?? [:]
         }
         return [:]
-    }
-
-    func addNemsisValue(_ newValue: String, forJSONPath jsonPath: String) {
-
     }
 
     func setNemsisValue(_ newValue: String?, forJSONPath jsonPath: String, isOptional: Bool = false) {
@@ -194,6 +191,14 @@ extension NemsisBacked {
                 }
             }
         }
+        return nil
+    }
+
+    func setNemsisValues(_ newValue: [String]?, forJSONPath jsonPath: String) {
+
+    }
+
+    func getNemsisValues(forJSONPath jsonPath: String) -> [String]? {
         return nil
     }
 }
