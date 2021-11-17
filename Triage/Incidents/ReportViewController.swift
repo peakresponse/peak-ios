@@ -215,7 +215,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
 
     func addAgeAndGender(tag: inout Int, to col: UIStackView) {
         let stackView = newColumns()
-        addTextField(source: patient, target: nil, attributeKey: "age", tag: &tag, to: stackView)
+        addTextField(source: patient, target: nil,
+                     attributeKey: "age",
+                     attributeType: .age(PickerKeyboardSourceWrapper<PatientAgeUnits>()),
+                     tag: &tag, to: stackView)
         addTextField(source: patient, target: nil,
                      attributeKey: "gender",
                      attributeType: .picker(PickerKeyboardSourceWrapper<PatientGender>()),
