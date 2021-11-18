@@ -150,14 +150,14 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                          attributeType: .integer,
                          tag: &tag, to: stackView)
             colB.addArrangedSubview(stackView)
-            addTextField(source: vital, target: nil, attributeKey: "heartRate", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "respiratoryRate", attributeType: .integer, tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
+            addTextField(source: vital, target: nil, attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
             addTextField(source: vital, target: nil, attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
             addTextField(source: vital, target: nil, attributeKey: "cardiacRhythm", tag: &tag, to: colB)
             addTextField(source: vital, target: nil, attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "pulseOximetry", attributeType: .integer, tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
             addTextField(source: vital, target: nil, attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "carbonMonoxide", attributeType: .decimal, tag: &tag, to: colB)
+            addTextField(source: vital, target: nil, attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
 
@@ -215,10 +215,12 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     func addTextField(source: AnyObject, target: AnyObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
+                      unitLabel: String? = nil,
                       tag: inout Int, to col: UIStackView) {
         let textField = newTextField(source: source, target: target,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
+                                     unitLabel: unitLabel,
                                      tag: &tag)
         col.addArrangedSubview(textField)
     }
@@ -271,6 +273,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     func newTextField(source: AnyObject, target: AnyObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
+                      unitLabel: String? = nil,
                       tag: inout Int) -> PRKit.TextField {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -282,6 +285,9 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         textField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
+        if let unitLabel = unitLabel {
+            textField.unitLabel.text = unitLabel
+        }
         textField.tag = tag
         tag += 1
         textField.delegate = self
