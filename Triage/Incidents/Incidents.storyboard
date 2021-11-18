@@ -119,8 +119,8 @@
                                     </containerView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="agm-ti-evy" firstAttribute="trailing" secondItem="Jb5-2I-CNd" secondAttribute="trailing" constant="-20" id="E49-4W-cqd"/>
-                                    <constraint firstItem="agm-ti-evy" firstAttribute="leading" secondItem="Jb5-2I-CNd" secondAttribute="leading" constant="20" id="qEl-Bb-AGl"/>
+                                    <constraint firstItem="agm-ti-evy" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="Jb5-2I-CNd" secondAttribute="trailing" constant="-20" id="E49-4W-cqd"/>
+                                    <constraint firstItem="agm-ti-evy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Jb5-2I-CNd" secondAttribute="leading" constant="20" id="qEl-Bb-AGl"/>
                                 </constraints>
                             </stackView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="odb-1w-YL3">
@@ -163,8 +163,20 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ziP-ge-wPm">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="694"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ziP-ge-wPm">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="892" translatesAutoresizingMaskIntoConstraints="NO" id="Qlh-nY-sUI">
+                                        <rect key="frame" x="20" y="4" width="374" height="892"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="bottom" secondItem="lkz-eC-EDf" secondAttribute="bottom" id="eOT-F7-BNd"/>
+                                    <constraint firstItem="lkz-eC-EDf" firstAttribute="trailing" secondItem="Qlh-nY-sUI" secondAttribute="trailing" constant="20" id="kUT-lG-J7a"/>
+                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="centerX" secondItem="ziP-ge-wPm" secondAttribute="centerX" id="yPe-2u-qc4"/>
+                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="top" secondItem="lkz-eC-EDf" secondAttribute="top" constant="4" id="yw6-Yx-Hi4"/>
+                                </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="lkz-eC-EDf"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
                             </scrollView>
@@ -179,6 +191,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="containerView" destination="Qlh-nY-sUI" id="jLG-ge-zaF"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
                     </connections>

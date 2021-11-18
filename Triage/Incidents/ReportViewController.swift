@@ -14,7 +14,7 @@ import RealmSwift
 class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    weak var containerView: UIView!
+    @IBOutlet weak var containerView: UIView!
     var formInputAccessoryView: UIView!
 
     var report: Report!
@@ -47,29 +47,23 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         patient = report.patient
         vitals = report.vitals
 
-        let containerView = UIView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(containerView)
-        let widthConstraint = containerView.widthAnchor.constraint(equalToConstant: 690)
-        widthConstraint.priority = .defaultHigh
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 4),
-            containerView.centerXAnchor.constraint(equalTo: scrollView.centerXAnchor),
-            containerView.leftAnchor.constraint(greaterThanOrEqualTo: scrollView.leftAnchor, constant: 20),
-            containerView.rightAnchor.constraint(lessThanOrEqualTo: scrollView.rightAnchor, constant: -20),
-            widthConstraint,
-            containerView.widthAnchor.constraint(lessThanOrEqualTo: scrollView.widthAnchor, constant: -40),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        self.containerView = containerView
+        if traitCollection.horizontalSizeClass == .regular {
+            NSLayoutConstraint.activate([
+                containerView.widthAnchor.constraint(equalToConstant: 690)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                containerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
+            ])
+        }
 
         var (cols, colA, colB) = newSection()
         containerView.addSubview(cols)
         NSLayoutConstraint.activate([
             cols.topAnchor.constraint(equalTo: containerView.topAnchor),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
         var tag = 1
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
@@ -97,8 +91,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         NSLayoutConstraint.activate([
             cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
         addTextField(source: patient, target: nil, attributeKey: "firstName", tag: &tag, to: colA)
         addTextField(source: patient, target: nil, attributeKey: "lastName", tag: &tag, to: colB)
@@ -118,8 +111,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         NSLayoutConstraint.activate([
             cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
         addTextField(labelText: "Chief Complaint", to: colA)
         addTextField(labelText: "Signs/Symptoms", to: colB)
@@ -139,8 +131,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             NSLayoutConstraint.activate([
                 cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-                cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
             addTextField(source: vital, target: nil, attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
             let stackView = newColumns()
@@ -182,8 +173,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         NSLayoutConstraint.activate([
             cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
         addTextField(labelText: "Treatment/Dose/Route", to: colA)
         addTextField(labelText: "Patient Response", to: colB)
@@ -202,7 +192,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            cols.widthAnchor.constraint(equalTo: containerView.widthAnchor),
             containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40)
         ])
         addCheckbox(labelText: "COVID-19 suspected", to: colA)
@@ -238,7 +227,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         let stackView = newColumns()
         addTextField(source: patient, target: nil,
                      attributeKey: "age",
-                     attributeType: .age(PickerKeyboardSourceWrapper<PatientAgeUnits>()),
+                     attributeType: .integerWithUnit(PickerKeyboardSourceWrapper<PatientAgeUnits>()),
                      tag: &tag, to: stackView)
         addTextField(source: patient, target: nil,
                      attributeKey: "gender",
@@ -357,6 +346,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         colA.translatesAutoresizingMaskIntoConstraints = false
         colA.axis = .vertical
         colA.alignment = .fill
+        colA.distribution = .fill
         colA.spacing = 20
         let colB = isRegular ? UIStackView() : colA
         let cols = isRegular ? UIStackView() : colA
@@ -364,6 +354,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             colB.translatesAutoresizingMaskIntoConstraints = false
             colB.axis = .vertical
             colB.alignment = .fill
+            colB.distribution = .fill
             colB.spacing = 20
 
             cols.translatesAutoresizingMaskIntoConstraints = false
