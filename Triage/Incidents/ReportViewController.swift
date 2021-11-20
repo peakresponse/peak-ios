@@ -133,31 +133,38 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
                 cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
-            addTextField(source: vital, target: nil, attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
             let stackView = newColumns()
             stackView.distribution = .fillProportionally
             addTextField(source: vital, target: nil,
-                         attributeKey: "bpSystolic",
-                         attributeType: .integer,
-                         tag: &tag, to: stackView)
+                         attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: stackView)
             let label = UILabel()
             label.font = .h3SemiBold
             label.textColor = .base800
             label.text = "/"
             stackView.addArrangedSubview(label)
             addTextField(source: vital, target: nil,
-                         attributeKey: "bpDiastolic",
-                         attributeType: .integer,
-                         tag: &tag, to: stackView)
+                         attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: stackView)
             colB.addArrangedSubview(stackView)
-            addTextField(source: vital, target: nil, attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
-            addTextField(source: vital, target: nil, attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "cardiacRhythm", tag: &tag, to: colB)
-            addTextField(source: vital, target: nil, attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
-            addTextField(source: vital, target: nil, attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil, attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "cardiacRhythm",
+                         attributeType: .multi(MultiSelectKeyboardSourceWrapper<VitalCardiacRhythm>()),
+                         tag: &tag, to: colB)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
+            addTextField(source: vital, target: nil,
+                         attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
 
@@ -179,6 +186,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(labelText: "Patient Response", to: colB)
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Add Intervention"))
 
+        /*
         header = newHeader("Additional Notes", subheaderText: " (optional)")
         containerView.addSubview(header)
         NSLayoutConstraint.activate([
@@ -192,7 +200,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-            containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40)
         ])
         addCheckbox(labelText: "COVID-19 suspected", to: colA)
         addCheckbox(labelText: "ETOH suspected", to: colA)
@@ -200,6 +207,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addCheckbox(labelText: "Psych patient", to: colA)
         addCheckbox(labelText: "Combative", to: colA)
         addTextField(labelText: "Other Notes", to: colB)
+         */
+        containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
     }
 
     func addCheckbox(labelText: String, to col: UIStackView) {
