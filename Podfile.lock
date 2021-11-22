@@ -1,4 +1,5 @@
 PODS:
+  - AlignedCollectionViewFlowLayout (1.1.2)
   - CocoaLumberjack (3.7.2):
     - CocoaLumberjack/Core (= 3.7.2)
   - CocoaLumberjack/Core (3.7.2)
@@ -30,6 +31,7 @@ PODS:
   - Keys (1.0.1)
   - PLCrashReporter (1.8.1)
   - PRKit (0.1.0):
+    - AlignedCollectionViewFlowLayout
     - Keyboardy (~> 0.2)
     - SVGKit (~> 3.0)
   - Realm (10.11.0):
@@ -69,6 +71,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - AlignedCollectionViewFlowLayout
     - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
@@ -97,20 +100,21 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 1c1e80672019c582ee2626451ee7b3a75f797e17
+    :commit: f56264b44c342bebcb1e28444139354245e8c9e6
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
 
 SPEC CHECKSUMS:
+  AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
-  PRKit: ef7cdcdc18d06c28220a99d1f366e9a0fec0ce9f
+  PRKit: fd4bc051e9a9032677b346672be3327dd40a6687
   Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
   RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
