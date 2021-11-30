@@ -25,6 +25,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     var disposition: Disposition!
     var patient: Patient!
     var vitals: List<Vital>!
+    var situation: Situation!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,6 +47,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         disposition = report.disposition
         patient = report.patient
         vitals = report.vitals
+        situation = report.situation
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -113,7 +115,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
-        addTextField(labelText: "Chief Complaint", to: colA)
+        addTextField(source: situation, target: nil, attributeKey: "chiefComplaint", tag: &tag, to: colA)
         addTextField(labelText: "Signs/Symptoms", to: colB)
         addTextField(labelText: "Medical History", to: colA)
         addTextField(labelText: "Allergies", to: colB)

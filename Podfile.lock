@@ -27,6 +27,8 @@ PODS:
   - GoogleMaps/Base (5.1.0)
   - GoogleMaps/Maps (5.1.0):
     - GoogleMaps/Base
+  - ICD10Kit (0.1.0):
+    - RealmSwift (>= 10.11.0)
   - Keyboardy (0.2.7)
   - Keys (1.0.1)
   - PLCrashReporter (1.8.1)
@@ -58,6 +60,7 @@ PODS:
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - ICD10Kit (from `https://github.com/peakresponse/peak-ios-icd10kit.git`, branch `dev`)
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
@@ -89,6 +92,9 @@ SPEC REPOS:
     - SwiftPath
 
 EXTERNAL SOURCES:
+  ICD10Kit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
@@ -99,6 +105,9 @@ EXTERNAL SOURCES:
     :tag: v1.0.4
 
 CHECKOUT OPTIONS:
+  ICD10Kit:
+    :commit: 5fd1d7cfa14be1d91af26cb4ad1634078f32e6df
+    :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
     :commit: f56264b44c342bebcb1e28444139354245e8c9e6
     :git: https://github.com/peakresponse/peak-ios-prkit.git
@@ -111,6 +120,7 @@ SPEC CHECKSUMS:
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
+  ICD10Kit: cff58a57be6e7f952e8f3a8b13c66467446ab3a6
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
@@ -127,6 +137,6 @@ SPEC CHECKSUMS:
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: 3963628a963013c406d32e85c1893e224b155e3b
+PODFILE CHECKSUM: 4778946c334aa6d7311dc11081febe6c937b3782
 
 COCOAPODS: 1.11.2
