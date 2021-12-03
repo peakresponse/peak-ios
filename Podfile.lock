@@ -106,7 +106,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICD10Kit:
-    :commit: 5fd1d7cfa14be1d91af26cb4ad1634078f32e6df
+    :commit: bded2b0e69973883586ab5c3e756fcfb055be4ab
     :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
     :commit: c655271fc29fef6d876b855f3f9bfe6cc19d2765
@@ -120,7 +120,7 @@ SPEC CHECKSUMS:
   CocoaLumberjack: b7e05132ff94f6ae4dfa9d5bce9141893a21d9da
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
-  ICD10Kit: cff58a57be6e7f952e8f3a8b13c66467446ab3a6
+  ICD10Kit: 99ae768ab44393c85a72dbd3bcc7da97509761cf
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
