@@ -116,7 +116,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
         addTextField(source: situation, target: nil, attributeKey: "chiefComplaint", tag: &tag, to: colA)
-        addTextField(labelText: "Signs/Symptoms", to: colB)
+        addTextField(source: situation, target: nil,
+                     attributeKey: "primarySymptom",
+                     attributeType: .custom(SearchKeyboard(source: ICD10CMKeyboardSource(), isMultiSelect: false)),
+                     tag: &tag, to: colB)
         addTextField(labelText: "Medical History", to: colA)
         addTextField(labelText: "Allergies", to: colB)
 
@@ -383,5 +386,11 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.addArrangedSubview(colB)
         }
         return (cols, colA, colB)
+    }
+
+    // MARK: FormFieldDelegate
+
+    func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
+        presentAnimated(vc)
     }
 }

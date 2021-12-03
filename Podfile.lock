@@ -106,10 +106,10 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   ICD10Kit:
-    :commit: bded2b0e69973883586ab5c3e756fcfb055be4ab
+    :commit: 5c2669bce22d855721d93d018fd4c373546acafe
     :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
-    :commit: c655271fc29fef6d876b855f3f9bfe6cc19d2765
+    :commit: b72b1b5f141b45cb82068b30d97db4b97bb058de
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git

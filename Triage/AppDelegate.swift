@@ -11,6 +11,7 @@ import Keys
 import RollbarNotifier
 import RollbarPLCrashReporter
 import UIKit
+import ICD10Kit
 
 @UIApplicationMain
 
@@ -49,6 +50,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Rollbar.initWithConfiguration(rollbarConfig, crashCollector: rollbarCrashCollector)
 
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
+
+        CMRealm.configure(url: Bundle.main.url(forResource: "ICD10CM", withExtension: "realm"), isReadOnly: true)
 
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,

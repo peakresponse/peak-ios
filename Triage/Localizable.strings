@@ -52,6 +52,7 @@
 "Button.record" = "Record";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
+"Button.search" = "Search";
 "Button.signIn" = "Sign In";
 "Button.skip" = "Skip";
 "Button.startScene" = "Start Scene";
@@ -296,6 +297,7 @@
 "Sidebar.item.logOut" = "Log out";
 
 "Situation.chiefComplaint" = "Chief Complaint";
+"Situation.primarySymptom" = "Primary Symptom";
 
 "SortBar.sortBy" = "Sort By :";
 
