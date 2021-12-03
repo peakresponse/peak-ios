@@ -9,7 +9,7 @@
 import RealmSwift
 import PRKit
 
-enum VitalCardiacRhythm: String, StringIterable {
+enum VitalCardiacRhythm: String, StringCaseIterable {
     case agonalIdioventricular = "9901001"
     case asystole = "9901003"
     case artifact = "9901005"

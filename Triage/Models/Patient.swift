@@ -76,7 +76,7 @@ let PRIORITY_LABEL_COLORS = [
     UIColor.white
 ]
 
-enum PatientAgeUnits: String, PickerKeyboardSourceEnum {
+enum PatientAgeUnits: String, StringCaseIterable {
     case years = "2516009"
     case months = "2516007"
     case days = "2516001"
@@ -92,7 +92,7 @@ enum PatientAgeUnits: String, PickerKeyboardSourceEnum {
     }
 }
 
-enum PatientGender: String, PickerKeyboardSourceEnum {
+enum PatientGender: String, StringCaseIterable {
     case female = "9906001"
     case male = "9906003"
     case transFemale = "9906009"

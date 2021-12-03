@@ -295,6 +295,8 @@
 "Sidebar.item.switch" = "Change Unit/Vehicle";
 "Sidebar.item.logOut" = "Log out";
 
+"Situation.chiefComplaint" = "Chief Complaint";
+
 "SortBar.sortBy" = "Sort By :";
 
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";

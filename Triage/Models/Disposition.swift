@@ -9,7 +9,7 @@
 import RealmSwift
 import PRKit
 
-enum UnitDisposition: String, CustomStringConvertible, PickerKeyboardSourceEnum {
+enum UnitDisposition: String, StringCaseIterable {
     case patientContactMade = "4227001"
     case noPatientFound = "4227009"
     case noPatientContact = "4227007"

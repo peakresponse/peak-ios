@@ -78,7 +78,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: narrative, target: nil, attributeKey: "text", tag: &tag, to: colA)
         addTextField(source: disposition, target: nil,
                      attributeKey: "unitDisposition",
-                     attributeType: .picker(PickerKeyboardSourceWrapper<UnitDisposition>()),
+                     attributeType: .picker(EnumKeyboardSource<UnitDisposition>()),
                      tag: &tag, to: colB)
 
         var header = newHeader("Patient Information", subheaderText: " (optional)")
@@ -157,7 +157,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                          attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
             addTextField(source: vital, target: nil,
                          attributeKey: "cardiacRhythm",
-                         attributeType: .multi(MultiSelectKeyboardSourceWrapper<VitalCardiacRhythm>()),
+                         attributeType: .multi(EnumKeyboardSource<VitalCardiacRhythm>()),
                          tag: &tag, to: colB)
             addTextField(source: vital, target: nil,
                          attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
@@ -240,11 +240,11 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         let stackView = newColumns()
         addTextField(source: patient, target: nil,
                      attributeKey: "age",
-                     attributeType: .integerWithUnit(PickerKeyboardSourceWrapper<PatientAgeUnits>()),
+                     attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
                      tag: &tag, to: stackView)
         addTextField(source: patient, target: nil,
                      attributeKey: "gender",
-                     attributeType: .picker(PickerKeyboardSourceWrapper<PatientGender>()),
+                     attributeType: .picker(EnumKeyboardSource<PatientGender>()),
                      tag: &tag, to: stackView)
         col.addArrangedSubview(stackView)
     }

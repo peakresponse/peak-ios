@@ -9,7 +9,7 @@
 import PRKit
 import RealmSwift
 
-enum ComplaintType: String, StringIterable {
+enum ComplaintType: String, StringCaseIterable {
     case chief = "2803001"
     case other = "2803003"
     case secondary = "2803005"
