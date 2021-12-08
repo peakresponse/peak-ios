@@ -30,4 +30,19 @@ class ICD10CMKeyboard: SearchKeyboard {
         vc.delegate = self
         delegate?.formInputView(self, wantsToPresent: vc)
     }
+
+    override func text(for value: AnyObject?) -> String? {
+        if let value = value as? String, let field = field {
+            let realm = AppRealm.open()
+            if let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first,
+               let item = realm.objects(CodeListItem.self).filter("list=%@ AND code=%@", list, value).first {
+                var text = item.name
+                if let sectionName = item.section?.name {
+                    text = "\(sectionName): \(text ?? "")"
+                }
+                return text
+            }
+        }
+        return super.text(for: value)
+    }
 }

@@ -109,7 +109,7 @@ CHECKOUT OPTIONS:
     :commit: 5c2669bce22d855721d93d018fd4c373546acafe
     :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
-    :commit: 21079cb4884c93e2cf7bdcf799d3e9519507b9b7
+    :commit: 95e550fdb47214aa91f6db74005cc484df7aaec0
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
