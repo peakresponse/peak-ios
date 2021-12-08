@@ -8,5 +8,15 @@
 
 import RealmSwift
 
-class History: BaseVersioned {
+class History: BaseVersioned, NemsisBacked {
+    @Persisted var _data: Data?
+
+    @objc var medicalSurgicalHistory: [String]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eHistory.08")
+        }
+        set {
+            setNemsisValues(newValue, forJSONPath: "/eHistory.08")
+        }
+    }
 }

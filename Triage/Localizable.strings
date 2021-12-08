@@ -104,6 +104,8 @@
 "Facility.type.1701033" = "Drug and/or Alcohol Rehabilitation Facility";
 "Facility.type.1701035" = "Skilled Nursing Facility";
 
+"History.medicalSurgicalHistory" = "Medical/Surgical History";
+
 "Incident.number" = "Incident #";
 
 "IncidentsViewController.mine" = "My Dispatches";

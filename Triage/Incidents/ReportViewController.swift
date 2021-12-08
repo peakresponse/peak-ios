@@ -26,6 +26,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     var patient: Patient!
     var vitals: List<Vital>!
     var situation: Situation!
+    var history: History!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -48,6 +49,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         patient = report.patient
         vitals = report.vitals
         situation = report.situation
+        history = report.history
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -120,7 +122,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      attributeKey: "primarySymptom",
                      attributeType: .custom(ICD10CMKeyboard(field: "eSituation.09", isMultiSelect: false)),
                      tag: &tag, to: colB)
-        addTextField(labelText: "Medical History", to: colA)
+        addTextField(source: history, target: nil,
+                     attributeKey: "medicalSurgicalHistory",
+                     attributeType: .custom(ICD10CMKeyboard(field: "eHistory.08", isMultiSelect: true)),
+                     tag: &tag, to: colA)
         addTextField(labelText: "Allergies", to: colB)
 
         for vital in vitals {
