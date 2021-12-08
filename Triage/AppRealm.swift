@@ -268,6 +268,31 @@ class AppRealm {
         }
     }
 
+    // MARK: - List
+
+    public static func getLists(completionHandler: @escaping (Error?) -> Void) {
+        let task = ApiClient.shared.getLists { (_, _, data, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let data = data {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    if let lists = data["lists"] as? [[String: Any]] {
+                        realm.add(lists.map { CodeList.instantiate(from: $0) }, update: .modified)
+                    }
+                    if let sections = data["sections"] as? [[String: Any]] {
+                        realm.add(sections.map { CodeListSection.instantiate(from: $0) }, update: .modified)
+                    }
+                    if let items = data["items"] as? [[String: Any]] {
+                        realm.add(items.map { CodeListItem.instantiate(from: $0) }, update: .modified)
+                    }
+                }
+                completionHandler(nil)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Patients
 
     public static func getPatients(sceneId: String, completionHandler: @escaping (Error?) -> Void) {

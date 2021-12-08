@@ -118,7 +118,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: situation, target: nil, attributeKey: "chiefComplaint", tag: &tag, to: colA)
         addTextField(source: situation, target: nil,
                      attributeKey: "primarySymptom",
-                     attributeType: .custom(SearchKeyboard(source: ICD10CMKeyboardSource(), isMultiSelect: false)),
+                     attributeType: .custom(ICD10CMKeyboard(field: "eSituation.09", isMultiSelect: false)),
                      tag: &tag, to: colB)
         addTextField(labelText: "Medical History", to: colA)
         addTextField(labelText: "Allergies", to: colB)

@@ -23,6 +23,10 @@ class InterstitialViewController: UIViewController {
     }
 
     func checkLoginStatus() {
+        // update code lists in the background
+        AppRealm.getLists { (_) in
+            // noop
+        }
         // hit the server to check current log-in status
         AppRealm.me { (user, agency, assignment, scene, error) in
             // if an explicit server error, log out to force re-login

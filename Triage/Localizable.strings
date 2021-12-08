@@ -117,6 +117,9 @@
 "InputAccessoryView.go" = "Go";
 "InputAccessoryView.search" = "Search";
 
+"ICD10CMViewController.segment.subset" = "Subset";
+"ICD10CMViewController.segment.full" = "Full";
+
 "LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
 "LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
 
