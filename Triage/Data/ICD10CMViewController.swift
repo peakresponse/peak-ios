@@ -12,6 +12,7 @@ import RealmSwift
 
 class ICD10CMViewController: SearchViewController {
     weak var segmentedControl: SegmentedControl!
+    weak var containerView: UIView!
     var field: String?
 
     var results: Results<CodeListItem>?
@@ -24,7 +25,12 @@ class ICD10CMViewController: SearchViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if field != nil {
+        if let field = field {
+            let realm = AppRealm.open()
+            // look up the list for the field
+            let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first
+            guard let list = list else { return }
+
             // add a segmented control to switch between field list and full code list
             let segmentedControl = SegmentedControl()
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -48,12 +54,42 @@ class ICD10CMViewController: SearchViewController {
             }
             searchField.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10).isActive = true
 
+            // container view to hold list browsing views
+            let containerView = UIView()
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            view.addSubview(containerView)
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+                containerView.leftAnchor.constraint(equalTo: collectionView.leftAnchor),
+                containerView.rightAnchor.constraint(equalTo: collectionView.rightAnchor),
+                containerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+            ])
+            self.containerView = containerView
+
+            let storyboard = UIStoryboard(name: "ICD10CM", bundle: nil)
+            if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
+                if let vc = vc.topViewController as? ICD10CMSectionsViewController {
+                    vc.list = list
+                }
+                addChild(vc)
+                vc.view.translatesAutoresizingMaskIntoConstraints = false
+                containerView.addSubview(vc.view)
+                NSLayoutConstraint.activate([
+                    vc.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                    vc.view.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+                    vc.view.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+                    vc.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+                ])
+                vc.didMove(toParent: self)
+            }
+
             // query for field list
             performQuery()
         }
     }
 
     @objc func segmentedControlValueChanged() {
+        containerView.isHidden = segmentedControl.selectedIndex != 0
         collectionView.reloadData()
     }
 
@@ -99,6 +135,7 @@ class ICD10CMViewController: SearchViewController {
     open override func formFieldDidChange(_ field: PRKit.FormField) {
         if self.field != nil, segmentedControl.selectedIndex == 0 {
             performQuery(field.text)
+            containerView.isHidden = !(field.text?.isEmpty ?? true)
             return
         }
         super.formFieldDidChange(field)
@@ -126,7 +163,11 @@ class ICD10CMViewController: SearchViewController {
             if let cell = cell as? SelectCheckboxCell {
                 let item = results?[indexPath.row]
                 cell.checkbox.value = item?.code
-                cell.checkbox.labelText = item?.name
+                if let sectionName = item?.section?.name {
+                    cell.checkbox.labelText = "\(sectionName): \(item?.name ?? "")"
+                } else {
+                    cell.checkbox.labelText = item?.name
+                }
                 cell.checkbox.delegate = self
                 cell.checkbox.isRadioButton = !isMultiSelect
                 if let value = cell.checkbox.value as? String, values?.contains(value) ?? false {

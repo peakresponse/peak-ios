@@ -39,6 +39,10 @@ class InterstitialViewController: UIViewController {
             }
             if let user = user, let agency = agency {
                 AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
+                // update code lists in the background
+                AppRealm.getLists { (_) in
+                    // noop
+                }
                 if let sceneId = scene?.id {
                     DispatchQueue.main.async {
                         AppDelegate.enterScene(id: sceneId)
