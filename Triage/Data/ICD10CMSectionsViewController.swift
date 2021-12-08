@@ -8,12 +8,21 @@
 
 import UIKit
 import RealmSwift
+import PRKit
 
 class ICD10CMSectionTableViewCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
 }
 
-class ICD10CMSectionsViewController: UITableViewController {
+protocol ICD10CMSectionsViewControllerDelegate: AnyObject {
+    func icd10CMSectionsViewController(_ vc: ICD10CMSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool)
+}
+
+class ICD10CMSectionsViewController: UITableViewController, ICD10CMItemsViewControllerDelegate {
+    weak var delegate: ICD10CMSectionsViewControllerDelegate?
+
+    var isMultiSelect = false
+    var values: [String]?
     var list: CodeList?
     var results: Results<CodeListSection>?
     var notificationToken: NotificationToken?
@@ -55,6 +64,27 @@ class ICD10CMSectionsViewController: UITableViewController {
             presentAlert(error: error)
         }
     }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? ICD10CMItemsViewController,
+           let indexPath = tableView.indexPathForSelectedRow,
+           let section = results?[indexPath.row] {
+            vc.delegate = self
+            vc.values = values
+            vc.isMultiSelect = isMultiSelect
+            vc.section = section
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
+    }
+
+    // MARK: - ICD10CMItemsViewControllerDelegate
+
+    func icd10CMItemsViewController(_ vc: ICD10CMItemsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
+        delegate?.icd10CMSectionsViewController(self, checkbox: checkbox, didChange: isChecked)
+        vc.values = values
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1

@@ -8,11 +8,88 @@
 
 import UIKit
 import PRKit
+import RealmSwift
 
-class ICD10CMItemsViewController: UIViewController, CommandHeaderDelegate,
+protocol ICD10CMItemsViewControllerDelegate: AnyObject {
+    func icd10CMItemsViewController(_ vc: ICD10CMItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)
+}
+
+class ICD10CMItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate,
                                   UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+
+    weak var delegate: ICD10CMItemsViewControllerDelegate?
+    var isMultiSelect = false
+    var values: [String]?
+    var section: CodeListSection?
+    var results: Results<CodeListItem>?
+    var notificationToken: NotificationToken?
+
+    deinit {
+        notificationToken?.invalidate()
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        collectionView.register(SelectCheckboxCell.self, forCellWithReuseIdentifier: "Checkbox")
+        let backButton = UIBarButtonItem(title: "Button.back".localized, style: .plain, target: self, action: #selector(backPressed))
+        backButton.image = UIImage(named: "ChevronLeft40px", in: PRKitBundle.instance, compatibleWith: nil)
+        commandHeader.leftBarButtonItem = backButton
+
+        guard let section = section else { return }
+
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = .h3SemiBold
+        titleLabel.textColor = .base800
+        titleLabel.numberOfLines = 1
+        titleLabel.text = section.name
+        if let view = commandHeader.leftBarButtonView, let button = view.subviews.first,
+            let rightConstraint = view.constraints.filter({ ($0.firstItem as? UIButton) == button && $0.firstAttribute == .right }).first {
+            rightConstraint.isActive = false
+            button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+            commandHeader.leftBarButtonView?.addSubview(titleLabel)
+            NSLayoutConstraint.activate([
+                titleLabel.leftAnchor.constraint(equalTo: button.rightAnchor, constant: 20),
+                titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
+                titleLabel.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+            ])
+        }
+
+        let realm = AppRealm.open()
+        results = realm.objects(CodeListItem.self).filter("section=%@", section).sorted(byKeyPath: "name", ascending: true)
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+    }
+
+    func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<CodeListItem>>) {
+        switch changes {
+        case .initial:
+            collectionView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            }, completion: nil)
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    @objc func backPressed() {
+        navigationController?.popViewController(animated: true)
+    }
+
+    // MARK: - CheckboxDelegate
+
+    func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
+        delegate?.icd10CMItemsViewController(self, checkbox: checkbox, didChange: isChecked)
+        collectionView.reloadData()
+    }
 
     // MARK: - UICollectionViewDataSource
 
@@ -21,11 +98,22 @@ class ICD10CMItemsViewController: UIViewController, CommandHeaderDelegate,
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
+        return results?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
+        if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
+            cell.checkbox.value = item.code
+            cell.checkbox.labelText = item.name
+            cell.checkbox.delegate = self
+            cell.checkbox.isRadioButton = !isMultiSelect
+            if let value = cell.checkbox.value as? String, values?.contains(value) ?? false {
+                cell.checkbox.isChecked = true
+            } else {
+                cell.checkbox.isChecked = false
+            }
+        }
         return cell
     }
 }

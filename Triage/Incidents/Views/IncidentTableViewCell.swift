@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import PRKit
 
 class IncidentTableViewCell: UITableViewCell {
     weak var containerView: UIView!
@@ -120,7 +121,7 @@ class IncidentTableViewCell: UITableViewCell {
 
         let chevronImageView = UIImageView()
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
-        chevronImageView.image = UIImage(named: "ChevronRight40px")
+        chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
         chevronImageView.tintColor = .base500
         containerView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([

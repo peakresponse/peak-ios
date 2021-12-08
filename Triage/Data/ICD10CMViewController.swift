@@ -10,11 +10,11 @@ import Foundation
 import PRKit
 import RealmSwift
 
-class ICD10CMViewController: SearchViewController {
+class ICD10CMViewController: SearchViewController, ICD10CMSectionsViewControllerDelegate {
     weak var segmentedControl: SegmentedControl!
     weak var containerView: UIView!
-    var field: String?
 
+    var field: String?
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
 
@@ -69,6 +69,9 @@ class ICD10CMViewController: SearchViewController {
             let storyboard = UIStoryboard(name: "ICD10CM", bundle: nil)
             if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
                 if let vc = vc.topViewController as? ICD10CMSectionsViewController {
+                    vc.delegate = self
+                    vc.values = values
+                    vc.isMultiSelect = isMultiSelect
                     vc.list = list
                 }
                 addChild(vc)
@@ -130,6 +133,13 @@ class ICD10CMViewController: SearchViewController {
         }
     }
 
+    // MARK: - ICD10CMSectionsViewControllerDelegate
+
+    func icd10CMSectionsViewController(_ vc: ICD10CMSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
+        self.checkbox(checkbox, didChange: isChecked)
+        vc.values = values
+    }
+
     // MARK: - FormFieldDelegate
 
     open override func formFieldDidChange(_ field: PRKit.FormField) {
@@ -160,13 +170,12 @@ class ICD10CMViewController: SearchViewController {
     open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if field != nil, segmentedControl.selectedIndex == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
-            if let cell = cell as? SelectCheckboxCell {
-                let item = results?[indexPath.row]
-                cell.checkbox.value = item?.code
-                if let sectionName = item?.section?.name {
-                    cell.checkbox.labelText = "\(sectionName): \(item?.name ?? "")"
+            if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
+                cell.checkbox.value = item.code
+                if let sectionName = item.section?.name {
+                    cell.checkbox.labelText = "\(sectionName): \(item.name ?? "")"
                 } else {
-                    cell.checkbox.labelText = item?.name
+                    cell.checkbox.labelText = item.name
                 }
                 cell.checkbox.delegate = self
                 cell.checkbox.isRadioButton = !isMultiSelect
