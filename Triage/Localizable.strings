@@ -304,6 +304,7 @@
 
 "Situation.chiefComplaint" = "Chief Complaint";
 "Situation.primarySymptom" = "Primary Symptom";
+"Situation.otherAssociatedSymptoms" = "Other Associated Symptoms";
 
 "SortBar.sortBy" = "Sort By :";
 

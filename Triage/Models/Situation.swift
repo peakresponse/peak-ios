@@ -40,4 +40,13 @@ class Situation: BaseVersioned, NemsisBacked {
             setNemsisValue(newValue, forJSONPath: "/eSituation.09")
         }
     }
+
+    @objc var otherAssociatedSymptoms: [String]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eSituation.10")
+        }
+        set {
+            setNemsisValues(newValue, forJSONPath: "/eSituation.10")
+        }
+    }
 }

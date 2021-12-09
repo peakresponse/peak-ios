@@ -101,7 +101,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: patient, target: nil, attributeKey: "lastName", tag: &tag, to: colB)
         addTextField(source: patient, target: nil, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
         addAgeAndGender(tag: &tag, to: colB)
-        addPatientButtons(to: colA)
+//        addPatientButtons(to: colA)
 
         header = newHeader("Medical Information", subheaderText: " (optional)")
         containerView.addSubview(header)
@@ -122,11 +122,15 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      attributeKey: "primarySymptom",
                      attributeType: .custom(ICD10CMKeyboard(field: "eSituation.09", isMultiSelect: false)),
                      tag: &tag, to: colB)
+        addTextField(source: situation, target: nil,
+                     attributeKey: "otherAssociatedSymptoms",
+                     attributeType: .custom(ICD10CMKeyboard(field: "eSituation.10", isMultiSelect: true)),
+                     tag: &tag, to: colB)
         addTextField(source: history, target: nil,
                      attributeKey: "medicalSurgicalHistory",
                      attributeType: .custom(ICD10CMKeyboard(field: "eHistory.08", isMultiSelect: true)),
                      tag: &tag, to: colA)
-        addTextField(labelText: "Allergies", to: colB)
+        addTextField(labelText: "Allergies", to: colA)
 
         for vital in vitals {
             header = newHeader("Vitals", subheaderText: " (optional)")
