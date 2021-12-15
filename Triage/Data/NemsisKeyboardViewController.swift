@@ -1,5 +1,5 @@
 //
-//  ICD10CMViewController.swift
+//  NemsisKeyboardViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 12/7/21.
@@ -10,7 +10,7 @@ import Foundation
 import PRKit
 import RealmSwift
 
-class ICD10CMViewController: SearchViewController, ICD10CMSectionsViewControllerDelegate {
+class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewControllerDelegate {
     weak var segmentedControl: SegmentedControl!
     weak var containerView: UIView!
 
@@ -34,8 +34,8 @@ class ICD10CMViewController: SearchViewController, ICD10CMSectionsViewController
             // add a segmented control to switch between field list and full code list
             let segmentedControl = SegmentedControl()
             segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-            segmentedControl.addSegment(title: "ICD10CMViewController.segment.subset".localized)
-            segmentedControl.addSegment(title: "ICD10CMViewController.segment.full".localized)
+            segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.suggested".localized)
+            segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.icd10cm".localized)
             segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
             view.addSubview(segmentedControl)
             NSLayoutConstraint.activate([
@@ -66,9 +66,9 @@ class ICD10CMViewController: SearchViewController, ICD10CMSectionsViewController
             ])
             self.containerView = containerView
 
-            let storyboard = UIStoryboard(name: "ICD10CM", bundle: nil)
+            let storyboard = UIStoryboard(name: "CodeList", bundle: nil)
             if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
-                if let vc = vc.topViewController as? ICD10CMSectionsViewController {
+                if let vc = vc.topViewController as? CodeListSectionsViewController {
                     vc.delegate = self
                     vc.values = values
                     vc.isMultiSelect = isMultiSelect
@@ -135,7 +135,7 @@ class ICD10CMViewController: SearchViewController, ICD10CMSectionsViewController
 
     // MARK: - ICD10CMSectionsViewControllerDelegate
 
-    func icd10CMSectionsViewController(_ vc: ICD10CMSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
+    func codeListSectionsViewController(_ vc: CodeListSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
         self.checkbox(checkbox, didChange: isChecked)
         vc.values = values
     }

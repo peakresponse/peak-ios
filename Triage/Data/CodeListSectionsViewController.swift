@@ -1,5 +1,5 @@
 //
-//  ICD10CMSectionsViewController.swift
+//  CodeListSectionsViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 12/7/21.
@@ -10,16 +10,16 @@ import UIKit
 import RealmSwift
 import PRKit
 
-class ICD10CMSectionTableViewCell: UITableViewCell {
+class CodeListSectionTableViewCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
 }
 
-protocol ICD10CMSectionsViewControllerDelegate: AnyObject {
-    func icd10CMSectionsViewController(_ vc: ICD10CMSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool)
+protocol CodeListSectionsViewControllerDelegate: AnyObject {
+    func codeListSectionsViewController(_ vc: CodeListSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool)
 }
 
-class ICD10CMSectionsViewController: UITableViewController, ICD10CMItemsViewControllerDelegate {
-    weak var delegate: ICD10CMSectionsViewControllerDelegate?
+class CodeListSectionsViewController: UITableViewController, CodeListItemsViewControllerDelegate {
+    weak var delegate: CodeListSectionsViewControllerDelegate?
 
     var isMultiSelect = false
     var values: [String]?
@@ -66,7 +66,7 @@ class ICD10CMSectionsViewController: UITableViewController, ICD10CMItemsViewCont
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? ICD10CMItemsViewController,
+        if let vc = segue.destination as? CodeListItemsViewController,
            let indexPath = tableView.indexPathForSelectedRow,
            let section = results?[indexPath.row] {
             vc.delegate = self
@@ -77,10 +77,10 @@ class ICD10CMSectionsViewController: UITableViewController, ICD10CMItemsViewCont
         }
     }
 
-    // MARK: - ICD10CMItemsViewControllerDelegate
+    // MARK: - CodeListItemsViewControllerDelegate
 
-    func icd10CMItemsViewController(_ vc: ICD10CMItemsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
-        delegate?.icd10CMSectionsViewController(self, checkbox: checkbox, didChange: isChecked)
+    func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
+        delegate?.codeListSectionsViewController(self, checkbox: checkbox, didChange: isChecked)
         vc.values = values
     }
 
@@ -96,7 +96,7 @@ class ICD10CMSectionsViewController: UITableViewController, ICD10CMItemsViewCont
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Section", for: indexPath)
-        if let cell = cell as? ICD10CMSectionTableViewCell {
+        if let cell = cell as? CodeListSectionTableViewCell {
             cell.label.text = results?[indexPath.row].name
         }
         return cell

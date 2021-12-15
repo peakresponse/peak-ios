@@ -88,11 +88,16 @@
 		458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0A8275ADC980065F324 /* ICD10CM.realm */; };
 		458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */; };
 		458CA0AE275FD6610065F324 /* CodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AD275FD6610065F324 /* CodeList.swift */; };
-		458CA0B0275FF9CE0065F324 /* ICD10CMKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AF275FF9CE0065F324 /* ICD10CMKeyboard.swift */; };
-		458CA0B2275FF9F60065F324 /* ICD10CMViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B1275FF9F60065F324 /* ICD10CMViewController.swift */; };
-		458CA0B427603F390065F324 /* ICD10CM.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0B327603F390065F324 /* ICD10CM.storyboard */; };
-		458CA0B627603F750065F324 /* ICD10CMSectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B527603F750065F324 /* ICD10CMSectionsViewController.swift */; };
-		458CA0B8276040980065F324 /* ICD10CMItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B7276040980065F324 /* ICD10CMItemsViewController.swift */; };
+		458CA0B0275FF9CE0065F324 /* NemsisKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AF275FF9CE0065F324 /* NemsisKeyboard.swift */; };
+		458CA0B2275FF9F60065F324 /* NemsisKeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */; };
+		458CA0B427603F390065F324 /* CodeList.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0B327603F390065F324 /* CodeList.storyboard */; };
+		458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B527603F750065F324 /* CodeListSectionsViewController.swift */; };
+		458CA0B8276040980065F324 /* CodeListItemsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0B7276040980065F324 /* CodeListItemsViewController.swift */; };
+		458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BB2767DAFB0065F324 /* NemsisValue.swift */; };
+		458CA0BE2767F0B30065F324 /* NemsisValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */; };
+		458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BF27680BFF0065F324 /* NemsisBacked.swift */; };
+		458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */; };
+		458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
 		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
 		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
@@ -274,11 +279,16 @@
 		458CA0A8275ADC980065F324 /* ICD10CM.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ICD10CM.realm; sourceTree = "<group>"; };
 		458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0AD275FD6610065F324 /* CodeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeList.swift; sourceTree = "<group>"; };
-		458CA0AF275FF9CE0065F324 /* ICD10CMKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboard.swift; sourceTree = "<group>"; };
-		458CA0B1275FF9F60065F324 /* ICD10CMViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMViewController.swift; sourceTree = "<group>"; };
-		458CA0B327603F390065F324 /* ICD10CM.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ICD10CM.storyboard; sourceTree = "<group>"; };
-		458CA0B527603F750065F324 /* ICD10CMSectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMSectionsViewController.swift; sourceTree = "<group>"; };
-		458CA0B7276040980065F324 /* ICD10CMItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMItemsViewController.swift; sourceTree = "<group>"; };
+		458CA0AF275FF9CE0065F324 /* NemsisKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisKeyboard.swift; sourceTree = "<group>"; };
+		458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisKeyboardViewController.swift; sourceTree = "<group>"; };
+		458CA0B327603F390065F324 /* CodeList.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = CodeList.storyboard; sourceTree = "<group>"; };
+		458CA0B527603F750065F324 /* CodeListSectionsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeListSectionsViewController.swift; sourceTree = "<group>"; };
+		458CA0B7276040980065F324 /* CodeListItemsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeListItemsViewController.swift; sourceTree = "<group>"; };
+		458CA0BB2767DAFB0065F324 /* NemsisValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisValue.swift; sourceTree = "<group>"; };
+		458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisValueTests.swift; sourceTree = "<group>"; };
+		458CA0BF27680BFF0065F324 /* NemsisBacked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisBacked.swift; sourceTree = "<group>"; };
+		458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativeKeyboard.swift; sourceTree = "<group>"; };
+		458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisComboKeyboard.swift; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
 		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
 		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
@@ -488,6 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
+				458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */,
 				4566F06A236CE8A800A04C75 /* PatientTests.swift */,
 				45F130472525A062001495C7 /* ResponderTests.swift */,
 				45F7BAD7273B04BF00FBD31F /* TimeTests.swift */,
@@ -568,6 +579,8 @@
 				45C757CC272CAFB000386F07 /* Incident.swift */,
 				45F7BACF273AEC2B00FBD31F /* Medication.swift */,
 				45F7BACD273AEC2000FBD31F /* Narrative.swift */,
+				458CA0BF27680BFF0065F324 /* NemsisBacked.swift */,
+				458CA0BB2767DAFB0065F324 /* NemsisValue.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
 				45F7BAD1273AEC3500FBD31F /* Procedure.swift */,
@@ -652,12 +665,14 @@
 			isa = PBXGroup;
 			children = (
 				458CA0A8275ADC980065F324 /* ICD10CM.realm */,
-				458CA0B327603F390065F324 /* ICD10CM.storyboard */,
-				458CA0B7276040980065F324 /* ICD10CMItemsViewController.swift */,
-				458CA0AF275FF9CE0065F324 /* ICD10CMKeyboard.swift */,
+				458CA0B327603F390065F324 /* CodeList.storyboard */,
+				458CA0B7276040980065F324 /* CodeListItemsViewController.swift */,
+				458CA0B527603F750065F324 /* CodeListSectionsViewController.swift */,
 				458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */,
-				458CA0B527603F750065F324 /* ICD10CMSectionsViewController.swift */,
-				458CA0B1275FF9F60065F324 /* ICD10CMViewController.swift */,
+				458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */,
+				458CA0AF275FF9CE0065F324 /* NemsisKeyboard.swift */,
+				458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */,
+				458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -846,7 +861,7 @@
 				4563C74124DA6FB200217901 /* Barlow-Regular.ttf in Resources */,
 				4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */,
 				458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */,
-				458CA0B427603F390065F324 /* ICD10CM.storyboard in Resources */,
+				458CA0B427603F390065F324 /* CodeList.storyboard in Resources */,
 				4566F027236CCC5500A04C75 /* Main.storyboard in Resources */,
 				45B7A2EA250F2AAC00BCAAAE /* AlertViewController.xib in Resources */,
 				4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */,
@@ -1039,7 +1054,7 @@
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
 				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
 				45F2190024E5D7B50046A39B /* ObservationTableViewController.swift in Sources */,
-				458CA0B627603F750065F324 /* ICD10CMSectionsViewController.swift in Sources */,
+				458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */,
 				454EE968251C62D800EB266A /* LocationHelper.swift in Sources */,
 				4566F07A236D486B00A04C75 /* RoundImageView.swift in Sources */,
 				45F218FC24E371660046A39B /* LocationTableViewCell.swift in Sources */,
@@ -1091,6 +1106,7 @@
 				45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */,
 				458CA0AE275FD6610065F324 /* CodeList.swift in Sources */,
 				4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */,
+				458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				454EEAA12524075D00EB266A /* RespondersViewController.swift in Sources */,
 				45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */,
@@ -1099,12 +1115,13 @@
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
 				45F7BAC22739E37300FBD31F /* Report.swift in Sources */,
 				45F7BACA273AEC0800FBD31F /* History.swift in Sources */,
-				458CA0B8276040980065F324 /* ICD10CMItemsViewController.swift in Sources */,
+				458CA0B8276040980065F324 /* CodeListItemsViewController.swift in Sources */,
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
-				458CA0B0275FF9CE0065F324 /* ICD10CMKeyboard.swift in Sources */,
+				458CA0B0275FF9CE0065F324 /* NemsisKeyboard.swift in Sources */,
 				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
 				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */,
+				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,
 				452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
@@ -1120,13 +1137,15 @@
 				452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */,
+				458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
-				458CA0B2275FF9F60065F324 /* ICD10CMViewController.swift in Sources */,
+				458CA0B2275FF9F60065F324 /* NemsisKeyboardViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
+				458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
 				45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */,
@@ -1142,6 +1161,7 @@
 				45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */,
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
+				458CA0BE2767F0B30065F324 /* NemsisValueTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

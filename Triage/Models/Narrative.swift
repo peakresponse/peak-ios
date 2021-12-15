@@ -13,10 +13,10 @@ class Narrative: BaseVersioned, NemsisBacked {
 
     @objc var text: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eNarrative/eNarrative.01")
+            return getFirstNemsisValue(forJSONPath: "/eNarrative/eNarrative.01")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eNarrative/eNarrative.01")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eNarrative/eNarrative.01")
         }
     }
 }

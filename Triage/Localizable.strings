@@ -105,6 +105,7 @@
 "Facility.type.1701035" = "Skilled Nursing Facility";
 
 "History.medicalSurgicalHistory" = "Medical/Surgical History";
+"History.medicationAllergies" = "Medication Allergies";
 
 "Incident.number" = "Incident #";
 
@@ -120,9 +121,6 @@
 "InputAccessoryView.go" = "Go";
 "InputAccessoryView.search" = "Search";
 
-"ICD10CMViewController.segment.subset" = "Subset";
-"ICD10CMViewController.segment.full" = "Full";
-
 "LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
 "LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
 
@@ -136,6 +134,35 @@
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
 "NavigationBar.saveAndExit" = "Save & Exit";
+
+"NemsisCodeType.9924001" = "ICD-10";
+"NemsisCodeType.9924003" = "RxNorm";
+"NemsisCodeType.9924005" = "SNOMED-CT";
+
+"NemsisKeyboardViewController.segment.suggested" = "Suggested";
+"NemsisKeyboardViewController.segment.icd10cm" = "ICD-10-CM";
+
+"NemsisNegative.7701001" = "Not Applicable";
+"NemsisNegative.7701003" = "Not Recorded";
+"NemsisNegative.7701005" = "Not Reporting";
+"NemsisNegative.8801001" = "Contraindication Noted";
+"NemsisNegative.8801003" = "Denied By Order";
+"NemsisNegative.8801005" = "Exam Finding Not Present";
+"NemsisNegative.8801007" = "Medication Allergy";
+"NemsisNegative.8801009" = "Medication Already Taken";
+"NemsisNegative.8801013" = "No Known Drug Allergy";
+"NemsisNegative.8801015" = "None Reported";
+"NemsisNegative.8801017" = "Not Performed by EMS";
+"NemsisNegative.8801019" = "Refused";
+"NemsisNegative.8801021" = "Unresponsive";
+"NemsisNegative.8801023" = "Unable to Complete";
+"NemsisNegative.8801025" = "Not Immunized";
+"NemsisNegative.8801027" = "Order Criteria Not Met";
+"NemsisNegative.8801029" = "Approximate";
+"NemsisNegative.8801031" = "Symptom Not Present";
+
+"NemsisNegativeKeyboard.title" = "Negatives";
+"NemsisSearchKeyboard.title" = "Search";
 
 "NewScenePinView.nameField.label" = "Pin Name";
 "NewScenePinView.descField.label" = "Description";

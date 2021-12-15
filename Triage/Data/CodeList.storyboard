@@ -10,23 +10,23 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Items View Controller-->
+        <!--Code List Items View Controller-->
         <scene sceneID="jJU-5a-BxF">
             <objects>
-                <viewController id="4TP-sX-eng" customClass="ICD10CMItemsViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="4TP-sX-eng" customClass="CodeListItemsViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="jA6-Ym-KsQ">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="44" translatesAutoresizingMaskIntoConstraints="NO" id="C2f-Nd-Psb" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="68"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="delegate" destination="4TP-sX-eng" id="kYc-EL-3Cy"/>
                                 </connections>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="gOy-6x-wd2">
-                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                                <rect key="frame" x="0.0" y="68" width="414" height="828"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="20" minimumInteritemSpacing="20" id="aaA-6N-WRi">
                                     <size key="itemSize" width="128" height="128"/>
@@ -81,14 +81,14 @@
         <!--Root View Controller-->
         <scene sceneID="dob-qn-Q4N">
             <objects>
-                <tableViewController clearsSelectionOnViewWillAppear="NO" id="1vs-YZ-Pdy" customClass="ICD10CMSectionsViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController clearsSelectionOnViewWillAppear="NO" id="1vs-YZ-Pdy" customClass="CodeListSectionsViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="OhG-hL-IFS">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Section" id="db6-Q8-792" customClass="ICD10CMSectionTableViewCell" customModule="Peak_Response" customModuleProvider="target">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" accessoryType="disclosureIndicator" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Section" id="db6-Q8-792" customClass="CodeListSectionTableViewCell" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="44.5" width="414" height="60.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="db6-Q8-792" id="Fzf-IE-4ym">

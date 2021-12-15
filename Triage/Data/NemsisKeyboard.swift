@@ -1,5 +1,5 @@
 //
-//  ICD10CMKeyboard.swift
+//  NemsisKeyboard.swift
 //  Triage
 //
 //  Created by Francis Li on 12/7/21.
@@ -9,7 +9,7 @@
 import Foundation
 import PRKit
 
-class ICD10CMKeyboard: SearchKeyboard {
+class NemsisKeyboard: SearchKeyboard {
     var field: String?
 
     init(field: String, isMultiSelect: Bool) {
@@ -22,7 +22,7 @@ class ICD10CMKeyboard: SearchKeyboard {
     }
 
     override func searchPressed() {
-        let vc = ICD10CMViewController()
+        let vc = NemsisKeyboardViewController()
         vc.field = field
         vc.source = source
         vc.values = values

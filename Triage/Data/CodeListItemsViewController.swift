@@ -1,5 +1,5 @@
 //
-//  ICD10CMItemsViewController.swift
+//  CodeListItemsViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 12/7/21.
@@ -10,16 +10,16 @@ import UIKit
 import PRKit
 import RealmSwift
 
-protocol ICD10CMItemsViewControllerDelegate: AnyObject {
-    func icd10CMItemsViewController(_ vc: ICD10CMItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)
+protocol CodeListItemsViewControllerDelegate: AnyObject {
+    func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)
 }
 
-class ICD10CMItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate,
+class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate,
                                   UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
 
-    weak var delegate: ICD10CMItemsViewControllerDelegate?
+    weak var delegate: CodeListItemsViewControllerDelegate?
     var isMultiSelect = false
     var values: [String]?
     var section: CodeListSection?
@@ -87,7 +87,7 @@ class ICD10CMItemsViewController: UIViewController, CheckboxDelegate, CommandHea
     // MARK: - CheckboxDelegate
 
     func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
-        delegate?.icd10CMItemsViewController(self, checkbox: checkbox, didChange: isChecked)
+        delegate?.codeListItemsViewController(self, checkbox: checkbox, didChange: isChecked)
         collectionView.reloadData()
     }
 

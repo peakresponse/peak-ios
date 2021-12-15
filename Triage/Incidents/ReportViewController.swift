@@ -120,17 +120,29 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: situation, target: nil, attributeKey: "chiefComplaint", tag: &tag, to: colA)
         addTextField(source: situation, target: nil,
                      attributeKey: "primarySymptom",
-                     attributeType: .custom(ICD10CMKeyboard(field: "eSituation.09", isMultiSelect: false)),
+                     attributeType: .custom(NemsisComboKeyboard(keyboards: [
+                        NemsisKeyboard(field: "eSituation.09", isMultiSelect: false),
+                        NemsisNegativeKeyboard(negatives: [.notApplicable])
+                     ], titles: [
+                        "NemsisSearchKeyboard.title".localized,
+                        "NemsisNegativeKeyboard.title".localized
+                     ])),
                      tag: &tag, to: colB)
         addTextField(source: situation, target: nil,
                      attributeKey: "otherAssociatedSymptoms",
-                     attributeType: .custom(ICD10CMKeyboard(field: "eSituation.10", isMultiSelect: true)),
+                     attributeType: .custom(NemsisKeyboard(field: "eSituation.10", isMultiSelect: true)),
                      tag: &tag, to: colB)
         addTextField(source: history, target: nil,
                      attributeKey: "medicalSurgicalHistory",
-                     attributeType: .custom(ICD10CMKeyboard(field: "eHistory.08", isMultiSelect: true)),
+                     attributeType: .custom(NemsisKeyboard(field: "eHistory.08", isMultiSelect: true)),
                      tag: &tag, to: colA)
-        addTextField(labelText: "Allergies", to: colA)
+        addTextField(source: history, target: nil,
+                     attributeKey: "medicationAllergies",
+                     attributeType: .custom(NemsisNegativeKeyboard(negatives: [
+                        .notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete
+                     ])),
+//                     attributeType: .custom(ICD10CMKeyboard(field: "eHistory.06", isMultiSelect: true)),
+                     tag: &tag, to: colA)
 
         for vital in vitals {
             header = newHeader("Vitals", subheaderText: " (optional)")

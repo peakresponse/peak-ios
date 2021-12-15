@@ -51,6 +51,8 @@ PODS:
   - RollbarSwift (2.0.0-beta.22):
     - RollbarCommon (~> 2.0.0-beta.22)
     - RollbarNotifier (~> 2.0.0-beta.22)
+  - RxNormKit (0.1.0):
+    - RealmSwift (>= 10.11.0)
   - Starscream (4.0.4)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
@@ -68,6 +70,7 @@ DEPENDENCIES:
   - RollbarNotifier (= 2.0.0-beta.22)
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
   - RollbarSwift (= 2.0.0-beta.22)
+  - RxNormKit (from `https://github.com/peakresponse/peak-ios-rxnormkit.git`, branch `dev`)
   - Starscream
   - SwiftLint
   - SwiftPath
@@ -103,17 +106,23 @@ EXTERNAL SOURCES:
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
+  RxNormKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
 
 CHECKOUT OPTIONS:
   ICD10Kit:
     :commit: 5c2669bce22d855721d93d018fd4c373546acafe
     :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
-    :commit: b2aee4a1fe8d2077e81579186ae188d190f93d14
+    :commit: 593c27b397f471d172a10e61819b2127a44b6a03
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
+  RxNormKit:
+    :commit: f47e8bb07da6e79cec3ff131b79c22c117dc2e7f
+    :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
@@ -132,11 +141,12 @@ SPEC CHECKSUMS:
   RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
   RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
+  RxNormKit: 5e2a98767352eeb9dc54d6f4c20fadfd19c3f591
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: 4778946c334aa6d7311dc11081febe6c937b3782
+PODFILE CHECKSUM: b9ec2d2e26bc3c4cb463f2fef4a6720d9420733f
 
 COCOAPODS: 1.11.2

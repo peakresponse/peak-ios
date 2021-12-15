@@ -13,19 +13,19 @@ class Response: BaseVersioned, NemsisBacked {
 
     @objc var incidentNumber: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.03")
+            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.03")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eResponse/eResponse.03")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.03")
         }
     }
 
     @objc var unitNumber: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.13")
+            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.13")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eResponse/eResponse.13")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.13")
         }
     }
 }

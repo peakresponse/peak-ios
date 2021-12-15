@@ -27,10 +27,10 @@ class Disposition: BaseVersioned, NemsisBacked {
 
     @objc var unitDisposition: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
+            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
         }
     }
 }

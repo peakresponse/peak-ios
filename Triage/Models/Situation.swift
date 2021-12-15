@@ -24,24 +24,24 @@ class Situation: BaseVersioned, NemsisBacked {
 
     @objc var chiefComplaint: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.04")
+            return getFirstNemsisValue(forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.04")?.text
         }
         set {
-            setNemsisValue(ComplaintType.chief.rawValue, forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.03")
-            setNemsisValue(newValue, forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.04")
+            setNemsisValue(NemsisValue(text: ComplaintType.chief.rawValue), forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.03")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eSituation.PatientComplaintGroup/eSituation.04")
         }
     }
 
     @objc var primarySymptom: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eSituation.09")
+            return getFirstNemsisValue(forJSONPath: "/eSituation.09")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eSituation.09")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eSituation.09")
         }
     }
 
-    @objc var otherAssociatedSymptoms: [String]? {
+    @objc var otherAssociatedSymptoms: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eSituation.10")
         }

@@ -13,58 +13,60 @@ class Time: BaseVersioned, NemsisBacked {
 
     @objc var psapCall: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.01"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.01")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.01")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.01")
         }
     }
     @objc var dispatchNotified: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.02"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.02")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.02", isOptional: true)
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.02",
+                           isOptional: true)
         }
     }
     @objc var unitNotifiedByDispatch: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.03"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.03")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.03")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.03")
         }
     }
     @objc var dispatchAcknowledged: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.04"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.04")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.04", isOptional: true)
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.04",
+                           isOptional: true)
         }
     }
     @objc var unitEnRoute: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.05"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.05")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.05")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.05")
         }
     }
     @objc var unitArrivedOnScene: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.06"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.06")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.06")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.06")
         }
     }
     @objc var arrivedAtPatient: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.07"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eTimes/eTimes.07")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eTimes/eTimes.07")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.07")
         }
     }
 }

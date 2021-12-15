@@ -11,7 +11,7 @@ import RealmSwift
 class History: BaseVersioned, NemsisBacked {
     @Persisted var _data: Data?
 
-    @objc var medicalSurgicalHistory: [String]? {
+    @objc var medicalSurgicalHistory: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eHistory.08")
         }
@@ -19,4 +19,6 @@ class History: BaseVersioned, NemsisBacked {
             setNemsisValues(newValue, forJSONPath: "/eHistory.08")
         }
     }
+
+    @objc var medicationAllergies: [NemsisValue]?
 }

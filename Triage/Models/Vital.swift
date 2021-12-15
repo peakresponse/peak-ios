@@ -59,13 +59,13 @@ class Vital: BaseVersioned, NemsisBacked {
 
     @objc var vitalSignsTakenAt: Date? {
         get {
-            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eVitals.01"))
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eVitals.01")?.text)
         }
         set {
-            setNemsisValue(ISO8601DateFormatter.string(from: newValue), forJSONPath: "/eVitals.01")
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eVitals.01")
         }
     }
-    @objc var cardiacRhythm: [String]? {
+    @objc var cardiacRhythm: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eVitals.CardiacRhythmGroup/eVitals.03")
         }
@@ -75,74 +75,74 @@ class Vital: BaseVersioned, NemsisBacked {
     }
     @objc var bpSystolic: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.06")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.06")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.BloodPressureGroup/eVitals.06")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.BloodPressureGroup/eVitals.06")
         }
     }
     @objc var bpDiastolic: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.07")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.07")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.BloodPressureGroup/eVitals.07")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.BloodPressureGroup/eVitals.07")
         }
     }
     @objc var heartRate: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")
         }
     }
     @objc var pulseOximetry: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.12")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.12")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.12")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.12")
         }
     }
     @objc var respiratoryRate: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.14")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.14")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.14")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.14")
         }
     }
     @objc var endTidalCarbonDioxide: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.16")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.16")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.16")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.16")
         }
     }
     @objc var carbonMonoxide: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.17")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.17")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.17")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.17")
         }
     }
     @objc var bloodGlucoseLevel: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.18")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.18")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.18")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.18")
         }
     }
     @objc var totalGlasgowComaScore: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
+            return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")?.text
         }
         set {
-            setNemsisValue(newValue, forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
         }
     }
 }
