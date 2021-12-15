@@ -18,7 +18,10 @@ class RxNormKeyboardSource: KeyboardSource {
     var filteredResults: Results<RxNConcept>?
 
     init() {
-        results = RxNRealm.open().objects(RxNConcept.self).sorted(byKeyPath: "name", ascending: true)
+        results = RxNRealm.open().objects(RxNConcept.self).sorted(by: [
+            SortDescriptor(keyPath: "rxcui", ascending: true),
+            SortDescriptor(keyPath: "name", ascending: true)
+        ])
     }
 
     func count() -> Int {
@@ -38,14 +41,14 @@ class RxNormKeyboardSource: KeyboardSource {
 
     func search(_ query: String?) {
         if let query = query, !query.isEmpty {
-            filteredResults = results?.filter("(name CONTAINS[cd] %@) OR (desc CONTAINS[cd] %@)", query, query)
+            filteredResults = results?.filter("name CONTAINS[cd] %@", query, query)
         } else {
             filteredResults = nil
         }
     }
 
     func title(for value: String?) -> String? {
-        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: value) else { return nil }
+        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: Int(value ?? "")) else { return nil }
         return "\(code.rxcui): \(code.name)"
     }
 

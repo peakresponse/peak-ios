@@ -12,6 +12,7 @@ import RollbarNotifier
 import RollbarPLCrashReporter
 import UIKit
 import ICD10Kit
+import RxNormKit
 
 @UIApplicationMain
 
@@ -52,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
 
         CMRealm.configure(url: Bundle.main.url(forResource: "ICD10CM", withExtension: "realm"), isReadOnly: true)
+        RxNRealm.configure(url: Bundle.main.url(forResource: "RxNorm", withExtension: "realm"), isReadOnly: true)
 
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,

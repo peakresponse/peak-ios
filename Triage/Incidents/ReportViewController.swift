@@ -139,8 +139,14 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      tag: &tag, to: colA)
         addTextField(source: history, target: nil,
                      attributeKey: "medicationAllergies",
-                     attributeType: .custom(NemsisNegativeKeyboard(negatives: [
-                        .notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete
+                     attributeType: .custom(NemsisComboKeyboard(keyboards: [
+                        NemsisKeyboard(field: "eSituation.09", sources: [RxNormKeyboardSource()], isMultiSelect: true),
+                        NemsisNegativeKeyboard(negatives: [
+                           .notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete
+                        ])
+                     ], titles: [
+                        "NemsisSearchKeyboard.title".localized,
+                        "NemsisNegativeKeyboard.title".localized
                      ])),
 //                     attributeType: .custom(ICD10CMKeyboard(field: "eHistory.06", isMultiSelect: true)),
                      tag: &tag, to: colA)
