@@ -10,6 +10,9 @@ import Foundation
 import PRKit
 
 class NemsisNegativeKeyboard: PickerKeyboard, KeyboardSource {
+    var name: String {
+        return "NemsisNegativeKeyboard.title".localized
+    }
     var negatives: [NemsisNegative]
 
     init(negatives: [NemsisNegative]) {

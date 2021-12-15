@@ -1,24 +1,24 @@
 //
-//  ICD10CMKeyboardSource.swift
+//  RxNormKeyboardSource.swift
 //  Triage
 //
-//  Created by Francis Li on 12/3/21.
+//  Created by Francis Li on 12/14/21.
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import ICD10Kit
 import PRKit
 import RealmSwift
+import RxNormKit
 
-class ICD10CMKeyboardSource: KeyboardSource {
+class RxNormKeyboardSource: KeyboardSource {
     var name: String {
-        return "ICD-10-CM"
+        return "RxNorm"
     }
-    var results: Results<CMCode>?
-    var filteredResults: Results<CMCode>?
+    var results: Results<RxNConcept>?
+    var filteredResults: Results<RxNConcept>?
 
     init() {
-        results = CMRealm.open().objects(CMCode.self).sorted(byKeyPath: "name", ascending: true)
+        results = RxNRealm.open().objects(RxNConcept.self).sorted(byKeyPath: "name", ascending: true)
     }
 
     func count() -> Int {
@@ -29,7 +29,7 @@ class ICD10CMKeyboardSource: KeyboardSource {
     }
 
     func firstIndex(of value: String) -> Int? {
-        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: value) else { return nil }
+        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: value) else { return nil }
         if let filteredResults = filteredResults {
             return filteredResults.firstIndex(of: code)
         }
@@ -45,21 +45,27 @@ class ICD10CMKeyboardSource: KeyboardSource {
     }
 
     func title(for value: String?) -> String? {
-        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: value) else { return nil }
-        return "\(code.name ?? ""): \(code.desc ?? "")"
+        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: value) else { return nil }
+        return "\(code.rxcui): \(code.name)"
     }
 
     func title(at index: Int) -> String? {
         if let filteredResults = filteredResults {
-            return "\(filteredResults[index].name ?? ""): \(filteredResults[index].desc ?? "")"
+            return "\(filteredResults[index].rxcui): \(filteredResults[index].name)"
         }
-        return "\(results?[index].name ?? ""): \(results?[index].desc ?? "")"
+        return "\(results?[index].rxcui ?? 0): \(results?[index].name ?? "")"
     }
 
     func value(at index: Int) -> String? {
+        var value: Int?
         if let filteredResults = filteredResults {
-            return filteredResults[index].name
+            value = filteredResults[index].rxcui
+        } else {
+            value = results?[index].rxcui
         }
-        return results?[index].name
+        if let value = value {
+            return String(value)
+        }
+        return nil
     }
 }

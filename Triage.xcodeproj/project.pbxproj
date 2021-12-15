@@ -99,6 +99,7 @@
 		458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BF27680BFF0065F324 /* NemsisBacked.swift */; };
 		458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */; };
 		458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */; };
+		458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
 		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
 		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
@@ -291,6 +292,7 @@
 		458CA0BF27680BFF0065F324 /* NemsisBacked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisBacked.swift; sourceTree = "<group>"; };
 		458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativeKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisComboKeyboard.swift; sourceTree = "<group>"; };
+		458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNormKeyboardSource.swift; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
 		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
 		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
@@ -676,6 +678,7 @@
 				458CA0AF275FF9CE0065F324 /* NemsisKeyboard.swift */,
 				458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */,
 				458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */,
+				458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1125,6 +1128,7 @@
 				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
 				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */,
+				458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */,
 				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,
 				452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,

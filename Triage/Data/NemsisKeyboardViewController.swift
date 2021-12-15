@@ -14,6 +14,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
     weak var segmentedControl: SegmentedControl!
     weak var containerView: UIView!
 
+    var sources: [KeyboardSource]?
     var field: String?
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
@@ -23,7 +24,41 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
     }
 
     override func viewDidLoad() {
+        source = sources?[0]
         super.viewDidLoad()
+
+        // add a segmented control to switch between field list and full code list
+        let segmentedControl = SegmentedControl()
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
+        view.addSubview(segmentedControl)
+        NSLayoutConstraint.activate([
+            segmentedControl.topAnchor.constraint(equalTo: commandHeader.bottomAnchor, constant: 10),
+            segmentedControl.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            segmentedControl.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
+        ])
+        self.segmentedControl = segmentedControl
+
+        // reposition search field
+        for constraint in view.constraints {
+            if constraint.firstItem as? PRKit.TextField != nil, constraint.secondItem as? CommandHeader != nil {
+                constraint.isActive = false
+                break
+            }
+        }
+        searchField.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10).isActive = true
+
+        // container view to hold list browsing views
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
+            containerView.leftAnchor.constraint(equalTo: collectionView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: collectionView.rightAnchor),
+            containerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+        ])
+        self.containerView = containerView
 
         if let field = field {
             let realm = AppRealm.open()
@@ -31,40 +66,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
             let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first
             guard let list = list else { return }
 
-            // add a segmented control to switch between field list and full code list
-            let segmentedControl = SegmentedControl()
-            segmentedControl.translatesAutoresizingMaskIntoConstraints = false
             segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.suggested".localized)
-            segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.icd10cm".localized)
-            segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged), for: .valueChanged)
-            view.addSubview(segmentedControl)
-            NSLayoutConstraint.activate([
-                segmentedControl.topAnchor.constraint(equalTo: commandHeader.bottomAnchor, constant: 10),
-                segmentedControl.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-                segmentedControl.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
-            ])
-            self.segmentedControl = segmentedControl
-
-            // reposition search field
-            for constraint in view.constraints {
-                if constraint.firstItem as? PRKit.TextField != nil, constraint.secondItem as? CommandHeader != nil {
-                    constraint.isActive = false
-                    break
-                }
-            }
-            searchField.topAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 10).isActive = true
-
-            // container view to hold list browsing views
-            let containerView = UIView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            view.addSubview(containerView)
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
-                containerView.leftAnchor.constraint(equalTo: collectionView.leftAnchor),
-                containerView.rightAnchor.constraint(equalTo: collectionView.rightAnchor),
-                containerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
-            ])
-            self.containerView = containerView
 
             let storyboard = UIStoryboard(name: "CodeList", bundle: nil)
             if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
@@ -89,10 +91,17 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
             // query for field list
             performQuery()
         }
+
+        if let sources = sources {
+            for source in sources {
+                segmentedControl.addSegment(title: source.name)
+            }
+        }
     }
 
     @objc func segmentedControlValueChanged() {
         containerView.isHidden = segmentedControl.selectedIndex != 0
+        source = sources?[segmentedControl.selectedIndex - 1]
         collectionView.reloadData()
     }
 

@@ -121,7 +121,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: situation, target: nil,
                      attributeKey: "primarySymptom",
                      attributeType: .custom(NemsisComboKeyboard(keyboards: [
-                        NemsisKeyboard(field: "eSituation.09", isMultiSelect: false),
+                        NemsisKeyboard(field: "eSituation.09", sources: [ICD10CMKeyboardSource()], isMultiSelect: false),
                         NemsisNegativeKeyboard(negatives: [.notApplicable])
                      ], titles: [
                         "NemsisSearchKeyboard.title".localized,
@@ -130,11 +130,12 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      tag: &tag, to: colB)
         addTextField(source: situation, target: nil,
                      attributeKey: "otherAssociatedSymptoms",
-                     attributeType: .custom(NemsisKeyboard(field: "eSituation.10", isMultiSelect: true)),
+                     attributeType: .custom(NemsisKeyboard(field: "eSituation.10",
+                                                           sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colB)
         addTextField(source: history, target: nil,
                      attributeKey: "medicalSurgicalHistory",
-                     attributeType: .custom(NemsisKeyboard(field: "eHistory.08", isMultiSelect: true)),
+                     attributeType: .custom(NemsisKeyboard(field: "eHistory.08", sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colA)
         addTextField(source: history, target: nil,
                      attributeKey: "medicationAllergies",

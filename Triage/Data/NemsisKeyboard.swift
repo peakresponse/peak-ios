@@ -10,21 +10,25 @@ import Foundation
 import PRKit
 
 class NemsisKeyboard: SearchKeyboard {
+    var sources: [KeyboardSource]
+    var currentIndex = 0
     var field: String?
 
-    init(field: String, isMultiSelect: Bool) {
-        super.init(source: ICD10CMKeyboardSource(), isMultiSelect: isMultiSelect)
+    init(field: String, sources: [KeyboardSource], isMultiSelect: Bool) {
+        self.sources = sources
+        super.init(source: nil, isMultiSelect: isMultiSelect)
         self.field = field
     }
 
     required init?(coder: NSCoder) {
+        self.sources = []
         super.init(coder: coder)
     }
 
     override func searchPressed() {
         let vc = NemsisKeyboardViewController()
         vc.field = field
-        vc.source = source
+        vc.sources = sources
         vc.values = values
         vc.isMultiSelect = isMultiSelect
         vc.delegate = self
@@ -42,6 +46,16 @@ class NemsisKeyboard: SearchKeyboard {
                 }
                 return text
             }
+        }
+        if let value = value as? String {
+            var text: String?
+            for source in sources {
+                text = source.title(for: value)
+                if text != nil {
+                    break
+                }
+            }
+            return text
         }
         return super.text(for: value)
     }
