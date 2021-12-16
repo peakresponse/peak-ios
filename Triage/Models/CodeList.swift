@@ -78,7 +78,9 @@ class CodeListItem: Base {
     override func update(from data: [String: Any]) {
         super.update(from: data)
         list = (realm ?? AppRealm.open()).object(ofType: CodeList.self, forPrimaryKey: data[Keys.listId])
-        section = (realm ?? AppRealm.open()).object(ofType: CodeListSection.self, forPrimaryKey: data[Keys.sectionId])
+        if let sectionId = data[Keys.sectionId] as? String {
+            section = (realm ?? AppRealm.open()).object(ofType: CodeListSection.self, forPrimaryKey: sectionId)
+        }
         system = data[Keys.system] as? String
         code = data[Keys.code] as? String
         name = data[Keys.name] as? String

@@ -51,6 +51,16 @@ class CodeListSectionsViewController: UITableViewController, CodeListItemsViewCo
         switch changes {
         case .initial:
             tableView.reloadData()
+            if results?.count == 0 {
+                let vc = UIStoryboard(name: "CodeList", bundle: nil).instantiateViewController(withIdentifier: "Items")
+                if let vc = vc as? CodeListItemsViewController {
+                    vc.list = list
+                    vc.delegate = self
+                    vc.values = values
+                    vc.isMultiSelect = isMultiSelect
+                }
+                navigationController?.pushViewController(vc, animated: false)
+            }
         case .update(_, let deletions, let insertions, let modifications):
             self.tableView.beginUpdates()
             self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) },

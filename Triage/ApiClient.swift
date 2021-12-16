@@ -327,7 +327,7 @@ class ApiClient {
     // MARK: - Lists
 
     func getLists(completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/lists", completionHandler: completionHandler)
+        return GET(path: "/api/lists/all", completionHandler: completionHandler)
     }
 
     // MARK: - Patients

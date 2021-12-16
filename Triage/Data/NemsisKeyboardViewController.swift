@@ -101,8 +101,10 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
 
     @objc func segmentedControlValueChanged() {
         containerView.isHidden = segmentedControl.selectedIndex != 0
-        source = sources?[segmentedControl.selectedIndex - 1]
-        collectionView.reloadData()
+        if segmentedControl.selectedIndex > 0 {
+            source = sources?[segmentedControl.selectedIndex - 1]
+            collectionView.reloadData()
+        }
     }
 
     func performQuery(_ query: String? = nil) {

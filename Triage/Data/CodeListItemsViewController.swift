@@ -22,6 +22,7 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
     weak var delegate: CodeListItemsViewControllerDelegate?
     var isMultiSelect = false
     var values: [String]?
+    var list: CodeList?
     var section: CodeListSection?
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
@@ -34,32 +35,40 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
         super.viewDidLoad()
 
         collectionView.register(SelectCheckboxCell.self, forCellWithReuseIdentifier: "Checkbox")
-        let backButton = UIBarButtonItem(title: "Button.back".localized, style: .plain, target: self, action: #selector(backPressed))
-        backButton.image = UIImage(named: "ChevronLeft40px", in: PRKitBundle.instance, compatibleWith: nil)
-        commandHeader.leftBarButtonItem = backButton
-
-        guard let section = section else { return }
-
-        let titleLabel = UILabel()
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.font = .h3SemiBold
-        titleLabel.textColor = .base800
-        titleLabel.numberOfLines = 1
-        titleLabel.text = section.name
-        if let view = commandHeader.leftBarButtonView, let button = view.subviews.first,
-            let rightConstraint = view.constraints.filter({ ($0.firstItem as? UIButton) == button && $0.firstAttribute == .right }).first {
-            rightConstraint.isActive = false
-            button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-            commandHeader.leftBarButtonView?.addSubview(titleLabel)
-            NSLayoutConstraint.activate([
-                titleLabel.leftAnchor.constraint(equalTo: button.rightAnchor, constant: 20),
-                titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
-                titleLabel.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-            ])
-        }
 
         let realm = AppRealm.open()
-        results = realm.objects(CodeListItem.self).filter("section=%@", section).sorted(byKeyPath: "name", ascending: true)
+        results = realm.objects(CodeListItem.self)
+        if let section = section {
+            results = results?.filter("section=%@", section)
+
+            let backButton = UIBarButtonItem(title: "Button.back".localized, style: .plain, target: self, action: #selector(backPressed))
+            backButton.image = UIImage(named: "ChevronLeft40px", in: PRKitBundle.instance, compatibleWith: nil)
+            commandHeader.leftBarButtonItem = backButton
+
+            let titleLabel = UILabel()
+            titleLabel.translatesAutoresizingMaskIntoConstraints = false
+            titleLabel.font = .h3SemiBold
+            titleLabel.textColor = .base800
+            titleLabel.numberOfLines = 1
+            titleLabel.text = section.name
+            if let view = commandHeader.leftBarButtonView, let button = view.subviews.first,
+                let rightConstraint = view.constraints.filter({ ($0.firstItem as? UIButton) == button && $0.firstAttribute == .right }).first {
+                rightConstraint.isActive = false
+                button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+                commandHeader.leftBarButtonView?.addSubview(titleLabel)
+                NSLayoutConstraint.activate([
+                    titleLabel.leftAnchor.constraint(equalTo: button.rightAnchor, constant: 20),
+                    titleLabel.rightAnchor.constraint(equalTo: view.rightAnchor),
+                    titleLabel.centerYAnchor.constraint(equalTo: button.centerYAnchor)
+                ])
+            }
+        } else {
+            commandHeader.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            if let list = list {
+                results = results?.filter("list=%@", list)
+            }
+        }
+        results = results?.sorted(byKeyPath: "name", ascending: true)
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
