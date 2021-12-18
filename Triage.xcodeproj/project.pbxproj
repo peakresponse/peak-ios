@@ -24,6 +24,7 @@
 		452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */; };
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452DDBDB243D819500A8F1FF /* SelectorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD9243D819500A8F1FF /* SelectorView.swift */; };
+		452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */ = {isa = PBXBuildFile; fileRef = 452FBE0D276D5EE600874DF0 /* SNOMED.realm */; };
 		453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453877BC236FA47300E19880 /* NonSceneTabBarController.swift */; };
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
 		4543BF6926545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */; };
@@ -211,6 +212,7 @@
 		452DDBCE243D341900A8F1FF /* FacilityTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityTableViewCell.swift; sourceTree = "<group>"; };
 		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		452DDBD9243D819500A8F1FF /* SelectorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectorView.swift; sourceTree = "<group>"; };
+		452FBE0D276D5EE600874DF0 /* SNOMED.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = SNOMED.realm; sourceTree = "<group>"; };
 		453877BC236FA47300E19880 /* NonSceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonSceneTabBarController.swift; sourceTree = "<group>"; };
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 		4543BF6826545C4500B72132 /* PatientTriagePerfusionKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientTriagePerfusionKeyboardView.swift; sourceTree = "<group>"; };
@@ -670,6 +672,7 @@
 			children = (
 				458CA0A8275ADC980065F324 /* ICD10CM.realm */,
 				4552A9892769714B00BB18FE /* RxNorm.realm */,
+				452FBE0D276D5EE600874DF0 /* SNOMED.realm */,
 				458CA0B327603F390065F324 /* CodeList.storyboard */,
 				458CA0B7276040980065F324 /* CodeListItemsViewController.swift */,
 				458CA0B527603F750065F324 /* CodeListSectionsViewController.swift */,
@@ -858,6 +861,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
+				452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */,
 				454EEAA92524078C00EB266A /* Users.storyboard in Resources */,
 				4566F058236CD1EE00A04C75 /* Patients.storyboard in Resources */,
 				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,

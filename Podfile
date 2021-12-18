@@ -29,6 +29,7 @@ target 'Triage' do
   pod 'Starscream'
   pod 'SwiftLint'
   pod 'SwiftPath'
+  pod 'SNOMEDKit', :git => 'https://github.com/peakresponse/peak-ios-snomedkit.git', :branch => 'dev'
 
   target 'TriageTests' do
     inherit! :search_paths

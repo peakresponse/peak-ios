@@ -53,6 +53,8 @@ PODS:
     - RollbarNotifier (~> 2.0.0-beta.22)
   - RxNormKit (0.1.0):
     - RealmSwift (>= 10.11.0)
+  - SNOMEDKit (0.1.0):
+    - RealmSwift (>= 10.11.0)
   - Starscream (4.0.4)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
@@ -71,6 +73,7 @@ DEPENDENCIES:
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
   - RollbarSwift (= 2.0.0-beta.22)
   - RxNormKit (from `https://github.com/peakresponse/peak-ios-rxnormkit.git`, branch `dev`)
+  - SNOMEDKit (from `https://github.com/peakresponse/peak-ios-snomedkit.git`, branch `dev`)
   - Starscream
   - SwiftLint
   - SwiftPath
@@ -109,6 +112,9 @@ EXTERNAL SOURCES:
   RxNormKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
+  SNOMEDKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-snomedkit.git
 
 CHECKOUT OPTIONS:
   ICD10Kit:
@@ -123,6 +129,9 @@ CHECKOUT OPTIONS:
   RxNormKit:
     :commit: f47e8bb07da6e79cec3ff131b79c22c117dc2e7f
     :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
+  SNOMEDKit:
+    :commit: 62a9727715eda46d095395f8c40adad620521440
+    :git: https://github.com/peakresponse/peak-ios-snomedkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
@@ -142,11 +151,12 @@ SPEC CHECKSUMS:
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
   RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
   RxNormKit: 5e2a98767352eeb9dc54d6f4c20fadfd19c3f591
+  SNOMEDKit: 1c27fed7c08377aefd8905320b77a9f2db0c4fca
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: b9ec2d2e26bc3c4cb463f2fef4a6720d9420733f
+PODFILE CHECKSUM: 6504aee3e9a6d1b316186d42443c5572aa4ab677
 
 COCOAPODS: 1.11.2
