@@ -149,6 +149,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                         "NemsisNegativeKeyboard.title".localized
                      ])),
                      tag: &tag, to: colA)
+        addTextField(source: history, target: nil,
+                     attributeKey: "environmentalFoodAllergies",
+                     attributeType: .custom(NemsisKeyboard(field: "eHistory.07", sources: [SNOMEDKeyboardSource()], isMultiSelect: true)),
+                     tag: &tag, to: colB)
 
         for vital in vitals {
             header = newHeader("Vitals", subheaderText: " (optional)")

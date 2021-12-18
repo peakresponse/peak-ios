@@ -21,4 +21,6 @@ class History: BaseVersioned, NemsisBacked {
     }
 
     @objc var medicationAllergies: [NemsisValue]?
+
+    @objc var environmentalFoodAllergies: [NemsisValue]?
 }

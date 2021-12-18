@@ -106,6 +106,7 @@
 
 "History.medicalSurgicalHistory" = "Medical/Surgical History";
 "History.medicationAllergies" = "Medication Allergies";
+"History.environmentalFoodAllergies" = "Environmental/Food Allergies";
 
 "Incident.number" = "Incident #";
 

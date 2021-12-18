@@ -13,6 +13,7 @@ import RollbarPLCrashReporter
 import UIKit
 import ICD10Kit
 import RxNormKit
+import SNOMEDKit
 
 @UIApplicationMain
 
@@ -54,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         CMRealm.configure(url: Bundle.main.url(forResource: "ICD10CM", withExtension: "realm"), isReadOnly: true)
         RxNRealm.configure(url: Bundle.main.url(forResource: "RxNorm", withExtension: "realm"), isReadOnly: true)
+        SCTRealm.configure(url: Bundle.main.url(forResource: "SNOMED", withExtension: "realm"), isReadOnly: true)
 
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,

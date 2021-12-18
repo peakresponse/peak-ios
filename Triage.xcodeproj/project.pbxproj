@@ -101,6 +101,7 @@
 		458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */; };
 		458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */; };
 		458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */; };
+		458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
 		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
 		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
@@ -295,6 +296,7 @@
 		458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativeKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisComboKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNormKeyboardSource.swift; sourceTree = "<group>"; };
+		458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNOMEDKeyboardSource.swift; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
 		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
 		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
@@ -682,6 +684,7 @@
 				458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */,
 				458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */,
 				458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */,
+				458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */,
 			);
 			path = Data;
 			sourceTree = "<group>";
@@ -1121,6 +1124,7 @@
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				454EEAA12524075D00EB266A /* RespondersViewController.swift in Sources */,
 				45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */,
+				458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */,
 				45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
