@@ -25,6 +25,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
 
     override func viewDidLoad() {
         source = sources?[0]
+        isSearchFieldFocusedOnOpen = false
         super.viewDidLoad()
 
         // add a segmented control to switch between field list and full code list
