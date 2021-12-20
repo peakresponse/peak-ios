@@ -55,9 +55,9 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         view.addSubview(containerView)
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: collectionView.topAnchor),
-            containerView.leftAnchor.constraint(equalTo: collectionView.leftAnchor),
-            containerView.rightAnchor.constraint(equalTo: collectionView.rightAnchor),
-            containerView.bottomAnchor.constraint(equalTo: collectionView.bottomAnchor)
+            containerView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            containerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         self.containerView = containerView
 
