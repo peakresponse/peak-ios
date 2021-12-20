@@ -37,7 +37,7 @@ class ICD10CMKeyboardSource: KeyboardSource {
     }
 
     func search(_ query: String?) {
-        if let query = query, !query.isEmpty {
+        if let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty {
             filteredResults = results?.filter("(name CONTAINS[cd] %@) OR (desc CONTAINS[cd] %@)", query, query)
         } else {
             filteredResults = nil

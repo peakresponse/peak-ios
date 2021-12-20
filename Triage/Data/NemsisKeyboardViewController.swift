@@ -116,7 +116,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first
         guard let list = list else { return }
         results = realm.objects(CodeListItem.self).filter("list=%@", list)
-        if let query = query {
+        if let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty {
             results = results?.filter("name CONTAINS[cd] %@", query)
         }
         results = results?.sorted(by: [
