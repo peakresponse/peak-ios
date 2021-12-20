@@ -14,10 +14,12 @@ protocol CodeListItemsViewControllerDelegate: AnyObject {
     func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)
 }
 
-class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate,
-                                  UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate, KeyboardAwareScrollViewController,
+                                   UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    var scrollView: UIScrollView! { return collectionView }
+    @IBOutlet var scrollViewBottomConstraint: NSLayoutConstraint!
 
     weak var delegate: CodeListItemsViewControllerDelegate?
     var isMultiSelect = false
@@ -72,6 +74,16 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<CodeListItem>>) {
