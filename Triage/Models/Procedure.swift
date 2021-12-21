@@ -6,7 +6,46 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import PRKit
 import RealmSwift
 
-class Procedure: BaseVersioned {
+enum ProcedureResponse: String, StringCaseIterable {
+    case improved = "9916001"
+    case unchanged = "9916003"
+    case worse = "9916005"
+
+    var description: String {
+      return "Procedure.response.\(rawValue)".localized
+    }
+}
+
+class Procedure: BaseVersioned, NemsisBacked {
+    @Persisted var _data: Data?
+
+    @objc var procedurePerformedAt: Date? {
+        get {
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eProcedures.01")?.text)
+        }
+        set {
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eProcedures.01")
+        }
+    }
+
+    @objc var procedure: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.03")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eProcedures.03")
+        }
+    }
+
+    @objc var responseToProcedure: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.08")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eProcedures.08")
+        }
+    }
 }

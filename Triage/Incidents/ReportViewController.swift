@@ -24,9 +24,10 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
     var narrative: Narrative!
     var disposition: Disposition!
     var patient: Patient!
-    var vitals: List<Vital>!
     var situation: Situation!
     var history: History!
+    var vitals: List<Vital>!
+    var procedures: List<Procedure>!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -50,6 +51,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         vitals = report.vitals
         situation = report.situation
         history = report.history
+        procedures = report.procedures
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -204,22 +206,40 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
 
-        header = newHeader("Interventions", subheaderText: " (optional)")
-        containerView.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-            header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-            header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-        ])
-        (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-        ])
-        addTextField(labelText: "Treatment/Dose/Route", to: colA)
-        addTextField(labelText: "Patient Response", to: colB)
+        for procedure in procedures {
+            header = newHeader("Interventions", subheaderText: " (optional)")
+            containerView.addSubview(header)
+            NSLayoutConstraint.activate([
+                header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
+                header.leftAnchor.constraint(equalTo: cols.leftAnchor),
+                header.rightAnchor.constraint(equalTo: cols.rightAnchor)
+            ])
+            (cols, colA, colB) = newSection()
+            containerView.addSubview(cols)
+            NSLayoutConstraint.activate([
+                cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
+                cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
+            ])
+            addTextField(source: procedure, target: nil,
+                         attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
+            addTextField(source: procedure, target: nil,
+                         attributeKey: "procedure",
+                         attributeType: .custom(NemsisComboKeyboard(keyboards: [
+                            NemsisKeyboard(field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false),
+                            NemsisNegativeKeyboard(negatives: [
+                                .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
+                            ])
+                         ], titles: [
+                            "NemsisSearchKeyboard.title".localized,
+                            "NemsisNegativeKeyboard.title".localized
+                         ])),
+                         tag: &tag, to: colA)
+            addTextField(source: procedure, target: nil,
+                         attributeKey: "responseToProcedure",
+                         attributeType: .picker(EnumKeyboardSource<ProcedureResponse>()),
+                         tag: &tag, to: colA)
+        }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Add Intervention"))
 
         /*

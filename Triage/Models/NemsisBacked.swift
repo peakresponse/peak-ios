@@ -14,7 +14,7 @@ protocol NemsisBacked: AnyObject {
     var _data: Data? { get set }
     var data: [String: Any] { get }
 
-    func setNemsisValue(_ newValue: NemsisValue, forJSONPath jsonPath: String, isOptional: Bool)
+    func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool)
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue?
     func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String)
     func getNemsisValues(forJSONPath jsonPath: String) -> [NemsisValue]?
@@ -28,7 +28,11 @@ extension NemsisBacked {
         return [:]
     }
 
-    func setNemsisValue(_ newValue: NemsisValue, forJSONPath jsonPath: String, isOptional: Bool = false) {
+    func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool = false) {
+        var nemsisValue: NemsisValue! = newValue
+        if nemsisValue == nil {
+            nemsisValue = NemsisValue()
+        }
         var patches: [[String: Any]] = []
         let parts = jsonPath.split(separator: "/")
         var data: [String: Any]? = self.data
@@ -38,7 +42,7 @@ extension NemsisBacked {
             data = data?[key] as? [String: Any]
             path = "\(path)/\(key)"
             if i == (parts.count - 1) {
-                if newValue.isNil && isOptional {
+                if nemsisValue.isNil && isOptional {
                     if data != nil {
                         patches.append([
                             "op": "remove",
@@ -46,7 +50,7 @@ extension NemsisBacked {
                         ])
                     }
                 } else {
-                    let value: [String: Any] = newValue.asXMLJSObject()
+                    let value: [String: Any] = nemsisValue.asXMLJSObject()
                     patches.append([
                         "op": data == nil ? "add" : "replace",
                         "path": path,

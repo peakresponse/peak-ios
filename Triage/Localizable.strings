@@ -264,6 +264,14 @@
 
 "PriorityTableViewCell.statusBeforeTransportLabel" = "Triage Status Before Transport";
 
+"Procedure.response.9916001" = "Improved";
+"Procedure.response.9916003" = "Unchanged";
+"Procedure.response.9916005" = "Worse";
+
+"Procedure.procedurePerformedAt" = "Performed At";
+"Procedure.procedure" = "Treatment";
+"Procedure.responseToProcedure" = "Patient Response";
+
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
