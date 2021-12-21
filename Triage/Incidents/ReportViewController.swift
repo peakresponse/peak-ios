@@ -11,7 +11,7 @@ import UIKit
 import Keyboardy
 import RealmSwift
 
-class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
+class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIView!
@@ -73,14 +73,14 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         ])
         var tag = 1
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
-        addTextField(source: response, target: nil, attributeKey: "incidentNumber",
+        addTextField(source: response, attributeKey: "incidentNumber",
                      keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
-        addTextField(source: scene, target: nil, attributeKey: "address", tag: &tag, to: colA)
-        addTextField(source: response, target: nil, attributeKey: "unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
-        addTextField(source: time, target: nil, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
-        addTextField(source: time, target: nil, attributeKey: "arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
-        addTextField(source: narrative, target: nil, attributeKey: "text", tag: &tag, to: colA)
-        addTextField(source: disposition, target: nil,
+        addTextField(source: scene, attributeKey: "address", tag: &tag, to: colA)
+        addTextField(source: response, attributeKey: "unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
+        addTextField(source: time, attributeKey: "unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
+        addTextField(source: time, attributeKey: "arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
+        addTextField(source: narrative, attributeKey: "text", tag: &tag, to: colA)
+        addTextField(source: disposition,
                      attributeKey: "unitDisposition",
                      attributeType: .picker(EnumKeyboardSource<UnitDisposition>()),
                      tag: &tag, to: colB)
@@ -100,15 +100,15 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
-        addTextField(source: patient, target: nil, attributeKey: "firstName", tag: &tag, to: colA)
-        addTextField(source: patient, target: nil, attributeKey: "lastName", tag: &tag, to: colB)
-        addTextField(source: patient, target: nil, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
+        addTextField(source: patient, attributeKey: "firstName", tag: &tag, to: colA)
+        addTextField(source: patient, attributeKey: "lastName", tag: &tag, to: colB)
+        addTextField(source: patient, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
         var innerCols = newColumns()
-        addTextField(source: patient, target: nil,
+        addTextField(source: patient,
                      attributeKey: "age",
                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
                      tag: &tag, to: innerCols)
-        addTextField(source: patient, target: nil,
+        addTextField(source: patient,
                      attributeKey: "gender",
                      attributeType: .picker(EnumKeyboardSource<PatientGender>()),
                      tag: &tag, to: innerCols)
@@ -133,8 +133,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
-        addTextField(source: situation, target: nil, attributeKey: "chiefComplaint", tag: &tag, to: colA)
-        addTextField(source: situation, target: nil,
+        addTextField(source: situation, attributeKey: "chiefComplaint", tag: &tag, to: colA)
+        addTextField(source: situation,
                      attributeKey: "primarySymptom",
                      attributeType: .custom(NemsisComboKeyboard(keyboards: [
                         NemsisKeyboard(field: "eSituation.09", sources: [ICD10CMKeyboardSource()], isMultiSelect: false),
@@ -144,16 +144,16 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                         "NemsisNegativeKeyboard.title".localized
                      ])),
                      tag: &tag, to: colB)
-        addTextField(source: situation, target: nil,
+        addTextField(source: situation,
                      attributeKey: "otherAssociatedSymptoms",
                      attributeType: .custom(NemsisKeyboard(field: "eSituation.10",
                                                            sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colB)
-        addTextField(source: history, target: nil,
+        addTextField(source: history,
                      attributeKey: "medicalSurgicalHistory",
                      attributeType: .custom(NemsisKeyboard(field: "eHistory.08", sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colA)
-        addTextField(source: history, target: nil,
+        addTextField(source: history,
                      attributeKey: "medicationAllergies",
                      attributeType: .custom(NemsisComboKeyboard(keyboards: [
                         NemsisKeyboard(field: "eHistory.06", sources: [RxNormKeyboardSource()], isMultiSelect: true),
@@ -165,7 +165,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                         "NemsisNegativeKeyboard.title".localized
                      ])),
                      tag: &tag, to: colA)
-        addTextField(source: history, target: nil,
+        addTextField(source: history,
                      attributeKey: "environmentalFoodAllergies",
                      attributeType: .custom(NemsisKeyboard(field: "eHistory.07", sources: [SNOMEDKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colB)
@@ -186,37 +186,37 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
                 cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
             innerCols = newColumns()
             innerCols.distribution = .fillProportionally
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
             let label = UILabel()
             label.font = .h3SemiBold
             label.textColor = .base800
             label.text = "/"
             innerCols.addArrangedSubview(label)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
             colB.addArrangedSubview(innerCols)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "cardiacRhythm",
                          attributeType: .multi(EnumKeyboardSource<VitalCardiacRhythm>()),
                          tag: &tag, to: colB)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-            addTextField(source: vital, target: nil,
+            addTextField(source: vital,
                          attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
@@ -237,9 +237,9 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
                 cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
-            addTextField(source: procedure, target: nil,
+            addTextField(source: procedure,
                          attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
-            addTextField(source: procedure, target: nil,
+            addTextField(source: procedure,
                          attributeKey: "procedure",
                          attributeType: .custom(NemsisComboKeyboard(keyboards: [
                             NemsisKeyboard(field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false),
@@ -251,7 +251,7 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                             "NemsisNegativeKeyboard.title".localized
                          ])),
                          tag: &tag, to: colA)
-            addTextField(source: procedure, target: nil,
+            addTextField(source: procedure,
                          attributeKey: "responseToProcedure",
                          attributeType: .picker(EnumKeyboardSource<ProcedureResponse>()),
                          tag: &tag, to: colA)
@@ -259,134 +259,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))
 
         containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
-    }
-
-    func addTextField(source: AnyObject, target: AnyObject?,
-                      attributeKey: String, attributeType: FormFieldAttributeType = .text,
-                      keyboardType: UIKeyboardType = .default,
-                      unitLabel: String? = nil,
-                      tag: inout Int, to col: UIStackView) {
-        let textField = newTextField(source: source, target: target,
-                                     attributeKey: attributeKey, attributeType: attributeType,
-                                     keyboardType: keyboardType,
-                                     unitLabel: unitLabel,
-                                     tag: &tag)
-        col.addArrangedSubview(textField)
-    }
-
-    func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
-        let button = PRKit.Button()
-        button.bundleImage = bundleImage
-        button.setTitle(title, for: .normal)
-        button.size = .small
-        button.style = .primary
-        return button
-    }
-
-    func newColumns() -> UIStackView {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .horizontal
-        stackView.distribution = .fillEqually
-        stackView.spacing = 20
-        return stackView
-    }
-
-    func newTextField(source: AnyObject, target: AnyObject?,
-                      attributeKey: String, attributeType: FormFieldAttributeType = .text,
-                      keyboardType: UIKeyboardType = .default,
-                      unitLabel: String? = nil,
-                      tag: inout Int) -> PRKit.TextField {
-        let textField = PRKit.TextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.source = source
-        textField.target = target
-        textField.attributeKey = attributeKey
-        textField.attributeType = attributeType
-        textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
-        textField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
-        textField.inputAccessoryView = formInputAccessoryView
-        textField.keyboardType = keyboardType
-        if let unitLabel = unitLabel {
-            textField.unitLabel.text = unitLabel
-        }
-        textField.tag = tag
-        tag += 1
-        textField.delegate = self
-        return textField
-    }
-
-    func newHeader(_ text: String, subheaderText: String?) -> UIView {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-
-        let header = UILabel()
-        header.translatesAutoresizingMaskIntoConstraints = false
-        header.font = .h4SemiBold
-        header.text = text
-        header.textColor = .brandPrimary500
-        view.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.topAnchor),
-            header.leftAnchor.constraint(equalTo: view.leftAnchor)
-        ])
-
-        if let subheaderText = subheaderText {
-            let subheader = UILabel()
-            subheader.translatesAutoresizingMaskIntoConstraints = false
-            subheader.font = .h4SemiBold
-            subheader.text = subheaderText
-            subheader.textColor = .base500
-            view.addSubview(subheader)
-            NSLayoutConstraint.activate([
-                subheader.firstBaselineAnchor.constraint(equalTo: header.firstBaselineAnchor),
-                subheader.leftAnchor.constraint(equalTo: header.rightAnchor),
-                subheader.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
-            ])
-        } else {
-            header.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor).isActive = true
-        }
-
-        let rule = UIView()
-        rule.translatesAutoresizingMaskIntoConstraints = false
-        rule.backgroundColor = .base300
-        view.addSubview(rule)
-        NSLayoutConstraint.activate([
-            rule.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 3),
-            rule.leftAnchor.constraint(equalTo: view.leftAnchor),
-            rule.rightAnchor.constraint(equalTo: view.rightAnchor),
-            rule.heightAnchor.constraint(equalToConstant: 2),
-            view.bottomAnchor.constraint(equalTo: rule.bottomAnchor)
-        ])
-        return view
-    }
-
-    func newSection() -> (UIStackView, UIStackView, UIStackView) {
-        let isRegular = traitCollection.horizontalSizeClass == .regular
-        let colA = UIStackView()
-        colA.translatesAutoresizingMaskIntoConstraints = false
-        colA.axis = .vertical
-        colA.alignment = .fill
-        colA.distribution = .fill
-        colA.spacing = 20
-        let colB = isRegular ? UIStackView() : colA
-        let cols = isRegular ? UIStackView() : colA
-        if isRegular {
-            colB.translatesAutoresizingMaskIntoConstraints = false
-            colB.axis = .vertical
-            colB.alignment = .fill
-            colB.distribution = .fill
-            colB.spacing = 20
-
-            cols.translatesAutoresizingMaskIntoConstraints = false
-            cols.axis = .horizontal
-            cols.alignment = .top
-            cols.distribution = .fillEqually
-            cols.spacing = 20
-            cols.addArrangedSubview(colA)
-            cols.addArrangedSubview(colB)
-        }
-        return (cols, colA, colB)
     }
 
     // MARK: FormFieldDelegate
