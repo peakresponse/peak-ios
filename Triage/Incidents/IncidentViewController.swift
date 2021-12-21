@@ -52,13 +52,16 @@ class IncidentViewController: UIViewController {
                     report.response?.unitNumber = vehicle.number
                 }
             }
-
             showReport(report)
         }
     }
 
     @objc func cancelPressed() {
         dismissAnimated()
+    }
+
+    @objc func editPressed() {
+
     }
 
     @objc func savePressed() {
@@ -71,6 +74,7 @@ class IncidentViewController: UIViewController {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
         if let vc = vc as? ReportViewController {
             vc.report = report
+            vc.isEditing = report.realm == nil
         }
         addChild(vc)
         containerView.addSubview(vc.view)
@@ -78,12 +82,19 @@ class IncidentViewController: UIViewController {
         vc.didMove(toParent: self)
 
         activityIndicatorView.isHidden = true
-        segmentedControl.isHidden = false
+        segmentedControl.isHidden = report.realm == nil ? true : false
         containerView.isHidden = false
 
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.saveAndExit".localized,
-                                                           style: .done,
-                                                           target: self,
-                                                           action: #selector(savePressed))
+        if vc.isEditing {
+            commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
+                                                               style: .done,
+                                                               target: self,
+                                                               action: #selector(savePressed))
+        } else {
+            commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
+                                                               style: .plain,
+                                                               target: self,
+                                                               action: #selector(editPressed))
+        }
     }
 }

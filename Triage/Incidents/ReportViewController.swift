@@ -85,7 +85,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      attributeType: .picker(EnumKeyboardSource<UnitDisposition>()),
                      tag: &tag, to: colB)
 
-        var header = newHeader("Patient Information", subheaderText: " (optional)")
+        var header = newHeader("ReportViewController.patientInformation".localized,
+                               subheaderText: "ReportViewController.optional".localized)
         containerView.addSubview(header)
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
@@ -102,10 +103,23 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         addTextField(source: patient, target: nil, attributeKey: "firstName", tag: &tag, to: colA)
         addTextField(source: patient, target: nil, attributeKey: "lastName", tag: &tag, to: colB)
         addTextField(source: patient, target: nil, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
-        addAgeAndGender(tag: &tag, to: colB)
-//        addPatientButtons(to: colA)
+        var innerCols = newColumns()
+        addTextField(source: patient, target: nil,
+                     attributeKey: "age",
+                     attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
+                     tag: &tag, to: innerCols)
+        addTextField(source: patient, target: nil,
+                     attributeKey: "gender",
+                     attributeType: .picker(EnumKeyboardSource<PatientGender>()),
+                     tag: &tag, to: innerCols)
+        colB.addArrangedSubview(innerCols)
+//        innerCols = newColumns()
+//        innerCols.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized))
+//        innerCols.addArrangedSubview(newButton(bundleImage: "PatientAdd24px", title: "Button.addPatient".localized))
+//        colA.addArrangedSubview(innerCols)
 
-        header = newHeader("Medical Information", subheaderText: " (optional)")
+        header = newHeader("ReportViewController.medicalInformation".localized,
+                           subheaderText: "ReportViewController.optional".localized)
         containerView.addSubview(header)
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
@@ -157,7 +171,8 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                      tag: &tag, to: colB)
 
         for vital in vitals {
-            header = newHeader("Vitals", subheaderText: " (optional)")
+            header = newHeader("ReportViewController.vitals".localized,
+                               subheaderText: "ReportViewController.optional".localized)
             containerView.addSubview(header)
             NSLayoutConstraint.activate([
                 header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
@@ -173,18 +188,18 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             ])
             addTextField(source: vital, target: nil,
                          attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
-            let stackView = newColumns()
-            stackView.distribution = .fillProportionally
+            innerCols = newColumns()
+            innerCols.distribution = .fillProportionally
             addTextField(source: vital, target: nil,
-                         attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: stackView)
+                         attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
             let label = UILabel()
             label.font = .h3SemiBold
             label.textColor = .base800
             label.text = "/"
-            stackView.addArrangedSubview(label)
+            innerCols.addArrangedSubview(label)
             addTextField(source: vital, target: nil,
-                         attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: stackView)
-            colB.addArrangedSubview(stackView)
+                         attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
+            colB.addArrangedSubview(innerCols)
             addTextField(source: vital, target: nil,
                          attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
             addTextField(source: vital, target: nil,
@@ -204,10 +219,11 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
             addTextField(source: vital, target: nil,
                          attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
         }
-        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "New Vitals"))
+        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
 
         for procedure in procedures {
-            header = newHeader("Interventions", subheaderText: " (optional)")
+            header = newHeader("ReportViewController.interventions".localized,
+                               subheaderText: "ReportViewController.optional".localized)
             containerView.addSubview(header)
             NSLayoutConstraint.activate([
                 header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
@@ -240,41 +256,9 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                          attributeType: .picker(EnumKeyboardSource<ProcedureResponse>()),
                          tag: &tag, to: colA)
         }
-        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Add Intervention"))
+        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))
 
-        /*
-        header = newHeader("Additional Notes", subheaderText: " (optional)")
-        containerView.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-            header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-            header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-        ])
-        (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-        ])
-        addCheckbox(labelText: "COVID-19 suspected", to: colA)
-        addCheckbox(labelText: "ETOH suspected", to: colA)
-        addCheckbox(labelText: "Drugs suspected", to: colA)
-        addCheckbox(labelText: "Psych patient", to: colA)
-        addCheckbox(labelText: "Combative", to: colA)
-        addTextField(labelText: "Other Notes", to: colB)
-         */
         containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
-    }
-
-    func addCheckbox(labelText: String, to col: UIStackView) {
-        let checkbox = newCheckbox(labelText: labelText)
-        col.addArrangedSubview(checkbox)
-    }
-
-    func addTextField(labelText: String, to col: UIStackView) {
-        let textField = newTextField(labelText: labelText)
-        col.addArrangedSubview(textField)
     }
 
     func addTextField(source: AnyObject, target: AnyObject?,
@@ -288,26 +272,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
                                      unitLabel: unitLabel,
                                      tag: &tag)
         col.addArrangedSubview(textField)
-    }
-
-    func addAgeAndGender(tag: inout Int, to col: UIStackView) {
-        let stackView = newColumns()
-        addTextField(source: patient, target: nil,
-                     attributeKey: "age",
-                     attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
-                     tag: &tag, to: stackView)
-        addTextField(source: patient, target: nil,
-                     attributeKey: "gender",
-                     attributeType: .picker(EnumKeyboardSource<PatientGender>()),
-                     tag: &tag, to: stackView)
-        col.addArrangedSubview(stackView)
-    }
-
-    func addPatientButtons(to col: UIStackView) {
-        let stackView = newColumns()
-        stackView.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Scan License"))
-        stackView.addArrangedSubview(newButton(bundleImage: "PatientAdd24px", title: "Add Patient"))
-        col.addArrangedSubview(stackView)
     }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
@@ -326,13 +290,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         stackView.distribution = .fillEqually
         stackView.spacing = 20
         return stackView
-    }
-
-    func newCheckbox(labelText: String) -> PRKit.Checkbox {
-        let checkbox = PRKit.Checkbox()
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        checkbox.labelText = labelText
-        return checkbox
     }
 
     func newTextField(source: AnyObject, target: AnyObject?,
@@ -356,13 +313,6 @@ class ReportViewController: UIViewController, PRKit.FormFieldDelegate, KeyboardA
         textField.tag = tag
         tag += 1
         textField.delegate = self
-        return textField
-    }
-
-    func newTextField(labelText: String) -> PRKit.TextField {
-        let textField = PRKit.TextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.labelText = labelText
         return textField
     }
 

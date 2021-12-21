@@ -32,6 +32,8 @@
 
 "Button.addNote" = "Add Note";
 "Button.addPhoto" = "Add Photo";
+"Button.addIntervention" = "Add Intervention";
+"Button.addPatient" = "Add Patient";
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
 "Button.back" = "Back";
@@ -48,11 +50,13 @@
 "Button.joinScene" = "Arrived on Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
 "Button.record" = "Record";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
+"Button.scanLicense" = "Scan License";
 "Button.search" = "Search";
 "Button.signIn" = "Sign In";
 "Button.skip" = "Skip";
@@ -275,6 +279,12 @@
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
+
+"ReportViewController.interventions" = "Interventions";
+"ReportViewController.optional" = " (optional)";
+"ReportViewController.medicalInformation" = "Medical Information";
+"ReportViewController.patientInformation" = "Patient Information";
+"ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";
 
