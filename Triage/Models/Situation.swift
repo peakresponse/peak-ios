@@ -35,12 +35,12 @@ class Situation: BaseVersioned, NemsisBacked {
         }
     }
 
-    @objc var primarySymptom: String? {
+    @objc var primarySymptom: NemsisValue? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eSituation.09")?.text
+            return getFirstNemsisValue(forJSONPath: "/eSituation.09")
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eSituation.09")
+            setNemsisValue(newValue, forJSONPath: "/eSituation.09")
         }
     }
 

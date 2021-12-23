@@ -161,4 +161,15 @@ extension FormViewController {
         return (cols, colA, colB)
     }
 
+    // MARK: FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        if let attributeKey = field.attributeKey, let target = field.target as? NSObject {
+            target.setValue(field.attributeValue ?? field.text, forKey: attributeKey)
+        }
+    }
+
+    func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
+        presentAnimated(vc)
+    }
 }

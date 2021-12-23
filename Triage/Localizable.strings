@@ -166,8 +166,8 @@
 "NemsisNegative.8801029" = "Approximate";
 "NemsisNegative.8801031" = "Symptom Not Present";
 
+"NemsisKeyboard.title" = "Search";
 "NemsisNegativeKeyboard.title" = "Negatives";
-"NemsisSearchKeyboard.title" = "Search";
 
 "NewScenePinView.nameField.label" = "Pin Name";
 "NewScenePinView.descField.label" = "Description";

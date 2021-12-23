@@ -105,20 +105,13 @@ class NemsisValue: NSObject {
 
     override init() {
         super.init()
-        attributes = [
-            "xsi:nil": "true"
-        ]
+        isNil = true
     }
 
-    init(text: String?) {
+    init(text: String?, negativeValue: String? = nil) {
         super.init()
-        if let text = text, !text.isEmpty {
-            self.text = text
-        } else {
-            attributes = [
-                "xsi:nil": "true"
-            ]
-        }
+        self.text = text
+        self.negativeValue = negativeValue
     }
 
     init(data: [String: Any]) {

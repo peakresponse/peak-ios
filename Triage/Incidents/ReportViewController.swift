@@ -139,13 +139,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: situation, attributeKey: "chiefComplaint", tag: &tag, to: colA)
         addTextField(source: situation,
                      attributeKey: "primarySymptom",
-                     attributeType: .custom(NemsisComboKeyboard(keyboards: [
-                        NemsisKeyboard(field: "eSituation.09", sources: [ICD10CMKeyboardSource()], isMultiSelect: false),
-                        NemsisNegativeKeyboard(negatives: [.notApplicable])
-                     ], titles: [
-                        "NemsisSearchKeyboard.title".localized,
-                        "NemsisNegativeKeyboard.title".localized
-                     ])),
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eSituation.09", sources: [ICD10CMKeyboardSource()], isMultiSelect: false,
+                        negatives: [.notApplicable])),
                      tag: &tag, to: colB)
         addTextField(source: situation,
                      attributeKey: "otherAssociatedSymptoms",
@@ -158,15 +154,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "medicationAllergies",
-                     attributeType: .custom(NemsisComboKeyboard(keyboards: [
-                        NemsisKeyboard(field: "eHistory.06", sources: [RxNormKeyboardSource()], isMultiSelect: true),
-                        NemsisNegativeKeyboard(negatives: [
-                           .notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete
-                        ])
-                     ], titles: [
-                        "NemsisSearchKeyboard.title".localized,
-                        "NemsisNegativeKeyboard.title".localized
-                     ])),
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eHistory.06", sources: [RxNormKeyboardSource()], isMultiSelect: true,
+                        negatives: [.notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete])),
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "environmentalFoodAllergies",
@@ -244,15 +234,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                          attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
             addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "procedure",
-                         attributeType: .custom(NemsisComboKeyboard(keyboards: [
-                            NemsisKeyboard(field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false),
-                            NemsisNegativeKeyboard(negatives: [
+                         attributeType: .custom(NemsisComboKeyboard(
+                            field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false,
+                            negatives: [
                                 .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
-                            ])
-                         ], titles: [
-                            "NemsisSearchKeyboard.title".localized,
-                            "NemsisNegativeKeyboard.title".localized
-                         ])),
+                            ])),
                          tag: &tag, to: colA)
             addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "responseToProcedure",
@@ -317,17 +303,5 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 }
             }
         }
-    }
-
-    // MARK: FormFieldDelegate
-
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target as? NSObject {
-            target.setValue(field.attributeValue ?? field.text, forKey: attributeKey)
-        }
-    }
-
-    func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
-        presentAnimated(vc)
     }
 }
