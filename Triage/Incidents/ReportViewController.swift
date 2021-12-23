@@ -304,4 +304,16 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             }
         }
     }
+
+    // MARK: FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        if let attributeKey = field.attributeKey, let target = field.target as? NSObject {
+            target.setValue(field.attributeValue, forKey: attributeKey)
+        }
+    }
+
+    func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
+        presentAnimated(vc)
+    }
 }
