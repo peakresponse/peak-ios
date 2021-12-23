@@ -20,6 +20,9 @@ enum ComplaintType: String, StringCaseIterable {
 }
 
 class Situation: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var chiefComplaint: String? {
@@ -48,5 +51,11 @@ class Situation: BaseVersioned, NemsisBacked {
         set {
             setNemsisValues(newValue, forJSONPath: "/eSituation.10")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

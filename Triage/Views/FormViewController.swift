@@ -12,18 +12,19 @@ import UIKit
 protocol FormViewController: PRKit.FormFieldDelegate {
     var traitCollection: UITraitCollection { get }
     var formInputAccessoryView: UIView! { get }
+    var formFields: [PRKit.FormField] { get set }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
     func newSection() -> (UIStackView, UIStackView, UIStackView)
-    func newTextField(source: AnyObject,
+    func newTextField(source: AnyObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitLabel: String?,
                       tag: inout Int) -> PRKit.TextField
 
-    func addTextField(source: AnyObject,
+    func addTextField(source: AnyObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitLabel: String?,
@@ -31,17 +32,18 @@ protocol FormViewController: PRKit.FormFieldDelegate {
 }
 
 extension FormViewController {
-    func addTextField(source: AnyObject,
+    func addTextField(source: AnyObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitLabel: String? = nil,
                       tag: inout Int, to col: UIStackView) {
-        let textField = newTextField(source: source,
+        let textField = newTextField(source: source, sourceIndex: sourceIndex,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
                                      unitLabel: unitLabel,
                                      tag: &tag)
         col.addArrangedSubview(textField)
+        formFields.append(textField)
     }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
@@ -62,7 +64,7 @@ extension FormViewController {
         return stackView
     }
 
-    func newTextField(source: AnyObject,
+    func newTextField(source: AnyObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitLabel: String? = nil,
@@ -70,6 +72,7 @@ extension FormViewController {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.source = source
+        textField.sourceIndex = sourceIndex
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
@@ -82,7 +85,6 @@ extension FormViewController {
         textField.tag = tag
         tag += 1
         textField.delegate = self
-        textField.isUserInteractionEnabled = false
         return textField
     }
 

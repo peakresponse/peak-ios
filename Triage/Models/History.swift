@@ -9,6 +9,9 @@
 import RealmSwift
 
 class History: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var medicalSurgicalHistory: [NemsisValue]? {
@@ -23,4 +26,10 @@ class History: BaseVersioned, NemsisBacked {
     @objc var medicationAllergies: [NemsisValue]?
 
     @objc var environmentalFoodAllergies: [NemsisValue]?
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
+    }
 }

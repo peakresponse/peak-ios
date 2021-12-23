@@ -16,8 +16,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIView!
     var formInputAccessoryView: UIView!
+    var formFields: [PRKit.FormField] = []
+    var formFieldsMap: [String: PRKit.FormField] = [:]
 
     var report: Report!
+    var newReport: Report?
     var scene: Scene!
     var time: Time!
     var response: Response!
@@ -170,7 +173,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeType: .custom(NemsisKeyboard(field: "eHistory.07", sources: [SNOMEDKeyboardSource()], isMultiSelect: true)),
                      tag: &tag, to: colB)
 
-        for vital in vitals {
+        for (i, vital) in vitals.enumerated() {
             header = newHeader("ReportViewController.vitals".localized,
                                subheaderText: "ReportViewController.optional".localized)
             containerView.addSubview(header)
@@ -186,42 +189,42 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
                 cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
             innerCols = newColumns()
             innerCols.distribution = .fillProportionally
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
             let label = UILabel()
             label.font = .h3SemiBold
             label.textColor = .base800
             label.text = "/"
             innerCols.addArrangedSubview(label)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
             colB.addArrangedSubview(innerCols)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "cardiacRhythm",
                          attributeType: .multi(EnumKeyboardSource<VitalCardiacRhythm>()),
                          tag: &tag, to: colB)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-            addTextField(source: vital,
+            addTextField(source: vital, sourceIndex: i,
                          attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
 
-        for procedure in procedures {
+        for (i, procedure) in procedures.enumerated() {
             header = newHeader("ReportViewController.interventions".localized,
                                subheaderText: "ReportViewController.optional".localized)
             containerView.addSubview(header)
@@ -237,9 +240,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
                 cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
             ])
-            addTextField(source: procedure,
+            addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
-            addTextField(source: procedure,
+            addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "procedure",
                          attributeType: .custom(NemsisComboKeyboard(keyboards: [
                             NemsisKeyboard(field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false),
@@ -251,7 +254,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                             "NemsisNegativeKeyboard.title".localized
                          ])),
                          tag: &tag, to: colA)
-            addTextField(source: procedure,
+            addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "responseToProcedure",
                          attributeType: .picker(EnumKeyboardSource<ProcedureResponse>()),
                          tag: &tag, to: colA)
@@ -259,9 +262,70 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))
 
         containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
+
+        if isEditing {
+            setEditing(true, animated: false)
+        }
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            if report.realm != nil {
+                // clone
+            } else {
+                newReport = report
+            }
+        } else {
+            newReport = nil
+        }
+        for formField in formFields {
+            formField.isEditing = editing
+            formField.isUserInteractionEnabled = editing
+            if let source = formField.source {
+                switch String(describing: type(of: source)) {
+                case "Scene":
+                    formField.target = newReport?.scene
+                case "Time":
+                    formField.target = newReport?.time
+                case "Response":
+                    formField.target = newReport?.response
+                case "Narrative":
+                    formField.target = newReport?.narrative
+                case "Disposition":
+                    formField.target = newReport?.disposition
+                case "Patient":
+                    formField.target = newReport?.patient
+                case "Situation":
+                    formField.target = newReport?.situation
+                case "History":
+                    formField.target = newReport?.history
+                case "Vital":
+                    if let index = formField.sourceIndex, index < newReport?.vitals.count ?? 0 {
+                        formField.target = newReport?.vitals[index]
+                    } else {
+                        formField.target = nil
+                    }
+                case "Procedure":
+                    if let index = formField.sourceIndex, index < newReport?.procedures.count ?? 0 {
+                        formField.target = newReport?.procedures[index]
+                    } else {
+                        formField.target = nil
+                    }
+                default:
+                    break
+                }
+            }
+        }
     }
 
     // MARK: FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        if let attributeKey = field.attributeKey, let target = field.target as? NSObject {
+            target.setValue(field.attributeValue ?? field.text, forKey: attributeKey)
+        }
+    }
 
     func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
         presentAnimated(vc)

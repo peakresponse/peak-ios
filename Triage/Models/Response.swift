@@ -9,6 +9,9 @@
 import RealmSwift
 
 class Response: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var incidentNumber: String? {
@@ -27,5 +30,11 @@ class Response: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.13")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

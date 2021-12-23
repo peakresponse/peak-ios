@@ -65,7 +65,7 @@ class IncidentViewController: UIViewController {
     }
 
     @objc func savePressed() {
-
+        print(String(data: try! JSONSerialization.data(withJSONObject: report?.asJSONPayload(), options: [.prettyPrinted]), encoding: .utf8)!)
     }
 
     func showReport(_ report: Report) {

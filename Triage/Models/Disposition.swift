@@ -23,6 +23,9 @@ enum UnitDisposition: String, StringCaseIterable {
 }
 
 class Disposition: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var unitDisposition: String? {
@@ -32,5 +35,11 @@ class Disposition: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

@@ -9,6 +9,9 @@
 import RealmSwift
 
 class Time: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var psapCall: Date? {
@@ -68,5 +71,11 @@ class Time: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eTimes/eTimes.07")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

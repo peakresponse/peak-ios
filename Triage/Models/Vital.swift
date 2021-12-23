@@ -55,6 +55,9 @@ enum VitalCardiacRhythm: String, StringCaseIterable {
 }
 
 class Vital: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var vitalSignsTakenAt: Date? {
@@ -144,5 +147,11 @@ class Vital: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

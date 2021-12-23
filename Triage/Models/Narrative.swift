@@ -9,6 +9,9 @@
 import RealmSwift
 
 class Narrative: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var text: String? {
@@ -18,5 +21,11 @@ class Narrative: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eNarrative/eNarrative.01")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }

@@ -20,6 +20,9 @@ enum ProcedureResponse: String, StringCaseIterable {
 }
 
 class Procedure: BaseVersioned, NemsisBacked {
+    struct Keys {
+        static let data = "data"
+    }
     @Persisted var _data: Data?
 
     @objc var procedurePerformedAt: Date? {
@@ -47,5 +50,11 @@ class Procedure: BaseVersioned, NemsisBacked {
         set {
             setNemsisValue(newValue, forJSONPath: "/eProcedures.08")
         }
+    }
+
+    override func asJSON() -> [String: Any] {
+        var json = super.asJSON()
+        json[Keys.data] = data
+        return json
     }
 }
