@@ -64,8 +64,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         if let field = field {
             let realm = AppRealm.open()
             // look up the list for the field
-            let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first
-            guard let list = list else { return }
+            guard let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first else { return }
 
             segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.suggested".localized)
 
@@ -113,8 +112,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         guard let field = field else { return }
         let realm = AppRealm.open()
         // look up the list for the field
-        let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first
-        guard let list = list else { return }
+        guard let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first else { return }
         results = realm.objects(CodeListItem.self).filter("list=%@", list)
         if let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty {
             results = results?.filter("name CONTAINS[cd] %@", query)
