@@ -8,8 +8,9 @@
 
 import RealmSwift
 
-class Report: BaseVersioned {
+class Report: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let data = "data"
         static let incidentId = "incidentId"
         static let sceneId = "sceneId"
         static let responseId = "responseId"
@@ -23,6 +24,7 @@ class Report: BaseVersioned {
         static let vitalIds = "vitalIds"
         static let procedureIds = "procedureIds"
     }
+    @Persisted var _data: Data?
     @Persisted var incident: Incident?
     @Persisted var scene: Scene?
     @Persisted var response: Response?
@@ -35,8 +37,18 @@ class Report: BaseVersioned {
     @Persisted var vitals: List<Vital>
     @Persisted var procedures: List<Procedure>
 
+    @objc var patientCareReportNumber: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eRecord.01")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eRecord.01")
+        }
+    }
+
     override func new() {
         super.new()
+        patientCareReportNumber = canonicalId
         scene = Scene.newRecord()
         response = Response.newRecord()
         time = Time.newRecord()
@@ -51,6 +63,7 @@ class Report: BaseVersioned {
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
+        json[Keys.data] = data
         json[Keys.incidentId] = incident?.id
         json[Keys.sceneId] = scene?.id
         json[Keys.responseId] = response?.id

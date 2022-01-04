@@ -9,6 +9,7 @@
 import Foundation
 import Keys
 import Starscream
+import SwiftUI
 
 enum ApiClientError: Error {
     case csrf
@@ -343,6 +344,12 @@ class ApiClient {
 
     func createOrUpdatePatient(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/patients", body: data, completionHandler: completionHandler)
+    }
+
+    // MARK: - Reports
+
+    func createOrUpdateReport(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/reports", body: data, completionHandler: completionHandler)
     }
 
     // MARK: - Scenes

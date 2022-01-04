@@ -388,6 +388,24 @@ class AppRealm {
         queue.addOperation(op)
     }
 
+    // MARK: - Report
+
+    public static func saveReport(report: Report) {
+        let realm = AppRealm.open()
+        try! realm.write {
+            realm.add(report, update: .modified)
+        }
+        let data = report.asJSONPayload()
+        let op = RequestOperation()
+        op.queuePriority = .veryHigh
+        op.request = { (completionHandler) in
+            return ApiClient.shared.createOrUpdateReport(data: data) { (_, _, _, error) in
+                completionHandler(error)
+            }
+        }
+        queue.addOperation(op)
+    }
+
     // MARK: - Scene
 
     public static func captureLocation(sceneId: String) {

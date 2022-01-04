@@ -65,7 +65,9 @@ class IncidentViewController: UIViewController {
     }
 
     @objc func savePressed() {
-        print(String(data: try! JSONSerialization.data(withJSONObject: report?.asJSONPayload(), options: [.prettyPrinted]), encoding: .utf8)!)
+        if let report = self.report {
+            AppRealm.saveReport(report: report)
+        }
     }
 
     func showReport(_ report: Report) {
