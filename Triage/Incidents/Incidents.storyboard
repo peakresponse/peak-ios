@@ -108,7 +108,7 @@
                                 <rect key="frame" x="0.0" y="126" width="414" height="770"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="56" translatesAutoresizingMaskIntoConstraints="NO" id="agm-ti-evy" customClass="SegmentedControl" customModule="PRKit">
-                                        <rect key="frame" x="20" y="0.0" width="374" height="0.0"/>
+                                        <rect key="frame" x="20" y="0.0" width="374" height="56"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" priority="750" constant="690" id="kYa-hc-GDo"/>
@@ -154,6 +154,55 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iIX-Sa-E24" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1289.8550724637682" y="107.8125"/>
+        </scene>
+        <!--Reports View Controller-->
+        <scene sceneID="dUY-0W-KsP">
+            <objects>
+                <viewController storyboardIdentifier="Reports" modalPresentationStyle="overCurrentContext" id="3xr-9r-eE4" customClass="ReportsViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="XID-e6-jx9">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="ssB-kE-P5A" customClass="CommandHeader" customModule="PRKit">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8cd-NT-ekp">
+                                <rect key="frame" x="0.0" y="128" width="414" height="768"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1Wz-hg-HZ0">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells/>
+                                <connections>
+                                    <outlet property="dataSource" destination="3xr-9r-eE4" id="ZrF-6C-sfm"/>
+                                    <outlet property="delegate" destination="3xr-9r-eE4" id="uyQ-ry-EDk"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="e4i-fK-bL8"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="8cd-NT-ekp" secondAttribute="bottom" id="56I-aM-AiV"/>
+                            <constraint firstItem="ssB-kE-P5A" firstAttribute="leading" secondItem="XID-e6-jx9" secondAttribute="leading" id="A4W-cA-3cG"/>
+                            <constraint firstAttribute="trailing" secondItem="8cd-NT-ekp" secondAttribute="trailing" id="abl-Ub-PPf"/>
+                            <constraint firstItem="8cd-NT-ekp" firstAttribute="top" secondItem="ssB-kE-P5A" secondAttribute="bottom" id="cki-9Q-EJN"/>
+                            <constraint firstAttribute="trailing" secondItem="ssB-kE-P5A" secondAttribute="trailing" id="enb-pS-LSp"/>
+                            <constraint firstItem="ssB-kE-P5A" firstAttribute="top" secondItem="XID-e6-jx9" secondAttribute="top" id="lFO-9x-Ot9"/>
+                            <constraint firstItem="8cd-NT-ekp" firstAttribute="leading" secondItem="XID-e6-jx9" secondAttribute="leading" id="v8o-U3-56m"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="collectionView" destination="8cd-NT-ekp" id="RJx-Bt-KuE"/>
+                        <outlet property="commandHeader" destination="ssB-kE-P5A" id="Asc-i0-lZX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vOq-0C-89q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2179.7101449275365" y="107.8125"/>
         </scene>
         <!--Report View Controller-->
         <scene sceneID="Mpb-BL-2BK">

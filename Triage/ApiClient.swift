@@ -352,6 +352,10 @@ class ApiClient {
         return POST(path: "/api/reports", body: data, completionHandler: completionHandler)
     }
 
+    func getReports(incidentId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/reports", params: ["incidentId": incidentId], completionHandler: completionHandler)
+    }
+
     // MARK: - Scenes
 
     func connect(sceneId: String,

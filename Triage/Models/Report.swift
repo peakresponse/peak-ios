@@ -35,6 +35,7 @@ class Report: BaseVersioned, NemsisBacked {
     @Persisted var disposition: Disposition?
     @Persisted var narrative: Narrative?
     @Persisted var vitals: List<Vital>
+    @Persisted var medications: List<Medication>
     @Persisted var procedures: List<Procedure>
 
     @objc var patientCareReportNumber: String? {
@@ -58,7 +59,51 @@ class Report: BaseVersioned, NemsisBacked {
         disposition = Disposition.newRecord()
         narrative = Narrative.newRecord()
         vitals.append(Vital.newRecord())
+        medications.append(Medication.newRecord())
         procedures.append(Procedure.newRecord())
+    }
+
+    override func update(from data: [String: Any]) {
+        super.update(from: data)
+        if data.index(forKey: Keys.data) != nil {
+            self.data = data[Keys.data] as? [String: Any] ?? [:]
+        }
+        if data.index(forKey: Keys.incidentId) != nil {
+            incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: data[Keys.incidentId] as? String)
+        }
+        if data.index(forKey: Keys.sceneId) != nil {
+            scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: data[Keys.sceneId] as? String)
+        }
+        if data.index(forKey: Keys.responseId) != nil {
+            response = (realm ?? AppRealm.open()).object(ofType: Response.self, forPrimaryKey: data[Keys.responseId] as? String)
+        }
+        if data.index(forKey: Keys.timeId) != nil {
+            time = (realm ?? AppRealm.open()).object(ofType: Time.self, forPrimaryKey: data[Keys.timeId] as? String)
+        }
+        if data.index(forKey: Keys.patientId) != nil {
+            patient = (realm ?? AppRealm.open()).object(ofType: Patient.self, forPrimaryKey: data[Keys.patientId] as? String)
+        }
+        if data.index(forKey: Keys.situationId) != nil {
+            situation = (realm ?? AppRealm.open()).object(ofType: Situation.self, forPrimaryKey: data[Keys.situationId] as? String)
+        }
+        if data.index(forKey: Keys.historyId) != nil {
+            history = (realm ?? AppRealm.open()).object(ofType: History.self, forPrimaryKey: data[Keys.historyId] as? String)
+        }
+        if data.index(forKey: Keys.dispositionId) != nil {
+            disposition = (realm ?? AppRealm.open()).object(ofType: Disposition.self, forPrimaryKey: data[Keys.dispositionId] as? String)
+        }
+        if data.index(forKey: Keys.narrativeId) != nil {
+            narrative = (realm ?? AppRealm.open()).object(ofType: Narrative.self, forPrimaryKey: data[Keys.narrativeId] as? String)
+        }
+        if data.index(forKey: Keys.vitalIds) != nil {
+            vitals.append(objectsIn: (realm ?? AppRealm.open()).objects(Vital.self).filter("id IN %@", data[Keys.vitalIds] as? [String] as Any))
+        }
+        if data.index(forKey: Keys.medicationIds) != nil {
+            medications.append(objectsIn: (realm ?? AppRealm.open()).objects(Medication.self).filter("id IN %@", data[Keys.medicationIds] as? [String] as Any))
+        }
+        if data.index(forKey: Keys.procedureIds) != nil {
+            procedures.append(objectsIn: (realm ?? AppRealm.open()).objects(Procedure.self).filter("id IN %@", data[Keys.procedureIds] as? [String] as Any))
+        }
     }
 
     override func asJSON() -> [String: Any] {

@@ -197,6 +197,13 @@ class Patient: BaseVersioned {
             return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")"
                 .trimmingCharacters(in: .whitespacesAndNewlines)
         }
+        if let dob = dob, let date = ISO8601DateFormatter.date(from: dob) {
+            let calendar = Calendar.current
+            let ageComponents = calendar.dateComponents([.year, .month, .day], from: date, to: Date())
+            if let age = ageComponents.year, age > 0 {
+                return "\(age) \(PatientAgeUnits.years.abbrDescription)"
+            }
+        }
         return ""
     }
     @Persisted var dob: String?

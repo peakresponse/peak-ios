@@ -103,6 +103,8 @@
 		458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */; };
 		458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */; };
 		458CA0CC277293580065F324 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CB277293580065F324 /* FormViewController.swift */; };
+		458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CE278527FC0065F324 /* ReportsViewController.swift */; };
+		458CA0D1278673C70065F324 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
 		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
 		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
@@ -299,6 +301,8 @@
 		458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNormKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNOMEDKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0CB277293580065F324 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
+		458CA0CE278527FC0065F324 /* ReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewController.swift; sourceTree = "<group>"; };
+		458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCollectionViewCell.swift; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
 		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
 		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
@@ -473,10 +477,10 @@
 		4566F01E236CCC5500A04C75 /* Triage */ = {
 			isa = PBXGroup;
 			children = (
-				458CA0AA275ADCBA0065F324 /* Data */,
 				4566F05D236CD56200A04C75 /* Extensions */,
 				4566F061236CE17900A04C75 /* Models */,
 				4566F04F236CCF5C00A04C75 /* Auth */,
+				458CA0AA275ADCBA0065F324 /* Data */,
 				45C007C7272A023A0072FF18 /* Incidents */,
 				4566F056236CD1E000A04C75 /* Patients */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
@@ -702,6 +706,7 @@
 				45C757DF2734AFE400386F07 /* RefusalViewController.swift */,
 				45C757E12734B00000386F07 /* ReportViewController.swift */,
 				45C757DD2734AFC400386F07 /* RingdownViewController.swift */,
+				458CA0CE278527FC0065F324 /* ReportsViewController.swift */,
 			);
 			path = Incidents;
 			sourceTree = "<group>";
@@ -710,6 +715,7 @@
 			isa = PBXGroup;
 			children = (
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
+				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1113,6 +1119,7 @@
 				45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */,
 				452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */,
 				454EE97C25202C7A00EB266A /* PatientView.swift in Sources */,
+				458CA0D1278673C70065F324 /* ReportCollectionViewCell.swift in Sources */,
 				45E2675824196E5C0010CDE9 /* NavigationController.swift in Sources */,
 				45F1303D25253AA0001495C7 /* UserTableViewCell.swift in Sources */,
 				4563C74324DA763700217901 /* FormField.swift in Sources */,
@@ -1129,6 +1136,7 @@
 				45BA942F2502BE2B0098E9BD /* BaseField.swift in Sources */,
 				458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */,
 				45B7A2F025101DD400BCAAAE /* SceneSummaryHeaderView.swift in Sources */,
+				458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				454E17AE24FECC1B00F9EB8B /* NewSceneViewController.swift in Sources */,
 				45F7BAC22739E37300FBD31F /* Report.swift in Sources */,

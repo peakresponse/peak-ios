@@ -9,13 +9,17 @@
 import UIKit
 import PRKit
 
+protocol IncidentViewControllerDelegate: NSObject {
+    func incidentViewControllerDidCancel(_ vc: IncidentViewController)
+}
+
 class IncidentViewController: UIViewController {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
-    var incidentId: String?
+    weak var delegate: IncidentViewControllerDelegate?
     var incident: Incident?
     var report: Report?
 
@@ -26,38 +30,11 @@ class IncidentViewController: UIViewController {
         segmentedControl.addSegment(title: "IncidentViewController.tab.ringdown".localized)
         segmentedControl.addSegment(title: "IncidentViewController.tab.refusal".localized)
 
-        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
-                                                          style: .plain,
-                                                          target: self,
-                                                          action: #selector(cancelPressed))
-
-        guard let incidentId = incidentId else { return }
-
-        let realm = AppRealm.open()
-        incident = realm.object(ofType: Incident.self, forPrimaryKey: incidentId)
-
-        guard let incident = incident else { return }
-
-        if incident.reportsCount == 0 {
-            let report = Report.newRecord()
-            report.incident = incident
-            report.scene = incident.scene
-            report.response?.incidentNumber = incident.number
-            if let assignmentId = AppSettings.assignmentId,
-               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {
-                if let dispatch = incident.dispatches.first(where: { $0.vehicleId == assignment.vehicleId }) {
-                    report.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
-                }
-                if let vehicleId = assignment.vehicleId, let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
-                    report.response?.unitNumber = vehicle.number
-                }
-            }
-            showReport(report)
-        }
+        showReport()
     }
 
     @objc func cancelPressed() {
-        dismissAnimated()
+
     }
 
     @objc func editPressed() {
@@ -70,8 +47,8 @@ class IncidentViewController: UIViewController {
         }
     }
 
-    func showReport(_ report: Report) {
-        self.report = report
+    func showReport() {
+        guard let report = report else { return }
 
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
         if let vc = vc as? ReportViewController {

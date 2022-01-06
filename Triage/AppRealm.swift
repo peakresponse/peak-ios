@@ -390,6 +390,48 @@ class AppRealm {
 
     // MARK: - Report
 
+    public static func getReports(incident: Incident, completionHandler: @escaping (Results<Report>?, Error?) -> Void) {
+        let task = ApiClient.shared.getReports(incidentId: incident.id) { (_, _, data, error) in
+            var objects: [Base] = []
+            var reportIds: [String] = []
+            for model in [
+                Response.self,
+                Scene.self,
+                Time.self,
+                Patient.self,
+                Situation.self,
+                History.self,
+                Disposition.self,
+                Narrative.self,
+                Medication.self,
+                Procedure.self,
+                Vital.self,
+                Report.self
+            ] {
+                if let records = data?[String(describing: model)] as? [[String: Any]] {
+                    objects.append(contentsOf: records.map { model.instantiate(from: $0) })
+                    if model == Report.self {
+                        reportIds.append(contentsOf: records.map { $0["id"] as! String })
+                    }
+                }
+            }
+            let realm = AppRealm.open()
+            try! realm.write {
+                realm.add(objects, update: .modified)
+            }
+            DispatchQueue.main.async {
+                if let error = error {
+                    completionHandler(nil, error)
+                } else {
+                    let realm = AppRealm.open()
+                    let results = realm.objects(Report.self).filter("id IN %@", reportIds)
+                    completionHandler(results, nil)
+                }
+            }
+        }
+        task.resume()
+    }
+
     public static func saveReport(report: Report) {
         let realm = AppRealm.open()
         try! realm.write {

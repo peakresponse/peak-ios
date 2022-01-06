@@ -12,7 +12,7 @@ import SwiftPath
 
 protocol NemsisBacked: AnyObject {
     var _data: Data? { get set }
-    var data: [String: Any] { get }
+    var data: [String: Any] { get set }
 
     func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool)
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue?
@@ -22,10 +22,15 @@ protocol NemsisBacked: AnyObject {
 
 extension NemsisBacked {
     var data: [String: Any] {
-        if let _data = _data {
-            return (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any]) ?? [:]
+        get {
+            if let _data = _data {
+                return (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any]) ?? [:]
+            }
+            return [:]
         }
-        return [:]
+        set {
+            _data = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+        }
     }
 
     func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool = false) {
