@@ -47,6 +47,42 @@ class Report: BaseVersioned, NemsisBacked {
         }
     }
 
+    convenience init(clone report: Report) {
+        self.init(value: report)
+        id = UUID().uuidString.lowercased()
+        parentId = report.id
+        if let scene = scene {
+            self.scene = Scene(clone: scene)
+        }
+        if let response = response {
+            self.response = Response(clone: response)
+        }
+        if let time = time {
+            self.time = Time(clone: time)
+        }
+        if let patient = patient {
+            self.patient = Patient(clone: patient)
+        }
+        if let situation = situation {
+            self.situation = Situation(clone: situation)
+        }
+        if let history = history {
+            self.history = History(clone: history)
+        }
+        if let disposition = disposition {
+            self.disposition = Disposition(clone: disposition)
+        }
+        if let narrative = narrative {
+            self.narrative = Narrative(clone: narrative)
+        }
+        vitals.removeAll()
+        vitals.append(objectsIn: report.vitals.map { Vital(clone: $0) })
+        medications.removeAll()
+        medications.append(objectsIn: report.medications.map { Medication(clone: $0) })
+        procedures.removeAll()
+        procedures.append(objectsIn: report.procedures.map { Procedure(clone: $0) })
+    }
+
     override func new() {
         super.new()
         patientCareReportNumber = canonicalId
@@ -123,19 +159,23 @@ class Report: BaseVersioned, NemsisBacked {
         return json
     }
 
-    func asJSONPayload() -> [String: Any] {
+    func asJSONPayload(changedFrom parent: Report?) -> [String: Any] {
         var payload: [String: Any] = [:]
-        payload["Response"] = response?.asJSON()
-        payload["Scene"] = scene?.asJSON()
-        payload["Time"] = time?.asJSON()
-        payload["Patient"] = patient?.asJSON()
-        payload["Situation"] = situation?.asJSON()
-        payload["History"] = history?.asJSON()
-        payload["Disposition"] = disposition?.asJSON()
-        payload["Narrative"] = narrative?.asJSON()
-        payload["Vital"] = Array(vitals.map { $0.asJSON() })
-        payload["Procedure"] = Array(procedures.map { $0.asJSON() })
-        payload["Report"] = asJSON()
+        if parent == nil {
+            payload["Response"] = response?.asJSON()
+            payload["Scene"] = scene?.asJSON()
+            payload["Time"] = time?.asJSON()
+            payload["Patient"] = patient?.asJSON()
+            payload["Situation"] = situation?.asJSON()
+            payload["History"] = history?.asJSON()
+            payload["Disposition"] = disposition?.asJSON()
+            payload["Narrative"] = narrative?.asJSON()
+            payload["Vital"] = Array(vitals.map { $0.asJSON() })
+            payload["Procedure"] = Array(procedures.map { $0.asJSON() })
+            payload["Report"] = asJSON()
+        } else {
+            
+        }
         return payload
     }
 }

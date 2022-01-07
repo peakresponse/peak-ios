@@ -434,10 +434,21 @@ class AppRealm {
 
     public static func saveReport(report: Report) {
         let realm = AppRealm.open()
+        var parent: Report?
         try! realm.write {
+            if report.realm == nil, let canonicalId = report.canonicalId {
+                let canonical = Report(clone: report)
+                canonical.id = canonicalId
+                canonical.canonicalId = nil
+                canonical.parentId = nil
+                realm.add(canonical, update: .modified)
+            }
+            if let parentId = report.parentId {
+                parent = realm.object(ofType: Report.self, forPrimaryKey: parentId)
+            }
             realm.add(report, update: .modified)
         }
-        let data = report.asJSONPayload()
+        let data = report.asJSONPayload(changedFrom: parent)
         let op = RequestOperation()
         op.queuePriority = .veryHigh
         op.request = { (completionHandler) in

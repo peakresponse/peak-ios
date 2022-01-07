@@ -29,4 +29,17 @@ class BaseTests: XCTestCase {
         XCTAssertEqual(copy.createdAt, base.createdAt)
         XCTAssertEqual(copy.updatedAt, base.updatedAt)
     }
+
+    func testCloneVersioned() {
+        let base = BaseVersioned()
+        base.createdAt = Date()
+        base.updatedAt = Date()
+
+        let copy = BaseVersioned(clone: base)
+        XCTAssertNotEqual(copy.id, base.id)
+        XCTAssertEqual(copy.parentId, base.id)
+        XCTAssertEqual(copy.canonicalId, base.canonicalId)
+        XCTAssertEqual(copy.createdAt, base.createdAt)
+        XCTAssertEqual(copy.updatedAt, base.updatedAt)
+    }
 }

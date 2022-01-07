@@ -10,7 +10,7 @@ import UIKit
 import PRKit
 
 protocol IncidentViewControllerDelegate: NSObject {
-    func incidentViewControllerDidCancel(_ vc: IncidentViewController)
+    func incidentViewControllerDidSave(_ vc: IncidentViewController)
 }
 
 class IncidentViewController: UIViewController {
@@ -22,6 +22,7 @@ class IncidentViewController: UIViewController {
     weak var delegate: IncidentViewControllerDelegate?
     var incident: Incident?
     var report: Report?
+    var leftBarButtonItem: UIBarButtonItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,17 +35,47 @@ class IncidentViewController: UIViewController {
     }
 
     @objc func cancelPressed() {
-
+        commandHeader.leftBarButtonItem = leftBarButtonItem
+        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(editPressed))
+        if let vc = children[0] as? ReportViewController {
+            vc.setEditing(false, animated: true)
+            vc.resetFormFields()
+            vc.scrollView.setContentOffset(.zero, animated: true)
+        }
     }
 
     @objc func editPressed() {
-
+        leftBarButtonItem = commandHeader.leftBarButtonItem
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                                          style: .plain,
+                                                           target: self,
+                                                           action: #selector(cancelPressed))
+        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
+                                                           style: .done,
+                                                           target: self,
+                                                           action: #selector(savePressed))
+        if let vc = children[0] as? ReportViewController {
+            vc.setEditing(true, animated: true)
+        }
     }
 
     @objc func savePressed() {
-        if let report = self.report {
-            AppRealm.saveReport(report: report)
+        if let vc = children[0] as? ReportViewController {
+            if let report = vc.newReport {
+                AppRealm.saveReport(report: report)
+            }
+            vc.setEditing(false, animated: true)
+            vc.scrollView.setContentOffset(.zero, animated: true)
         }
+        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
+                                                           style: .plain,
+                                                           target: self,
+                                                           action: #selector(editPressed))
+        segmentedControl.isHidden = false
+        delegate?.incidentViewControllerDidSave(self)
     }
 
     func showReport() {

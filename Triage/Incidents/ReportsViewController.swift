@@ -10,7 +10,7 @@ import UIKit
 import PRKit
 import RealmSwift
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate,
+class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -46,7 +46,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate,
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@", incident)
+            .filter("incident=%@ AND canonicalId=%@ AND parentId=%@", incident, NSNull(), NSNull())
             .sorted(by: [SortDescriptor(keyPath: "createdAt", ascending: true)])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
@@ -139,6 +139,15 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate,
         dismiss(animated: true) { [weak self] in
             self?.dismiss(animated: false)
         }
+    }
+
+    // MARK: - IncidentViewControllerDelegate
+
+    func incidentViewControllerDidSave(_ vc: IncidentViewController) {
+        vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
+                                                             style: .done,
+                                                             target: self,
+                                                             action: #selector(self.dismissAnimated))
     }
 
     // MARK: - UICollectionViewDataSource

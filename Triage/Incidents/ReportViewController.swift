@@ -249,16 +249,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
         containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
 
-        if isEditing {
-            setEditing(true, animated: false)
-        }
+        setEditing(isEditing, animated: false)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
             if report.realm != nil {
-                // clone
+                newReport = Report(clone: report)
             } else {
                 newReport = report
             }
@@ -301,6 +299,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 default:
                     break
                 }
+            }
+        }
+    }
+
+    func resetFormFields() {
+        for formField in formFields {
+            if let source = formField.source, let attributeKey = formField.attributeKey {
+                formField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
             }
         }
     }

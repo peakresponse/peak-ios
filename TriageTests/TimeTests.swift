@@ -19,6 +19,13 @@ class TimeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testClone() {
+        let time = Time.newRecord()
+        let clone = Time(clone: time)
+        XCTAssertEqual(clone.parentId, time.id)
+        XCTAssertEqual(clone.canonicalId, time.canonicalId)
+    }
+
     func testNemsisBackedProperties() {
         let time = Time.newRecord()
         let now = Date()

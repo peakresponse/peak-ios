@@ -37,4 +37,11 @@ class Response: BaseVersioned, NemsisBacked {
         json[Keys.data] = data
         return json
     }
+
+    override func update(from data: [String: Any]) {
+        super.update(from: data)
+        if data.index(forKey: Keys.data) != nil {
+            self.data = data[Keys.data] as? [String: Any] ?? [:]
+        }
+    }
 }

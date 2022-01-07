@@ -260,6 +260,9 @@
         <designable name="jui-7z-no6">
             <size key="intrinsicContentSize" width="414" height="126"/>
         </designable>
+        <designable name="ssB-kE-P5A">
+            <size key="intrinsicContentSize" width="414" height="128"/>
+        </designable>
     </designables>
     <resources>
         <namedColor name="Base800">

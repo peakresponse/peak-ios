@@ -26,8 +26,8 @@ class Base: Object {
         super.init()
     }
 
-    convenience init(clone: Any) {
-        self.init(value: clone)
+    convenience init(clone obj: Base) {
+        self.init(value: obj)
         id = UUID().uuidString.lowercased()
     }
 
@@ -68,6 +68,16 @@ class BaseVersioned: Base {
     @Persisted var currentId: String?
     @Persisted var parentId: String?
     @Persisted var secondParentId: String?
+
+    convenience init(clone obj: BaseVersioned) {
+        self.init(value: obj)
+        id = UUID().uuidString.lowercased()
+        if let currentId = obj.currentId {
+            parentId = currentId
+        } else {
+            parentId = obj.id
+        }
+    }
 
     static func newRecord() -> Self {
         let obj = self.init()
