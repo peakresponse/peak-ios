@@ -10,8 +10,10 @@ import CoreLocation
 import Foundation
 import RealmSwift
 
-class Scene: BaseVersioned {
+class Scene: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let data = "data"
+        static let dataPatch = "data_patch"
         static let name = "name"
         static let desc = "desc"
         static let urgency = "urgency"
@@ -34,7 +36,7 @@ class Scene: BaseVersioned {
         static let incidentCommanderAgencyId = "incidentCommanderAgencyId"
         static let closedAt = "closedAt"
     }
-
+    @Persisted var _data: Data?
     @Persisted var name: String?
     @Persisted var desc: String?
     @Persisted var urgency: String?
@@ -119,6 +121,7 @@ class Scene: BaseVersioned {
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        self.data = data[Keys.data] as? [String: Any] ?? [:]
         name = data[Keys.name] as? String
         desc = data[Keys.desc] as? String
         urgency = data[Keys.urgency] as? String
@@ -145,6 +148,7 @@ class Scene: BaseVersioned {
     // swiftlint:disable:next cyclomatic_complexity
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        data[Keys.data] = self.data
         if let value = name {
             data[Keys.name] = value
         }
@@ -184,5 +188,16 @@ class Scene: BaseVersioned {
             data[Keys.zip] = value
         }
         return data
+    }
+
+    override func changes(from source: BaseVersioned?) -> [String: Any]? {
+        guard let source = source as? Scene else { return nil }
+        if let dataPatch = self.dataPatch(from: source) {
+            var json = asJSON()
+            json.removeValue(forKey: Keys.data)
+            json[Keys.dataPatch] = dataPatch
+            return json
+        }
+        return nil
     }
 }

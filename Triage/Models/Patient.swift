@@ -129,8 +129,10 @@ enum PatientTriageMentalStatus: String, CaseIterable, CustomStringConvertible {
 }
 
 // swiftlint:disable:next type_body_length
-class Patient: BaseVersioned {
+class Patient: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let data = "data"
+        static let dataPatch = "data_patch"
         static let sceneId = "sceneId"
         static let pin = "pin"
         static let version = "version"
@@ -170,19 +172,41 @@ class Patient: BaseVersioned {
         static let transportFacilityId = "transportFacilityId"
         static let predictions = "predictions"
     }
+    @Persisted var _data: Data?
 
     @Persisted var sceneId: String?
     @Persisted var pin: String?
 
     @Persisted var version: Int?
 
-    @Persisted var lastName: String?
-    @Persisted var firstName: String?
+    @objc var lastName: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.PatientNameGroup/ePatient.02")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.PatientNameGroup/ePatient.02")
+        }
+    }
+    @objc var firstName: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.PatientNameGroup/ePatient.03")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.PatientNameGroup/ePatient.03")
+        }
+    }
     var fullName: String {
         return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
-    @Persisted var gender: String?
+    @objc var gender: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.13")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.13")
+        }
+    }
     @objc var genderString: String {
         if let value = gender {
             return PatientGender(rawValue: value)?.description ?? ""
@@ -190,8 +214,22 @@ class Patient: BaseVersioned {
         return ""
     }
 
-    @Persisted var age: Int?
-    @Persisted var ageUnits: String?
+    @objc var age: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.AgeGroup/ePatient.15")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.AgeGroup/ePatient.15")
+        }
+    }
+    @objc var ageUnits: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.AgeGroup/ePatient.16")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.AgeGroup/ePatient.16")
+        }
+    }
     @objc var ageString: String {
         if let value = age {
             return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")"
@@ -206,7 +244,15 @@ class Patient: BaseVersioned {
         }
         return ""
     }
-    @Persisted var dob: String?
+
+    @objc var dob: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/ePatient.17")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/ePatient.17")
+        }
+    }
 
     @Persisted var complaint: String?
 
@@ -396,18 +442,13 @@ class Patient: BaseVersioned {
 
     // swiftlint:disable:next cyclomatic_complexity
     override func setValue(_ value: Any?, forKey key: String) {
-        if [Keys.age, Keys.bpDiastolic, Keys.bpSystolic, Keys.capillaryRefill, Keys.gcsTotal,
+        if [Keys.bpDiastolic, Keys.bpSystolic, Keys.capillaryRefill, Keys.gcsTotal,
             Keys.priority, Keys.pulse, Keys.respiratoryRate].contains(key) {
             var value = value
             if let valueString = value as? String {
                 value = Int(valueString)
             }
             switch key {
-            case Keys.age:
-                age = value as? Int
-                if ageUnits == nil {
-                    ageUnits = PatientAgeUnits.years.rawValue
-                }
             case Keys.bpDiastolic:
                 bpDiastolic = value as? Int
             case Keys.bpSystolic:
@@ -429,12 +470,18 @@ class Patient: BaseVersioned {
             }
             return
         }
+        if key == Keys.age, ageUnits == nil {
+            ageUnits = PatientAgeUnits.years.rawValue
+        }
         super.setValue(value, forKey: key)
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        if data.index(forKey: Keys.data) != nil {
+            self.data = data[Keys.data] as? [String: Any] ?? [:]
+        }
         if data.index(forKey: Keys.sceneId) != nil {
             sceneId = data[Keys.sceneId] as? String
         }
@@ -454,7 +501,7 @@ class Patient: BaseVersioned {
             gender = data[Keys.gender] as? String
         }
         if data.index(forKey: Keys.age) != nil {
-            age = data[Keys.age] as? Int
+            age = "\(data[Keys.age] as? Int ?? 0)"
         }
         if data.index(forKey: Keys.ageUnits) != nil {
             ageUnits = data[Keys.ageUnits] as? String
@@ -553,6 +600,7 @@ class Patient: BaseVersioned {
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        data[Keys.data] = self.data
         if let value = sceneId {
             data[Keys.sceneId] = value
         }
@@ -571,8 +619,8 @@ class Patient: BaseVersioned {
         if let value = gender {
             data[Keys.gender] = value
         }
-        if let value = age {
-            data[Keys.age] = value
+        if let value = age, let ageNumber = Int(value) {
+            data[Keys.age] = ageNumber
         }
         if let value = ageUnits {
             data[Keys.ageUnits] = value
@@ -659,6 +707,17 @@ class Patient: BaseVersioned {
             data[Keys.predictions] = predictions
         }
         return data
+    }
+
+    override func changes(from source: BaseVersioned?) -> [String: Any]? {
+        guard let source = source as? Patient else { return nil }
+        if let dataPatch = self.dataPatch(from: source) {
+            var json = asJSON()
+            json.removeValue(forKey: Keys.data)
+            json[Keys.dataPatch] = dataPatch
+            return json
+        }
+        return nil
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length

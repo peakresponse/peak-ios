@@ -113,4 +113,8 @@ class BaseVersioned: Base {
         }
         return data
     }
+
+    func changes(from source: BaseVersioned?) -> [String: Any]? {
+        return nil
+    }
 }

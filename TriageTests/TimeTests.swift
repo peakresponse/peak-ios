@@ -26,6 +26,27 @@ class TimeTests: XCTestCase {
         XCTAssertEqual(clone.canonicalId, time.canonicalId)
     }
 
+    func testChanges() {
+        let time = Time.newRecord()
+        XCTAssertNil(time.changes(from: time))
+
+        let clone = Time(clone: time)
+        let now = Date()
+        clone.unitNotifiedByDispatch = now
+        let changes = clone.changes(from: time)
+        let patch = changes?["data_patch"] as? [[String: Any]]
+        XCTAssertNotNil(patch)
+        XCTAssertEqual(patch?.count, 1)
+        XCTAssertEqual(patch?[0]["op"] as? String, "add")
+        XCTAssertEqual(patch?[0]["path"] as? String, "/eTimes")
+        XCTAssertEqual((patch?[0]["value"] as? [String: Any])?["eTimes.03"] as? [String: String], [
+            "_text": now.asISO8601String()
+        ])
+
+        let newClone = Time(clone: clone)
+        XCTAssertNil(newClone.changes(from: clone))
+    }
+
     func testNemsisBackedProperties() {
         let time = Time.newRecord()
         let now = Date()

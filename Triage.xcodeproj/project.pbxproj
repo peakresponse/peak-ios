@@ -105,6 +105,7 @@
 		458CA0CC277293580065F324 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CB277293580065F324 /* FormViewController.swift */; };
 		458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CE278527FC0065F324 /* ReportsViewController.swift */; };
 		458CA0D1278673C70065F324 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */; };
+		458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D42788EBD90065F324 /* ReportTests.swift */; };
 		458D1C8924283672003C7C85 /* DropdownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458D1C8824283672003C7C85 /* DropdownButton.swift */; };
 		45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FDE254C8241002E03E7 /* NewScenePinView.swift */; };
 		45917FE4254C8A4D002E03E7 /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FE3254C8A4D002E03E7 /* IconButton.swift */; };
@@ -303,6 +304,7 @@
 		458CA0CB277293580065F324 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		458CA0CE278527FC0065F324 /* ReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewController.swift; sourceTree = "<group>"; };
 		458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCollectionViewCell.swift; sourceTree = "<group>"; };
+		458CA0D42788EBD90065F324 /* ReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTests.swift; sourceTree = "<group>"; };
 		458D1C8824283672003C7C85 /* DropdownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownButton.swift; sourceTree = "<group>"; };
 		45917FDE254C8241002E03E7 /* NewScenePinView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewScenePinView.swift; sourceTree = "<group>"; };
 		45917FE3254C8A4D002E03E7 /* IconButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
@@ -511,6 +513,7 @@
 		4566F035236CCC5700A04C75 /* TriageTests */ = {
 			isa = PBXGroup;
 			children = (
+				458CA0D42788EBD90065F324 /* ReportTests.swift */,
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */,
 				4566F06A236CE8A800A04C75 /* PatientTests.swift */,
@@ -1189,6 +1192,7 @@
 				45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */,
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
+				458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */,
 				458CA0BE2767F0B30065F324 /* NemsisValueTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,
 			);

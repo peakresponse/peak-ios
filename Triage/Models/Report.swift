@@ -159,7 +159,32 @@ class Report: BaseVersioned, NemsisBacked {
         return json
     }
 
-    func asJSONPayload(changedFrom parent: Report?) -> [String: Any] {
+    static func canonicalize<T: BaseVersioned>(source: List<T>?, target: List<T>) -> ([String], [[String: Any]]) {
+        var ids: [String] = []
+        var data: [[String: Any]] = []
+        var objs: [T] = []
+        for obj in target {
+            if let parent = source?.first(where: { $0.id == obj.parentId }) {
+                if let changes = obj.changes(from: parent) {
+                    ids.append(obj.id)
+                    data.append(changes)
+                    objs.append(obj)
+                } else {
+                    ids.append(parent.id)
+                    objs.append(parent)
+                }
+            } else {
+                ids.append(obj.id)
+                data.append(obj.asJSON())
+                objs.append(obj)
+            }
+        }
+        target.removeAll()
+        target.append(objectsIn: objs)
+        return (ids, data)
+    }
+
+    func canonicalize(from parent: Report?) -> [String: Any] {
         var payload: [String: Any] = [:]
         if parent == nil {
             payload["Response"] = response?.asJSON()
@@ -174,7 +199,88 @@ class Report: BaseVersioned, NemsisBacked {
             payload["Procedure"] = Array(procedures.map { $0.asJSON() })
             payload["Report"] = asJSON()
         } else {
-            
+            var report = asJSON()
+            if let changes = response?.changes(from: parent?.response) {
+                payload["Response"] = changes
+            } else {
+                report.removeValue(forKey: Keys.responseId)
+                response = parent?.response
+            }
+
+            if let changes = scene?.changes(from: parent?.scene) {
+                payload["Scene"] = changes
+            } else {
+                report.removeValue(forKey: Keys.sceneId)
+                scene = parent?.scene
+            }
+
+            if let changes = time?.changes(from: parent?.time) {
+                payload["Time"] = changes
+            } else {
+                report.removeValue(forKey: Keys.timeId)
+                time = parent?.time
+            }
+
+            if let changes = patient?.changes(from: parent?.patient) {
+                payload["Patient"] = changes
+            } else {
+                report.removeValue(forKey: Keys.patientId)
+                patient = parent?.patient
+            }
+
+            if let changes = situation?.changes(from: parent?.situation) {
+                payload["Situation"] = changes
+            } else {
+                report.removeValue(forKey: Keys.situationId)
+                situation = parent?.situation
+            }
+
+            if let changes = history?.changes(from: parent?.history) {
+                payload["History"] = changes
+            } else {
+                report.removeValue(forKey: Keys.historyId)
+                history = parent?.history
+            }
+
+            if let changes = disposition?.changes(from: parent?.disposition) {
+                payload["Disposition"] = changes
+            } else {
+                report.removeValue(forKey: Keys.dispositionId)
+                disposition = parent?.disposition
+            }
+
+            if let changes = narrative?.changes(from: parent?.narrative) {
+                payload["Narrative"] = changes
+            } else {
+                report.removeValue(forKey: Keys.narrativeId)
+                narrative = parent?.narrative
+            }
+
+            var (ids, data) = Report.canonicalize(source: parent?.vitals, target: vitals)
+            if data.count > 0 {
+                payload["Vital"] = data
+                report["vitalIds"] = ids
+            } else {
+                report.removeValue(forKey: "vitalIds")
+            }
+
+            (ids, data) = Report.canonicalize(source: parent?.procedures, target: procedures)
+            if data.count > 0 {
+                payload["Procedure"] = data
+                report["procedureIds"] = ids
+            } else {
+                report.removeValue(forKey: "procedureIds")
+            }
+
+            (ids, data) = Report.canonicalize(source: parent?.medications, target: medications)
+            if data.count > 0 {
+                payload["Medication"] = data
+                report["medicationIds"] = ids
+            } else {
+                report.removeValue(forKey: "medicationIds")
+            }
+
+            payload["Report"] = report
         }
         return payload
     }

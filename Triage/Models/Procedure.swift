@@ -22,6 +22,7 @@ enum ProcedureResponse: String, StringCaseIterable {
 class Procedure: BaseVersioned, NemsisBacked {
     struct Keys {
         static let data = "data"
+        static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
 
@@ -63,5 +64,16 @@ class Procedure: BaseVersioned, NemsisBacked {
         if data.index(forKey: Keys.data) != nil {
             self.data = data[Keys.data] as? [String: Any] ?? [:]
         }
+    }
+
+    override func changes(from source: BaseVersioned?) -> [String: Any]? {
+        guard let source = source as? Procedure else { return nil }
+        if let dataPatch = self.dataPatch(from: source) {
+            var json = asJSON()
+            json.removeValue(forKey: Keys.data)
+            json[Keys.dataPatch] = dataPatch
+            return json
+        }
+        return nil
     }
 }

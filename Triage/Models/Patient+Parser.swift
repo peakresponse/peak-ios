@@ -32,17 +32,17 @@ private struct Matcher {
 private let PATTERN_NUMBERS = #"\d+|one|to|too|two|three|four|five|six|seven|eight|nine"#
 
 private let MAPPINGS_NUMBERS: [String: Any] = [
-    "one": 1,
-    "to": 2,
-    "too": 2,
-    "two": 2,
-    "three": 3,
-    "four": 4,
-    "five": 5,
-    "six": 6,
-    "seven": 7,
-    "eight": 8,
-    "nine": 9
+    "one": "1",
+    "to": "2",
+    "too": "2",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9"
 ]
 
 private let MAPPINGS_AGE_UNITS: [String: Any] = [

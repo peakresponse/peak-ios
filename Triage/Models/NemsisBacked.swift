@@ -14,6 +14,7 @@ protocol NemsisBacked: AnyObject {
     var _data: Data? { get set }
     var data: [String: Any] { get set }
 
+    func dataPatch(from source: NemsisBacked) -> NSArray?
     func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool)
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue?
     func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String)
@@ -31,6 +32,17 @@ extension NemsisBacked {
         set {
             _data = try? JSONSerialization.data(withJSONObject: newValue, options: [])
         }
+    }
+
+    func dataPatch(from source: NemsisBacked) -> NSArray? {
+        if let patch = try? JSONPatch(source: source._data ?? "{}".data(using: .utf8)!,
+                                      target: _data ?? "{}".data(using: .utf8)!) {
+            let jsonArray = patch.jsonArray
+            if jsonArray.count > 0 {
+                return jsonArray
+            }
+        }
+        return nil
     }
 
     func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool = false) {
