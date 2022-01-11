@@ -392,7 +392,7 @@ class AppRealm {
 
     public static func getReports(incident: Incident, completionHandler: @escaping (Results<Report>?, Error?) -> Void) {
         let task = ApiClient.shared.getReports(incidentId: incident.id) { (_, _, data, error) in
-            var objects: [Base] = []
+            var dependencies: [Base] = []
             var reportIds: [String] = []
             for model in [
                 Response.self,
@@ -405,19 +405,19 @@ class AppRealm {
                 Narrative.self,
                 Medication.self,
                 Procedure.self,
-                Vital.self,
-                Report.self
+                Vital.self
             ] {
                 if let records = data?[String(describing: model)] as? [[String: Any]] {
-                    objects.append(contentsOf: records.map { model.instantiate(from: $0) })
-                    if model == Report.self {
-                        reportIds.append(contentsOf: records.map { $0["id"] as! String })
-                    }
+                    dependencies.append(contentsOf: records.map { model.instantiate(from: $0) })
                 }
             }
             let realm = AppRealm.open()
             try! realm.write {
-                realm.add(objects, update: .modified)
+                realm.add(dependencies, update: .modified)
+                if let records = data?["Report"] as? [[String: Any]] {
+                    reportIds.append(contentsOf: records.map { $0["id"] as! String })
+                    realm.add(records.map { Report.instantiate(from: $0) }, update: .modified)
+                }
             }
             DispatchQueue.main.async {
                 if let error = error {

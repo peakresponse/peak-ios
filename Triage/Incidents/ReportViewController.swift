@@ -45,15 +45,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        scene = report.scene
-        time = report.time
-        response = report.response
-        narrative = report.narrative
-        disposition = report.disposition
-        patient = report.patient
+        scene = report.scene ?? Scene.newRecord()
+        time = report.time ?? Time.newRecord()
+        response = report.response ?? Response.newRecord()
+        narrative = report.narrative ?? Narrative.newRecord()
+        disposition = report.disposition ?? Disposition.newRecord()
+        patient = report.patient ?? Patient.newRecord()
+        situation = report.situation ?? Situation.newRecord()
+        history = report.history ?? History.newRecord()
         vitals = report.vitals
-        situation = report.situation
-        history = report.history
         procedures = report.procedures
 
         if traitCollection.horizontalSizeClass == .regular {

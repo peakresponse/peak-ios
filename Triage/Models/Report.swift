@@ -59,27 +59,43 @@ class Report: BaseVersioned, NemsisBacked {
         }
         if let scene = scene {
             self.scene = Scene(clone: scene)
+        } else {
+            scene = Scene.newRecord()
         }
         if let response = response {
             self.response = Response(clone: response)
+        } else {
+            response = Response.newRecord()
         }
         if let time = time {
             self.time = Time(clone: time)
+        } else {
+            time = Time.newRecord()
         }
         if let patient = patient {
             self.patient = Patient(clone: patient)
+        } else {
+            patient = Patient.newRecord()
         }
         if let situation = situation {
             self.situation = Situation(clone: situation)
+        } else {
+            situation = Situation.newRecord()
         }
         if let history = history {
             self.history = History(clone: history)
+        } else {
+            history = History.newRecord()
         }
         if let disposition = disposition {
             self.disposition = Disposition(clone: disposition)
+        } else {
+            disposition = Disposition.newRecord()
         }
         if let narrative = narrative {
             self.narrative = Narrative(clone: narrative)
+        } else {
+            narrative = Narrative.newRecord()
         }
         vitals.removeAll()
         vitals.append(objectsIn: report.vitals.map { Vital(clone: $0) })
