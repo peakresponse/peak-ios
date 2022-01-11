@@ -72,8 +72,10 @@ class BaseVersioned: Base {
     convenience init(clone obj: BaseVersioned) {
         self.init(value: obj)
         id = UUID().uuidString.lowercased()
-        if let currentId = obj.currentId {
+        if currentId != nil {
+            canonicalId = obj.id
             parentId = currentId
+            currentId = nil
         } else {
             parentId = obj.id
         }

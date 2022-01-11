@@ -182,6 +182,7 @@
 
 "Patient.dob" = "Date of Birth";
 "Patient.age" = "Age";
+"Patient.ageArray" = "Age";
 "Patient.bloodPressure" = "Blood Pressure";
 "Patient.capillaryRefill" = "Capillary Refill";
 "Patient.complaint" = "Chief Complaint";

@@ -6,6 +6,7 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import PRKit
 import UIKit
 
 class ReportCollectionViewCell: UICollectionViewCell {
@@ -38,8 +39,19 @@ class ReportCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
+        ])
+
+        let chevronImageView = UIImageView()
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
+        chevronImageView.tintColor = .base500
+        contentView.addSubview(chevronImageView)
+        NSLayoutConstraint.activate([
+            chevronImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            chevronImageView.widthAnchor.constraint(equalToConstant: 40),
+            stackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor)
         ])
 
         let ageLabel = UILabel()

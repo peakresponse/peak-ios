@@ -68,7 +68,7 @@ class PatientTests: XCTestCase {
         XCTAssertEqual(patient?.version, 3)
         XCTAssertEqual(patient?.lastName, "Thomas")
         XCTAssertEqual(patient?.firstName, "Mary")
-        XCTAssertEqual(patient?.age, "23")
+        XCTAssertEqual(patient?.age, 23)
         XCTAssertEqual(patient?.ageUnits, PatientAgeUnits.years.rawValue)
         XCTAssertNil(patient?.dob)
         XCTAssertEqual(patient?.gender, PatientGender.female.rawValue)
@@ -226,7 +226,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.age, "28", "age failed for: \(sample)")
+            XCTAssertEqual(observation.age, 28, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
             XCTAssertEqual(observation.complaint, "")
         }
@@ -240,7 +240,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.age, "2", "age failed for: \(sample)")
+            XCTAssertEqual(observation.age, 2, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
         }
     }

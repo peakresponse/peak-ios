@@ -50,7 +50,13 @@ class Report: BaseVersioned, NemsisBacked {
     convenience init(clone report: Report) {
         self.init(value: report)
         id = UUID().uuidString.lowercased()
-        parentId = report.id
+        if currentId != nil {
+            canonicalId = report.id
+            parentId = currentId
+            currentId = nil
+        } else {
+            parentId = report.id
+        }
         if let scene = scene {
             self.scene = Scene(clone: scene)
         }

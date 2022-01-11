@@ -112,24 +112,23 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentVi
     func presentReport(report: Report, animated: Bool = true, completion: (() -> Void)? = nil) {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Incident")
         if let vc = vc as? IncidentViewController {
+            vc.delegate = self
             vc.incident = incident
             vc.report = report
-        }
-        present(vc, animated: animated) { [weak self] in
-            guard let self = self else { return }
-            if let vc = vc as? IncidentViewController {
-                if report.realm == nil {
-                    vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
-                                                                         style: .plain,
-                                                                         target: self,
-                                                                         action: #selector(self.newReportCancelled))
-                } else {
-                    vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
-                                                                         style: .done,
-                                                                         target: self,
-                                                                         action: #selector(self.dismissAnimated))
-                }
+            _ = vc.view
+            if report.realm == nil {
+                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                                                     style: .plain,
+                                                                     target: self,
+                                                                     action: #selector(newReportCancelled))
+            } else {
+                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
+                                                                     style: .done,
+                                                                     target: self,
+                                                                     action: #selector(dismissAnimated))
             }
+        }
+        present(vc, animated: animated) {
             completion?()
         }
     }

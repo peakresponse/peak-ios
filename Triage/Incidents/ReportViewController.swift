@@ -108,7 +108,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: patient, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
         var innerCols = newColumns()
         addTextField(source: patient,
-                     attributeKey: "age",
+                     attributeKey: "ageArray",
                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
                      tag: &tag, to: innerCols)
         addTextField(source: patient,
