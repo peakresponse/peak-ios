@@ -207,6 +207,9 @@ class Patient: BaseVersioned {
             if let newValue = newValue as? [String], newValue.count == 2 {
                 self.age = Int(newValue[0])
                 self.ageUnits = newValue[1]
+            } else {
+                self.age = nil
+                self.ageUnits = nil
             }
         }
     }

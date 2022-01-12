@@ -442,7 +442,7 @@ class AppRealm {
         try! realm.write {
             realm.add(report, update: .modified)
             if let canonicalId = report.canonicalId {
-                let canonical = Report(clone: report)
+                let canonical = Report(value: report)
                 canonical.id = canonicalId
                 canonical.canonicalId = nil
                 canonical.parentId = nil
