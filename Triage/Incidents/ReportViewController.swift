@@ -85,7 +85,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: narrative, attributeKey: "text", tag: &tag, to: colA)
         addTextField(source: disposition,
                      attributeKey: "unitDisposition",
-                     attributeType: .picker(EnumKeyboardSource<UnitDisposition>()),
+                     attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
                      tag: &tag, to: colB)
 
         var header = newHeader("ReportViewController.patientInformation".localized,
@@ -113,7 +113,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      tag: &tag, to: innerCols)
         addTextField(source: patient,
                      attributeKey: "gender",
-                     attributeType: .picker(EnumKeyboardSource<PatientGender>()),
+                     attributeType: .single(EnumKeyboardSource<PatientGender>()),
                      tag: &tag, to: innerCols)
         colB.addArrangedSubview(innerCols)
 //        innerCols = newColumns()
@@ -238,11 +238,17 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                             field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false,
                             negatives: [
                                 .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
-                            ])),
+                            ],
+                            isNegativeExclusive: false)),
                          tag: &tag, to: colA)
             addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "responseToProcedure",
-                         attributeType: .picker(EnumKeyboardSource<ProcedureResponse>()),
+                         attributeType: .custom(NemsisComboKeyboard(
+                            source: EnumKeyboardSource<ProcedureResponse>(),
+                            isMultiSelect: false,
+                            negatives: [
+                                .notApplicable
+                            ])),
                          tag: &tag, to: colA)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))

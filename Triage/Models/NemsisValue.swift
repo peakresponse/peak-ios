@@ -87,6 +87,9 @@ class NemsisValue: NSObject {
     var NegativeValue: NemsisNegative? {
         set {
             if let newValue = newValue {
+                if attributes == nil {
+                    attributes = [:]
+                }
                 if newValue.isNotValue {
                     isNil = true
                     attributes?["NV"] = newValue.rawValue

@@ -178,6 +178,7 @@ class Report: BaseVersioned, NemsisBacked {
         json[Keys.narrativeId] = narrative?.id
         json[Keys.vitalIds] = Array(vitals.map { $0.id })
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
+        json[Keys.medicationIds] = Array(medications.map { $0.id })
         return json
     }
 
@@ -219,6 +220,7 @@ class Report: BaseVersioned, NemsisBacked {
             payload["Narrative"] = narrative?.asJSON()
             payload["Vital"] = Array(vitals.map { $0.asJSON() })
             payload["Procedure"] = Array(procedures.map { $0.asJSON() })
+            payload["Medication"] = Array(medications.map { $0.asJSON() })
             payload["Report"] = asJSON()
         } else {
             var report = asJSON()

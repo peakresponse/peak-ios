@@ -9,10 +9,7 @@
 import Foundation
 import PRKit
 
-class NemsisNegativeKeyboard: PickerKeyboard, KeyboardSource {
-    var name: String {
-        return "NemsisNegativeKeyboard.title".localized
-    }
+class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
     var negatives: [NemsisNegative]
 
     init(negatives: [NemsisNegative]) {
@@ -27,15 +24,18 @@ class NemsisNegativeKeyboard: PickerKeyboard, KeyboardSource {
         source = self
     }
 
+    // MARK: - KeyboardSource
+
+    var name: String {
+        return "NemsisNegativeKeyboard.title".localized
+    }
+
     func count() -> Int {
-        return negatives.count + 1
+        return negatives.count
     }
 
     func firstIndex(of value: String) -> Int? {
-        if let index = negatives.firstIndex(where: { $0.rawValue == value }) {
-            return index + 1
-        }
-        return nil
+        return negatives.firstIndex(where: { $0.rawValue == value })
     }
 
     func search(_ query: String?) {
@@ -43,23 +43,14 @@ class NemsisNegativeKeyboard: PickerKeyboard, KeyboardSource {
     }
 
     func title(for value: String?) -> String? {
-        if value == nil {
-            return ""
-        }
         return negatives.first(where: {$0.rawValue == value})?.description
     }
 
     func title(at index: Int) -> String? {
-        if index == 0 {
-            return ""
-        }
-        return negatives[index - 1].description
+        return negatives[index].description
     }
 
     func value(at index: Int) -> String? {
-        if index == 0 {
-            return nil
-        }
-        return negatives[index - 1].rawValue
+        return negatives[index].rawValue
     }
 }

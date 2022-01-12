@@ -10,7 +10,20 @@ import Foundation
 import PRKit
 
 class NemsisComboKeyboard: ComboKeyboard {
-    init(field: String, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative]) {
+    var isNegativeExclusive = true
+
+    init(source: KeyboardSource, isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
+        super.init(keyboards: [
+            SelectKeyboard(source: source, isMultiSelect: isMultiSelect),
+            NemsisNegativeKeyboard(negatives: negatives)
+        ], titles: [
+            "NemsisKeyboard.title".localized,
+            "NemsisNegativeKeyboard.title".localized
+        ])
+        self.isNegativeExclusive = isNegativeExclusive
+    }
+
+    init(field: String, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
         super.init(keyboards: [
             NemsisKeyboard(field: field, sources: sources, isMultiSelect: isMultiSelect),
             NemsisNegativeKeyboard(negatives: negatives)
@@ -18,6 +31,7 @@ class NemsisComboKeyboard: ComboKeyboard {
             "NemsisKeyboard.title".localized,
             "NemsisNegativeKeyboard.title".localized
         ])
+        self.isNegativeExclusive = isNegativeExclusive
     }
 
     required init?(coder: NSCoder) {
@@ -43,10 +57,14 @@ class NemsisComboKeyboard: ComboKeyboard {
     override func formInputView(_ inputView: FormInputView, didChange value: AnyObject?) {
         if let index = keyboards.firstIndex(of: inputView) {
             if values[index] !== value {
-                for i in 0..<values.count {
-                    if i != index {
-                        values[i] = nil
-                        keyboards[i].setValue(nil)
+                if isNegativeExclusive
+                    || (index == 0 && (NemsisNegative(rawValue: values[1] as? String ?? "")?.isNotValue ?? false))
+                    || (index == 1 && (NemsisNegative(rawValue: value as? String ?? "")?.isNotValue ?? false)) {
+                    for i in 0..<values.count {
+                        if i != index {
+                            values[i] = nil
+                            keyboards[i].setValue(nil)
+                        }
                     }
                 }
                 values[index] = value
