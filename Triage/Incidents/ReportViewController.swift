@@ -140,30 +140,41 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: situation,
                      attributeKey: "primarySymptom",
                      attributeType: .custom(NemsisComboKeyboard(
-                        field: "eSituation.09", sources: [ICD10CMKeyboardSource()], isMultiSelect: false,
+                        field: "eSituation.09",
+                        sources: [ICD10CMKeyboardSource()],
+                        isMultiSelect: false,
                         negatives: [.notApplicable])),
                      tag: &tag, to: colB)
         addTextField(source: situation,
                      attributeKey: "otherAssociatedSymptoms",
                      attributeType: .custom(NemsisComboKeyboard(
-                        field: "eSituation.10", sources: [ICD10CMKeyboardSource()], isMultiSelect: true,
+                        field: "eSituation.10",
+                        sources: [ICD10CMKeyboardSource()],
+                        isMultiSelect: true,
                         negatives: [.notApplicable])),
                      tag: &tag, to: colB)
         addTextField(source: history,
                      attributeKey: "medicalSurgicalHistory",
                      attributeType: .custom(NemsisComboKeyboard(
-                        field: "eHistory.08", sources: [ICD10CMKeyboardSource()], isMultiSelect: true,
+                        field: "eHistory.08",
+                        sources: [ICD10CMKeyboardSource()],
+                        isMultiSelect: true,
                         negatives: [.notApplicable, .noneReported, .refused, .unabletoComplete, .unresponsive])),
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "medicationAllergies",
                      attributeType: .custom(NemsisComboKeyboard(
-                        field: "eHistory.06", sources: [RxNormKeyboardSource()], isMultiSelect: true,
+                        field: "eHistory.06",
+                        sources: [RxNormKeyboardSource()],
+                        isMultiSelect: true,
                         negatives: [.notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete])),
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "environmentalFoodAllergies",
-                     attributeType: .custom(NemsisKeyboard(field: "eHistory.07", sources: [SNOMEDKeyboardSource()], isMultiSelect: true)),
+                     attributeType: .custom(NemsisKeyboard(
+                        field: "eHistory.07",
+                        sources: [SNOMEDKeyboardSource()],
+                        isMultiSelect: true)),
                      tag: &tag, to: colB)
 
         for (i, vital) in vitals.enumerated() {
@@ -238,7 +249,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "procedure",
                          attributeType: .custom(NemsisComboKeyboard(
-                            field: "eProcedures.03", sources: [SNOMEDKeyboardSource()], isMultiSelect: false,
+                            field: "eProcedures.03",
+                            sources: [SNOMEDKeyboardSource()],
+                            isMultiSelect: false,
                             negatives: [
                                 .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
                             ],

@@ -95,6 +95,9 @@ class NemsisValue: NSObject {
                     attributes?["NV"] = newValue.rawValue
                     attributes?.removeValue(forKey: "PN")
                 } else if newValue.isPertinentNegative {
+                    if text == nil {
+                        attributes?["xsi:nil"] = "true"
+                    }
                     attributes?["PN"] = newValue.rawValue
                     attributes?.removeValue(forKey: "NV")
                 }
@@ -111,7 +114,7 @@ class NemsisValue: NSObject {
         isNil = true
     }
 
-    init(text: String?, negativeValue: String? = nil) {
+    init(text: String? = nil, negativeValue: String? = nil) {
         super.init()
         self.text = text
         self.negativeValue = negativeValue

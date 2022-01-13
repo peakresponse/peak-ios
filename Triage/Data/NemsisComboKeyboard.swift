@@ -25,7 +25,7 @@ class NemsisComboKeyboard: ComboKeyboard {
         self.isNegativeExclusive = isNegativeExclusive
     }
 
-    init(field: String, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
+    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
         super.init(keyboards: [
             NemsisKeyboard(field: field, sources: sources, isMultiSelect: isMultiSelect),
             NemsisNegativeKeyboard(negatives: negatives)
@@ -41,28 +41,54 @@ class NemsisComboKeyboard: ComboKeyboard {
         super.init(coder: coder)
     }
 
-    override func setValue(_ value: NSObject?) {
+    func transformValue(_ value: NSObject?) -> NSObject? {
         if let value = value as? NemsisValue {
-            super.setValue([value.text, value.negativeValue] as NSObject?)
+            if value.isNil && value.NegativeValue != nil {
+                return [nil, value] as NSObject
+            } else if (keyboards[0] as? NemsisKeyboard) != nil {
+                if isMultiSelect {
+                    return [[value], nil] as NSObject
+                } else {
+                    return [value, nil] as NSObject
+                }
+            } else if isMultiSelect {
+                return [[value.text], nil] as NSObject
+            } else {
+                return [value.text, nil] as NSObject
+            }
+        } else if let values = value as? [NemsisValue] {
+            if values.count == 0 {
+                return [nil, nil] as NSObject
+            } else if values.count == 1 {
+                return values[0]
+            } else {
+                return [values, nil] as NSObject
+            }
+        }
+        return nil
+    }
+
+    override func setValue(_ value: NSObject?) {
+        if let value = transformValue(value) {
+            self.setValue(value)
         } else {
             super.setValue(value)
         }
     }
 
     override func text(for value: NSObject?) -> String? {
-        if let value = value as? NemsisValue {
-            return super.text(for: [value.text, value.negativeValue] as NSObject?)
-        } else {
-            return super.text(for: value)
+        if let value = transformValue(value) {
+            return self.text(for: value)
         }
+        return super.text(for: value)
     }
 
     override func formInputView(_ inputView: FormInputView, didChange value: NSObject?) {
         if let index = keyboards.firstIndex(of: inputView) {
-            if values[index] !== value {
+            if values[index] != value {
                 if isNegativeExclusive
-                    || (index == 0 && (NemsisNegative(rawValue: values[1] as? String ?? "")?.isNotValue ?? false))
-                    || (index == 1 && (NemsisNegative(rawValue: value as? String ?? "")?.isNotValue ?? false)) {
+                    || (index == 0 && ((values[1] as? NemsisValue)?.NegativeValue?.isNotValue ?? false))
+                    || (index == 1 && ((value as? NemsisValue)?.NegativeValue?.isNotValue ?? false)) {
                     for i in 0..<values.count {
                         if i != index {
                             values[i] = nil
@@ -70,9 +96,28 @@ class NemsisComboKeyboard: ComboKeyboard {
                         }
                     }
                 }
-                values[index] = value
+                if (keyboards[0] as? NemsisKeyboard) != nil || index == 1 {
+                    values[index] = value
+                } else {
+                    values[index] = NemsisValue(text: value as? String, negativeValue: (values[1] as? NemsisValue)?.negativeValue)
+                }
             }
         }
-        delegate?.formInputView(self, didChange: NemsisValue(text: values[0] as? String, negativeValue: values[1] as? String))
+        var newValues: [NemsisValue] = []
+        if let values = values[0] as? [NemsisValue] {
+            newValues.append(contentsOf: values)
+        } else if let value = values[0] as? NemsisValue {
+            newValues.append(value)
+        }
+        if let value = values[1] as? NemsisValue {
+            newValues.append(value)
+        }
+        if isMultiSelect {
+            delegate?.formInputView(self, didChange: newValues as NSObject)
+        } else if newValues.count > 0 {
+            delegate?.formInputView(self, didChange: newValues[0])
+        } else {
+            delegate?.formInputView(self, didChange: nil)
+        }
     }
 }

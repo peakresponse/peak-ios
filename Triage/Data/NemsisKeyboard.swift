@@ -14,7 +14,7 @@ class NemsisKeyboard: SearchKeyboard {
     var currentIndex = 0
     var field: String?
 
-    init(field: String, sources: [KeyboardSource], isMultiSelect: Bool) {
+    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool) {
         self.sources = sources
         super.init(source: nil, isMultiSelect: isMultiSelect)
         self.field = field

@@ -35,8 +35,8 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
     }
 
     func firstIndex(of value: NSObject) -> Int? {
-        guard let value = value as? String else { return nil }
-        return negatives.firstIndex(where: { $0.rawValue == value })
+        guard let value = value as? NemsisValue, let negativeValue = value.NegativeValue else { return nil }
+        return negatives.firstIndex(of: negativeValue)
     }
 
     func search(_ query: String?) {
@@ -44,8 +44,8 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
     }
 
     func title(for value: NSObject?) -> String? {
-        guard let value = value as? String else { return nil }
-        return negatives.first(where: {$0.rawValue == value})?.description
+        guard let value = value as? NemsisValue else { return nil }
+        return value.NegativeValue?.description
     }
 
     func title(at index: Int) -> String? {
@@ -53,6 +53,6 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
     }
 
     func value(at index: Int) -> NSObject? {
-        return negatives[index].rawValue as NSObject
+        return NemsisValue(negativeValue: negatives[index].rawValue)
     }
 }
