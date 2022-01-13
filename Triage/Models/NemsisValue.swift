@@ -112,12 +112,13 @@ class NemsisValue: NSObject {
     override init() {
         super.init()
         isNil = true
+        NegativeValue = .notRecorded
     }
 
     init(text: String? = nil, negativeValue: String? = nil) {
         super.init()
         self.text = text
-        self.negativeValue = negativeValue
+        self.negativeValue = text == nil && negativeValue == nil ? NemsisNegative.notRecorded.rawValue : negativeValue
     }
 
     init(data: [String: Any]) {

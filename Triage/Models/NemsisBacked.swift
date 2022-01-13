@@ -17,7 +17,7 @@ protocol NemsisBacked: AnyObject {
     func dataPatch(from source: NemsisBacked) -> NSArray?
     func setNemsisValue(_ newValue: NemsisValue?, forJSONPath jsonPath: String, isOptional: Bool)
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue?
-    func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String)
+    func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String, isOptional: Bool)
     func getNemsisValues(forJSONPath jsonPath: String) -> [NemsisValue]?
 }
 
@@ -40,6 +40,17 @@ extension NemsisBacked {
             let jsonArray = patch.jsonArray
             if jsonArray.count > 0 {
                 return jsonArray
+            }
+        }
+        return nil
+    }
+
+    func data(forJSONPath jsonPath: String) -> Any? {
+        if let _data = _data {
+            let parts = jsonPath.split(separator: "/")
+            let jsonPath = "$\(parts.map { #"["\#($0)"]"# }.joined())"
+            if let path = SwiftPath(jsonPath) {
+                return try? path.evaluate(with: _data)
             }
         }
         return nil
@@ -88,26 +99,81 @@ extension NemsisBacked {
     }
 
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue? {
-        if let _data = _data {
-            let parts = jsonPath.split(separator: "/")
-            let jsonPath = "$\(parts.map { #"["\#($0)"]"# }.joined())"
-            if let path = SwiftPath(jsonPath) {
-                let result = try? path.evaluate(with: _data)
-                if let results = result as? [[String: Any]], results.count > 0 {
-                    return NemsisValue(data: results[0])
-                } else if let result = result as? [String: Any] {
-                    return NemsisValue(data: result)
-                }
+        if let result = data(forJSONPath: jsonPath) {
+            if let results = result as? [[String: Any]], results.count > 0 {
+                return NemsisValue(data: results[0])
+            } else if let result = result as? [String: Any] {
+                return NemsisValue(data: result)
             }
         }
         return nil
     }
 
-    func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String) {
-
+    func setNemsisValues(_ newValue: [NemsisValue]?, forJSONPath jsonPath: String, isOptional: Bool = false) {
+        var nemsisValues: [NemsisValue]! = newValue
+        if nemsisValues == nil {
+            nemsisValues = [NemsisValue()]
+        }
+        var patches: [[String: Any]] = []
+        let parts = jsonPath.split(separator: "/")
+        var data: Any? = self.data
+        var path = ""
+        for (i, part) in parts.enumerated() {
+            let key = String(part)
+            data = (data as? [String: Any])?[key]
+            path = "\(path)/\(key)"
+            if i == (parts.count - 1) {
+                if nemsisValues.count == 1, nemsisValues[0].NegativeValue == .notRecorded, isOptional {
+                    if data != nil {
+                        patches.append([
+                            "op": "remove",
+                            "path": path
+                        ])
+                    }
+                } else {
+                    if nemsisValues.count == 1 {
+                        patches.append([
+                            "op": data == nil ? "add" : "replace",
+                            "path": path,
+                            "value": nemsisValues[0].asXMLJSObject()
+                        ])
+                    } else {
+                        patches.append([
+                            "op": data == nil ? "add" : "replace",
+                            "path": path,
+                            "value": []
+                        ])
+                        for nemsisValue in nemsisValues {
+                            let value: [String: Any] = nemsisValue.asXMLJSObject()
+                            patches.append([
+                                "op": "add",
+                                "path": "\(path)/-",
+                                "value": value
+                            ])
+                        }
+                    }
+                }
+            } else if data == nil {
+                let value: [String: Any] = [:]
+                patches.append([
+                    "op": "add",
+                    "path": path,
+                    "value": value
+                ])
+            }
+        }
+        let patch = try! JSONPatch(jsonArray: patches as NSArray)
+        _data = try! patch.apply(to: _data ?? "{}".data(using: .utf8)!)
     }
 
     func getNemsisValues(forJSONPath jsonPath: String) -> [NemsisValue]? {
+        if let result = data(forJSONPath: jsonPath) {
+            if let results = result as? [[String: Any]], results.count > 0 {
+                return results.map { NemsisValue(data: $0) }
+            } else if let result = result as? [String: Any] {
+                return [NemsisValue(data: result)]
+            }
+        }
         return nil
     }
 }

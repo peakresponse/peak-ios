@@ -23,6 +23,7 @@ class NemsisValueTests: XCTestCase {
         var value = NemsisValue()
         XCTAssertTrue(value.isNil)
         XCTAssertEqual(value.attributes?["xsi:nil"], "true")
+        XCTAssertEqual(value.attributes?["NV"], "7701003")
 
         value = NemsisValue(text: "Text value")
         XCTAssertFalse(value.isNil)
@@ -63,7 +64,6 @@ class NemsisValueTests: XCTestCase {
 
     func testSetText() throws {
         let value = NemsisValue()
-        value.NegativeValue = .notRecorded
         XCTAssertTrue(value.isNil)
         XCTAssertEqual(value.attributes?["xsi:nil"], "true")
         XCTAssertEqual(value.attributes?["NV"], "7701003")
@@ -79,7 +79,8 @@ class NemsisValueTests: XCTestCase {
         var obj = value.asXMLJSObject()
         XCTAssertNil(obj["_text"])
         XCTAssertEqual(obj["_attributes"] as? [String: String], [
-            "xsi:nil": "true"
+            "xsi:nil": "true",
+            "NV": "7701003"
         ])
 
         value = NemsisValue(text: "Text value")

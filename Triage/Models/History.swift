@@ -20,7 +20,7 @@ class History: BaseVersioned, NemsisBacked {
             return getNemsisValues(forJSONPath: "/eHistory.06")
         }
         set {
-            setNemsisValues(newValue, forJSONPath: "/eHistory.06")
+            setNemsisValues(newValue, forJSONPath: "/eHistory.06", isOptional: true)
         }
     }
 
@@ -29,7 +29,7 @@ class History: BaseVersioned, NemsisBacked {
             return getNemsisValues(forJSONPath: "/eHistory.07")
         }
         set {
-            setNemsisValues(newValue, forJSONPath: "/eHistory.07")
+            setNemsisValues(newValue, forJSONPath: "/eHistory.07", isOptional: true)
         }
     }
 
@@ -38,7 +38,7 @@ class History: BaseVersioned, NemsisBacked {
             return getNemsisValues(forJSONPath: "/eHistory.08")
         }
         set {
-            setNemsisValues(newValue, forJSONPath: "/eHistory.08")
+            setNemsisValues(newValue, forJSONPath: "/eHistory.08", isOptional: true)
         }
     }
 

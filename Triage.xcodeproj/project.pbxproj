@@ -87,6 +87,7 @@
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */; };
+		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
 		458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0A8275ADC980065F324 /* ICD10CM.realm */; };
 		458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */; };
 		458CA0AE275FD6610065F324 /* CodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AD275FD6610065F324 /* CodeList.swift */; };
@@ -286,6 +287,7 @@
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
+		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		458CA0A8275ADC980065F324 /* ICD10CM.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ICD10CM.realm; sourceTree = "<group>"; };
 		458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0AD275FD6610065F324 /* CodeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeList.swift; sourceTree = "<group>"; };
@@ -513,6 +515,7 @@
 		4566F035236CCC5700A04C75 /* TriageTests */ = {
 			isa = PBXGroup;
 			children = (
+				45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */,
 				458CA0D42788EBD90065F324 /* ReportTests.swift */,
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */,
@@ -1189,6 +1192,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */,
 				45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */,
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
