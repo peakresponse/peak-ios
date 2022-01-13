@@ -43,8 +43,14 @@ class NemsisComboKeyboard: ComboKeyboard {
 
     func transformValue(_ value: NSObject?) -> NSObject? {
         if let value = value as? NemsisValue {
-            if value.isNil && value.NegativeValue != nil {
-                return [nil, value] as NSObject
+            if value.negativeValue != nil {
+                if value.isNil {
+                    return [nil, value] as NSObject
+                } else if isMultiSelect {
+                    return [[value], nil] as NSObject
+                } else {
+                    return [NemsisValue(text: value.text), NemsisValue(negativeValue: value.negativeValue)] as NSObject
+                }
             } else if (keyboards[0] as? NemsisKeyboard) != nil {
                 if isMultiSelect {
                     return [[value], nil] as NSObject
@@ -61,7 +67,7 @@ class NemsisComboKeyboard: ComboKeyboard {
                 return [nil, nil] as NSObject
             } else if values.count == 1 {
                 return values[0]
-            } else {
+            } else if isMultiSelect {
                 return [values, nil] as NSObject
             }
         }
@@ -104,13 +110,22 @@ class NemsisComboKeyboard: ComboKeyboard {
             }
         }
         var newValues: [NemsisValue] = []
-        if let values = values[0] as? [NemsisValue] {
-            newValues.append(contentsOf: values)
-        } else if let value = values[0] as? NemsisValue {
-            newValues.append(value)
-        }
-        if let value = values[1] as? NemsisValue {
-            newValues.append(value)
+        if isMultiSelect {
+            if let values = values[0] as? [NemsisValue] {
+                newValues.append(contentsOf: values)
+            }
+            if let value = values[1] as? NemsisValue {
+                newValues.append(value)
+            }
+        } else {
+            if let value = values[0] as? NemsisValue {
+                newValues.append(value)
+                if let value = values[1] as? NemsisValue, value.NegativeValue?.isPertinentNegative ?? false, !isNegativeExclusive {
+                    newValues[0].negativeValue = value.negativeValue
+                }
+            } else if let value = values[1] as? NemsisValue {
+                newValues.append(value)
+            }
         }
         if isMultiSelect {
             delegate?.formInputView(self, didChange: newValues as NSObject)
