@@ -145,12 +145,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      tag: &tag, to: colB)
         addTextField(source: situation,
                      attributeKey: "otherAssociatedSymptoms",
-                     attributeType: .custom(NemsisKeyboard(field: "eSituation.10",
-                                                           sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eSituation.10", sources: [ICD10CMKeyboardSource()], isMultiSelect: true,
+                        negatives: [.notApplicable])),
                      tag: &tag, to: colB)
         addTextField(source: history,
                      attributeKey: "medicalSurgicalHistory",
-                     attributeType: .custom(NemsisKeyboard(field: "eHistory.08", sources: [ICD10CMKeyboardSource()], isMultiSelect: true)),
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eHistory.08", sources: [ICD10CMKeyboardSource()], isMultiSelect: true,
+                        negatives: [.notApplicable, .noneReported, .refused, .unabletoComplete, .unresponsive])),
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "medicationAllergies",
@@ -312,7 +315,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     func resetFormFields() {
         for formField in formFields {
             if let source = formField.source, let attributeKey = formField.attributeKey {
-                formField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
+                formField.attributeValue = source.value(forKey: attributeKey) as? NSObject
             }
         }
     }
@@ -320,7 +323,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     // MARK: FormFieldDelegate
 
     func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target as? NSObject {
+        if let attributeKey = field.attributeKey, let target = field.target {
             target.setValue(field.attributeValue, forKey: attributeKey)
         }
     }

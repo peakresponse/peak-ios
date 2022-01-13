@@ -35,11 +35,11 @@ class NemsisKeyboard: SearchKeyboard {
         delegate?.formInputView(self, wantsToPresent: vc)
     }
 
-    override func text(for value: AnyObject?) -> String? {
-        if let value = value as? String, let field = field {
+    override func text(for value: NSObject?) -> String? {
+        if let value = value as? NemsisValue, !value.isNil, let code = value.text, let field = field {
             let realm = AppRealm.open()
             if let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first,
-               let item = realm.objects(CodeListItem.self).filter("list=%@ AND code=%@", list, value).first {
+               let item = realm.objects(CodeListItem.self).filter("list=%@ AND code=%@", list, code).first {
                 var text = item.name
                 if let sectionName = item.section?.name {
                     text = "\(sectionName): \(text ?? "")"
@@ -47,7 +47,7 @@ class NemsisKeyboard: SearchKeyboard {
                 return text
             }
         }
-        if let value = value as? String {
+        if let value = value as? NemsisValue {
             var text: String?
             for source in sources {
                 text = source.title(for: value)

@@ -28,8 +28,9 @@ class ICD10CMKeyboardSource: KeyboardSource {
         return results?.count ?? 0
     }
 
-    func firstIndex(of value: String) -> Int? {
-        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: value) else { return nil }
+    func firstIndex(of value: NSObject) -> Int? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: id) else { return nil }
         if let filteredResults = filteredResults {
             return filteredResults.firstIndex(of: code)
         }
@@ -44,8 +45,9 @@ class ICD10CMKeyboardSource: KeyboardSource {
         }
     }
 
-    func title(for value: String?) -> String? {
-        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: value) else { return nil }
+    func title(for value: NSObject?) -> String? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = CMRealm.open().object(ofType: CMCode.self, forPrimaryKey: id) else { return nil }
         return "\(code.name ?? ""): \(code.desc ?? "")"
     }
 
@@ -56,10 +58,10 @@ class ICD10CMKeyboardSource: KeyboardSource {
         return "\(results?[index].name ?? ""): \(results?[index].desc ?? "")"
     }
 
-    func value(at index: Int) -> String? {
+    func value(at index: Int) -> NSObject? {
         if let filteredResults = filteredResults {
-            return filteredResults[index].name
+            return NemsisValue(text: filteredResults[index].name)
         }
-        return results?[index].name
+        return NemsisValue(text: results?[index].name)
     }
 }

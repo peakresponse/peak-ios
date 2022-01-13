@@ -181,7 +181,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         if field != nil, segmentedControl.selectedIndex == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
             if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
-                cell.checkbox.value = item.code
+                cell.checkbox.value = NemsisValue(text: item.code)
                 if let sectionName = item.section?.name {
                     cell.checkbox.labelText = "\(sectionName): \(item.name ?? "")"
                 } else {
@@ -189,7 +189,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
                 }
                 cell.checkbox.delegate = self
                 cell.checkbox.isRadioButton = !isMultiSelect
-                if let value = cell.checkbox.value as? String, values?.contains(value) ?? false {
+                if let value = cell.checkbox.value, values?.contains(value) ?? false {
                     cell.checkbox.isChecked = true
                 } else {
                     cell.checkbox.isChecked = false

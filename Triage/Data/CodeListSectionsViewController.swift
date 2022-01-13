@@ -22,7 +22,7 @@ class CodeListSectionsViewController: UITableViewController, CodeListItemsViewCo
     weak var delegate: CodeListSectionsViewControllerDelegate?
 
     var isMultiSelect = false
-    var values: [String]?
+    var values: [NSObject]?
     var list: CodeList?
     var results: Results<CodeListSection>?
     var notificationToken: NotificationToken?

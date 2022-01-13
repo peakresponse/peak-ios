@@ -23,7 +23,7 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
 
     weak var delegate: CodeListItemsViewControllerDelegate?
     var isMultiSelect = false
-    var values: [String]?
+    var values: [NSObject]?
     var list: CodeList?
     var section: CodeListSection?
     var results: Results<CodeListItem>?
@@ -125,11 +125,11 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
         if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
-            cell.checkbox.value = item.code
+            cell.checkbox.value = NemsisValue(text: item.code)
             cell.checkbox.labelText = item.name
             cell.checkbox.delegate = self
             cell.checkbox.isRadioButton = !isMultiSelect
-            if let value = cell.checkbox.value as? String, values?.contains(value) ?? false {
+            if let value = cell.checkbox.value, values?.contains(value) ?? false {
                 cell.checkbox.isChecked = true
             } else {
                 cell.checkbox.isChecked = false

@@ -18,13 +18,13 @@ protocol FormViewController: PRKit.FormFieldDelegate {
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
     func newSection() -> (UIStackView, UIStackView, UIStackView)
-    func newTextField(source: AnyObject, sourceIndex: Int?,
+    func newTextField(source: NSObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitLabel: String?,
                       tag: inout Int) -> PRKit.TextField
 
-    func addTextField(source: AnyObject, sourceIndex: Int?,
+    func addTextField(source: NSObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitLabel: String?,
@@ -32,7 +32,7 @@ protocol FormViewController: PRKit.FormFieldDelegate {
 }
 
 extension FormViewController {
-    func addTextField(source: AnyObject, sourceIndex: Int? = nil,
+    func addTextField(source: NSObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitLabel: String? = nil,
@@ -64,7 +64,7 @@ extension FormViewController {
         return stackView
     }
 
-    func newTextField(source: AnyObject, sourceIndex: Int? = nil,
+    func newTextField(source: NSObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitLabel: String? = nil,
@@ -76,7 +76,7 @@ extension FormViewController {
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
         textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
-        textField.attributeValue = source.value(forKey: attributeKey) as AnyObject?
+        textField.attributeValue = source.value(forKey: attributeKey) as? NSObject
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
         if let unitLabel = unitLabel {

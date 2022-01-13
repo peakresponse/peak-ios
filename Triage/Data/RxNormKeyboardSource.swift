@@ -31,8 +31,9 @@ class RxNormKeyboardSource: KeyboardSource {
         return results?.count ?? 0
     }
 
-    func firstIndex(of value: String) -> Int? {
-        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: value) else { return nil }
+    func firstIndex(of value: NSObject) -> Int? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: Int(id)) else { return nil }
         if let filteredResults = filteredResults {
             return filteredResults.firstIndex(of: code)
         }
@@ -47,8 +48,9 @@ class RxNormKeyboardSource: KeyboardSource {
         }
     }
 
-    func title(for value: String?) -> String? {
-        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: Int(value ?? "")) else { return nil }
+    func title(for value: NSObject?) -> String? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: Int(id)) else { return nil }
         return "\(code.rxcui): \(code.name)"
     }
 
@@ -59,7 +61,7 @@ class RxNormKeyboardSource: KeyboardSource {
         return "\(results?[index].rxcui ?? 0): \(results?[index].name ?? "")"
     }
 
-    func value(at index: Int) -> String? {
+    func value(at index: Int) -> NSObject? {
         var value: Int?
         if let filteredResults = filteredResults {
             value = filteredResults[index].rxcui
@@ -67,7 +69,7 @@ class RxNormKeyboardSource: KeyboardSource {
             value = results?[index].rxcui
         }
         if let value = value {
-            return String(value)
+            return NemsisValue(text: String(value))
         }
         return nil
     }

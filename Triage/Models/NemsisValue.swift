@@ -123,6 +123,18 @@ class NemsisValue: NSObject {
         attributes = data["_attributes"] as? [String: String]
     }
 
+    override func isEqual(_ object: Any?) -> Bool {
+        if let object = object as? NemsisValue {
+            if self === object {
+                return true
+            }
+            if text == object.text && attributes == object.attributes {
+                return true
+            }
+        }
+        return false
+    }
+
     func asXMLJSObject() -> [String: Any] {
         var obj: [String: Any] = [:]
         if let attributes = attributes {

@@ -34,7 +34,8 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
         return negatives.count
     }
 
-    func firstIndex(of value: String) -> Int? {
+    func firstIndex(of value: NSObject) -> Int? {
+        guard let value = value as? String else { return nil }
         return negatives.firstIndex(where: { $0.rawValue == value })
     }
 
@@ -42,7 +43,8 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
 
     }
 
-    func title(for value: String?) -> String? {
+    func title(for value: NSObject?) -> String? {
+        guard let value = value as? String else { return nil }
         return negatives.first(where: {$0.rawValue == value})?.description
     }
 
@@ -50,7 +52,7 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
         return negatives[index].description
     }
 
-    func value(at index: Int) -> String? {
-        return negatives[index].rawValue
+    func value(at index: Int) -> NSObject? {
+        return negatives[index].rawValue as NSObject
     }
 }

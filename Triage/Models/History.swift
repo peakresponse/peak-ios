@@ -15,6 +15,24 @@ class History: BaseVersioned, NemsisBacked {
     }
     @Persisted var _data: Data?
 
+    @objc var medicationAllergies: [NemsisValue]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eHistory.06")
+        }
+        set {
+            setNemsisValues(newValue, forJSONPath: "/eHistory.06")
+        }
+    }
+
+    @objc var environmentalFoodAllergies: [NemsisValue]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eHistory.07")
+        }
+        set {
+            setNemsisValues(newValue, forJSONPath: "/eHistory.07")
+        }
+    }
+
     @objc var medicalSurgicalHistory: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eHistory.08")
@@ -23,10 +41,6 @@ class History: BaseVersioned, NemsisBacked {
             setNemsisValues(newValue, forJSONPath: "/eHistory.08")
         }
     }
-
-    @objc var medicationAllergies: [NemsisValue]?
-
-    @objc var environmentalFoodAllergies: [NemsisValue]?
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()

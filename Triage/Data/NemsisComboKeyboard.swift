@@ -10,6 +10,7 @@ import Foundation
 import PRKit
 
 class NemsisComboKeyboard: ComboKeyboard {
+    var isMultiSelect = false
     var isNegativeExclusive = true
 
     init(source: KeyboardSource, isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
@@ -20,6 +21,7 @@ class NemsisComboKeyboard: ComboKeyboard {
             "NemsisKeyboard.title".localized,
             "NemsisNegativeKeyboard.title".localized
         ])
+        self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive
     }
 
@@ -31,6 +33,7 @@ class NemsisComboKeyboard: ComboKeyboard {
             "NemsisKeyboard.title".localized,
             "NemsisNegativeKeyboard.title".localized
         ])
+        self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive
     }
 
@@ -38,23 +41,23 @@ class NemsisComboKeyboard: ComboKeyboard {
         super.init(coder: coder)
     }
 
-    override func setValue(_ value: AnyObject?) {
+    override func setValue(_ value: NSObject?) {
         if let value = value as? NemsisValue {
-            super.setValue([value.text, value.negativeValue] as AnyObject?)
+            super.setValue([value.text, value.negativeValue] as NSObject?)
         } else {
             super.setValue(value)
         }
     }
 
-    override func text(for value: AnyObject?) -> String? {
+    override func text(for value: NSObject?) -> String? {
         if let value = value as? NemsisValue {
-            return super.text(for: [value.text, value.negativeValue] as AnyObject?)
+            return super.text(for: [value.text, value.negativeValue] as NSObject?)
         } else {
             return super.text(for: value)
         }
     }
 
-    override func formInputView(_ inputView: FormInputView, didChange value: AnyObject?) {
+    override func formInputView(_ inputView: FormInputView, didChange value: NSObject?) {
         if let index = keyboards.firstIndex(of: inputView) {
             if values[index] !== value {
                 if isNegativeExclusive
@@ -70,6 +73,6 @@ class NemsisComboKeyboard: ComboKeyboard {
                 values[index] = value
             }
         }
-        delegate?.formInputView(self, didChange: NemsisValue(text: values[0] as? String, negativeValue: values[1] as? String) as AnyObject)
+        delegate?.formInputView(self, didChange: NemsisValue(text: values[0] as? String, negativeValue: values[1] as? String))
     }
 }

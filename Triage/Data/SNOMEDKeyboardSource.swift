@@ -30,12 +30,13 @@ class SNOMEDKeyboardSource: KeyboardSource {
         return results?.count ?? 0
     }
 
-    func firstIndex(of value: String) -> Int? {
-        guard let code = SCTRealm.open().object(ofType: SCTConcept.self, forPrimaryKey: value) else { return nil }
+    func firstIndex(of value: NSObject) -> Int? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = SCTRealm.open().object(ofType: SCTConcept.self, forPrimaryKey: id) else { return nil }
         if let filteredResults = filteredResults {
             return filteredResults.firstIndex(of: code)
         }
-        return results?.firstIndex(of: code) ?? nil
+        return results?.firstIndex(of: code)
     }
 
     func search(_ query: String?) {
@@ -46,8 +47,9 @@ class SNOMEDKeyboardSource: KeyboardSource {
         }
     }
 
-    func title(for value: String?) -> String? {
-        guard let code = SCTRealm.open().object(ofType: SCTConcept.self, forPrimaryKey: value) else { return nil }
+    func title(for value: NSObject?) -> String? {
+        guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
+        guard let code = SCTRealm.open().object(ofType: SCTConcept.self, forPrimaryKey: id) else { return nil }
         return "\(code.id): \(code.name)"
     }
 
@@ -58,13 +60,10 @@ class SNOMEDKeyboardSource: KeyboardSource {
         return "\(results?[index].id ?? ""): \(results?[index].name ?? "")"
     }
 
-    func value(at index: Int) -> String? {
-        var value: String?
+    func value(at index: Int) -> NSObject? {
         if let filteredResults = filteredResults {
-            value = filteredResults[index].id
-        } else {
-            value = results?[index].id
+            return NemsisValue(text: filteredResults[index].id)
         }
-        return value
+        return NemsisValue(text: results?[index].id)
     }
 }
