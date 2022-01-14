@@ -29,8 +29,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     var patient: Patient!
     var situation: Situation!
     var history: History!
-    var vitals: List<Vital>!
-    var procedures: List<Procedure>!
+    var vitals: [Vital]!
+    var procedures: [Procedure]!
+    var medications: [Medication]!
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -53,8 +54,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         patient = report.patient ?? Patient.newRecord()
         situation = report.situation ?? Situation.newRecord()
         history = report.history ?? History.newRecord()
-        vitals = report.vitals
-        procedures = report.procedures
+        vitals = Array(report.vitals)
+        procedures = Array(report.procedures)
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -215,7 +216,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                          attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "cardiacRhythm",
-                         attributeType: .multi(EnumKeyboardSource<VitalCardiacRhythm>()),
+                         attributeType: .custom(NemsisComboKeyboard(
+                            source: EnumKeyboardSource<VitalCardiacRhythm>(),
+                            isMultiSelect: true,
+                            negatives: [
+                                .notApplicable,
+                                .refused,
+                                .unabletoComplete
+                            ])),
                          tag: &tag, to: colB)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
@@ -321,6 +329,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 default:
                     break
                 }
+            } else {
+                print("missing source for", formField.attributeKey)
             }
         }
     }

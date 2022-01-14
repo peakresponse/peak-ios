@@ -68,7 +68,11 @@ class NemsisComboKeyboard: ComboKeyboard {
             } else if values.count == 1 {
                 return values[0]
             } else if isMultiSelect {
-                return [values, nil] as NSObject
+                if (keyboards[0] as? NemsisKeyboard) != nil {
+                    return [values, nil] as NSObject
+                } else {
+                    return [values.map { $0.text }, nil] as NSObject
+                }
             }
         }
         return nil
@@ -104,6 +108,8 @@ class NemsisComboKeyboard: ComboKeyboard {
                 }
                 if (keyboards[0] as? NemsisKeyboard) != nil || index == 1 {
                     values[index] = value
+                } else if let value = value as? [String] {
+                    values[index] = value.map { NemsisValue(text: $0) } as NSObject
                 } else {
                     values[index] = NemsisValue(text: value as? String, negativeValue: (values[1] as? NemsisValue)?.negativeValue)
                 }
