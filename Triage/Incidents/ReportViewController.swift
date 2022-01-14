@@ -209,9 +209,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                          attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
             colB.addArrangedSubview(innerCols)
             addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "heartRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colA)
+                         attributeKey: "heartRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "respiratoryRate", attributeType: .integer, unitLabel: " bpm", tag: &tag, to: colB)
+                         attributeKey: "respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
@@ -228,11 +228,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "pulseOximetry", attributeType: .integer, unitLabel: " %", tag: &tag, to: colB)
+                         attributeKey: "pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "carbonMonoxide", attributeType: .decimal, unitLabel: " %", tag: &tag, to: colB)
+                         attributeKey: "carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
 

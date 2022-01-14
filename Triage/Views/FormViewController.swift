@@ -21,13 +21,13 @@ protocol FormViewController: PRKit.FormFieldDelegate {
     func newTextField(source: NSObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
-                      unitLabel: String?,
+                      unitText: String?,
                       tag: inout Int) -> PRKit.TextField
 
     func addTextField(source: NSObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
-                      unitLabel: String?,
+                      unitText: String?,
                       tag: inout Int,
                       to col: UIStackView, withWrapper: Bool)
 }
@@ -36,13 +36,13 @@ extension FormViewController {
     func addTextField(source: NSObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
-                      unitLabel: String? = nil,
+                      unitText: String? = nil,
                       tag: inout Int,
                       to col: UIStackView, withWrapper: Bool = false) {
         let textField = newTextField(source: source, sourceIndex: sourceIndex,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
-                                     unitLabel: unitLabel,
+                                     unitText: unitText,
                                      tag: &tag)
         if withWrapper {
             let wrapper = UIView()
@@ -82,7 +82,7 @@ extension FormViewController {
     func newTextField(source: NSObject, sourceIndex: Int? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
-                      unitLabel: String? = nil,
+                      unitText: String? = nil,
                       tag: inout Int) -> PRKit.TextField {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -94,8 +94,8 @@ extension FormViewController {
         textField.attributeValue = source.value(forKey: attributeKey) as? NSObject
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
-        if let unitLabel = unitLabel {
-            textField.unitLabel.text = unitLabel
+        if let unitText = unitText {
+            textField.unitText = unitText
         }
         textField.tag = tag
         tag += 1
