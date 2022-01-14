@@ -28,7 +28,8 @@ protocol FormViewController: PRKit.FormFieldDelegate {
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitLabel: String?,
-                      tag: inout Int, to col: UIStackView)
+                      tag: inout Int,
+                      to col: UIStackView, withWrapper: Bool)
 }
 
 extension FormViewController {
@@ -36,13 +37,27 @@ extension FormViewController {
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitLabel: String? = nil,
-                      tag: inout Int, to col: UIStackView) {
+                      tag: inout Int,
+                      to col: UIStackView, withWrapper: Bool = false) {
         let textField = newTextField(source: source, sourceIndex: sourceIndex,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
                                      unitLabel: unitLabel,
                                      tag: &tag)
-        col.addArrangedSubview(textField)
+        if withWrapper {
+            let wrapper = UIView()
+            wrapper.translatesAutoresizingMaskIntoConstraints = false
+            wrapper.addSubview(textField)
+            NSLayoutConstraint.activate([
+                textField.topAnchor.constraint(equalTo: wrapper.topAnchor),
+                textField.leftAnchor.constraint(equalTo: wrapper.leftAnchor),
+                textField.rightAnchor.constraint(equalTo: wrapper.rightAnchor),
+                textField.bottomAnchor.constraint(lessThanOrEqualTo: wrapper.bottomAnchor)
+            ])
+            col.addArrangedSubview(wrapper)
+        } else {
+            col.addArrangedSubview(textField)
+        }
         formFields.append(textField)
     }
 

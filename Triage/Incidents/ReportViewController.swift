@@ -111,11 +111,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: patient,
                      attributeKey: "ageArray",
                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
-                     tag: &tag, to: innerCols)
+                     tag: &tag, to: innerCols, withWrapper: true)
         addTextField(source: patient,
                      attributeKey: "gender",
                      attributeType: .single(EnumKeyboardSource<PatientGender>()),
-                     tag: &tag, to: innerCols)
+                     tag: &tag, to: innerCols, withWrapper: true)
         colB.addArrangedSubview(innerCols)
 //        innerCols = newColumns()
 //        innerCols.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized))
