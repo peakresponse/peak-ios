@@ -14,8 +14,8 @@ protocol CodeListItemsViewControllerDelegate: AnyObject {
     func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)
 }
 
-class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHeaderDelegate, KeyboardAwareScrollViewController,
-                                   UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class CodeListItemsViewController: UIViewController, CheckboxDelegate, CodeListViewController, CommandHeaderDelegate,
+                                   KeyboardAwareScrollViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     var scrollView: UIScrollView! { return collectionView }
@@ -109,7 +109,20 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CommandHe
 
     func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
         delegate?.codeListItemsViewController(self, checkbox: checkbox, didChange: isChecked)
-        collectionView.reloadData()
+    }
+
+    // MARK: - CodeListViewController
+
+    func reloadVisible() {
+        for indexPath in collectionView.indexPathsForVisibleItems {
+            if let cell = collectionView.cellForItem(at: indexPath) as? SelectCheckboxCell {
+                if let value = cell.checkbox.value, values?.contains(value) ?? false {
+                    cell.checkbox.isChecked = true
+                } else {
+                    cell.checkbox.isChecked = false
+                }
+            }
+        }
     }
 
     // MARK: - UICollectionViewDataSource

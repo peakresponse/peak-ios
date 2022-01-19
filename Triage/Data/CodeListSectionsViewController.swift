@@ -10,6 +10,11 @@ import UIKit
 import RealmSwift
 import PRKit
 
+protocol CodeListViewController: AnyObject {
+    var values: [NSObject]? { get set }
+    func reloadVisible()
+}
+
 class CodeListSectionTableViewCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
 }
@@ -18,7 +23,7 @@ protocol CodeListSectionsViewControllerDelegate: AnyObject {
     func codeListSectionsViewController(_ vc: CodeListSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool)
 }
 
-class CodeListSectionsViewController: UITableViewController, CodeListItemsViewControllerDelegate {
+class CodeListSectionsViewController: UITableViewController, CodeListViewController, CodeListItemsViewControllerDelegate {
     weak var delegate: CodeListSectionsViewControllerDelegate?
 
     var isMultiSelect = false
@@ -91,7 +96,12 @@ class CodeListSectionsViewController: UITableViewController, CodeListItemsViewCo
 
     func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
         delegate?.codeListSectionsViewController(self, checkbox: checkbox, didChange: isChecked)
-        vc.values = values
+    }
+
+    // MARK: - CodeListViewController
+
+    func reloadVisible() {
+
     }
 
     // MARK: - UITableViewDataSource

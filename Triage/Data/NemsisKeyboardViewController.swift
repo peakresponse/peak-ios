@@ -109,14 +109,14 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
 
     func performQuery(_ query: String? = nil) {
         notificationToken?.invalidate()
+        results = nil
+        guard let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty else { return }
         guard let field = field else { return }
         let realm = AppRealm.open()
         // look up the list for the field
         guard let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first else { return }
         results = realm.objects(CodeListItem.self).filter("list=%@", list)
-        if let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty {
-            results = results?.filter("name CONTAINS[cd] %@", query)
-        }
+        results = results?.filter("name CONTAINS[cd] %@", query)
         results = results?.sorted(by: [
             SortDescriptor(keyPath: "section.position", ascending: true),
             SortDescriptor(keyPath: "section.name", ascending: true),
@@ -143,11 +143,24 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         }
     }
 
-    // MARK: - ICD10CMSectionsViewControllerDelegate
+    // MARK: - CheckboxDelegate
+
+    override func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
+        super.checkbox(checkbox, didChange: isChecked)
+        if let navVC = children.first as? UINavigationController {
+            for vc in navVC.children {
+                if let vc = vc as? CodeListViewController {
+                    vc.values = values
+                    vc.reloadVisible()
+                }
+            }
+        }
+    }
+
+    // MARK: - CodeListSectionsViewControllerDelegate
 
     func codeListSectionsViewController(_ vc: CodeListSectionsViewController, checkbox: Checkbox, didChange isChecked: Bool) {
         self.checkbox(checkbox, didChange: isChecked)
-        vc.values = values
     }
 
     // MARK: - FormFieldDelegate
