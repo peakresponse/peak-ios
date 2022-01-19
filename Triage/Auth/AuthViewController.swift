@@ -68,6 +68,10 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                         }
                         if let subdomain = agencies[0]["subdomain"] as? String {
                             AppSettings.subdomain = subdomain
+                            // update code lists in the background
+                            AppRealm.getLists { (_) in
+                                // noop
+                            }
                             AppRealm.me { [weak self] (user, agency, assignment, scene, error) in
                                 let userId = user?.id
                                 let agencyId = agency?.id

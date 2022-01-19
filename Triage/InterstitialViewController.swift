@@ -23,10 +23,6 @@ class InterstitialViewController: UIViewController {
     }
 
     func checkLoginStatus() {
-        // update code lists in the background
-        AppRealm.getLists { (_) in
-            // noop
-        }
         // hit the server to check current log-in status
         AppRealm.me { (user, agency, assignment, scene, error) in
             // if an explicit server error, log out to force re-login
@@ -38,11 +34,11 @@ class InterstitialViewController: UIViewController {
                 return
             }
             if let user = user, let agency = agency {
-                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
                 // update code lists in the background
                 AppRealm.getLists { (_) in
                     // noop
                 }
+                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
                 if let sceneId = scene?.id {
                     DispatchQueue.main.async {
                         AppDelegate.enterScene(id: sceneId)
