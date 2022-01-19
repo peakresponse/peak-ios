@@ -14,7 +14,7 @@ import RealmSwift
 class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var containerView: UIStackView!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
     var formFieldsMap: [String: PRKit.FormField] = [:]
@@ -68,13 +68,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             ])
         }
 
-        var (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: containerView.topAnchor),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-        ])
+        var (section, cols, colA, colB) = newSection()
         var tag = 1
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
         addTextField(source: response, attributeKey: "incidentNumber",
@@ -88,22 +82,13 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeKey: "unitDisposition",
                      attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
                      tag: &tag, to: colB)
+        section.addArrangedSubview(cols)
+        containerView.addArrangedSubview(section)
 
+        (section, cols, colA, colB) = newSection()
         var header = newHeader("ReportViewController.patientInformation".localized,
                                subheaderText: "ReportViewController.optional".localized)
-        containerView.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-            header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-            header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-        ])
-        (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-        ])
+        section.addArrangedSubview(header)
         addTextField(source: patient, attributeKey: "firstName", tag: &tag, to: colA)
         addTextField(source: patient, attributeKey: "lastName", tag: &tag, to: colB)
         addTextField(source: patient, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
@@ -121,22 +106,13 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 //        innerCols.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized))
 //        innerCols.addArrangedSubview(newButton(bundleImage: "PatientAdd24px", title: "Button.addPatient".localized))
 //        colA.addArrangedSubview(innerCols)
+        section.addArrangedSubview(cols)
+        containerView.addArrangedSubview(section)
 
+        (section, cols, colA, colB) = newSection()
         header = newHeader("ReportViewController.medicalInformation".localized,
                            subheaderText: "ReportViewController.optional".localized)
-        containerView.addSubview(header)
-        NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-            header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-            header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-        ])
-        (cols, colA, colB) = newSection()
-        containerView.addSubview(cols)
-        NSLayoutConstraint.activate([
-            cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-            cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-            cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-        ])
+        section.addArrangedSubview(header)
         addTextField(source: situation, attributeKey: "chiefComplaint", tag: &tag, to: colA)
         addTextField(source: situation,
                      attributeKey: "primarySymptom",
@@ -177,23 +153,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                         sources: [SNOMEDKeyboardSource()],
                         isMultiSelect: true)),
                      tag: &tag, to: colB)
+        section.addArrangedSubview(cols)
+        containerView.addArrangedSubview(section)
 
         for (i, vital) in vitals.enumerated() {
+            (section, cols, colA, colB) = newSection()
             header = newHeader("ReportViewController.vitals".localized,
                                subheaderText: "ReportViewController.optional".localized)
-            containerView.addSubview(header)
-            NSLayoutConstraint.activate([
-                header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-                header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-                header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-            ])
-            (cols, colA, colB) = newSection()
-            containerView.addSubview(cols)
-            NSLayoutConstraint.activate([
-                cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-                cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-            ])
+            section.addArrangedSubview(header)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
             innerCols = newColumns()
@@ -233,25 +200,16 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                          attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
             addTextField(source: vital, sourceIndex: i,
                          attributeKey: "carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
 
         for (i, procedure) in procedures.enumerated() {
+            (section, cols, colA, colB) = newSection()
             header = newHeader("ReportViewController.interventions".localized,
                                subheaderText: "ReportViewController.optional".localized)
-            containerView.addSubview(header)
-            NSLayoutConstraint.activate([
-                header.topAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40),
-                header.leftAnchor.constraint(equalTo: cols.leftAnchor),
-                header.rightAnchor.constraint(equalTo: cols.rightAnchor)
-            ])
-            (cols, colA, colB) = newSection()
-            containerView.addSubview(cols)
-            NSLayoutConstraint.activate([
-                cols.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 20),
-                cols.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-                cols.rightAnchor.constraint(equalTo: containerView.rightAnchor)
-            ])
+            section.addArrangedSubview(header)
             addTextField(source: procedure, sourceIndex: i,
                          attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
             addTextField(source: procedure, sourceIndex: i,
@@ -274,10 +232,10 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                                 .notApplicable
                             ])),
                          tag: &tag, to: colA)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
         }
         colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))
-
-        containerView.bottomAnchor.constraint(equalTo: cols.bottomAnchor, constant: 40).isActive = true
 
         setEditing(isEditing, animated: false)
     }

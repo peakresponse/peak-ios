@@ -108,7 +108,7 @@
                                 <rect key="frame" x="0.0" y="126" width="414" height="770"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="56" translatesAutoresizingMaskIntoConstraints="NO" id="agm-ti-evy" customClass="SegmentedControl" customModule="PRKit">
-                                        <rect key="frame" x="20" y="0.0" width="374" height="56"/>
+                                        <rect key="frame" x="20" y="0.0" width="374" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" priority="750" constant="690" id="kYa-hc-GDo"/>
@@ -215,16 +215,15 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ziP-ge-wPm">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
-                                    <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="892" translatesAutoresizingMaskIntoConstraints="NO" id="Qlh-nY-sUI">
-                                        <rect key="frame" x="20" y="4" width="374" height="892"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="852" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="9cv-2k-5xn">
+                                        <rect key="frame" x="20" y="4" width="374" height="852"/>
+                                    </stackView>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="bottom" secondItem="lkz-eC-EDf" secondAttribute="bottom" id="eOT-F7-BNd"/>
-                                    <constraint firstItem="lkz-eC-EDf" firstAttribute="trailing" secondItem="Qlh-nY-sUI" secondAttribute="trailing" constant="20" id="kUT-lG-J7a"/>
-                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="centerX" secondItem="ziP-ge-wPm" secondAttribute="centerX" id="yPe-2u-qc4"/>
-                                    <constraint firstItem="Qlh-nY-sUI" firstAttribute="top" secondItem="lkz-eC-EDf" secondAttribute="top" constant="4" id="yw6-Yx-Hi4"/>
+                                    <constraint firstItem="9cv-2k-5xn" firstAttribute="centerX" secondItem="ziP-ge-wPm" secondAttribute="centerX" id="awH-A7-1sv"/>
+                                    <constraint firstItem="9cv-2k-5xn" firstAttribute="bottom" secondItem="lkz-eC-EDf" secondAttribute="bottom" constant="-40" id="eOT-F7-BNd"/>
+                                    <constraint firstItem="lkz-eC-EDf" firstAttribute="trailing" secondItem="9cv-2k-5xn" secondAttribute="trailing" constant="20" id="kUT-lG-J7a"/>
+                                    <constraint firstItem="9cv-2k-5xn" firstAttribute="top" secondItem="lkz-eC-EDf" secondAttribute="top" constant="4" id="yw6-Yx-Hi4"/>
                                 </constraints>
                                 <viewLayoutGuide key="contentLayoutGuide" id="lkz-eC-EDf"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
@@ -240,7 +239,7 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="containerView" destination="Qlh-nY-sUI" id="jLG-ge-zaF"/>
+                        <outlet property="containerView" destination="9cv-2k-5xn" id="96k-Km-wie"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
                     </connections>

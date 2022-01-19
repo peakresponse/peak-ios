@@ -17,7 +17,7 @@ protocol FormViewController: PRKit.FormFieldDelegate {
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
-    func newSection() -> (UIStackView, UIStackView, UIStackView)
+    func newSection() -> (UIStackView, UIStackView, UIStackView, UIStackView)
     func newTextField(source: NSObject, sourceIndex: Int?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
@@ -114,7 +114,7 @@ extension FormViewController {
         header.textColor = .brandPrimary500
         view.addSubview(header)
         NSLayoutConstraint.activate([
-            header.topAnchor.constraint(equalTo: view.topAnchor),
+            header.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),
             header.leftAnchor.constraint(equalTo: view.leftAnchor)
         ])
 
@@ -143,12 +143,19 @@ extension FormViewController {
             rule.leftAnchor.constraint(equalTo: view.leftAnchor),
             rule.rightAnchor.constraint(equalTo: view.rightAnchor),
             rule.heightAnchor.constraint(equalToConstant: 2),
-            view.bottomAnchor.constraint(equalTo: rule.bottomAnchor)
+            view.bottomAnchor.constraint(equalTo: rule.bottomAnchor, constant: 20)
         ])
         return view
     }
 
-    func newSection() -> (UIStackView, UIStackView, UIStackView) {
+    func newSection() -> (UIStackView, UIStackView, UIStackView, UIStackView) {
+        let section = UIStackView()
+        section.translatesAutoresizingMaskIntoConstraints = false
+        section.axis = .vertical
+        section.alignment = .fill
+        section.distribution = .fill
+        section.spacing = 0
+
         let isRegular = traitCollection.horizontalSizeClass == .regular
         let colA = UIStackView()
         colA.translatesAutoresizingMaskIntoConstraints = false
@@ -173,6 +180,6 @@ extension FormViewController {
             cols.addArrangedSubview(colA)
             cols.addArrangedSubview(colB)
         }
-        return (cols, colA, colB)
+        return (section, cols, colA, colB)
     }
 }
