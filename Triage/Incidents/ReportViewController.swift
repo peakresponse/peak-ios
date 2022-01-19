@@ -282,6 +282,13 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         setEditing(isEditing, animated: false)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        for formField in formFields {
+            formField.updateStyle()
+        }
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {
