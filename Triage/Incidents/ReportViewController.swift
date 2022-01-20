@@ -56,6 +56,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         history = report.history ?? History.newRecord()
         vitals = Array(report.vitals)
         procedures = Array(report.procedures)
+        medications = Array(report.medications)
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -203,11 +204,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             section.addArrangedSubview(cols)
             containerView.addArrangedSubview(section)
         }
-        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized))
+        var button = newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized)
+        button.addTarget(self, action: #selector(newVitalsPressed), for: .touchUpInside)
+        button.tag = tag
+        colA.addArrangedSubview(button)
 
+        tag += 1000
         for (i, procedure) in procedures.enumerated() {
             (section, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.interventions".localized,
+            header = newHeader("ReportViewController.procedures".localized,
                                subheaderText: "ReportViewController.optional".localized)
             section.addArrangedSubview(header)
             addTextField(source: procedure, sourceIndex: i,
@@ -235,7 +240,47 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             section.addArrangedSubview(cols)
             containerView.addArrangedSubview(section)
         }
-        colA.addArrangedSubview(newButton(bundleImage: "Plus24px", title: "Button.addIntervention".localized))
+        button = newButton(bundleImage: "Plus24px", title: "Button.addProcedure".localized)
+        button.addTarget(self, action: #selector(addProcedurePressed), for: .touchUpInside)
+        button.tag = tag
+        colA.addArrangedSubview(button)
+
+        tag += 1000
+        for (i, medication) in medications.enumerated() {
+            (section, cols, colA, colB) = newSection()
+            header = newHeader("ReportViewController.medications".localized,
+                               subheaderText: "ReportViewController.optional".localized)
+            section.addArrangedSubview(header)
+            addTextField(source: medication, sourceIndex: i,
+                         attributeKey: "medicationAdministeredAt", attributeType: .datetime, tag: &tag, to: colA)
+            addTextField(source: medication, sourceIndex: i,
+                         attributeKey: "medication",
+                         attributeType: .custom(NemsisComboKeyboard(
+                            field: "eMedications.03",
+                            sources: [RxNormKeyboardSource()],
+                            isMultiSelect: false,
+                            negatives: [
+                                .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
+                                .refused, .unabletoComplete, .orderCriteriaNotMet
+                            ],
+                            isNegativeExclusive: false)),
+                         tag: &tag, to: colA)
+            addTextField(source: medication, sourceIndex: i,
+                         attributeKey: "responseToMedication",
+                         attributeType: .custom(NemsisComboKeyboard(
+                            source: EnumKeyboardSource<MedicationResponse>(),
+                            isMultiSelect: false,
+                            negatives: [
+                                .notApplicable
+                            ])),
+                         tag: &tag, to: colA)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+        }
+        button = newButton(bundleImage: "Plus24px", title: "Button.addMedication".localized)
+        button.addTarget(self, action: #selector(addMedicationPressed), for: .touchUpInside)
+        button.tag = tag
+        colA.addArrangedSubview(button)
 
         setEditing(isEditing, animated: false)
     }
@@ -306,6 +351,18 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 formField.attributeValue = source.value(forKey: attributeKey) as? NSObject
             }
         }
+    }
+
+    @objc func newVitalsPressed() {
+
+    }
+
+    @objc func addProcedurePressed() {
+
+    }
+
+    @objc func addMedicationPressed() {
+
     }
 
     // MARK: FormFieldDelegate

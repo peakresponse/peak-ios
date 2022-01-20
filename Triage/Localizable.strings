@@ -30,10 +30,11 @@
 "BaseNonSceneViewController.logout.title" = "Log out";
 "BaseNonSceneViewController.logout.message" = "Are you sure you wish to log out?";
 
+"Button.addMedication" = "Add Medication";
 "Button.addNote" = "Add Note";
-"Button.addPhoto" = "Add Photo";
-"Button.addIntervention" = "Add Intervention";
 "Button.addPatient" = "Add Patient";
+"Button.addPhoto" = "Add Photo";
+"Button.addProcedure" = "Add Procedure";
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
 "Button.back" = "Back";
@@ -131,6 +132,10 @@
 
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
+
+"Medication.medicationAdministeredAt" = "Administered at";
+"Medication.medication" = "Medication";
+"Medication.responseToMedication" = "Patient Response";
 
 "Narrative.text" = "Narrative";
 
@@ -281,10 +286,11 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
-"ReportViewController.interventions" = "Interventions";
-"ReportViewController.optional" = " (optional)";
+"ReportViewController.medications" = "Medications";
 "ReportViewController.medicalInformation" = "Medical Information";
+"ReportViewController.optional" = " (optional)";
 "ReportViewController.patientInformation" = "Patient Information";
+"ReportViewController.procedures" = "Procedures";
 "ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";

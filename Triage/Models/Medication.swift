@@ -6,7 +6,18 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import PRKit
 import RealmSwift
+
+enum MedicationResponse: String, StringCaseIterable {
+    case improved = "9916001"
+    case unchanged = "9916003"
+    case worse = "9916005"
+
+    var description: String {
+      return "Medication.response.\(rawValue)".localized
+    }
+}
 
 class Medication: BaseVersioned, NemsisBacked {
     struct Keys {
@@ -14,6 +25,33 @@ class Medication: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+
+    @objc var medicationAdministeredAt: Date? {
+        get {
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eMedications.01")?.text)
+        }
+        set {
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eMedications.01")
+        }
+    }
+
+    @objc var medication: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eMedications.03")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eMedications.03")
+        }
+    }
+
+    @objc var responseToMedication: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eMedications.07")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eMedications.07")
+        }
+    }
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
