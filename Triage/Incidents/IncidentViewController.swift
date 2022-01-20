@@ -13,7 +13,7 @@ protocol IncidentViewControllerDelegate: NSObject {
     func incidentViewControllerDidSave(_ vc: IncidentViewController)
 }
 
-class IncidentViewController: UIViewController {
+class IncidentViewController: UIViewController, ReportViewControllerDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
@@ -83,6 +83,7 @@ class IncidentViewController: UIViewController {
 
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
         if let vc = vc as? ReportViewController {
+            vc.delegate = self
             vc.report = report
             vc.isEditing = report.realm == nil
         }
@@ -106,5 +107,11 @@ class IncidentViewController: UIViewController {
                                                                target: self,
                                                                action: #selector(editPressed))
         }
+    }
+
+    // MARK: - ReportViewController
+
+    func reportViewControllerNeedsEditing(_ vc: ReportViewController) {
+        editPressed()
     }
 }

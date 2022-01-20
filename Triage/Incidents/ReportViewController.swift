@@ -11,13 +11,16 @@ import UIKit
 import Keyboardy
 import RealmSwift
 
+protocol ReportViewControllerDelegate: AnyObject {
+    func reportViewControllerNeedsEditing(_ vc: ReportViewController)
+}
+
 class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
-    var formFieldsMap: [String: PRKit.FormField] = [:]
 
     var report: Report!
     var newReport: Report?
@@ -32,6 +35,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     var vitals: [Vital]!
     var procedures: [Procedure]!
     var medications: [Medication]!
+
+    weak var delegate: ReportViewControllerDelegate?
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -93,7 +98,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: patient, attributeKey: "firstName", tag: &tag, to: colA)
         addTextField(source: patient, attributeKey: "lastName", tag: &tag, to: colB)
         addTextField(source: patient, attributeKey: "dob", attributeType: .date, tag: &tag, to: colA)
-        var innerCols = newColumns()
+        let innerCols = newColumns()
         addTextField(source: patient,
                      attributeKey: "ageArray",
                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
@@ -158,54 +163,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         containerView.addArrangedSubview(section)
 
         for (i, vital) in vitals.enumerated() {
-            (section, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.vitals".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-            section.addArrangedSubview(header)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
-            innerCols = newColumns()
-            innerCols.distribution = .fillProportionally
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
-            let label = UILabel()
-            label.font = .h3SemiBold
-            label.textColor = .base800
-            label.text = "/"
-            innerCols.addArrangedSubview(label)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
-            colB.addArrangedSubview(innerCols)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "heartRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colA)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "cardiacRhythm",
-                         attributeType: .custom(NemsisComboKeyboard(
-                            source: EnumKeyboardSource<VitalCardiacRhythm>(),
-                            isMultiSelect: true,
-                            negatives: [
-                                .notApplicable,
-                                .refused,
-                                .unabletoComplete
-                            ])),
-                         tag: &tag, to: colB)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-            addTextField(source: vital, sourceIndex: i,
-                         attributeKey: "carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
-            section.addArrangedSubview(cols)
+            (section, cols, colA, colB) = newVitalsSection(i, vital: vital, tag: &tag)
             containerView.addArrangedSubview(section)
         }
         var button = newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized)
-        button.addTarget(self, action: #selector(newVitalsPressed), for: .touchUpInside)
+        button.addTarget(self, action: #selector(newVitalsPressed(_:)), for: .touchUpInside)
         button.tag = tag
         colA.addArrangedSubview(button)
 
@@ -285,6 +247,54 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         setEditing(isEditing, animated: false)
     }
 
+    func newVitalsSection(_ i: Int, vital: Vital, tag: inout Int) -> (UIStackView, UIStackView, UIStackView, UIStackView) {
+        let (section, cols, colA, colB) = newSection()
+        let header = newHeader("ReportViewController.vitals".localized,
+                               subheaderText: "ReportViewController.optional".localized)
+        section.addArrangedSubview(header)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
+        let innerCols = newColumns()
+        innerCols.distribution = .fillProportionally
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
+        let label = UILabel()
+        label.font = .h3SemiBold
+        label.textColor = .base800
+        label.text = "/"
+        innerCols.addArrangedSubview(label)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
+        colB.addArrangedSubview(innerCols)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "heartRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colA)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "cardiacRhythm",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        source: EnumKeyboardSource<VitalCardiacRhythm>(),
+                        isMultiSelect: true,
+                        negatives: [
+                            .notApplicable,
+                            .refused,
+                            .unabletoComplete
+                        ])),
+                     tag: &tag, to: colB)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
+        addTextField(source: vital, sourceIndex: i,
+                     attributeKey: "carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
+        section.addArrangedSubview(cols)
+        return (section, cols, colA, colB)
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         for formField in formFields {
@@ -353,8 +363,33 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
-    @objc func newVitalsPressed() {
+    @objc func newVitalsPressed(_ button: PRKit.Button) {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        guard let newReport = newReport else { return }
+        let vital = Vital.newRecord()
+        let i = newReport.vitals.count
+        var tag = button.tag
+        newReport.vitals.append(vital)
 
+        guard var prevSection = button.superview else { return }
+        while prevSection.superview != containerView {
+            if let superview = prevSection.superview {
+                prevSection = superview
+            } else {
+                return
+            }
+        }
+        guard var prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
+        prevIndex += 1
+
+        let (section, _, colA, _) = newVitalsSection(i, vital: vital, tag: &tag)
+        containerView.insertArrangedSubview(section, at: prevIndex)
+        button.tag = tag
+        button.removeFromSuperview()
+        colA.addArrangedSubview(button)
     }
 
     @objc func addProcedurePressed() {
