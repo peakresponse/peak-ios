@@ -24,17 +24,6 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     var report: Report!
     var newReport: Report?
-    var scene: Scene!
-    var time: Time!
-    var response: Response!
-    var narrative: Narrative!
-    var disposition: Disposition!
-    var patient: Patient!
-    var situation: Situation!
-    var history: History!
-    var vitals: [Vital]!
-    var procedures: [Procedure]!
-    var medications: [Medication]!
 
     weak var delegate: ReportViewControllerDelegate?
 
@@ -51,17 +40,17 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        scene = report.scene ?? Scene.newRecord()
-        time = report.time ?? Time.newRecord()
-        response = report.response ?? Response.newRecord()
-        narrative = report.narrative ?? Narrative.newRecord()
-        disposition = report.disposition ?? Disposition.newRecord()
-        patient = report.patient ?? Patient.newRecord()
-        situation = report.situation ?? Situation.newRecord()
-        history = report.history ?? History.newRecord()
-        vitals = Array(report.vitals)
-        procedures = Array(report.procedures)
-        medications = Array(report.medications)
+        let scene = report.scene ?? Scene.newRecord()
+        let time = report.time ?? Time.newRecord()
+        let response = report.response ?? Response.newRecord()
+        let narrative = report.narrative ?? Narrative.newRecord()
+        let disposition = report.disposition ?? Disposition.newRecord()
+        let patient = report.patient ?? Patient.newRecord()
+        let situation = report.situation ?? Situation.newRecord()
+        let history = report.history ?? History.newRecord()
+        let vitals = Array(report.vitals)
+        let procedures = Array(report.procedures)
+        let medications = Array(report.medications)
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -108,10 +97,6 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeType: .single(EnumKeyboardSource<PatientGender>()),
                      tag: &tag, to: innerCols, withWrapper: true)
         colB.addArrangedSubview(innerCols)
-//        innerCols = newColumns()
-//        innerCols.addArrangedSubview(newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized))
-//        innerCols.addArrangedSubview(newButton(bundleImage: "PatientAdd24px", title: "Button.addPatient".localized))
-//        colA.addArrangedSubview(innerCols)
         section.addArrangedSubview(cols)
         containerView.addArrangedSubview(section)
 
@@ -163,116 +148,68 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         containerView.addArrangedSubview(section)
 
         for (i, vital) in vitals.enumerated() {
-            (section, cols, colA, colB) = newVitalsSection(i, vital: vital, tag: &tag)
+            (section, cols, colA, colB) = newVitalsSection(i, source: vital, tag: &tag)
             containerView.addArrangedSubview(section)
         }
         var button = newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized)
         button.addTarget(self, action: #selector(newVitalsPressed(_:)), for: .touchUpInside)
         button.tag = tag
-        colA.addArrangedSubview(button)
+        section.addLastButton(button)
 
-        tag += 1000
+        tag += 10000
         for (i, procedure) in procedures.enumerated() {
-            (section, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.procedures".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-            section.addArrangedSubview(header)
-            addTextField(source: procedure, sourceIndex: i,
-                         attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
-            addTextField(source: procedure, sourceIndex: i,
-                         attributeKey: "procedure",
-                         attributeType: .custom(NemsisComboKeyboard(
-                            field: "eProcedures.03",
-                            sources: [SNOMEDKeyboardSource()],
-                            isMultiSelect: false,
-                            negatives: [
-                                .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
-                            ],
-                            isNegativeExclusive: false)),
-                         tag: &tag, to: colA)
-            addTextField(source: procedure, sourceIndex: i,
-                         attributeKey: "responseToProcedure",
-                         attributeType: .custom(NemsisComboKeyboard(
-                            source: EnumKeyboardSource<ProcedureResponse>(),
-                            isMultiSelect: false,
-                            negatives: [
-                                .notApplicable
-                            ])),
-                         tag: &tag, to: colA)
-            section.addArrangedSubview(cols)
+            (section, cols, colA, colB) = newProceduresSection(i, source: procedure, tag: &tag)
             containerView.addArrangedSubview(section)
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addProcedure".localized)
         button.addTarget(self, action: #selector(addProcedurePressed), for: .touchUpInside)
         button.tag = tag
-        colA.addArrangedSubview(button)
+        section.addLastButton(button)
 
-        tag += 1000
+        tag += 10000
         for (i, medication) in medications.enumerated() {
-            (section, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.medications".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-            section.addArrangedSubview(header)
-            addTextField(source: medication, sourceIndex: i,
-                         attributeKey: "medicationAdministeredAt", attributeType: .datetime, tag: &tag, to: colA)
-            addTextField(source: medication, sourceIndex: i,
-                         attributeKey: "medication",
-                         attributeType: .custom(NemsisComboKeyboard(
-                            field: "eMedications.03",
-                            sources: [RxNormKeyboardSource()],
-                            isMultiSelect: false,
-                            negatives: [
-                                .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
-                                .refused, .unabletoComplete, .orderCriteriaNotMet
-                            ],
-                            isNegativeExclusive: false)),
-                         tag: &tag, to: colA)
-            addTextField(source: medication, sourceIndex: i,
-                         attributeKey: "responseToMedication",
-                         attributeType: .custom(NemsisComboKeyboard(
-                            source: EnumKeyboardSource<MedicationResponse>(),
-                            isMultiSelect: false,
-                            negatives: [
-                                .notApplicable
-                            ])),
-                         tag: &tag, to: colA)
-            section.addArrangedSubview(cols)
+            (section, cols, colA, colB) = newMedicationsSection(i, source: medication, tag: &tag)
             containerView.addArrangedSubview(section)
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addMedication".localized)
         button.addTarget(self, action: #selector(addMedicationPressed), for: .touchUpInside)
         button.tag = tag
-        colA.addArrangedSubview(button)
+        section.addLastButton(button)
 
         setEditing(isEditing, animated: false)
     }
 
-    func newVitalsSection(_ i: Int, vital: Vital, tag: inout Int) -> (UIStackView, UIStackView, UIStackView, UIStackView) {
+    func newVitalsSection(_ i: Int, source: Vital? = nil, target: Vital? = nil,
+                          tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
         let (section, cols, colA, colB) = newSection()
+        section.source = source
+        section.sourceIndex = i
+        section.target = target
+
         let header = newHeader("ReportViewController.vitals".localized,
                                subheaderText: "ReportViewController.optional".localized)
         section.addArrangedSubview(header)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
         let innerCols = newColumns()
         innerCols.distribution = .fillProportionally
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
         let label = UILabel()
         label.font = .h3SemiBold
         label.textColor = .base800
         label.text = "/"
         innerCols.addArrangedSubview(label)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
         colB.addArrangedSubview(innerCols)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "heartRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colA)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "cardiacRhythm",
                      attributeType: .custom(NemsisComboKeyboard(
                         source: EnumKeyboardSource<VitalCardiacRhythm>(),
@@ -283,14 +220,87 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                             .unabletoComplete
                         ])),
                      tag: &tag, to: colB)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-        addTextField(source: vital, sourceIndex: i,
+        addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
+        section.addArrangedSubview(cols)
+        return (section, cols, colA, colB)
+    }
+
+    func newProceduresSection(_ i: Int, source: Procedure? = nil, target: Procedure? = nil,
+                              tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
+        let (section, cols, colA, colB) = newSection()
+        section.source = source
+        section.sourceIndex = i
+        section.target = target
+
+        let header = newHeader("ReportViewController.procedures".localized,
+                               subheaderText: "ReportViewController.optional".localized)
+        section.addArrangedSubview(header)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "procedurePerformedAt", attributeType: .datetime, tag: &tag, to: colA)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "procedure",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eProcedures.03",
+                        sources: [SNOMEDKeyboardSource()],
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
+                        ],
+                        isNegativeExclusive: false)),
+                     tag: &tag, to: colB)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "responseToProcedure",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        source: EnumKeyboardSource<ProcedureResponse>(),
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable
+                        ])),
+                     tag: &tag, to: colB)
+        section.addArrangedSubview(cols)
+        return (section, cols, colA, colB)
+    }
+
+    func newMedicationsSection(_ i: Int, source: Medication? = nil, target: Medication? = nil,
+                               tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
+        let (section, cols, colA, colB) = newSection()
+        section.source = source
+        section.sourceIndex = i
+        section.target = target
+
+        let header = newHeader("ReportViewController.medications".localized,
+                               subheaderText: "ReportViewController.optional".localized)
+        section.addArrangedSubview(header)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "medicationAdministeredAt", attributeType: .datetime, tag: &tag, to: colA)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "medication",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        field: "eMedications.03",
+                        sources: [RxNormKeyboardSource()],
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
+                            .refused, .unabletoComplete, .orderCriteriaNotMet
+                        ],
+                        isNegativeExclusive: false)),
+                     tag: &tag, to: colA)
+        addTextField(source: source, sourceIndex: i, target: target,
+                     attributeKey: "responseToMedication",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        source: EnumKeyboardSource<MedicationResponse>(),
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable
+                        ])),
+                     tag: &tag, to: colA)
         section.addArrangedSubview(cols)
         return (section, cols, colA, colB)
     }
@@ -299,6 +309,25 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         super.viewDidLayoutSubviews()
         for formField in formFields {
             formField.updateStyle()
+        }
+    }
+
+    func removeSections(type: AnyClass, greaterThan count: Int) {
+        var lastSection: FormSection?
+        for view in containerView.arrangedSubviews {
+            if let view = view as? FormSection, (view.source ?? view.target)?.isKind(of: type) ?? false {
+                if view.sourceIndex ?? 0 >= count {
+                    let fieldsToRemove = FormSection.fields(in: view)
+                    formFields = formFields.filter { !fieldsToRemove.contains($0) }
+                    if let button = view.findLastButton() {
+                        button.removeFromSuperview()
+                        lastSection?.addLastButton(button)
+                    }
+                    view.removeFromSuperview()
+                } else {
+                    lastSection = view
+                }
+            }
         }
     }
 
@@ -311,6 +340,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 newReport = report
             }
         } else {
+            if newReport?.vitals.count ?? 0 > report.vitals.count {
+                removeSections(type: Vital.self, greaterThan: report.vitals.count)
+            }
+            if newReport?.procedures.count ?? 0 > report.procedures.count {
+                removeSections(type: Procedure.self, greaterThan: report.procedures.count)
+            }
+            if newReport?.medications.count ?? 0 > report.medications.count {
+                removeSections(type: Medication.self, greaterThan: report.medications.count)
+            }
             newReport = nil
         }
         for formField in formFields {
@@ -346,6 +384,12 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                     } else {
                         formField.target = nil
                     }
+                case "Medication":
+                    if let index = formField.sourceIndex, index < newReport?.medications.count ?? 0 {
+                        formField.target = newReport?.procedures[index]
+                    } else {
+                        formField.target = nil
+                    }
                 default:
                     break
                 }
@@ -374,30 +418,56 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         var tag = button.tag
         newReport.vitals.append(vital)
 
-        guard var prevSection = button.superview else { return }
-        while prevSection.superview != containerView {
-            if let superview = prevSection.superview {
-                prevSection = superview
-            } else {
-                return
-            }
-        }
-        guard var prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
-        prevIndex += 1
+        guard let prevSection = FormSection.parent(of: button) else { return }
+        guard let prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
 
-        let (section, _, colA, _) = newVitalsSection(i, vital: vital, tag: &tag)
-        containerView.insertArrangedSubview(section, at: prevIndex)
+        let (section, _, _, _) = newVitalsSection(i, target: vital, tag: &tag)
+        containerView.insertArrangedSubview(section, at: prevIndex + 1)
         button.tag = tag
         button.removeFromSuperview()
-        colA.addArrangedSubview(button)
+        section.addLastButton(button)
     }
 
-    @objc func addProcedurePressed() {
+    @objc func addProcedurePressed(_ button: PRKit.Button) {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        guard let newReport = newReport else { return }
+        let procedure = Procedure.newRecord()
+        let i = newReport.procedures.count
+        var tag = button.tag
+        newReport.procedures.append(procedure)
 
+        guard let prevSection = FormSection.parent(of: button) else { return }
+        guard let prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
+
+        let (section, _, _, _) = newProceduresSection(i, target: procedure, tag: &tag)
+        containerView.insertArrangedSubview(section, at: prevIndex + 1)
+        button.tag = tag
+        button.removeFromSuperview()
+        section.addLastButton(button)
     }
 
-    @objc func addMedicationPressed() {
+    @objc func addMedicationPressed(_ button: PRKit.Button) {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        guard let newReport = newReport else { return }
+        let medication = Medication.newRecord()
+        let i = newReport.medications.count
+        var tag = button.tag
+        newReport.medications.append(medication)
 
+        guard let prevSection = FormSection.parent(of: button) else { return }
+        guard let prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
+
+        let (section, _, _, _) = newMedicationsSection(i, target: medication, tag: &tag)
+        containerView.insertArrangedSubview(section, at: prevIndex + 1)
+        button.tag = tag
+        button.removeFromSuperview()
+        section.addLastButton(button)
     }
 
     // MARK: FormFieldDelegate

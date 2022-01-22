@@ -9,7 +9,57 @@
 import PRKit
 import UIKit
 
-protocol FormViewController: PRKit.FormFieldDelegate {
+open class FormSection: UIStackView {
+    open var source: NSObject?
+    open var sourceIndex: Int?
+    open var target: NSObject?
+    open var targetIndex: Int?
+
+    public static func parent(of view: UIView) -> FormSection? {
+        var superview = view.superview
+        while superview != nil {
+            if let superview = superview as? FormSection {
+                return superview
+            }
+            superview = superview?.superview
+        }
+        return nil
+    }
+
+    public static func fields(in view: UIView) -> [PRKit.FormField] {
+        var fields: [PRKit.FormField] = []
+        FormSection.fields(in: view, fields: &fields)
+        return fields
+    }
+
+    static func fields(in view: UIView, fields: inout [PRKit.FormField]) {
+        for subview in view.subviews {
+            if let subview = subview as? PRKit.FormField {
+                fields.append(subview)
+            } else {
+                FormSection.fields(in: subview, fields: &fields)
+            }
+        }
+    }
+
+    func addLastButton(_ button: PRKit.Button) {
+        var stackView = arrangedSubviews.last as? UIStackView
+        if stackView?.axis == .horizontal {
+            stackView = stackView?.arrangedSubviews.first as? UIStackView
+        }
+        stackView?.addArrangedSubview(button)
+    }
+
+    func findLastButton() -> PRKit.Button? {
+        var stackView = arrangedSubviews.last as? UIStackView
+        if stackView?.axis == .horizontal {
+            stackView = stackView?.arrangedSubviews.first as? UIStackView
+        }
+        return stackView?.arrangedSubviews.last as? PRKit.Button
+    }
+}
+
+public protocol FormViewController: PRKit.FormFieldDelegate {
     var traitCollection: UITraitCollection { get }
     var formInputAccessoryView: UIView! { get }
     var formFields: [PRKit.FormField] { get set }
@@ -17,14 +67,14 @@ protocol FormViewController: PRKit.FormFieldDelegate {
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
-    func newSection() -> (UIStackView, UIStackView, UIStackView, UIStackView)
-    func newTextField(source: NSObject, sourceIndex: Int?,
+    func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView)
+    func newTextField(source: NSObject?, sourceIndex: Int?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitText: String?,
                       tag: inout Int) -> PRKit.TextField
 
-    func addTextField(source: NSObject, sourceIndex: Int?,
+    func addTextField(source: NSObject?, sourceIndex: Int?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitText: String?,
@@ -33,13 +83,13 @@ protocol FormViewController: PRKit.FormFieldDelegate {
 }
 
 extension FormViewController {
-    func addTextField(source: NSObject, sourceIndex: Int? = nil,
+    func addTextField(source: NSObject? = nil, sourceIndex: Int? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitText: String? = nil,
                       tag: inout Int,
                       to col: UIStackView, withWrapper: Bool = false) {
-        let textField = newTextField(source: source, sourceIndex: sourceIndex,
+        let textField = newTextField(source: source, sourceIndex: sourceIndex, target: target,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
                                      unitText: unitText,
@@ -79,7 +129,7 @@ extension FormViewController {
         return stackView
     }
 
-    func newTextField(source: NSObject, sourceIndex: Int? = nil,
+    func newTextField(source: NSObject? = nil, sourceIndex: Int? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitText: String? = nil,
@@ -88,10 +138,11 @@ extension FormViewController {
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.source = source
         textField.sourceIndex = sourceIndex
+        textField.target = target
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
-        textField.labelText = "\(String(describing: type(of: source))).\(attributeKey)".localized
-        textField.attributeValue = source.value(forKey: attributeKey) as? NSObject
+        textField.labelText = "\(String(describing: type(of: source ?? target ?? NSNull()))).\(attributeKey)".localized
+        textField.attributeValue = (source ?? target)?.value(forKey: attributeKey) as? NSObject
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
         if let unitText = unitText {
@@ -148,8 +199,8 @@ extension FormViewController {
         return view
     }
 
-    func newSection() -> (UIStackView, UIStackView, UIStackView, UIStackView) {
-        let section = UIStackView()
+    func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView) {
+        let section = FormSection()
         section.translatesAutoresizingMaskIntoConstraints = false
         section.axis = .vertical
         section.alignment = .fill

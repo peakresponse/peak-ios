@@ -99,10 +99,19 @@ class Report: BaseVersioned, NemsisBacked {
         }
         vitals.removeAll()
         vitals.append(objectsIn: report.vitals.map { Vital(clone: $0) })
+        if vitals.count == 0 {
+            vitals.append(Vital.newRecord())
+        }
         medications.removeAll()
         medications.append(objectsIn: report.medications.map { Medication(clone: $0) })
+        if medications.count == 0 {
+            medications.append(Medication.newRecord())
+        }
         procedures.removeAll()
         procedures.append(objectsIn: report.procedures.map { Procedure(clone: $0) })
+        if procedures.count == 0 {
+            procedures.append(Procedure.newRecord())
+        }
     }
 
     override func new() {
