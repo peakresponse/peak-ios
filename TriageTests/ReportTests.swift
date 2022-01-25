@@ -19,6 +19,28 @@ class ReportTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testSaveDependencies() throws {
+        AppRealm.deleteAll()
+
+        let report = Report.newRecord()
+
+        let patient = report.patient
+        patient?.firstName = "John"
+        patient?.lastName = "Doe"
+        patient?.gender = PatientGender.male.rawValue
+
+        let vital = report.vitals[0]
+        vital.bpSystolic = "120"
+        vital.bpDiastolic = "80"
+
+        let realm = AppRealm.open()
+        try! realm.write {
+            realm.add(report, update: .modified)
+            XCTAssertNotNil(patient?.realm)
+            XCTAssertNotNil(vital.realm)
+        }
+    }
+
     func testCanonicalize() throws {
         let report = Report.newRecord()
         report.patient?.firstName = "John"
