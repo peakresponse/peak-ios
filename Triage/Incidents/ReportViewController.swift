@@ -147,9 +147,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         section.addArrangedSubview(cols)
         containerView.addArrangedSubview(section)
 
-        for (i, vital) in vitals.enumerated() {
-            (section, cols, colA, colB) = newVitalsSection(i, source: vital, tag: &tag)
+        if vitals.count == 0 {
+            (section, cols, colA, colB) = newVitalsSection(0, source: Vital.newRecord(), tag: &tag)
             containerView.addArrangedSubview(section)
+        } else {
+            for (i, vital) in vitals.enumerated() {
+                (section, cols, colA, colB) = newVitalsSection(i, source: vital, tag: &tag)
+                containerView.addArrangedSubview(section)
+            }
         }
         var button = newButton(bundleImage: "Plus24px", title: "Button.newVitals".localized)
         button.addTarget(self, action: #selector(newVitalsPressed(_:)), for: .touchUpInside)
@@ -157,9 +162,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         section.addLastButton(button)
 
         tag += 10000
-        for (i, procedure) in procedures.enumerated() {
-            (section, cols, colA, colB) = newProceduresSection(i, source: procedure, tag: &tag)
+        if procedures.count == 0 {
+            (section, cols, colA, colB) = newProceduresSection(0, source: Procedure.newRecord(), tag: &tag)
             containerView.addArrangedSubview(section)
+        } else {
+            for (i, procedure) in procedures.enumerated() {
+                (section, cols, colA, colB) = newProceduresSection(i, source: procedure, tag: &tag)
+                containerView.addArrangedSubview(section)
+            }
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addProcedure".localized)
         button.addTarget(self, action: #selector(addProcedurePressed), for: .touchUpInside)
@@ -167,9 +177,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         section.addLastButton(button)
 
         tag += 10000
-        for (i, medication) in medications.enumerated() {
-            (section, cols, colA, colB) = newMedicationsSection(i, source: medication, tag: &tag)
+        if medications.count == 0 {
+            (section, cols, colA, colB) = newMedicationsSection(0, source: Medication.newRecord(), tag: &tag)
             containerView.addArrangedSubview(section)
+        } else {
+            for (i, medication) in medications.enumerated() {
+                (section, cols, colA, colB) = newMedicationsSection(i, source: medication, tag: &tag)
+                containerView.addArrangedSubview(section)
+            }
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addMedication".localized)
         button.addTarget(self, action: #selector(addMedicationPressed), for: .touchUpInside)
@@ -341,13 +356,13 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             }
         } else {
             if newReport?.vitals.count ?? 0 > report.vitals.count {
-                removeSections(type: Vital.self, greaterThan: report.vitals.count)
+                removeSections(type: Vital.self, greaterThan: max(1, report.vitals.count))
             }
             if newReport?.procedures.count ?? 0 > report.procedures.count {
-                removeSections(type: Procedure.self, greaterThan: report.procedures.count)
+                removeSections(type: Procedure.self, greaterThan: max(1, report.procedures.count))
             }
             if newReport?.medications.count ?? 0 > report.medications.count {
-                removeSections(type: Medication.self, greaterThan: report.medications.count)
+                removeSections(type: Medication.self, greaterThan: max(1, report.medications.count))
             }
             newReport = nil
         }
@@ -386,7 +401,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                     }
                 case "Medication":
                     if let index = formField.sourceIndex, index < newReport?.medications.count ?? 0 {
-                        formField.target = newReport?.procedures[index]
+                        formField.target = newReport?.medications[index]
                     } else {
                         formField.target = nil
                     }
@@ -401,8 +416,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     func resetFormFields() {
         for formField in formFields {
-            if let source = formField.source, let attributeKey = formField.attributeKey {
-                formField.attributeValue = source.value(forKey: attributeKey) as? NSObject
+            if let attributeKey = formField.attributeKey {
+                formField.attributeValue = formField.source?.value(forKey: attributeKey) as? NSObject
             }
         }
     }

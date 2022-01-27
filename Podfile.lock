@@ -64,7 +64,7 @@ PODS:
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
-  - ICD10Kit (from `https://github.com/peakresponse/peak-ios-icd10kit.git`, branch `dev`)
+  - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
@@ -73,7 +73,7 @@ DEPENDENCIES:
   - RollbarPLCrashReporter (= 2.0.0-beta.22)
   - RollbarSwift (= 2.0.0-beta.22)
   - RxNormKit (from `https://github.com/peakresponse/peak-ios-rxnormkit.git`, branch `dev`)
-  - SNOMEDKit (from `https://github.com/peakresponse/peak-ios-snomedkit.git`, branch `dev`)
+  - SNOMEDKit
   - Starscream
   - SwiftLint
   - SwiftPath
@@ -84,6 +84,7 @@ SPEC REPOS:
     - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - ICD10Kit
     - Keyboardy
     - PLCrashReporter
     - Realm
@@ -92,15 +93,13 @@ SPEC REPOS:
     - RollbarNotifier
     - RollbarPLCrashReporter
     - RollbarSwift
+    - SNOMEDKit
     - Starscream
     - SVGKit
     - SwiftLint
     - SwiftPath
 
 EXTERNAL SOURCES:
-  ICD10Kit:
-    :branch: dev
-    :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
@@ -112,14 +111,8 @@ EXTERNAL SOURCES:
   RxNormKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
-  SNOMEDKit:
-    :branch: dev
-    :git: https://github.com/peakresponse/peak-ios-snomedkit.git
 
 CHECKOUT OPTIONS:
-  ICD10Kit:
-    :commit: 5c2669bce22d855721d93d018fd4c373546acafe
-    :git: https://github.com/peakresponse/peak-ios-icd10kit.git
   PRKit:
     :commit: 58cb47c0670f025195c0d8a6a28968f675bc48a1
     :git: https://github.com/peakresponse/peak-ios-prkit.git
@@ -129,16 +122,13 @@ CHECKOUT OPTIONS:
   RxNormKit:
     :commit: f47e8bb07da6e79cec3ff131b79c22c117dc2e7f
     :git: https://github.com/peakresponse/peak-ios-rxnormkit.git
-  SNOMEDKit:
-    :commit: 62a9727715eda46d095395f8c40adad620521440
-    :git: https://github.com/peakresponse/peak-ios-snomedkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
-  ICD10Kit: 99ae768ab44393c85a72dbd3bcc7da97509761cf
+  ICD10Kit: d627ff3bfba6604b86fe637547bdcf4bfe47720d
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
@@ -151,12 +141,12 @@ SPEC CHECKSUMS:
   RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
   RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
   RxNormKit: 5e2a98767352eeb9dc54d6f4c20fadfd19c3f591
-  SNOMEDKit: 1c27fed7c08377aefd8905320b77a9f2db0c4fca
+  SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: 6504aee3e9a6d1b316186d42443c5572aa4ab677
+PODFILE CHECKSUM: a68961c58b9406acf47e4d530838942675ff6f6b
 
 COCOAPODS: 1.11.2

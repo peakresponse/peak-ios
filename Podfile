@@ -18,7 +18,7 @@ target 'Triage' do
   # Pods for Triage
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
-  pod 'ICD10Kit', :git => 'https://github.com/peakresponse/peak-ios-icd10kit.git', :branch => 'dev'
+  pod 'ICD10Kit'
   pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
   pod 'RealmSwift', '10.11.0'
   pod 'RollbarNotifier', '2.0.0-beta.22'
@@ -29,7 +29,7 @@ target 'Triage' do
   pod 'Starscream'
   pod 'SwiftLint'
   pod 'SwiftPath'
-  pod 'SNOMEDKit', :git => 'https://github.com/peakresponse/peak-ios-snomedkit.git', :branch => 'dev'
+  pod 'SNOMEDKit'
 
   target 'TriageTests' do
     inherit! :search_paths

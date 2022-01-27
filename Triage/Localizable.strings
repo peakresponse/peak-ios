@@ -137,6 +137,10 @@
 "Medication.medication" = "Medication";
 "Medication.responseToMedication" = "Patient Response";
 
+"Medication.response.9916001" = "Improved";
+"Medication.response.9916003" = "Unchanged";
+"Medication.response.9916005" = "Worse";
+
 "Narrative.text" = "Narrative";
 
 "NavigationBar.cancel" = "Cancel";
