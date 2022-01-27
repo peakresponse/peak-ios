@@ -19,7 +19,7 @@ class RxNormKeyboardSource: KeyboardSource {
 
     init() {
         results = RxNRealm.open().objects(RxNConcept.self).sorted(by: [
-            SortDescriptor(keyPath: "rxcui", ascending: true),
+            SortDescriptor(keyPath: "tty", ascending: true),
             SortDescriptor(keyPath: "name", ascending: true)
         ])
     }
@@ -51,14 +51,14 @@ class RxNormKeyboardSource: KeyboardSource {
     func title(for value: NSObject?) -> String? {
         guard let value = value as? NemsisValue, !value.isNil, let id = value.text else { return nil }
         guard let code = RxNRealm.open().object(ofType: RxNConcept.self, forPrimaryKey: Int(id)) else { return nil }
-        return "\(code.rxcui): \(code.name)"
+        return "\(code.name.capitalized)"
     }
 
     func title(at index: Int) -> String? {
         if let filteredResults = filteredResults {
-            return "\(filteredResults[index].rxcui): \(filteredResults[index].name)"
+            return "\(filteredResults[index].name.capitalized)"
         }
-        return "\(results?[index].rxcui ?? 0): \(results?[index].name ?? "")"
+        return "\(results?[index].name.capitalized ?? "")"
     }
 
     func value(at index: Int) -> NSObject? {

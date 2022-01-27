@@ -16,6 +16,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
 
     var sources: [KeyboardSource]?
     var field: String?
+    var fieldList: CodeList?
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
 
@@ -61,40 +62,47 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         ])
         self.containerView = containerView
 
+        let realm = AppRealm.open()
+        // look up the list for the field
+
         if let field = field {
-            let realm = AppRealm.open()
-            // look up the list for the field
-            guard let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first else { return }
+            fieldList = realm.objects(CodeList.self).filter("%@ IN fields", field).first
+            if let fieldList = fieldList {
+                segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.suggested".localized)
 
-            segmentedControl.addSegment(title: "NemsisKeyboardViewController.segment.suggested".localized)
-
-            let storyboard = UIStoryboard(name: "CodeList", bundle: nil)
-            if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
-                if let vc = vc.topViewController as? CodeListSectionsViewController {
-                    vc.delegate = self
-                    vc.values = values
-                    vc.isMultiSelect = isMultiSelect
-                    vc.list = list
+                let storyboard = UIStoryboard(name: "CodeList", bundle: nil)
+                if let vc = storyboard.instantiateInitialViewController() as? UINavigationController {
+                    if let vc = vc.topViewController as? CodeListSectionsViewController {
+                        vc.delegate = self
+                        vc.values = values
+                        vc.isMultiSelect = isMultiSelect
+                        vc.list = fieldList
+                    }
+                    addChild(vc)
+                    vc.view.translatesAutoresizingMaskIntoConstraints = false
+                    containerView.addSubview(vc.view)
+                    NSLayoutConstraint.activate([
+                        vc.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+                        vc.view.leftAnchor.constraint(equalTo: containerView.leftAnchor),
+                        vc.view.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+                        vc.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+                    ])
+                    vc.didMove(toParent: self)
                 }
-                addChild(vc)
-                vc.view.translatesAutoresizingMaskIntoConstraints = false
-                containerView.addSubview(vc.view)
-                NSLayoutConstraint.activate([
-                    vc.view.topAnchor.constraint(equalTo: containerView.topAnchor),
-                    vc.view.leftAnchor.constraint(equalTo: containerView.leftAnchor),
-                    vc.view.rightAnchor.constraint(equalTo: containerView.rightAnchor),
-                    vc.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-                ])
-                vc.didMove(toParent: self)
-            }
 
-            // query for field list
-            performQuery()
+                // query for field list
+                performQuery()
+            }
         }
 
         if let sources = sources {
             for source in sources {
                 segmentedControl.addSegment(title: source.name)
+            }
+            if fieldList == nil {
+                containerView.isHidden = true
+                source = sources[0]
+                collectionView.reloadData()
             }
         }
     }
@@ -111,11 +119,10 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         notificationToken?.invalidate()
         results = nil
         guard let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty else { return }
-        guard let field = field else { return }
+        guard let fieldList = fieldList else { return }
         let realm = AppRealm.open()
         // look up the list for the field
-        guard let list = realm.objects(CodeList.self).filter("%@ IN fields", field).first else { return }
-        results = realm.objects(CodeListItem.self).filter("list=%@", list)
+        results = realm.objects(CodeListItem.self).filter("list=%@", fieldList)
         results = results?.filter("name CONTAINS[cd] %@", query)
         results = results?.sorted(by: [
             SortDescriptor(keyPath: "section.position", ascending: true),
@@ -166,7 +173,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
     // MARK: - FormFieldDelegate
 
     open override func formFieldDidChange(_ field: PRKit.FormField) {
-        if self.field != nil, segmentedControl.selectedIndex == 0 {
+        if fieldList != nil, segmentedControl.selectedIndex == 0 {
             performQuery(field.text)
             containerView.isHidden = !(field.text?.isEmpty ?? true)
             return
@@ -177,21 +184,21 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
     // MARK: - UICollectionViewDataSource
 
     open override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        if field != nil, segmentedControl.selectedIndex == 0 {
+        if fieldList != nil, segmentedControl.selectedIndex == 0 {
             return 1
         }
         return super.numberOfSections(in: collectionView)
     }
 
     open override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if field != nil, segmentedControl.selectedIndex == 0 {
+        if fieldList != nil, segmentedControl.selectedIndex == 0 {
             return results?.count ?? 0
         }
         return super.collectionView(collectionView, numberOfItemsInSection: section)
     }
 
     open override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if field != nil, segmentedControl.selectedIndex == 0 {
+        if fieldList != nil, segmentedControl.selectedIndex == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
             if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
                 cell.checkbox.value = NemsisValue(text: item.code)
