@@ -12,8 +12,10 @@ import PRKit
 class NemsisComboKeyboard: ComboKeyboard {
     var isMultiSelect = false
     var isNegativeExclusive = true
+    var includeSystem = false
 
-    init(source: KeyboardSource, isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
+    init(source: KeyboardSource, isMultiSelect: Bool, negatives: [NemsisNegative],
+         isNegativeExclusive: Bool = true, includeSystem: Bool = false) {
         super.init(keyboards: [
             SelectKeyboard(source: source, isMultiSelect: isMultiSelect),
             NemsisNegativeKeyboard(negatives: negatives)
@@ -23,11 +25,13 @@ class NemsisComboKeyboard: ComboKeyboard {
         ])
         self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive
+        self.includeSystem = includeSystem
     }
 
-    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative], isNegativeExclusive: Bool = true) {
+    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool, negatives: [NemsisNegative],
+         isNegativeExclusive: Bool = true, includeSystem: Bool = false) {
         super.init(keyboards: [
-            NemsisKeyboard(field: field, sources: sources, isMultiSelect: isMultiSelect),
+            NemsisKeyboard(field: field, sources: sources, isMultiSelect: isMultiSelect, includeSystem: includeSystem),
             NemsisNegativeKeyboard(negatives: negatives)
         ], titles: [
             "NemsisKeyboard.title".localized,
@@ -35,6 +39,7 @@ class NemsisComboKeyboard: ComboKeyboard {
         ])
         self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive
+        self.includeSystem = includeSystem
     }
 
     required init?(coder: NSCoder) {

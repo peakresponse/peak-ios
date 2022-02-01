@@ -133,9 +133,10 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeKey: "medicationAllergies",
                      attributeType: .custom(NemsisComboKeyboard(
                         field: "eHistory.06",
-                        sources: [RxNormKeyboardSource()],
+                        sources: [RxNormKeyboardSource(includeSystem: true)],
                         isMultiSelect: true,
-                        negatives: [.notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete])),
+                        negatives: [.notApplicable, .noKnownDrugAllergy, .refused, .unresponsive, .unabletoComplete],
+                        includeSystem: true)),
                      tag: &tag, to: colA)
         addTextField(source: history,
                      attributeKey: "environmentalFoodAllergies",
@@ -299,13 +300,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeKey: "medication",
                      attributeType: .custom(NemsisComboKeyboard(
                         field: "eMedications.03",
-                        sources: [RxNormKeyboardSource()],
+                        sources: [RxNormKeyboardSource(includeSystem: true)],
                         isMultiSelect: false,
                         negatives: [
                             .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
                             .refused, .unabletoComplete, .orderCriteriaNotMet
                         ],
-                        isNegativeExclusive: false)),
+                        isNegativeExclusive: false,
+                        includeSystem: true)),
                      tag: &tag, to: colA)
         addTextField(source: source, sourceIndex: i, target: target,
                      attributeKey: "responseToMedication",

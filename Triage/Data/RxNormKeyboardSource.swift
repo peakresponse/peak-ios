@@ -16,8 +16,10 @@ class RxNormKeyboardSource: KeyboardSource {
     }
     var results: Results<RxNConcept>?
     var filteredResults: Results<RxNConcept>?
+    var includeSystem = false
 
-    init() {
+    init(includeSystem: Bool = false) {
+        self.includeSystem = includeSystem
         results = RxNRealm.open().objects(RxNConcept.self).sorted(by: [
             SortDescriptor(keyPath: "tty", ascending: true),
             SortDescriptor(keyPath: "name", ascending: true)
@@ -69,7 +71,10 @@ class RxNormKeyboardSource: KeyboardSource {
             value = results?[index].rxcui
         }
         if let value = value {
-            return NemsisValue(text: String(value))
+            let nemsisValue = NemsisValue(text: String(value))
+            nemsisValue.attributes = [:]
+            nemsisValue.attributes?["CodeType"] = MedicationCodeType.rxNorm.rawValue
+            return nemsisValue
         }
         return nil
     }

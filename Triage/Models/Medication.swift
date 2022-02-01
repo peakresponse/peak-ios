@@ -9,6 +9,16 @@
 import PRKit
 import RealmSwift
 
+enum MedicationCodeType: String, StringCaseIterable {
+    case icd10cm = "9924001"
+    case rxNorm = "9924003"
+    case snomed = "9924005"
+
+    var description: String {
+      return "Medication.codeType.\(rawValue)".localized
+    }
+}
+
 enum MedicationResponse: String, StringCaseIterable {
     case improved = "9916001"
     case unchanged = "9916003"

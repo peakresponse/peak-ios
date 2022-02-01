@@ -17,6 +17,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
     var sources: [KeyboardSource]?
     var field: String?
     var fieldList: CodeList?
+    var includeSystem = false
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
 
@@ -77,6 +78,7 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
                         vc.values = values
                         vc.isMultiSelect = isMultiSelect
                         vc.list = fieldList
+                        vc.includeSystem = includeSystem
                     }
                     addChild(vc)
                     vc.view.translatesAutoresizingMaskIntoConstraints = false
@@ -201,7 +203,12 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
         if fieldList != nil, segmentedControl.selectedIndex == 0 {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
             if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
-                cell.checkbox.value = NemsisValue(text: item.code)
+                let value = NemsisValue(text: item.code)
+                if includeSystem {
+                    value.attributes = [:]
+                    value.attributes?["CodeType"] = item.system
+                }
+                cell.checkbox.value = value
                 if let sectionName = item.section?.name {
                     cell.checkbox.labelText = "\(sectionName): \(item.name ?? "")"
                 } else {

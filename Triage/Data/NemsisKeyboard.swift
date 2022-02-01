@@ -13,11 +13,13 @@ class NemsisKeyboard: SearchKeyboard {
     var sources: [KeyboardSource]
     var currentIndex = 0
     var field: String?
+    var includeSystem = false
 
-    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool) {
+    init(field: String? = nil, sources: [KeyboardSource], isMultiSelect: Bool, includeSystem: Bool = false) {
         self.sources = sources
         super.init(source: nil, isMultiSelect: isMultiSelect)
         self.field = field
+        self.includeSystem = includeSystem
     }
 
     required init?(coder: NSCoder) {
@@ -31,6 +33,7 @@ class NemsisKeyboard: SearchKeyboard {
         vc.sources = sources
         vc.values = values
         vc.isMultiSelect = isMultiSelect
+        vc.includeSystem = includeSystem
         vc.delegate = self
         delegate?.formInputView(self, wantsToPresent: vc)
     }

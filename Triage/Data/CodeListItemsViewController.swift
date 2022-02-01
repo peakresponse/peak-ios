@@ -25,6 +25,7 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CodeListV
     var isMultiSelect = false
     var values: [NSObject]?
     var list: CodeList?
+    var includeSystem = false
     var section: CodeListSection?
     var results: Results<CodeListItem>?
     var notificationToken: NotificationToken?
@@ -138,7 +139,12 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CodeListV
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Checkbox", for: indexPath)
         if let cell = cell as? SelectCheckboxCell, let item = results?[indexPath.row] {
-            cell.checkbox.value = NemsisValue(text: item.code)
+            let value = NemsisValue(text: item.code)
+            if includeSystem {
+                value.attributes = [:]
+                value.attributes?["CodeType"] = item.system
+            }
+            cell.checkbox.value = value
             cell.checkbox.labelText = item.name
             cell.checkbox.delegate = self
             cell.checkbox.isRadioButton = !isMultiSelect

@@ -29,6 +29,7 @@ class CodeListSectionsViewController: UITableViewController, CodeListViewControl
     var isMultiSelect = false
     var values: [NSObject]?
     var list: CodeList?
+    var includeSystem = false
     var results: Results<CodeListSection>?
     var notificationToken: NotificationToken?
 
@@ -60,6 +61,7 @@ class CodeListSectionsViewController: UITableViewController, CodeListViewControl
                 let vc = UIStoryboard(name: "CodeList", bundle: nil).instantiateViewController(withIdentifier: "Items")
                 if let vc = vc as? CodeListItemsViewController {
                     vc.list = list
+                    vc.includeSystem = includeSystem
                     vc.delegate = self
                     vc.values = values
                     vc.isMultiSelect = isMultiSelect
@@ -88,6 +90,7 @@ class CodeListSectionsViewController: UITableViewController, CodeListViewControl
             vc.values = values
             vc.isMultiSelect = isMultiSelect
             vc.section = section
+            vc.includeSystem = includeSystem
             tableView.deselectRow(at: indexPath, animated: true)
         }
     }
