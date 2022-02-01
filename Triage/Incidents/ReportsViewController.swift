@@ -10,10 +10,11 @@ import UIKit
 import PRKit
 import RealmSwift
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentViewControllerDelegate,
+class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, IncidentViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var customTabBar: CustomTabBar!
 
     var incident: Incident?
     var results: Results<Report>?
@@ -30,6 +31,10 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentVi
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target:
                                                             self, action: #selector(dismissAnimated))
 
+        customTabBar.buttonTitle = "Button.addPatient".localized
+        customTabBar.delegate = self
+        customTabBar.isHidden = true
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
@@ -37,6 +42,13 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentVi
         collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
 
         performQuery()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var contentInset = collectionView.contentInset
+        contentInset.bottom = customTabBar.frame.height
+        collectionView.contentInset = contentInset
     }
 
     @objc func performQuery() {
@@ -65,6 +77,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentVi
             if self.firstRefresh {
                 self.firstRefresh = false
                 // show add patient button footer
+                self.customTabBar.isHidden = false
                 if let results = results, results.count == 0 {
                     self.presentNewReport(animated: false) { [weak self] in
                         self?.collectionView.refreshControl?.endRefreshing()
@@ -138,6 +151,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, IncidentVi
         dismiss(animated: true) { [weak self] in
             self?.dismiss(animated: false)
         }
+    }
+
+    // MARK: - CustomTabBarDelegate
+
+    func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
+        presentNewReport()
     }
 
     // MARK: - IncidentViewControllerDelegate

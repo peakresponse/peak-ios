@@ -112,7 +112,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 58cb47c0670f025195c0d8a6a28968f675bc48a1
+    :commit: 27938ccbffade91ad64537893bb8652b045f0019
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
@@ -127,7 +127,7 @@ SPEC CHECKSUMS:
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
-  PRKit: fd4bc051e9a9032677b346672be3327dd40a6687
+  PRKit: ba036dd225e79200d99b7de1dcf6651e60579b9b
   Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
   RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
