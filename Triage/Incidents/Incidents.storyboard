@@ -108,7 +108,7 @@
                                 <rect key="frame" x="0.0" y="126" width="414" height="770"/>
                                 <subviews>
                                     <view hidden="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="56" translatesAutoresizingMaskIntoConstraints="NO" id="agm-ti-evy" customClass="SegmentedControl" customModule="PRKit">
-                                        <rect key="frame" x="20" y="0.0" width="374" height="56"/>
+                                        <rect key="frame" x="20" y="0.0" width="374" height="0.0"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
                                             <constraint firstAttribute="width" priority="750" constant="690" id="kYa-hc-GDo"/>
@@ -237,18 +237,35 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="lkz-eC-EDf"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
                             </scrollView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geQ-9G-uZG">
+                                <rect key="frame" x="0.0" y="758" width="414" height="138"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="20" y="774" width="374" height="72"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="igN-42-GkM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Rci-2n-3m4" firstAttribute="trailing" secondItem="igN-42-GkM" secondAttribute="trailing" constant="-20" id="9X8-tx-bEk"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="top" secondItem="TLt-cm-djY" secondAttribute="top" id="B3r-HQ-EDc"/>
+                            <constraint firstItem="geQ-9G-uZG" firstAttribute="leading" secondItem="TLt-cm-djY" secondAttribute="leading" id="Fhf-vG-ahk"/>
+                            <constraint firstItem="geQ-9G-uZG" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="I3q-xc-RmM"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="V2g-qM-sg2"/>
+                            <constraint firstItem="geQ-9G-uZG" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="jnV-Pp-3y3"/>
+                            <constraint firstItem="geQ-9G-uZG" firstAttribute="top" secondItem="Rci-2n-3m4" secondAttribute="top" constant="-16" id="n2J-AC-511"/>
+                            <constraint firstItem="Rci-2n-3m4" firstAttribute="bottom" secondItem="igN-42-GkM" secondAttribute="bottom" constant="-16" id="qbX-3R-0yY"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="rI5-AU-jqe"/>
                             <constraint firstAttribute="leading" secondItem="ziP-ge-wPm" secondAttribute="leading" id="rzQ-g5-n6x"/>
+                            <constraint firstItem="Rci-2n-3m4" firstAttribute="leading" secondItem="igN-42-GkM" secondAttribute="leading" constant="20" id="stJ-so-Dsg"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="containerView" destination="9cv-2k-5xn" id="96k-Km-wie"/>
+                        <outlet property="recordButton" destination="Rci-2n-3m4" id="grO-Lk-gih"/>
+                        <outlet property="recordButtonBackground" destination="geQ-9G-uZG" id="u4K-TF-fFe"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
                     </connections>
@@ -259,8 +276,14 @@
         </scene>
     </scenes>
     <designables>
+        <designable name="36M-Oo-Prq">
+            <size key="intrinsicContentSize" width="414" height="128"/>
+        </designable>
         <designable name="Jdt-YE-HiW">
             <size key="intrinsicContentSize" width="414" height="131"/>
+        </designable>
+        <designable name="Rci-2n-3m4">
+            <size key="intrinsicContentSize" width="374" height="72"/>
         </designable>
         <designable name="agm-ti-evy">
             <size key="intrinsicContentSize" width="374" height="56"/>

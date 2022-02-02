@@ -54,7 +54,7 @@
 "Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
-"Button.record" = "Record";
+"Button.record" = "Voice-to-Text";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
