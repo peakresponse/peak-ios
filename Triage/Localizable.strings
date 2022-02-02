@@ -118,9 +118,9 @@
 "IncidentsViewController.mine" = "My Dispatches";
 "IncidentsViewController.all" = "All Incidents";
 
-"IncidentViewController.tab.incident" = "Incident";
-"IncidentViewController.tab.ringdown" = "Ringdown";
-"IncidentViewController.tab.refusal" = "Refusal";
+"ReportContainerViewController.tab.incident" = "Incident";
+"ReportContainerViewController.tab.ringdown" = "Ringdown";
+"ReportContainerViewController.tab.refusal" = "Refusal";
 
 "InputAccessoryView.cancel" = "Cancel";
 "InputAccessoryView.done" = "Done";

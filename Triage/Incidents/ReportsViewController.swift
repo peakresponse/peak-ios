@@ -10,7 +10,7 @@ import UIKit
 import PRKit
 import RealmSwift
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, IncidentViewControllerDelegate,
+class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, ReportContainerViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -124,7 +124,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     func presentReport(report: Report, animated: Bool = true, completion: (() -> Void)? = nil) {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Incident")
-        if let vc = vc as? IncidentViewController {
+        if let vc = vc as? ReportContainerViewController {
             vc.delegate = self
             vc.incident = incident
             vc.report = report
@@ -159,9 +159,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         presentNewReport()
     }
 
-    // MARK: - IncidentViewControllerDelegate
+    // MARK: - ReportContainerViewControllerDelegate
 
-    func incidentViewControllerDidSave(_ vc: IncidentViewController) {
+    func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController) {
         vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
                                                              style: .done,
                                                              target: self,

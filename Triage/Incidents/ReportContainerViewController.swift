@@ -1,5 +1,5 @@
 //
-//  IncidentViewController.swift
+//  ReportContainerViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 11/4/21.
@@ -9,17 +9,17 @@
 import UIKit
 import PRKit
 
-protocol IncidentViewControllerDelegate: NSObject {
-    func incidentViewControllerDidSave(_ vc: IncidentViewController)
+protocol ReportContainerViewControllerDelegate: NSObject {
+    func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController)
 }
 
-class IncidentViewController: UIViewController, ReportViewControllerDelegate {
+class ReportContainerViewController: UIViewController, ReportViewControllerDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
-    weak var delegate: IncidentViewControllerDelegate?
+    weak var delegate: ReportContainerViewControllerDelegate?
     var incident: Incident?
     var report: Report?
     var leftBarButtonItem: UIBarButtonItem?
@@ -27,9 +27,9 @@ class IncidentViewController: UIViewController, ReportViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        segmentedControl.addSegment(title: "IncidentViewController.tab.incident".localized)
-        segmentedControl.addSegment(title: "IncidentViewController.tab.ringdown".localized)
-        segmentedControl.addSegment(title: "IncidentViewController.tab.refusal".localized)
+        segmentedControl.addSegment(title: "ReportContainerViewController.tab.incident".localized)
+        segmentedControl.addSegment(title: "ReportContainerViewController.tab.ringdown".localized)
+//        segmentedControl.addSegment(title: "ReportContainerViewController.tab.refusal".localized)
 
         showReport()
     }
@@ -75,7 +75,7 @@ class IncidentViewController: UIViewController, ReportViewControllerDelegate {
                                                            target: self,
                                                            action: #selector(editPressed))
         segmentedControl.isHidden = false
-        delegate?.incidentViewControllerDidSave(self)
+        delegate?.reportContainerViewControllerDidSave(self)
     }
 
     func showReport() {

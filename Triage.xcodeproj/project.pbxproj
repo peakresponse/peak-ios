@@ -137,7 +137,7 @@
 		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
 		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
-		45C757DC27349FD500386F07 /* IncidentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DB27349FD500386F07 /* IncidentViewController.swift */; };
+		45C757DC27349FD500386F07 /* ReportContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DB27349FD500386F07 /* ReportContainerViewController.swift */; };
 		45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DD2734AFC400386F07 /* RingdownViewController.swift */; };
 		45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DF2734AFE400386F07 /* RefusalViewController.swift */; };
 		45C757E22734B00000386F07 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757E12734B00000386F07 /* ReportViewController.swift */; };
@@ -338,7 +338,7 @@
 		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
 		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
-		45C757DB27349FD500386F07 /* IncidentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentViewController.swift; sourceTree = "<group>"; };
+		45C757DB27349FD500386F07 /* ReportContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContainerViewController.swift; sourceTree = "<group>"; };
 		45C757DD2734AFC400386F07 /* RingdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownViewController.swift; sourceTree = "<group>"; };
 		45C757DF2734AFE400386F07 /* RefusalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefusalViewController.swift; sourceTree = "<group>"; };
 		45C757E12734B00000386F07 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
@@ -708,7 +708,7 @@
 				45C757CE272CB9CC00386F07 /* Views */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
-				45C757DB27349FD500386F07 /* IncidentViewController.swift */,
+				45C757DB27349FD500386F07 /* ReportContainerViewController.swift */,
 				45C757DF2734AFE400386F07 /* RefusalViewController.swift */,
 				45C757E12734B00000386F07 /* ReportViewController.swift */,
 				45C757DD2734AFC400386F07 /* RingdownViewController.swift */,
@@ -1107,7 +1107,7 @@
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
 				454EE9872520305000EB266A /* PatientTableViewCell.swift in Sources */,
 				45F1305325269318001495C7 /* UserView.swift in Sources */,
-				45C757DC27349FD500386F07 /* IncidentViewController.swift in Sources */,
+				45C757DC27349FD500386F07 /* ReportContainerViewController.swift in Sources */,
 				45B7A2DA2508331500BCAAAE /* State.swift in Sources */,
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				451A16FF252FD5FD00DC7705 /* RoleButton.swift in Sources */,

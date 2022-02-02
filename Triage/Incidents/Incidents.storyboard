@@ -92,10 +92,10 @@
             </objects>
             <point key="canvasLocation" x="408.69565217391306" y="107.8125"/>
         </scene>
-        <!--Incident View Controller-->
+        <!--Report Container View Controller-->
         <scene sceneID="Llj-vs-B8t">
             <objects>
-                <viewController storyboardIdentifier="Incident" modalPresentationStyle="fullScreen" id="lwf-Iy-y4i" customClass="IncidentViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Incident" modalPresentationStyle="fullScreen" id="lwf-Iy-y4i" customClass="ReportContainerViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="l5e-zz-e9E">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
