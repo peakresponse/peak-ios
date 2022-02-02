@@ -129,7 +129,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
   TranscriptionKit:
-    :commit: fe8d96da0f582663f6d54eea4000011939fbefa5
+    :commit: 9dff4ae26152d1a20ddf467fc0a6daefcbd1632f
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:

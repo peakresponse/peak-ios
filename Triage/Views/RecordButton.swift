@@ -6,6 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import TranscriptionKit
 import UIKit
 
 class RecordIconButton: UIButton {
@@ -125,7 +126,7 @@ class RecordButton: UIControl {
             recordButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 36), for: .highlighted)
             switch recordState {
             case .record, .addRecording:
-                bluetoothButton.isHidden = AudioHelper.bluetoothHFPInputs.count == 0
+                bluetoothButton.isHidden = Transcriber.bluetoothHFPInputs.count == 0
                 bluetoothButton.isSelected = bluetoothButton.isHidden || AppSettings.audioInputPortUID != nil
                 recordButton.setImage(UIImage(named: "Microphone"), for: .normal)
             case .update:
@@ -147,7 +148,7 @@ class RecordButton: UIControl {
             AppSettings.audioInputPortUID = nil
         } else {
             // select Bluetooth input, provide prompt if multiple
-            let inputPorts = AudioHelper.bluetoothHFPInputs
+            let inputPorts = Transcriber.bluetoothHFPInputs
             if inputPorts.count > 1 {
                 let alert = UIAlertController(title: "RecordButton.selectInputLabel".localized, message: nil, preferredStyle: .actionSheet)
                 for inputPort in inputPorts {

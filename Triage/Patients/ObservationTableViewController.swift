@@ -7,8 +7,8 @@
 //
 
 import CoreLocation
-import Speech
 import UIKit
+import TranscriptionKit
 
 class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate,
                                       RecordingViewControllerDelegate {
@@ -257,7 +257,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
         switch error {
-        case AudioHelperError.speechRecognitionNotAuthorized:
+        case TranscriberError.speechRecognitionNotAuthorized:
             // even with speech recognition off, we can still allow a recording...
             vc.startRecording()
         default:

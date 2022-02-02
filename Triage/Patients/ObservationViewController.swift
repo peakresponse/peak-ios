@@ -6,7 +6,6 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
-import Speech
 import UIKit
 
 @objc protocol ObservationViewControllerDelegate {
