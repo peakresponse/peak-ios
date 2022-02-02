@@ -30,6 +30,7 @@ target 'Triage' do
   pod 'SwiftLint'
   pod 'SwiftPath'
   pod 'SNOMEDKit'
+  pod 'TranscriptionKit', :git => 'https://github.com/peakresponse/peak-ios-transcriptionkit.git', :branch => 'dev'
 
   target 'TriageTests' do
     inherit! :search_paths

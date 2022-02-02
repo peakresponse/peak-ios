@@ -1,5 +1,8 @@
 PODS:
   - AlignedCollectionViewFlowLayout (1.1.2)
+  - AWSCore (2.27.1)
+  - AWSTranscribeStreaming (2.27.1):
+    - AWSCore (= 2.27.1)
   - CocoaLumberjack (3.7.4):
     - CocoaLumberjack/Core (= 3.7.4)
   - CocoaLumberjack/Core (3.7.4)
@@ -60,6 +63,8 @@ PODS:
     - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
+  - TranscriptionKit (0.1.0):
+    - AWSTranscribeStreaming (~> 2.27.1)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
@@ -77,10 +82,13 @@ DEPENDENCIES:
   - Starscream
   - SwiftLint
   - SwiftPath
+  - TranscriptionKit (from `https://github.com/peakresponse/peak-ios-transcriptionkit.git`, branch `dev`)
 
 SPEC REPOS:
   trunk:
     - AlignedCollectionViewFlowLayout
+    - AWSCore
+    - AWSTranscribeStreaming
     - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
@@ -109,6 +117,9 @@ EXTERNAL SOURCES:
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
+  TranscriptionKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 CHECKOUT OPTIONS:
   PRKit:
@@ -117,9 +128,14 @@ CHECKOUT OPTIONS:
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
+  TranscriptionKit:
+    :commit: fe8d96da0f582663f6d54eea4000011939fbefa5
+    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
+  AWSCore: f859f6955a8e52dcb3e79fac95fef058639d1049
+  AWSTranscribeStreaming: 25c06cad7111e87a2bf78af83c8f24327c26a15c
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
   GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
@@ -141,7 +157,8 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
+  TranscriptionKit: 0db92bf7acc8b76963fe5f76f086bb70fad1c83b
 
-PODFILE CHECKSUM: ebe3b11b516991e2c1f37fc019223f7651dd0058
+PODFILE CHECKSUM: 645d56c2d7aa3b082e236db98d17c252028d7715
 
 COCOAPODS: 1.11.2
