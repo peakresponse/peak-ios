@@ -6,16 +6,17 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import PRKit
-import UIKit
 import Keyboardy
+import PRKit
 import RealmSwift
+import TranscriptionKit
+import UIKit
 
 protocol ReportViewControllerDelegate: AnyObject {
     func reportViewControllerNeedsEditing(_ vc: ReportViewController)
 }
 
-class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController {
+class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, RecordingViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -431,6 +432,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
+    func refreshFormFields() {
+        for formField in formFields {
+            if let attributeKey = formField.attributeKey, let target = formField.target {
+                formField.attributeValue = target.value(forKey: attributeKey) as? NSObject
+            }
+        }
+    }
+
     @objc func newVitalsPressed(_ button: PRKit.Button) {
         if !isEditing {
             guard let delegate = delegate else { return }
@@ -494,7 +503,21 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         section.addLastButton(button)
     }
 
-    // MARK: FormFieldDelegate
+    @IBAction func recordPressed() {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        performSegue(withIdentifier: "Record", sender: self)
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let vc = segue.destination as? RecordingViewController {
+            vc.delegate = self
+        }
+    }
+
+    // MARK: - FormFieldDelegate
 
     func formFieldDidChange(_ field: PRKit.FormField) {
         if let attributeKey = field.attributeKey, let target = field.target {
@@ -504,5 +527,44 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
         presentAnimated(vc)
+    }
+
+    // MARK: - RecordingViewControllerDelegate
+
+    func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
+                                 sourceId: String, metadata: [String: Any], isFinal: Bool) {
+        if newReport == report {
+            newReport?.narrative?.text = text
+        } else {
+            newReport?.narrative?.text = "\(report.narrative?.text ?? "") \(text)"
+        }
+        let formField = formFields.first(where: { $0.target == newReport?.narrative && $0.attributeKey == "text" })
+        formField?.attributeValue = formField?.target?.value(forKey: "text") as? NSObject
+//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+//            self?.patient.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+//            DispatchQueue.main.async { [weak self] in
+//                guard let self = self else { return }
+//                self.tableView.reloadData()
+//                if let priority = self.patient.filterPriority {
+//                    self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
+//                }
+//            }
+//        }
+    }
+
+    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
+//        AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
+    }
+
+    func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
+        switch error {
+        case TranscriberError.speechRecognitionNotAuthorized:
+            // even with speech recognition off, we can still allow a recording...
+            vc.startRecording()
+        default:
+            dismiss(animated: true) { [weak self] in
+                self?.presentAlert(error: error)
+            }
+        }
     }
 }

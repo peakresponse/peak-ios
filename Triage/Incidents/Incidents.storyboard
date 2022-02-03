@@ -244,6 +244,9 @@
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
                                 <rect key="frame" x="20" y="774" width="374" height="72"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <connections>
+                                    <action selector="recordPressed" destination="XxD-by-Nsu" eventType="touchUpInside" id="P4z-ES-l3M"/>
+                                </connections>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="igN-42-GkM"/>
@@ -268,11 +271,120 @@
                         <outlet property="recordButtonBackground" destination="geQ-9G-uZG" id="u4K-TF-fFe"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
+                        <segue destination="PeO-Bh-tCp" kind="presentation" identifier="Record" id="eKD-F2-ye7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f1j-Je-euw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1288" y="791"/>
+            <point key="canvasLocation" x="1290" y="791"/>
+        </scene>
+        <!--Recording View Controller-->
+        <scene sceneID="oRY-ZT-jOe">
+            <objects>
+                <viewController modalPresentationStyle="overCurrentContext" id="PeO-Bh-tCp" customClass="RecordingViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="byf-bB-jCo">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="279" translatesAutoresizingMaskIntoConstraints="NO" id="JJN-PD-wtK">
+                                <rect key="frame" x="0.0" y="617" width="414" height="279"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="k0D-Wk-2Lz">
+                                        <rect key="frame" x="188.5" y="185.5" width="37" height="37"/>
+                                        <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    </activityIndicatorView>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1t1-jN-HJT" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="22" y="185" width="370" height="38"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="stopAndSave"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="stopPressed:" destination="PeO-Bh-tCp" eventType="touchUpInside" id="izd-yr-qoz"/>
+                                        </connections>
+                                    </view>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="equalSpacing" alignment="bottom" translatesAutoresizingMaskIntoConstraints="NO" id="dDg-y3-MPq">
+                                        <rect key="frame" x="38" y="101" width="338" height="62"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="62" id="HYu-J9-Hol"/>
+                                        </constraints>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:00:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cHF-HH-uS5">
+                                        <rect key="frame" x="38" y="35" width="338" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="copyLBold"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TgH-b6-4Kg">
+                                        <rect key="frame" x="38" y="14" width="354" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="copyMBold"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="RecordingViewController.observationLabel"/>
+                                        </userDefinedRuntimeAttributes>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sum-eV-2Ix">
+                                        <rect key="frame" x="338" y="7.5" width="54" height="34"/>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.cancel"/>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="copySBold"/>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="cancelPressed:" destination="PeO-Bh-tCp" eventType="touchUpInside" id="7Aw-TX-aEm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" name="PeakBlue"/>
+                                <constraints>
+                                    <constraint firstItem="TgH-b6-4Kg" firstAttribute="trailing" secondItem="sum-eV-2Ix" secondAttribute="trailing" id="0vM-p8-IYa"/>
+                                    <constraint firstItem="cHF-HH-uS5" firstAttribute="trailing" secondItem="JJN-PD-wtK" secondAttribute="trailing" constant="-38" id="A9B-3Q-70w"/>
+                                    <constraint firstItem="k0D-Wk-2Lz" firstAttribute="centerY" secondItem="1t1-jN-HJT" secondAttribute="centerY" id="Ce2-gM-MTP"/>
+                                    <constraint firstItem="1t1-jN-HJT" firstAttribute="leading" secondItem="JJN-PD-wtK" secondAttribute="leading" constant="22" id="EQK-ZN-9O7"/>
+                                    <constraint firstItem="dDg-y3-MPq" firstAttribute="bottom" secondItem="1t1-jN-HJT" secondAttribute="top" constant="-22" id="NDL-hC-2vU"/>
+                                    <constraint firstItem="dDg-y3-MPq" firstAttribute="trailing" secondItem="JJN-PD-wtK" secondAttribute="trailing" constant="-38" id="UJU-9j-WWo"/>
+                                    <constraint firstItem="TgH-b6-4Kg" firstAttribute="bottom" secondItem="cHF-HH-uS5" secondAttribute="top" id="W0Z-Wh-eJE"/>
+                                    <constraint firstItem="TgH-b6-4Kg" firstAttribute="top" secondItem="JJN-PD-wtK" secondAttribute="top" constant="14" id="Wgi-ZT-gvk"/>
+                                    <constraint firstItem="sum-eV-2Ix" firstAttribute="centerY" secondItem="TgH-b6-4Kg" secondAttribute="centerY" id="bhY-0K-RqM"/>
+                                    <constraint firstItem="sum-eV-2Ix" firstAttribute="trailing" secondItem="JJN-PD-wtK" secondAttribute="trailing" constant="-22" id="cAY-lP-sHd"/>
+                                    <constraint firstItem="cHF-HH-uS5" firstAttribute="leading" secondItem="JJN-PD-wtK" secondAttribute="leading" constant="38" id="fcR-8J-k5W"/>
+                                    <constraint firstItem="1t1-jN-HJT" firstAttribute="trailing" secondItem="JJN-PD-wtK" secondAttribute="trailing" constant="-22" id="hOD-6r-rFe"/>
+                                    <constraint firstItem="dDg-y3-MPq" firstAttribute="leading" secondItem="JJN-PD-wtK" secondAttribute="leading" constant="38" id="iDt-K0-PvQ"/>
+                                    <constraint firstItem="TgH-b6-4Kg" firstAttribute="leading" secondItem="JJN-PD-wtK" secondAttribute="leading" constant="38" id="nk6-zd-JVP"/>
+                                    <constraint firstItem="cHF-HH-uS5" firstAttribute="bottom" secondItem="dDg-y3-MPq" secondAttribute="top" constant="-45" id="qCr-Qe-kzO"/>
+                                    <constraint firstItem="k0D-Wk-2Lz" firstAttribute="centerX" secondItem="1t1-jN-HJT" secondAttribute="centerX" id="xAq-ur-4yn"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="8nz-v0-A49"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="JJN-PD-wtK" firstAttribute="trailing" secondItem="8nz-v0-A49" secondAttribute="trailing" id="1rA-LR-O6E"/>
+                            <constraint firstItem="JJN-PD-wtK" firstAttribute="leading" secondItem="8nz-v0-A49" secondAttribute="leading" id="dOQ-YV-fBf"/>
+                            <constraint firstItem="JJN-PD-wtK" firstAttribute="bottom" secondItem="byf-bB-jCo" secondAttribute="bottom" id="jh8-NZ-QWn"/>
+                            <constraint firstItem="1t1-jN-HJT" firstAttribute="bottom" secondItem="8nz-v0-A49" secondAttribute="bottom" constant="-22" id="wKL-yl-hAX"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="activityIndicatorView" destination="k0D-Wk-2Lz" id="g9a-iq-pMd"/>
+                        <outlet property="cancelButton" destination="sum-eV-2Ix" id="od7-JM-Cg1"/>
+                        <outlet property="observationLabel" destination="TgH-b6-4Kg" id="ZKU-Ua-7aE"/>
+                        <outlet property="sheetView" destination="JJN-PD-wtK" id="kZH-IZ-GYB"/>
+                        <outlet property="spectrumStackView" destination="dDg-y3-MPq" id="jrz-Fk-GC7"/>
+                        <outlet property="stopButton" destination="1t1-jN-HJT" id="brv-xG-dKA"/>
+                        <outlet property="timeLabel" destination="cHF-HH-uS5" id="Sjj-pe-u70"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="qp6-gy-rsc" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2180" y="791"/>
         </scene>
     </scenes>
     <designables>
@@ -298,6 +410,9 @@
     <resources>
         <namedColor name="Base800">
             <color red="0.18431372549019609" green="0.29019607843137257" blue="0.33725490196078434" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="PeakBlue">
+            <color red="0.27500000596046448" green="0.6470000147819519" blue="0.85900002717971802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
