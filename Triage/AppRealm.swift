@@ -755,11 +755,11 @@ class AppRealm {
 
     // MARK: - Users
 
-    public static func me(completionHandler: @escaping (User?, Agency?, Assignment?, Scene?, Error?) -> Void) {
+    public static func me(completionHandler: @escaping (User?, Agency?, Assignment?, Scene?, [String: String]?, Error?) -> Void) {
         let task = ApiClient.shared.me { (_, _, data, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completionHandler(nil, nil, nil, nil, error)
+                    completionHandler(nil, nil, nil, nil, nil, error)
                 }
             } else if let data = data {
                 var user: User?
@@ -767,6 +767,7 @@ class AppRealm {
                 var assignment: Assignment?
                 var vehicle: Vehicle?
                 var activeScenes: [Base]?
+                var awsCredentials: [String: String]?
                 if let data = data["user"] as? [String: Any] {
                     user = User.instantiate(from: data) as? User
                     if let data = data["activeScenes"] as? [[String: Any]] {
@@ -778,6 +779,7 @@ class AppRealm {
                         }
                         assignment = Assignment.instantiate(from: data) as? Assignment
                     }
+                    awsCredentials = data["awsCredentials"] as? [String: String]
                 }
                 if let data = data["agency"] as? [String: Any] {
                     agency = Agency.instantiate(from: data) as? Agency
@@ -804,10 +806,10 @@ class AppRealm {
                 if let activeScenes = activeScenes, activeScenes.count > 0 {
                     scene = activeScenes[0] as? Scene
                 }
-                completionHandler(user, agency, assignment, scene, nil)
+                completionHandler(user, agency, assignment, scene, awsCredentials, nil)
             } else {
                 DispatchQueue.main.async {
-                    completionHandler(nil, nil, nil, nil, ApiClientError.unexpected)
+                    completionHandler(nil, nil, nil, nil, nil, ApiClientError.unexpected)
                 }
             }
         }

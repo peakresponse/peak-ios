@@ -51,6 +51,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "subdomain") }
     }
 
+    static var awsCredentials: [String: String]? {
+        get { return defaults.dictionary(forKey: "awsCredentials") as? [String: String] }
+        set { defaults.set(newValue, forKey: "awsCredentials") }
+    }
+
     static func login(userId: String, agencyId: String, assignmentId: String?, sceneId: String?) {
         AppSettings.userId = userId
         AppSettings.agencyId = agencyId

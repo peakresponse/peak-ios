@@ -54,6 +54,15 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
         }
 
         transcriber = Transcriber()
+        if let awsCredentials = AppSettings.awsCredentials,
+            let accessKey = awsCredentials["AccessKeyId"],
+            let secretKey = awsCredentials["SecretAccessKey"],
+            let sessionToken = awsCredentials["SessionToken"] {
+            transcriber.recognizer = AWSRecognizer(accessKey: accessKey,
+                                                   secretKey: secretKey,
+                                                   sessionToken: sessionToken,
+                                                   region: .USWest2)
+        }
         transcriber.delegate = self
     }
 

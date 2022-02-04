@@ -72,11 +72,12 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                             AppRealm.getLists { (_) in
                                 // noop
                             }
-                            AppRealm.me { [weak self] (user, agency, assignment, scene, error) in
+                            AppRealm.me { [weak self] (user, agency, assignment, scene, awsCredentials, error) in
                                 let userId = user?.id
                                 let agencyId = agency?.id
                                 let assignmentId = assignment?.id
                                 let sceneId = scene?.id
+                                AppSettings.awsCredentials = awsCredentials
                                 DispatchQueue.main.async { [weak self] in
                                     guard let self = self else { return }
                                     if let error = error {
