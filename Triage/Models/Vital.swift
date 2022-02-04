@@ -69,6 +69,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eVitals.01")
         }
     }
+
     @objc var cardiacRhythm: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eVitals.CardiacRhythmGroup/eVitals.03")
@@ -77,6 +78,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValues(newValue, forJSONPath: "/eVitals.CardiacRhythmGroup/eVitals.03")
         }
     }
+
     @objc var bpSystolic: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.06")?.text
@@ -93,6 +95,30 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.BloodPressureGroup/eVitals.07")
         }
     }
+    // swiftlint:disable:next force_try
+    static let bloodPressureExpr = try! NSRegularExpression(pattern: #"(?<bpSystolic>\d*)(?:(?:/|(?: over ))(?<bpDiastolic>\d*))?"#,
+                                                            options: [.caseInsensitive])
+    @objc var bloodPressure: String? {
+        get {
+            return "\(bpSystolic?.description ?? "")\(bpDiastolic != nil ? "/" : "")\(bpDiastolic?.description ?? "")"
+        }
+        set {
+            if let newValue = newValue,
+               let match = Patient.bloodPressureExpr.firstMatch(in: newValue, options: [],
+                                                                range: NSRange(newValue.startIndex..., in: newValue)) {
+                for attr in ["bpSystolic", "bpDiastolic"] {
+                    let range = match.range(withName: attr)
+                    if range.location != NSNotFound, let range = Range(range, in: newValue) {
+                        setValue(newValue[range], forKey: attr)
+                    }
+                }
+            } else {
+                bpSystolic = nil
+                bpDiastolic = nil
+            }
+        }
+    }
+
     @objc var heartRate: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")?.text
@@ -101,6 +127,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.HeartRateGroup/eVitals.10")
         }
     }
+
     @objc var pulseOximetry: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.12")?.text
@@ -117,6 +144,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.14")
         }
     }
+
     @objc var endTidalCarbonDioxide: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.16")?.text
@@ -125,6 +153,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.16")
         }
     }
+
     @objc var carbonMonoxide: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.17")?.text
@@ -133,6 +162,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.17")
         }
     }
+
     @objc var bloodGlucoseLevel: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.18")?.text
@@ -141,6 +171,7 @@ class Vital: BaseVersioned, NemsisBacked {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.18")
         }
     }
+
     @objc var totalGlasgowComaScore: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")?.text
