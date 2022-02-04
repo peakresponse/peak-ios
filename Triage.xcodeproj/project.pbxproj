@@ -84,6 +84,7 @@
 		4566F099236E12A600A04C75 /* BasePatientTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F098236E12A600A04C75 /* BasePatientTableViewCell.swift */; };
 		4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */; };
 		456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */; };
+		456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04F927ACAA47000CEE42 /* Report+Parser.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */; };
@@ -283,6 +284,7 @@
 		4566F098236E12A600A04C75 /* BasePatientTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasePatientTableViewCell.swift; sourceTree = "<group>"; };
 		4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientMapViewController.swift; sourceTree = "<group>"; };
 		456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormButton.swift; sourceTree = "<group>"; };
+		456F04F927ACAA47000CEE42 /* Report+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+Parser.swift"; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
@@ -602,6 +604,7 @@
 				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
 				45F7BAD1273AEC3500FBD31F /* Procedure.swift */,
 				45F7BAC12739E37300FBD31F /* Report.swift */,
+				456F04F927ACAA47000CEE42 /* Report+Parser.swift */,
 				454E17B824FFF5C900F9EB8B /* Responder.swift */,
 				45F7BAC3273AEBE100FBD31F /* Response.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
@@ -1040,6 +1043,7 @@
 				45C757E22734B00000386F07 /* ReportViewController.swift in Sources */,
 				45150BCE270511C30085132C /* AuthViewController.swift in Sources */,
 				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
+				456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */,
 				45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */,
 				454E17B024FECD8800F9EB8B /* BannerView.swift in Sources */,
 				45515A3124DF682A007BAE09 /* SortBar.swift in Sources */,

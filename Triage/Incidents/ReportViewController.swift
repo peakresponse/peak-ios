@@ -540,16 +540,12 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
         let formField = formFields.first(where: { $0.target == newReport?.narrative && $0.attributeKey == "text" })
         formField?.attributeValue = formField?.target?.value(forKey: "text") as? NSObject
-//        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-//            self?.patient.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
-//            DispatchQueue.main.async { [weak self] in
-//                guard let self = self else { return }
-//                self.tableView.reloadData()
-//                if let priority = self.patient.filterPriority {
-//                    self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
-//                }
-//            }
-//        }
+        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
+            self?.newReport?.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            DispatchQueue.main.async { [weak self] in
+                self?.refreshFormFields()
+            }
+        }
     }
 
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {

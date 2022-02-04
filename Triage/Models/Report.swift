@@ -35,8 +35,17 @@ class Report: BaseVersioned, NemsisBacked {
     @Persisted var disposition: Disposition?
     @Persisted var narrative: Narrative?
     @Persisted var vitals: List<Vital>
+    @objc var lastVital: Vital? {
+        return vitals.last
+    }
     @Persisted var medications: List<Medication>
+    @objc var lastMedication: Medication? {
+        return medications.last
+    }
     @Persisted var procedures: List<Procedure>
+    @objc var lastProcedure: Procedure? {
+        return procedures.last
+    }
 
     @objc var patientCareReportNumber: String? {
         get {
