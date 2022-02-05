@@ -85,6 +85,7 @@
 		4566F0A1236E46FF00A04C75 /* PatientMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */; };
 		456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */; };
 		456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04F927ACAA47000CEE42 /* Report+Parser.swift */; };
+		456F04FC27AE081F000CEE42 /* ReportParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FB27AE081F000CEE42 /* ReportParserTests.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */; };
@@ -285,6 +286,7 @@
 		4566F0A0236E46FF00A04C75 /* PatientMapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientMapViewController.swift; sourceTree = "<group>"; };
 		456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormButton.swift; sourceTree = "<group>"; };
 		456F04F927ACAA47000CEE42 /* Report+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+Parser.swift"; sourceTree = "<group>"; };
+		456F04FB27AE081F000CEE42 /* ReportParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportParserTests.swift; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
@@ -514,6 +516,7 @@
 		4566F035236CCC5700A04C75 /* TriageTests */ = {
 			isa = PBXGroup;
 			children = (
+				456F04FB27AE081F000CEE42 /* ReportParserTests.swift */,
 				45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */,
 				458CA0D42788EBD90065F324 /* ReportTests.swift */,
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
@@ -1198,6 +1201,7 @@
 				45F130482525A062001495C7 /* ResponderTests.swift in Sources */,
 				458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */,
 				458CA0BE2767F0B30065F324 /* NemsisValueTests.swift in Sources */,
+				456F04FC27AE081F000CEE42 /* ReportParserTests.swift in Sources */,
 				4566F06B236CE8A800A04C75 /* PatientTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

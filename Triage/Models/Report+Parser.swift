@@ -28,7 +28,7 @@ private struct Matcher {
     }
 }
 
-private let PATTERN_NUMBERS = #"\d+|one|to|too|two|three|four|five|six|seven|eight|nine"#
+private let PATTERN_NUMBERS = #"\d+|one|to|too|two|three|four|five|six|seven|eight|nine|zero"#
 
 private let MAPPINGS_NUMBERS: [String: Any] = [
     "one": "1",
@@ -41,7 +41,8 @@ private let MAPPINGS_NUMBERS: [String: Any] = [
     "six": "6",
     "seven": "7",
     "eight": "8",
-    "nine": "9"
+    "nine": "9",
+    "zero": "0"
 ]
 
 private let MAPPINGS_AGE_UNITS: [String: Any] = [
@@ -123,8 +124,8 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0priority": MAPPINGS_PRIORITY
             ]),
-    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.) (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
-    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.) (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:^| )(?<patient0triageMentalStatus>responsive|unresponsive|not responsive|non-responsive|nonresponsive|confused)(?: to commands?)?)"#,
             mappings: [
                 "patient0triageMentalStatus": MAPPINGS_TRIAGE_MENTAL_STATUS
@@ -145,7 +146,23 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0capillaryRefill": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.) (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
+    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
+    Matcher(pattern: #"(?:(?:blood sugar(?: levels?)?)|(?:blood glucose(?: levels?)?))(?:,|\.)? (?:is )?(?<lastVital0bloodGlucoseLevel>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0bloodGlucoseLevel": MAPPINGS_NUMBERS
+            ]),
+    Matcher(pattern: #"(?:(?:blood oxygen(?: levels?)?)|(?:oxygen saturation)|(?:pulse oximetry))(?:,|\.)? (?:is )?(?<lastVital0pulseOximetry>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0pulseOximetry": MAPPINGS_NUMBERS
+            ]),
+    Matcher(pattern: #"(?:(?:carbon monoxide(?: levels?)?))(?:,|\.)? (?:is )?(?<lastVital0carbonMonoxide>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0carbonMonoxide": MAPPINGS_NUMBERS
+            ]),
+    Matcher(pattern: #"(?:(?:end tidal carbon dioxide))(?:,|\.)? (?:is )?(?<lastVital0endTidalCarbonDioxide>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0endTidalCarbonDioxide": MAPPINGS_NUMBERS
+            ]),
     Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is )?(?<lastVital0totalGlasgowComaScore>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0totalGlasgowComaScore": MAPPINGS_NUMBERS
