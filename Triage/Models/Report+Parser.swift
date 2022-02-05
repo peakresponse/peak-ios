@@ -123,8 +123,8 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0priority": MAPPINGS_PRIORITY
             ]),
-    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?) (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
-    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate)) (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.) (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.) (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:^| )(?<patient0triageMentalStatus>responsive|unresponsive|not responsive|non-responsive|nonresponsive|confused)(?: to commands?)?)"#,
             mappings: [
                 "patient0triageMentalStatus": MAPPINGS_TRIAGE_MENTAL_STATUS
@@ -145,7 +145,7 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0capillaryRefill": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:blood pressure)|bp) (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
+    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.) (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
     Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is )?(?<lastVital0totalGlasgowComaScore>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0totalGlasgowComaScore": MAPPINGS_NUMBERS

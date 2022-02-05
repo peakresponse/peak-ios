@@ -16,6 +16,9 @@ protocol ReportViewControllerDelegate: AnyObject {
     func reportViewControllerNeedsEditing(_ vc: ReportViewController)
 }
 
+// swiftlint:disable:next force_try
+let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
+
 class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, RecordingViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -530,18 +533,20 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     }
 
     // MARK: - RecordingViewControllerDelegate
-
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
                                  sourceId: String, metadata: [String: Any], isFinal: Bool) {
+        // fix weird number handling from AWS Transcribe (i.e. one-twenty recognized as "1 20" instead of "120")
+        let processedText = numbersExpr.stringByReplacingMatches(in: text, options: [], range: NSRange(location: 0, length: text.count),
+                                                                 withTemplate: "$1$2$3")
         if newReport == report {
-            newReport?.narrative?.text = text
+            newReport?.narrative?.text = processedText
         } else {
-            newReport?.narrative?.text = "\(report.narrative?.text ?? "") \(text)"
+            newReport?.narrative?.text = "\(report.narrative?.text ?? "") \(processedText)"
         }
         let formField = formFields.first(where: { $0.target == newReport?.narrative && $0.attributeKey == "text" })
         formField?.attributeValue = formField?.target?.value(forKey: "text") as? NSObject
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.newReport?.extractValues(from: text, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            self?.newReport?.extractValues(from: processedText, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
             DispatchQueue.main.async { [weak self] in
                 self?.refreshFormFields()
             }
