@@ -144,8 +144,9 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0capillaryRefill": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of))(?:,|\.)? (?:is )?(?<situation0chiefComplaint>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of))(?:,|\.)? (?:is )?(?<situation0primarySymptom>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0chiefComplaint>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0primarySymptom>[^.]+)"#),
+    Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
@@ -190,17 +191,37 @@ extension Report {
                                 value = mappings[key] as Any
                             }
                         }
-                        let keyPath =  group.replacingOccurrences(of: "0", with: ".")
-                        if keyPath == "situation.primarySymptom" {
-                            // search for text in associated suggested list
-                            let realm = AppRealm.open()
-                            let results = realm.objects(CodeListItem.self)
-                                .filter("%@ IN list.fields", "eSituation.09")
-                                .filter("name CONTAINS[cd] %@", value)
-                            if results.count == 0 {
-                                continue
+                        let keyPath = group.replacingOccurrences(of: "0", with: ".")
+                        if let (fieldName, isMultiSelect) = NemsisBackedPropertyMap[keyPath] {
+                            if !isMultiSelect {
+                                // search for text in associated suggested list
+                                let realm = AppRealm.open()
+                                let results = realm.objects(CodeListItem.self)
+                                    .filter("%@ IN list.fields", fieldName)
+                                    .filter("name CONTAINS[cd] %@", value)
+                                if results.count == 0 {
+                                    continue
+                                }
+                                value = NemsisValue(text: results[0].code)
+                            } else if var valuesString = value as? String {
+                                valuesString = valuesString.replacingOccurrences(of: " and ", with: ",")
+                                let values = valuesString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                                    .compactMap { $0.isEmpty ? nil : $0 }
+                                let realm = AppRealm.open()
+                                var nemsisValues: [NemsisValue] = []
+                                for value in values {
+                                    let results = realm.objects(CodeListItem.self)
+                                        .filter("%@ IN list.fields", fieldName)
+                                        .filter("name CONTAINS[cd] %@", value)
+                                    if results.count > 0 {
+                                        nemsisValues.append(NemsisValue(text: results[0].code))
+                                    }
+                                }
+                                if nemsisValues.count == 0 {
+                                    continue
+                                }
+                                value = nemsisValues as Any
                             }
-                            value = NemsisValue(text: results[0].code)
                         }
                         setValue(value, forKeyPath: keyPath)
 //                        var predictions = self.predictions ?? [:]

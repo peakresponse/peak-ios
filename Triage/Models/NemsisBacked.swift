@@ -10,6 +10,11 @@ import Foundation
 import JSONPatch
 import SwiftPath
 
+let NemsisBackedPropertyMap: [String: (String, Bool)] = [
+    "situation.primarySymptom": ("eSituation.09", false),
+    "history.medicalSurgicalHistory": ("eHistory.08", true)
+]
+
 protocol NemsisBacked: AnyObject {
     var _data: Data? { get set }
     var data: [String: Any] { get set }

@@ -58,7 +58,8 @@ class ReportParserTests: XCTestCase {
     func testExtractChiefComplaint() {
         let samples = [
             "Patient complains of chest pain.",
-            "Chief complaint is chest pain."
+            "Chief complaint is chest pain.",
+            "Complaining of chest pain."
         ]
 
         for sample in samples {
@@ -71,13 +72,28 @@ class ReportParserTests: XCTestCase {
     func testExtractPrimarySymptom() {
         let samples = [
             "Patient complains of chest pain.",
-            "Chief complaint is chest pain."
+            "Chief complaint is chest pain.",
+            "Complaining of chest pain."
         ]
 
         for sample in samples {
             let report = Report.newRecord()
             report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.situation?.primarySymptom?.text, "R07.9", "Primary symptom failed for: \(sample)")
+        }
+    }
+
+    func testExtractMedicalSurgicalHistory() {
+        let samples = [
+            "History of hypertension and myocarditis."
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.history?.medicalSurgicalHistory?.count, 2, "Medical/Surgical History failed for: \(sample)")
+            XCTAssertEqual(report.history?.medicalSurgicalHistory?[0].text, "I10", "Medical/Surgical History failed for: \(sample)")
+            XCTAssertEqual(report.history?.medicalSurgicalHistory?[1].text, "I40.9", "Medical/Surgical History failed for: \(sample)")
         }
     }
 }
