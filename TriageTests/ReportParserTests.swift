@@ -55,4 +55,17 @@ class ReportParserTests: XCTestCase {
         }
     }
 
+    func testExtractChiefComplaint() {
+        let samples = [
+            "Patient complains of chest pain",
+            "Chief complaint is chest pain"
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.situation?.chiefComplaint, "chest pain", "Chief complaint failed for: \(sample)")
+        }
+    }
+
 }
