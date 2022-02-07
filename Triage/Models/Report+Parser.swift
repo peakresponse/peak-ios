@@ -145,6 +145,7 @@ private let MATCHERS: [Matcher] = [
                 "patient0capillaryRefill": MAPPINGS_NUMBERS
             ]),
     Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of))(?:,|\.)? (?:is )?(?<situation0chiefComplaint>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of))(?:,|\.)? (?:is )?(?<situation0primarySymptom>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
@@ -189,7 +190,19 @@ extension Report {
                                 value = mappings[key] as Any
                             }
                         }
-                        setValue(value, forKeyPath: group.replacingOccurrences(of: "0", with: "."))
+                        let keyPath =  group.replacingOccurrences(of: "0", with: ".")
+                        if keyPath == "situation.primarySymptom" {
+                            // search for text in associated suggested list
+                            let realm = AppRealm.open()
+                            let results = realm.objects(CodeListItem.self)
+                                .filter("%@ IN list.fields", "eSituation.09")
+                                .filter("name CONTAINS[cd] %@", value)
+                            if results.count == 0 {
+                                continue
+                            }
+                            value = NemsisValue(text: results[0].code)
+                        }
+                        setValue(value, forKeyPath: keyPath)
 //                        var predictions = self.predictions ?? [:]
 //                        predictions[group] = [
 //                            "sourceId": sourceId,
