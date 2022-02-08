@@ -68,6 +68,7 @@ class ReportParserTests: XCTestCase {
             report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastVital?.bpSystolic, "120", "Blood Pressure failed for: \(sample)")
             XCTAssertEqual(report.lastVital?.bpDiastolic, "80", "Blood Pressure failed for: \(sample)")
+            XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
         }
     }
 
@@ -82,6 +83,7 @@ class ReportParserTests: XCTestCase {
             let report = Report.newRecord()
             report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastVital?.pulseOximetry, "96", "Pulse oximetry failed for: \(sample)")
+            XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
         }
     }
 

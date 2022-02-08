@@ -243,6 +243,9 @@ extension Report {
                             }
                         }
                         setValue(value, forKeyPath: keyPath)
+                        if keyPath.starts(with: "lastVital.") && lastVital?.vitalSignsTakenAt == nil {
+                            lastVital?.vitalSignsTakenAt = Date()
+                        }
 //                        var predictions = self.predictions ?? [:]
 //                        predictions[group] = [
 //                            "sourceId": sourceId,
