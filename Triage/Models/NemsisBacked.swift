@@ -14,7 +14,9 @@ let NemsisBackedPropertyMap: [String: (String, Bool)] = [
     "situation.primarySymptom": ("eSituation.09", false),
     "history.medicalSurgicalHistory": ("eHistory.08", true),
     "history.medicationAllergies": ("eHistory.06", true),
-    "history.environmentalFoodAllergies": ("eHistory.07", true)
+    "history.environmentalFoodAllergies": ("eHistory.07", true),
+    "lastProcedure.procedure": ("eProcedures.03", false),
+    "lastMedication.medication": ("eMedications.03", false)
 ]
 
 protocol NemsisBacked: AnyObject {

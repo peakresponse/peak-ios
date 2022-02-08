@@ -144,4 +144,30 @@ class ReportParserTests: XCTestCase {
             XCTAssertEqual(report.history?.environmentalFoodAllergies?[1].text, "91935009", "Allergies history failed for: \(sample)")
         }
     }
+
+    func testExtractProcedure() {
+        let samples = [
+            "Performed CPR."
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastProcedure?.procedure?.text, "89666000", "Procedure failed for: \(sample)")
+            XCTAssertNotNil(report.lastProcedure?.procedurePerformedAt)
+        }
+    }
+
+    func testExtractMedication() {
+        let samples = [
+            "Administered aspirin."
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastMedication?.medication?.text, "1191", "Medication failed for: \(sample)")
+            XCTAssertNotNil(report.lastMedication?.medicationAdministeredAt)
+        }
+    }
 }

@@ -150,6 +150,8 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0medicationAllergies>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0environmentalFoodAllergies>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:performed)|(?:applied))(?:,|\.)? (?:is )?(?<lastProcedure0procedure>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:administered))(?:,|\.)? (?:is )?(?<lastMedication0medication>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
@@ -205,7 +207,8 @@ extension Report {
                                     tokens.append(tag?.rawValue ?? String(valueString[range]))
                                     return true
                                 }
-                                valueString = tokens.joined(separator: "")
+                                valueString = tokens.joined(separator: "").trimmingCharacters(in: .whitespacesAndNewlines)
+                                print("searching for ", valueString)
                                 // search for text in associated suggested list
                                 let realm = AppRealm.open()
                                 let results = realm.objects(CodeListItem.self)
@@ -231,7 +234,8 @@ extension Report {
                                     }
                                     let results = realm.objects(CodeListItem.self)
                                         .filter("%@ IN list.fields", fieldName)
-                                        .filter("name CONTAINS[cd] %@", tokens.joined(separator: ""))
+                                        .filter("name CONTAINS[cd] %@",
+                                                tokens.joined(separator: "").trimmingCharacters(in: .whitespacesAndNewlines))
                                     if results.count > 0 {
                                         nemsisValues.append(NemsisValue(text: results[0].code))
                                     }
@@ -245,6 +249,10 @@ extension Report {
                         setValue(value, forKeyPath: keyPath)
                         if keyPath.starts(with: "lastVital.") && lastVital?.vitalSignsTakenAt == nil {
                             lastVital?.vitalSignsTakenAt = Date()
+                        } else if keyPath.starts(with: "lastProcedure.") && lastProcedure?.procedurePerformedAt == nil {
+                            lastProcedure?.procedurePerformedAt = Date()
+                        } else if keyPath.starts(with: "lastMedication.") && lastMedication?.medicationAdministeredAt == nil {
+                            lastMedication?.medicationAdministeredAt = Date()
                         }
 //                        var predictions = self.predictions ?? [:]
 //                        predictions[group] = [
