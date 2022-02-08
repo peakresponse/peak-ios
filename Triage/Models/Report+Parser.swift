@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import NaturalLanguage
 
 // swiftlint:disable force_try line_length
 private struct Matcher {
@@ -147,6 +148,8 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0chiefComplaint>[^.]+)"#),
     Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0primarySymptom>[^.]+)"#),
     Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0medicationAllergies>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0environmentalFoodAllergies>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
@@ -192,27 +195,43 @@ extension Report {
                             }
                         }
                         let keyPath = group.replacingOccurrences(of: "0", with: ".")
-                        if let (fieldName, isMultiSelect) = NemsisBackedPropertyMap[keyPath] {
+                        if let (fieldName, isMultiSelect) = NemsisBackedPropertyMap[keyPath], var valueString = value as? String {
+                            let tagger = NLTagger(tagSchemes: [.lemma])
+                            var tokens: [String] = []
                             if !isMultiSelect {
+                                tagger.string = valueString
+                                tagger.enumerateTags(in: valueString.startIndex..<valueString.endIndex,
+                                                     unit: .word, scheme: .lemma) { (tag, range) in
+                                    tokens.append(tag?.rawValue ?? String(valueString[range]))
+                                    return true
+                                }
+                                valueString = tokens.joined(separator: "")
                                 // search for text in associated suggested list
                                 let realm = AppRealm.open()
                                 let results = realm.objects(CodeListItem.self)
                                     .filter("%@ IN list.fields", fieldName)
-                                    .filter("name CONTAINS[cd] %@", value)
+                                    .filter("search CONTAINS[cd] %@", valueString)
                                 if results.count == 0 {
                                     continue
                                 }
                                 value = NemsisValue(text: results[0].code)
-                            } else if var valuesString = value as? String {
-                                valuesString = valuesString.replacingOccurrences(of: " and ", with: ",")
-                                let values = valuesString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
+                            } else {
+                                valueString = valueString.replacingOccurrences(of: " and ", with: ",")
+                                let values = valueString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
                                     .compactMap { $0.isEmpty ? nil : $0 }
                                 let realm = AppRealm.open()
                                 var nemsisValues: [NemsisValue] = []
                                 for value in values {
+                                    tokens = []
+                                    tagger.string = value
+                                    tagger.enumerateTags(in: value.startIndex..<value.endIndex,
+                                                         unit: .word, scheme: .lemma) { (tag, range) in
+                                        tokens.append(tag?.rawValue ?? String(value[range]))
+                                        return true
+                                    }
                                     let results = realm.objects(CodeListItem.self)
                                         .filter("%@ IN list.fields", fieldName)
-                                        .filter("name CONTAINS[cd] %@", value)
+                                        .filter("name CONTAINS[cd] %@", tokens.joined(separator: ""))
                                     if results.count > 0 {
                                         nemsisValues.append(NemsisValue(text: results[0].code))
                                     }

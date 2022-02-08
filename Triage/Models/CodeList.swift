@@ -6,6 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import NaturalLanguage
 import RealmSwift
 
 class CodeList: Base {
@@ -74,6 +75,7 @@ class CodeListItem: Base {
     @Persisted var system: String?
     @Persisted var code: String?
     @Persisted var name: String?
+    @Persisted var search: String?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
@@ -84,6 +86,16 @@ class CodeListItem: Base {
         system = data[Keys.system] as? String
         code = data[Keys.code] as? String
         name = data[Keys.name] as? String
+
+        let search = "\(section?.name ?? "" ) \(name ?? "")".trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        var tokens: [String] = []
+        let tagger = NLTagger(tagSchemes: [.lemma])
+        tagger.string = search
+        tagger.enumerateTags(in: search.startIndex..<search.endIndex, unit: .word, scheme: .lemma) { (tag, range) in
+            tokens.append(tag?.rawValue ?? String(search[range]))
+            return true
+        }
+        self.search = tokens.joined(separator: "")
     }
 
     override func asJSON() -> [String: Any] {

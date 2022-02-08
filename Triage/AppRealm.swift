@@ -67,6 +67,7 @@ class RequestOperation: Operation {
 
 // swiftlint:disable file_length force_try type_body_length
 class AppRealm {
+    private static var mainUrl: URL?
     private static var main: Realm!
     private static var _queue: OperationQueue!
     private static var queue: OperationQueue {
@@ -82,14 +83,22 @@ class AppRealm {
 
     private static var locationHelper: LocationHelper?
 
+    public static func configure(url: URL?) {
+        mainUrl = url
+        main = nil
+    }
+
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
             AppRealm.main.refresh()
             return AppRealm.main
         }
-        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
-                                                             appropriateFor: nil, create: false)
-        let url = documentDirectory?.appendingPathComponent( "app.realm")
+        var url: URL! = mainUrl
+        if url == nil {
+            let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+                                                                 appropriateFor: nil, create: false)
+            url = documentDirectory?.appendingPathComponent( "app.realm")
+        }
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true)
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {

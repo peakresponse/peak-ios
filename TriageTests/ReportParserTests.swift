@@ -6,6 +6,8 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import NaturalLanguage
+import RealmSwift
 import XCTest
 @testable import Peak_Response
 
@@ -15,11 +17,39 @@ class ReportParserTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
+        let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
+        AppRealm.configure(url: url)
     }
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
+
+    // Uncomment the following test function to generate a Realm database file with CodeList records for testing
+    // Copy the file out from the printed URL and put into the TriageTests directory so it will be loaded
+    // in the setup above
+//    func testCreateRealmFile() {
+//        let realm = AppRealm.open()
+//        let config = Realm.Configuration(inMemoryIdentifier: "Test.realm")
+//        let testRealm = try! Realm(configuration: config)
+//        try! testRealm.write {
+//            for obj in realm.objects(CodeList.self) {
+//                testRealm.create(CodeList.self, value: obj, update: .all)
+//            }
+//            for obj in realm.objects(CodeListSection.self) {
+//                testRealm.create(CodeListSection.self, value: obj, update: .all)
+//            }
+//            for obj in realm.objects(CodeListItem.self) {
+//                testRealm.create(CodeListItem.self, value: obj, update: .all)
+//            }
+//        }
+//        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+//                                                             appropriateFor: nil, create: false)
+//        if let url = documentDirectory?.appendingPathComponent( "Test.realm") {
+//            try! testRealm.writeCopy(toFile: url, encryptionKey: nil)
+//            print(url)
+//        }
+//    }
 
     func testExtractBloodPressure() {
         let samples = [
@@ -94,6 +124,22 @@ class ReportParserTests: XCTestCase {
             XCTAssertEqual(report.history?.medicalSurgicalHistory?.count, 2, "Medical/Surgical History failed for: \(sample)")
             XCTAssertEqual(report.history?.medicalSurgicalHistory?[0].text, "I10", "Medical/Surgical History failed for: \(sample)")
             XCTAssertEqual(report.history?.medicalSurgicalHistory?[1].text, "I40.9", "Medical/Surgical History failed for: \(sample)")
+        }
+    }
+
+    func testExtractAllergies() {
+        let samples = [
+            "Allergic to penicillin, gluten, peanuts."
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.history?.medicationAllergies?.count, 1, "Allergies history failed for: \(sample)")
+            XCTAssertEqual(report.history?.medicationAllergies?[0].text, "Z88.0", "Allergies history failed for: \(sample)")
+            XCTAssertEqual(report.history?.environmentalFoodAllergies?.count, 2, "Allergies history failed for: \(sample)")
+            XCTAssertEqual(report.history?.environmentalFoodAllergies?[0].text, "441831003", "Allergies history failed for: \(sample)")
+            XCTAssertEqual(report.history?.environmentalFoodAllergies?[1].text, "91935009", "Allergies history failed for: \(sample)")
         }
     }
 }
