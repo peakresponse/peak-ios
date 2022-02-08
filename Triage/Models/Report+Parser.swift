@@ -208,7 +208,6 @@ extension Report {
                                     return true
                                 }
                                 valueString = tokens.joined(separator: "").trimmingCharacters(in: .whitespacesAndNewlines)
-                                print("searching for ", valueString)
                                 // search for text in associated suggested list
                                 let realm = AppRealm.open()
                                 let results = realm.objects(CodeListItem.self)
