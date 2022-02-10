@@ -141,8 +141,15 @@ extension FormViewController {
         textField.target = target
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
-        textField.labelText = "\(String(describing: type(of: source ?? target ?? NSNull()))).\(attributeKey)".localized
-        textField.attributeValue = (source ?? target)?.value(forKey: attributeKey) as? NSObject
+        let obj = source ?? target
+        if let index = attributeKey.lastIndex(of: ".") {
+            let child = obj?.value(forKeyPath: String(attributeKey[attributeKey.startIndex..<index])) as? NSObject
+            let childAttributeKey = attributeKey[attributeKey.index(after: index)..<attributeKey.endIndex]
+            textField.labelText = "\(String(describing: type(of: child ?? NSNull()))).\(childAttributeKey)".localized
+        } else {
+            textField.labelText = "\(String(describing: type(of: obj ?? NSNull()))).\(attributeKey)".localized
+        }
+        textField.attributeValue = obj?.value(forKeyPath: attributeKey) as? NSObject
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
         if let unitText = unitText {

@@ -19,6 +19,23 @@ class ReportTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func testSetValueForKeyPath() throws {
+        let report = Report.newRecord()
+        report.setValue("John", forKeyPath: "patient.firstName")
+        report.setValue("120", forKeyPath: "vitals[0].bpSystolic")
+        XCTAssertEqual(report.patient?.firstName, "John")
+        XCTAssertEqual(report.vitals[0].bpSystolic, "120")
+    }
+
+    func testValueForKeyPath() throws {
+        let report = Report.newRecord()
+        report.patient?.firstName = "John"
+        report.vitals[0].bpSystolic = "120"
+        XCTAssertEqual(report.value(forKeyPath: "patient.firstName") as? String, "John")
+        XCTAssertEqual(report.value(forKeyPath: "vitals[0]") as? Vital, report.vitals[0])
+        XCTAssertEqual(report.value(forKeyPath: "vitals[0].bpSystolic") as? String, "120")
+    }
+
     func testSaveDependencies() throws {
         AppRealm.deleteAll()
 
