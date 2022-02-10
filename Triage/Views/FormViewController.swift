@@ -10,10 +10,8 @@ import PRKit
 import UIKit
 
 open class FormSection: UIStackView {
-    open var source: NSObject?
-    open var sourceIndex: Int?
-    open var target: NSObject?
-    open var targetIndex: Int?
+    open var type: AnyClass?
+    open var index: Int?
 
     public static func parent(of view: UIView) -> FormSection? {
         var superview = view.superview
@@ -68,13 +66,13 @@ public protocol FormViewController: PRKit.FormFieldDelegate {
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView)
-    func newTextField(source: NSObject?, sourceIndex: Int?, target: NSObject?,
+    func newTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitText: String?,
                       tag: inout Int) -> PRKit.TextField
 
-    func addTextField(source: NSObject?, sourceIndex: Int?, target: NSObject?,
+    func addTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
                       unitText: String?,
@@ -83,13 +81,13 @@ public protocol FormViewController: PRKit.FormFieldDelegate {
 }
 
 extension FormViewController {
-    func addTextField(source: NSObject? = nil, sourceIndex: Int? = nil, target: NSObject? = nil,
+    func addTextField(source: NSObject? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitText: String? = nil,
                       tag: inout Int,
                       to col: UIStackView, withWrapper: Bool = false) {
-        let textField = newTextField(source: source, sourceIndex: sourceIndex, target: target,
+        let textField = newTextField(source: source, target: target,
                                      attributeKey: attributeKey, attributeType: attributeType,
                                      keyboardType: keyboardType,
                                      unitText: unitText,
@@ -129,7 +127,7 @@ extension FormViewController {
         return stackView
     }
 
-    func newTextField(source: NSObject? = nil, sourceIndex: Int? = nil, target: NSObject? = nil,
+    func newTextField(source: NSObject? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
                       unitText: String? = nil,
@@ -137,7 +135,6 @@ extension FormViewController {
         let textField = PRKit.TextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.source = source
-        textField.sourceIndex = sourceIndex
         textField.target = target
         textField.attributeKey = attributeKey
         textField.attributeType = attributeType
