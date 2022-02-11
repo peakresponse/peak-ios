@@ -155,7 +155,11 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:(?:administered))(?:,|\.)? (?:is )?(?<lastMedication0medication>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
     Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
-    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bloodPressure>(?:"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?:"# + PATTERN_NUMBERS + #"))"#),
+    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bpSystolic>"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?<lastVital0bpDiastolic>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0bpSystolic": MAPPINGS_NUMBERS,
+                "lastVital0bpDiastolic": MAPPINGS_NUMBERS
+            ]),
     Matcher(pattern: #"(?:(?:blood sugar(?: levels?)?)|(?:blood glucose(?: levels?)?))(?:,|\.)? (?:is )?(?<lastVital0bloodGlucoseLevel>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0bloodGlucoseLevel": MAPPINGS_NUMBERS
