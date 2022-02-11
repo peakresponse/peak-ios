@@ -82,14 +82,12 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         addTextField(source: report, attributeKey: "patient.firstName", tag: &tag, to: colA)
         addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
         addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
-        let innerCols = newColumns()
         addTextField(source: report, attributeKey: "patient.ageArray",
                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
-                     tag: &tag, to: innerCols, withWrapper: true)
+                     tag: &tag, to: colB, withWrapper: true)
         addTextField(source: report, attributeKey: "patient.gender",
                      attributeType: .single(EnumKeyboardSource<PatientGender>()),
-                     tag: &tag, to: innerCols, withWrapper: true)
-        colB.addArrangedSubview(innerCols)
+                     tag: &tag, to: colA, withWrapper: true)
         section.addArrangedSubview(cols)
         containerView.addArrangedSubview(section)
 
@@ -182,6 +180,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                      attributeKey: "vitals[\(i)].vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
         let innerCols = newColumns()
         innerCols.distribution = .fillProportionally
+        innerCols.spacing = 5
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
         let label = UILabel()

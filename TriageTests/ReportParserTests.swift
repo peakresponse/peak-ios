@@ -51,6 +51,37 @@ class ReportParserTests: XCTestCase {
 //        }
 //    }
 
+    func testExtractAge() {
+        var samples: [String]!
+
+        samples = [
+            "age 28",
+            "28 year old",
+            "28 years old",
+            "28-year-old",
+            "28-years-old"
+        ]
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.patient?.age, 28, "age failed for: \(sample)")
+            XCTAssertEqual(report.patient?.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
+        }
+
+        samples = [
+            "two month old",
+            "two months old",
+            "two-month-old",
+            "two-months-old"
+        ]
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.patient?.age, 2, "age failed for: \(sample)")
+            XCTAssertEqual(report.patient?.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
+        }
+    }
+
     func testExtractBloodPressure() {
         let samples = [
             "BP 120/80",
