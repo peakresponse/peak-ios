@@ -274,7 +274,7 @@ extension Report {
                                 "location": match.range.location,
                                 "length": match.range.length
                             ],
-                            "value": value,
+                            "value": substr,
                             "status": PredictionStatus.unconfirmed.rawValue
                         ]
                         var sources = predictions["_sources"] as? [String: Any] ?? [:]
