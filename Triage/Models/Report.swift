@@ -6,9 +6,10 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import PRKit
 import RealmSwift
 
-class Report: BaseVersioned, NemsisBacked {
+class Report: BaseVersioned, NemsisBacked, Predictions {
     struct Keys {
         static let data = "data"
         static let incidentId = "incidentId"
@@ -23,6 +24,7 @@ class Report: BaseVersioned, NemsisBacked {
         static let medicationIds = "medicationIds"
         static let vitalIds = "vitalIds"
         static let procedureIds = "procedureIds"
+        static let predictions = "predictions"
     }
     @Persisted var _data: Data?
     @Persisted var incident: Incident?
@@ -53,6 +55,23 @@ class Report: BaseVersioned, NemsisBacked {
         }
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eRecord.01")
+        }
+    }
+
+    @Persisted var _predictions: Data?
+    @objc var predictions: [String: Any]? {
+        get {
+            if let _predictions = _predictions {
+                return try? JSONSerialization.jsonObject(with: _predictions, options: []) as? [String: Any]
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _predictions = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _predictions = nil
+            }
         }
     }
 
@@ -180,6 +199,9 @@ class Report: BaseVersioned, NemsisBacked {
         if data.index(forKey: Keys.procedureIds) != nil {
             procedures.append(objectsIn: (realm ?? AppRealm.open()).objects(Procedure.self).filter("id IN %@", data[Keys.procedureIds] as? [String] as Any))
         }
+        if data.index(forKey: Keys.predictions) != nil {
+            predictions = data[Keys.predictions] as? [String: Any]
+        }
     }
 
     override func asJSON() -> [String: Any] {
@@ -197,6 +219,9 @@ class Report: BaseVersioned, NemsisBacked {
         json[Keys.vitalIds] = Array(vitals.map { $0.id })
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
         json[Keys.medicationIds] = Array(medications.map { $0.id })
+        if let predictions = predictions {
+            data[Keys.predictions] = predictions
+        }
         return json
     }
 

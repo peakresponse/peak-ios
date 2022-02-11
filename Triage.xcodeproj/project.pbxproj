@@ -88,6 +88,7 @@
 		456F04FC27AE081F000CEE42 /* ReportParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FB27AE081F000CEE42 /* ReportParserTests.swift */; };
 		456F04FE27B2E609000CEE42 /* Test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 456F04FD27B2E609000CEE42 /* Test.realm */; };
 		456F050027B5B983000CEE42 /* Base+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */; };
+		456F050227B5E884000CEE42 /* Predictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050127B5E884000CEE42 /* Predictions.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */; };
@@ -291,6 +292,7 @@
 		456F04FB27AE081F000CEE42 /* ReportParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportParserTests.swift; sourceTree = "<group>"; };
 		456F04FD27B2E609000CEE42 /* Test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Test.realm; sourceTree = "<group>"; };
 		456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+KeyPath.swift"; sourceTree = "<group>"; };
+		456F050127B5E884000CEE42 /* Predictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictions.swift; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
@@ -611,6 +613,7 @@
 				458CA0BB2767DAFB0065F324 /* NemsisValue.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
 				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
+				456F050127B5E884000CEE42 /* Predictions.swift */,
 				45F7BAD1273AEC3500FBD31F /* Procedure.swift */,
 				45F7BAC12739E37300FBD31F /* Report.swift */,
 				456F04F927ACAA47000CEE42 /* Report+Parser.swift */,
@@ -1163,6 +1166,7 @@
 				45FD73E7243151C200FD7EDB /* ObservationView.swift in Sources */,
 				458CA0B0275FF9CE0065F324 /* NemsisKeyboard.swift in Sources */,
 				452DDBD0243D341900A8F1FF /* FacilityTableViewCell.swift in Sources */,
+				456F050227B5E884000CEE42 /* Predictions.swift in Sources */,
 				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */,
 				458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */,

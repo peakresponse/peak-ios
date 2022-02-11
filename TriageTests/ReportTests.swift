@@ -6,6 +6,7 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import PRKit
 import XCTest
 @testable import Peak_Response
 
@@ -17,6 +18,16 @@ class ReportTests: XCTestCase {
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+    }
+
+    func testPredictionStatus() throws {
+        let report = Report.newRecord()
+        report.predictions = [
+            "patient.firstName": [
+                "status": PredictionStatus.unconfirmed.rawValue
+            ]
+        ]
+        XCTAssertEqual(report.predictionStatus(for: "patient.firstName"), PredictionStatus.unconfirmed)
     }
 
     func testSetValueForKeyPath() throws {

@@ -8,6 +8,7 @@
 
 import Foundation
 import NaturalLanguage
+import PRKit
 
 // swiftlint:disable force_try line_length
 private struct Matcher {
@@ -196,7 +197,7 @@ extension Report {
                                 value = mappings[key] as Any
                             }
                         }
-                        let keyPath = group.replacingOccurrences(of: "0", with: ".")
+                        var keyPath = group.replacingOccurrences(of: "0", with: ".")
                         if let (fieldName, isMultiSelect) = NemsisBackedPropertyMap[keyPath], var valueString = value as? String {
                             let tagger = NLTagger(tagSchemes: [.lemma])
                             var tokens: [String] = []
@@ -246,59 +247,68 @@ extension Report {
                             }
                         }
                         setValue(value, forKeyPath: keyPath)
-                        if keyPath.starts(with: "lastVital.") && lastVital?.vitalSignsTakenAt == nil {
-                            lastVital?.vitalSignsTakenAt = Date()
-                        } else if keyPath.starts(with: "lastProcedure.") && lastProcedure?.procedurePerformedAt == nil {
-                            lastProcedure?.procedurePerformedAt = Date()
-                        } else if keyPath.starts(with: "lastMedication.") && lastMedication?.medicationAdministeredAt == nil {
-                            lastMedication?.medicationAdministeredAt = Date()
+                        if keyPath.starts(with: "lastVital."), let lastVital = lastVital {
+                            if lastVital.vitalSignsTakenAt == nil {
+                                lastVital.vitalSignsTakenAt = Date()
+                            }
+                            keyPath = keyPath.replacingOccurrences(of: "lastVital.", with: "vitals[\(vitals.count - 1)].")
+                        } else if keyPath.starts(with: "lastProcedure."), let lastProcedure = lastProcedure {
+                            if lastProcedure.procedurePerformedAt == nil {
+                                lastProcedure.procedurePerformedAt = Date()
+                            }
+                            keyPath = keyPath.replacingOccurrences(of: "lastProcedure.", with: "procedures[\(procedures.count - 1)].")
+                        } else if keyPath.starts(with: "lastMedication."), let lastMedication = lastMedication {
+                            if lastMedication.medicationAdministeredAt == nil {
+                                lastMedication.medicationAdministeredAt = Date()
+                            }
+                            keyPath = keyPath.replacingOccurrences(of: "lastMedication.", with: "medications[\(medications.count - 1)].")
                         }
-//                        var predictions = self.predictions ?? [:]
-//                        predictions[group] = [
-//                            "sourceId": sourceId,
-//                            "range": [
-//                                "location": range.location,
-//                                "length": range.length
-//                            ],
-//                            "sourceRange": [
-//                                "location": match.range.location,
-//                                "length": match.range.length
-//                            ],
-//                            "value": value,
-//                            "status": PredictionStatus.unconfirmed.rawValue
-//                        ]
-//                        var sources = predictions["_sources"] as? [String: Any] ?? [:]
-//                        sources[sourceId] = [
-//                            "id": sourceId,
-//                            "text": text,
-//                            "metadata": metadata
-//                        ]
-//                        predictions["_sources"] = sources
-//                        self.predictions = predictions
+                        var predictions = self.predictions ?? [:]
+                        predictions[keyPath] = [
+                            "sourceId": sourceId,
+                            "range": [
+                                "location": range.location,
+                                "length": range.length
+                            ],
+                            "sourceRange": [
+                                "location": match.range.location,
+                                "length": match.range.length
+                            ],
+                            "value": value,
+                            "status": PredictionStatus.unconfirmed.rawValue
+                        ]
+                        var sources = predictions["_sources"] as? [String: Any] ?? [:]
+                        sources[sourceId] = [
+                            "id": sourceId,
+                            "text": text,
+                            "metadata": metadata
+                        ]
+                        predictions["_sources"] = sources
+                        self.predictions = predictions
                     }
                 }
             }
         }
 
         if isFinal {
-//            var predictions = self.predictions ?? [:]
-//            // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
-//            var sourceIds: [String] = []
-//            for (key, value) in predictions where key != "_sources" {
-//                if let value = value as? [String: Any] {
-//                    if let sourceId = value["sourceId"] as? String {
-//                        sourceIds.append(sourceId)
-//                    }
-//                }
-//            }
-//            var sources = predictions["_sources"] as? [String: Any] ?? [:]
-//            for key in sources.keys {
-//                if sourceIds.firstIndex(of: key) == nil {
-//                    sources.removeValue(forKey: key)
-//                }
-//            }
-//            predictions["_sources"] = sources
-//            self.predictions = predictions
+            var predictions = self.predictions ?? [:]
+            // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
+            var sourceIds: [String] = []
+            for (key, value) in predictions where key != "_sources" {
+                if let value = value as? [String: Any] {
+                    if let sourceId = value["sourceId"] as? String {
+                        sourceIds.append(sourceId)
+                    }
+                }
+            }
+            var sources = predictions["_sources"] as? [String: Any] ?? [:]
+            for key in sources.keys {
+                if sourceIds.firstIndex(of: key) == nil {
+                    sources.removeValue(forKey: key)
+                }
+            }
+            predictions["_sources"] = sources
+            self.predictions = predictions
         }
     }
 }

@@ -147,6 +147,9 @@ extension FormViewController {
             textField.labelText = "\(String(describing: type(of: obj ?? NSNull()))).\(attributeKey)".localized
         }
         textField.attributeValue = obj?.value(forKeyPath: attributeKey) as? NSObject
+        if let obj = obj as? Predictions {
+            textField.status = obj.predictionStatus(for: attributeKey)
+        }
         textField.inputAccessoryView = formInputAccessoryView
         textField.keyboardType = keyboardType
         if let unitText = unitText {

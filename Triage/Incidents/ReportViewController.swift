@@ -353,6 +353,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         for formField in formFields {
             if let attributeKey = formField.attributeKey {
                 formField.attributeValue = formField.source?.value(forKeyPath: attributeKey) as? NSObject
+                if let source = formField.source as? Predictions {
+                    formField.status = source.predictionStatus(for: attributeKey)
+                }
             }
         }
     }
@@ -361,6 +364,9 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         for formField in formFields {
             if let attributeKey = formField.attributeKey, let target = formField.target {
                 formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                if let target = formField.target as? Predictions {
+                    formField.status = target.predictionStatus(for: attributeKey)
+                }
             }
         }
     }
@@ -477,6 +483,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
 //        AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
+        print("!!!", newReport?.predictions)
     }
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
