@@ -343,7 +343,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
         for formField in formFields {
             formField.isEditing = editing
-            formField.isUserInteractionEnabled = editing
+            formField.isEnabled = editing
             formField.target = newReport
         }
     }
