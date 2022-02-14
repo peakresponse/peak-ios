@@ -220,7 +220,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
         json[Keys.medicationIds] = Array(medications.map { $0.id })
         if let predictions = predictions {
-            data[Keys.predictions] = predictions
+            json[Keys.predictions] = predictions
         }
         return json
     }
