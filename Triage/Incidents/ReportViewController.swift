@@ -461,7 +461,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     // MARK: - RecordingViewControllerDelegate
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
-                                 sourceId: String, metadata: [String: Any], isFinal: Bool) {
+                                 fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
         // fix weird number handling from AWS Transcribe (i.e. one-twenty recognized as "1 20" instead of "120")
         let processedText = numbersExpr.stringByReplacingMatches(in: text, options: [], range: NSRange(location: 0, length: text.count),
                                                                  withTemplate: "$1$2$3")
@@ -473,7 +473,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         let formField = formFields.first(where: { $0.target == newReport && $0.attributeKey == "narrative.text" })
         formField?.attributeValue = newReport?.narrative?.text as NSObject?
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self?.newReport?.extractValues(from: processedText, sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            self?.newReport?.extractValues(from: processedText, fileId: fileId, transcriptId: transcriptId,
+                                           metadata: metadata, isFinal: isFinal)
             DispatchQueue.main.async { [weak self] in
                 self?.refreshFormFields()
             }

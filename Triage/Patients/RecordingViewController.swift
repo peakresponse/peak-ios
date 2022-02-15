@@ -12,7 +12,7 @@ import TranscriptionKit
 
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
-                                                sourceId: String, metadata: [String: Any], isFinal: Bool)
+                                                fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error)
 }
@@ -94,11 +94,12 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
 
     // MARK: - TranscriberDelegate
 
-    func transcriber(_ transcriber: Transcriber, didRecognizeText text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
+    func transcriber(_ transcriber: Transcriber, didRecognizeText text: String, fileId: String, transcriptId: String,
+                     metadata: [String: Any], isFinal: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.delegate?.recordingViewController?(self, didRecognizeText: text,
-                                                    sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            self.delegate?.recordingViewController?(self, didRecognizeText: text, fileId: fileId, transcriptId: transcriptId,
+                                                    metadata: metadata, isFinal: isFinal)
         }
     }
 

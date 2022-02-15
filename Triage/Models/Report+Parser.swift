@@ -185,7 +185,7 @@ private let MATCHERS: [Matcher] = [
 
 extension Report {
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func extractValues(from text: String, sourceId: String, metadata: [String: Any], isFinal: Bool) {
+    func extractValues(from text: String, fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
         let range = NSRange(text.startIndex..<text.endIndex, in: text)
         // apply every matcher across the full text
         for matcher in MATCHERS {
@@ -269,7 +269,8 @@ extension Report {
                         }
                         var predictions = self.predictions ?? [:]
                         predictions[keyPath] = [
-                            "sourceId": sourceId,
+                            "transcriptId": transcriptId,
+                            "fileId": fileId,
                             "range": [
                                 "location": range.location,
                                 "length": range.length
@@ -282,8 +283,9 @@ extension Report {
                             "status": PredictionStatus.unconfirmed.rawValue
                         ]
                         var sources = predictions["_sources"] as? [String: Any] ?? [:]
-                        sources[sourceId] = [
-                            "id": sourceId,
+                        sources[transcriptId] = [
+                            "id": transcriptId,
+                            "fileId": fileId,
                             "text": text,
                             "metadata": metadata
                         ]
@@ -297,17 +299,17 @@ extension Report {
         if isFinal {
             var predictions = self.predictions ?? [:]
             // clean out any sources that are no longer referenced by any predictions (overwritten by later recognition)
-            var sourceIds: [String] = []
+            var transcriptIds: [String] = []
             for (key, value) in predictions where key != "_sources" {
                 if let value = value as? [String: Any] {
-                    if let sourceId = value["sourceId"] as? String {
-                        sourceIds.append(sourceId)
+                    if let transcriptId = value["transcriptId"] as? String {
+                        transcriptIds.append(transcriptId)
                     }
                 }
             }
             var sources = predictions["_sources"] as? [String: Any] ?? [:]
             for key in sources.keys {
-                if sourceIds.firstIndex(of: key) == nil {
+                if transcriptIds.firstIndex(of: key) == nil {
                     sources.removeValue(forKey: key)
                 }
             }
