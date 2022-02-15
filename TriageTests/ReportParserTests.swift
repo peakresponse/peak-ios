@@ -12,7 +12,8 @@ import XCTest
 @testable import Peak_Response
 
 class ReportParserTests: XCTestCase {
-    var sourceId = UUID().uuidString
+    var fileId = UUID().uuidString
+    var transcriptId = UUID().uuidString
     var metadata = ["provider": "test"]
 
     override func setUpWithError() throws {
@@ -63,7 +64,7 @@ class ReportParserTests: XCTestCase {
         ]
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.patient?.age, 28, "age failed for: \(sample)")
             XCTAssertEqual(report.patient?.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
         }
@@ -76,7 +77,7 @@ class ReportParserTests: XCTestCase {
         ]
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.patient?.age, 2, "age failed for: \(sample)")
             XCTAssertEqual(report.patient?.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
         }
@@ -96,7 +97,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastVital?.bpSystolic, "120", "Blood Pressure failed for: \(sample)")
             XCTAssertEqual(report.lastVital?.bpDiastolic, "80", "Blood Pressure failed for: \(sample)")
             XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
@@ -112,7 +113,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastVital?.pulseOximetry, "96", "Pulse oximetry failed for: \(sample)")
             XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
         }
@@ -127,7 +128,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.situation?.chiefComplaint, "chest pain", "Chief complaint failed for: \(sample)")
         }
     }
@@ -141,7 +142,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.situation?.primarySymptom?.text, "R07.9", "Primary symptom failed for: \(sample)")
         }
     }
@@ -153,7 +154,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.history?.medicalSurgicalHistory?.count, 2, "Medical/Surgical History failed for: \(sample)")
             XCTAssertEqual(report.history?.medicalSurgicalHistory?[0].text, "I10", "Medical/Surgical History failed for: \(sample)")
             XCTAssertEqual(report.history?.medicalSurgicalHistory?[1].text, "I40.9", "Medical/Surgical History failed for: \(sample)")
@@ -167,7 +168,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.history?.medicationAllergies?.count, 1, "Allergies history failed for: \(sample)")
             XCTAssertEqual(report.history?.medicationAllergies?[0].text, "Z88.0", "Allergies history failed for: \(sample)")
             XCTAssertEqual(report.history?.environmentalFoodAllergies?.count, 2, "Allergies history failed for: \(sample)")
@@ -183,7 +184,7 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastProcedure?.procedure?.text, "89666000", "Procedure failed for: \(sample)")
             XCTAssertNotNil(report.lastProcedure?.procedurePerformedAt)
         }
@@ -196,9 +197,85 @@ class ReportParserTests: XCTestCase {
 
         for sample in samples {
             let report = Report.newRecord()
-            report.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastMedication?.medication?.text, "1191", "Medication failed for: \(sample)")
             XCTAssertNotNil(report.lastMedication?.medicationAdministeredAt)
         }
+    }
+
+    func testExtractTimeRange() throws {
+        let segmentData = """
+        [
+          {
+            "duration": 0.3975000000000001,
+            "substring": "Patient",
+            "timestamp": 0.59,
+            "substringRange": {
+              "length": 7,
+              "location": 0
+            }
+          },
+          {
+            "duration": 0.10999999999999988,
+            "substring": "is",
+            "timestamp": 0.9875,
+            "substringRange": {
+              "length": 2,
+              "location": 8
+            }
+          },
+          {
+            "duration": 0.44000000000000017,
+            "substring": "complaining",
+            "timestamp": 1.0975,
+            "substringRange": {
+              "length": 11,
+              "location": 11
+            }
+          },
+          {
+            "duration": 0.08499999999999996,
+            "substring": "of",
+            "timestamp": 1.5375,
+            "substringRange": {
+              "length": 2,
+              "location": 23
+            }
+          },
+          {
+            "duration": 0.41500000000000004,
+            "substring": "chest",
+            "timestamp": 1.6225,
+            "substringRange": {
+              "length": 5,
+              "location": 26
+            }
+          },
+          {
+            "duration": 0.3075000000000001,
+            "substring": "pain",
+            "timestamp": 2.0375,
+            "substringRange": {
+              "length": 4,
+              "location": 32
+            }
+          },
+          {
+            "duration": 0,
+            "substring": ".",
+            "timestamp": 2.345,
+            "substringRange": {
+              "length": 1,
+              "location": 36
+            }
+          }
+        ]
+        """
+        let segments = try! JSONSerialization.jsonObject(with: segmentData.data(using: .utf8)!, options: []) as! [[String: Any]]
+        let range = NSRange(location: 11, length: 25)
+        let report = Report.newRecord()
+        let (timestamp, duration) = report.extractTimeRange(for: range, in: segments) ?? (nil, nil)
+        XCTAssertEqual(timestamp, 1.0975)
+        XCTAssertEqual(duration, 1.2475000000000003)
     }
 }

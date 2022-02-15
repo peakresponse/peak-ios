@@ -267,8 +267,7 @@ extension Report {
                             }
                             keyPath = keyPath.replacingOccurrences(of: "lastMedication.", with: "medications[\(medications.count - 1)].")
                         }
-                        var predictions = self.predictions ?? [:]
-                        predictions[keyPath] = [
+                        var prediction: [String: Any] = [
                             "transcriptId": transcriptId,
                             "fileId": fileId,
                             "range": [
@@ -282,6 +281,12 @@ extension Report {
                             "value": substr,
                             "status": PredictionStatus.unconfirmed.rawValue
                         ]
+                        if let (timestamp, duration) = extractTimeRange(for: match.range, in: metadata["segments"] as? [[String: Any]]) {
+                            prediction["timestamp"] = timestamp
+                            prediction["duration"] = duration
+                        }
+                        var predictions = self.predictions ?? [:]
+                        predictions[keyPath] = prediction
                         var sources = predictions["_sources"] as? [String: Any] ?? [:]
                         sources[transcriptId] = [
                             "id": transcriptId,
@@ -316,5 +321,29 @@ extension Report {
             predictions["_sources"] = sources
             self.predictions = predictions
         }
+    }
+
+    func extractTimeRange(for textRange: NSRange, in segments: [[String: Any]]?) -> (TimeInterval, TimeInterval)? {
+        guard let segments = segments else { return nil }
+        var timestamp: TimeInterval?
+        var duration: TimeInterval?
+        for segment in segments {
+            if let substringRange = segment["substringRange"] as? [String: Int],
+                let location = substringRange["location"],
+                let length = substringRange["length"],
+                let substringTimestamp = segment["timestamp"] as? TimeInterval,
+                let substringDuration = segment["duration"] as? TimeInterval {
+                if textRange.lowerBound >= location && textRange.lowerBound < (location + length) {
+                    timestamp = substringTimestamp
+                }
+                if textRange.upperBound >= location && textRange.upperBound <= (location + length), let timestamp = timestamp {
+                    duration = substringTimestamp + substringDuration - timestamp
+                }
+            }
+        }
+        if let timestamp = timestamp, let duration = duration {
+            return (timestamp, duration)
+        }
+        return nil
     }
 }
