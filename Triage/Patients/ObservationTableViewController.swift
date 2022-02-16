@@ -246,7 +246,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         }
     }
 
-    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
+    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL) {
         AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
         // hide the record button, user must clear current recording to continue

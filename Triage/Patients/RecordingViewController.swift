@@ -13,7 +13,7 @@ import TranscriptionKit
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
                                                 fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool)
-    @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL)
+    @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error)
 }
 
@@ -86,7 +86,7 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
 
     @IBAction func stopPressed(_ sender: Any) {
         transcriber.stopRecording()
-        delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileURL)
+        delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileId, fileURL: transcriber.fileURL)
         stopButton.layer.opacity = 0
         activityIndicatorView.startAnimating()
         cancelButton.isHidden = true

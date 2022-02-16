@@ -24,6 +24,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let medicationIds = "medicationIds"
         static let vitalIds = "vitalIds"
         static let procedureIds = "procedureIds"
+        static let fileIds = "fileIds"
         static let predictions = "predictions"
     }
     @Persisted var _data: Data?
@@ -48,6 +49,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     @objc var lastProcedure: Procedure? {
         return procedures.last
     }
+    @Persisted var files: List<File>
 
     @objc var patientCareReportNumber: String? {
         get {
@@ -140,6 +142,8 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if procedures.count == 0 {
             procedures.append(Procedure.newRecord())
         }
+        files.removeAll()
+        files.append(objectsIn: report.files.map { File(clone: $0) })
     }
 
     override func new() {
@@ -199,6 +203,9 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.procedureIds) != nil {
             procedures.append(objectsIn: (realm ?? AppRealm.open()).objects(Procedure.self).filter("id IN %@", data[Keys.procedureIds] as? [String] as Any))
         }
+        if data.index(forKey: Keys.fileIds) != nil {
+            files.append(objectsIn: (realm ?? AppRealm.open()).objects(File.self).filter("id IN %@", data[Keys.fileIds] as? [String] as Any))
+        }
         if data.index(forKey: Keys.predictions) != nil {
             predictions = data[Keys.predictions] as? [String: Any]
         }
@@ -219,6 +226,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         json[Keys.vitalIds] = Array(vitals.map { $0.id })
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
         json[Keys.medicationIds] = Array(medications.map { $0.id })
+        json[Keys.fileIds] = Array(files.map { $0.id })
         if let predictions = predictions {
             json[Keys.predictions] = predictions
         }
@@ -264,6 +272,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
             payload["Vital"] = Array(vitals.map { $0.asJSON() })
             payload["Procedure"] = Array(procedures.map { $0.asJSON() })
             payload["Medication"] = Array(medications.map { $0.asJSON() })
+            payload["File"] = Array(files.map { $0.asJSON() })
             payload["Report"] = asJSON()
         } else {
             var report = asJSON()
@@ -345,6 +354,14 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
                 report["medicationIds"] = ids
             } else {
                 report.removeValue(forKey: "medicationIds")
+            }
+
+            (ids, data) = Report.canonicalize(source: parent?.files, target: files)
+            if data.count > 0 {
+                payload["File"] = data
+                report["fileIds"] = ids
+            } else {
+                report.removeValue(forKey: "fileIds")
             }
 
             payload["Report"] = report

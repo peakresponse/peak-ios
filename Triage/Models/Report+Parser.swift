@@ -250,7 +250,9 @@ extension Report {
                                 value = nemsisValues as Any
                             }
                         }
-                        setValue(value, forKeyPath: keyPath)
+                        DispatchQueue.main.sync {
+                            self.setValue(value, forKeyPath: keyPath)
+                        }
                         if keyPath.starts(with: "lastVital."), let lastVital = lastVital {
                             if lastVital.vitalSignsTakenAt == nil {
                                 lastVital.vitalSignsTakenAt = Date()
@@ -295,7 +297,9 @@ extension Report {
                             "metadata": metadata
                         ]
                         predictions["_sources"] = sources
-                        self.predictions = predictions
+                        DispatchQueue.main.sync {
+                            self.predictions = predictions
+                        }
                     }
                 }
             }
@@ -319,7 +323,9 @@ extension Report {
                 }
             }
             predictions["_sources"] = sources
-            self.predictions = predictions
+            DispatchQueue.main.sync {
+                self.predictions = predictions
+            }
         }
     }
 

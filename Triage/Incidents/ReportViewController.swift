@@ -481,9 +481,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
-    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
-//        AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
-        print("!!!", newReport?.predictions)
+    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL) {
+        let file = File.newRecord()
+        file.canonicalId = fileId
+        file.file = fileURL.lastPathComponent
+        file.fileUrl = fileURL.absoluteString
+        file.fileAttachmentType = fileURL.pathExtension
+        file.externalElectronicDocumentType = FileDocumentType.otherAudioRecording.rawValue
+        newReport?.files.append(file)
+        AppRealm.uploadFile(fileURL: fileURL)
     }
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {

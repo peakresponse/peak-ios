@@ -89,6 +89,7 @@
 		456F04FE27B2E609000CEE42 /* Test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 456F04FD27B2E609000CEE42 /* Test.realm */; };
 		456F050027B5B983000CEE42 /* Base+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */; };
 		456F050227B5E884000CEE42 /* Predictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050127B5E884000CEE42 /* Predictions.swift */; };
+		456F050427BC6D03000CEE42 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050327BC6D03000CEE42 /* File.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */; };
@@ -293,6 +294,7 @@
 		456F04FD27B2E609000CEE42 /* Test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Test.realm; sourceTree = "<group>"; };
 		456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+KeyPath.swift"; sourceTree = "<group>"; };
 		456F050127B5E884000CEE42 /* Predictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictions.swift; sourceTree = "<group>"; };
+		456F050327BC6D03000CEE42 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIActivityIndicatorView+Extensions.swift"; sourceTree = "<group>"; };
@@ -605,6 +607,7 @@
 				45C757D1272CC3A200386F07 /* Dispatch.swift */,
 				45F7BACB273AEC1600FBD31F /* Disposition.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
+				456F050327BC6D03000CEE42 /* File.swift */,
 				45F7BAC9273AEC0800FBD31F /* History.swift */,
 				45C757CC272CAFB000386F07 /* Incident.swift */,
 				45F7BACF273AEC2B00FBD31F /* Medication.swift */,
@@ -1114,6 +1117,7 @@
 				4566F099236E12A600A04C75 /* BasePatientTableViewCell.swift in Sources */,
 				45D3E944272767A200E5382D /* Vehicle.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
+				456F050427BC6D03000CEE42 /* File.swift in Sources */,
 				454E17AC24FECBF800F9EB8B /* PreviousScenesViewController.swift in Sources */,
 				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,
 				4543BF6E26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift in Sources */,

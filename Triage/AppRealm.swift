@@ -219,6 +219,39 @@ class AppRealm {
         task.resume()
     }
 
+    // MARK: - Files
+
+    public static func uploadFile(fileURL: URL) {
+        /// ensure a unique upload filename by prepending the user uuid
+        let fileName = fileURL.lastPathComponent
+        /// move to the local app file cache
+        let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
+        let op = RequestOperation()
+        op.queuePriority = .veryHigh
+        op.request = { (completionHandler) in
+            if let data = op.data,
+               let directUpload = data["direct_upload"] as? [String: Any],
+               let urlString = directUpload["url"] as? String,
+               let url = URL(string: urlString),
+               let headers = directUpload["headers"] as? [String: Any] {
+                return ApiClient.shared.upload(fileURL: cacheFileURL ?? fileURL, toURL: url, headers: headers) { (error) in
+                    completionHandler(error)
+                }
+            } else {
+                return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (_, _, response, error) in
+                    if let error = error {
+                        completionHandler(error)
+                    } else if let response = response {
+                        op.data = response
+                        op.retryTime = 0
+                        completionHandler(ApiClientError.unexpected)
+                    }
+                }
+            }
+        }
+        queue.addOperation(op)
+    }
+
     // MARK: - Incidents
 
     public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
@@ -414,7 +447,8 @@ class AppRealm {
                 Narrative.self,
                 Medication.self,
                 Procedure.self,
-                Vital.self
+                Vital.self,
+                File.self
             ] {
                 if let records = data?[String(describing: model)] as? [[String: Any]] {
                     dependencies.append(contentsOf: records.map { model.instantiate(from: $0) })
