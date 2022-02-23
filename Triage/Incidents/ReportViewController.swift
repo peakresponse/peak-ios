@@ -19,7 +19,8 @@ protocol ReportViewControllerDelegate: AnyObject {
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
-class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, RecordingViewControllerDelegate {
+class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, RecordingFieldDelegate,
+                            RecordingViewControllerDelegate, TranscriberDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -27,9 +28,13 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var recordButtonBackground: UIView!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
+    var recordingsSection: FormSection!
 
     var report: Report!
     var newReport: Report?
+
+    var player: Transcriber?
+    var playingRecordingField: RecordingField?
 
     weak var delegate: ReportViewControllerDelegate?
 
@@ -164,7 +169,38 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         button.tag = tag
         section.addLastButton(button)
 
+        (recordingsSection, cols, colA, colB) = newSection()
+        header = newHeader("ReportViewController.recordings".localized)
+        recordingsSection.addArrangedSubview(header)
+        for i in 0..<report.files.count {
+            addRecordingField(i, source: report, to: i.isMultiple(of: 2) ? colA : colB)
+        }
+        recordingsSection.addArrangedSubview(cols)
+        containerView.addArrangedSubview(recordingsSection)
+
         setEditing(isEditing, animated: false)
+    }
+
+    func addRecordingField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
+        let report = target ?? source
+        let file = report?.files[i]
+        let recordingField = RecordingField()
+        recordingField.source = source
+        recordingField.target = target
+        recordingField.attributeKey = "files[\(i)]"
+        recordingField.delegate = self
+        recordingField.setDate(file?.createdAt ?? Date())
+        recordingField.titleText = String(format: "ReportViewController.recording".localized, i + 1)
+        recordingField.durationText = file?.metadata?["formattedDuration"] as? String ?? "--:--"
+        if let sources = report?.predictions?["_sources"] as? [String: [String: Any]] {
+            for source in sources.values {
+                if (source["isFinal"] as? Bool) ?? false, (source["fileId"] as? String)?.lowercased() == file?.canonicalId?.lowercased() {
+                    recordingField.text = source["text"] as? String
+                    break
+                }
+            }
+        }
+        col.addArrangedSubview(recordingField)
     }
 
     func newVitalsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
@@ -459,7 +495,50 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         presentAnimated(vc)
     }
 
+    // MARK: - RecordingFieldDelegate
+
+    func recordingField(_ field: RecordingField, didPressPlayButton button: UIButton) {
+        if field != playingRecordingField {
+            playingRecordingField?.playButton.isSelected = false
+            playingRecordingField = nil
+            player?.stopPressed()
+        }
+        if button.isSelected {
+            button.isSelected = false
+            playingRecordingField = nil
+            player?.stopPressed()
+        } else {
+            if player == nil {
+                player = Transcriber()
+                player?.delegate = self
+            }
+            if let keyPath = field.attributeKey, let file = (field.target ?? field.source)?.value(forKeyPath: keyPath) as? File,
+               let fileUrl = file.fileUrl ?? file.file {
+                AppCache.cachedFile(from: fileUrl) { [weak self] (url, error) in
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+//                        self?.activityIndicatorView.stopAnimating()
+                        if let error = error {
+                            self.presentAlert(error: error)
+                        } else if let url = url {
+                            do {
+                                self.player?.fileURL = url
+                                try self.player?.playPressed()
+                                self.playingRecordingField = field
+                                field.durationText = "00:00:00"
+                                button.isSelected = true
+                            } catch {
+                                self.presentAlert(error: error)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     // MARK: - RecordingViewControllerDelegate
+
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
                                  fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
         // fix weird number handling from AWS Transcribe (i.e. one-twenty recognized as "1 20" instead of "120")
@@ -481,13 +560,18 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
-    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL) {
+    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL,
+                                 duration: TimeInterval, formattedDuration: String) {
         let file = File.newRecord()
         file.canonicalId = fileId
         file.file = fileURL.lastPathComponent
         file.fileUrl = fileURL.absoluteString
         file.fileAttachmentType = fileURL.pathExtension
         file.externalElectronicDocumentType = FileDocumentType.otherAudioRecording.rawValue
+        file.metadata = [
+            "duration": duration,
+            "formattedDuration": formattedDuration
+        ]
         newReport?.files.append(file)
         AppRealm.uploadFile(fileURL: fileURL)
     }
@@ -501,6 +585,23 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             dismiss(animated: true) { [weak self] in
                 self?.presentAlert(error: error)
             }
+        }
+    }
+
+    // MARK: - TranscriberDelegate
+
+    func transcriber(_ transcriber: Transcriber, didFinishPlaying successfully: Bool) {
+        DispatchQueue.main.async { [weak self] in
+//            self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
+//            self?.durationLabel.text = transcriber.recordingLengthFormatted
+        }
+    }
+
+    func transcriber(_ transcriber: Transcriber, didPlay seconds: TimeInterval, formattedDuration duration: String) {
+        DispatchQueue.main.async { [weak self] in
+//            if self?.transcriber?.isPlaying ?? false {
+//                self?.durationLabel.text = duration
+//            }
         }
     }
 }

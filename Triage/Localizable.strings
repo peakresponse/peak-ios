@@ -295,6 +295,8 @@
 "ReportViewController.optional" = " (optional)";
 "ReportViewController.patientInformation" = "Patient Information";
 "ReportViewController.procedures" = "Procedures";
+"ReportViewController.recordings" = "Recordings";
+"ReportViewController.recording" = "Recording %d";
 "ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";

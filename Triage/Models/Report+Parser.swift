@@ -292,6 +292,7 @@ extension Report {
                         var sources = predictions["_sources"] as? [String: Any] ?? [:]
                         sources[transcriptId] = [
                             "id": transcriptId,
+                            "isFinal": isFinal,
                             "fileId": fileId,
                             "text": text,
                             "metadata": metadata
@@ -318,7 +319,7 @@ extension Report {
             }
             var sources = predictions["_sources"] as? [String: Any] ?? [:]
             for key in sources.keys {
-                if transcriptIds.firstIndex(of: key) == nil {
+                if key != transcriptId && transcriptIds.firstIndex(of: key) == nil {
                     sources.removeValue(forKey: key)
                 }
             }

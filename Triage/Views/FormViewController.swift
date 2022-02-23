@@ -13,6 +13,10 @@ open class FormSection: UIStackView {
     open var type: AnyClass?
     open var index: Int?
 
+    open var cols: UIStackView!
+    open var colA: UIStackView!
+    open var colB: UIStackView!
+
     public static func parent(of view: UIView) -> FormSection? {
         var superview = view.superview
         while superview != nil {
@@ -161,7 +165,7 @@ extension FormViewController {
         return textField
     }
 
-    func newHeader(_ text: String, subheaderText: String?) -> UIView {
+    func newHeader(_ text: String, subheaderText: String? = nil) -> UIView {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
 
@@ -207,13 +211,6 @@ extension FormViewController {
     }
 
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView) {
-        let section = FormSection()
-        section.translatesAutoresizingMaskIntoConstraints = false
-        section.axis = .vertical
-        section.alignment = .fill
-        section.distribution = .fill
-        section.spacing = 0
-
         let isRegular = traitCollection.horizontalSizeClass == .regular
         let colA = UIStackView()
         colA.translatesAutoresizingMaskIntoConstraints = false
@@ -238,6 +235,15 @@ extension FormViewController {
             cols.addArrangedSubview(colA)
             cols.addArrangedSubview(colB)
         }
+        let section = FormSection()
+        section.translatesAutoresizingMaskIntoConstraints = false
+        section.axis = .vertical
+        section.alignment = .fill
+        section.distribution = .fill
+        section.spacing = 0
+        section.cols = cols
+        section.colA = colA
+        section.colB = colB
         return (section, cols, colA, colB)
     }
 }
