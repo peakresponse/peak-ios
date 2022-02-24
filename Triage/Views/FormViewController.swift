@@ -28,6 +28,16 @@ open class FormSection: UIStackView {
         return nil
     }
 
+    public static func subviews<T>(_ subviews: inout [T], in view: UIView) {
+        for subview in view.subviews {
+            if let subview = subview as? T {
+                subviews.append(subview)
+            } else {
+                FormSection.subviews(&subviews, in: subview)
+            }
+        }
+    }
+
     public static func fields(in view: UIView) -> [PRKit.FormField] {
         var fields: [PRKit.FormField] = []
         FormSection.fields(in: view, fields: &fields)

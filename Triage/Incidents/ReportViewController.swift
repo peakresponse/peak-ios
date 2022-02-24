@@ -365,17 +365,24 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             } else {
                 newReport = report
             }
-        } else {
-            if newReport?.vitals.count ?? 0 > report.vitals.count {
+        } else if let newReport = newReport {
+            if newReport.vitals.count > report.vitals.count {
                 removeSections(type: Vital.self, greaterThan: max(1, report.vitals.count))
             }
-            if newReport?.procedures.count ?? 0 > report.procedures.count {
+            if newReport.procedures.count > report.procedures.count {
                 removeSections(type: Procedure.self, greaterThan: max(1, report.procedures.count))
             }
-            if newReport?.medications.count ?? 0 > report.medications.count {
+            if newReport.medications.count > report.medications.count {
                 removeSections(type: Medication.self, greaterThan: max(1, report.medications.count))
             }
-            newReport = nil
+            if newReport.files.count > report.files.count {
+                var recordingFields: [RecordingField] = []
+                FormSection.subviews(&recordingFields, in: recordingsSection)
+                for recordingField in recordingFields[report.files.count..<newReport.files.count] {
+                    recordingField.removeFromSuperview()
+                }
+            }
+            self.newReport = nil
         }
         for formField in formFields {
             formField.isEditing = editing
@@ -498,26 +505,25 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     // MARK: - RecordingFieldDelegate
 
     func recordingField(_ field: RecordingField, didPressPlayButton button: UIButton) {
-        if field != playingRecordingField {
-            playingRecordingField?.playButton.isSelected = false
+        let startPlaying = !field.isPlaying
+        if field != playingRecordingField || field.isPlaying {
+            playingRecordingField?.durationText = player?.recordingLengthFormatted
+            playingRecordingField?.isPlaying = false
             playingRecordingField = nil
             player?.stopPressed()
         }
-        if button.isSelected {
-            button.isSelected = false
-            playingRecordingField = nil
-            player?.stopPressed()
-        } else {
+        if startPlaying {
             if player == nil {
                 player = Transcriber()
                 player?.delegate = self
             }
             if let keyPath = field.attributeKey, let file = (field.target ?? field.source)?.value(forKeyPath: keyPath) as? File,
                let fileUrl = file.fileUrl ?? file.file {
+                field.isActivityIndicatorAnimating = true
                 AppCache.cachedFile(from: fileUrl) { [weak self] (url, error) in
                     DispatchQueue.main.async { [weak self] in
                         guard let self = self else { return }
-//                        self?.activityIndicatorView.stopAnimating()
+                        field.isActivityIndicatorAnimating = false
                         if let error = error {
                             self.presentAlert(error: error)
                         } else if let url = url {
@@ -526,7 +532,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                                 try self.player?.playPressed()
                                 self.playingRecordingField = field
                                 field.durationText = "00:00:00"
-                                button.isSelected = true
+                                field.isPlaying = true
                             } catch {
                                 self.presentAlert(error: error)
                             }
@@ -572,8 +578,12 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             "duration": duration,
             "formattedDuration": formattedDuration
         ]
-        newReport?.files.append(file)
-        AppRealm.uploadFile(fileURL: fileURL)
+        if let newReport = newReport {
+            let i = newReport.files.count
+            newReport.files.append(file)
+            AppRealm.uploadFile(fileURL: fileURL)
+            addRecordingField(i, target: newReport, to: i.isMultiple(of: 2) ? recordingsSection.colA : recordingsSection.colB)
+        }
     }
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
@@ -592,16 +602,19 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     func transcriber(_ transcriber: Transcriber, didFinishPlaying successfully: Bool) {
         DispatchQueue.main.async { [weak self] in
-//            self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
-//            self?.durationLabel.text = transcriber.recordingLengthFormatted
+            if let playingRecordingField = self?.playingRecordingField {
+                playingRecordingField.durationText = transcriber.recordingLengthFormatted
+                playingRecordingField.isPlaying = false
+                self?.playingRecordingField = nil
+            }
         }
     }
 
     func transcriber(_ transcriber: Transcriber, didPlay seconds: TimeInterval, formattedDuration duration: String) {
         DispatchQueue.main.async { [weak self] in
-//            if self?.transcriber?.isPlaying ?? false {
-//                self?.durationLabel.text = duration
-//            }
+            if let playingRecordingField = self?.playingRecordingField {
+                playingRecordingField.durationText = duration
+            }
         }
     }
 }
