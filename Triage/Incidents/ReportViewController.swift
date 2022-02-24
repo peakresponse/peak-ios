@@ -561,7 +561,21 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             self?.newReport?.extractValues(from: processedText, fileId: fileId, transcriptId: transcriptId,
                                            metadata: metadata, isFinal: isFinal)
             DispatchQueue.main.async { [weak self] in
-                self?.refreshFormFields()
+                guard let self = self else { return }
+                self.refreshFormFields()
+                if isFinal {
+                    // update recording field with text
+                    var recordingFields: [RecordingField] = []
+                    FormSection.subviews(&recordingFields, in: self.recordingsSection)
+                    for recordingField in recordingFields {
+                        if let keyPath = recordingField.attributeKey,
+                           let file = (recordingField.target ?? recordingField.source)?.value(forKeyPath: keyPath) as? File,
+                           file.canonicalId == fileId {
+                            recordingField.text = text
+                            break
+                        }
+                    }
+                }
             }
         }
     }
