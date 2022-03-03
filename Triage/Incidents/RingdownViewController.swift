@@ -7,7 +7,18 @@
 //
 
 import UIKit
+import PRKit
 
-class RingdownViewController: UIViewController {
+class RingdownViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController {
+    @IBOutlet weak var scrollView: UIScrollView!
+    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var containerView: UIStackView!
 
+    var formInputAccessoryView: UIView!
+    var formFields: [PRKit.FormField] = []
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+    }
 }

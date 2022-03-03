@@ -28,7 +28,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target:
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
                                                             self, action: #selector(dismissAnimated))
 
         customTabBar.buttonTitle = "Button.addPatient".localized
@@ -136,7 +136,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                                                                      action: #selector(newReportCancelled))
             } else {
                 vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
-                                                                     style: .done,
+                                                                     style: .plain,
                                                                      target: self,
                                                                      action: #selector(dismissAnimated))
             }

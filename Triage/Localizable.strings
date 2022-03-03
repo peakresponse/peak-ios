@@ -310,6 +310,14 @@
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
 
+"RingdownViewController.urgency" = "Urgency";
+"RingdownViewController.urgency.code2" = "Code 2";
+"RingdownViewController.urgency.code3" = "Code 3";
+"RingdownViewController.stability" = "Vitals Stability";
+"RingdownViewController.stability.stable" = "Stable";
+"RingdownViewController.stability.unstable" = "Unstable";
+
+
 "Scene.address" = "Location";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";

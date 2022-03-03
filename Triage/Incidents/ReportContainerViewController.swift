@@ -23,23 +23,50 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     var incident: Incident?
     var report: Report?
     var leftBarButtonItem: UIBarButtonItem?
+    var editBarButtonItem: UIBarButtonItem?
+    var saveBarButtonItem: UIBarButtonItem?
+    var cancelBarButtonItem: UIBarButtonItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         segmentedControl.addSegment(title: "ReportContainerViewController.tab.incident".localized)
         segmentedControl.addSegment(title: "ReportContainerViewController.tab.ringdown".localized)
-//        segmentedControl.addSegment(title: "ReportContainerViewController.tab.refusal".localized)
+
+        editBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
+                                            style: .done,
+                                            target: self,
+                                            action: #selector(editPressed))
+        saveBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
+                                            style: .done,
+                                            target: self,
+                                            action: #selector(savePressed))
+        cancelBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                              style: .plain,
+                                               target: self,
+                                               action: #selector(cancelPressed))
 
         showReport()
     }
 
+    @IBAction func segmentedControlChanged(_ sender: SegmentedControl) {
+        removeCurrentViewController()
+        switch segmentedControl.selectedIndex {
+        case 0:
+            commandHeader.rightBarButtonItem = editBarButtonItem
+            showReport()
+        case 1:
+            commandHeader.rightBarButtonItem = nil
+            showRingdown()
+        default:
+            break
+        }
+    }
+
     @objc func cancelPressed() {
+        segmentedControl.isEnabled = true
         commandHeader.leftBarButtonItem = leftBarButtonItem
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(editPressed))
+        commandHeader.rightBarButtonItem = editBarButtonItem
         if let vc = children[0] as? ReportViewController {
             vc.setEditing(false, animated: true)
             vc.resetFormFields()
@@ -48,15 +75,10 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     }
 
     @objc func editPressed() {
+        segmentedControl.isEnabled = false
         leftBarButtonItem = commandHeader.leftBarButtonItem
-        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
-                                                          style: .plain,
-                                                           target: self,
-                                                           action: #selector(cancelPressed))
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
-                                                           style: .done,
-                                                           target: self,
-                                                           action: #selector(savePressed))
+        commandHeader.leftBarButtonItem = cancelBarButtonItem
+        commandHeader.rightBarButtonItem = saveBarButtonItem
         if let vc = children[0] as? ReportViewController {
             vc.setEditing(true, animated: true)
         }
@@ -70,12 +92,32 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             vc.setEditing(false, animated: true)
             vc.scrollView.setContentOffset(.zero, animated: true)
         }
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
-                                                           style: .plain,
-                                                           target: self,
-                                                           action: #selector(editPressed))
+        commandHeader.rightBarButtonItem = editBarButtonItem
         segmentedControl.isHidden = false
+        segmentedControl.isEnabled = false
         delegate?.reportContainerViewControllerDidSave(self)
+    }
+
+    func removeCurrentViewController() {
+        if children.count > 0 {
+            let vc = children[0]
+            vc.willMove(toParent: nil)
+            vc.view.removeFromSuperview()
+            vc.removeFromParent()
+        }
+    }
+
+    func showRingdown() {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
+//        if let vc = vc as? RingdownViewController {
+//            vc.delegate = self
+//            vc.report = report
+//            vc.isEditing = report.realm == nil
+//        }
+        addChild(vc)
+        containerView.addSubview(vc.view)
+        vc.view.frame = containerView.bounds
+        vc.didMove(toParent: self)
     }
 
     func showReport() {
@@ -97,15 +139,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         containerView.isHidden = false
 
         if vc.isEditing {
-            commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
-                                                               style: .done,
-                                                               target: self,
-                                                               action: #selector(savePressed))
+            commandHeader.rightBarButtonItem = saveBarButtonItem
         } else {
-            commandHeader.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.edit".localized,
-                                                               style: .plain,
-                                                               target: self,
-                                                               action: #selector(editPressed))
+            commandHeader.rightBarButtonItem = editBarButtonItem
         }
     }
 
