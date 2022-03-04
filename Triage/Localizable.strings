@@ -59,6 +59,7 @@
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
 "Button.search" = "Search";
+"Button.select" = "Select";
 "Button.signIn" = "Sign In";
 "Button.skip" = "Skip";
 "Button.startScene" = "Start Scene";
@@ -310,13 +311,17 @@
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
 
+"RingdownFacilityView.erBeds" = "ER Beds";
+"RingdownFacilityView.psychBeds" = "Behav. Beds";
+"RingdownFacilityView.enroute" = "Amb. En-Route";
+"RingdownFacilityView.waiting" = "Amb. Waiting";
+
 "RingdownViewController.urgency" = "Urgency";
 "RingdownViewController.urgency.code2" = "Code 2";
 "RingdownViewController.urgency.code3" = "Code 3";
 "RingdownViewController.stability" = "Vitals Stability";
 "RingdownViewController.stability.stable" = "Stable";
 "RingdownViewController.stability.unstable" = "Unstable";
-
 
 "Scene.address" = "Location";
 

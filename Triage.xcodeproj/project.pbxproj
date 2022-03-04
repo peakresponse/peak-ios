@@ -139,6 +139,7 @@
 		45BA94312502C17F0098E9BD /* FormMultilineField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BA94302502C17F0098E9BD /* FormMultilineField.swift */; };
 		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
+		45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */; };
 		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
 		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
@@ -345,6 +346,7 @@
 		45BA94302502C17F0098E9BD /* FormMultilineField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormMultilineField.swift; sourceTree = "<group>"; };
 		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
+		45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownFacilityView.swift; sourceTree = "<group>"; };
 		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
 		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
@@ -737,6 +739,7 @@
 			children = (
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
+				45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1069,6 +1072,7 @@
 				454E17C1250022ED00F9EB8B /* SceneRespondersView.swift in Sources */,
 				4566F088236E0A5800A04C75 /* ObservationViewController.swift in Sources */,
 				45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */,
+				45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */,
 				4566F06F236D2EBF00A04C75 /* PortraitView.swift in Sources */,
 				4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */,
 				45F218FE24E5BB510046A39B /* PatientTableViewController.swift in Sources */,

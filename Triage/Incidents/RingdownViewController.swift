@@ -31,6 +31,21 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         codeCheckboxes = [code2Checkbox, code3Checkbox]
         code3Checkbox.isEnabled = false
         stabilityCheckboxes = [stableCheckbox, unstableCheckbox]
+
+        let hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        containerView.addArrangedSubview(hr)
+
+        let (section, cols, colA, _) = newSection()
+        section.addArrangedSubview(cols)
+        containerView.addArrangedSubview(section)
+
+        let facilityView = RingdownFacilityView()
+        facilityView.translatesAutoresizingMaskIntoConstraints = false
+        facilityView.nameText = "Test"
+        facilityView.setUpdatedAt(Date())
+        colA.addArrangedSubview(facilityView)
     }
 
     func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
