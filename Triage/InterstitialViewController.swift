@@ -38,6 +38,12 @@ class InterstitialViewController: UIViewController {
                 AppRealm.getLists { (_) in
                     // noop
                 }
+                // log in to VitaLink API (TODO: parameterize based on agency settings)
+                VLApiClient.shared.login { (_, _, error) in
+                    if error == nil {
+                        VLRealm.connect()
+                    }
+                }.resume()
                 AppSettings.awsCredentials = awsCredentials
                 AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
                 if let sceneId = scene?.id {

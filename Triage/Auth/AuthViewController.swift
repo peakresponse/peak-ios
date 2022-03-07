@@ -50,7 +50,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             passwordField.isUserInteractionEnabled = false
             signInButton.isUserInteractionEnabled = false
             activityIndicatorView.startAnimating()
-            let task = ApiClient.shared.login(email: email, password: password) { [weak self] (_, _, data, error) in
+            let task = PRApiClient.shared.login(email: email, password: password) { [weak self] (_, _, data, error) in
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     if let error = error {
@@ -78,6 +78,12 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                 let assignmentId = assignment?.id
                                 let sceneId = scene?.id
                                 AppSettings.awsCredentials = awsCredentials
+                                // log in to VitaLink API (TODO: parameterize based on agency settings)
+                                VLApiClient.shared.login { (_, _, error) in
+                                    if error == nil {
+                                        VLRealm.connect()
+                                    }
+                                }.resume()
                                 DispatchQueue.main.async { [weak self] in
                                     guard let self = self else { return }
                                     if let error = error {

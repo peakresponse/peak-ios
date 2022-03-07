@@ -77,6 +77,8 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
 
         performQuery()
+
+        AppRealm.connect()
     }
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Incident>>) {

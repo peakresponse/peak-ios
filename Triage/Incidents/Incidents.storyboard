@@ -312,7 +312,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="KcX-PN-o40" userLabel="Code 2" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="722.33333333333326"/>
+                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="654.33333333333326"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -323,7 +323,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="gop-Rk-4M3" userLabel="Code 3" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="784" width="147.66666666666666" height="48"/>
+                                                                <rect key="frame" x="0.0" y="716" width="147.66666666666666" height="116"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -375,7 +375,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="jbz-l2-bGF" userLabel="Stable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="722.33333333333326"/>
+                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="626.33333333333326"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -386,7 +386,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="XT0-Uc-mFf" userLabel="Unstable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="784" width="127.33333333333331" height="48"/>
+                                                                <rect key="frame" x="19.999999999999993" y="688" width="127.33333333333331" height="144"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -466,6 +466,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="checkboxesView" destination="d6d-gm-8sp" id="Suf-d3-5iQ"/>
                         <outlet property="code2Checkbox" destination="KcX-PN-o40" id="sid-sf-fzJ"/>
                         <outlet property="code3Checkbox" destination="gop-Rk-4M3" id="9Zj-1o-BXp"/>
                         <outlet property="containerView" destination="Hm1-T5-Mdx" id="hY1-Ef-mNs"/>

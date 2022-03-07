@@ -14,7 +14,7 @@ class AppCache {
         DispatchQueue.global().async {
             var url: URL?
             if urlString.starts(with: "/") {
-                let request = ApiClient.shared.urlRequest(for: urlString)
+                let request = PRApiClient.shared.urlRequest(for: urlString)
                 url = request.url
             } else {
                 url = URL(string: urlString)
@@ -28,8 +28,8 @@ class AppCache {
                     if !fileManager.fileExists(atPath: destURL.path) {
                         // download into cache location
                         if urlString.starts(with: "/") {
-                            let request = ApiClient.shared.urlRequest(for: urlString)
-                            let task = ApiClient.shared.download(request: request) { (url, response, error) in
+                            let request = PRApiClient.shared.urlRequest(for: urlString)
+                            let task = PRApiClient.shared.download(request: request) { (url, response, error) in
                                 guard let response = response as? HTTPURLResponse else { return }
                                 if let error = error {
                                     completionHandler(nil, error)

@@ -68,15 +68,22 @@ class RingdownFacilityView: UIView {
     weak var nameLabel: UILabel!
     weak var updatedAtLabel: UILabel!
     weak var statsStackView: UIStackView!
-    var statCounts: [RingdownFacilityCountView] = []
+    var statCountViews: [RingdownFacilityCountView] = []
+    weak var notesRule: PixelRuleView!
+    weak var notesLabel: UILabel!
 
     var nameText: String? {
         get { return nameLabel.text }
         set { nameLabel.text = newValue }
     }
 
-    func setUpdatedAt(_ date: Date) {
-        updatedAtLabel.text = date.asRelativeString()
+    func setUpdatedAt(_ date: Date?) {
+        updatedAtLabel.text = date?.asTimeDateString() ?? "-"
+    }
+
+    var notesText: String? {
+        get { return notesLabel.text }
+        set { notesLabel.text = newValue }
     }
 
     override init(frame: CGRect) {
@@ -133,8 +140,7 @@ class RingdownFacilityView: UIView {
         NSLayoutConstraint.activate([
             statsStackView.topAnchor.constraint(equalTo: updatedAtLabel.bottomAnchor, constant: 16),
             statsStackView.leftAnchor.constraint(equalTo: updatedAtLabel.leftAnchor),
-            statsStackView.widthAnchor.constraint(equalToConstant: 180),
-            bottomAnchor.constraint(equalTo: statsStackView.bottomAnchor, constant: 40)
+            statsStackView.widthAnchor.constraint(equalToConstant: 180)
         ])
         self.statsStackView = statsStackView
 
@@ -145,6 +151,7 @@ class RingdownFacilityView: UIView {
         countView.translatesAutoresizingMaskIntoConstraints = false
         countView.labelText = "RingdownFacilityView.erBeds".localized
         statsStackView.addArrangedSubview(countView)
+        statCountViews.append(countView)
 
         hr = PixelRuleView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -155,6 +162,7 @@ class RingdownFacilityView: UIView {
         countView.translatesAutoresizingMaskIntoConstraints = false
         countView.labelText = "RingdownFacilityView.psychBeds".localized
         statsStackView.addArrangedSubview(countView)
+        statCountViews.append(countView)
 
         hr = PixelRuleView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -165,6 +173,7 @@ class RingdownFacilityView: UIView {
         countView.translatesAutoresizingMaskIntoConstraints = false
         countView.labelText = "RingdownFacilityView.enroute".localized
         statsStackView.addArrangedSubview(countView)
+        statCountViews.append(countView)
 
         hr = PixelRuleView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -175,5 +184,48 @@ class RingdownFacilityView: UIView {
         countView.translatesAutoresizingMaskIntoConstraints = false
         countView.labelText = "RingdownFacilityView.waiting".localized
         statsStackView.addArrangedSubview(countView)
+        statCountViews.append(countView)
+
+        hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        hr.isHidden = true
+        statsStackView.addArrangedSubview(hr)
+        self.notesRule = hr
+
+        let notesLabel = UILabel()
+        notesLabel.translatesAutoresizingMaskIntoConstraints = false
+        notesLabel.font = .h4SemiBold
+        notesLabel.textColor = .brandSecondary800
+        notesLabel.numberOfLines = 0
+        notesLabel.isHidden = true
+        addSubview(notesLabel)
+        NSLayoutConstraint.activate([
+            notesLabel.topAnchor.constraint(equalTo: statsStackView.bottomAnchor, constant: 4),
+            notesLabel.leftAnchor.constraint(equalTo: statsStackView.leftAnchor),
+            notesLabel.rightAnchor.constraint(equalTo: selectButton.rightAnchor),
+            bottomAnchor.constraint(equalTo: notesLabel.bottomAnchor, constant: 40)
+        ])
+        self.notesLabel = notesLabel
+    }
+
+    func update(from update: HospitalStatusUpdate) {
+        nameText = update.name
+        setUpdatedAt(update.updatedAt)
+
+        statCountViews[0].countText = update.openEdBedCount != nil ? "\(update.openEdBedCount ?? 0)" : "-"
+        statCountViews[1].countText = update.openPsychBedCount != nil ? "\(update.openPsychBedCount ?? 0)" : "-"
+        statCountViews[2].countText = update.ambulancesEnRoute != nil ? "\(update.ambulancesEnRoute ?? 0)" : "-"
+        statCountViews[3].countText = update.ambulancesOffloading != nil ? "\(update.ambulancesOffloading ?? 0)" : "-"
+
+        if let notes = update.notes {
+            notesLabel.text = notes
+            notesLabel.isHidden = false
+            notesRule.isHidden = false
+        } else {
+            notesLabel.text = nil
+            notesLabel.isHidden = true
+            notesRule.isHidden = true
+        }
     }
 }

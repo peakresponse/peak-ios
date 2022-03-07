@@ -39,7 +39,7 @@ extension UIViewController: AuthViewControllerDelegate, UIAdaptivePresentationCo
     }
 
     func logout() {
-        ApiClient.shared.logout { [weak self] in
+        PRApiClient.shared.logout { [weak self] in
             AppRealm.disconnectScene()
             AppRealm.disconnect()
             AppRealm.deleteAll()
