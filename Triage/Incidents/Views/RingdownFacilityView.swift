@@ -62,7 +62,12 @@ class RingdownFacilityCountView: UIView {
     }
 }
 
-class RingdownFacilityView: UIView {
+protocol RingdownFacilityViewDelegate: AnyObject {
+    func ringdownFacilityView(_ view: RingdownFacilityView, didSelect isSelected: Bool)
+    func ringdownFacilityView(_ view: RingdownFacilityView, didChangeEta eta: String?)
+}
+
+class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
     weak var selectButton: PRKit.Button!
     weak var arrivalField: PRKit.TextField!
     weak var nameLabel: UILabel!
@@ -71,6 +76,20 @@ class RingdownFacilityView: UIView {
     var statCountViews: [RingdownFacilityCountView] = []
     weak var notesRule: PixelRuleView!
     weak var notesLabel: UILabel!
+
+    weak var delegate: RingdownFacilityViewDelegate?
+
+    var isSelected: Bool = false {
+        didSet {
+            arrivalField.isHidden = !isSelected
+            selectButton.alpha = isSelected ? 0 : 1
+            if isSelected {
+                _ = arrivalField.becomeFirstResponder()
+            } else {
+                arrivalField.text = nil
+            }
+        }
+    }
 
     var nameText: String? {
         get { return nameLabel.text }
@@ -84,6 +103,16 @@ class RingdownFacilityView: UIView {
     var notesText: String? {
         get { return notesLabel.text }
         set { notesLabel.text = newValue }
+    }
+
+    var arrivalText: String? {
+        get { return arrivalField.text }
+        set { arrivalField.text = newValue }
+    }
+
+    override var inputAccessoryView: UIView? {
+        get { return arrivalField.inputAccessoryView }
+        set { arrivalField.inputAccessoryView = newValue }
     }
 
     override init(frame: CGRect) {
@@ -102,12 +131,28 @@ class RingdownFacilityView: UIView {
         selectButton.style = .secondary
         selectButton.translatesAutoresizingMaskIntoConstraints = false
         selectButton.setTitle("Button.select".localized, for: .normal)
+        selectButton.addTarget(self, action: #selector(selectPressed), for: .touchUpInside)
         addSubview(selectButton)
         NSLayoutConstraint.activate([
             selectButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
             selectButton.rightAnchor.constraint(equalTo: rightAnchor)
         ])
         self.selectButton = selectButton
+
+        let arrivalField = PRKit.TextField()
+        arrivalField.translatesAutoresizingMaskIntoConstraints = false
+        arrivalField.delegate = self
+        arrivalField.labelText = "RingdownFacilityView.eta".localized
+        arrivalField.unitText = "RingdownFacilityView.eta.mins".localized
+        arrivalField.attributeType = .integer
+        arrivalField.isHidden = true
+        addSubview(arrivalField)
+        NSLayoutConstraint.activate([
+            arrivalField.topAnchor.constraint(equalTo: selectButton.topAnchor),
+            arrivalField.rightAnchor.constraint(equalTo: selectButton.rightAnchor),
+            arrivalField.leftAnchor.constraint(equalTo: selectButton.leftAnchor)
+        ])
+        self.arrivalField = arrivalField
 
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -226,6 +271,32 @@ class RingdownFacilityView: UIView {
             notesLabel.text = nil
             notesLabel.isHidden = true
             notesRule.isHidden = true
+        }
+    }
+
+    @objc func selectPressed() {
+        isSelected = true
+        delegate?.ringdownFacilityView(self, didSelect: isSelected)
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        if field.text?.isEmpty ?? true {
+            if !field.isFirstResponder && isSelected {
+                isSelected = false
+                delegate?.ringdownFacilityView(self, didSelect: isSelected)
+            }
+        }
+        delegate?.ringdownFacilityView(self, didChangeEta: field.text?.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+
+    func formFieldDidEndEditing(_ field: PRKit.FormField) {
+        if field.text?.isEmpty ?? true {
+            if isSelected {
+                isSelected = false
+                delegate?.ringdownFacilityView(self, didSelect: isSelected)
+            }
         }
     }
 }

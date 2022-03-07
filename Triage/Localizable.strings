@@ -59,6 +59,7 @@
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
 "Button.search" = "Search";
+"Button.sendRingdown" = "Send Ringdown";
 "Button.select" = "Select";
 "Button.signIn" = "Sign In";
 "Button.skip" = "Skip";
@@ -311,6 +312,8 @@
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
 
+"RingdownFacilityView.eta" = "ETA";
+"RingdownFacilityView.eta.mins" = " min";
 "RingdownFacilityView.erBeds" = "ER Beds";
 "RingdownFacilityView.psychBeds" = "Behav. Beds";
 "RingdownFacilityView.enroute" = "Amb. En-Route";

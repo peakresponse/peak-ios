@@ -455,17 +455,38 @@
                                     </mask>
                                 </variation>
                             </scrollView>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XTJ-tc-zOc">
+                                <rect key="frame" x="0.0" y="702" width="375" height="110"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </view>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="335" placeholderIntrinsicHeight="44" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cBe-hz-dsJ" customClass="Button" customModule="PRKit">
+                                <rect key="frame" x="20" y="718" width="335" height="44"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="Style" value="primary"/>
+                                </userDefinedRuntimeAttributes>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fSH-9H-aV4"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="cBe-hz-dsJ" firstAttribute="trailing" secondItem="fSH-9H-aV4" secondAttribute="trailing" constant="-20" id="1Ub-RN-4GI"/>
                             <constraint firstItem="Y64-0c-SPB" firstAttribute="trailing" secondItem="6Qf-Nb-7kM" secondAttribute="trailing" id="3Xe-O4-704"/>
+                            <constraint firstItem="XTJ-tc-zOc" firstAttribute="trailing" secondItem="6Qf-Nb-7kM" secondAttribute="trailing" id="5Ln-Rd-NR8"/>
                             <constraint firstItem="Y64-0c-SPB" firstAttribute="leading" secondItem="6Qf-Nb-7kM" secondAttribute="leading" id="7r9-4k-XBB"/>
+                            <constraint firstItem="cBe-hz-dsJ" firstAttribute="bottom" secondItem="fSH-9H-aV4" secondAttribute="bottom" constant="-16" id="NEM-vV-3LU"/>
+                            <constraint firstItem="XTJ-tc-zOc" firstAttribute="leading" secondItem="6Qf-Nb-7kM" secondAttribute="leading" id="NvF-zd-tbp"/>
+                            <constraint firstItem="XTJ-tc-zOc" firstAttribute="bottom" secondItem="6Qf-Nb-7kM" secondAttribute="bottom" id="RIv-YB-eEX"/>
                             <constraint firstItem="Y64-0c-SPB" firstAttribute="top" secondItem="6Qf-Nb-7kM" secondAttribute="top" id="U9o-XN-PeF"/>
+                            <constraint firstItem="cBe-hz-dsJ" firstAttribute="leading" secondItem="fSH-9H-aV4" secondAttribute="leading" constant="20" id="aOB-ds-tB8"/>
                             <constraint firstItem="Y64-0c-SPB" firstAttribute="bottom" secondItem="6Qf-Nb-7kM" secondAttribute="bottom" id="kOI-c3-DC7"/>
+                            <constraint firstItem="XTJ-tc-zOc" firstAttribute="top" secondItem="cBe-hz-dsJ" secondAttribute="top" constant="-16" id="tgE-oc-cpd"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="actionButton" destination="cBe-hz-dsJ" id="MdG-IB-eYj"/>
+                        <outlet property="actionButtonBackground" destination="XTJ-tc-zOc" id="FRm-XI-H2U"/>
                         <outlet property="checkboxesView" destination="d6d-gm-8sp" id="Suf-d3-5iQ"/>
                         <outlet property="code2Checkbox" destination="KcX-PN-o40" id="sid-sf-fzJ"/>
                         <outlet property="code3Checkbox" destination="gop-Rk-4M3" id="9Zj-1o-BXp"/>
@@ -489,14 +510,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="279" translatesAutoresizingMaskIntoConstraints="NO" id="JJN-PD-wtK">
-                                <rect key="frame" x="0.0" y="533" width="375" height="279"/>
+                                <rect key="frame" x="0.0" y="499" width="375" height="313"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="k0D-Wk-2Lz">
-                                        <rect key="frame" x="169" y="185.66666666666663" width="37" height="37"/>
+                                        <rect key="frame" x="169" y="202.66666666666663" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1t1-jN-HJT" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="22" y="185" width="331" height="38"/>
+                                        <rect key="frame" x="22" y="185" width="331" height="72"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="stopAndSave"/>
@@ -531,7 +552,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sum-eV-2Ix">
-                                        <rect key="frame" x="299" y="7.6666666666666288" width="54" height="34"/>
+                                        <rect key="frame" x="299" y="7.6666666666666856" width="54" height="34"/>
                                         <state key="normal" title="Button">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
