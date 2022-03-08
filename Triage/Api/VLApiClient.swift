@@ -51,4 +51,8 @@ class VLApiClient: ApiClient {
 
     // MARK: - Ringdowns
 
+    func sendRingdown(payload: [String: Any],
+                      completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/ringdowns", body: payload, completionHandler: completionHandler)
+    }
 }

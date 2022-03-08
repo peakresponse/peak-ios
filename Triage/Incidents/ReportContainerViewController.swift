@@ -109,11 +109,10 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
     func showRingdown() {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
-//        if let vc = vc as? RingdownViewController {
+        if let vc = vc as? RingdownViewController {
 //            vc.delegate = self
-//            vc.report = report
-//            vc.isEditing = report.realm == nil
-//        }
+            vc.report = report
+        }
         addChild(vc)
         containerView.addSubview(vc.view)
         vc.view.frame = containerView.bounds

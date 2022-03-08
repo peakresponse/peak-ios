@@ -183,15 +183,18 @@ class Patient: BaseVersioned {
     }
 
     @Persisted var gender: String?
+    var Gender: PatientGender? {
+        return PatientGender(rawValue: gender ?? "")
+    }
     @objc var genderString: String {
-        if let value = gender {
-            return PatientGender(rawValue: value)?.description ?? ""
-        }
-        return ""
+        return Gender?.description ?? ""
     }
 
     @Persisted var age: Int?
     @Persisted var ageUnits: String?
+    var AgeUnits: PatientAgeUnits? {
+        return PatientAgeUnits(rawValue: ageUnits ?? "")
+    }
     @objc var ageArray: AnyObject? {
         get {
             var array: [String] = []
@@ -215,7 +218,7 @@ class Patient: BaseVersioned {
     }
     @objc var ageString: String {
         if let value = age {
-            return "\(value) \(PatientAgeUnits(rawValue: ageUnits ?? "")?.abbrDescription ?? "")"
+            return "\(value) \(AgeUnits?.abbrDescription ?? "")"
                 .trimmingCharacters(in: .whitespacesAndNewlines)
         }
         if let dob = dob, let date = ISO8601DateFormatter.date(from: dob) {

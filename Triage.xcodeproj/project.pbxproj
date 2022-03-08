@@ -122,6 +122,8 @@
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
+		45B50C8A27D6D3CB002F1674 /* Report+VitaLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */; };
+		45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */; };
 		45B7A2D82508330700BCAAAE /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D72508330600BCAAAE /* City.swift */; };
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
 		45B7A2DC250E970200BCAAAE /* BaseNonSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */; };
@@ -333,6 +335,8 @@
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
+		45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+VitaLink.swift"; sourceTree = "<group>"; };
+		45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownStatusView.swift; sourceTree = "<group>"; };
 		45B7A2D72508330600BCAAAE /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		45B7A2D92508331500BCAAAE /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
 		45B7A2DB250E970200BCAAAE /* BaseNonSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNonSceneViewController.swift; sourceTree = "<group>"; };
@@ -761,6 +765,7 @@
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
 				45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */,
+				45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -769,6 +774,7 @@
 			isa = PBXGroup;
 			children = (
 				45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */,
+				45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */,
 				45C9DAA827D598B20003B44B /* Ringdown.swift */,
 				45C9DAAA27D598BD0003B44B /* VLRealm.swift */,
 			);
@@ -1217,6 +1223,7 @@
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
+				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
 				45C5AF8727D28E9C003E630E /* VLApiClient.swift in Sources */,
@@ -1238,6 +1245,7 @@
 				458CA0CC277293580065F324 /* FormViewController.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
+				45B50C8A27D6D3CB002F1674 /* Report+VitaLink.swift in Sources */,
 				458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,

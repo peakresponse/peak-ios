@@ -33,7 +33,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     @IBOutlet weak var stableCheckbox: Checkbox!
     @IBOutlet weak var unstableCheckbox: Checkbox!
     var stabilityCheckboxes: [Checkbox]!
-    var stabilityIndicator: Bool? {
+    var stableIndicator: Bool? {
         if stableCheckbox.isChecked {
             return true
         } else if unstableCheckbox.isChecked {
@@ -42,16 +42,24 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         return nil
     }
 
-    weak var statusSection: FormSection!
+    weak var facilitiesSection: FormSection!
+    weak var ringdownSection: FormSection!
 
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
 
+    var report: Report!
+    var ringdown: Ringdown?
+
     var results: Results<HospitalStatusUpdate>?
     var notificationToken: NotificationToken?
 
+    var ringdownResults: Results<Ringdown>?
+    var ringdownNotificationToken: NotificationToken?
+
     deinit {
         notificationToken?.invalidate()
+        ringdownNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
@@ -75,7 +83,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
 
         section.addArrangedSubview(cols)
         containerView.addArrangedSubview(section)
-        self.statusSection = section
+        self.facilitiesSection = section
 
         formInputAccessoryView = FormInputAccessoryView(rootView: containerView)
 
@@ -85,6 +93,31 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
+
+        if let ringdownId = report.ringdownId {
+            ringdownResults = realm.objects(Ringdown.self).filter("id=%@", ringdownId)
+            ringdownNotificationToken = ringdownResults?.observe { [weak self] (changes) in
+                self?.didObserveRingdownRealmChanges(changes)
+            }
+        }
+    }
+
+    func addNewFacilityView(for update: HospitalStatusUpdate) {
+        let facilityView = RingdownFacilityView()
+        facilityView.tag = update.sortSequenceNumber ?? 0
+        facilityView.inputAccessoryView = formInputAccessoryView
+        facilityView.delegate = self
+        facilityView.update(from: update)
+        let col = ((update.sortSequenceNumber ?? 1) - 1).isMultiple(of: 2) ? facilitiesSection.colA : facilitiesSection.colB
+        col?.addArrangedSubview(facilityView)
+        let hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        col?.addArrangedSubview(hr)
+    }
+
+    func showRingdown() {
+        facilitiesSection.isHidden = true
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<HospitalStatusUpdate>>) {
@@ -92,40 +125,37 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         case .initial:
             if let results = results {
                 for update in results {
-                    let facilityView = RingdownFacilityView()
-                    facilityView.tag = update.sortSequenceNumber ?? 0
-                    facilityView.inputAccessoryView = formInputAccessoryView
-                    facilityView.delegate = self
-                    facilityView.update(from: update)
-                    let col = ((update.sortSequenceNumber ?? 1) - 1).isMultiple(of: 2) ? statusSection.colA : statusSection.colB
-                    col?.addArrangedSubview(facilityView)
-                    let hr = PixelRuleView()
-                    hr.translatesAutoresizingMaskIntoConstraints = false
-                    hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-                    col?.addArrangedSubview(hr)
+                    addNewFacilityView(for: update)
                 }
             }
         case .update(let results, _, let insertions, let modifications):
             for index in insertions {
                 let update = results[index]
-                let facilityView = RingdownFacilityView()
-                facilityView.tag = update.sortSequenceNumber ?? 0
-                facilityView.inputAccessoryView = formInputAccessoryView
-                facilityView.delegate = self
-                facilityView.update(from: update)
-                let col = ((update.sortSequenceNumber ?? 1) - 1).isMultiple(of: 2) ? statusSection.colA : statusSection.colB
-                col?.addArrangedSubview(facilityView)
-                let hr = PixelRuleView()
-                hr.translatesAutoresizingMaskIntoConstraints = false
-                hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-                col?.addArrangedSubview(hr)
+                addNewFacilityView(for: update)
             }
             var facilityViews: [RingdownFacilityView] = []
-            FormSection.subviews(&facilityViews, in: statusSection)
+            FormSection.subviews(&facilityViews, in: facilitiesSection)
             for index in modifications {
                 let update = results[index]
                 facilityViews[index].update(from: update)
             }
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    func didObserveRingdownRealmChanges(_ changes: RealmCollectionChange<Results<Ringdown>>) {
+        switch changes {
+        case .initial:
+            if let results = ringdownResults, results.count > 0 {
+                ringdown = results[0]
+                showRingdown()
+            }
+        case .update(let results, _, _, _):
+            if ringdown == nil, results.count > 0 {
+                ringdown = results[0]
+            }
+            showRingdown()
         case .error(let error):
             presentAlert(error: error)
         }
@@ -144,10 +174,58 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     func validateRingdown() {
         actionButton.isEnabled = false
         var facilityViews: [RingdownFacilityView] = []
-        FormSection.subviews(&facilityViews, in: statusSection)
+        FormSection.subviews(&facilityViews, in: facilitiesSection)
         guard let facilityView = facilityViews.first(where: { $0.isSelected }) else { return }
         guard Int(facilityView.arrivalText ?? "") != nil else { return }
-        actionButton.isEnabled = emergencyServiceResponseType != nil && stabilityIndicator != nil
+        actionButton.isEnabled = emergencyServiceResponseType != nil && stableIndicator != nil
+    }
+
+    @IBAction func actionPressed() {
+        if let ringdown = ringdown {
+
+        } else {
+            var payload = report.asRingdownJSON()
+            var facilityViews: [RingdownFacilityView] = []
+            FormSection.subviews(&facilityViews, in: facilitiesSection)
+            guard let index = facilityViews.firstIndex(where: { $0.isSelected }) else { return }
+            if let update = results?[index] {
+                payload["hospital"] = [
+                    "id": update.id
+                ]
+            }
+            let facilityView = facilityViews[index]
+            if let eta = facilityView.arrivalText, let etaMinutes = Int(eta) {
+                payload["patientDelivery"] = [
+                    "etaMinutes": etaMinutes
+                ]
+            }
+            if var patient = payload["patient"] as? [String: Any] {
+                if let stableIndicator = stableIndicator {
+                    patient["stableIndicator"] = stableIndicator
+                }
+                if let emergencyServiceResponseType = emergencyServiceResponseType {
+                    patient["emergencyServiceResponseType"] = emergencyServiceResponseType.rawValue
+                }
+                payload["patient"] = patient
+            }
+            VLRealm.sendRingdown(payload: payload) { [weak self] (ringdown, error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentAlert(error: error)
+                    }
+                } else if let ringdown = ringdown {
+                    let ringdownId = ringdown.id
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.ringdown = VLRealm.open().object(ofType: Ringdown.self, forPrimaryKey: ringdownId)
+                        self.showRingdown()
+                        let newReport = Report(clone: self.report)
+                        newReport.ringdownId = ringdownId
+                        AppRealm.saveReport(report: newReport)
+                    }
+                }
+            }
+        }
     }
 
     // MARK: - CheckboxDelegate
@@ -174,7 +252,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     func ringdownFacilityView(_ view: RingdownFacilityView, didSelect isSelected: Bool) {
         if isSelected {
             var facilityViews: [RingdownFacilityView] = []
-            FormSection.subviews(&facilityViews, in: statusSection)
+            FormSection.subviews(&facilityViews, in: facilitiesSection)
             for facilityView in facilityViews {
                 facilityView.isSelected = facilityView == view
             }

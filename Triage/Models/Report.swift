@@ -26,6 +26,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let procedureIds = "procedureIds"
         static let fileIds = "fileIds"
         static let predictions = "predictions"
+        static let ringdownId = "ringdownId"
     }
     @Persisted var _data: Data?
     @Persisted var incident: Incident?
@@ -50,6 +51,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         return procedures.last
     }
     @Persisted var files: List<File>
+    @Persisted var ringdownId: String?
 
     @objc var patientCareReportNumber: String? {
         get {
@@ -209,6 +211,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.predictions) != nil {
             predictions = data[Keys.predictions] as? [String: Any]
         }
+        self.ringdownId = data[Keys.ringdownId] as? String
     }
 
     override func asJSON() -> [String: Any] {
@@ -227,9 +230,14 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
         json[Keys.medicationIds] = Array(medications.map { $0.id })
         json[Keys.fileIds] = Array(files.map { $0.id })
-        if let predictions = predictions {
-            json[Keys.predictions] = predictions
+        if let value = predictions {
+            json[Keys.predictions] = value
         }
+        var value: Any = NSNull()
+        if let ringdownId = ringdownId {
+            value = ringdownId
+        }
+        json[Keys.ringdownId] = value
         return json
     }
 
@@ -362,6 +370,14 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
                 report["fileIds"] = ids
             } else {
                 report.removeValue(forKey: "fileIds")
+            }
+
+            if NSDictionary(dictionary: predictions ?? [:]).isEqual(NSDictionary(dictionary: parent?.predictions ?? [:])) {
+                report.removeValue(forKey: "predictions")
+            }
+
+            if ringdownId == parent?.ringdownId {
+                report.removeValue(forKey: "ringdownId")
             }
 
             payload["Report"] = report

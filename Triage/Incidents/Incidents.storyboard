@@ -466,6 +466,9 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="Style" value="primary"/>
                                 </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="actionPressed" destination="P54-3u-u0r" eventType="touchUpInside" id="8pp-qU-PRh"/>
+                                </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="fSH-9H-aV4"/>
