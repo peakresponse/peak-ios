@@ -66,7 +66,6 @@ class VLRealm {
                 let realm = VLRealm.open()
                 if let records = data["ringdowns"] as? [[String: Any]] {
                     let ringdowns = records.map { Ringdown.instantiate(from: $0) }
-                    print(ringdowns)
                     try! realm.write {
                         realm.add(ringdowns, update: .modified)
                     }

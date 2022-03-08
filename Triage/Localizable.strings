@@ -55,6 +55,7 @@
 "Button.no" = "No";
 "Button.ok" = "OK";
 "Button.record" = "Voice-to-Text";
+"Button.redirectPatient" = "Redirect Patient";
 "Button.retry" = "Retry";
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
@@ -318,6 +319,13 @@
 "RingdownFacilityView.psychBeds" = "Behav. Beds";
 "RingdownFacilityView.enroute" = "Amb. En-Route";
 "RingdownFacilityView.waiting" = "Amb. Waiting";
+
+"RingdownStatusView.status.confirmed" = "Confirmed";
+"RingdownStatusView.status.delivered" = "Delivered";
+"RingdownStatusView.status.pending" = "Pending";
+"RingdownStatusView.arrived" = "Arrived at: ";
+"RingdownStatusView.eta" = "ETA: ";
+"RingdownStatusView.ringdownStatus" = "Ringdown Status: ";
 
 "RingdownViewController.urgency" = "Urgency";
 "RingdownViewController.urgency.code2" = "Code 2";

@@ -43,6 +43,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     }
 
     weak var facilitiesSection: FormSection!
+    weak var ringdownStatusView: RingdownStatusView!
     weak var ringdownSection: FormSection!
 
     var formInputAccessoryView: UIView!
@@ -71,7 +72,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         code3Checkbox.isEnabled = false
         stabilityCheckboxes = [stableCheckbox, unstableCheckbox]
 
-        let (section, cols, colA, colB) = newSection()
+        var (section, cols, colA, colB) = newSection()
         colA.spacing = 0
         colB.spacing = 0
         section.addArrangedSubview(checkboxesView)
@@ -84,6 +85,15 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         section.addArrangedSubview(cols)
         containerView.addArrangedSubview(section)
         self.facilitiesSection = section
+
+        (section, cols, colA, colB) = newSection()
+        section.isHidden = true
+        section.addArrangedSubview(cols)
+        let ringdownStatusView = RingdownStatusView()
+        colA.addArrangedSubview(ringdownStatusView)
+        self.ringdownStatusView = ringdownStatusView
+        containerView.addArrangedSubview(section)
+        self.ringdownSection = section
 
         formInputAccessoryView = FormInputAccessoryView(rootView: containerView)
 
@@ -117,7 +127,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     }
 
     func showRingdown() {
+        guard let ringdown = ringdown else { return }
+        ringdownStatusView.update(from: ringdown)
         facilitiesSection.isHidden = true
+        ringdownSection.isHidden = false
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<HospitalStatusUpdate>>) {
