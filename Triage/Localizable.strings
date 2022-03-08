@@ -323,6 +323,10 @@
 "RingdownStatusView.status.confirmed" = "Confirmed";
 "RingdownStatusView.status.delivered" = "Delivered";
 "RingdownStatusView.status.pending" = "Pending";
+"RingdownStatusView.status.sent" = "Ringdown sent";
+"RingdownStatusView.status.arrived" = "Arrived at ED";
+"RingdownStatusView.status.offloaded" = "Patient offloaded";
+"RingdownStatusView.status.returned" = "Returned to service";
 "RingdownStatusView.arrived" = "Arrived at: ";
 "RingdownStatusView.eta" = "ETA: ";
 "RingdownStatusView.ringdownStatus" = "Ringdown Status: ";
