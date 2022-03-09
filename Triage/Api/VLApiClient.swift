@@ -63,4 +63,9 @@ class VLApiClient: ApiClient {
             "dateTimeLocal": dateTime.asISO8601String()
         ], completionHandler: completionHandler)
     }
+
+    func getRingdown(id: String,
+                     completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/ringdowns/\(id)", completionHandler: completionHandler)
+    }
 }

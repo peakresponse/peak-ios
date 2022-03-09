@@ -43,6 +43,8 @@
 "Button.cancelTransport" = "Cancel Transport";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
+"Button.confirmCancelTransport" = "Confirm Cancel Transport";
+"Button.confirmRedirectPatient" = "Confirm Redirect Patient";
 "Button.continue" = "Continue";
 "Button.delete" = "Delete";
 "Button.done" = "Done";
@@ -334,6 +336,10 @@
 "RingdownStatusView.eta" = "ETA: ";
 "RingdownStatusView.ringdownStatus" = "Ringdown Status: ";
 
+"RingdownViewController.alert.redirect.title" = "Redirect Patient?";
+"RingdownViewController.alert.redirect.message" = "You will be prompted to select a new destination.";
+"RingdownViewController.alert.cancel.title" = "Cancel Transport?";
+"RingdownViewController.alert.cancel.message" = "The current destination facility will be notified.";
 "RingdownViewController.urgency" = "Urgency";
 "RingdownViewController.urgency.code2" = "Code 2";
 "RingdownViewController.urgency.code3" = "Code 3";

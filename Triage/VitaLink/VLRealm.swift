@@ -99,6 +99,26 @@ class VLRealm {
                     realm.add(ringdown, update: .modified)
                 }
                 completionHandler(ringdown, nil)
+            } else {
+                completionHandler(nil, ApiClientError.unexpected)
+            }
+        }
+        task.resume()
+    }
+
+    public static func getRingdown(id: String, completionHandler: @escaping (Ringdown?, Error?) -> Void) {
+        let task = VLApiClient.shared.getRingdown(id: id) { (_, _, data, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let data = data {
+                let ringdown = Ringdown.instantiate(from: data)
+                let realm = VLRealm.open()
+                try! realm.write {
+                    realm.add(ringdown, update: .modified)
+                }
+                completionHandler(ringdown, nil)
+            } else {
+                completionHandler(nil, ApiClientError.unexpected)
             }
         }
         task.resume()

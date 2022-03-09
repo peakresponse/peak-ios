@@ -27,6 +27,8 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     var saveBarButtonItem: UIBarButtonItem?
     var cancelBarButtonItem: UIBarButtonItem?
 
+    var cachedViewControllers: [UIViewController] = []
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -107,26 +109,19 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         }
     }
 
-    func showRingdown() {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
-        if let vc = vc as? RingdownViewController {
-//            vc.delegate = self
-            vc.report = report
-        }
-        addChild(vc)
-        containerView.addSubview(vc.view)
-        vc.view.frame = containerView.bounds
-        vc.didMove(toParent: self)
-    }
-
     func showReport() {
         guard let report = report else { return }
-
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
-        if let vc = vc as? ReportViewController {
-            vc.delegate = self
-            vc.report = report
-            vc.isEditing = report.realm == nil
+        var vc: UIViewController
+        if cachedViewControllers.count > 0 {
+            vc = cachedViewControllers[0]
+        } else {
+            vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
+            if let vc = vc as? ReportViewController {
+                vc.delegate = self
+                vc.report = report
+                vc.isEditing = report.realm == nil
+            }
+            cachedViewControllers.append(vc)
         }
         addChild(vc)
         containerView.addSubview(vc.view)
@@ -142,6 +137,22 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         } else {
             commandHeader.rightBarButtonItem = editBarButtonItem
         }
+    }
+
+    func showRingdown() {
+        var vc: UIViewController
+        if cachedViewControllers.count > 1 {
+            vc = cachedViewControllers[1]
+        } else {
+            vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
+            if let vc = vc as? RingdownViewController {
+                vc.report = report
+            }
+        }
+        addChild(vc)
+        containerView.addSubview(vc.view)
+        vc.view.frame = containerView.bounds
+        vc.didMove(toParent: self)
     }
 
     // MARK: - ReportViewController

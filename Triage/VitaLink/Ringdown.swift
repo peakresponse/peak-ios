@@ -91,6 +91,7 @@ class Ringdown: Object {
             _timestamps = try? JSONSerialization.data(withJSONObject: newValue, options: [])
         }
     }
+    @Persisted var foo: Int?
 
     static func instantiate(from data: [String: Any]) -> Ringdown {
         let obj = Ringdown()

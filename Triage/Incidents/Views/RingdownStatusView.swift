@@ -127,6 +127,11 @@ class RingdownStatusRowView: UIView {
     }
 }
 
+protocol RingdownStatusViewDelegate: AnyObject {
+    func ringdownStatusViewDidPressCancel(_ view: RingdownStatusView)
+    func ringdownStatusViewDidPressRedirect(_ view: RingdownStatusView)
+}
+
 class RingdownStatusView: UIView {
     weak var hospitalNameLabel: UILabel!
     weak var ringdownStatusLabel: UILabel!
@@ -137,6 +142,8 @@ class RingdownStatusView: UIView {
     weak var redirectButton: PRKit.Button!
     weak var cancelButton: PRKit.Button!
     var statusRows: [RingdownStatusRowView] = []
+
+    weak var delegate: RingdownStatusViewDelegate?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -209,33 +216,6 @@ class RingdownStatusView: UIView {
         ])
         self.arrivalTimeLabel = arrivalTimeLabel
 
-        let buttonsView = UIStackView()
-        buttonsView.translatesAutoresizingMaskIntoConstraints = false
-        buttonsView.axis = .horizontal
-        buttonsView.distribution = .fillEqually
-        buttonsView.spacing = 20
-        addSubview(buttonsView)
-        NSLayoutConstraint.activate([
-            buttonsView.topAnchor.constraint(equalTo: arrivalLabel.bottomAnchor, constant: 12),
-            buttonsView.leftAnchor.constraint(equalTo: leftAnchor),
-            buttonsView.rightAnchor.constraint(equalTo: rightAnchor)
-        ])
-        self.buttonsView = buttonsView
-
-        let redirectButton = PRKit.Button()
-        redirectButton.size = .small
-        redirectButton.style = .secondary
-        redirectButton.setTitle("Button.redirectPatient".localized, for: .normal)
-        buttonsView.addArrangedSubview(redirectButton)
-        self.redirectButton = redirectButton
-
-        let cancelButton = PRKit.Button()
-        cancelButton.size = .small
-        cancelButton.style = .secondary
-        cancelButton.setTitle("Button.cancelTransport".localized, for: .normal)
-        buttonsView.addArrangedSubview(cancelButton)
-        self.cancelButton = cancelButton
-
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
@@ -243,11 +223,36 @@ class RingdownStatusView: UIView {
         stackView.alignment = .fill
         addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: buttonsView.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: arrivalLabel.bottomAnchor, constant: 12),
             stackView.leftAnchor.constraint(equalTo: leftAnchor),
             stackView.rightAnchor.constraint(equalTo: rightAnchor),
             bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
         ])
+
+        let buttonsView = UIStackView()
+        buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsView.axis = .horizontal
+        buttonsView.distribution = .fillEqually
+        buttonsView.spacing = 20
+        stackView.addArrangedSubview(buttonsView)
+        self.buttonsView = buttonsView
+
+        let redirectButton = PRKit.Button()
+        redirectButton.size = .small
+        redirectButton.style = .secondary
+        redirectButton.setTitle("Button.redirectPatient".localized, for: .normal)
+        redirectButton.addTarget(self, action: #selector(redirectPressed), for: .touchUpInside)
+        buttonsView.addArrangedSubview(redirectButton)
+        self.redirectButton = redirectButton
+
+        let cancelButton = PRKit.Button()
+        cancelButton.size = .small
+        cancelButton.style = .secondary
+        cancelButton.setTitle("Button.cancelTransport".localized, for: .normal)
+        cancelButton.addTarget(self, action: #selector(cancelPressed), for: .touchUpInside)
+        buttonsView.addArrangedSubview(cancelButton)
+        self.cancelButton = cancelButton
+
         var prevRow: RingdownStatusRowView?
         for status in ["sent", "arrived", "offloaded", "returned"] {
             let statusRow = RingdownStatusRowView()
@@ -290,5 +295,13 @@ class RingdownStatusView: UIView {
         statusRows[1].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.arrived.rawValue]))
         statusRows[2].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.offloaded.rawValue]))
         statusRows[3].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.returnedToService.rawValue]))
+    }
+
+    @objc func cancelPressed() {
+        delegate?.ringdownStatusViewDidPressCancel(self)
+    }
+
+    @objc func redirectPressed() {
+        delegate?.ringdownStatusViewDidPressRedirect(self)
     }
 }
