@@ -250,8 +250,12 @@ extension Report {
                                 value = nemsisValues as Any
                             }
                         }
-                        DispatchQueue.main.sync {
-                            self.setValue(value, forKeyPath: keyPath)
+                        if Thread.isMainThread {
+                            setValue(value, forKeyPath: keyPath)
+                        } else {
+                            DispatchQueue.main.sync {
+                                self.setValue(value, forKeyPath: keyPath)
+                            }
                         }
                         if keyPath.starts(with: "lastVital."), let lastVital = lastVital {
                             if lastVital.vitalSignsTakenAt == nil {
@@ -298,8 +302,12 @@ extension Report {
                             "metadata": metadata
                         ]
                         predictions["_sources"] = sources
-                        DispatchQueue.main.sync {
+                        if Thread.isMainThread {
                             self.predictions = predictions
+                        } else {
+                            DispatchQueue.main.sync {
+                                self.predictions = predictions
+                            }
                         }
                     }
                 }
@@ -324,8 +332,12 @@ extension Report {
                 }
             }
             predictions["_sources"] = sources
-            DispatchQueue.main.sync {
+            if Thread.isMainThread {
                 self.predictions = predictions
+            } else {
+                DispatchQueue.main.sync {
+                    self.predictions = predictions
+                }
             }
         }
     }

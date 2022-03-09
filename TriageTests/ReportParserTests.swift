@@ -17,7 +17,7 @@ class ReportParserTests: XCTestCase {
     var metadata = ["provider": "test"]
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        // comment out the following before runing the testCreateRealmFile
         let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
         AppRealm.configure(url: url)
     }
