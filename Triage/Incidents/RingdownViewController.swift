@@ -131,6 +131,19 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         ringdownStatusView.update(from: ringdown)
         facilitiesSection.isHidden = true
         ringdownSection.isHidden = false
+        actionButtonBackground.isHidden = false
+        actionButton.isHidden = false
+        let timestamps = ringdown.timestamps
+        if timestamps[RingdownStatus.returnedToService.rawValue] != nil {
+            actionButtonBackground.isHidden = true
+            actionButton.isHidden = true
+        } else if timestamps[RingdownStatus.offloaded.rawValue] != nil {
+            actionButton.setTitle("Button.returnToService".localized, for: .normal)
+        } else if timestamps[RingdownStatus.arrived.rawValue] != nil {
+            actionButton.setTitle("Button.markOffloaded".localized, for: .normal)
+        } else if timestamps[RingdownStatus.returnedToService.rawValue] == nil {
+            actionButton.setTitle("Button.markArrived".localized, for: .normal)
+        }
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<HospitalStatusUpdate>>) {
@@ -195,7 +208,21 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
 
     @IBAction func actionPressed() {
         if let ringdown = ringdown {
-
+            let timestamps = ringdown.timestamps
+            let completionHandler = { [weak self] (error: Error?) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentAlert(error: error)
+                    }
+                }
+            }
+            if timestamps[RingdownStatus.offloaded.rawValue] != nil {
+                VLRealm.setRingdownStatus(ringdown: ringdown, status: .returnedToService, completionHandler: completionHandler)
+            } else if timestamps[RingdownStatus.arrived.rawValue] != nil {
+                VLRealm.setRingdownStatus(ringdown: ringdown, status: .offloaded, completionHandler: completionHandler)
+            } else if timestamps[RingdownStatus.returnedToService.rawValue] == nil {
+                VLRealm.setRingdownStatus(ringdown: ringdown, status: .arrived, completionHandler: completionHandler)
+            }
         } else {
             var payload = report.asRingdownJSON()
             var facilityViews: [RingdownFacilityView] = []

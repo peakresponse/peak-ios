@@ -55,4 +55,12 @@ class VLApiClient: ApiClient {
                       completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/ringdowns", body: payload, completionHandler: completionHandler)
     }
+
+    func setRingdownStatus(id: String, status: RingdownStatus, dateTime: Date,
+                           completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return PATCH(path: "/api/ringdowns/\(id)/deliveryStatus", body: [
+            "deliveryStatus": status.rawValue,
+            "dateTimeLocal": dateTime.asISO8601String()
+        ], completionHandler: completionHandler)
+    }
 }

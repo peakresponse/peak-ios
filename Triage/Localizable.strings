@@ -51,12 +51,15 @@
 "Button.joinScene" = "Arrived on Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.markArrived" = "Mark Arrived";
+"Button.markOffloaded" = "Mark Offloaded";
 "Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
 "Button.record" = "Voice-to-Text";
 "Button.redirectPatient" = "Redirect Patient";
 "Button.retry" = "Retry";
+"Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
 "Button.search" = "Search";

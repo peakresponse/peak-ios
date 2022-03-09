@@ -262,7 +262,9 @@ class RingdownStatusView: UIView {
 
     func update(from ringdown: Ringdown) {
         hospitalNameLabel.text = ringdown.hospitalName
+
         let timestamps = ringdown.timestamps
+
         ringdownStatusChip.color = .triageDelayedMedium
         if timestamps[RingdownStatus.confirmed.rawValue] != nil {
             ringdownStatusChip.setTitle("RingdownStatusView.status.confirmed".localized, for: .normal)
@@ -272,6 +274,7 @@ class RingdownStatusView: UIView {
         } else {
             ringdownStatusChip.setTitle("RingdownStatusView.status.pending".localized, for: .normal)
         }
+
         if timestamps[RingdownStatus.arrived.rawValue] != nil {
             arrivalLabel.text = "RingdownStatusView.arrived".localized
         } else {
@@ -280,6 +283,9 @@ class RingdownStatusView: UIView {
         if let arrivalDate = ringdown.arrivalDate {
             arrivalTimeLabel.text = arrivalDate.asTimeString()
         }
+
+        buttonsView.isHidden = timestamps[RingdownStatus.offloaded.rawValue] != nil
+
         statusRows[0].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.sent.rawValue]))
         statusRows[1].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.arrived.rawValue]))
         statusRows[2].setStatusDate(ISO8601DateFormatter.date(from: timestamps[RingdownStatus.offloaded.rawValue]))

@@ -103,4 +103,28 @@ class VLRealm {
         }
         task.resume()
     }
+
+    public static func setRingdownStatus(ringdown: Ringdown, status: RingdownStatus, completionHandler: @escaping (Error?) -> Void) {
+        let ringdownId = ringdown.id
+        let timestamps = ringdown.timestamps
+        let now = Date()
+        let realm = VLRealm.open()
+        try! realm.write {
+            var timestamps = ringdown.timestamps
+            timestamps[status.rawValue] = now.asISO8601String()
+            ringdown.timestamps = timestamps
+        }
+        let task = VLApiClient.shared.setRingdownStatus(id: ringdown.id, status: status, dateTime: now) { (_, _, _, error) in
+            if error != nil {
+                let realm = VLRealm.open()
+                if let ringdown = realm.object(ofType: Ringdown.self, forPrimaryKey: ringdownId) {
+                    try! realm.write {
+                        ringdown.timestamps = timestamps
+                    }
+                }
+            }
+            completionHandler(error)
+        }
+        task.resume()
+    }
 }
