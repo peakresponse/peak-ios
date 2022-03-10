@@ -96,7 +96,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         }
         commandHeader.rightBarButtonItem = editBarButtonItem
         segmentedControl.isHidden = false
-        segmentedControl.isEnabled = false
+        segmentedControl.isEnabled = true
         delegate?.reportContainerViewControllerDidSave(self)
     }
 
