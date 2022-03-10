@@ -90,6 +90,10 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         if let vc = children[0] as? ReportViewController {
             if let report = vc.newReport {
                 AppRealm.saveReport(report: report)
+                if let canonicalId = report.canonicalId {
+                    self.report = AppRealm.open().object(ofType: Report.self, forPrimaryKey: canonicalId)
+                    vc.report = self.report
+                }
             }
             vc.setEditing(false, animated: true)
             vc.scrollView.setContentOffset(.zero, animated: true)
