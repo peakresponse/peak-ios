@@ -48,7 +48,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rollbarConfig.destination.accessToken = keys.rollbarPostClientItemAccessToken
         rollbarConfig.destination.environment = keys.rollbarEnvironment
         rollbarConfig.developerOptions.suppressSdkInfoLogging = true
-        let rollbarCrashCollector = RollbarPLCrashCollector()
+        let rollbarCrashCollector = RollbarPLCrashCollector(observer: nil)
         Rollbar.initWithConfiguration(rollbarConfig, crashCollector: rollbarCrashCollector)
 
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
