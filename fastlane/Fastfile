@@ -19,6 +19,11 @@ platform :ios do
   desc "Push a new beta build to TestFlight"
   lane :beta do
     begin
+      if ENV["ENV"] == "local"
+        print "\nPlease specifiy an environment! i.e:\n\nfastlane ios beta --env production\n\n"
+        return
+      end
+
       # rebuild cocoapods so that env vars get updated
       cocoapods
 
