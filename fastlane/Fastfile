@@ -33,7 +33,11 @@ platform :ios do
 
       # check if we're deploying a new version
       head_commit = `git rev-parse HEAD`
-      prev_commit = `git rev-parse #{prev_version}`
+      prev_commit, status = Open3.capture2("git rev-parse #{prev_version} --")
+      if status.exitstatus != 0
+        prev_version = `git describe --abbrev=0 --tags`.to_i
+        prev_commit = `git rev-parse #{prev_version} --`
+      end
       changelog = nil
       commit_after_upload = true
       if head_commit != prev_commit
