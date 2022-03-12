@@ -7,6 +7,7 @@
 //
 
 import CoreLocation
+import RealmSwift
 import UIKit
 
 enum FacilityType: String, CustomStringConvertible {
@@ -51,25 +52,25 @@ class Facility: Base {
         static let lng = "lng"
     }
 
-    @objc dynamic var type: String?
-    @objc dynamic var name: String?
-    @objc dynamic var stateCode: String?
-    @objc dynamic var code: String?
-    @objc dynamic var unit: String?
-    @objc dynamic var address: String?
-    @objc dynamic var city: String?
-    @objc dynamic var state: String?
-    @objc dynamic var zip: String?
-    @objc dynamic var country: String?
-    @objc dynamic var lat: String?
-    @objc dynamic var lng: String?
+    @Persisted var type: String?
+    @Persisted var name: String?
+    @Persisted var stateCode: String?
+    @Persisted var code: String?
+    @Persisted var unit: String?
+    @Persisted var address: String?
+    @Persisted var city: String?
+    @Persisted var state: String?
+    @Persisted var zip: String?
+    @Persisted var country: String?
+    @Persisted var lat: String?
+    @Persisted var lng: String?
     var latlng: CLLocation? {
         if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
             return CLLocation(latitude: lat, longitude: lng)
         }
         return nil
     }
-    @objc dynamic var distance: Double = Double.greatestFiniteMagnitude
+    @Persisted var distance: Double = Double.greatestFiniteMagnitude
 
     override var description: String {
         return name ?? ""

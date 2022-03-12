@@ -6,6 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import RealmSwift
 import UIKit
 
 class Agency: Base {
@@ -15,9 +16,9 @@ class Agency: Base {
         static let name = "name"
     }
 
-    @objc dynamic var stateNumber: String?
-    @objc dynamic var number: String?
-    @objc dynamic var name: String?
+    @Persisted var stateNumber: String?
+    @Persisted var number: String?
+    @Persisted var name: String?
 
     override var description: String {
         return name ?? ""

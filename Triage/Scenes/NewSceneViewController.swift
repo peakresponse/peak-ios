@@ -142,7 +142,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         if let attributeKey = field.attributeKey {
             switch field.attributeKey {
             case "approxPatients":
-                scene.approxPatientsCount.value = Int(field.text ?? "")
+                scene.approxPatientsCount = Int(field.text ?? "")
             default:
                 scene.setValue(field.text, forKey: attributeKey)
             }
@@ -164,7 +164,7 @@ class NewSceneViewController: UIViewController, FormFieldDelegate, LocationHelpe
         if let location = locations.last {
             scene.lat = String(format: "%.6f", location.coordinate.latitude)
             scene.lng = String(format: "%.6f", location.coordinate.longitude)
-            let task = ApiClient.shared.geocode(lat: scene.lat!, lng: scene.lng!) { [weak self] (data, error) in
+            let task = PRApiClient.shared.geocode(lat: scene.lat!, lng: scene.lng!) { [weak self] (_, _, data, error) in
                 if let error = error {
                     print(error)
                 } else {

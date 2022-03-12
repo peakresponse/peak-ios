@@ -14,6 +14,15 @@
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
+"AssignmentViewController.other" = "Other:";
+"AssignmentViewController.select" = "Please select your unit:";
+"AssignmentViewController.welcome" = "Welcome %@.";
+
+"AuthViewController.email" = "Email";
+"AuthViewController.password" = "Password";
+"AuthViewController.createAccount" = "CREATE NEW ACCOUNT";
+"AuthViewController.forgotPassword" = "FORGOT PASSWORD";
+
 "Banner.noActiveScenes" = "No Active Scenes";
 
 "BaseField.statusLabel.unconfirmed" = "Tap the mic icon to verify this information.";
@@ -21,26 +30,45 @@
 "BaseNonSceneViewController.logout.title" = "Log out";
 "BaseNonSceneViewController.logout.message" = "Are you sure you wish to log out?";
 
+"Button.addMedication" = "Add Medication";
 "Button.addNote" = "Add Note";
+"Button.addPatient" = "Add Patient";
 "Button.addPhoto" = "Add Photo";
+"Button.addProcedure" = "Add Procedure";
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
+"Button.back" = "Back";
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.cancelTransport" = "Cancel Transport";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
+"Button.confirmCancelTransport" = "Confirm Cancel Transport";
+"Button.confirmRedirectPatient" = "Confirm Redirect Patient";
+"Button.continue" = "Continue";
 "Button.delete" = "Delete";
+"Button.done" = "Done";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
 "Button.joinScene" = "Arrived on Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.markArrived" = "Mark Arrived";
+"Button.markOffloaded" = "Mark Offloaded";
+"Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
-"Button.record" = "Record";
+"Button.record" = "Voice-to-Text";
+"Button.redirectPatient" = "Redirect Patient";
 "Button.retry" = "Retry";
+"Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
+"Button.scanLicense" = "Scan License";
+"Button.search" = "Search";
+"Button.sendRingdown" = "Send Ringdown";
+"Button.select" = "Select";
+"Button.signIn" = "Sign In";
+"Button.skip" = "Skip";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
@@ -57,6 +85,8 @@
 "CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
+
+"Disposition.unitDisposition" = "Unit Disposition";
 
 "Error.title" = "An error has occurred";
 "Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
@@ -87,6 +117,19 @@
 "Facility.type.1701033" = "Drug and/or Alcohol Rehabilitation Facility";
 "Facility.type.1701035" = "Skilled Nursing Facility";
 
+"History.medicalSurgicalHistory" = "Medical/Surgical History";
+"History.medicationAllergies" = "Medication Allergies";
+"History.environmentalFoodAllergies" = "Environmental/Food Allergies";
+
+"Incident.number" = "Incident #";
+
+"IncidentsViewController.mine" = "My Dispatches";
+"IncidentsViewController.all" = "All Incidents";
+
+"ReportContainerViewController.tab.incident" = "Incident";
+"ReportContainerViewController.tab.ringdown" = "Ringdown";
+"ReportContainerViewController.tab.refusal" = "Refusal";
+
 "InputAccessoryView.cancel" = "Cancel";
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.go" = "Go";
@@ -98,10 +141,50 @@
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
 
+"Medication.medicationAdministeredAt" = "Administered at";
+"Medication.medication" = "Medication";
+"Medication.responseToMedication" = "Patient Response";
+
+"Medication.response.9916001" = "Improved";
+"Medication.response.9916003" = "Unchanged";
+"Medication.response.9916005" = "Worse";
+
+"Narrative.text" = "Narrative";
+
 "NavigationBar.cancel" = "Cancel";
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
+"NavigationBar.saveAndExit" = "Save & Exit";
+
+"NemsisCodeType.9924001" = "ICD-10";
+"NemsisCodeType.9924003" = "RxNorm";
+"NemsisCodeType.9924005" = "SNOMED-CT";
+
+"NemsisKeyboardViewController.segment.suggested" = "Suggested";
+"NemsisKeyboardViewController.segment.icd10cm" = "ICD-10-CM";
+
+"NemsisNegative.7701001" = "Not Applicable";
+"NemsisNegative.7701003" = "Not Recorded";
+"NemsisNegative.7701005" = "Not Reporting";
+"NemsisNegative.8801001" = "Contraindication Noted";
+"NemsisNegative.8801003" = "Denied By Order";
+"NemsisNegative.8801005" = "Exam Finding Not Present";
+"NemsisNegative.8801007" = "Medication Allergy";
+"NemsisNegative.8801009" = "Medication Already Taken";
+"NemsisNegative.8801013" = "No Known Drug Allergy";
+"NemsisNegative.8801015" = "None Reported";
+"NemsisNegative.8801017" = "Not Performed by EMS";
+"NemsisNegative.8801019" = "Refused";
+"NemsisNegative.8801021" = "Unresponsive";
+"NemsisNegative.8801023" = "Unable to Complete";
+"NemsisNegative.8801025" = "Not Immunized";
+"NemsisNegative.8801027" = "Order Criteria Not Met";
+"NemsisNegative.8801029" = "Approximate";
+"NemsisNegative.8801031" = "Symptom Not Present";
+
+"NemsisKeyboard.title" = "Search";
+"NemsisNegativeKeyboard.title" = "Negatives";
 
 "NewScenePinView.nameField.label" = "Pin Name";
 "NewScenePinView.descField.label" = "Description";
@@ -114,7 +197,9 @@
 "NewSceneViewController.approxPatientsField" = "Approximate Number of Patients";
 "NewSceneViewController.urgencyField" = "Description of Patient Urgency";
 
+"Patient.dob" = "Date of Birth";
 "Patient.age" = "Age";
+"Patient.ageArray" = "Age";
 "Patient.bloodPressure" = "Blood Pressure";
 "Patient.capillaryRefill" = "Capillary Refill";
 "Patient.complaint" = "Chief Complaint";
@@ -201,9 +286,26 @@
 
 "PriorityTableViewCell.statusBeforeTransportLabel" = "Triage Status Before Transport";
 
+"Procedure.response.9916001" = "Improved";
+"Procedure.response.9916003" = "Unchanged";
+"Procedure.response.9916005" = "Worse";
+
+"Procedure.procedurePerformedAt" = "Performed At";
+"Procedure.procedure" = "Treatment";
+"Procedure.responseToProcedure" = "Patient Response";
+
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
 "RecordingViewController.observationLabel" = "Observation";
+
+"ReportViewController.medications" = "Medications";
+"ReportViewController.medicalInformation" = "Medical Information";
+"ReportViewController.optional" = " (optional)";
+"ReportViewController.patientInformation" = "Patient Information";
+"ReportViewController.procedures" = "Procedures";
+"ReportViewController.recordings" = "Recordings";
+"ReportViewController.recording" = "Recording %d";
+"ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";
 
@@ -212,6 +314,40 @@
 "Responder.role.TRANSPORT" = "Transport Officer";
 "Responder.role.TREATMENT" = "Treatment Officer";
 "Responder.role.TRIAGE" = "Triage Officer";
+
+"Response.incidentNumber" = "Incident #";
+"Response.unitNumber" = "Unit #";
+
+"RingdownFacilityView.eta" = "ETA";
+"RingdownFacilityView.eta.mins" = " min";
+"RingdownFacilityView.erBeds" = "ER Beds";
+"RingdownFacilityView.psychBeds" = "Behav. Beds";
+"RingdownFacilityView.enroute" = "Amb. En-Route";
+"RingdownFacilityView.waiting" = "Amb. Waiting";
+
+"RingdownStatusView.status.confirmed" = "Confirmed";
+"RingdownStatusView.status.delivered" = "Delivered";
+"RingdownStatusView.status.pending" = "Pending";
+"RingdownStatusView.status.sent" = "Ringdown sent";
+"RingdownStatusView.status.arrived" = "Arrived at ED";
+"RingdownStatusView.status.offloaded" = "Patient offloaded";
+"RingdownStatusView.status.returned" = "Returned to service";
+"RingdownStatusView.arrived" = "Arrived at: ";
+"RingdownStatusView.eta" = "ETA: ";
+"RingdownStatusView.ringdownStatus" = "Ringdown Status: ";
+
+"RingdownViewController.alert.redirect.title" = "Redirect Patient?";
+"RingdownViewController.alert.redirect.message" = "You will be prompted to select a new destination.";
+"RingdownViewController.alert.cancel.title" = "Cancel Transport?";
+"RingdownViewController.alert.cancel.message" = "The current destination facility will be notified.";
+"RingdownViewController.urgency" = "Urgency";
+"RingdownViewController.urgency.code2" = "Code 2";
+"RingdownViewController.urgency.code3" = "Code 3";
+"RingdownViewController.stability" = "Vitals Stability";
+"RingdownViewController.stability.stable" = "Stable";
+"RingdownViewController.stability.unstable" = "Unstable";
+
+"Scene.address" = "Location";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";
@@ -259,11 +395,79 @@
 
 "SearchBar.placeholder" = "Search";
 
+"Sidebar.item.switch" = "Change Unit/Vehicle";
+"Sidebar.item.logOut" = "Log out";
+
+"Situation.chiefComplaint" = "Chief Complaint";
+"Situation.primarySymptom" = "Primary Symptom";
+"Situation.otherAssociatedSymptoms" = "Other Associated Symptoms";
+
 "SortBar.sortBy" = "Sort By :";
+
+"Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
+"Time.arrivedAtPatient" = "Arrived at Patient";
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
 
+"UnitDisposition.4227001" = "Patient Contact Made";
+"UnitDisposition.4227003" = "Cancelled on Scene";
+"UnitDisposition.4227005" = "Cancelled Prior to Arrival at Scene";
+"UnitDisposition.4227007" = "No Patient Contact";
+"UnitDisposition.4227009" = "No Patient Found";
+"UnitDisposition.4227011" = "Non-Patient Incident";
+
 "User.firstName" = "First Name";
 "User.lastName" = "Last Name";
 "User.position" = "Position/Role";
+
+"Vital.vitalSignsTakenAt" = "Vitals Taken At";
+"Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
+"Vital.bpSystolic" = "BP Systolic";
+"Vital.bpDiastolic" = "Diastolic     ";
+"Vital.heartRate" = "Heart Rate";
+"Vital.pulseOximetry" = "O2";
+"Vital.respiratoryRate" = "Respiratory Rate";
+"Vital.endTidalCarbonDioxide" = "ETCO2";
+"Vital.carbonMonoxide" = "CO";
+"Vital.bloodGlucoseLevel" = "Blood Glucose Level";
+"Vital.totalGlasgowComaScore" = "Total GCS";
+
+"Vital.cardiacRhythm.9901001" = "Agonal/Idioventricular";
+"Vital.cardiacRhythm.9901003" = "Asystole";
+"Vital.cardiacRhythm.9901005" = "Artifact";
+"Vital.cardiacRhythm.9901007" = "Atrial Fibrillation";
+"Vital.cardiacRhythm.9901009" = "Atrial Flutter";
+"Vital.cardiacRhythm.9901011" = "AV Block-1st Degree";
+"Vital.cardiacRhythm.9901013" = "AV Block-2nd Degree-Type 1";
+"Vital.cardiacRhythm.9901015" = "AV Block-2nd Degree-Type 2";
+"Vital.cardiacRhythm.9901017" = "AV Block-3rd Degree";
+"Vital.cardiacRhythm.9901019" = "Junctional";
+"Vital.cardiacRhythm.9901021" = "Left Bundle Branch Block";
+"Vital.cardiacRhythm.9901023" = "Non-STEMI Anterior Ischemia";
+"Vital.cardiacRhythm.9901025" = "Non-STEMI Inferior Ischemia";
+"Vital.cardiacRhythm.9901027" = "Non-STEMI Lateral Ischemia";
+"Vital.cardiacRhythm.9901029" = "Non-STEMI Posterior Ischemia";
+"Vital.cardiacRhythm.9901030" = "Non-STEMI Septal Ischemia";
+"Vital.cardiacRhythm.9901031" = "Other";
+"Vital.cardiacRhythm.9901033" = "Paced Rhythm";
+"Vital.cardiacRhythm.9901035" = "PEA";
+"Vital.cardiacRhythm.9901037" = "Premature Atrial Contractions";
+"Vital.cardiacRhythm.9901039" = "Premature Ventricular Contractions";
+"Vital.cardiacRhythm.9901041" = "Right Bundle Branch Block";
+"Vital.cardiacRhythm.9901043" = "Sinus Arrhythmia";
+"Vital.cardiacRhythm.9901045" = "Sinus Bradycardia";
+"Vital.cardiacRhythm.9901047" = "Sinus Rhythm";
+"Vital.cardiacRhythm.9901049" = "Sinus Tachycardia";
+"Vital.cardiacRhythm.9901051" = "STEMI Anterior Ischemia";
+"Vital.cardiacRhythm.9901053" = "STEMI Inferior Ischemia";
+"Vital.cardiacRhythm.9901055" = "STEMI Lateral Ischemia";
+"Vital.cardiacRhythm.9901057" = "STEMI Posterior Ischemia";
+"Vital.cardiacRhythm.9901058" = "STEMI Septal Ischemia";
+"Vital.cardiacRhythm.9901059" = "Supraventricular Tachycardia";
+"Vital.cardiacRhythm.9901061" = "Torsades De Points";
+"Vital.cardiacRhythm.9901063" = "Unknown AED Non-Shockable Rhythm";
+"Vital.cardiacRhythm.9901065" = "Unknown AED Shockable Rhythm";
+"Vital.cardiacRhythm.9901067" = "Ventricular Fibrillation";
+"Vital.cardiacRhythm.9901069" = "Ventricular Tachycardia (With Pulse)";
+"Vital.cardiacRhythm.9901071" = "Ventricular Tachycardia (Pulseless)";

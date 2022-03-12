@@ -9,7 +9,7 @@
 import RealmSwift
 import UIKit
 
-class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
+class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate, AssignmentViewControllerDelegate {
     @IBOutlet weak var bannerView: BannerView!
     @IBOutlet weak var activeScenesView: ActiveScenesView!
 
@@ -67,6 +67,14 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
                                       message: "BaseNonSceneViewController.logout.message".localized,
                                       preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Button.no".localized, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "Switch", style: .default, handler: { [weak self] (_) in
+            guard let self = self else { return }
+            let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "Assignment")
+            if let vc = vc as? AssignmentViewController {
+                vc.delegate = self
+            }
+            self.presentAnimated(vc)
+        }))
         alert.addAction(UIAlertAction(title: "Button.yes".localized, style: .destructive, handler: { [weak self] (_) in
             self?.logout()
         }))
@@ -106,5 +114,11 @@ class BaseNonSceneViewController: UIViewController, ActiveScenesViewDelegate {
         DispatchQueue.main.async {
             AppDelegate.enterScene(id: sceneId)
         }
+    }
+
+    // MARK: - AssignmentViewControllerDelegate
+
+    func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
+        dismissAnimated()
     }
 }

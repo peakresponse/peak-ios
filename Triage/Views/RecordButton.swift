@@ -6,6 +6,8 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import PRKit
+import TranscriptionKit
 import UIKit
 
 class RecordIconButton: UIButton {
@@ -36,7 +38,7 @@ enum RecordButtonState: String {
 
 @IBDesignable
 class RecordButton: UIControl {
-    let recordButton = RecordIconButton(type: .custom)
+    var recordButton: PRKit.Button!
     var recordButtonRightConstraint: NSLayoutConstraint!
     let bluetoothButton = UIButton(type: .custom)
 
@@ -64,14 +66,11 @@ class RecordButton: UIControl {
     private func commonInit() {
         backgroundColor = .clear
 
+        let recordButton = PRKit.Button()
+        recordButton.size = .medium
         recordButton.translatesAutoresizingMaskIntoConstraints = false
-        recordButton.titleLabel?.font = .copyLBold
-        recordButton.setTitleColor(.white, for: .normal)
         recordButton.setTitle("Button.record".localized, for: .normal)
         recordButton.adjustsImageWhenHighlighted = false
-        recordButton.setBackgroundImage(.resizableImage(withColor: .peakBlue, cornerRadius: 36), for: .normal)
-        recordButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 36), for: .highlighted)
-        recordButton.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 10, color: .black, opacity: 0.15)
         addSubview(recordButton)
         recordButtonRightConstraint = recordButton.rightAnchor.constraint(equalTo: rightAnchor)
         NSLayoutConstraint.activate([
@@ -81,6 +80,7 @@ class RecordButton: UIControl {
             recordButtonRightConstraint,
             bottomAnchor.constraint(equalTo: recordButton.bottomAnchor)
         ])
+        self.recordButton = recordButton
 
         bluetoothButton.setBackgroundImage(.resizableImage(withColor: .lowPriorityGrey, cornerRadius: 27,
                                                            borderColor: .clear, borderWidth: 3),
@@ -115,19 +115,15 @@ class RecordButton: UIControl {
         case .stopAndSave:
             bluetoothButton.isHidden = true
             bluetoothButton.isSelected = true
-            recordButton.setTitleColor(.peakBlue, for: .normal)
-            recordButton.setBackgroundImage(.resizableImage(withColor: .white, cornerRadius: 36), for: .normal)
-            recordButton.setBackgroundImage(.resizableImage(withColor: .lowPriorityGrey, cornerRadius: 36), for: .highlighted)
-            recordButton.setImage(UIImage(named: "StopAndSave"), for: .normal)
+            recordButton.style = .secondary
+            recordButton.setImage(nil, for: .normal)
         default:
-            recordButton.setTitleColor(.white, for: .normal)
-            recordButton.setBackgroundImage(.resizableImage(withColor: .peakBlue, cornerRadius: 36), for: .normal)
-            recordButton.setBackgroundImage(.resizableImage(withColor: .darkPeakBlue, cornerRadius: 36), for: .highlighted)
+            recordButton.style = .primary
             switch recordState {
             case .record, .addRecording:
-                bluetoothButton.isHidden = AudioHelper.bluetoothHFPInputs.count == 0
+                bluetoothButton.isHidden = Transcriber.bluetoothHFPInputs.count == 0
                 bluetoothButton.isSelected = bluetoothButton.isHidden || AppSettings.audioInputPortUID != nil
-                recordButton.setImage(UIImage(named: "Microphone"), for: .normal)
+                recordButton.setImage(UIImage(named: "RecordMic24px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
             case .update:
                 bluetoothButton.isHidden = true
                 bluetoothButton.isSelected = true
@@ -137,7 +133,6 @@ class RecordButton: UIControl {
             }
         }
         recordButton.setTitle("Button.\(recordState.rawValue)".localized, for: .normal)
-        recordButton.isBluetoothSelected = bluetoothButton.isSelected
         recordButtonRightConstraint.constant = bluetoothButton.isSelected ? 0 : -68
     }
 
@@ -147,7 +142,7 @@ class RecordButton: UIControl {
             AppSettings.audioInputPortUID = nil
         } else {
             // select Bluetooth input, provide prompt if multiple
-            let inputPorts = AudioHelper.bluetoothHFPInputs
+            let inputPorts = Transcriber.bluetoothHFPInputs
             if inputPorts.count > 1 {
                 let alert = UIAlertController(title: "RecordButton.selectInputLabel".localized, message: nil, preferredStyle: .actionSheet)
                 for inputPort in inputPorts {

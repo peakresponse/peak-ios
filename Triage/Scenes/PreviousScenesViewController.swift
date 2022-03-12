@@ -80,10 +80,10 @@ class PreviousScenesViewController: BaseNonSceneViewController, UITableViewDeleg
         }
     }
 
-    // MARK: - LoginViewControllerDelegate
+    // MARK: - AuthViewControllerDelegate
 
-    override func loginViewControllerDidLogin(_ vc: LoginViewController) {
-        super.loginViewControllerDidLogin(vc)
+    override func authViewControllerDidLogin(_ vc: AuthViewController) {
+        super.authViewControllerDidLogin(vc)
         refresh()
     }
 

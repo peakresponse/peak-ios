@@ -8,8 +8,8 @@
 
 import UIKit
 
-extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
-    var isModal: Bool {
+extension UIViewController: AuthViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
+    @IBInspectable var isModal: Bool {
         get {
             if #available(iOS 13.0, *) {
                 return isModalInPresentation
@@ -25,7 +25,7 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     }
 
     func presentAlert(error: Error) {
-        presentAlert(title: "Error".localized, message: error.localizedDescription)
+        presentAlert(title: "Error.title".localized, message: error.localizedDescription)
     }
 
     func presentAlert(title: String, message: String) {
@@ -34,8 +34,12 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
         present(alert, animated: true, completion: nil)
     }
 
+    func presentUnexpectedErrorAlert() {
+        presentAlert(title: "Error.title".localized, message: "Error.unexpected".localized)
+    }
+
     func logout() {
-        ApiClient.shared.logout { [weak self] in
+        PRApiClient.shared.logout { [weak self] in
             AppRealm.disconnectScene()
             AppRealm.disconnect()
             AppRealm.deleteAll()
@@ -47,8 +51,8 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
     }
 
     func presentLogin() {
-        if let vc = UIStoryboard(name: "Login", bundle: nil).instantiateInitialViewController() as? LoginViewController {
-            vc.loginDelegate = self
+        if let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController() as? AuthViewController {
+            vc.delegate = self
             presentAnimated(vc)
         }
     }
@@ -76,9 +80,9 @@ extension UIViewController: LoginViewControllerDelegate, UIAdaptivePresentationC
 
     }
 
-    // MARK: - LoginViewControllerDelegate
+    // MARK: - AuthViewControllerDelegate
 
-    func loginViewControllerDidLogin(_ vc: LoginViewController) {
+    func authViewControllerDidLogin(_ vc: AuthViewController) {
         dismissAnimated()
     }
 

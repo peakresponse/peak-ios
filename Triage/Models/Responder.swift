@@ -66,12 +66,12 @@ class Responder: Base {
         static let departedAt = "departedAt"
     }
 
-    @objc dynamic var scene: Scene?
-    @objc dynamic var agency: Agency?
-    @objc dynamic var user: User?
-    @objc dynamic var role: String?
-    @objc dynamic var arrivedAt: Date?
-    @objc dynamic var departedAt: Date?
+    @Persisted var scene: Scene?
+    @Persisted var agency: Agency?
+    @Persisted var user: User?
+    @Persisted var role: String?
+    @Persisted var arrivedAt: Date?
+    @Persisted var departedAt: Date?
 
     override func update(from data: [String: Any]) {
         super.update(from: data)

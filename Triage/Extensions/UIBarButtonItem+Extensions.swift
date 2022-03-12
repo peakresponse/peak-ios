@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import PRKit
 
 extension UIBarButtonItem: Localizable {
-    @IBInspectable var l10nKey: String? {
+    @IBInspectable public var l10nKey: String? {
         get { return nil }
         set { title = newValue?.localized }
     }

@@ -10,8 +10,10 @@ import CoreLocation
 import Foundation
 import RealmSwift
 
-class Scene: BaseVersioned {
+class Scene: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let data = "data"
+        static let dataPatch = "data_patch"
         static let name = "name"
         static let desc = "desc"
         static let urgency = "urgency"
@@ -34,12 +36,12 @@ class Scene: BaseVersioned {
         static let incidentCommanderAgencyId = "incidentCommanderAgencyId"
         static let closedAt = "closedAt"
     }
-
-    @objc dynamic var name: String?
-    @objc dynamic var desc: String?
-    @objc dynamic var urgency: String?
-    let approxPatientsCount = RealmOptional<Int>()
-    @objc dynamic var _approxPriorityPatientsCounts: String?
+    @Persisted var _data: Data?
+    @Persisted var name: String?
+    @Persisted var desc: String?
+    @Persisted var urgency: String?
+    @Persisted var approxPatientsCount: Int?
+    @Persisted var _approxPriorityPatientsCounts: String?
     var approxPriorityPatientsCounts: [Int]? {
         get {
             if let _approxPriorityPatientsCounts = _approxPriorityPatientsCounts {
@@ -51,8 +53,8 @@ class Scene: BaseVersioned {
             _approxPriorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
         }
     }
-    let patientsCount = RealmOptional<Int>()
-    @objc dynamic var _priorityPatientsCounts: String?
+    @Persisted var patientsCount: Int?
+    @Persisted var _priorityPatientsCounts: String?
     var priorityPatientsCounts: [Int]? {
         get {
             if let _priorityPatientsCounts = _priorityPatientsCounts {
@@ -64,11 +66,11 @@ class Scene: BaseVersioned {
             _priorityPatientsCounts = newValue?.map({ String($0) }).joined(separator: ",")
         }
     }
-    let respondersCount = RealmOptional<Int>()
-    @objc dynamic var isActive: Bool = false
-    @objc dynamic var isMCI: Bool = false
-    @objc dynamic var lat: String?
-    @objc dynamic var lng: String?
+    @Persisted var respondersCount: Int?
+    @Persisted var isActive: Bool = false
+    @Persisted var isMCI: Bool = false
+    @Persisted var lat: String?
+    @Persisted var lng: String?
     var hasLatLng: Bool {
         if let lat = lat, let lng = lng, lat != "", lng != "" {
             return true
@@ -91,15 +93,27 @@ class Scene: BaseVersioned {
         lat = nil
         lng = nil
     }
-    @objc dynamic var address1: String?
-    @objc dynamic var address2: String?
-    @objc dynamic var cityId: String?
-    @objc dynamic var countyId: String?
-    @objc dynamic var stateId: String?
-    @objc dynamic var zip: String?
-    @objc dynamic var closedAt: Date?
-    @objc dynamic var incidentCommanderId: String?
-    @objc dynamic var incidentCommanderAgencyId: String?
+    @Persisted var address1: String?
+    @Persisted var address2: String?
+    @Persisted var cityId: String?
+    var city: City? {
+        return realm?.object(ofType: City.self, forPrimaryKey: cityId)
+    }
+    @Persisted var countyId: String?
+    @Persisted var stateId: String?
+    var state: State? {
+        return realm?.object(ofType: State.self, forPrimaryKey: stateId)
+    }
+    @Persisted var zip: String?
+    @objc var address: String {
+        return "\(address1?.capitalized ?? "")\n\(address2?.capitalized ?? "")\n\(city?.name ?? ""), \(state?.abbr ?? "") \(zip ?? "")"
+            .replacingOccurrences(of: "\n\n", with: "\n")
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    @Persisted var closedAt: Date?
+    @Persisted var incidentCommanderId: String?
+    @Persisted var incidentCommanderAgencyId: String?
 
     override var description: String {
         return name ?? ""
@@ -107,14 +121,15 @@ class Scene: BaseVersioned {
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        self.data = data[Keys.data] as? [String: Any] ?? [:]
         name = data[Keys.name] as? String
         desc = data[Keys.desc] as? String
         urgency = data[Keys.urgency] as? String
-        approxPatientsCount.value = data[Keys.approxPatientsCount] as? Int
+        approxPatientsCount = data[Keys.approxPatientsCount] as? Int
         approxPriorityPatientsCounts = data[Keys.approxPriorityPatientsCounts] as? [Int]
-        patientsCount.value = data[Keys.patientsCount] as? Int
+        patientsCount = data[Keys.patientsCount] as? Int
         priorityPatientsCounts = data[Keys.priorityPatientsCounts] as? [Int]
-        respondersCount.value = data[Keys.respondersCount] as? Int
+        respondersCount = data[Keys.respondersCount] as? Int
         isActive = data[Keys.isActive] as? Bool ?? false
         isMCI = data[Keys.isMCI] as? Bool ?? false
         lat = data[Keys.lat] as? String
@@ -133,6 +148,7 @@ class Scene: BaseVersioned {
     // swiftlint:disable:next cyclomatic_complexity
     override func asJSON() -> [String: Any] {
         var data = super.asJSON()
+        data[Keys.data] = self.data
         if let value = name {
             data[Keys.name] = value
         }
@@ -142,7 +158,7 @@ class Scene: BaseVersioned {
         if let value = urgency {
             data[Keys.urgency] = value
         }
-        if let value = approxPatientsCount.value {
+        if let value = approxPatientsCount {
             data[Keys.approxPatientsCount] = value
         }
         data[Keys.approxPriorityPatientsCounts] = approxPriorityPatientsCounts
@@ -172,5 +188,16 @@ class Scene: BaseVersioned {
             data[Keys.zip] = value
         }
         return data
+    }
+
+    override func changes(from source: BaseVersioned?) -> [String: Any]? {
+        guard let source = source as? Scene else { return nil }
+        if let dataPatch = self.dataPatch(from: source) {
+            var json = asJSON()
+            json.removeValue(forKey: Keys.data)
+            json[Keys.dataPatch] = dataPatch
+            return json
+        }
+        return nil
     }
 }

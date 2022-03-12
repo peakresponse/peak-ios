@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol NewScenePinViewDelegate: class {
+protocol NewScenePinViewDelegate: AnyObject {
     func newScenePinView(_ view: NewScenePinView, didSelect pinType: ScenePinType)
     func newScenePinView(_ view: NewScenePinView, didChangeName name: String)
     func newScenePinView(_ view: NewScenePinView, didChangeDesc desc: String)

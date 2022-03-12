@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-protocol ScenePinInfoViewDelegate: class {
+protocol ScenePinInfoViewDelegate: AnyObject {
     func scenePinInfoViewDidEdit(_ view: ScenePinInfoView)
     func scenePinInfoViewDidDelete(_ view: ScenePinInfoView)
     func scenePinInfoViewDidCancel(_ view: ScenePinInfoView)

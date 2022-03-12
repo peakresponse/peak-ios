@@ -143,7 +143,7 @@ class ScenePatientsView: UIView {
     }
 
     func configure(from scene: Scene) {
-        approxCountViews[0].setValue(scene.approxPatientsCount.value ?? 0)
+        approxCountViews[0].setValue(scene.approxPatientsCount ?? 0)
         if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
             var total = 0
             for (index, count) in approxPriorityPatientsCounts.enumerated() {
@@ -153,7 +153,7 @@ class ScenePatientsView: UIView {
             approxCountViews[0].setBottomValue(total)
         }
 
-        countViews[0].setValue(scene.patientsCount.value ?? 0)
+        countViews[0].setValue(scene.patientsCount ?? 0)
         if let priorityPatientsCounts = scene.priorityPatientsCounts {
             for (index, count) in priorityPatientsCounts.enumerated() {
                 countViews[index + 1].setValue(count)

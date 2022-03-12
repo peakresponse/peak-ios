@@ -61,7 +61,7 @@ class RespondersViewController: UIViewController, UISearchBarDelegate, UITableVi
             predicates.append(NSPredicate(format: "user.firstName CONTAINS[cd] %@ OR user.lastName CONTAINS[cd] %@", text, text))
         }
 
-        var sorts: [SortDescriptor] = []
+        var sorts: [RealmSwift.SortDescriptor] = []
         switch sort {
         case .az:
             sorts.append(SortDescriptor(keyPath: "user.firstName", ascending: true))

@@ -62,7 +62,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
 
     private func performQuery() {
         notificationToken?.invalidate()
-        var sorts: [SortDescriptor] = []
+        var sorts: [RealmSwift.SortDescriptor] = []
         switch sort {
         case .recent:
             sorts.append(SortDescriptor(keyPath: "updatedAt", ascending: false))
@@ -166,7 +166,7 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
 
     // MARK: - LoginViewControllerDelegate
 
-    override func loginViewControllerDidLogin(_ vc: LoginViewController) {
+    override func authViewControllerDidLogin(_ vc: AuthViewController) {
         dismiss(animated: true) { [weak self] in
             self?.refresh()
         }

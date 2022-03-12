@@ -11,6 +11,9 @@ import Keys
 import RollbarNotifier
 import RollbarPLCrashReporter
 import UIKit
+import ICD10Kit
+import RxNormKit
+import SNOMEDKit
 
 @UIApplicationMain
 
@@ -28,7 +31,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static func leaveScene() -> UIViewController {
         AppSettings.sceneId = nil
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NoActiveScene")
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateInitialViewController()!
+//        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "NoActiveScene")
         for window in UIApplication.shared.windows where window.isKeyWindow {
             window.rootViewController = vc
             break
@@ -44,10 +48,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         rollbarConfig.destination.accessToken = keys.rollbarPostClientItemAccessToken
         rollbarConfig.destination.environment = keys.rollbarEnvironment
         rollbarConfig.developerOptions.suppressSdkInfoLogging = true
-        let rollbarCrashCollector = RollbarPLCrashCollector()
+        let rollbarCrashCollector = RollbarPLCrashCollector(observer: nil)
         Rollbar.initWithConfiguration(rollbarConfig, crashCollector: rollbarCrashCollector)
 
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
+
+        CMRealm.configure(url: Bundle.main.url(forResource: "ICD10CM", withExtension: "realm"), isReadOnly: true)
+        RxNRealm.configure(url: Bundle.main.url(forResource: "RxNorm", withExtension: "realm"), isReadOnly: true)
+        SCTRealm.configure(url: Bundle.main.url(forResource: "SNOMED", withExtension: "realm"), isReadOnly: true)
 
         UIBarButtonItem.appearance().setTitleTextAttributes([
             .font: UIFont.copySBold,

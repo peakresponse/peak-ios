@@ -1,62 +1,99 @@
 PODS:
-  - Google-Maps-iOS-Utils (3.9.0):
-    - Google-Maps-iOS-Utils/Clustering (= 3.9.0)
-    - Google-Maps-iOS-Utils/Geometry (= 3.9.0)
-    - Google-Maps-iOS-Utils/GeometryUtils (= 3.9.0)
-    - Google-Maps-iOS-Utils/Heatmap (= 3.9.0)
-    - Google-Maps-iOS-Utils/QuadTree (= 3.9.0)
+  - AlignedCollectionViewFlowLayout (1.1.2)
+  - AWSCore (2.27.1)
+  - AWSTranscribeStreaming (2.27.1):
+    - AWSCore (= 2.27.1)
+  - CocoaLumberjack (3.7.4):
+    - CocoaLumberjack/Core (= 3.7.4)
+  - CocoaLumberjack/Core (3.7.4)
+  - Google-Maps-iOS-Utils (3.10.3):
+    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
+    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
+    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
+    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (3.9.0):
+  - Google-Maps-iOS-Utils/Clustering (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (3.9.0):
+  - Google-Maps-iOS-Utils/Geometry (3.10.3):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/GeometryUtils (3.9.0):
+  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (3.9.0):
+  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (3.9.0):
+  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
     - GoogleMaps
-  - GoogleMaps (4.2.0):
-    - GoogleMaps/Maps (= 4.2.0)
-  - GoogleMaps/Base (4.2.0)
-  - GoogleMaps/Maps (4.2.0):
+  - GoogleMaps (5.1.0):
+    - GoogleMaps/Maps (= 5.1.0)
+  - GoogleMaps/Base (5.1.0)
+  - GoogleMaps/Maps (5.1.0):
     - GoogleMaps/Base
+  - ICD10Kit (0.1.0):
+    - RealmSwift (>= 10.11.0)
+  - Keyboardy (0.2.7)
   - Keys (1.0.1)
-  - PLCrashReporter (1.8.1)
-  - Realm (10.7.6):
-    - Realm/Headers (= 10.7.6)
-  - Realm/Headers (10.7.6)
-  - RealmSwift (10.7.6):
-    - Realm (= 10.7.6)
-  - RollbarCommon (2.0.0-beta.22)
-  - RollbarNotifier (2.0.0-beta.22):
-    - RollbarCommon (~> 2.0.0-beta.22)
-  - RollbarPLCrashReporter (2.0.0-beta.22):
-    - PLCrashReporter (~> 1.8.1)
-    - RollbarCommon (~> 2.0.0-beta.22)
-  - RollbarSwift (2.0.0-beta.22):
-    - RollbarCommon (~> 2.0.0-beta.22)
-    - RollbarNotifier (~> 2.0.0-beta.22)
+  - PLCrashReporter (1.10.1)
+  - PRKit (0.1.0):
+    - AlignedCollectionViewFlowLayout
+    - Keyboardy (~> 0.2)
+    - SVGKit (~> 3.0)
+  - Realm (10.11.0):
+    - Realm/Headers (= 10.11.0)
+  - Realm/Headers (10.11.0)
+  - RealmSwift (10.11.0):
+    - Realm (= 10.11.0)
+  - RMJSONPatch (1.0.4)
+  - RollbarCommon (2.0.3)
+  - RollbarNotifier (2.0.3):
+    - RollbarCommon (~> 2.0.3)
+  - RollbarPLCrashReporter (2.0.3):
+    - PLCrashReporter (~> 1.10.0)
+    - RollbarCommon (~> 2.0.3)
+  - RollbarSwift (2.0.3):
+    - RollbarCommon (~> 2.0.3)
+    - RollbarNotifier (~> 2.0.3)
+  - RxNormKit (0.1.0):
+    - RealmSwift (>= 10.11.0)
+  - SNOMEDKit (0.1.0):
+    - RealmSwift (>= 10.11.0)
   - Starscream (4.0.4)
-  - SwiftLint (0.40.3)
+  - SVGKit (3.0.0):
+    - CocoaLumberjack (~> 3.0)
+  - SwiftLint (0.44.0)
+  - SwiftPath (0.3.1)
+  - TranscriptionKit (0.1.0):
+    - AWSTranscribeStreaming (~> 2.27.1)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
+  - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
-  - RealmSwift
-  - RollbarNotifier (= 2.0.0-beta.22)
-  - RollbarPLCrashReporter (= 2.0.0-beta.22)
-  - RollbarSwift (= 2.0.0-beta.22)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
+  - RealmSwift (= 10.11.0)
+  - RMJSONPatch (from `https://github.com/raymccrae/swift-jsonpatch.git`, tag `v1.0.4`)
+  - RollbarNotifier (= 2.0.3)
+  - RollbarPLCrashReporter (= 2.0.3)
+  - RollbarSwift (= 2.0.3)
+  - RxNormKit
+  - SNOMEDKit
   - Starscream
   - SwiftLint
+  - SwiftPath
+  - TranscriptionKit (from `https://github.com/peakresponse/peak-ios-transcriptionkit.git`, branch `dev`)
 
 SPEC REPOS:
   trunk:
+    - AlignedCollectionViewFlowLayout
+    - AWSCore
+    - AWSTranscribeStreaming
+    - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - ICD10Kit
+    - Keyboardy
     - PLCrashReporter
     - Realm
     - RealmSwift
@@ -64,27 +101,64 @@ SPEC REPOS:
     - RollbarNotifier
     - RollbarPLCrashReporter
     - RollbarSwift
+    - RxNormKit
+    - SNOMEDKit
     - Starscream
+    - SVGKit
     - SwiftLint
+    - SwiftPath
 
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
+  PRKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-prkit.git
+  RMJSONPatch:
+    :git: https://github.com/raymccrae/swift-jsonpatch.git
+    :tag: v1.0.4
+  TranscriptionKit:
+    :branch: dev
+    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
+
+CHECKOUT OPTIONS:
+  PRKit:
+    :commit: a38bd3cafe2ecf6fe0e2602f9c97073f7e3d324d
+    :git: https://github.com/peakresponse/peak-ios-prkit.git
+  RMJSONPatch:
+    :git: https://github.com/raymccrae/swift-jsonpatch.git
+    :tag: v1.0.4
+  TranscriptionKit:
+    :commit: eab7490c035758702909f507903fad6899725cdb
+    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
-  Google-Maps-iOS-Utils: ae3b4e74b2d734454be32cf62ba8d6ad7283e0c1
-  GoogleMaps: eb03e327edfd70b06de1e6e321653f73712df7ad
+  AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
+  AWSCore: f859f6955a8e52dcb3e79fac95fef058639d1049
+  AWSTranscribeStreaming: 25c06cad7111e87a2bf78af83c8f24327c26a15c
+  CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
+  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
+  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
+  ICD10Kit: d627ff3bfba6604b86fe637547bdcf4bfe47720d
+  Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
-  PLCrashReporter: ea2d252e930f538a9f70f0b81bc9cce656651fbf
-  Realm: ed860452717c8db8f4bf832b6807f7f2ce708839
-  RealmSwift: e31c4ddbcc42ac879313d656b86f9ca539f6f4f4
-  RollbarCommon: a884c9a6a9c5007c9b45ab6dc625c26d7027929b
-  RollbarNotifier: f92636ff6d8f874cdb5c336ec7f0cdbe2f462b2c
-  RollbarPLCrashReporter: eedf4f75847ab59176f4bd87f6be4fcdf04626cd
-  RollbarSwift: d4164ed984ee8406ace895465855bf9e87a0fb7d
+  PLCrashReporter: b30195e509f07299ea277d1997b3a39449d05698
+  PRKit: ba036dd225e79200d99b7de1dcf6651e60579b9b
+  Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
+  RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
+  RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
+  RollbarCommon: 402cfbbca0955ab0f3c3da0b526b1a6e0d180d9f
+  RollbarNotifier: bbbd2be42a80a1bc406227edea63dc9517809f43
+  RollbarPLCrashReporter: ef3744b4a36fcd01301ec8e13489231ec076d3bb
+  RollbarSwift: e183721049f122776eaf9c6b63e2282199d0b327
+  RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
+  SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SwiftLint: dfd554ff0dff17288ee574814ccdd5cea85d76f7
+  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
+  SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
+  SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
+  TranscriptionKit: 0db92bf7acc8b76963fe5f76f086bb70fad1c83b
 
-PODFILE CHECKSUM: 937195b25d267c0f03068605237e78b8d67aa6d0
+PODFILE CHECKSUM: ed824293eeec861328f370f91b6611aeef518aca
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

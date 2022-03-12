@@ -155,15 +155,15 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
     }
 
     override func configure(from patient: Patient) {
-        priorityView.select(priority: patient.priority.value)
+        priorityView.select(priority: patient.priority)
 
-        if let priority = patient.priority.value {
+        if let priority = patient.priority {
             statusBeforeTransportButton.setTitle("Patient.priority.\(priority)".localized, for: .normal)
             statusBeforeTransportButton.setTitleColor(PRIORITY_LABEL_COLORS[priority], for: .normal)
             statusBeforeTransportButton.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[priority], cornerRadius: 5),
                                                            for: .normal)
         }
-        if let priority = patient.filterPriority.value {
+        if let priority = patient.filterPriority {
             statusButton.setTitle("Patient.priority.\(priority)".localized, for: .normal)
             statusButton.setTitleColor(PRIORITY_LABEL_COLORS[priority], for: .normal)
             statusButton.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[priority], cornerRadius: 5), for: .normal)
@@ -181,7 +181,7 @@ class PriorityTableViewCell: BasePatientTableViewCell, PriorityViewDelegate {
             statusBeforeTransportView.isHidden = true
         }
 
-        setPriorityViewVisible(patient.priority.value == nil)
+        setPriorityViewVisible(patient.priority == nil)
     }
 
     func setPriorityViewVisible(_ isVisible: Bool) {

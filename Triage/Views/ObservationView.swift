@@ -6,13 +6,14 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import TranscriptionKit
 import UIKit
 
 @objc protocol ObservationViewDelegate {
     @objc optional func observationView(_ observationView: ObservationView, didThrowError error: Error)
 }
 
-class ObservationView: UIView, AudioHelperDelgate {
+class ObservationView: UIView, TranscriberDelegate {
     static func heightForText(_ text: String, width: CGFloat) -> CGFloat {
         let font = UIFont.copySBold
         let text = text as NSString
@@ -40,7 +41,7 @@ class ObservationView: UIView, AudioHelperDelgate {
     let textView = UITextView()
 
     weak var delegate: ObservationViewDelegate?
-    var audioHelper: AudioHelper?
+    var transcriber: Transcriber?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -177,20 +178,20 @@ class ObservationView: UIView, AudioHelperDelgate {
                 if let error = error {
                     self.delegate?.observationView?(self, didThrowError: error)
                 } else if let url = url {
-                    if self.audioHelper == nil {
-                        self.audioHelper = AudioHelper()
+                    if self.transcriber == nil {
+                        self.transcriber = Transcriber()
                     }
-                    if let audioHelper = self.audioHelper {
-                        audioHelper.delegate = self
-                        audioHelper.fileURL = url
+                    if let transcriber = self.transcriber {
+                        transcriber.delegate = self
+                        transcriber.fileURL = url
                         do {
-                            try audioHelper.prepareToPlay()
+                            try transcriber.prepareToPlay()
                             DispatchQueue.main.async { [weak self] in
                                 self?.playButton.isHidden = false
                                 self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
                                 self?.durationLabel.isHidden = false
                                 self?.durationSeparatorLabel.isHidden = false
-                                self?.durationLabel.text = audioHelper.recordingLengthFormatted
+                                self?.durationLabel.text = transcriber.recordingLengthFormatted
                             }
                         } catch {
                             self.delegate?.observationView?(self, didThrowError: error)
@@ -202,14 +203,14 @@ class ObservationView: UIView, AudioHelperDelgate {
     }
 
     @objc func playPressed(_ sender: Any) {
-        guard let audioHelper = audioHelper else { return }
-        if audioHelper.isPlaying {
-            audioHelper.stopPressed()
+        guard let transcriber = transcriber else { return }
+        if transcriber.isPlaying {
+            transcriber.stopPressed()
             playButton.setImage(UIImage(named: "Play"), for: .normal)
-            durationLabel.text = audioHelper.recordingLengthFormatted
+            durationLabel.text = transcriber.recordingLengthFormatted
         } else {
             do {
-                try audioHelper.playPressed()
+                try transcriber.playPressed()
                 playButton.setImage(UIImage(named: "Stop"), for: .normal)
                 durationLabel.text = "00:00:00"
             } catch {
@@ -218,18 +219,18 @@ class ObservationView: UIView, AudioHelperDelgate {
         }
     }
 
-    // MARK: - AudioHelperDelegate
+    // MARK: - TranscriberDelegate
 
-    func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool) {
+    func transcriber(_ transcriber: Transcriber, didFinishPlaying successfully: Bool) {
         DispatchQueue.main.async { [weak self] in
             self?.playButton.setImage(UIImage(named: "Play"), for: .normal)
-            self?.durationLabel.text = audioHelper.recordingLengthFormatted
+            self?.durationLabel.text = transcriber.recordingLengthFormatted
         }
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String) {
+    func transcriber(_ transcriber: Transcriber, didPlay seconds: TimeInterval, formattedDuration duration: String) {
         DispatchQueue.main.async { [weak self] in
-            if self?.audioHelper?.isPlaying ?? false {
+            if self?.transcriber?.isPlaying ?? false {
                 self?.durationLabel.text = duration
             }
         }

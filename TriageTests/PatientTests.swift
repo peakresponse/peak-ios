@@ -65,24 +65,24 @@ class PatientTests: XCTestCase {
         XCTAssertNotNil(patient)
         XCTAssertEqual(patient?.id, "ae7c2351-bea3-47be-bb68-d5e338046c62")
         XCTAssertEqual(patient?.pin, "6")
-        XCTAssertEqual(patient?.version.value, 3)
+        XCTAssertEqual(patient?.version, 3)
         XCTAssertEqual(patient?.lastName, "Thomas")
         XCTAssertEqual(patient?.firstName, "Mary")
-        XCTAssertEqual(patient?.age.value, 23)
+        XCTAssertEqual(patient?.age, 23)
         XCTAssertEqual(patient?.ageUnits, PatientAgeUnits.years.rawValue)
         XCTAssertNil(patient?.dob)
         XCTAssertEqual(patient?.gender, PatientGender.female.rawValue)
         XCTAssertEqual(patient?.complaint, "Passes out and hits head on ground. Blood from mouth and ears.")
         XCTAssertEqual(patient?.triagePerfusion, PatientTriagePerfusion.radialPulsePresent.rawValue)
         XCTAssertEqual(patient?.triageMentalStatus, PatientTriageMentalStatus.unableToComply.rawValue)
-        XCTAssertEqual(patient?.respiratoryRate.value, 26)
-        XCTAssertEqual(patient?.pulse.value, 130)
-        XCTAssertEqual(patient?.capillaryRefill.value, 2)
-        XCTAssertEqual(patient?.bpSystolic.value, 110)
-        XCTAssertEqual(patient?.bpDiastolic.value, 80)
-        XCTAssertEqual(patient?.gcsTotal.value, 15)
+        XCTAssertEqual(patient?.respiratoryRate, 26)
+        XCTAssertEqual(patient?.pulse, 130)
+        XCTAssertEqual(patient?.capillaryRefill, 2)
+        XCTAssertEqual(patient?.bpSystolic, 110)
+        XCTAssertEqual(patient?.bpDiastolic, 80)
+        XCTAssertEqual(patient?.gcsTotal, 15)
         XCTAssertEqual(patient?.text, "Passes out and hits head on ground. Blood from mouth and ears.")
-        XCTAssertEqual(patient?.priority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient?.priority, Priority.immediate.rawValue)
         XCTAssertEqual(patient?.location, "Triage Staging")
         XCTAssertNil(patient?.lat)
         XCTAssertNil(patient?.lng)
@@ -96,15 +96,15 @@ class PatientTests: XCTestCase {
     func testBloodPressure() {
         let patient = Patient()
         patient.bloodPressure = "120/80"
-        XCTAssertEqual(patient.bpSystolic.value, 120)
-        XCTAssertEqual(patient.bpDiastolic.value, 80)
+        XCTAssertEqual(patient.bpSystolic, 120)
+        XCTAssertEqual(patient.bpDiastolic, 80)
     }
 
     func testSetPriorityAndTransported() {
         let patient = Patient()
         patient.setPriority(.immediate)
-        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
-        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.priority, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority, Priority.immediate.rawValue)
 
         patient.setTransported(true)
         patient.transportAgency = Agency()
@@ -113,16 +113,16 @@ class PatientTests: XCTestCase {
         XCTAssertNotNil(patient.transportAgency)
         XCTAssertNotNil(patient.transportFacility)
         XCTAssertFalse(patient.isTransportedLeftIndependently)
-        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
-        XCTAssertEqual(patient.filterPriority.value, Priority.transported.rawValue)
+        XCTAssertEqual(patient.priority, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority, Priority.transported.rawValue)
 
         patient.setTransported(false)
         XCTAssertFalse(patient.isTransported)
         XCTAssertFalse(patient.isTransportedLeftIndependently)
         XCTAssertNil(patient.transportAgency)
         XCTAssertNil(patient.transportFacility)
-        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
-        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.priority, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority, Priority.immediate.rawValue)
 
         patient.setTransported(true)
         patient.transportAgency = Agency()
@@ -133,16 +133,16 @@ class PatientTests: XCTestCase {
         XCTAssertTrue(patient.isTransportedLeftIndependently)
         XCTAssertNil(patient.transportAgency)
         XCTAssertNil(patient.transportFacility)
-        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
-        XCTAssertEqual(patient.filterPriority.value, Priority.transported.rawValue)
+        XCTAssertEqual(patient.priority, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority, Priority.transported.rawValue)
 
         patient.setTransported(false)
         XCTAssertFalse(patient.isTransported)
         XCTAssertFalse(patient.isTransportedLeftIndependently)
         XCTAssertNil(patient.transportAgency)
         XCTAssertNil(patient.transportFacility)
-        XCTAssertEqual(patient.priority.value, Priority.immediate.rawValue)
-        XCTAssertEqual(patient.filterPriority.value, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.priority, Priority.immediate.rawValue)
+        XCTAssertEqual(patient.filterPriority, Priority.immediate.rawValue)
     }
 
     func testPredictionSourceCleanup() {
@@ -226,7 +226,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.age.value, 28, "age failed for: \(sample)")
+            XCTAssertEqual(observation.age, 28, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.years.rawValue, "ageUnits failed for: \(sample)")
             XCTAssertEqual(observation.complaint, "")
         }
@@ -240,7 +240,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.age.value, 2, "age failed for: \(sample)")
+            XCTAssertEqual(observation.age, 2, "age failed for: \(sample)")
             XCTAssertEqual(observation.ageUnits, PatientAgeUnits.months.rawValue, "ageUnits failed for: \(sample)")
         }
     }
@@ -308,7 +308,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.priority.value, Priority.immediate.rawValue, "Priority failed for: \(sample)")
+            XCTAssertEqual(observation.priority, Priority.immediate.rawValue, "Priority failed for: \(sample)")
         }
 
         samples = [
@@ -321,7 +321,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.priority.value, Priority.delayed.rawValue, "Priority failed for: \(sample)")
+            XCTAssertEqual(observation.priority, Priority.delayed.rawValue, "Priority failed for: \(sample)")
         }
 
         samples = [
@@ -334,7 +334,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.priority.value, Priority.minimal.rawValue, "Priority failed for: \(sample)")
+            XCTAssertEqual(observation.priority, Priority.minimal.rawValue, "Priority failed for: \(sample)")
         }
 
         samples = [
@@ -346,7 +346,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.priority.value, Priority.expectant.rawValue, "Priority failed for: \(sample)")
+            XCTAssertEqual(observation.priority, Priority.expectant.rawValue, "Priority failed for: \(sample)")
         }
 
         samples = [
@@ -358,7 +358,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.priority.value, Priority.dead.rawValue, "Priority failed for: \(sample)")
+            XCTAssertEqual(observation.priority, Priority.dead.rawValue, "Priority failed for: \(sample)")
         }
     }
 
@@ -377,8 +377,8 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.bpSystolic.value, 120, "Blood Pressure failed for: \(sample)")
-            XCTAssertEqual(observation.bpDiastolic.value, 80, "Blood Pressure failed for: \(sample)")
+            XCTAssertEqual(observation.bpSystolic, 120, "Blood Pressure failed for: \(sample)")
+            XCTAssertEqual(observation.bpDiastolic, 80, "Blood Pressure failed for: \(sample)")
         }
     }
 
@@ -421,7 +421,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.capillaryRefill.value, 2, "Capillary Refill failed for: \(sample)")
+            XCTAssertEqual(observation.capillaryRefill, 2, "Capillary Refill failed for: \(sample)")
         }
     }
 
@@ -438,7 +438,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.gcsTotal.value, 3, "GCS total failed for: \(sample)")
+            XCTAssertEqual(observation.gcsTotal, 3, "GCS total failed for: \(sample)")
         }
     }
 
@@ -455,7 +455,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.pulse.value, 80, "Pulse failed for: \(sample)")
+            XCTAssertEqual(observation.pulse, 80, "Pulse failed for: \(sample)")
         }
     }
 
@@ -472,7 +472,7 @@ class PatientTests: XCTestCase {
         for sample in samples {
             let observation = Patient()
             observation.extractValues(from: sample, sourceId: sourceId, metadata: metadata, isFinal: true)
-            XCTAssertEqual(observation.respiratoryRate.value, 20, "Respiratory Rate failed for: \(sample)")
+            XCTAssertEqual(observation.respiratoryRate, 20, "Respiratory Rate failed for: \(sample)")
         }
     }
 

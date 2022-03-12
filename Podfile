@@ -7,7 +7,8 @@ plugin 'cocoapods-keys', {
     'ApiClientServerUrl',
     'GoogleMapsSdkApiKey',
     'RollbarEnvironment',
-    'RollbarPostClientItemAccessToken'
+    'RollbarPostClientItemAccessToken',
+    'RoutEDApiClientServerUrl',
   ]
 }
 
@@ -18,12 +19,19 @@ target 'Triage' do
   # Pods for Triage
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
-  pod 'RealmSwift'
-  pod 'RollbarNotifier', '2.0.0-beta.22'
-  pod 'RollbarPLCrashReporter', '2.0.0-beta.22'
-  pod 'RollbarSwift', '2.0.0-beta.22'
+  pod 'ICD10Kit'
+  pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
+  pod 'RealmSwift', '10.11.0'
+  pod 'RollbarNotifier', '2.0.3'
+  pod 'RollbarPLCrashReporter', '2.0.3'
+  pod 'RollbarSwift', '2.0.3'
+  pod 'RxNormKit'
+  pod 'RMJSONPatch', :git => 'https://github.com/raymccrae/swift-jsonpatch.git', :tag => 'v1.0.4'
   pod 'Starscream'
   pod 'SwiftLint'
+  pod 'SwiftPath'
+  pod 'SNOMEDKit'
+  pod 'TranscriptionKit', :git => 'https://github.com/peakresponse/peak-ios-transcriptionkit.git', :branch => 'dev'
 
   target 'TriageTests' do
     inherit! :search_paths

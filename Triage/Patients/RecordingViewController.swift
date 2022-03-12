@@ -8,16 +8,17 @@
 
 import UIKit
 import Accelerate
-import Speech
+import TranscriptionKit
 
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
-                                                sourceId: String, metadata: [String: Any], isFinal: Bool)
-    @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL)
+                                                fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool)
+    @objc optional func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL,
+                                                duration: TimeInterval, formattedDuration: String)
     @objc optional func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error)
 }
 
-class RecordingViewController: UIViewController, AudioHelperDelgate {
+class RecordingViewController: UIViewController, TranscriberDelegate {
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var stopButton: RecordButton!
     @IBOutlet weak var cancelButton: UIButton!
@@ -28,7 +29,7 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
 
     weak var delegate: RecordingViewControllerDelegate?
 
-    private var audioHelper: AudioHelper!
+    private var transcriber: Transcriber!
     private var barHeightConstraints: [NSLayoutConstraint] = []
 
     override func viewDidLoad() {
@@ -53,8 +54,17 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
             ])
         }
 
-        audioHelper = AudioHelper()
-        audioHelper.delegate = self
+        transcriber = Transcriber()
+        if let awsCredentials = AppSettings.awsCredentials,
+            let accessKey = awsCredentials["AccessKeyId"],
+            let secretKey = awsCredentials["SecretAccessKey"],
+            let sessionToken = awsCredentials["SessionToken"] {
+            transcriber.recognizer = AWSRecognizer(accessKey: accessKey,
+                                                   secretKey: secretKey,
+                                                   sessionToken: sessionToken,
+                                                   region: .USWest2)
+        }
+        transcriber.delegate = self
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -64,54 +74,47 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
 
     func startRecording() {
         do {
-            try audioHelper.startRecording()
+            try transcriber.startRecording()
         } catch {
             delegate?.recordingViewController?(self, didThrowError: error)
         }
     }
 
     @IBAction func cancelPressed(_ sender: Any) {
-        audioHelper.stopRecording()
+        transcriber.stopRecording()
         dismissAnimated()
     }
 
     @IBAction func stopPressed(_ sender: Any) {
-        audioHelper.stopRecording()
-        delegate?.recordingViewController?(self, didFinishRecording: audioHelper.fileURL)
+        transcriber.stopRecording()
+        delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileId, fileURL: transcriber.fileURL,
+                                           duration: transcriber.recordingLength, formattedDuration: transcriber.recordingLengthFormatted)
         stopButton.layer.opacity = 0
         activityIndicatorView.startAnimating()
         cancelButton.isHidden = true
     }
 
-    // MARK: - AudioHelperDelegate
+    // MARK: - TranscriberDelegate
 
-    func audioHelper(_ audioHelper: AudioHelper, didFinishPlaying successfully: Bool) {
-
-    }
-
-    func audioHelper(_ audioHelper: AudioHelper, didPlay seconds: TimeInterval, formattedDuration duration: String) {
-
-    }
-
-    func audioHelper(_ audioHelper: AudioHelper, didRecognizeText text: String,
-                     sourceId: String, metadata: [String: Any], isFinal: Bool) {
+    func transcriber(_ transcriber: Transcriber, didRecognizeText text: String, fileId: String, transcriptId: String,
+                     metadata: [String: Any], isFinal: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            self.delegate?.recordingViewController?(self, didRecognizeText: text,
-                                                    sourceId: sourceId, metadata: metadata, isFinal: isFinal)
+            self.delegate?.recordingViewController?(self, didRecognizeText: text, fileId: fileId, transcriptId: transcriptId,
+                                                    metadata: metadata, isFinal: isFinal)
         }
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didRecord seconds: TimeInterval, formattedDuration duration: String) {
+    func transcriber(_ transcriber: Transcriber, didRecord seconds: TimeInterval, formattedDuration duration: String) {
         timeLabel.text = duration
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didTransformBuffer input: [Float]) {
+    func transcriber(_ transcriber: Transcriber, didTransformBuffer data: [Float]) {
         // decimate the data into number of bars samples
-        let filterLength = input.count / barHeightConstraints.count
+        let filterLength = data.count / barHeightConstraints.count
         let filter = [Float](repeating: 16, count: filterLength)
         var output = [Float](repeating: 0, count: barHeightConstraints.count)
-        vDSP_desamp(input, filterLength, filter, &output, vDSP_Length(output.count), vDSP_Length(filterLength))
+        vDSP_desamp(data, filterLength, filter, &output, vDSP_Length(output.count), vDSP_Length(filterLength))
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             let barHeightConstraints = self.barHeightConstraints
@@ -121,28 +124,28 @@ class RecordingViewController: UIViewController, AudioHelperDelgate {
         }
     }
 
-    func audioHelperDidFinishRecognition(_ audioHelper: AudioHelper) {
+    func transcriberDidFinishRecognition(_ transcriber: Transcriber, withError error: Error?) {
         dismissAnimated()
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didRequestRecordAuthorization status: AVAudioSession.RecordPermission) {
+    func transcriber(_ transcriber: Transcriber, didRequestRecordAuthorization status: TranscriberAuthorizationStatus) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
             if status == .granted {
                 self.startRecording()
             } else {
-                self.delegate?.recordingViewController?(self, didThrowError: AudioHelperError.recordNotAuthorized)
+                self.delegate?.recordingViewController?(self, didThrowError: TranscriberError.recordNotAuthorized)
             }
         }
     }
 
-    func audioHelper(_ audioHelper: AudioHelper, didRequestSpeechAuthorization status: SFSpeechRecognizerAuthorizationStatus) {
+    func transcriber(_ transcriber: Transcriber, didRequestSpeechAuthorization status: TranscriberAuthorizationStatus) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            if status == .authorized {
+            if status == .granted {
                 self.startRecording()
             } else {
-                self.delegate?.recordingViewController?(self, didThrowError: AudioHelperError.speechRecognitionNotAuthorized)
+                self.delegate?.recordingViewController?(self, didThrowError: TranscriberError.speechRecognitionNotAuthorized)
             }
         }
     }

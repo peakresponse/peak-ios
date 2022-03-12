@@ -67,6 +67,7 @@ class RequestOperation: Operation {
 
 // swiftlint:disable file_length force_try type_body_length
 class AppRealm {
+    private static var mainUrl: URL?
     private static var main: Realm!
     private static var _queue: OperationQueue!
     private static var queue: OperationQueue {
@@ -82,14 +83,28 @@ class AppRealm {
 
     private static var locationHelper: LocationHelper?
 
+    public static func configure(url: URL?) {
+        mainUrl = url
+        main = nil
+    }
+
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
+            AppRealm.main.refresh()
             return AppRealm.main
         }
-        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
-                                                             appropriateFor: nil, create: false)
-        let url = documentDirectory?.appendingPathComponent( "app.realm")
-        let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true)
+        var url: URL! = mainUrl
+        if url == nil {
+            let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+                                                                 appropriateFor: nil, create: false)
+            url = documentDirectory?.appendingPathComponent( "app.realm")
+        }
+        let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
+            Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,
+            Disposition.self, Facility.self, File.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
+            Procedure.self, Report.self, Responder.self, Response.self, Scene.self, ScenePin.self, Situation.self, State.self,
+            Time.self, User.self, Vehicle.self, Vital.self
+        ])
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {
             AppRealm.main = realm
@@ -108,7 +123,7 @@ class AppRealm {
 
     public static func connect() {
         agencySocket?.disconnect()
-        agencySocket = ApiClient.shared.connect(completionHandler: { (socket, data, error) in
+        agencySocket = PRApiClient.shared.connect(completionHandler: { (socket, data, error) in
             guard socket == agencySocket else { return }
             if error != nil {
                 // close current connection
@@ -139,7 +154,7 @@ class AppRealm {
     }
 
     public static func getAgencies(search: String? = nil, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getAgencies(search: search, completionHandler: { (records, error) in
+        let task = PRApiClient.shared.getAgencies(search: search, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -154,11 +169,37 @@ class AppRealm {
         task.resume()
     }
 
+    // MARK: - Assignments
+
+    public static func createAssignment(number: String?, vehicleId: String?, completionHandler: @escaping (Assignment?, Error?) -> Void) {
+        var data: [String: Any] = [:]
+        if let number = number {
+            data["number"] = number
+        } else if let vehicleId = vehicleId {
+            data["vehicleId"] = vehicleId
+        } else {
+            data["vehicleId"] = NSNull()
+        }
+        let task = PRApiClient.shared.createAssignment(data: data) { (_, _, data, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let data = data {
+                let assignment = Assignment.instantiate(from: data)
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(assignment, update: .modified)
+                }
+                completionHandler(assignment as? Assignment, nil)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Facilities
 
     public static func getFacilities(lat: String, lng: String, search: String? = nil, type: String? = nil,
                                      completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (records, error) in
+        let task = PRApiClient.shared.getFacilities(lat: lat, lng: lng, search: search, type: type, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -183,10 +224,126 @@ class AppRealm {
         task.resume()
     }
 
+    // MARK: - Files
+
+    public static func uploadFile(fileURL: URL) {
+        /// ensure a unique upload filename by prepending the user uuid
+        let fileName = fileURL.lastPathComponent
+        /// move to the local app file cache
+        let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
+        let op = RequestOperation()
+        op.queuePriority = .veryHigh
+        op.request = { (completionHandler) in
+            if let data = op.data,
+               let directUpload = data["direct_upload"] as? [String: Any],
+               let urlString = directUpload["url"] as? String,
+               let url = URL(string: urlString),
+               let headers = directUpload["headers"] as? [String: Any] {
+                return PRApiClient.shared.upload(fileURL: cacheFileURL ?? fileURL, toURL: url, headers: headers) { (error) in
+                    completionHandler(error)
+                }
+            } else {
+                return PRApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (_, _, response, error) in
+                    if let error = error {
+                        completionHandler(error)
+                    } else if let response = response {
+                        op.data = response
+                        op.retryTime = 0
+                        completionHandler(ApiClientError.unexpected)
+                    }
+                }
+            }
+        }
+        queue.addOperation(op)
+    }
+
+    // MARK: - Incidents
+
+    public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
+                                    completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = PRApiClient.shared.getIncidents(vehicleId: vehicleId, search: search) { (_, response, records, error) in
+            AppRealm.handleIncidentsResponse(response: response, records: records, error: error,
+                                             completionHandler: completionHandler)
+        }
+        task.resume()
+    }
+
+    public static func getNextIncidents(url: String, completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = PRApiClient.shared.GET(path: url, params: nil) { (_, response, records: [[String: Any]]?, error) in
+            AppRealm.handleIncidentsResponse(response: response, records: records, error: error,
+                                             completionHandler: completionHandler)
+        }
+        task.resume()
+    }
+
+    private static func handleIncidentsResponse(response: URLResponse?, records: [[String: Any]]?, error: Error?,
+                                                completionHandler: @escaping (String?, Error?) -> Void) {
+        if let error = error {
+            completionHandler(nil, error)
+        } else if let records = records {
+            var cities: [Base] = []
+            var states: [Base] = []
+            var scenes: [[String: Any]] = []
+            var dispatches: [[String: Any]] = []
+            for record in records {
+                if let scene = record["scene"] as? [String: Any] {
+                    if let city = scene["city"] as? [String: Any] {
+                        cities.append(City.instantiate(from: city))
+                    }
+                    if let state = scene["state"] as? [String: Any] {
+                        states.append(State.instantiate(from: state))
+                    }
+                    scenes.append(scene)
+                }
+                if let newDispatches = record["dispatches"] as? [[String: Any]] {
+                    dispatches.append(contentsOf: newDispatches)
+                }
+            }
+            let realm = AppRealm.open()
+            try! realm.write {
+                realm.add(cities, update: .modified)
+                realm.add(states, update: .modified)
+                realm.add(scenes.map { Scene.instantiate(from: $0) }, update: .modified)
+                realm.add(records.map { Incident.instantiate(from: $0) }, update: .modified)
+                realm.add(dispatches.map { Dispatch.instantiate(from: $0) }, update: .modified)
+            }
+            var nextUrl: String?
+            if let links = PRApiClient.parseLinkHeader(from: response) {
+                nextUrl = links["next"]
+            }
+            completionHandler(nextUrl, nil)
+        }
+    }
+
+    // MARK: - List
+
+    public static func getLists(completionHandler: @escaping (Error?) -> Void) {
+        let task = PRApiClient.shared.getLists { (_, _, data, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let data = data {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    if let lists = data["lists"] as? [[String: Any]] {
+                        realm.add(lists.map { CodeList.instantiate(from: $0) }, update: .modified)
+                    }
+                    if let sections = data["sections"] as? [[String: Any]] {
+                        realm.add(sections.map { CodeListSection.instantiate(from: $0) }, update: .modified)
+                    }
+                    if let items = data["items"] as? [[String: Any]] {
+                        realm.add(items.map { CodeListItem.instantiate(from: $0) }, update: .modified)
+                    }
+                }
+                completionHandler(nil)
+            }
+        }
+        task.resume()
+    }
+
     // MARK: - Patients
 
     public static func getPatients(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getPatients(sceneId: sceneId, completionHandler: { (records, error) in
+        let task = PRApiClient.shared.getPatients(sceneId: sceneId, completionHandler: { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -202,7 +359,7 @@ class AppRealm {
     }
 
     public static func getPatient(idOrPin: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getPatient(idOrPin: idOrPin) { (record, error) in
+        let task = PRApiClient.shared.getPatient(idOrPin: idOrPin) { (_, _, record, error) in
             if let record = record {
                 if let patient = Patient.instantiate(from: record) as? Patient {
                     let realm = AppRealm.open()
@@ -225,7 +382,7 @@ class AppRealm {
         op.queuePriority = .veryHigh
         let data = patient.asJSON()
         op.request = { (completionHandler) in
-            return ApiClient.shared.createOrUpdatePatient(data: data) { (record, error) in
+            return PRApiClient.shared.createOrUpdatePatient(data: data) { (_, _, record, error) in
                 if let record = record {
                     if let patient = Patient.instantiate(from: record) as? Patient {
                         let realm = AppRealm.open()
@@ -260,11 +417,11 @@ class AppRealm {
                let urlString = directUpload["url"] as? String,
                let url = URL(string: urlString),
                let headers = directUpload["headers"] as? [String: Any] {
-                return ApiClient.shared.upload(fileURL: cacheFileURL ?? fileURL, toURL: url, headers: headers) { (error) in
+                return PRApiClient.shared.upload(fileURL: cacheFileURL ?? fileURL, toURL: url, headers: headers) { (error) in
                     completionHandler(error)
                 }
             } else {
-                return ApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (response, error) in
+                return PRApiClient.shared.upload(fileName: fileName, fileURL: cacheFileURL ?? fileURL) { (_, _, response, error) in
                     if let error = error {
                         completionHandler(error)
                     } else if let response = response {
@@ -273,6 +430,79 @@ class AppRealm {
                         completionHandler(ApiClientError.unexpected)
                     }
                 }
+            }
+        }
+        queue.addOperation(op)
+    }
+
+    // MARK: - Report
+
+    public static func getReports(incident: Incident, completionHandler: @escaping (Results<Report>?, Error?) -> Void) {
+        let task = PRApiClient.shared.getReports(incidentId: incident.id) { (_, _, data, error) in
+            var dependencies: [Base] = []
+            var reportIds: [String] = []
+            for model in [
+                Response.self,
+                Scene.self,
+                Time.self,
+                Patient.self,
+                Situation.self,
+                History.self,
+                Disposition.self,
+                Narrative.self,
+                Medication.self,
+                Procedure.self,
+                Vital.self,
+                File.self
+            ] {
+                if let records = data?[String(describing: model)] as? [[String: Any]] {
+                    dependencies.append(contentsOf: records.map { model.instantiate(from: $0) })
+                }
+            }
+            let realm = AppRealm.open()
+            try! realm.write {
+                realm.add(dependencies, update: .modified)
+                if let records = data?["Report"] as? [[String: Any]] {
+                    reportIds.append(contentsOf: records.map { $0["id"] as! String })
+                    realm.add(records.map { Report.instantiate(from: $0) }, update: .modified)
+                }
+            }
+            DispatchQueue.main.async {
+                if let error = error {
+                    completionHandler(nil, error)
+                } else {
+                    let realm = AppRealm.open()
+                    let results = realm.objects(Report.self).filter("id IN %@", reportIds)
+                    completionHandler(results, nil)
+                }
+            }
+        }
+        task.resume()
+    }
+
+    public static func saveReport(report: Report) {
+        let realm = AppRealm.open()
+        var parent: Report?
+        if let parentId = report.parentId {
+            parent = realm.object(ofType: Report.self, forPrimaryKey: parentId)
+        }
+        let data = report.canonicalize(from: parent)
+        try! realm.write {
+            realm.add(report, update: .modified)
+            if let canonicalId = report.canonicalId {
+                let canonical = Report(value: report)
+                canonical.id = canonicalId
+                canonical.canonicalId = nil
+                canonical.parentId = nil
+                canonical.currentId = report.id
+                realm.add(canonical, update: .modified)
+            }
+        }
+        let op = RequestOperation()
+        op.queuePriority = .veryHigh
+        op.request = { (completionHandler) in
+            return PRApiClient.shared.createOrUpdateReport(data: data) { (_, _, _, error) in
+                completionHandler(error)
             }
         }
         queue.addOperation(op)
@@ -291,12 +521,12 @@ class AppRealm {
                     op.request = { (completionHandler) in
                         if let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId),
                            let parentSceneId = scene.currentId {
-                            return ApiClient.shared.updateScene(data: [
+                            return PRApiClient.shared.updateScene(data: [
                                 "id": UUID().uuidString.lowercased(),
                                 "parentId": parentSceneId,
                                 "lat": lat,
                                 "lng": lng
-                            ]) { (_, error) in
+                            ]) { (_, _, _, error) in
                                 completionHandler(error)
                             }
                         }
@@ -306,7 +536,7 @@ class AppRealm {
                 }
                 AppRealm.locationHelper = nil
             }
-            locationHelper.didFailWithError = { (error) in
+            locationHelper.didFailWithError = { (_) in
                 AppRealm.locationHelper = nil
             }
             AppRealm.locationHelper = locationHelper
@@ -315,7 +545,7 @@ class AppRealm {
     }
 
     public static func getScenes(completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getScenes { (records, error) in
+        let task = PRApiClient.shared.getScenes { (_, _, records, error) in
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
@@ -338,7 +568,7 @@ class AppRealm {
         try! realm.write {
             realm.add([scene, canonical], update: .modified)
         }
-        let task = ApiClient.shared.createScene(data: scene.asJSON()) { (data, error) in
+        let task = PRApiClient.shared.createScene(data: scene.asJSON()) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -355,7 +585,7 @@ class AppRealm {
     }
 
     public static func getScene(sceneId: String, completionHandler: @escaping (Scene?, Error?) -> Void) {
-        let task = ApiClient.shared.getScene(sceneId: sceneId) { (data, error) in
+        let task = PRApiClient.shared.getScene(sceneId: sceneId) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -372,7 +602,7 @@ class AppRealm {
     }
 
     public static func closeScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.closeScene(sceneId: sceneId) { (data, error) in
+        let task = PRApiClient.shared.closeScene(sceneId: sceneId) { (_, _, data, error) in
             if let error = error {
                 completionHandler(error)
             } else if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
@@ -389,7 +619,7 @@ class AppRealm {
     }
 
     public static func joinScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.joinScene(sceneId: sceneId) { (_, error) in
+        let task = PRApiClient.shared.joinScene(sceneId: sceneId) { (_, _, _, error) in
             completionHandler(error)
         }
         task.resume()
@@ -407,7 +637,7 @@ class AppRealm {
         let op = RequestOperation()
         let data = pin.asJSON()
         op.request = { (completionHandler) in
-            return ApiClient.shared.addScenePin(sceneId: sceneId, data: data, completionHandler: completionHandler)
+            return PRApiClient.shared.addScenePin(sceneId: sceneId, data: data, completionHandler: completionHandler)
         }
         queue.addOperation(op)
     }
@@ -421,20 +651,20 @@ class AppRealm {
         let op = RequestOperation()
         let scenePinId = pin.id
         op.request = { (completionHandler) in
-            return ApiClient.shared.removeScenePin(sceneId: sceneId, scenePinId: scenePinId, completionHandler: completionHandler)
+            return PRApiClient.shared.removeScenePin(sceneId: sceneId, scenePinId: scenePinId, completionHandler: completionHandler)
         }
         queue.addOperation(op)
     }
 
     public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.leaveScene(sceneId: sceneId) { (_, error) in
+        let task = PRApiClient.shared.leaveScene(sceneId: sceneId) { (_, _, _, error) in
             completionHandler(error)
         }
         task.resume()
     }
 
     public static func transferScene(sceneId: String, userId: String, agencyId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.transferScene(sceneId: sceneId, userId: userId, agencyId: agencyId) { (error) in
+        let task = PRApiClient.shared.transferScene(sceneId: sceneId, userId: userId, agencyId: agencyId) { (error) in
             completionHandler(error)
         }
         task.resume()
@@ -444,7 +674,7 @@ class AppRealm {
         // cancel any existing task
         sceneSocket?.disconnect()
         // connect to scene socket
-        sceneSocket = ApiClient.shared.connect(sceneId: sceneId) { (socket, data, error) in
+        sceneSocket = PRApiClient.shared.connect(sceneId: sceneId) { (socket, data, error) in
             guard socket == sceneSocket else { return }
             if error != nil {
                 // close current connection
@@ -509,7 +739,7 @@ class AppRealm {
                         scene.approxPriorityPatientsCounts = approxPriorityPatientsCounts
                     }
                 } else {
-                    scene.approxPatientsCount.value = (scene.approxPatientsCount.value ?? 0) + delta
+                    scene.approxPatientsCount = (scene.approxPatientsCount ?? 0) + delta
                 }
                 struct Debounce {
                     static var timer: Timer?
@@ -521,7 +751,7 @@ class AppRealm {
                     "id": UUID().uuidString.lowercased(),
                     "parentId": parentSceneId
                 ]
-                if let approxPatientsCount = scene.approxPatientsCount.value {
+                if let approxPatientsCount = scene.approxPatientsCount {
                     data["approxPatientsCount"] = approxPatientsCount
                 }
                 if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
@@ -530,7 +760,7 @@ class AppRealm {
                 Debounce.timer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { (_) in
                     let op = RequestOperation()
                     op.request = { (completionHandler) in
-                        return ApiClient.shared.updateScene(data: data) { (_, error) in
+                        return PRApiClient.shared.updateScene(data: data) { (_, _, _, error) in
                             completionHandler(error)
                         }
                     }
@@ -543,7 +773,7 @@ class AppRealm {
     // MARK: - Responders
 
     public static func getResponders(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
-        let task = ApiClient.shared.getResponders(sceneId: sceneId) { (responders, error) in
+        let task = PRApiClient.shared.getResponders(sceneId: sceneId) { (_, _, responders, error) in
             if let error = error {
                 completionHandler(error)
             } else if let responders = responders {
@@ -566,28 +796,38 @@ class AppRealm {
         }
         let op = RequestOperation()
         op.request = { (completionHandler) in
-            return ApiClient.shared.assignResponder(responderId: responderId, role: role?.rawValue, completionHandler: completionHandler)
+            return PRApiClient.shared.assignResponder(responderId: responderId, role: role?.rawValue, completionHandler: completionHandler)
         }
         queue.addOperation(op)
     }
 
     // MARK: - Users
 
-    public static func me(completionHandler: @escaping (User?, Agency?, Scene?, Error?) -> Void) {
-        let task = ApiClient.shared.me { (data, error) in
+    public static func me(completionHandler: @escaping (User?, Agency?, Assignment?, Scene?, [String: String]?, Error?) -> Void) {
+        let task = PRApiClient.shared.me { (_, _, data, error) in
             if let error = error {
                 DispatchQueue.main.async {
-                    completionHandler(nil, nil, nil, error)
+                    completionHandler(nil, nil, nil, nil, nil, error)
                 }
             } else if let data = data {
                 var user: User?
                 var agency: Agency?
+                var assignment: Assignment?
+                var vehicle: Vehicle?
                 var activeScenes: [Base]?
+                var awsCredentials: [String: String]?
                 if let data = data["user"] as? [String: Any] {
                     user = User.instantiate(from: data) as? User
                     if let data = data["activeScenes"] as? [[String: Any]] {
                         activeScenes = data.map({ Scene.instantiate(from: $0) })
                     }
+                    if let data = data["currentAssignment"] as? [String: Any] {
+                        if let data = data["vehicle"] as? [String: Any] {
+                            vehicle = Vehicle.instantiate(from: data) as? Vehicle
+                        }
+                        assignment = Assignment.instantiate(from: data) as? Assignment
+                    }
+                    awsCredentials = data["awsCredentials"] as? [String: String]
                 }
                 if let data = data["agency"] as? [String: Any] {
                     agency = Agency.instantiate(from: data) as? Agency
@@ -600,6 +840,12 @@ class AppRealm {
                     if let agency = agency {
                         realm.add(agency, update: .modified)
                     }
+                    if let assignment = assignment {
+                        realm.add(assignment, update: .modified)
+                    }
+                    if let vehicle = vehicle {
+                        realm.add(vehicle, update: .modified)
+                    }
                     if let activeScenes = activeScenes {
                         realm.add(activeScenes, update: .modified)
                     }
@@ -608,13 +854,38 @@ class AppRealm {
                 if let activeScenes = activeScenes, activeScenes.count > 0 {
                     scene = activeScenes[0] as? Scene
                 }
-                completionHandler(user, agency, scene, nil)
+                completionHandler(user, agency, assignment, scene, awsCredentials, nil)
             } else {
                 DispatchQueue.main.async {
-                    completionHandler(nil, nil, nil, ApiClientError.unexpected)
+                    completionHandler(nil, nil, nil, nil, nil, ApiClientError.unexpected)
                 }
             }
         }
+        task.resume()
+    }
+
+    // MARK: - Vehicles
+
+    public static func getVehicles(completionHandler: @escaping (Error?) -> Void) {
+        var vehiclesCompletionHandler: ((URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void)!
+        vehiclesCompletionHandler = { (_, response, records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                let vehicles = records.map({ Vehicle.instantiate(from: $0) })
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(vehicles, update: .modified)
+                }
+                if let links = PRApiClient.parseLinkHeader(from: response), let next = links["next"] {
+                    let task = PRApiClient.shared.GET(path: next, params: nil, completionHandler: vehiclesCompletionHandler)
+                    task.resume()
+                } else {
+                    completionHandler(nil)
+                }
+            }
+        }
+        let task = PRApiClient.shared.getVehicles(completionHandler: vehiclesCompletionHandler)
         task.resume()
     }
 }

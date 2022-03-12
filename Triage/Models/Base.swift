@@ -15,9 +15,9 @@ class Base: Object {
         static let updatedAt = "updatedAt"
     }
 
-    @objc dynamic var id = UUID().uuidString.lowercased()
-    @objc dynamic var createdAt: Date?
-    @objc dynamic var updatedAt: Date?
+    @Persisted(primaryKey: true) var id = UUID().uuidString.lowercased()
+    @Persisted var createdAt: Date?
+    @Persisted var updatedAt: Date?
     var updatedAtRelativeString: String {
         return updatedAt?.asRelativeString() ?? "Unknown".localized
     }
@@ -26,13 +26,9 @@ class Base: Object {
         super.init()
     }
 
-    convenience init(clone: Any) {
-        self.init(value: clone)
+    convenience init(clone obj: Base) {
+        self.init(value: obj)
         id = UUID().uuidString.lowercased()
-    }
-
-    override public class func primaryKey() -> String? {
-        return "id"
     }
 
     func update(from data: [String: Any]) {
@@ -68,10 +64,28 @@ class BaseVersioned: Base {
         static let secondParentId = "secondParentId"
     }
 
-    @objc dynamic var canonicalId: String?
-    @objc dynamic var currentId: String?
-    @objc dynamic var parentId: String?
-    @objc dynamic var secondParentId: String?
+    @Persisted var canonicalId: String?
+    @Persisted var currentId: String?
+    @Persisted var parentId: String?
+    @Persisted var secondParentId: String?
+
+    convenience init(clone obj: BaseVersioned) {
+        self.init(value: obj)
+        id = UUID().uuidString.lowercased()
+        if currentId != nil {
+            canonicalId = obj.id
+            parentId = currentId
+            currentId = nil
+        } else {
+            parentId = obj.id
+        }
+    }
+
+    static func newRecord() -> Self {
+        let obj = self.init()
+        obj.new()
+        return obj
+    }
 
     func new() {
         canonicalId = UUID().uuidString.lowercased()
@@ -100,5 +114,9 @@ class BaseVersioned: Base {
             data[Keys.secondParentId] = value
         }
         return data
+    }
+
+    func changes(from source: BaseVersioned?) -> [String: Any]? {
+        return nil
     }
 }

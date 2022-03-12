@@ -7,8 +7,8 @@
 //
 
 import CoreLocation
-import Speech
 import UIKit
+import TranscriptionKit
 
 class ObservationTableViewController: PatientTableViewController, LocationHelperDelegate, PortraitViewDelegate,
                                       RecordingViewControllerDelegate {
@@ -79,7 +79,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
         if let tableViewHeader = tableView.tableHeaderView as? PatientHeaderView {
             tableViewHeader.configure(from: patient)
         }
-        if let priority = patient.filterPriority.value {
+        if let priority = patient.filterPriority {
             delegate?.patientTableViewController?(self, didUpdatePriority: priority)
         }
     }
@@ -89,7 +89,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
     }
 
     @IBAction func savePressed(_ sender: Any) {
-        if patient.priority.value == nil {
+        if patient.priority == nil {
             presentAlert(title: "Error".localized, message: "Please select a SALT priority")
             return
         }
@@ -239,14 +239,14 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.tableView.reloadData()
-                if let priority = self.patient.filterPriority.value {
+                if let priority = self.patient.filterPriority {
                     self.delegate?.patientTableViewController?(self, didUpdatePriority: priority)
                 }
             }
         }
     }
 
-    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileURL: URL) {
+    func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL) {
         AppRealm.uploadPatientAsset(patient: patient, key: Patient.Keys.audioFile, fileURL: fileURL)
         tableView.reloadSections(IndexSet(integer: Section.observations.rawValue), with: .none)
         // hide the record button, user must clear current recording to continue
@@ -257,7 +257,7 @@ class ObservationTableViewController: PatientTableViewController, LocationHelper
 
     func recordingViewController(_ vc: RecordingViewController, didThrowError error: Error) {
         switch error {
-        case AudioHelperError.speechRecognitionNotAuthorized:
+        case TranscriberError.speechRecognitionNotAuthorized:
             // even with speech recognition off, we can still allow a recording...
             vc.startRecording()
         default:

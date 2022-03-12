@@ -24,16 +24,38 @@ class InterstitialViewController: UIViewController {
 
     func checkLoginStatus() {
         // hit the server to check current log-in status
-        AppRealm.me { (user, agency, scene, error) in
-            if let error = error {
-                // if an explicit server error, log out to force re-login
-                if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
-                        self.logout()
-                    }
-                    return
+        AppRealm.me { (user, agency, assignment, scene, awsCredentials, error) in
+            // if an explicit server error, log out to force re-login
+            if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.logout()
                 }
+                return
+            }
+            if let user = user, let agency = agency {
+                // update code lists in the background
+                AppRealm.getLists { (_) in
+                    // noop
+                }
+                // log in to RoutED API (TODO: parameterize based on agency settings)
+                REDApiClient.shared.login { (_, _, error) in
+                    if error == nil {
+                        REDRealm.connect()
+                    }
+                }.resume()
+                AppSettings.awsCredentials = awsCredentials
+                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
+                if let sceneId = scene?.id {
+                    DispatchQueue.main.async {
+                        AppDelegate.enterScene(id: sceneId)
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        _ = AppDelegate.leaveScene()
+                    }
+                }
+            } else {
                 // check if we've previously logged in within a threshold of time
                 let threshold = Date(timeIntervalSinceNow: -60 * 60) // one hour?
                 let userId = AppSettings.userId
@@ -58,21 +80,12 @@ class InterstitialViewController: UIViewController {
                 // otherwise, display error and force re-login on next retry
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
-                    self.presentAlert(error: error)
+                    if let error = error {
+                        self.presentAlert(error: error)
+                    } else {
+                        self.presentUnexpectedErrorAlert()
+                    }
                     self.retryButton.isHidden = false
-                }
-            } else {
-                AppSettings.userId = user?.id
-                AppSettings.agencyId = agency?.id
-                if let scene = scene {
-                    let sceneId = scene.id
-                    DispatchQueue.main.async {
-                        AppDelegate.enterScene(id: sceneId)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        _ = AppDelegate.leaveScene()
-                    }
                 }
             }
         }
