@@ -1,5 +1,5 @@
 //
-//  VLRealm.swift
+//  REDRealm.swift
 //  Triage
 //
 //  Created by Francis Li on 3/6/22.
@@ -9,7 +9,7 @@
 import RealmSwift
 import Starscream
 
-class VLRealm {
+class REDRealm {
     private static var mainUrl: URL?
     private static var main: Realm!
 
@@ -21,28 +21,28 @@ class VLRealm {
     }
 
     public static func open() -> Realm {
-        if Thread.current.isMainThread && VLRealm.main != nil {
-            VLRealm.main.refresh()
-            return VLRealm.main
+        if Thread.current.isMainThread && REDRealm.main != nil {
+            REDRealm.main.refresh()
+            return REDRealm.main
         }
         var url: URL! = mainUrl
         if url == nil {
             let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
                                                                  appropriateFor: nil, create: false)
-            url = documentDirectory?.appendingPathComponent( "vitalink.realm")
+            url = documentDirectory?.appendingPathComponent( "routed.realm")
         }
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             HospitalStatusUpdate.self, Ringdown.self
         ])
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {
-            VLRealm.main = realm
+            REDRealm.main = realm
         }
         return realm
     }
 
     public static func deleteAll() {
-        let realm = VLRealm.open()
+        let realm = REDRealm.open()
         try! realm.write {
             realm.deleteAll()
         }
@@ -52,7 +52,7 @@ class VLRealm {
 
     public static func connect() {
         userSocket?.disconnect()
-        userSocket = VLApiClient.shared.connect(completionHandler: { (socket, data, error) in
+        userSocket = REDApiClient.shared.connect(completionHandler: { (socket, data, error) in
             guard socket == userSocket else { return }
             if error != nil {
                 // close current connection
@@ -63,7 +63,7 @@ class VLRealm {
                     connect()
                 }
             } else if let data = data {
-                let realm = VLRealm.open()
+                let realm = REDRealm.open()
                 if let records = data["ringdowns"] as? [[String: Any]] {
                     let ringdowns = records.map { Ringdown.instantiate(from: $0) }
                     try! realm.write {
@@ -89,12 +89,12 @@ class VLRealm {
     // MARK: - Ringdowns
 
     public static func sendRingdown(payload: [String: Any], completionHandler: @escaping (Ringdown?, Error?) -> Void) {
-        let task = VLApiClient.shared.sendRingdown(payload: payload) { (_, _, data, error) in
+        let task = REDApiClient.shared.sendRingdown(payload: payload) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
                 let ringdown = Ringdown.instantiate(from: data)
-                let realm = VLRealm.open()
+                let realm = REDRealm.open()
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
@@ -107,12 +107,12 @@ class VLRealm {
     }
 
     public static func getRingdown(id: String, completionHandler: @escaping (Ringdown?, Error?) -> Void) {
-        let task = VLApiClient.shared.getRingdown(id: id) { (_, _, data, error) in
+        let task = REDApiClient.shared.getRingdown(id: id) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
                 let ringdown = Ringdown.instantiate(from: data)
-                let realm = VLRealm.open()
+                let realm = REDRealm.open()
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
@@ -128,15 +128,15 @@ class VLRealm {
         let ringdownId = ringdown.id
         let timestamps = ringdown.timestamps
         let now = Date()
-        let realm = VLRealm.open()
+        let realm = REDRealm.open()
         try! realm.write {
             var timestamps = ringdown.timestamps
             timestamps[status.rawValue] = now.asISO8601String()
             ringdown.timestamps = timestamps
         }
-        let task = VLApiClient.shared.setRingdownStatus(id: ringdown.id, status: status, dateTime: now) { (_, _, _, error) in
+        let task = REDApiClient.shared.setRingdownStatus(id: ringdown.id, status: status, dateTime: now) { (_, _, _, error) in
             if error != nil {
-                let realm = VLRealm.open()
+                let realm = REDRealm.open()
                 if let ringdown = realm.object(ofType: Ringdown.self, forPrimaryKey: ringdownId) {
                     try! realm.write {
                         ringdown.timestamps = timestamps

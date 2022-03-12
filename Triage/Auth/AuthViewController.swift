@@ -78,10 +78,10 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                 let assignmentId = assignment?.id
                                 let sceneId = scene?.id
                                 AppSettings.awsCredentials = awsCredentials
-                                // log in to VitaLink API (TODO: parameterize based on agency settings)
-                                VLApiClient.shared.login { (_, _, error) in
+                                // log in to RoutED API (TODO: parameterize based on agency settings)
+                                REDApiClient.shared.login { (_, _, error) in
                                     if error == nil {
-                                        VLRealm.connect()
+                                        REDRealm.connect()
                                     }
                                 }.resume()
                                 DispatchQueue.main.async { [weak self] in

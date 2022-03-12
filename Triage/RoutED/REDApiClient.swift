@@ -1,5 +1,5 @@
 //
-//  VLApiClient.swift
+//  REDApiClient.swift
 //  Triage
 //
 //  Created by Francis Li on 3/4/22.
@@ -11,8 +11,8 @@ import Keys
 import Starscream
 
 // swiftlint:disable type_body_length file_length
-class VLApiClient: ApiClient {
-    static var shared: VLApiClient = VLApiClient(baseURL: TriageKeys().vitaLinkApiClientServerUrl)! {
+class REDApiClient: ApiClient {
+    static var shared: REDApiClient = REDApiClient(baseURL: TriageKeys().routEDApiClientServerUrl)! {
         willSet {
             shared.invalidate()
         }

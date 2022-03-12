@@ -8,7 +8,7 @@ plugin 'cocoapods-keys', {
     'GoogleMapsSdkApiKey',
     'RollbarEnvironment',
     'RollbarPostClientItemAccessToken',
-    'VitaLinkApiClientServerUrl',
+    'RoutEDApiClientServerUrl',
   ]
 }
 

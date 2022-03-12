@@ -104,7 +104,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
 
         formInputAccessoryView = FormInputAccessoryView(rootView: containerView)
 
-        let realm = VLRealm.open()
+        let realm = REDRealm.open()
         results = realm.objects(HospitalStatusUpdate.self)
             .sorted(by: [SortDescriptor(keyPath: "sortSequenceNumber", ascending: true)])
         notificationToken = results?.observe { [weak self] (changes) in
@@ -116,13 +116,13 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
 
     func performRingdownQuery() {
         if let ringdownId = report.ringdownId {
-            let realm = VLRealm.open()
+            let realm = REDRealm.open()
             ringdownResults = realm.objects(Ringdown.self).filter("id=%@", ringdownId)
             ringdownNotificationToken = ringdownResults?.observe { [weak self] (changes) in
                 self?.didObserveRingdownRealmChanges(changes)
             }
             if ringdownResults?.count == 0 {
-                VLRealm.getRingdown(id: ringdownId) { [weak self] (_, error) in
+                REDRealm.getRingdown(id: ringdownId) { [weak self] (_, error) in
                     if let error = error {
                         DispatchQueue.main.async { [weak self] in
                             self?.presentAlert(error: error)
@@ -258,7 +258,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
             payload["patient"] = patient
         }
         commandFooter.isLoading = true
-        VLRealm.sendRingdown(payload: payload) { [weak self] (ringdown, error) in
+        REDRealm.sendRingdown(payload: payload) { [weak self] (ringdown, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.commandFooter.isLoading = false
@@ -291,7 +291,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         guard let ringdown = ringdown else { return }
         commandFooter.isLoading = true
         let reportId = report.id
-        VLRealm.setRingdownStatus(ringdown: ringdown, status: status) { [weak self] (error) in
+        REDRealm.setRingdownStatus(ringdown: ringdown, status: status) { [weak self] (error) in
             if error == nil {
                 let realm = AppRealm.open()
                 if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
@@ -328,11 +328,11 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
                 }
             }
             if timestamps[RingdownStatus.offloaded.rawValue] != nil {
-                VLRealm.setRingdownStatus(ringdown: ringdown, status: .returnedToService, completionHandler: completionHandler)
+                REDRealm.setRingdownStatus(ringdown: ringdown, status: .returnedToService, completionHandler: completionHandler)
             } else if timestamps[RingdownStatus.arrived.rawValue] != nil {
-                VLRealm.setRingdownStatus(ringdown: ringdown, status: .offloaded, completionHandler: completionHandler)
+                REDRealm.setRingdownStatus(ringdown: ringdown, status: .offloaded, completionHandler: completionHandler)
             } else if timestamps[RingdownStatus.returnedToService.rawValue] == nil {
-                VLRealm.setRingdownStatus(ringdown: ringdown, status: .arrived, completionHandler: completionHandler)
+                REDRealm.setRingdownStatus(ringdown: ringdown, status: .arrived, completionHandler: completionHandler)
             }
         } else {
             sendRingdown()

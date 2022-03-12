@@ -122,7 +122,7 @@
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45ACBDCC237FA4A200C99EBB /* PatientsMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */; };
-		45B50C8A27D6D3CB002F1674 /* Report+VitaLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */; };
+		45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */; };
 		45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */; };
 		45B7A2D82508330700BCAAAE /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D72508330600BCAAAE /* City.swift */; };
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
@@ -142,7 +142,7 @@
 		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
 		45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */; };
-		45C5AF8727D28E9C003E630E /* VLApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8627D28E9C003E630E /* VLApiClient.swift */; };
+		45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8627D28E9C003E630E /* REDApiClient.swift */; };
 		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
 		45C757D0272CB9D700386F07 /* IncidentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */; };
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
@@ -153,7 +153,7 @@
 		45C9DAA427D57EE40003B44B /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAA327D57EE40003B44B /* ApiClient.swift */; };
 		45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */; };
 		45C9DAA927D598B20003B44B /* Ringdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAA827D598B20003B44B /* Ringdown.swift */; };
-		45C9DAAB27D598BD0003B44B /* VLRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAAA27D598BD0003B44B /* VLRealm.swift */; };
+		45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAAA27D598BD0003B44B /* REDRealm.swift */; };
 		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
 		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
 		45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */; };
@@ -335,7 +335,7 @@
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45ACBDCB237FA4A200C99EBB /* PatientsMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientsMapViewController.swift; sourceTree = "<group>"; };
-		45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+VitaLink.swift"; sourceTree = "<group>"; };
+		45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+RoutED.swift"; sourceTree = "<group>"; };
 		45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownStatusView.swift; sourceTree = "<group>"; };
 		45B7A2D72508330600BCAAAE /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
 		45B7A2D92508331500BCAAAE /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
@@ -356,7 +356,7 @@
 		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
 		45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownFacilityView.swift; sourceTree = "<group>"; };
-		45C5AF8627D28E9C003E630E /* VLApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLApiClient.swift; sourceTree = "<group>"; };
+		45C5AF8627D28E9C003E630E /* REDApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REDApiClient.swift; sourceTree = "<group>"; };
 		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
 		45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentTableViewCell.swift; sourceTree = "<group>"; };
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
@@ -367,7 +367,7 @@
 		45C9DAA327D57EE40003B44B /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalStatusUpdate.swift; sourceTree = "<group>"; };
 		45C9DAA827D598B20003B44B /* Ringdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ringdown.swift; sourceTree = "<group>"; };
-		45C9DAAA27D598BD0003B44B /* VLRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VLRealm.swift; sourceTree = "<group>"; };
+		45C9DAAA27D598BD0003B44B /* REDRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REDRealm.swift; sourceTree = "<group>"; };
 		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
 		45D63568252AAE160045C7CC /* ScrollIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollIndicatorView.swift; sourceTree = "<group>"; };
@@ -514,10 +514,10 @@
 				458CA0AA275ADCBA0065F324 /* Data */,
 				45C007C7272A023A0072FF18 /* Incidents */,
 				4566F056236CD1E000A04C75 /* Patients */,
+				45C9DAA527D5987E0003B44B /* RoutED */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
 				454EEA9F2524073300EB266A /* Users */,
 				4566F078236D484D00A04C75 /* Views */,
-				45C9DAA527D5987E0003B44B /* VitaLink */,
 				45ACBDC7237E718600C99EBB /* AppCache.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
@@ -754,7 +754,6 @@
 			children = (
 				45C9DAA327D57EE40003B44B /* ApiClient.swift */,
 				4566F05B236CD2DB00A04C75 /* PRApiClient.swift */,
-				45C5AF8627D28E9C003E630E /* VLApiClient.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -770,15 +769,16 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		45C9DAA527D5987E0003B44B /* VitaLink */ = {
+		45C9DAA527D5987E0003B44B /* RoutED */ = {
 			isa = PBXGroup;
 			children = (
 				45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */,
-				45B50C8927D6D3CB002F1674 /* Report+VitaLink.swift */,
+				45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */,
 				45C9DAA827D598B20003B44B /* Ringdown.swift */,
-				45C9DAAA27D598BD0003B44B /* VLRealm.swift */,
+				45C5AF8627D28E9C003E630E /* REDApiClient.swift */,
+				45C9DAAA27D598BD0003B44B /* REDRealm.swift */,
 			);
-			path = VitaLink;
+			path = RoutED;
 			sourceTree = "<group>";
 		};
 		45E267302418AF340010CDE9 /* Fonts */ = {
@@ -1226,11 +1226,11 @@
 				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B524FF29B500F9EB8B /* SceneTableViewCell.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
-				45C5AF8727D28E9C003E630E /* VLApiClient.swift in Sources */,
+				45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */,
 				454E17BF250022E000F9EB8B /* ScenePatientsView.swift in Sources */,
 				45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* PRApiClient.swift in Sources */,
-				45C9DAAB27D598BD0003B44B /* VLRealm.swift in Sources */,
+				45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */,
 				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,
 				453877BD236FA47300E19880 /* NonSceneTabBarController.swift in Sources */,
 				452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */,
@@ -1245,7 +1245,7 @@
 				458CA0CC277293580065F324 /* FormViewController.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45B7A2E2250EE11300BCAAAE /* ActiveSceneView.swift in Sources */,
-				45B50C8A27D6D3CB002F1674 /* Report+VitaLink.swift in Sources */,
+				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
 				458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
