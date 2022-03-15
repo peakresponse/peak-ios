@@ -76,7 +76,6 @@ class RecordButton: UIControl {
         NSLayoutConstraint.activate([
             recordButton.topAnchor.constraint(equalTo: topAnchor),
             recordButton.leftAnchor.constraint(equalTo: leftAnchor),
-            recordButton.heightAnchor.constraint(equalToConstant: 72),
             recordButtonRightConstraint,
             bottomAnchor.constraint(equalTo: recordButton.bottomAnchor)
         ])
@@ -108,6 +107,12 @@ class RecordButton: UIControl {
         ])
 
         updateButtonStates()
+    }
+
+    override func invalidateIntrinsicContentSize() {
+        recordButton.isLayoutVertical = false
+        recordButton.invalidateIntrinsicContentSize()
+        super.invalidateIntrinsicContentSize()
     }
 
     private func updateButtonStates() {

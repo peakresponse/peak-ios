@@ -240,38 +240,37 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="lkz-eC-EDf"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geQ-9G-uZG">
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="138" translatesAutoresizingMaskIntoConstraints="NO" id="geQ-9G-uZG" customClass="CommandFooter" customModule="PRKit">
                                 <rect key="frame" x="0.0" y="674" width="375" height="138"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="33" width="335" height="72"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <connections>
+                                            <action selector="recordPressed" destination="XxD-by-Nsu" eventType="touchUpInside" id="P4z-ES-l3M"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="20" y="690" width="335" height="72"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <connections>
-                                    <action selector="recordPressed" destination="XxD-by-Nsu" eventType="touchUpInside" id="P4z-ES-l3M"/>
-                                </connections>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="igN-42-GkM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="trailing" secondItem="igN-42-GkM" secondAttribute="trailing" constant="-20" id="9X8-tx-bEk"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="top" secondItem="TLt-cm-djY" secondAttribute="top" id="B3r-HQ-EDc"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="leading" secondItem="TLt-cm-djY" secondAttribute="leading" id="Fhf-vG-ahk"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="I3q-xc-RmM"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="V2g-qM-sg2"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="jnV-Pp-3y3"/>
-                            <constraint firstItem="geQ-9G-uZG" firstAttribute="top" secondItem="Rci-2n-3m4" secondAttribute="top" constant="-16" id="n2J-AC-511"/>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="bottom" secondItem="igN-42-GkM" secondAttribute="bottom" constant="-16" id="qbX-3R-0yY"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="rI5-AU-jqe"/>
                             <constraint firstAttribute="leading" secondItem="ziP-ge-wPm" secondAttribute="leading" id="rzQ-g5-n6x"/>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="leading" secondItem="igN-42-GkM" secondAttribute="leading" constant="20" id="stJ-so-Dsg"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="commandFooter" destination="geQ-9G-uZG" id="UIk-o0-mt9"/>
                         <outlet property="containerView" destination="9cv-2k-5xn" id="96k-Km-wie"/>
                         <outlet property="recordButton" destination="Rci-2n-3m4" id="grO-Lk-gih"/>
-                        <outlet property="recordButtonBackground" destination="geQ-9G-uZG" id="u4K-TF-fFe"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
                         <segue destination="PeO-Bh-tCp" kind="presentation" identifier="Record" id="eKD-F2-ye7"/>
@@ -312,7 +311,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="KcX-PN-o40" userLabel="Code 2" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="654.33333333333326"/>
+                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="654.66666666666652"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -323,7 +322,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="gop-Rk-4M3" userLabel="Code 3" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="716" width="147.66666666666666" height="116"/>
+                                                                <rect key="frame" x="0.0" y="716.33333333333337" width="147.66666666666666" height="115.66666666666663"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -375,7 +374,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="jbz-l2-bGF" userLabel="Stable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="626.33333333333326"/>
+                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="599"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -386,7 +385,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="XT0-Uc-mFf" userLabel="Unstable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="688" width="127.33333333333331" height="144"/>
+                                                                <rect key="frame" x="19.999999999999993" y="660.66666666666663" width="127.33333333333331" height="171.33333333333337"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -643,6 +642,9 @@
         </designable>
         <designable name="cBe-hz-dsJ">
             <size key="intrinsicContentSize" width="335" height="44"/>
+        </designable>
+        <designable name="geQ-9G-uZG">
+            <size key="intrinsicContentSize" width="375" height="138"/>
         </designable>
         <designable name="gop-Rk-4M3">
             <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
