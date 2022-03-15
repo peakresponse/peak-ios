@@ -240,38 +240,37 @@
                                 <viewLayoutGuide key="contentLayoutGuide" id="lkz-eC-EDf"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="DvP-hT-o4L"/>
                             </scrollView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="geQ-9G-uZG">
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="138" translatesAutoresizingMaskIntoConstraints="NO" id="geQ-9G-uZG" customClass="CommandFooter" customModule="PRKit">
                                 <rect key="frame" x="0.0" y="674" width="375" height="138"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="20" y="33" width="335" height="72"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <connections>
+                                            <action selector="recordPressed" destination="XxD-by-Nsu" eventType="touchUpInside" id="P4z-ES-l3M"/>
+                                        </connections>
+                                    </view>
+                                </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="72" translatesAutoresizingMaskIntoConstraints="NO" id="Rci-2n-3m4" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="20" y="690" width="335" height="72"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <connections>
-                                    <action selector="recordPressed" destination="XxD-by-Nsu" eventType="touchUpInside" id="P4z-ES-l3M"/>
-                                </connections>
                             </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="igN-42-GkM"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="trailing" secondItem="igN-42-GkM" secondAttribute="trailing" constant="-20" id="9X8-tx-bEk"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="top" secondItem="TLt-cm-djY" secondAttribute="top" id="B3r-HQ-EDc"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="leading" secondItem="TLt-cm-djY" secondAttribute="leading" id="Fhf-vG-ahk"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="I3q-xc-RmM"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="bottom" secondItem="TLt-cm-djY" secondAttribute="bottom" id="V2g-qM-sg2"/>
                             <constraint firstItem="geQ-9G-uZG" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="jnV-Pp-3y3"/>
-                            <constraint firstItem="geQ-9G-uZG" firstAttribute="top" secondItem="Rci-2n-3m4" secondAttribute="top" constant="-16" id="n2J-AC-511"/>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="bottom" secondItem="igN-42-GkM" secondAttribute="bottom" constant="-16" id="qbX-3R-0yY"/>
                             <constraint firstItem="ziP-ge-wPm" firstAttribute="trailing" secondItem="TLt-cm-djY" secondAttribute="trailing" id="rI5-AU-jqe"/>
                             <constraint firstAttribute="leading" secondItem="ziP-ge-wPm" secondAttribute="leading" id="rzQ-g5-n6x"/>
-                            <constraint firstItem="Rci-2n-3m4" firstAttribute="leading" secondItem="igN-42-GkM" secondAttribute="leading" constant="20" id="stJ-so-Dsg"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="commandFooter" destination="geQ-9G-uZG" id="UIk-o0-mt9"/>
                         <outlet property="containerView" destination="9cv-2k-5xn" id="96k-Km-wie"/>
                         <outlet property="recordButton" destination="Rci-2n-3m4" id="grO-Lk-gih"/>
-                        <outlet property="recordButtonBackground" destination="geQ-9G-uZG" id="u4K-TF-fFe"/>
                         <outlet property="scrollView" destination="ziP-ge-wPm" id="t35-k0-ZKK"/>
                         <outlet property="scrollViewBottomConstraint" destination="V2g-qM-sg2" id="2FT-ZF-G2l"/>
                         <segue destination="PeO-Bh-tCp" kind="presentation" identifier="Record" id="eKD-F2-ye7"/>
@@ -519,14 +518,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="279" translatesAutoresizingMaskIntoConstraints="NO" id="JJN-PD-wtK">
-                                <rect key="frame" x="0.0" y="499" width="375" height="313"/>
+                                <rect key="frame" x="0.0" y="533" width="375" height="279"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="k0D-Wk-2Lz">
-                                        <rect key="frame" x="169" y="202.66666666666663" width="37" height="37"/>
+                                        <rect key="frame" x="169" y="185.66666666666663" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1t1-jN-HJT" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="22" y="185" width="331" height="72"/>
+                                        <rect key="frame" x="22" y="185" width="331" height="38"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="stopAndSave"/>
@@ -561,7 +560,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sum-eV-2Ix">
-                                        <rect key="frame" x="299" y="7.6666666666666856" width="54" height="34"/>
+                                        <rect key="frame" x="299" y="7.6666666666666288" width="54" height="34"/>
                                         <state key="normal" title="Button">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>

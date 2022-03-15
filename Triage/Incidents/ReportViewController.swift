@@ -24,8 +24,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
+    @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var recordButton: RecordButton!
-    @IBOutlet weak var recordButtonBackground: UIView!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
     var recordingsSection: FormSection!
@@ -50,8 +50,6 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        recordButtonBackground.addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .base500, opacity: 0.2)
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -334,7 +332,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             formField.updateStyle()
         }
         var contentInset = scrollView.contentInset
-        contentInset.bottom = recordButton.frame.height + 16
+        contentInset.bottom = commandFooter.frame.height + 16
         scrollView.contentInset = contentInset
     }
 
