@@ -51,6 +51,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "subdomain") }
     }
 
+    static var routedUrl: String? {
+        get { return defaults.string(forKey: "routedUrl") }
+        set { defaults.set(newValue, forKey: "routedUrl") }
+    }
+
     static var awsCredentials: [String: String]? {
         get { return defaults.dictionary(forKey: "awsCredentials") as? [String: String] }
         set { defaults.set(newValue, forKey: "awsCredentials") }
@@ -69,5 +74,6 @@ class AppSettings {
         AppSettings.assignmentId = nil
         AppSettings.sceneId = nil
         AppSettings.subdomain = nil
+        AppSettings.routedUrl = nil
     }
 }

@@ -68,6 +68,11 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                         }
                         if let subdomain = agencies[0]["subdomain"] as? String {
                             AppSettings.subdomain = subdomain
+                            if let routedUrl = agencies[0]["routedUrl"] as? String {
+                                AppSettings.routedUrl = routedUrl
+                                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+                                REDRealm.connect()
+                            }
                             // update code lists in the background
                             AppRealm.getLists { (_) in
                                 // noop
@@ -78,12 +83,6 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                 let assignmentId = assignment?.id
                                 let sceneId = scene?.id
                                 AppSettings.awsCredentials = awsCredentials
-                                // log in to RoutED API (TODO: parameterize based on agency settings)
-                                REDApiClient.shared.login { (_, _, error) in
-                                    if error == nil {
-                                        REDRealm.connect()
-                                    }
-                                }.resume()
                                 DispatchQueue.main.async { [weak self] in
                                     guard let self = self else { return }
                                     if let error = error {
