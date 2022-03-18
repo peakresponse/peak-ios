@@ -39,6 +39,11 @@ extension UIViewController: AuthViewControllerDelegate, UIAdaptivePresentationCo
     }
 
     func logout() {
+        REDApiClient.shared?.logout {
+            REDApiClient.shared = nil
+            REDRealm.disconnect()
+            REDRealm.deleteAll()
+        }
         PRApiClient.shared.logout { [weak self] in
             AppRealm.disconnectScene()
             AppRealm.disconnect()

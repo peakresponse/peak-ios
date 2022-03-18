@@ -99,7 +99,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             vc.scrollView.setContentOffset(.zero, animated: true)
         }
         commandHeader.rightBarButtonItem = editBarButtonItem
-        segmentedControl.isHidden = false
+        segmentedControl.isHidden = AppSettings.routedUrl?.isEmpty ?? true
         segmentedControl.isEnabled = true
         delegate?.reportContainerViewControllerDidSave(self)
     }
@@ -133,7 +133,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         vc.didMove(toParent: self)
 
         activityIndicatorView.isHidden = true
-        segmentedControl.isHidden = report.realm == nil ? true : false
+        segmentedControl.isHidden = report.realm == nil ? true : (AppSettings.routedUrl?.isEmpty ?? true)
         containerView.isHidden = false
 
         if vc.isEditing {

@@ -52,7 +52,7 @@ class REDRealm {
 
     public static func connect() {
         userSocket?.disconnect()
-        userSocket = REDApiClient.shared.connect(completionHandler: { (socket, data, error) in
+        userSocket = REDApiClient.shared?.connect(completionHandler: { (socket, data, error) in
             guard socket == userSocket else { return }
             if error != nil {
                 // close current connection
@@ -64,11 +64,13 @@ class REDRealm {
                         switch error {
                         case .notAnUpgrade(let code):
                             if code == 401 {
-                                let task = REDApiClient.shared.login { (_, _, _) in
+                                let task = REDApiClient.shared?.login { (_, _, _) in
                                     connect()
                                 }
-                                task.resume()
-                                return
+                                if let task = task {
+                                    task.resume()
+                                    return
+                                }
                             }
                         default:
                             break
@@ -92,7 +94,13 @@ class REDRealm {
                 }
             }
         })
-        userSocket?.connect()
+        if let userSocket = userSocket {
+            userSocket.connect()
+        } else {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                connect()
+            }
+        }
     }
 
     public static func disconnect() {
@@ -103,7 +111,7 @@ class REDRealm {
     // MARK: - Ringdowns
 
     public static func sendRingdown(payload: [String: Any], completionHandler: @escaping (Ringdown?, Error?) -> Void) {
-        let task = REDApiClient.shared.sendRingdown(payload: payload) { (_, _, data, error) in
+        let task = REDApiClient.shared?.sendRingdown(payload: payload) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
@@ -117,11 +125,11 @@ class REDRealm {
                 completionHandler(nil, ApiClientError.unexpected)
             }
         }
-        task.resume()
+        task?.resume()
     }
 
     public static func getRingdown(id: String, completionHandler: @escaping (Ringdown?, Error?) -> Void) {
-        let task = REDApiClient.shared.getRingdown(id: id) { (_, _, data, error) in
+        let task = REDApiClient.shared?.getRingdown(id: id) { (_, _, data, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
@@ -135,7 +143,7 @@ class REDRealm {
                 completionHandler(nil, ApiClientError.unexpected)
             }
         }
-        task.resume()
+        task?.resume()
     }
 
     public static func setRingdownStatus(ringdown: Ringdown, status: RingdownStatus, completionHandler: @escaping (Error?) -> Void) {
@@ -148,7 +156,7 @@ class REDRealm {
             timestamps[status.rawValue] = now.asISO8601String()
             ringdown.timestamps = timestamps
         }
-        let task = REDApiClient.shared.setRingdownStatus(id: ringdown.id, status: status, dateTime: now) { (_, _, _, error) in
+        let task = REDApiClient.shared?.setRingdownStatus(id: ringdown.id, status: status, dateTime: now) { (_, _, _, error) in
             if error != nil {
                 let realm = REDRealm.open()
                 if let ringdown = realm.object(ofType: Ringdown.self, forPrimaryKey: ringdownId) {
@@ -159,6 +167,6 @@ class REDRealm {
             }
             completionHandler(error)
         }
-        task.resume()
+        task?.resume()
     }
 }
