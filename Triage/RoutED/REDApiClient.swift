@@ -12,7 +12,7 @@ import Starscream
 
 // swiftlint:disable type_body_length file_length
 class REDApiClient: ApiClient {
-    static var shared: REDApiClient! {
+    static var shared: REDApiClient? {
         willSet {
             shared?.invalidate()
         }
