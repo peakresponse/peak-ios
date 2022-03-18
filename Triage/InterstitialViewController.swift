@@ -33,17 +33,16 @@ class InterstitialViewController: UIViewController {
                 }
                 return
             }
+            // also attempt log in to RoutED API
+            if let routedUrl = AppSettings.routedUrl {
+                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+                REDRealm.connect()
+            }
             if let user = user, let agency = agency {
                 // update code lists in the background
                 AppRealm.getLists { (_) in
                     // noop
                 }
-                // log in to RoutED API (TODO: parameterize based on agency settings)
-                REDApiClient.shared.login { (_, _, error) in
-                    if error == nil {
-                        REDRealm.connect()
-                    }
-                }.resume()
                 AppSettings.awsCredentials = awsCredentials
                 AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
                 if let sceneId = scene?.id {

@@ -60,6 +60,20 @@ class REDRealm {
                 userSocket = nil
                 // retry after 5 secs
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                    if let error = error as? HTTPUpgradeError {
+                        switch error {
+                        case .notAnUpgrade(let code):
+                            if code == 401 {
+                                let task = REDApiClient.shared.login { (_, _, _) in
+                                    connect()
+                                }
+                                task.resume()
+                                return
+                            }
+                        default:
+                            break
+                        }
+                    }
                     connect()
                 }
             } else if let data = data {
