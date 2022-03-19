@@ -97,12 +97,12 @@ class Scene: BaseVersioned, NemsisBacked {
     @Persisted var address2: String?
     @Persisted var cityId: String?
     var city: City? {
-        return realm?.object(ofType: City.self, forPrimaryKey: cityId)
+        return cityId != nil ? realm?.object(ofType: City.self, forPrimaryKey: cityId) : nil
     }
     @Persisted var countyId: String?
     @Persisted var stateId: String?
     var state: State? {
-        return realm?.object(ofType: State.self, forPrimaryKey: stateId)
+        return stateId != nil ? realm?.object(ofType: State.self, forPrimaryKey: stateId) : nil
     }
     @Persisted var zip: String?
     @objc var address: String {
