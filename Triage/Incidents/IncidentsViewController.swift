@@ -29,23 +29,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let userId = AppSettings.userId {
-            let realm = AppRealm.open()
-            let user = realm.object(ofType: User.self, forPrimaryKey: userId)
-            AppCache.cachedImage(from: user?.iconUrl) { [weak self] (image, _) in
-                let image = image?.rounded()
-                DispatchQueue.main.async { [weak self] in
-                    self?.commandHeader.userImage = image
-                }
-            }
-            if let assignmentId = AppSettings.assignmentId,
-               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
-               let vehicleId = assignment.vehicleId,
-               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
-                commandHeader.userLabelText = "\(vehicle.number ?? ""): \(user?.fullName ?? "")"
-            }
-        }
-
+        setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
         commandHeader.searchField.delegate = self
 
         let segmentedControl = SegmentedControl()
@@ -79,6 +63,27 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         performQuery()
 
         AppRealm.connect()
+    }
+
+    func setCommandHeaderUser(userId: String?, assignmentId: String?) {
+        if let userId = userId {
+            let realm = AppRealm.open()
+            let user = realm.object(ofType: User.self, forPrimaryKey: userId)
+            AppCache.cachedImage(from: user?.iconUrl) { [weak self] (image, _) in
+                let image = image?.rounded()
+                DispatchQueue.main.async { [weak self] in
+                    self?.commandHeader.userImage = image
+                }
+            }
+            var userLabelText = user?.fullName
+            if let assignmentId = assignmentId,
+               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
+               let vehicleId = assignment.vehicleId,
+               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+                userLabelText = "\(vehicle.number ?? ""): \(userLabelText ?? "")"
+            }
+            commandHeader.userLabelText = userLabelText
+        }
     }
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Incident>>) {
@@ -171,6 +176,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
+        setCommandHeaderUser(userId: AppSettings.userId, assignmentId: assignmentId)
         performQuery()
         dismissAnimated()
     }
