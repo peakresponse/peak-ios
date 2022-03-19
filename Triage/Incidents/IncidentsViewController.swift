@@ -113,12 +113,16 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         if let assignmentId = AppSettings.assignmentId {
             let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId)
             if let vehicleId = assignment?.vehicleId {
+                if segmentedControl.segmentsCount < 2 {
+                    segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
+                }
                 if segmentedControl.selectedIndex == 0 {
                     results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
                 }
-                segmentedControl.isHidden = false
             } else {
-                segmentedControl.isHidden = true
+                if segmentedControl.segmentsCount > 1 {
+                    segmentedControl.removeSegment(at: 0)
+                }
             }
         }
         if let text = commandHeader.searchField.text, !text.isEmpty {
