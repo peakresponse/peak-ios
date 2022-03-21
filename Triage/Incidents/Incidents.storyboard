@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5Ay-gC-PdX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5Ay-gC-PdX">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -173,7 +173,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="8cd-NT-ekp">
                                 <rect key="frame" x="0.0" y="128" width="375" height="684"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="1Wz-hg-HZ0">
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="1Wz-hg-HZ0">
                                     <size key="itemSize" width="128" height="128"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -311,7 +311,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="KcX-PN-o40" userLabel="Code 2" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="654.66666666666652"/>
+                                                                <rect key="frame" x="0.0" y="49.666666666666686" width="147.66666666666666" height="654.33333333333326"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -322,7 +322,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="gop-Rk-4M3" userLabel="Code 3" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="0.0" y="716.33333333333337" width="147.66666666666666" height="115.66666666666663"/>
+                                                                <rect key="frame" x="0.0" y="716" width="147.66666666666666" height="116"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -374,7 +374,7 @@
                                                                 </userDefinedRuntimeAttributes>
                                                             </label>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="jbz-l2-bGF" userLabel="Stable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="599"/>
+                                                                <rect key="frame" x="19.999999999999993" y="49.666666666666686" width="127.33333333333331" height="626.33333333333326"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>
@@ -385,7 +385,7 @@
                                                                 </connections>
                                                             </view>
                                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="147.66666666666666" placeholderIntrinsicHeight="48" translatesAutoresizingMaskIntoConstraints="NO" id="XT0-Uc-mFf" userLabel="Unstable" customClass="Checkbox" customModule="PRKit">
-                                                                <rect key="frame" x="19.999999999999993" y="660.66666666666663" width="127.33333333333331" height="171.33333333333337"/>
+                                                                <rect key="frame" x="19.999999999999993" y="688" width="127.33333333333331" height="144"/>
                                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                                 <userDefinedRuntimeAttributes>
                                                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isRadioButton" value="YES"/>

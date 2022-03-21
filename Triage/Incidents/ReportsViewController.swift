@@ -9,6 +9,7 @@
 import UIKit
 import PRKit
 import RealmSwift
+import AlignedCollectionViewFlowLayout
 
 class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, ReportContainerViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegate {
@@ -27,6 +28,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        collectionView.setCollectionViewLayout(layout, animated: false)
 
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
                                                             self, action: #selector(dismissAnimated))
@@ -49,6 +56,15 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         var contentInset = collectionView.contentInset
         contentInset.bottom = customTabBar.frame.height
         collectionView.contentInset = contentInset
+        if traitCollection.horizontalSizeClass == .regular {
+            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
+                var sectionInset = layout.sectionInset
+                let inset = max(0, (collectionView.frame.width - 744) / 2)
+                sectionInset.left = inset
+                sectionInset.right = inset
+                layout.sectionInset = sectionInset
+            }
+        }
     }
 
     @objc func performQuery() {
@@ -181,7 +197,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
         if let cell = cell as? ReportCollectionViewCell {
-            cell.configure(report: results?[indexPath.row])
+            cell.configure(report: results?[indexPath.row], index: indexPath.row)
         }
         return cell
     }

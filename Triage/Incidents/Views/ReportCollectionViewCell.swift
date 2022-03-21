@@ -15,6 +15,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
     weak var nameLabel: UILabel!
     weak var unitLabel: UILabel!
     weak var updatedAtLabel: UILabel!
+    weak var vr: UIView!
 
     var calculatedSize: CGSize?
 
@@ -97,6 +98,18 @@ class ReportCollectionViewCell: UICollectionViewCell {
             hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             hr.heightAnchor.constraint(equalToConstant: 2)
         ])
+
+        let vr = UIView()
+        vr.translatesAutoresizingMaskIntoConstraints = false
+        vr.backgroundColor = .base300
+        contentView.addSubview(vr)
+        NSLayoutConstraint.activate([
+            vr.topAnchor.constraint(equalTo: contentView.topAnchor),
+            vr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            vr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            vr.widthAnchor.constraint(equalToConstant: 2)
+        ])
+        self.vr = vr
     }
 
     override func prepareForReuse() {
@@ -107,7 +120,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         if calculatedSize == nil {
             if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 375, height: 160)
+                calculatedSize = CGSize(width: 372, height: 160)
             } else {
                 calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 160)
             }
@@ -116,7 +129,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
 
-    func configure(report: Report?) {
+    func configure(report: Report?, index: Int) {
         guard let report = report else { return }
         if let ageString = report.patient?.ageString, !ageString.isEmpty {
             ageLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.age".localized): ", text: ageString)
@@ -138,5 +151,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
         } else {
             unitLabel.isHidden = true
         }
+        vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }
