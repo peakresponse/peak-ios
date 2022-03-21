@@ -13,6 +13,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
     weak var ageLabel: UILabel!
     weak var genderLabel: UILabel!
     weak var nameLabel: UILabel!
+    weak var unitLabel: UILabel!
     weak var updatedAtLabel: UILabel!
 
     var calculatedSize: CGSize?
@@ -78,6 +79,14 @@ class ReportCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(nameLabel)
         self.nameLabel = nameLabel
 
+        let unitLabel = UILabel()
+        unitLabel.translatesAutoresizingMaskIntoConstraints = false
+        unitLabel.font = .h4
+        unitLabel.textColor = .base500
+        unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "")
+        stackView.addArrangedSubview(unitLabel)
+        self.unitLabel = unitLabel
+
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
         hr.backgroundColor = .base300
@@ -109,14 +118,25 @@ class ReportCollectionViewCell: UICollectionViewCell {
 
     func configure(report: Report?) {
         guard let report = report else { return }
-        if let ageString = report.patient?.ageString {
+        if let ageString = report.patient?.ageString, !ageString.isEmpty {
             ageLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.age".localized): ", text: ageString)
+        } else {
+            ageLabel.isHidden = true
         }
-        if let genderString = report.patient?.genderString {
+        if let genderString = report.patient?.genderString, !genderString.isEmpty {
             genderLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.gender".localized): ", text: genderString)
+        } else {
+            genderLabel.isHidden = true
         }
-        if let fullName = report.patient?.fullName {
+        if let fullName = report.patient?.fullName, !fullName.isEmpty {
             nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.fullName".localized): ", text: fullName)
+        } else {
+            nameLabel.isHidden = true
+        }
+        if let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
+            unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: unitNumber)
+        } else {
+            unitLabel.isHidden = true
         }
     }
 }
