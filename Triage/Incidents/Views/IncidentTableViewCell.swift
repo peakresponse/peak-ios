@@ -16,6 +16,7 @@ class IncidentTableViewCell: UITableViewCell {
     weak var dateLabel: UILabel!
     weak var timeLabel: UILabel!
     var timeLabelConstraints: [NSLayoutConstraint] = []
+    weak var reportsCountChip: Chip!
     weak var chevronImageView: UIImageView!
 
     var number: String? {
@@ -33,6 +34,17 @@ class IncidentTableViewCell: UITableViewCell {
     var time: String? {
         get { return timeLabel.text }
         set { timeLabel.text = newValue }
+    }
+    var reportsCount: Int? {
+        get { return Int(reportsCountChip.title(for: .normal) ?? "") }
+        set {
+            if let newValue = newValue, newValue > 0 {
+                reportsCountChip.setTitle("\(newValue)", for: .normal)
+                reportsCountChip.isHidden = false
+            } else {
+                reportsCountChip.isHidden = true
+            }
+        }
     }
 
     override public init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -125,9 +137,21 @@ class IncidentTableViewCell: UITableViewCell {
         chevronImageView.tintColor = .base500
         containerView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
-            chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor),
+            chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
             chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
+
+        let reportsCountChip = Chip()
+        reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
+        reportsCountChip.color = .brandPrimary600
+        reportsCountChip.setTitleColor(.white, for: .normal)
+        reportsCountChip.isUserInteractionEnabled = false
+        containerView.addSubview(reportsCountChip)
+        NSLayoutConstraint.activate([
+            reportsCountChip.centerYAnchor.constraint(equalTo: chevronImageView.centerYAnchor),
+            reportsCountChip.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor)
+        ])
+        self.reportsCountChip = reportsCountChip
 
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false

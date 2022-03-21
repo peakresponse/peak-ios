@@ -275,6 +275,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
                 cell.date = dispatch.dispatchedAt?.asDateString()
                 cell.time = dispatch.dispatchedAt?.asTimeString()
             }
+            cell.reportsCount = incident.reportsCount
         }
         return cell
     }
