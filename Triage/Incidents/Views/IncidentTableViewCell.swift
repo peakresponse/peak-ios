@@ -15,9 +15,13 @@ class IncidentTableViewCell: UITableViewCell {
     weak var addressLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var timeLabel: UILabel!
-    var timeLabelConstraints: [NSLayoutConstraint] = []
     weak var reportsCountChip: Chip!
     weak var chevronImageView: UIImageView!
+
+    var numberWidthConstraint: NSLayoutConstraint!
+    var addressLeftConstraint: NSLayoutConstraint!
+    var addressWidthConstraint: NSLayoutConstraint!
+    var dateLeftConstraint: NSLayoutConstraint!
 
     var number: String? {
         get { return numberLabel.text }
@@ -98,9 +102,14 @@ class IncidentTableViewCell: UITableViewCell {
                 addressLabel.leftAnchor.constraint(equalTo: numberLabel.leftAnchor)
             ])
         } else {
+            numberWidthConstraint = numberLabel.widthAnchor.constraint(equalToConstant: 190)
+            addressLeftConstraint = addressLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 200)
+            addressWidthConstraint = addressLabel.widthAnchor.constraint(equalToConstant: 250)
             NSLayoutConstraint.activate([
+                numberWidthConstraint,
                 addressLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                addressLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 260)
+                addressLeftConstraint,
+                addressWidthConstraint
             ])
         }
         self.addressLabel = addressLabel
@@ -116,9 +125,10 @@ class IncidentTableViewCell: UITableViewCell {
                 dateLabel.leftAnchor.constraint(equalTo: addressLabel.leftAnchor)
             ])
         } else {
+            dateLeftConstraint = dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 460)
             NSLayoutConstraint.activate([
                 dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 540)
+                dateLeftConstraint
             ])
         }
         self.dateLabel = dateLabel
@@ -129,7 +139,17 @@ class IncidentTableViewCell: UITableViewCell {
         timeLabel.textColor = .base500
         containerView.addSubview(timeLabel)
         self.timeLabel = timeLabel
-        updateTimeLabelConstraints()
+        if isCompact {
+            NSLayoutConstraint.activate([
+                timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor)
+            ])
+        }
 
         let chevronImageView = UIImageView()
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -180,6 +200,8 @@ class IncidentTableViewCell: UITableViewCell {
             NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged),
                                                    name: UIDevice.orientationDidChangeNotification, object: nil)
         }
+
+        orientationChanged()
     }
 
     deinit {
@@ -188,28 +210,22 @@ class IncidentTableViewCell: UITableViewCell {
         }
     }
 
-    func updateTimeLabelConstraints() {
-        NSLayoutConstraint.deactivate(timeLabelConstraints)
-        timeLabelConstraints.removeAll()
-
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-        let orientation = UIApplication.interfaceOrientation()
-        if isCompact {
-            timeLabelConstraints.append(timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor))
-            timeLabelConstraints.append(timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10))
-        } else {
-            if orientation == .landscapeLeft || orientation == .landscapeRight {
-                timeLabelConstraints.append(timeLabel.topAnchor.constraint(equalTo: containerView.topAnchor))
-                timeLabelConstraints.append(timeLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 700))
-            } else {
-                timeLabelConstraints.append(timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor))
-                timeLabelConstraints.append(timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor))
-            }
-        }
-        NSLayoutConstraint.activate(timeLabelConstraints)
-    }
-
     @objc func orientationChanged() {
-        updateTimeLabelConstraints()
+        guard traitCollection.horizontalSizeClass == .regular else { return }
+        let orientation = UIApplication.interfaceOrientation()
+        switch orientation {
+        case .portrait, .portraitUpsideDown:
+            numberWidthConstraint.constant = 190
+            addressLeftConstraint.constant = 200
+            addressWidthConstraint.constant = 250
+            dateLeftConstraint.constant = 460
+        case .landscapeLeft, .landscapeRight:
+            numberWidthConstraint.constant = 220
+            addressLeftConstraint.constant = 260
+            addressWidthConstraint.constant = 280
+            dateLeftConstraint.constant = 580
+        default:
+            break
+        }
     }
 }
