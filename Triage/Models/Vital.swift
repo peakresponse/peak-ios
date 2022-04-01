@@ -70,6 +70,15 @@ class Vital: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var obtainedPrior: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eVitals.BloodPressureGroup/eVitals.02")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eVitals.BloodPressureGroup/eVitals.02")
+        }
+    }
+
     @objc var cardiacRhythm: [NemsisValue]? {
         get {
             return getNemsisValues(forJSONPath: "/eVitals.CardiacRhythmGroup/eVitals.03")

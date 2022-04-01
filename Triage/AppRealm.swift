@@ -485,9 +485,10 @@ class AppRealm {
         var parent: Report?
         if let parentId = report.parentId {
             parent = realm.object(ofType: Report.self, forPrimaryKey: parentId)
-            if parent == nil, let canonicalId = report.canonicalId {
-                if let canonical = realm.object(ofType: Report.self, forPrimaryKey: canonicalId), canonical.currentId == parentId {
-                    parent = canonical
+            if parent == nil {
+                let results = realm.objects(Report.self).filter("currentId=%@", parentId)
+                if results.count == 1 {
+                    parent = results[0]
                 }
             }
             if parent == nil {
@@ -505,7 +506,7 @@ class AppRealm {
                 canonical.currentId = report.id
                 realm.add(canonical, update: .modified)
             }
-            if report.parentId == nil, let incident = report.incident {
+            if report.parentId == nil || report.canonicalId != parent?.canonicalId, let incident = report.incident {
                 // locally increment incidents count
                 incident.reportsCount = (incident.reportsCount ?? 0) + 1
             }

@@ -74,8 +74,11 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@ AND parentId=%@", incident, NSNull(), NSNull())
-            .sorted(by: [SortDescriptor(keyPath: "createdAt", ascending: true)])
+            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            .sorted(by: [
+                SortDescriptor(keyPath: "patient.canonicalId"),
+                SortDescriptor(keyPath: "patient.parentId", ascending: false)
+            ])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }

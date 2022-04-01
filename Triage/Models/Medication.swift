@@ -45,6 +45,15 @@ class Medication: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var administeredPrior: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eMedications.02")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eMedications.02")
+        }
+    }
+
     @objc var medication: NemsisValue? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eMedications.03")

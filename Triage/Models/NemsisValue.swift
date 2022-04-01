@@ -9,13 +9,26 @@
 import Foundation
 import PRKit
 
+enum NemsisBoolean: String, StringCaseIterable {
+    case no = "9923001"
+    case yes = "9923003"
+
+    var description: String {
+        return "NemsisBoolean.\(rawValue)".localized
+    }
+
+    var nemsisValue: NemsisValue {
+        return NemsisValue(text: rawValue)
+    }
+}
+
 enum NemsisCodeType: String, StringCaseIterable {
     case icd10 = "9924001"
     case rxnorm = "9924003"
     case snomded = "9924005"
 
     var description: String {
-      return "NemsisCodeType.\(rawValue)".localized
+        return "NemsisCodeType.\(rawValue)".localized
     }
 }
 

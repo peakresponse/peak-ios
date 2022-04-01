@@ -24,6 +24,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     var report: Report?
     var leftBarButtonItem: UIBarButtonItem?
     var editBarButtonItem: UIBarButtonItem?
+    var transferBarButtonItem: UIBarButtonItem?
     var saveBarButtonItem: UIBarButtonItem?
     var cancelBarButtonItem: UIBarButtonItem?
 
@@ -39,6 +40,10 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                                             style: .done,
                                             target: self,
                                             action: #selector(editPressed))
+        transferBarButtonItem = UIBarButtonItem(title: "NavigationBar.transfer".localized,
+                                                style: .done,
+                                                target: self,
+                                                action: #selector(transferPressed))
         saveBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
                                             style: .done,
                                             target: self,
@@ -84,6 +89,29 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         if let vc = children[0] as? ReportViewController {
             vc.setEditing(true, animated: true)
         }
+    }
+
+    @objc func transferPressed() {
+        guard let report = report else { return }
+        let newReport = Report(transfer: report)
+        let realm = AppRealm.open()
+        if let assignmentId = AppSettings.assignmentId,
+           let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {
+            if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == assignment.vehicleId }) {
+                newReport.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
+            }
+            if let vehicleId = assignment.vehicleId, let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+                newReport.response?.unitNumber = vehicle.number
+            }
+        }
+        self.report = newReport
+        removeCurrentViewController()
+        cachedViewControllers = []
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                                          style: .plain,
+                                                          target: self,
+                                                          action: #selector(dismissAnimated))
+        showReport()
     }
 
     @objc func savePressed() {
@@ -139,7 +167,20 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         if vc.isEditing {
             commandHeader.rightBarButtonItem = saveBarButtonItem
         } else {
-            commandHeader.rightBarButtonItem = editBarButtonItem
+            let realm = AppRealm.open()
+            if let assignmentId = AppSettings.assignmentId,
+               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
+               let vehicleId = assignment.vehicleId,
+               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId),
+               vehicle.number == report.response?.unitNumber {
+                commandHeader.rightBarButtonItem = editBarButtonItem
+            } else {
+                commandHeader.rightBarButtonItem = transferBarButtonItem
+                segmentedControl.isHidden = true
+                if let vc = vc as? ReportViewController {
+                    vc.disableEditing()
+                }
+            }
         }
     }
 

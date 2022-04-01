@@ -355,6 +355,17 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
+    func disableEditing() {
+        commandFooter.isHidden = true
+        for view in containerView.arrangedSubviews {
+            if let section = view as? FormSection {
+                if let button = section.findLastButton() {
+                    button.isHidden = true
+                }
+            }
+        }
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         if editing {

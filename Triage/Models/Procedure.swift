@@ -35,6 +35,15 @@ class Procedure: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var performedPrior: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.02")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eProcedures.02")
+        }
+    }
+
     @objc var procedure: NemsisValue? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eProcedures.03")

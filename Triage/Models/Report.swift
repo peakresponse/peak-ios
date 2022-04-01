@@ -148,6 +148,41 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         files.append(objectsIn: report.files.map { File(clone: $0) })
     }
 
+    convenience init(transfer report: Report) {
+        self.init(clone: report)
+        // create a new canonical id for a transfer
+        canonicalId = UUID().uuidString.lowercased()
+        patientCareReportNumber = canonicalId
+        // create new records for the parts that are distinct per unit,
+        // new canonical ids for others EXCEPT for Patient
+        scene?.canonicalId = UUID().uuidString.lowercased()
+        response = Response.newRecord()
+        response?.incidentNumber = report.response?.incidentNumber
+        time = Time.newRecord()
+        situation?.canonicalId = UUID().uuidString.lowercased()
+        history?.canonicalId = UUID().uuidString.lowercased()
+        disposition = Disposition.newRecord()
+        narrative = Narrative.newRecord()
+        for vital in vitals {
+            if vital.parentId != nil {
+                vital.canonicalId = UUID().uuidString.lowercased()
+                vital.obtainedPrior = NemsisBoolean.yes.nemsisValue
+            }
+        }
+        for medication in medications {
+            if medication.parentId != nil {
+                medication.canonicalId = UUID().uuidString.lowercased()
+                medication.administeredPrior = NemsisBoolean.yes.nemsisValue
+            }
+        }
+        for procedure in procedures {
+            if procedure.parentId != nil {
+                procedure.canonicalId = UUID().uuidString.lowercased()
+                procedure.performedPrior = NemsisBoolean.yes.nemsisValue
+            }
+        }
+    }
+
     override func new() {
         super.new()
         patientCareReportNumber = canonicalId
@@ -251,9 +286,17 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
                     ids.append(obj.id)
                     data.append(changes)
                     objs.append(obj)
-                } else {
+                } else if obj.canonicalId == parent.canonicalId {
                     ids.append(parent.id)
                     objs.append(parent)
+                } else {
+                    ids.append(obj.id)
+                    data.append([
+                        "id": obj.id,
+                        "canonicalId": obj.canonicalId as Any,
+                        "parentId": obj.parentId as Any
+                    ])
+                    objs.append(obj)
                 }
             } else {
                 ids.append(obj.id)
@@ -284,61 +327,34 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
             payload["Report"] = asJSON()
         } else {
             var report = asJSON()
-            if let changes = response?.changes(from: parent?.response) {
-                payload["Response"] = changes
-            } else {
-                report.removeValue(forKey: Keys.responseId)
-                response = parent?.response
+            let canonicalize = { (object: String) in
+                if let obj = self.value(forKey: object) as? BaseVersioned {
+                    if obj.parentId != nil, let parent = parent?.value(forKey: object) as? BaseVersioned {
+                        if let changes = obj.changes(from: parent) {
+                            payload[object.capitalized] = changes
+                        } else if obj.canonicalId == parent.canonicalId {
+                            report.removeValue(forKey: "\(object)Id")
+                            self.setValue(parent, forKey: object)
+                        } else {
+                            payload[object.capitalized] = [
+                                "id": obj.id,
+                                "parentId": obj.parentId,
+                                "canonicalId": obj.canonicalId
+                            ]
+                        }
+                    } else {
+                        payload[object.capitalized] = obj.asJSON()
+                    }
+                }
             }
-
-            if let changes = scene?.changes(from: parent?.scene) {
-                payload["Scene"] = changes
-            } else {
-                report.removeValue(forKey: Keys.sceneId)
-                scene = parent?.scene
-            }
-
-            if let changes = time?.changes(from: parent?.time) {
-                payload["Time"] = changes
-            } else {
-                report.removeValue(forKey: Keys.timeId)
-                time = parent?.time
-            }
-
-            if let changes = patient?.changes(from: parent?.patient) {
-                payload["Patient"] = changes
-            } else {
-                report.removeValue(forKey: Keys.patientId)
-                patient = parent?.patient
-            }
-
-            if let changes = situation?.changes(from: parent?.situation) {
-                payload["Situation"] = changes
-            } else {
-                report.removeValue(forKey: Keys.situationId)
-                situation = parent?.situation
-            }
-
-            if let changes = history?.changes(from: parent?.history) {
-                payload["History"] = changes
-            } else {
-                report.removeValue(forKey: Keys.historyId)
-                history = parent?.history
-            }
-
-            if let changes = disposition?.changes(from: parent?.disposition) {
-                payload["Disposition"] = changes
-            } else {
-                report.removeValue(forKey: Keys.dispositionId)
-                disposition = parent?.disposition
-            }
-
-            if let changes = narrative?.changes(from: parent?.narrative) {
-                payload["Narrative"] = changes
-            } else {
-                report.removeValue(forKey: Keys.narrativeId)
-                narrative = parent?.narrative
-            }
+            canonicalize("response")
+            canonicalize("scene")
+            canonicalize("time")
+            canonicalize("patient")
+            canonicalize("situation")
+            canonicalize("history")
+            canonicalize("disposition")
+            canonicalize("narrative")
 
             var (ids, data) = Report.canonicalize(source: parent?.vitals, target: vitals)
             if data.count > 0 {

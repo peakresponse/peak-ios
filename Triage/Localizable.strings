@@ -156,6 +156,7 @@
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
 "NavigationBar.saveAndExit" = "Save & Exit";
+"NavigationBar.transfer" = "Transfer";
 
 "NemsisCodeType.9924001" = "ICD-10";
 "NemsisCodeType.9924003" = "RxNorm";

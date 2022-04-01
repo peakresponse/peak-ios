@@ -56,6 +56,15 @@ class ReportCollectionViewCell: UICollectionViewCell {
             stackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor)
         ])
 
+        let unitLabel = UILabel()
+        unitLabel.translatesAutoresizingMaskIntoConstraints = false
+        unitLabel.font = .h4
+        unitLabel.textColor = .base500
+        unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "")
+        unitLabel.numberOfLines = 2
+        stackView.addArrangedSubview(unitLabel)
+        self.unitLabel = unitLabel
+
         let ageLabel = UILabel()
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
         ageLabel.font = .h4
@@ -79,14 +88,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
         nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.fullName".localized): ", text: "")
         stackView.addArrangedSubview(nameLabel)
         self.nameLabel = nameLabel
-
-        let unitLabel = UILabel()
-        unitLabel.translatesAutoresizingMaskIntoConstraints = false
-        unitLabel.font = .h4
-        unitLabel.textColor = .base500
-        unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "")
-        stackView.addArrangedSubview(unitLabel)
-        self.unitLabel = unitLabel
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -131,25 +132,29 @@ class ReportCollectionViewCell: UICollectionViewCell {
 
     func configure(report: Report?, index: Int) {
         guard let report = report else { return }
+        if let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
+            unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "\(unitNumber)\n")
+            unitLabel.isHidden = false
+        } else {
+            unitLabel.isHidden = true
+        }
         if let ageString = report.patient?.ageString, !ageString.isEmpty {
             ageLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.age".localized): ", text: ageString)
+            ageLabel.isHidden = false
         } else {
             ageLabel.isHidden = true
         }
         if let genderString = report.patient?.genderString, !genderString.isEmpty {
             genderLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.gender".localized): ", text: genderString)
+            genderLabel.isHidden = false
         } else {
             genderLabel.isHidden = true
         }
         if let fullName = report.patient?.fullName, !fullName.isEmpty {
             nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.fullName".localized): ", text: fullName)
+            nameLabel.isHidden = false
         } else {
             nameLabel.isHidden = true
-        }
-        if let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
-            unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: unitNumber)
-        } else {
-            unitLabel.isHidden = true
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
