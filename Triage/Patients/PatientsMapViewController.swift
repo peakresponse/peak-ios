@@ -8,6 +8,7 @@
 
 import GoogleMaps
 import MapKit
+import PRKit
 import RealmSwift
 import UIKit
 
@@ -45,6 +46,11 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
 
     // MARK: -
 
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        tabBarItem.image = UIImage(named: "Pin", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
     deinit {
         sceneNotificationToken?.invalidate()
         patientsNotificationToken?.invalidate()
@@ -58,7 +64,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
         guard let sceneId = AppSettings.sceneId else { return }
         scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
         guard scene != nil else { return }
-        isMGS = AppSettings.userId == scene.incidentCommanderId
+        isMGS = AppSettings.userId == scene.mgsResponderId
         sceneNotificationToken = scene?.observe { [weak self] (_) in
             self?.refresh()
         }
@@ -190,7 +196,7 @@ class PatientsMapViewController: UIViewController, UISearchBarDelegate, GMSMapVi
     }
 
     @objc func refresh() {
-        isMGS = AppSettings.userId == scene.incidentCommanderId
+        isMGS = AppSettings.userId == scene.mgsResponderId
         AppRealm.getPatients(sceneId: scene.id) { [weak self] (error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in

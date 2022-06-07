@@ -10,6 +10,8 @@
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
+"ActiveScene.message" = "This is an active MCI in progress.";
+
 "ActiveSceneView.patientsLabel" = " Patients on Scene";
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
@@ -41,6 +43,7 @@
 "Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.cancelTransport" = "Cancel Transport";
+"Button.captureLocation" = "Capture GPS";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.confirmCancelTransport" = "Confirm Cancel Transport";
@@ -50,25 +53,30 @@
 "Button.done" = "Done";
 "Button.edit" = "Edit";
 "Button.exitScene" = "Exit Scene";
-"Button.joinScene" = "Arrived on Scene";
+"Button.findTag" = "Find Tag";
+"Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
+"Button.map" = "Map";
 "Button.markArrived" = "Mark Arrived";
 "Button.markOffloaded" = "Mark Offloaded";
 "Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
 "Button.record" = "Voice-to-Text";
+"Button.redAlert" = "MCI?";
 "Button.redirectPatient" = "Redirect Patient";
 "Button.retry" = "Retry";
 "Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
+"Button.scanPatient" = "Scan Patient";
 "Button.search" = "Search";
 "Button.sendRingdown" = "Send Ringdown";
 "Button.select" = "Select";
 "Button.signIn" = "Sign In";
 "Button.skip" = "Skip";
+"Button.startMCI" = "Start MCI";
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
@@ -77,12 +85,12 @@
 "Button.transport" = "Transport";
 "Button.transportPatient" = "Transport Patient";
 "Button.update" = "Update";
+"Button.updateLocation" = "Update GPS";
 "Button.updateStatus" = "Update Status";
 "Button.viewScene" = "View Scene";
 "Button.yes" = "Yes";
 
-"CloseSceneConfirmation.title" = "Are you sure you want to close the %@ scene?";
-"CloseSceneConfirmation.message" = "After you close the scene you will still be able to edit scene details and patient information, but will not have access to the same live updates and coordination of first responders on scene.";
+"CloseSceneConfirmation.message" = "Are you sure you want to close the scene?";
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
 
@@ -137,6 +145,8 @@
 
 "LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
 "LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
+
+"LatLngControl.capturingLocation" = "Capturing location...";
 
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
@@ -247,20 +257,6 @@
 "Patient.gender.abbr.9906009" = "TF";
 "Patient.gender.abbr.9906011" = "Oth";
 
-"Patient.priority.0" = "Immediate";
-"Patient.priority.1" = "Delayed";
-"Patient.priority.2" = "Minimal";
-"Patient.priority.3" = "Expectant";
-"Patient.priority.4" = "Dead";
-"Patient.priority.5" = "Transported";
-
-"Patient.priority.abbr.0" = "Imm.";
-"Patient.priority.abbr.1" = "Del.";
-"Patient.priority.abbr.2" = "Min.";
-"Patient.priority.abbr.3" = "Exp.";
-"Patient.priority.abbr.4" = "Dead";
-"Patient.priority.abbr.5" = "Tra.";
-
 "Patient.sort.0" = "Recently Updated";
 "Patient.sort.1" = "Longest Since Update";
 "Patient.sort.2" = "Alphabetically";
@@ -299,6 +295,9 @@
 
 "RecordingViewController.observationLabel" = "Observation";
 
+"Report.pin" = "Tag #";
+
+"ReportViewController.redAlert.message" = "Are you sure you want to make this a Mass Casualty Incident?";
 "ReportViewController.medications" = "Medications";
 "ReportViewController.medicalInformation" = "Medical Information";
 "ReportViewController.optional" = " (optional)";
@@ -310,6 +309,7 @@
 
 "Responder.sort.az" = "Alphabetically";
 
+"Responder.role.assign" = "Assign";
 "Responder.role.MGS" = "Medical Group Supervisor";
 "Responder.role.STAGING" = "Staging Officer";
 "Responder.role.TRANSPORT" = "Transport Officer";
@@ -348,6 +348,10 @@
 "RingdownViewController.stability.stable" = "Stable";
 "RingdownViewController.stability.unstable" = "Unstable";
 
+"ScanViewController.or" = "OR";
+"ScanViewController.scanPatientTag" = "Scan Patient Tag";
+"ScanViewController.enterTagCode" = "Enter Tag Code";
+
 "Scene.address" = "Location";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
@@ -358,6 +362,10 @@
 "SceneLocationView.stateLabel" = "State: ";
 "SceneLocationView.zipLabel" = "Zipcode: ";
 "SceneLocationView.startLabel" = "Start Time: ";
+
+"SceneOverviewCounterCell.approxPatientsLabel" = "Approx # Patients";
+"SceneOverviewTriageTotalCell.headerLabel" = "Approx Triage Counts";
+"SceneOverviewTriageTotalCell.totalLabel" = "Total from below: %d";
 
 "ScenePatientsView.approxLabel" = "Approximate #s";
 "ScenePatientsView.patientsLabel" = "Recorded #s";
@@ -386,8 +394,7 @@
 "SceneSummaryViewController.notes" = "Notes";
 "SceneSummaryViewController.photos" = "Photos";
 
-"SceneTabBarController.closed.title" = "This scene has been closed by MGS";
-"SceneTabBarController.closed.message" = "You will be able to add and update information for the next 24 hours.";
+"SceneTabBarController.closed.message" = "This scene has been closed by the MGS.";
 
 "SceneTableViewCell.patientsLabel" = "%d Patients Total";
 "SceneTableViewCell.respondersLabel" = "%d First Responders";
@@ -405,11 +412,32 @@
 
 "SortBar.sortBy" = "Sort By :";
 
+"TabBarItem.patientDetails" = "Patient\nDetails";
+"TabBarItem.rolesResources" = "Roles/\nResources";
+"TabBarItem.sceneMap" = "Scene\nMap";
+"TabBarItem.sceneOverview" = "Scene\nOverview";
+
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
 "Time.arrivedAtPatient" = "Arrived at Patient";
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
+
+"TriagePriority.0" = "Immediate";
+"TriagePriority.1" = "Delayed";
+"TriagePriority.2" = "Minimal";
+"TriagePriority.3" = "Expectant";
+"TriagePriority.4" = "Dead";
+"TriagePriority.5" = "Transported";
+"TriagePriority.6" = "Unknown";
+
+"TriagePriority.abbr.0" = "Imm.";
+"TriagePriority.abbr.1" = "Del.";
+"TriagePriority.abbr.2" = "Min.";
+"TriagePriority.abbr.3" = "Exp.";
+"TriagePriority.abbr.4" = "Dead";
+"TriagePriority.abbr.5" = "Tra.";
+"TriagePriority.abbr.6" = "Unk.";
 
 "UnitDisposition.4227001" = "Patient Contact Made";
 "UnitDisposition.4227003" = "Cancelled on Scene";

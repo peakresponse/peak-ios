@@ -95,12 +95,11 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         guard let report = report else { return }
         let newReport = Report(transfer: report)
         let realm = AppRealm.open()
-        if let assignmentId = AppSettings.assignmentId,
-           let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {
-            if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == assignment.vehicleId }) {
+        if let vehicleId = AppSettings.vehicleId {
+            if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == vehicleId }) {
                 newReport.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
             }
-            if let vehicleId = assignment.vehicleId, let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+            if let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
                 newReport.response?.unitNumber = vehicle.number
             }
         }
@@ -168,9 +167,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             commandHeader.rightBarButtonItem = saveBarButtonItem
         } else {
             let realm = AppRealm.open()
-            if let assignmentId = AppSettings.assignmentId,
-               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
-               let vehicleId = assignment.vehicleId,
+            if report.scene?.isMCI ?? false {
+                commandHeader.rightBarButtonItem = editBarButtonItem
+            } else if let vehicleId = AppSettings.vehicleId,
                let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId),
                vehicle.number == report.response?.unitNumber {
                 commandHeader.rightBarButtonItem = editBarButtonItem
@@ -204,5 +203,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
     func reportViewControllerNeedsEditing(_ vc: ReportViewController) {
         editPressed()
+    }
+
+    func reportViewControllerNeedsSave(_ vc: ReportViewController) {
+        savePressed()
     }
 }

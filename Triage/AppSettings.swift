@@ -31,6 +31,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "assignmentId") }
     }
 
+    static var vehicleId: String? {
+        get { return defaults.string(forKey: "vehicleId") }
+        set { defaults.set(newValue, forKey: "vehicleId") }
+    }
+
     static var lastPingDate: Date? {
         get { return defaults.object(forKey: "lastPingDate") as? Date }
         set { defaults.set(newValue, forKey: "lastPingDate") }
@@ -61,10 +66,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "awsCredentials") }
     }
 
-    static func login(userId: String, agencyId: String, assignmentId: String?, sceneId: String?) {
+    static func login(userId: String, agencyId: String, assignmentId: String?, vehicleId: String?, sceneId: String?) {
         AppSettings.userId = userId
         AppSettings.agencyId = agencyId
         AppSettings.assignmentId = assignmentId
+        AppSettings.vehicleId = vehicleId
         AppSettings.sceneId = sceneId
     }
 
@@ -72,6 +78,7 @@ class AppSettings {
         AppSettings.userId = nil
         AppSettings.agencyId = nil
         AppSettings.assignmentId = nil
+        AppSettings.vehicleId = nil
         AppSettings.sceneId = nil
         AppSettings.subdomain = nil
         AppSettings.routedUrl = nil

@@ -24,7 +24,7 @@ class InterstitialViewController: UIViewController {
 
     func checkLoginStatus() {
         // hit the server to check current log-in status
-        AppRealm.me { (user, agency, assignment, scene, awsCredentials, error) in
+        AppRealm.me { (user, agency, assignment, vehicle, scene, awsCredentials, error) in
             // if an explicit server error, log out to force re-login
             if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
                 DispatchQueue.main.async { [weak self] in
@@ -44,7 +44,7 @@ class InterstitialViewController: UIViewController {
                     // noop
                 }
                 AppSettings.awsCredentials = awsCredentials
-                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, sceneId: scene?.id)
+                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, vehicleId: vehicle?.id, sceneId: scene?.id)
                 if let sceneId = scene?.id {
                     DispatchQueue.main.async {
                         AppDelegate.enterScene(id: sceneId)

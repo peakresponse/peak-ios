@@ -7,20 +7,30 @@
 //
 
 import AVFoundation
+import PRKit
+import RealmSwift
 import UIKit
 
-class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, ObservationViewControllerDelegate, UITextFieldDelegate {
-    @IBOutlet weak var navigationBar: NavigationBar!
+class ScanCameraView: UIView {
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if let sublayers = layer.sublayers {
+            for layer in sublayers {
+                layer.frame = bounds
+            }
+        }
+    }
+}
+
+class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
-    @IBOutlet weak var orLabel: UILabel!
-    @IBOutlet weak var pinFieldLabel: UILabel!
-    @IBOutlet weak var pinField: UITextField!
-
-    private var inputToolbar: UIToolbar!
+    @IBOutlet weak var pinField: PRKit.TextField!
 
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+
+    var incident: Incident?
 
     deinit {
         removeKeyboardListener()
@@ -30,22 +40,10 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.viewDidLoad()
 
         addKeyboardListener()
-
         isModal = true
 
-        inputToolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
-        inputToolbar.setItems([
-            UIBarButtonItem(
-                title: "InputAccessoryView.cancel".localized, style: .plain, target: self, action: #selector(inputCancelPressed)),
-            UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil),
-            UIBarButtonItem(
-                title: "InputAccessoryView.go".localized, style: .plain, target: self, action: #selector(inputSearchPressed))
-        ], animated: false)
-
-        // labels and fields
-        cameraLabel.font = .copyMBold
-        orLabel.font = .copyMBold
-        pinFieldLabel.font = .copyMBold
+        let formInputAccessoryView = FormInputAccessoryView(rootView: view)
+        pinField.inputAccessoryView = formInputAccessoryView
 
         setupCamera()
     }
@@ -82,11 +80,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         }
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        videoPreviewLayer?.frame = cameraView.bounds
-    }
-
     @objc override func keyboardWillShow(_ notification: NSNotification) {
         if let pinFieldFrame = pinField.superview?.convert(pinField.frame, to: nil),
             let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
@@ -94,7 +87,7 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
                 let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval ?? 0.25
                 UIView.animate(withDuration: duration) {
                     var bounds = self.view.bounds
-                    bounds.origin.y = -floor(keyboardFrame.minY - pinFieldFrame.maxY)
+                    bounds.origin.y = -floor(keyboardFrame.minY - pinFieldFrame.maxY) + 20
                     self.view.bounds = bounds
                 }
             }
@@ -133,8 +126,6 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
-            videoPreviewLayer?.frame = cameraView.layer.bounds
-            print(cameraView.frame, cameraView.layer.bounds)
             cameraView.layer.addSublayer(videoPreviewLayer!)
             // Start video capture.
             captureSession.startRunning()
@@ -144,46 +135,21 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
     }
 
     @IBAction func didTap(_ sender: Any) {
-        inputCancelPressed()
-    }
-
-    override var inputAccessoryView: UIView? {
-        return inputToolbar
-    }
-
-    @objc func inputCancelPressed() {
+        pinField.text = nil
         _ = pinField.resignFirstResponder()
     }
 
-    @objc func inputSearchPressed() {
+    func findPIN() {
         // hide keyboard
         _ = pinField.resignFirstResponder()
         // get input
         guard let pin = pinField.text else { return }
-        // check if Patient record exists
         let realm = AppRealm.open()
-        let results = realm.objects(Patient.self).filter("sceneId=%@ AND pin=%@ AND canonicalId=NULL", AppSettings.sceneId ?? "", pin)
-        var vc: UIViewController?
+        let results = realm.objects(Report.self).filter("canonicalId=%@ AND pin=%@", NSNull(), pin).sorted(byKeyPath: "createdAt", ascending: false)
         if results.count > 0 {
-            vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Patient")
-            if let vc = vc as? PatientViewController {
-                vc.patient = results[0]
-            }
+            presentReport(report: results[0])
         } else {
-            let patient = Patient()
-            patient.new()
-            patient.sceneId = AppSettings.sceneId
-            patient.pin = pin
-            patient.createdAt = Date()
-            vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Observation")
-            if let vc = vc as? ObservationViewController {
-                vc.delegate = self
-                vc.patient = patient
-            }
-        }
-        if let vc = vc {
-            // present modally
-            presentAnimated(vc)
+            presentNewReport(incident: incident, pin: pin)
         }
         // clear pinfield
         pinField.text = nil
@@ -197,32 +163,32 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         if metadataObjects.count == 0 {
             return
         }
-
         // Get the metadata object.
         if let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
            let pin = metadataObj.stringValue {
+            captureSession.stopRunning()
             pinField.text = pin
-            inputSearchPressed()
+            findPIN()
         }
     }
 
-    // MARK: - UITextFieldDelegate
+    // MARK: - FormFieldDelegate
 
-    func textFieldDidBeginEditing(_ textField: UITextField) {
+    func formFieldDidBeginEditing(_ field: PRKit.FormField) {
         captureSession.stopRunning()
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        captureSession.startRunning()
+    func formFieldDidEndEditing(_ field: PRKit.FormField) {
+        if !(pinField.text?.isEmpty ?? true) {
+            findPIN()
+        } else {
+            captureSession.startRunning()
+        }
     }
 
-    // MARK: - ObservationViewControllerDelegate
+    // MARK: - ReportContainerViewControllerDelegate
 
-    func observationViewControllerDidCancel(_ vc: ObservationViewController) {
-        dismissAnimated()
-    }
-
-    func observationViewControllerDidSave(_ vc: ObservationViewController) {
+    override func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController) {
         dismissAnimated()
     }
 }

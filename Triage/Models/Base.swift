@@ -65,8 +65,22 @@ class BaseVersioned: Base {
     }
 
     @Persisted var canonicalId: String?
+    var canonical: BaseVersioned? {
+        if let canonicalId = canonicalId {
+            let realm = self.realm ?? AppRealm.open()
+            return realm.object(ofType: type(of: self), forPrimaryKey: canonicalId)
+        }
+        return nil
+    }
     @Persisted var currentId: String?
     @Persisted var parentId: String?
+    var parent: BaseVersioned? {
+        if let parentId = parentId {
+            let realm = self.realm ?? AppRealm.open()
+            return realm.object(ofType: type(of: self), forPrimaryKey: parentId)
+        }
+        return nil
+    }
     @Persisted var secondParentId: String?
 
     convenience init(clone obj: BaseVersioned) {
@@ -79,6 +93,15 @@ class BaseVersioned: Base {
         } else {
             parentId = obj.id
         }
+    }
+
+    convenience init?(current obj: BaseVersioned) {
+        self.init(value: obj)
+        guard let currentId = currentId else { return nil}
+        canonicalId = id
+        id = currentId
+        parentId = nil
+        self.currentId = nil
     }
 
     static func newRecord() -> Self {

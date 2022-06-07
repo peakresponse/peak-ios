@@ -14,13 +14,14 @@ import UIKit
 
 protocol ReportViewControllerDelegate: AnyObject {
     func reportViewControllerNeedsEditing(_ vc: ReportViewController)
+    func reportViewControllerNeedsSave(_ vc: ReportViewController)
 }
 
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
-class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, RecordingFieldDelegate,
-                            RecordingViewControllerDelegate, TranscriberDelegate {
+class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, LatLngControlDelegate,
+                            RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -28,6 +29,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var recordButton: RecordButton!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
+    var latLngControl: LatLngControl?
+    var triageControl: TriageControl?
     var recordingsSection: FormSection!
 
     var report: Report!
@@ -62,37 +65,103 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             ])
         }
 
-        var (section, cols, colA, colB) = newSection()
-        var tag = 1
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
-        addTextField(source: report, attributeKey: "response.incidentNumber",
-                     keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
-        addTextField(source: report, attributeKey: "scene.address", tag: &tag, to: colA)
-        addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
-        addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
-        addTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
-        addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
-        addTextField(source: report, attributeKey: "disposition.unitDisposition",
-                     attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
-                     tag: &tag, to: colB)
-        section.addArrangedSubview(cols)
-        containerView.addArrangedSubview(section)
 
-        (section, cols, colA, colB) = newSection()
-        var header = newHeader("ReportViewController.patientInformation".localized,
+        var (section, cols, colA, colB) = newSection()
+        var header: UIView
+        var tag = 1
+
+        let isMCI = report.scene?.isMCI ?? false
+        if isMCI {
+            addTextField(source: report, attributeKey: "pin",
+                         attributeType: .integer, tag: &tag, to: colA)
+            let triageControl = TriageControl()
+            triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
+            triageControl.addTarget(self, action: #selector(triagePriorityChanged(_:)), for: .valueChanged)
+            colA.addArrangedSubview(triageControl)
+            self.triageControl = triageControl
+            addTextField(source: report, attributeKey: "patient.ageArray",
+                         attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
+                         tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "patient.gender",
+                         attributeType: .single(EnumKeyboardSource<PatientGender>()),
+                         tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colB)
+            let locationField = newTextField(source: report, attributeKey: "patient.location", tag: &tag)
+            formFields.append(locationField)
+            let locationView = UIView()
+            locationView.addSubview(locationField)
+            NSLayoutConstraint.activate([
+                locationField.topAnchor.constraint(equalTo: locationView.topAnchor),
+                locationField.leftAnchor.constraint(equalTo: locationView.leftAnchor),
+                locationField.rightAnchor.constraint(equalTo: locationView.rightAnchor)
+            ])
+            let latLngControl = LatLngControl()
+            latLngControl.delegate = self
+            latLngControl.location = report.patient?.latLng
+            latLngControl.translatesAutoresizingMaskIntoConstraints = false
+            locationView.addSubview(latLngControl)
+            NSLayoutConstraint.activate([
+                latLngControl.topAnchor.constraint(equalTo: locationField.bottomAnchor, constant: 4),
+                latLngControl.leftAnchor.constraint(equalTo: locationField.leftAnchor, constant: 16),
+                latLngControl.rightAnchor.constraint(equalTo: locationField.rightAnchor, constant: -16),
+                locationView.bottomAnchor.constraint(equalTo: latLngControl.bottomAnchor)
+            ])
+            self.latLngControl = latLngControl
+            colB.addArrangedSubview(locationView)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+
+            (section, cols, colA, colB) = newSection()
+            header = newHeader("ReportViewController.patientInformation".localized,
                                subheaderText: "ReportViewController.optional".localized)
-        section.addArrangedSubview(header)
-        addTextField(source: report, attributeKey: "patient.firstName", tag: &tag, to: colA)
-        addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
-        addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
-        addTextField(source: report, attributeKey: "patient.ageArray",
-                     attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
-                     tag: &tag, to: colB, withWrapper: true)
-        addTextField(source: report, attributeKey: "patient.gender",
-                     attributeType: .single(EnumKeyboardSource<PatientGender>()),
-                     tag: &tag, to: colA, withWrapper: true)
-        section.addArrangedSubview(cols)
-        containerView.addArrangedSubview(section)
+            section.addArrangedSubview(header)
+            addTextField(source: report, attributeKey: "patient.firstName", tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+        } else {
+            let innerCols = newColumns()
+            innerCols.distribution = .fillProportionally
+            innerCols.spacing = 10
+            addTextField(source: report, attributeKey: "response.incidentNumber",
+                         keyboardType: .numbersAndPunctuation, tag: &tag, to: innerCols)
+            let alertButton = PRKit.Button()
+            alertButton.style = .destructiveSecondary
+            alertButton.setTitle("Button.redAlert".localized, for: .normal)
+            alertButton.addTarget(self, action: #selector(mciPressed), for: .touchUpInside)
+            alertButton.widthAnchor.constraint(equalToConstant: 110).isActive = true
+            innerCols.addArrangedSubview(alertButton)
+            colA.addArrangedSubview(innerCols)
+            addTextField(source: report, attributeKey: "scene.address", tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "disposition.unitDisposition",
+                         attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
+                         tag: &tag, to: colB)
+
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+
+            (section, cols, colA, colB) = newSection()
+            header = newHeader("ReportViewController.patientInformation".localized,
+                               subheaderText: "ReportViewController.optional".localized)
+            section.addArrangedSubview(header)
+            addTextField(source: report, attributeKey: "patient.firstName", tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "patient.ageArray",
+                         attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
+                         tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "patient.gender",
+                         attributeType: .single(EnumKeyboardSource<PatientGender>()),
+                         tag: &tag, to: colA)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+        }
 
         (section, cols, colA, colB) = newSection()
         header = newHeader("ReportViewController.medicalInformation".localized,
@@ -398,6 +467,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             formField.isEnabled = editing
             formField.target = newReport
         }
+        latLngControl?.isEditing = editing
+        // for brand new reports during an MCI, immedialy initiate location capture
+        if editing && (report.scene?.isMCI ?? false) && report.realm == nil {
+            latLngControl?.capturePressed()
+        }
     }
 
     func resetFormFields() {
@@ -419,6 +493,10 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                     formField.status = target.predictionStatus(for: attributeKey)
                 }
             }
+        }
+        // if mci, update triage control
+        if let triageControl = triageControl {
+            triageControl.priority = TriagePriority(rawValue: newReport?.patient?.priority ?? -1)
         }
     }
 
@@ -493,9 +571,54 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         performSegue(withIdentifier: "Record", sender: self)
     }
 
+    @objc func mciPressed() {
+        let modal = ModalViewController()
+        modal.isDismissedOnAction = false
+        modal.messageText = "ReportViewController.redAlert.message".localized
+        modal.addAction(UIAlertAction(title: "Button.startMCI".localized, style: .destructive, handler: { [weak self] (_) in
+            if let sceneId = self?.report.scene?.canonicalId ?? self?.report.scene?.id {
+                AppRealm.startScene(sceneId: sceneId) { [weak self] (canonicalId, error) in
+                    DispatchQueue.main.async {
+                        modal.dismiss(animated: true)
+                    }
+                    if let canonicalId = canonicalId {
+                        AppSettings.sceneId = canonicalId
+                        if let error = error {
+                            DispatchQueue.main.async { [weak self] in
+                                guard let self = self else { return }
+                                self.presentAlert(error: error)
+                            }
+                        } else {
+                            DispatchQueue.main.async {
+                                AppDelegate.enterScene(id: canonicalId)
+                            }
+                        }
+                    } else {
+                        DispatchQueue.main.async { [weak self] in
+                            guard let self = self else { return }
+                            self.presentAlert(error: ApiClientError.unexpected)
+                        }
+                    }
+                }
+            }
+        }))
+        modal.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+        presentAnimated(modal)
+    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? RecordingViewController {
             vc.delegate = self
+        }
+    }
+
+    @objc func triagePriorityChanged(_ sender: TriageControl) {
+        if isEditing {
+            newReport?.patient?.priority = sender.priority?.rawValue
+        } else {
+            newReport = Report(clone: report)
+            newReport?.patient?.priority = sender.priority?.rawValue
+            delegate?.reportViewControllerNeedsSave(self)
         }
     }
 
@@ -509,6 +632,20 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
         presentAnimated(vc)
+    }
+
+    // MARK: - LatLngControlDelegate
+
+    func latLngControlMapPressed(_ control: LatLngControl) {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "ReportMap")
+        if let vc = vc as? ReportMapViewController {
+            vc.report = newReport ?? report
+        }
+        presentAnimated(vc)
+    }
+
+    func latLngControlDidCaptureLocation(_ control: LatLngControl) {
+        newReport?.patient?.latLng = control.location
     }
 
     // MARK: - RecordingFieldDelegate

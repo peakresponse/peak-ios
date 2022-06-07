@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import PRKit
 import RealmSwift
 import UIKit
 
@@ -24,6 +25,11 @@ class PatientsViewController: UIViewController, UICollectionViewDelegateFlowLayo
     var sort: Sort = .priority
 
     // MARK: -
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        tabBarItem.image = UIImage(named: "Patient", in: PRKitBundle.instance, compatibleWith: nil)
+    }
 
     deinit {
         notificationToken?.invalidate()

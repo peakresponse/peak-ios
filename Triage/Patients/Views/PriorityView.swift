@@ -66,7 +66,7 @@ class PriorityView: UIView {
 
             if index < 5 {
                 let button = UIButton(type: .custom)
-                button.setTitle("Patient.priority.\(index)".localized, for: .normal)
+                button.setTitle("TriagePriority.\(index)".localized, for: .normal)
                 button.setTitleColor(PRIORITY_LABEL_COLORS[index], for: .normal)
                 button.titleLabel?.font = .copySBold
                 button.setBackgroundImage(UIImage.resizableImage(withColor: PRIORITY_COLORS[index], cornerRadius: 5), for: .normal)

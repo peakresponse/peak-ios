@@ -11,16 +11,23 @@ import PRKit
 import RealmSwift
 import AlignedCollectionViewFlowLayout
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, ReportContainerViewControllerDelegate,
+class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, PRKit.FormFieldDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var customTabBar: CustomTabBar!
 
     var incident: Incident?
+    var isMCI = false
     var results: Results<Report>?
     var notificationToken: NotificationToken?
     var firstRefresh = true
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        tabBarItem.title = "TabBarItem.patientDetails".localized
+        tabBarItem.image = UIImage(named: "Patient", in: PRKitBundle.instance, compatibleWith: nil)
+    }
 
     deinit {
         notificationToken?.invalidate()
@@ -29,14 +36,25 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if incident == nil, let sceneId = AppSettings.sceneId,
+           let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
+            incident = scene.incident.first
+            isMCI = scene.isMCI
+        }
+
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         collectionView.setCollectionViewLayout(layout, animated: false)
 
-        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
-                                                            self, action: #selector(dismissAnimated))
+        if isMCI {
+            commandHeader.isSearchHidden = false
+            commandHeader.searchField.delegate = self
+        } else {
+            commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
+                                                                self, action: #selector(dismissAnimated))
+        }
 
         customTabBar.buttonTitle = "Button.addPatient".localized
         customTabBar.delegate = self
@@ -53,9 +71,11 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        var contentInset = collectionView.contentInset
-        contentInset.bottom = customTabBar.frame.height
-        collectionView.contentInset = contentInset
+        if !isMCI {
+            var contentInset = collectionView.contentInset
+            contentInset.bottom = customTabBar.frame.height
+            collectionView.contentInset = contentInset
+        }
         if traitCollection.horizontalSizeClass == .regular {
             if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
                 var sectionInset = layout.sectionInset
@@ -75,10 +95,21 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
             .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
-            .sorted(by: [
+        if isMCI {
+            if let text = commandHeader.searchField.text, !text.isEmpty {
+                results = results?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
+                                          text, text, text)
+            }
+            results = results?.sorted(by: [
+                SortDescriptor(keyPath: "patient.priority"),
+                SortDescriptor(keyPath: "pin")
+            ])
+        } else {
+            results = results?.sorted(by: [
                 SortDescriptor(keyPath: "patient.canonicalId"),
                 SortDescriptor(keyPath: "patient.parentId", ascending: false)
             ])
+        }
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
@@ -95,13 +126,15 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
             }
             if self.firstRefresh {
                 self.firstRefresh = false
-                // show add patient button footer
-                self.customTabBar.isHidden = false
-                if let results = results, results.count == 0 {
-                    self.presentNewReport(animated: false) { [weak self] in
-                        self?.collectionView.refreshControl?.endRefreshing()
+                if !self.isMCI {
+                    // show add patient button footer
+                    self.customTabBar.isHidden = false
+                    if let results = results, results.count == 0 {
+                        self.presentNewReport(incident: incident, animated: false) { [weak self] in
+                            self?.collectionView.refreshControl?.endRefreshing()
+                        }
+                        return
                     }
-                    return
                 }
             }
             self.collectionView.refreshControl?.endRefreshing()
@@ -123,49 +156,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         }
     }
 
-    func presentNewReport(animated: Bool = true, completion: (() -> Void)? = nil) {
-        let report = Report.newRecord()
-        report.incident = incident
-        report.scene = incident?.scene
-        report.response?.incidentNumber = incident?.number
-        let realm = AppRealm.open()
-        if let assignmentId = AppSettings.assignmentId,
-           let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId) {
-            if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == assignment.vehicleId }) {
-                report.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
-            }
-            if let vehicleId = assignment.vehicleId, let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
-                report.response?.unitNumber = vehicle.number
-            }
-        }
-        presentReport(report: report, animated: animated, completion: completion)
-    }
-
-    func presentReport(report: Report, animated: Bool = true, completion: (() -> Void)? = nil) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Incident")
-        if let vc = vc as? ReportContainerViewController {
-            vc.delegate = self
-            vc.incident = incident
-            vc.report = report
-            _ = vc.view
-            if report.realm == nil {
-                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
-                                                                     style: .plain,
-                                                                     target: self,
-                                                                     action: #selector(newReportCancelled))
-            } else {
-                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
-                                                                     style: .plain,
-                                                                     target: self,
-                                                                     action: #selector(dismissAnimated))
-            }
-        }
-        present(vc, animated: animated) {
-            completion?()
-        }
-    }
-
-    @objc func newReportCancelled() {
+    @objc override func newReportCancelled() {
         view.isHidden = true
         dismiss(animated: true) { [weak self] in
             self?.dismiss(animated: false)
@@ -174,13 +165,28 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     // MARK: - CustomTabBarDelegate
 
+    func customTabBar(_ tabBar: CustomTabBar, didSelect index: Int) {
+
+    }
+
     func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
-        presentNewReport()
+        presentNewReport(incident: incident)
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formFieldDidChange(_ field: PRKit.FormField) {
+        performQuery()
+    }
+
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
+        field.resignFirstResponder()
+        return false
     }
 
     // MARK: - ReportContainerViewControllerDelegate
 
-    func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController) {
+    override func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController) {
         vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
                                                              style: .done,
                                                              target: self,

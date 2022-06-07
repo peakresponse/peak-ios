@@ -13,6 +13,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     struct Keys {
         static let data = "data"
         static let incidentId = "incidentId"
+        static let pin = "pin"
         static let sceneId = "sceneId"
         static let responseId = "responseId"
         static let timeId = "timeId"
@@ -30,6 +31,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     }
     @Persisted var _data: Data?
     @Persisted var incident: Incident?
+    @Persisted var pin: String?
     @Persisted var scene: Scene?
     @Persisted var response: Response?
     @Persisted var time: Time?
@@ -154,8 +156,8 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         canonicalId = UUID().uuidString.lowercased()
         patientCareReportNumber = canonicalId
         // create new records for the parts that are distinct per unit,
-        // new canonical ids for others EXCEPT for Patient
-        scene?.canonicalId = UUID().uuidString.lowercased()
+        // new canonical ids for others EXCEPT for Patient and Scene
+        // which will be shared across Report transfers
         response = Response.newRecord()
         response?.incidentNumber = report.response?.incidentNumber
         time = Time.newRecord()
@@ -207,6 +209,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.incidentId) != nil {
             incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: data[Keys.incidentId] as? String)
         }
+        pin = data[Keys.pin] as? String
         if data.index(forKey: Keys.sceneId) != nil {
             scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: data[Keys.sceneId] as? String)
         }
@@ -253,6 +256,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         var json = super.asJSON()
         json[Keys.data] = data
         json[Keys.incidentId] = incident?.id
+        json[Keys.pin] = pin ?? NSNull()
         json[Keys.sceneId] = scene?.id
         json[Keys.responseId] = response?.id
         json[Keys.timeId] = time?.id
@@ -311,93 +315,81 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
 
     func canonicalize(from parent: Report?) -> [String: Any] {
         var payload: [String: Any] = [:]
-        if parent == nil {
-            payload["Response"] = response?.asJSON()
-            payload["Scene"] = scene?.asJSON()
-            payload["Time"] = time?.asJSON()
-            payload["Patient"] = patient?.asJSON()
-            payload["Situation"] = situation?.asJSON()
-            payload["History"] = history?.asJSON()
-            payload["Disposition"] = disposition?.asJSON()
-            payload["Narrative"] = narrative?.asJSON()
-            payload["Vital"] = Array(vitals.map { $0.asJSON() })
-            payload["Procedure"] = Array(procedures.map { $0.asJSON() })
-            payload["Medication"] = Array(medications.map { $0.asJSON() })
-            payload["File"] = Array(files.map { $0.asJSON() })
-            payload["Report"] = asJSON()
-        } else {
-            var report = asJSON()
-            let canonicalize = { (object: String) in
-                if let obj = self.value(forKey: object) as? BaseVersioned {
-                    if obj.parentId != nil, let parent = parent?.value(forKey: object) as? BaseVersioned {
-                        if let changes = obj.changes(from: parent) {
-                            payload[object.capitalized] = changes
-                        } else if obj.canonicalId == parent.canonicalId {
+        var report = asJSON()
+        let canonicalize = { (object: String) in
+            if let obj = self.value(forKey: object) as? BaseVersioned {
+                if obj.parentId != nil, let objParent = (parent?.value(forKey: object) as? BaseVersioned) ?? obj.parent {
+                    if let changes = obj.changes(from: objParent) {
+                        payload[object.capitalized] = changes
+                    } else if obj.canonicalId == objParent.canonicalId {
+                        if parent != nil {
                             report.removeValue(forKey: "\(object)Id")
-                            self.setValue(parent, forKey: object)
                         } else {
-                            payload[object.capitalized] = [
-                                "id": obj.id,
-                                "parentId": obj.parentId,
-                                "canonicalId": obj.canonicalId
-                            ]
+                            report["\(object)Id"] = objParent.id
                         }
+                        self.setValue(objParent, forKey: object)
                     } else {
-                        payload[object.capitalized] = obj.asJSON()
+                        payload[object.capitalized] = [
+                            "id": obj.id,
+                            "parentId": obj.parentId,
+                            "canonicalId": obj.canonicalId
+                        ]
                     }
+                } else {
+                    payload[object.capitalized] = obj.asJSON()
                 }
             }
-            canonicalize("response")
-            canonicalize("scene")
-            canonicalize("time")
-            canonicalize("patient")
-            canonicalize("situation")
-            canonicalize("history")
-            canonicalize("disposition")
-            canonicalize("narrative")
-
-            var (ids, data) = Report.canonicalize(source: parent?.vitals, target: vitals)
-            if data.count > 0 {
-                payload["Vital"] = data
-                report["vitalIds"] = ids
-            } else {
-                report.removeValue(forKey: "vitalIds")
-            }
-
-            (ids, data) = Report.canonicalize(source: parent?.procedures, target: procedures)
-            if data.count > 0 {
-                payload["Procedure"] = data
-                report["procedureIds"] = ids
-            } else {
-                report.removeValue(forKey: "procedureIds")
-            }
-
-            (ids, data) = Report.canonicalize(source: parent?.medications, target: medications)
-            if data.count > 0 {
-                payload["Medication"] = data
-                report["medicationIds"] = ids
-            } else {
-                report.removeValue(forKey: "medicationIds")
-            }
-
-            (ids, data) = Report.canonicalize(source: parent?.files, target: files)
-            if data.count > 0 {
-                payload["File"] = data
-                report["fileIds"] = ids
-            } else {
-                report.removeValue(forKey: "fileIds")
-            }
-
-            if NSDictionary(dictionary: predictions ?? [:]).isEqual(NSDictionary(dictionary: parent?.predictions ?? [:])) {
-                report.removeValue(forKey: "predictions")
-            }
-
-            if ringdownId == parent?.ringdownId {
-                report.removeValue(forKey: "ringdownId")
-            }
-
-            payload["Report"] = report
         }
+        canonicalize("response")
+        canonicalize("scene")
+        canonicalize("time")
+        canonicalize("patient")
+        canonicalize("situation")
+        canonicalize("history")
+        canonicalize("disposition")
+        canonicalize("narrative")
+
+        var (ids, data) = Report.canonicalize(source: parent?.vitals, target: vitals)
+        if data.count > 0 {
+            payload["Vital"] = data
+            report["vitalIds"] = ids
+        } else {
+            report.removeValue(forKey: "vitalIds")
+        }
+
+        (ids, data) = Report.canonicalize(source: parent?.procedures, target: procedures)
+        if data.count > 0 {
+            payload["Procedure"] = data
+            report["procedureIds"] = ids
+        } else {
+            report.removeValue(forKey: "procedureIds")
+        }
+
+        (ids, data) = Report.canonicalize(source: parent?.medications, target: medications)
+        if data.count > 0 {
+            payload["Medication"] = data
+            report["medicationIds"] = ids
+        } else {
+            report.removeValue(forKey: "medicationIds")
+        }
+
+        (ids, data) = Report.canonicalize(source: parent?.files, target: files)
+        if data.count > 0 {
+            payload["File"] = data
+            report["fileIds"] = ids
+        } else {
+            report.removeValue(forKey: "fileIds")
+        }
+
+        if NSDictionary(dictionary: predictions ?? [:]).isEqual(NSDictionary(dictionary: parent?.predictions ?? [:])) {
+            report.removeValue(forKey: "predictions")
+        }
+
+        if ringdownId == parent?.ringdownId {
+            report.removeValue(forKey: "ringdownId")
+        }
+
+        payload["Report"] = report
         return payload
     }
 }

@@ -75,9 +75,6 @@ class ApiClient {
             components.queryItems = queryItems
             request.httpBody = components.query?.data(using: .utf8)
         }
-        if let subdomain = AppSettings.subdomain {
-            request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
-        }
         return request
     }
 
@@ -141,6 +138,7 @@ class ApiClient {
             request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
         }
         let socket = WebSocket(request: request)
+        socket.callbackQueue = DispatchQueue.global(qos: .background)
         socket.onEvent = { [weak self] event in
             objc_sync_enter(socket)
             var data: Data?

@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eh9-7l-CQq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eh9-7l-CQq">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Scan-->
-        <scene sceneID="5jR-w2-9qg">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Patients" referencedIdentifier="Scan" id="o9v-Wz-bfp" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Scan Patient" id="z9S-dJ-qSo"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="PWK-wL-jh1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1884" y="1"/>
-        </scene>
-        <!--Patients-->
+        <!--Reports-->
         <scene sceneID="8TV-wG-0Oe">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="Patients" storyboardName="Patients" referencedIdentifier="Patients" id="NJ5-p0-v3H" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Patiens" id="gnH-sg-YPn"/>
+                <viewControllerPlaceholder storyboardIdentifier="Patients" storyboardName="Incidents" referencedIdentifier="Reports" id="NJ5-p0-v3H" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Patients" id="gnH-sg-YPn"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YH5-AZ-06u" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="374" y="53"/>
         </scene>
-        <!--Responders-->
+        <!--ResponderRoles-->
         <scene sceneID="Pqz-B3-H2h">
             <objects>
-                <viewControllerPlaceholder storyboardName="Users" referencedIdentifier="Responders" id="pku-sl-pXg" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="Users" referencedIdentifier="ResponderRoles" id="pku-sl-pXg" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Item" id="GjL-QX-gUI"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="f6c-dJ-Fdz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -50,102 +40,15 @@
             </objects>
             <point key="canvasLocation" x="518" y="-416"/>
         </scene>
-        <!--PatientsMap-->
+        <!--SceneMap-->
         <scene sceneID="SJF-A6-3Wu">
             <objects>
-                <viewControllerPlaceholder storyboardIdentifier="PatientsMap" storyboardName="Patients" referencedIdentifier="PatientsMap" id="bSX-H3-4Sa" userLabel="PatientsMap" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardIdentifier="SceneMap" storyboardName="Scenes" referencedIdentifier="SceneMap" id="bSX-H3-4Sa" userLabel="SceneMap" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Map" id="jeo-5Q-J6I"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mak-E2-ZHP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="393" y="-50"/>
-        </scene>
-        <!--New Scene-->
-        <scene sceneID="hE5-xd-LNE">
-            <objects>
-                <viewController id="OHT-b1-bk3" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="l4P-IC-BBo">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="W2M-sv-xXj"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="New Scene" image="NewScene" selectedImage="NewSceneSelected" id="Q7s-bv-8An" customClass="TabBarItem" customModule="Peak_Response" customModuleProvider="target">
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isLarge" value="YES"/>
-                            <userDefinedRuntimeAttribute type="string" keyPath="segueIdentifier" value="NewScene"/>
-                        </userDefinedRuntimeAttributes>
-                    </tabBarItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="wPR-j4-edv" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2081" y="1"/>
-        </scene>
-        <!--NewScene-->
-        <scene sceneID="Zo7-ot-D6P">
-            <objects>
-                <viewControllerPlaceholder storyboardIdentifier="NewScene" storyboardName="Scenes" referencedIdentifier="NewScene" id="0z0-MN-3gi" sceneMemberID="viewController"/>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="TFC-rP-djP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1358" y="1"/>
-        </scene>
-        <!--Agency Info-->
-        <scene sceneID="S9u-zE-Wry">
-            <objects>
-                <viewController id="X5K-Q4-fi7" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="bH0-3l-Od6">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="axp-I7-tg9"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Agency Info" image="Agency" selectedImage="AgencySelected" id="4XZ-T2-5Ox"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jdw-hV-UL9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2081" y="721"/>
-        </scene>
-        <!--Search-->
-        <scene sceneID="L8w-LF-d5E">
-            <objects>
-                <viewController id="kNw-6k-X6N" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="3q4-t1-ung">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="LCB-q9-7WJ"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Search" image="GlobalSearch" selectedImage="GlobalSearchSelected" id="qEk-DN-3fa"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="itw-ff-IfR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2081" y="1412"/>
-        </scene>
-        <!--PreviousScenes-->
-        <scene sceneID="8tj-mY-Jc2">
-            <objects>
-                <viewControllerPlaceholder storyboardName="Scenes" referencedIdentifier="PreviousScenes" id="1oo-dP-DCU" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Previous" id="7Zn-Xr-nOJ"/>
-                </viewControllerPlaceholder>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Gp0-hv-Zas" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2080" y="-1144"/>
-        </scene>
-        <!--Users-->
-        <scene sceneID="80C-dY-0Ef">
-            <objects>
-                <viewController id="pb4-bc-l9h" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="zW7-Zc-xrC">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="4g7-ZM-frE"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Users" image="Users" selectedImage="UsersSelected" id="IFO-jv-HdK"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="JGJ-9s-3gR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2081" y="-648"/>
         </scene>
         <!--Interstitial View Controller-->
         <scene sceneID="Uq8-zb-Snh">
@@ -166,8 +69,8 @@
                                 <rect key="frame" x="188.5" y="572" width="37" height="37"/>
                                 <color key="color" name="MainGrey"/>
                             </activityIndicatorView>
-                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xiw-Me-j7d" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="87" y="501" width="240" height="128"/>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xiw-Me-j7d" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="87" y="559.5" width="240" height="62"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="240" id="cc0-4Y-hSn"/>
@@ -200,94 +103,36 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="qbg-E4-dCP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-3929" y="0.0"/>
-        </scene>
-        <!--Non Scene Tab Bar Controller-->
-        <scene sceneID="vEv-Ym-ayQ">
-            <objects>
-                <tabBarController storyboardIdentifier="NoActiveScene" id="pqi-yF-G1G" customClass="NonSceneTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="hum-RW-fwI" customClass="PlaceholderTabBar" customModule="Peak_Response" customModuleProvider="target">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="0z0-MN-3gi" kind="presentation" identifier="NewScene" id="WLy-Rb-XgT"/>
-                        <segue destination="1oo-dP-DCU" kind="relationship" relationship="viewControllers" id="O1c-c6-4dS"/>
-                        <segue destination="pb4-bc-l9h" kind="relationship" relationship="viewControllers" id="Oym-HC-r8b"/>
-                        <segue destination="OHT-b1-bk3" kind="relationship" relationship="viewControllers" id="zAb-Dl-RAD"/>
-                        <segue destination="X5K-Q4-fi7" kind="relationship" relationship="viewControllers" id="4al-f7-tqS"/>
-                        <segue destination="kNw-6k-X6N" kind="relationship" relationship="viewControllers" id="DEu-fc-Owc"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="gJ7-qC-U8y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-2986" y="1"/>
+            <point key="canvasLocation" x="-1416" y="0.0"/>
         </scene>
         <!--Scene Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
                 <tabBarController storyboardIdentifier="ActiveScene" id="49e-Tb-3d3" customClass="SceneTabBarController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA" customClass="PlaceholderTabBar" customModule="Peak_Response" customModuleProvider="target">
+                    <tabBar key="tabBar" contentMode="scaleToFill" id="W28-zg-YXA" customClass="CustomTabBarPlaceholder" customModule="PRKit">
                         <rect key="frame" x="0.0" y="975" width="768" height="49"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="o9v-Wz-bfp" kind="presentation" identifier="PresentScan" id="SJs-RD-bLg"/>
                         <segue destination="HOx-Le-ka0" kind="relationship" relationship="viewControllers" id="B4q-AB-Csd"/>
-                        <segue destination="bSX-H3-4Sa" kind="relationship" relationship="viewControllers" id="vQr-IM-nFG"/>
-                        <segue destination="vKM-hF-vpI" kind="relationship" relationship="viewControllers" id="8sj-eo-uRS"/>
                         <segue destination="NJ5-p0-v3H" kind="relationship" relationship="viewControllers" id="zgr-Dl-Juf"/>
                         <segue destination="pku-sl-pXg" kind="relationship" relationship="viewControllers" id="8EN-dg-Tr2"/>
+                        <segue destination="bSX-H3-4Sa" kind="relationship" relationship="viewControllers" id="vQr-IM-nFG"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-529" y="0.0"/>
         </scene>
-        <!--Scan Patient-->
-        <scene sceneID="62p-PL-44t">
-            <objects>
-                <viewController id="vKM-hF-vpI" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="NeN-Sj-Phk">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="9ke-i7-eRm"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Scan Patient" image="Scan" selectedImage="ScanSelected" id="ohS-5X-7Z2" customClass="TabBarItem" customModule="Peak_Response" customModuleProvider="target">
-                        <userDefinedRuntimeAttributes>
-                            <userDefinedRuntimeAttribute type="string" keyPath="segueIdentifier" value="PresentScan"/>
-                            <userDefinedRuntimeAttribute type="boolean" keyPath="isLarge" value="YES"/>
-                        </userDefinedRuntimeAttributes>
-                    </tabBarItem>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="prH-o2-3OX" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1323" y="0.0"/>
-        </scene>
     </scenes>
     <designables>
         <designable name="W28-zg-YXA">
             <size key="intrinsicContentSize" width="-1" height="83"/>
         </designable>
-        <designable name="hum-RW-fwI">
-            <size key="intrinsicContentSize" width="-1" height="83"/>
-        </designable>
     </designables>
     <resources>
-        <image name="Agency" width="30" height="32"/>
-        <image name="AgencySelected" width="30" height="32"/>
-        <image name="GlobalSearch" width="29" height="32"/>
-        <image name="GlobalSearchSelected" width="29" height="32"/>
         <image name="Logo" width="332" height="88"/>
-        <image name="NewScene" width="52" height="52"/>
-        <image name="NewSceneSelected" width="52" height="52"/>
-        <image name="Scan" width="52" height="52"/>
-        <image name="ScanSelected" width="52" height="52"/>
-        <image name="Users" width="35" height="32"/>
-        <image name="UsersSelected" width="36" height="32"/>
         <namedColor name="BgBackground">
             <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

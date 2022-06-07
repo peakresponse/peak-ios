@@ -24,6 +24,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     deinit {
         notificationToken?.invalidate()
+        AppRealm.disconnectIncidents()
     }
 
     override func viewDidLoad() {
@@ -62,7 +63,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
         performQuery()
 
-        AppRealm.connect()
+        AppRealm.connectIncidents()
     }
 
     func setCommandHeaderUser(userId: String?, assignmentId: String?) {
@@ -110,19 +111,16 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         let realm = AppRealm.open()
         results = realm.objects(Incident.self)
             .sorted(by: [SortDescriptor(keyPath: "number", ascending: false)])
-        if let assignmentId = AppSettings.assignmentId {
-            let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId)
-            if let vehicleId = assignment?.vehicleId {
-                if segmentedControl.segmentsCount < 2 {
-                    segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
-                }
-                if segmentedControl.selectedIndex == 0 {
-                    results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
-                }
-            } else {
-                if segmentedControl.segmentsCount > 1 {
-                    segmentedControl.removeSegment(at: 0)
-                }
+        if let vehicleId = AppSettings.vehicleId {
+            if segmentedControl.segmentsCount < 2 {
+                segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
+            }
+            if segmentedControl.selectedIndex == 0 {
+                results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+            }
+        } else {
+            if segmentedControl.segmentsCount > 1 {
+                segmentedControl.removeSegment(at: 0)
             }
         }
         if let text = commandHeader.searchField.text, !text.isEmpty {
@@ -242,6 +240,26 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             default:
                 break
             }
+        } else if let incident = results?[indexPath.row], let scene = incident.scene, scene.isMCI && scene.isActive {
+            let sceneId = scene.canonicalId ?? scene.id
+            let vc = ModalViewController()
+            vc.messageText = "ActiveScene.message".localized
+            vc.isDismissedOnAction = false
+            vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
+                AppRealm.joinScene(sceneId: scene.id) { (_) in
+                    DispatchQueue.main.async {
+                        vc.dismissAnimated()
+                        AppSettings.sceneId = sceneId
+                        AppDelegate.enterScene(id: sceneId)
+                    }
+                }
+            }))
+            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
+                vc.dismissAnimated()
+                AppSettings.sceneId = sceneId
+                AppDelegate.enterScene(id: sceneId)
+            }))
+            presentAnimated(vc)
         } else {
             let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
             if let vc = vc as? ReportsViewController {
@@ -268,14 +286,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         }
         let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
         if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
-            cell.number = "#\(incident.number ?? "")"
-            cell.address = incident.scene?.address
-            if incident.dispatches.count > 0 {
-                let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
-                cell.date = dispatch.dispatchedAt?.asDateString()
-                cell.time = dispatch.dispatchedAt?.asTimeString()
-            }
-            cell.reportsCount = incident.reportsCount
+            cell.update(from: incident)
         }
         return cell
     }

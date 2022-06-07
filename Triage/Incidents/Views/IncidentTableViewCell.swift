@@ -12,6 +12,7 @@ import PRKit
 class IncidentTableViewCell: UITableViewCell {
     weak var containerView: UIView!
     weak var numberLabel: UILabel!
+    weak var mciChip: Chip!
     weak var addressLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var timeLabel: UILabel!
@@ -67,16 +68,25 @@ class IncidentTableViewCell: UITableViewCell {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(containerView)
-        let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: isCompact ? 300 : 860)
-        containerViewWidthConstraint.priority = .defaultHigh
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isCompact ? 28 : 22),
-            containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
-            containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
-            containerViewWidthConstraint,
-            contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: isCompact ? 28 : 22)
-        ])
+        if isCompact {
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
+                containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 28)
+            ])
+        } else {
+            let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: 860)
+            containerViewWidthConstraint.priority = .defaultHigh
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
+                containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
+                containerViewWidthConstraint,
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 22)
+            ])
+        }
         self.containerView = containerView
 
         let numberLabel = UILabel()
@@ -89,6 +99,19 @@ class IncidentTableViewCell: UITableViewCell {
             numberLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor)
         ])
         self.numberLabel = numberLabel
+
+        let mciChip = Chip()
+        mciChip.translatesAutoresizingMaskIntoConstraints = false
+        mciChip.size = .small
+        mciChip.color = .brandSecondary800
+        mciChip.isUserInteractionEnabled = false
+        mciChip.setTitle("MCI".localized, for: .normal)
+        containerView.addSubview(mciChip)
+        NSLayoutConstraint.activate([
+            mciChip.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 1),
+            mciChip.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 4)
+        ])
+        self.mciChip = mciChip
 
         let addressLabel = UILabel()
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -158,7 +181,7 @@ class IncidentTableViewCell: UITableViewCell {
         containerView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
             chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
-            chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
+            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
 
         let reportsCountChip = Chip()
@@ -227,5 +250,21 @@ class IncidentTableViewCell: UITableViewCell {
         default:
             break
         }
+    }
+
+    func update(from incident: Incident) {
+        number = "#\(incident.number ?? "")"
+        address = incident.scene?.address
+        let isMCI = incident.scene?.isMCI ?? false
+        contentView.backgroundColor = isMCI ? .brandSecondary300 : .white
+        numberLabel.textColor = isMCI ? .brandSecondary800 : .brandPrimary600
+        if incident.dispatches.count > 0 {
+            let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
+            date = dispatch.dispatchedAt?.asDateString()
+            time = dispatch.dispatchedAt?.asTimeString()
+        }
+        mciChip.isHidden = !isMCI
+        reportsCountChip.color = isMCI ? .brandSecondary800 : .brandPrimary600
+        reportsCount = incident.reportsCount
     }
 }

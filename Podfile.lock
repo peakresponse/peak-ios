@@ -6,29 +6,29 @@ PODS:
   - CocoaLumberjack (3.7.4):
     - CocoaLumberjack/Core (= 3.7.4)
   - CocoaLumberjack/Core (3.7.4)
-  - Google-Maps-iOS-Utils (3.10.3):
-    - Google-Maps-iOS-Utils/Clustering (= 3.10.3)
-    - Google-Maps-iOS-Utils/Geometry (= 3.10.3)
-    - Google-Maps-iOS-Utils/GeometryUtils (= 3.10.3)
-    - Google-Maps-iOS-Utils/Heatmap (= 3.10.3)
-    - Google-Maps-iOS-Utils/QuadTree (= 3.10.3)
+  - Google-Maps-iOS-Utils (4.1.0):
+    - Google-Maps-iOS-Utils/Clustering (= 4.1.0)
+    - Google-Maps-iOS-Utils/Geometry (= 4.1.0)
+    - Google-Maps-iOS-Utils/GeometryUtils (= 4.1.0)
+    - Google-Maps-iOS-Utils/Heatmap (= 4.1.0)
+    - Google-Maps-iOS-Utils/QuadTree (= 4.1.0)
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Clustering (3.10.3):
+  - Google-Maps-iOS-Utils/Clustering (4.1.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Geometry (3.10.3):
+  - Google-Maps-iOS-Utils/Geometry (4.1.0):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/GeometryUtils (3.10.3):
+  - Google-Maps-iOS-Utils/GeometryUtils (4.1.0):
     - GoogleMaps
-  - Google-Maps-iOS-Utils/Heatmap (3.10.3):
+  - Google-Maps-iOS-Utils/Heatmap (4.1.0):
     - Google-Maps-iOS-Utils/QuadTree
     - GoogleMaps
-  - Google-Maps-iOS-Utils/QuadTree (3.10.3):
+  - Google-Maps-iOS-Utils/QuadTree (4.1.0):
     - GoogleMaps
-  - GoogleMaps (5.1.0):
-    - GoogleMaps/Maps (= 5.1.0)
-  - GoogleMaps/Base (5.1.0)
-  - GoogleMaps/Maps (5.1.0):
+  - GoogleMaps (6.2.1):
+    - GoogleMaps/Maps (= 6.2.1)
+  - GoogleMaps/Base (6.2.1)
+  - GoogleMaps/Maps (6.2.1):
     - GoogleMaps/Base
   - ICD10Kit (0.1.0):
     - RealmSwift (>= 10.11.0)
@@ -123,7 +123,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: b0d10bf375f32071f5e1106ba40d722f5399e972
+    :commit: 0b5fd952298fee65ed642276101017b33305d74c
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
@@ -137,8 +137,8 @@ SPEC CHECKSUMS:
   AWSCore: f859f6955a8e52dcb3e79fac95fef058639d1049
   AWSTranscribeStreaming: 25c06cad7111e87a2bf78af83c8f24327c26a15c
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
-  Google-Maps-iOS-Utils: 95d5ca4d2004314eff88c1819b969db6cac37ab6
-  GoogleMaps: 086ae1dab659eaa7339bdb30fc88e2f44e7c597c
+  Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
+  GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
   ICD10Kit: d627ff3bfba6604b86fe637547bdcf4bfe47720d
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
@@ -161,4 +161,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 40615b78859f8cecca8a65128361ec38777aa606
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

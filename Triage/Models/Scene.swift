@@ -21,7 +21,6 @@ class Scene: BaseVersioned, NemsisBacked {
         static let approxPriorityPatientsCounts = "approxPriorityPatientsCounts"
         static let patientsCount = "patientsCount"
         static let priorityPatientsCounts = "priorityPatientsCounts"
-        static let respondersCount = "respondersCount"
         static let isActive = "isActive"
         static let isMCI = "isMCI"
         static let lat = "lat"
@@ -32,10 +31,15 @@ class Scene: BaseVersioned, NemsisBacked {
         static let countyId = "countyId"
         static let stateId = "stateId"
         static let zip = "zip"
-        static let incidentCommanderId = "incidentCommanderId"
-        static let incidentCommanderAgencyId = "incidentCommanderAgencyId"
         static let closedAt = "closedAt"
+        static let respondersCount = "respondersCount"
+        static let mgsResponderId = "mgsResponderId"
+        static let triageResponderId = "triageResponderId"
+        static let treatmentResponderId = "treatmentResponderId"
+        static let stagingResponderId = "stagingResponderId"
+        static let transportResponderId = "transportResponderId"
     }
+    @Persisted(originProperty: "scene") var incident: LinkingObjects<Incident>
     @Persisted var _data: Data?
     @Persisted var name: String?
     @Persisted var desc: String?
@@ -112,8 +116,15 @@ class Scene: BaseVersioned, NemsisBacked {
     }
 
     @Persisted var closedAt: Date?
-    @Persisted var incidentCommanderId: String?
-    @Persisted var incidentCommanderAgencyId: String?
+    @Persisted var mgsResponderId: String?
+    var mgsResponder: Responder? {
+        return mgsResponderId != nil ? (realm ?? AppRealm.open()).object(ofType: Responder.self, forPrimaryKey: mgsResponderId) : nil
+    }
+    @Persisted var triageResponderId: String?
+    @Persisted var treatmentResponderId: String?
+    @Persisted var stagingResponderId: String?
+    @Persisted var transportResponderId: String?
+    @Persisted(originProperty: "scene") var responders: LinkingObjects<Responder>
 
     override var description: String {
         return name ?? ""
@@ -141,8 +152,11 @@ class Scene: BaseVersioned, NemsisBacked {
         stateId = data[Keys.stateId] as? String
         zip = data[Keys.zip] as? String
         closedAt = ISO8601DateFormatter.date(from: data[Keys.closedAt])
-        incidentCommanderId = data[Keys.incidentCommanderId] as? String
-        incidentCommanderAgencyId = data[Keys.incidentCommanderAgencyId] as? String
+        mgsResponderId = data[Keys.mgsResponderId] as? String
+        triageResponderId = data[Keys.triageResponderId] as? String
+        treatmentResponderId = data[Keys.treatmentResponderId] as? String
+        stagingResponderId = data[Keys.stagingResponderId] as? String
+        transportResponderId = data[Keys.transportResponderId] as? String
     }
 
     // swiftlint:disable:next cyclomatic_complexity
@@ -187,17 +201,65 @@ class Scene: BaseVersioned, NemsisBacked {
         if let value = zip {
             data[Keys.zip] = value
         }
+        if let value = mgsResponderId {
+            data[Keys.mgsResponderId] = value
+        }
+        if let value = triageResponderId {
+            data[Keys.triageResponderId] = value
+        }
+        if let value = treatmentResponderId {
+            data[Keys.treatmentResponderId] = value
+        }
+        if let value = stagingResponderId {
+            data[Keys.stagingResponderId] = value
+        }
+        if let value = transportResponderId {
+            data[Keys.transportResponderId] = value
+        }
         return data
     }
 
     override func changes(from source: BaseVersioned?) -> [String: Any]? {
         guard let source = source as? Scene else { return nil }
-        if let dataPatch = self.dataPatch(from: source) {
-            var json = asJSON()
-            json.removeValue(forKey: Keys.data)
-            json[Keys.dataPatch] = dataPatch
-            return json
+        var json: [String: Any] = [:]
+        if isMCI != source.isMCI {
+            json[Keys.isMCI] = isMCI
         }
-        return nil
+        if approxPatientsCount != source.approxPatientsCount {
+            json[Keys.approxPatientsCount] = approxPatientsCount ?? NSNull()
+        }
+        if _approxPriorityPatientsCounts != source._approxPriorityPatientsCounts {
+            json[Keys.approxPriorityPatientsCounts] = approxPriorityPatientsCounts ?? NSNull()
+        }
+        if mgsResponderId != source.mgsResponderId {
+            json[Keys.mgsResponderId] = mgsResponderId ?? NSNull()
+        }
+        if triageResponderId != source.triageResponderId {
+            json[Keys.triageResponderId] = triageResponderId ?? NSNull()
+        }
+        if treatmentResponderId != source.treatmentResponderId {
+            json[Keys.treatmentResponderId] = treatmentResponderId ?? NSNull()
+        }
+        if stagingResponderId != source.stagingResponderId {
+            json[Keys.stagingResponderId] = stagingResponderId ?? NSNull()
+        }
+        if transportResponderId != source.transportResponderId {
+            json[Keys.transportResponderId] = transportResponderId ?? NSNull()
+        }
+        if closedAt != source.closedAt {
+            json[Keys.closedAt] = closedAt?.asISO8601String() ?? NSNull()
+        }
+        if let dataPatch = self.dataPatch(from: source) {
+            json[Keys.dataPatch] = dataPatch
+        }
+        if json.isEmpty {
+            return nil
+        }
+        json.merge(super.asJSON()) { (_, new) in new }
+        return json
+    }
+
+    func isResponder(userId: String?) -> Bool {
+        return responders.filter("user.id=%@", userId as Any).count > 0
     }
 }

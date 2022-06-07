@@ -77,10 +77,11 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                             AppRealm.getLists { (_) in
                                 // noop
                             }
-                            AppRealm.me { [weak self] (user, agency, assignment, scene, awsCredentials, error) in
+                            AppRealm.me { [weak self] (user, agency, assignment, vehicle, scene, awsCredentials, error) in
                                 let userId = user?.id
                                 let agencyId = agency?.id
                                 let assignmentId = assignment?.id
+                                let vehicleId = vehicle?.id
                                 let sceneId = scene?.id
                                 AppSettings.awsCredentials = awsCredentials
                                 DispatchQueue.main.async { [weak self] in
@@ -92,7 +93,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                         // check if the user or scene has changed since last login
                                         if userId != AppSettings.userId || sceneId != AppSettings.sceneId {
                                             // set new login ids, and navigate as needed
-                                            AppSettings.login(userId: userId, agencyId: agencyId, assignmentId: assignmentId, sceneId: sceneId)
+                                            AppSettings.login(userId: userId, agencyId: agencyId, assignmentId: assignmentId, vehicleId: vehicleId, sceneId: sceneId)
                                             if assignmentId == nil {
                                                 let vc = UIStoryboard(name: "Auth",
                                                                       bundle: nil).instantiateViewController(withIdentifier: "Assignment")

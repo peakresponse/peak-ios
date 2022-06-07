@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="19455" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19454"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -14,19 +14,19 @@
         <!--Scan-->
         <scene sceneID="hpx-iK-7pX">
             <objects>
-                <viewController storyboardIdentifier="Scan" title="Scan" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Scan" title="Scan" modalPresentationStyle="fullScreen" id="sEU-cw-0rZ" customClass="ScanViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="eVf-ID-a8b">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RqV-NY-3gB" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="44" width="414" height="38"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RqV-NY-3gB" customClass="CommandHeader" customModule="PRKit">
+                                <rect key="frame" x="0.0" y="44" width="414" height="65.5"/>
                                 <connections>
-                                    <outlet property="navigationItem" destination="HWA-UM-Jx9" id="riQ-aK-xjf"/>
+                                    <outlet property="leftBarButtonItem" destination="tEf-50-yl7" id="Nv5-O2-4XG"/>
                                 </connections>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="phl-lr-h2x">
-                                <rect key="frame" x="22" y="82" width="370" height="731"/>
+                                <rect key="frame" x="22" y="109.5" width="370" height="703.5"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6sV-5v-yZA">
                                         <rect key="frame" x="0.0" y="0.0" width="370" height="1"/>
@@ -38,13 +38,17 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JFX-Kt-eCm">
                                         <rect key="frame" x="0.0" y="1" width="370" height="591.5"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Scan Patient Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxu-vI-QS7">
-                                                <rect key="frame" x="121.5" y="0.0" width="127.5" height="214.5"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxu-vI-QS7">
+                                                <rect key="frame" x="185" y="0.0" width="0.0" height="214.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="MainGrey"/>
+                                                <color key="textColor" name="Base800"/>
                                                 <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="h4SemiBold"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="ScanViewController.scanPatientTag"/>
+                                                </userDefinedRuntimeAttributes>
                                             </label>
-                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9QM-ay-WY7">
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9QM-ay-WY7" customClass="ScanCameraView" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="221.5" width="370" height="370"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
@@ -64,30 +68,34 @@
                                         <rect key="frame" x="0.0" y="592.5" width="370" height="50"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="MCe-Bf-Hcu" customClass="HorizontalRuleView" customModule="Peak_Response" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="24.5" width="151.5" height="1"/>
+                                                <rect key="frame" x="0.0" y="24.5" width="163" height="1"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="qMC-iy-Czc"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                                        <color key="value" name="LowPriorityGrey"/>
+                                                        <color key="value" name="Base500"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="OR" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sxm-5e-9BP">
-                                                <rect key="frame" x="173.5" y="0.0" width="23.5" height="50"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Sxm-5e-9BP">
+                                                <rect key="frame" x="185" y="0.0" width="0.0" height="50"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="LowPriorityGrey"/>
+                                                <color key="textColor" name="Base500"/>
                                                 <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="h4SemiBold"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="ScanViewController.or"/>
+                                                </userDefinedRuntimeAttributes>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Ey-ex-9df" customClass="HorizontalRuleView" customModule="Peak_Response" customModuleProvider="target">
-                                                <rect key="frame" x="219" y="24.5" width="151" height="1"/>
+                                                <rect key="frame" x="207" y="24.5" width="163" height="1"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="1" id="aie-UU-IeS"/>
                                                 </constraints>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="color" keyPath="lineColor">
-                                                        <color key="value" name="LowPriorityGrey"/>
+                                                        <color key="value" name="Base500"/>
                                                     </userDefinedRuntimeAttribute>
                                                 </userDefinedRuntimeAttributes>
                                             </view>
@@ -106,39 +114,31 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="a6V-qK-7ac">
-                                        <rect key="frame" x="0.0" y="642.5" width="370" height="87.5"/>
+                                        <rect key="frame" x="0.0" y="642.5" width="370" height="60"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Tag Code" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aX5-A8-kqF">
-                                                <rect key="frame" x="0.0" y="0.0" width="370" height="20.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <color key="textColor" name="MainGrey"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bBg-lW-FIg" userLabel="Pin Field" customClass="TextField" customModule="Peak_Response" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="27.5" width="370" height="60"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="60" id="HWf-0T-xIw"/>
-                                                </constraints>
+                                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bBg-lW-FIg" userLabel="Pin Field" customClass="TextField" customModule="PRKit">
+                                                <rect key="frame" x="0.0" y="0.0" width="370" height="60"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="go"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="ScanViewController.enterTagCode"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="AttributeType" value="integer"/>
+                                                </userDefinedRuntimeAttributes>
                                                 <connections>
-                                                    <outlet property="delegate" destination="sEU-cw-0rZ" id="kvV-DJ-a2Q"/>
+                                                    <outlet property="delegate" destination="sEU-cw-0rZ" id="quE-D1-dG2"/>
                                                 </connections>
                                             </textField>
                                         </subviews>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
-                                            <constraint firstItem="aX5-A8-kqF" firstAttribute="leading" secondItem="a6V-qK-7ac" secondAttribute="leading" id="0GZ-Mb-PJZ"/>
-                                            <constraint firstItem="aX5-A8-kqF" firstAttribute="top" secondItem="a6V-qK-7ac" secondAttribute="top" id="7UW-6l-zfo"/>
                                             <constraint firstItem="bBg-lW-FIg" firstAttribute="bottom" secondItem="a6V-qK-7ac" secondAttribute="bottom" id="JPD-aE-1Sc"/>
-                                            <constraint firstItem="aX5-A8-kqF" firstAttribute="trailing" secondItem="a6V-qK-7ac" secondAttribute="trailing" id="Osz-7E-ukl"/>
+                                            <constraint firstItem="bBg-lW-FIg" firstAttribute="top" secondItem="a6V-qK-7ac" secondAttribute="top" id="PSF-Ph-WjR"/>
                                             <constraint firstItem="bBg-lW-FIg" firstAttribute="trailing" secondItem="a6V-qK-7ac" secondAttribute="trailing" id="S5K-74-mmI"/>
                                             <constraint firstItem="bBg-lW-FIg" firstAttribute="leading" secondItem="a6V-qK-7ac" secondAttribute="leading" id="XdA-lw-CYl"/>
-                                            <constraint firstItem="bBg-lW-FIg" firstAttribute="top" secondItem="aX5-A8-kqF" secondAttribute="bottom" constant="7" id="exH-Qc-htq"/>
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7C0-k8-lHR">
-                                        <rect key="frame" x="0.0" y="730" width="370" height="1"/>
+                                        <rect key="frame" x="0.0" y="702.5" width="370" height="1"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="mAM-oh-I33"/>
@@ -152,7 +152,7 @@
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QRP-AI-ska"/>
-                        <color key="backgroundColor" name="BgBackground"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="RqV-NY-3gB" firstAttribute="leading" secondItem="QRP-AI-ska" secondAttribute="leading" id="7jU-KH-ivW"/>
@@ -182,10 +182,7 @@
                     <connections>
                         <outlet property="cameraLabel" destination="jxu-vI-QS7" id="3Zv-eS-f6s"/>
                         <outlet property="cameraView" destination="9QM-ay-WY7" id="bLe-2E-YZZ"/>
-                        <outlet property="navigationBar" destination="RqV-NY-3gB" id="e0v-m3-yGE"/>
-                        <outlet property="orLabel" destination="Sxm-5e-9BP" id="d1Q-L7-WWK"/>
-                        <outlet property="pinField" destination="bBg-lW-FIg" id="LIg-N1-7gT"/>
-                        <outlet property="pinFieldLabel" destination="aX5-A8-kqF" id="nbd-VT-uRv"/>
+                        <outlet property="pinField" destination="bBg-lW-FIg" id="v0Q-pJ-1vD"/>
                         <segue destination="QqV-WA-Cb0" kind="presentation" identifier="NewPatient" id="aE2-dW-Apo"/>
                     </connections>
                 </viewController>
@@ -206,14 +203,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
-                                <rect key="frame" x="0.0" y="38" width="414" height="804"/>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2QB-JR-QPx">
+                                <rect key="frame" x="0.0" y="82" width="414" height="760"/>
                                 <connections>
                                     <segue destination="VKI-7c-oCx" kind="embed" id="oiL-nl-Oms"/>
                                 </connections>
                             </containerView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="38"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VyA-Tw-PAD" customClass="NavigationBar" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="44" width="414" height="38"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                         </subviews>
@@ -371,7 +368,7 @@
                             <constraint firstItem="UfQ-2c-rQ4" firstAttribute="bottom" secondItem="ILX-Ak-94l" secondAttribute="bottom" id="yih-3A-hW9"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="Map" selectedImage="MapSelected" id="h5q-TU-XJf"/>
+                    <tabBarItem key="tabBarItem" title="Map" id="h5q-TU-XJf"/>
                     <toolbarItems/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -450,7 +447,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eRj-Cu-WoL">
-                                <rect key="frame" x="0.0" y="153" width="414" height="660"/>
+                                <rect key="frame" x="0.0" y="150" width="414" height="663"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gqG-lE-yu5">
                                     <size key="itemSize" width="128" height="128"/>
@@ -473,7 +470,7 @@
                                 </cells>
                             </collectionView>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BeN-q8-LM6" customClass="SortBar" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="103" width="414" height="50"/>
+                                <rect key="frame" x="0.0" y="100" width="414" height="50"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="ToN-O7-WsD" customClass="SearchBar" customModule="Peak_Response" customModuleProvider="target">
@@ -499,7 +496,7 @@
                             <constraint firstItem="ToN-O7-WsD" firstAttribute="top" secondItem="mXO-Zo-RQu" secondAttribute="top" id="piD-UJ-B2F"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Patients" image="Patients" selectedImage="PatientsSelected" id="fjK-Cx-O0d"/>
+                    <tabBarItem key="tabBarItem" title="Patients" id="fjK-Cx-O0d"/>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="collectionView" destination="eRj-Cu-WoL" id="jKo-4n-eVR"/>
@@ -533,11 +530,11 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pAo-zC-dwa">
-                                <rect key="frame" x="0.0" y="688" width="414" height="116"/>
+                                <rect key="frame" x="0.0" y="691" width="414" height="113"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                             </view>
                             <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nxX-pb-cRP" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="22" y="710" width="370" height="72"/>
+                                <rect key="frame" x="22" y="713" width="370" height="69"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="update"/>
@@ -629,12 +626,12 @@
                                     <outlet property="delegate" destination="wZS-XM-NNO" id="dLt-xb-g5n"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HIQ-6o-wEJ">
-                                <rect key="frame" x="0.0" y="688" width="414" height="116"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HIQ-6o-wEJ">
+                                <rect key="frame" x="0.0" y="691" width="414" height="113"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                             </view>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="22" y="710" width="370" height="72"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xm4-ki-lDz" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                <rect key="frame" x="22" y="713" width="370" height="69"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <action selector="updatePressed" destination="wZS-XM-NNO" eventType="touchUpInside" id="l3f-Ib-J0Z"/>
@@ -695,15 +692,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="804"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
-                                <rect key="frame" x="0.0" y="525" width="414" height="279"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fMd-LL-IAb">
+                                <rect key="frame" x="0.0" y="528" width="414" height="276"/>
                                 <subviews>
-                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" ambiguous="YES" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
-                                        <rect key="frame" x="188.5" y="202.5" width="37" height="37"/>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="YHD-U0-n7f">
+                                        <rect key="frame" x="188.5" y="201" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
-                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="22" y="185" width="370" height="72"/>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FS9-jk-rvs" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
+                                        <rect key="frame" x="22" y="185" width="370" height="69"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="stopAndSave"/>
@@ -999,7 +996,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DJW-35-Cg2">
-                                <rect key="frame" x="0.0" y="140" width="414" height="114"/>
+                                <rect key="frame" x="0.0" y="184" width="414" height="114"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zbM-gs-XDL">
                                         <rect key="frame" x="370" y="0.0" width="44" height="44"/>
@@ -1035,7 +1032,7 @@
                                 </constraints>
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YpY-Ed-Ytr">
-                                <rect key="frame" x="0.0" y="254" width="414" height="588"/>
+                                <rect key="frame" x="0.0" y="298" width="414" height="544"/>
                                 <color key="backgroundColor" name="BgBackground"/>
                                 <view key="tableHeaderView" contentMode="scaleToFill" id="87p-3R-ZjT">
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="95"/>
@@ -1116,7 +1113,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zOm-70-xCO">
-                                <rect key="frame" x="0.0" y="140" width="414" height="702"/>
+                                <rect key="frame" x="0.0" y="184" width="414" height="658"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eow-S2-Htx">
                                         <rect key="frame" x="370" y="0.0" width="44" height="44"/>
@@ -1165,12 +1162,12 @@
                                         </userDefinedRuntimeAttributes>
                                     </label>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5nE-o8-1lZ">
-                                        <rect key="frame" x="0.0" y="235.5" width="414" height="432.5"/>
+                                        <rect key="frame" x="0.0" y="235.5" width="414" height="422.5"/>
                                         <subviews>
-                                            <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
-                                                <rect key="frame" x="107" y="146.5" width="200" height="140"/>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="upl-1h-uLy">
+                                                <rect key="frame" x="107" y="141.5" width="200" height="140"/>
                                                 <subviews>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OCF-PJ-AVd" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="0.0" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -1180,7 +1177,7 @@
                                                             <action selector="confirmPressed:" destination="AJM-DO-iCT" eventType="touchUpInside" id="sBc-0g-Chh"/>
                                                         </connections>
                                                     </view>
-                                                    <view contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
+                                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OAz-IT-XRp" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
                                                         <rect key="frame" x="0.0" y="78" width="200" height="62"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
@@ -1290,18 +1287,17 @@
     </inferredMetricsTieBreakers>
     <resources>
         <image name="Clear" width="15" height="15"/>
-        <image name="Map" width="40" height="32"/>
-        <image name="MapSelected" width="40" height="32"/>
-        <image name="Patients" width="40" height="32"/>
-        <image name="PatientsSelected" width="40" height="32"/>
+        <namedColor name="Base500">
+            <color red="0.49411764705882355" green="0.61176470588235299" blue="0.66274509803921566" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="Base800">
+            <color red="0.18431372549019609" green="0.29019607843137257" blue="0.33725490196078434" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="BgBackground">
             <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="GreyPeakBlue">
             <color red="0.40799999237060547" green="0.57999998331069946" blue="0.70999997854232788" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="LowPriorityGrey">
-            <color red="0.57999998331069946" green="0.65100002288818359" blue="0.67799997329711914" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="MainGrey">
             <color red="0.23899999260902405" green="0.31400001049041748" blue="0.3449999988079071" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

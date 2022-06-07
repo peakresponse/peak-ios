@@ -50,21 +50,21 @@ enum Sort: Int, CaseIterable, CustomStringConvertible {
 }
 
 let PRIORITY_COLORS = [
-    UIColor.immediateRed,
-    UIColor.delayedYellow,
-    UIColor.minimalGreen,
-    UIColor.expectantGray,
-    UIColor.deadBlack,
-    UIColor.natBlue
+    UIColor.triageImmediateMedium,
+    UIColor.triageDelayedMedium,
+    UIColor.triageMinimalMedium,
+    UIColor.triageExpectantMedium,
+    UIColor.triageDeadMedium,
+    UIColor.triageTransportedMedium
 ]
 
 let PRIORITY_COLORS_LIGHTENED = [
-    UIColor.immediateRedLightened,
-    UIColor.delayedYellowLightened,
-    UIColor.minimalGreenLightened,
-    UIColor.expectantGrayLightened,
-    UIColor.deadBlackLightened,
-    UIColor.natBlueLightened
+    UIColor.triageImmediateLight,
+    UIColor.triageDelayedLight,
+    UIColor.triageMinimalLight,
+    UIColor.triageExpectantLight,
+    UIColor.triageDeadLight,
+    UIColor.triageTransportedLight
 ]
 
 let PRIORITY_LABEL_COLORS = [
@@ -308,12 +308,23 @@ class Patient: BaseVersioned {
         return false
     }
     var latLng: CLLocationCoordinate2D? {
-        if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
-            return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+        get {
+            if let lat = Double(lat ?? ""), let lng = Double(lng ?? "") {
+                return CLLocationCoordinate2D(latitude: CLLocationDegrees(lat), longitude: CLLocationDegrees(lng))
+            }
+            return nil
         }
-        return nil
+        set {
+            if let newValue = newValue {
+                lat = String(format: "%.6f", newValue.latitude)
+                lng = String(format: "%.6f", newValue.longitude)
+            } else {
+                lat = nil
+                lng = nil
+            }
+        }
     }
-    var latLngString: String? {
+    @objc var latLngString: String? {
         if let lat = lat, let lng = lng {
             return "\(lat), \(lng)".trimmingCharacters(in: .whitespacesAndNewlines)
         }
@@ -705,6 +716,18 @@ class Patient: BaseVersioned {
         }
         if dob != source.dob {
             json[Keys.dob] = dob ?? NSNull()
+        }
+        if priority != source.priority {
+            json[Keys.priority] = priority ?? NSNull()
+        }
+        if location != source.location {
+            json[Keys.location] = location ?? NSNull()
+        }
+        if lat != source.lat {
+            json[Keys.lat] = lat ?? NSNull()
+        }
+        if lng != source.lng {
+            json[Keys.lng] = lng ?? NSNull()
         }
         if json.isEmpty {
             return nil

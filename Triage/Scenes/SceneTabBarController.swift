@@ -8,8 +8,9 @@
 
 import UIKit
 import RealmSwift
+import PRKit
 
-class SceneTabBarController: TabBarController {
+class SceneTabBarController: CustomTabBarController {
     var results: Results<Scene>?
     var notificationToken: NotificationToken?
 
@@ -21,9 +22,11 @@ class SceneTabBarController: TabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        customTabBar.buttonTitle = "Button.scanPatient".localized
+
         if let sceneId = AppSettings.sceneId {
             // disconnect from agency updates
-            AppRealm.disconnect()
+            AppRealm.disconnectIncidents()
             // conenct to scene updates
             AppRealm.connect(sceneId: sceneId)
 
@@ -43,27 +46,32 @@ class SceneTabBarController: TabBarController {
             if let results = results, results.count > 0 {
                 let scene = results[0]
                 if scene.closedAt != nil {
-                    let alert = AlertViewController()
-                    alert.alertTitle = "SceneTabBarController.closed.title".localized
-                    alert.alertMessage = "SceneTabBarController.closed.message".localized
-                    alert.addAlertAction(title: "Button.ok".localized, style: .cancel) { [weak self] (_) in
+                    let vc = ModalViewController()
+                    vc.messageText = "SceneTabBarController.closed.message".localized
+                    vc.addAction(UIAlertAction(title: "Button.ok".localized, style: .default, handler: { [weak self] (_) in
                         self?.dismiss(animated: true, completion: {
-                            if let tabBarController = AppDelegate.leaveScene() as? NonSceneTabBarController {
-                                let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "SceneSummary")
-                                if let vc = vc as? SceneSummaryViewController {
-                                    vc.scene = scene
-                                    if let navController = tabBarController.selectedViewController as? NavigationController {
-                                        navController.pushViewController(vc, animated: false)
-                                    }
-                                }
-                            }
+                            _ = AppDelegate.leaveScene()
                         })
-                    }
-                    presentAnimated(alert)
+                    }))
+                    presentAnimated(vc)
                 }
             }
         case .error(let error):
             presentAlert(error: error)
         }
+    }
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print(segue)
+    }
+
+    // MARK: - CustomTabBarDelegate
+
+    override func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
+        let vc = UIStoryboard(name: "Patients", bundle: nil).instantiateViewController(withIdentifier: "Scan")
+        if let vc = vc as? ScanViewController {
+            vc.incident = results?.first?.incident.first
+        }
+        presentAnimated(vc)
     }
 }

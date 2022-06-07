@@ -10,6 +10,9 @@ import PRKit
 import UIKit
 
 class ReportCollectionViewCell: UICollectionViewCell {
+    weak var mciView: UIView!
+    weak var priorityChip: Chip!
+    weak var tagLabel: UILabel!
     weak var ageLabel: UILabel!
     weak var genderLabel: UILabel!
     weak var nameLabel: UILabel!
@@ -34,16 +37,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
         selectedBackgroundView.backgroundColor = .base100
         self.selectedBackgroundView = selectedBackgroundView
 
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        contentView.addSubview(stackView)
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
-        ])
-
         let chevronImageView = UIImageView()
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
@@ -52,9 +45,46 @@ class ReportCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             chevronImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            chevronImageView.widthAnchor.constraint(equalToConstant: 40),
-            stackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor)
+            chevronImageView.widthAnchor.constraint(equalToConstant: 40)
         ])
+
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        contentView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            stackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
+        ])
+
+        let mciView = UIView()
+        stackView.addArrangedSubview(mciView)
+        self.mciView = mciView
+
+        let priorityChip = Chip()
+        priorityChip.translatesAutoresizingMaskIntoConstraints = false
+        priorityChip.isUserInteractionEnabled = false
+        mciView.addSubview(priorityChip)
+        NSLayoutConstraint.activate([
+            priorityChip.topAnchor.constraint(equalTo: mciView.topAnchor),
+            priorityChip.rightAnchor.constraint(equalTo: mciView.rightAnchor),
+            mciView.bottomAnchor.constraint(equalTo: priorityChip.bottomAnchor)
+        ])
+        self.priorityChip = priorityChip
+
+        let tagLabel = UILabel()
+        tagLabel.translatesAutoresizingMaskIntoConstraints = false
+        tagLabel.font = .h3SemiBold
+        tagLabel.textColor = .base800
+        mciView.addSubview(tagLabel)
+        NSLayoutConstraint.activate([
+            tagLabel.leftAnchor.constraint(equalTo: mciView.leftAnchor),
+            tagLabel.centerYAnchor.constraint(equalTo: priorityChip.centerYAnchor),
+            tagLabel.rightAnchor.constraint(lessThanOrEqualTo: priorityChip.leftAnchor)
+        ])
+        self.tagLabel = tagLabel
 
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -132,7 +162,17 @@ class ReportCollectionViewCell: UICollectionViewCell {
 
     func configure(report: Report?, index: Int) {
         guard let report = report else { return }
-        if let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
+        let isMCI = report.scene?.isMCI ?? false
+        mciView.isHidden = !isMCI
+        if let pin = report.pin, !pin.isEmpty {
+            tagLabel.text = "#\(pin)"
+        }
+        if isMCI {
+            let priority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+            priorityChip.color = priority.color
+            priorityChip.setTitle(priority.description, for: .normal)
+        }
+        if !isMCI, let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
             unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "\(unitNumber)\n")
             unitLabel.isHidden = false
         } else {

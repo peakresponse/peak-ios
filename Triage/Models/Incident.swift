@@ -59,4 +59,8 @@ class Incident: Base {
         }
         return json
     }
+
+    func isDispatched(vehicleId: String?) -> Bool {
+        return dispatches.filter("vehicleId=%@", vehicleId as Any).count > 0
+    }
 }

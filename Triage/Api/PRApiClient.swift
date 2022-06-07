@@ -18,6 +18,17 @@ class PRApiClient: ApiClient {
         }
     }
 
+    static let apiLevel = "2"
+
+    override func urlRequest(for path: String, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
+        var request = super.urlRequest(for: path, params: params, method: method, body: body)
+        request.setValue(PRApiClient.apiLevel, forHTTPHeaderField: "X-Api-Level")
+        if let subdomain = AppSettings.subdomain {
+            request.setValue(subdomain, forHTTPHeaderField: "X-Agency-Subdomain")
+        }
+        return request
+    }
+
     // MARK: - Sessions
 
     func login(email: String, password: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
@@ -81,8 +92,12 @@ class PRApiClient: ApiClient {
 
     // MARK: - Incidents
 
+    func incidents(assignmentId: String, completionHandler: @escaping (WebSocket, [String: Any]?, Error?) -> Void) -> WebSocket {
+        return WS(path: "/incidents", params: ["assignmentId": assignmentId ], completionHandler: completionHandler)
+    }
+
     func getIncidents(vehicleId: String? = nil, search: String? = nil,
-                      completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+                      completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: Any] = [:]
         if let vehicleId = vehicleId {
             params["vehicleId"] = vehicleId
@@ -131,7 +146,7 @@ class PRApiClient: ApiClient {
         return WS(path: "/scene", params: ["id": sceneId], completionHandler: completionHandler)
     }
 
-    func createScene(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+    func createOrUpdateScene(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 

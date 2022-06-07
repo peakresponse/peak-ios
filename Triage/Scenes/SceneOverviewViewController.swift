@@ -8,82 +8,38 @@
 
 import RealmSwift
 import UIKit
+import PRKit
 
-class SceneOverviewViewController: UIViewController {
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var sceneHeaderView: SceneHeaderView!
-    @IBOutlet weak var sceneCommandsView: UIView!
-    @IBOutlet weak var editButton: UIButton!
-    @IBOutlet weak var closeButton: FormButton!
-    @IBOutlet weak var leaveButton: FormButton!
-    @IBOutlet weak var exitButton: FormButton!
-    @IBOutlet weak var joinButton: FormButton!
-    @IBOutlet weak var transferButton: FormButton!
-    @IBOutlet weak var scenePatientsView: ScenePatientsView!
-    @IBOutlet weak var sceneRespondersView: SceneRespondersView!
-    @IBOutlet weak var addNoteButton: FormButton!
-    @IBOutlet weak var addPhotoButton: FormButton!
+class SceneOverviewViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
+                                   SceneOverviewCounterCellDelegate {
+    @IBOutlet weak var collectionView: UICollectionView!
 
-    private var scene: Scene!
+    private var scene: Scene?
     private var notificationToken: NotificationToken?
-    private var responders: Results<Responder>!
-    private var respondersNotificationToken: NotificationToken?
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        tabBarItem.title = "TabBarItem.sceneOverview".localized
+        tabBarItem.image = UIImage(named: "Dashboard", in: PRKitBundle.instance, compatibleWith: nil)
+    }
 
     deinit {
         notificationToken?.invalidate()
-        respondersNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        sceneCommandsView.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 20, color: .black, opacity: 0.1)
-        scenePatientsView.didUpdateApproxPatientsCounts = { [weak self] (priority, delta) in
-            self?.updateApproxPatientsCounts(priority: priority, delta: delta)
-        }
-        sceneRespondersView.isHidden = true
-
-        editButton.isHidden = true
-        addNoteButton.isHidden = true
-        addPhotoButton.isHidden = true
-
-        if let tableHeaderView = tableView.tableHeaderView {
-            tableHeaderView.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                tableHeaderView.widthAnchor.constraint(equalTo: tableView.widthAnchor)
-            ])
+        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
+            layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width, height: 120)
         }
 
         guard let sceneId = AppSettings.sceneId else { return }
-        AppRealm.getScene(sceneId: sceneId) { [weak self] (scene, error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            } else if let sceneId = scene?.id {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    let realm = AppRealm.open()
-                    self.scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
-                    self.notificationToken = self.scene.observe { [weak self] (change) in
-                        self?.didObserveChange(change)
-                    }
-                    self.responders = realm.objects(Responder.self).filter("scene.id=%@ AND user.id=%@ AND departedAt=NULL",
-                                                                           sceneId,
-                                                                           AppSettings.userId ?? "")
-                    self.respondersNotificationToken = self.responders.observe { [weak self] (change) in
-                        self?.didObserveRespondersChange(change)
-                    }
-                }
-            }
+        let realm = AppRealm.open()
+        scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+        notificationToken = scene?.observe { [weak self] (change) in
+            self?.didObserveChange(change)
         }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        // hack to trigger appropriate autolayout for header view- assign again, then trigger a second layout of just the tableView
-        tableView.tableHeaderView = tableView.tableHeaderView
-        tableView.layoutIfNeeded()
     }
 
     func didObserveChange(_ change: ObjectChange<Scene>) {
@@ -97,50 +53,17 @@ class SceneOverviewViewController: UIViewController {
         }
     }
 
-    func didObserveRespondersChange(_ change: RealmCollectionChange<Results<Responder>>) {
-        switch change {
-        case .initial:
-            refresh()
-        case .update(_, deletions: _, insertions: _, modifications: _):
-            refresh()
-        case .error(let error):
-            presentAlert(error: error)
-        }
-    }
-
     private func leaveScene() {
         _ = AppDelegate.leaveScene()
     }
 
     private func refresh() {
-        sceneHeaderView.configure(from: scene)
-        scenePatientsView.configure(from: scene)
-        sceneRespondersView.configure(from: scene)
-        let isMGS = AppSettings.userId == scene.incidentCommanderId
-        if isMGS {
-            closeButton.isHidden = false
-            leaveButton.isHidden = true
-            exitButton.isHidden = true
-            joinButton.isHidden = true
-            // for now, hide transfer button, leave space for sizing
-            transferButton.isHidden = false
-            transferButton.alpha = 0
-        } else {
-            closeButton.isHidden = true
-            if responders.count > 0 {
-                leaveButton.isHidden = false
-                exitButton.isHidden = true
-                joinButton.isHidden = true
-                transferButton.isHidden = false
-                transferButton.alpha = 0
-            } else {
-                leaveButton.isHidden = true
-                exitButton.isHidden = false
-                joinButton.isHidden = false
-                transferButton.isHidden = true
+        guard let scene = scene else { return }
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? SceneOverviewCell {
+                cell.configure(from: scene)
             }
         }
-        scenePatientsView.isEditing = true
     }
 
     @IBAction func editPressed(_ sender: Any) {
@@ -153,7 +76,8 @@ class SceneOverviewViewController: UIViewController {
     }
 
     @IBAction func joinPressed(_ sender: Any) {
-        AppRealm.joinScene(sceneId: scene.id) { (error) in
+        guard let sceneId = scene?.id else { return }
+        AppRealm.joinScene(sceneId: sceneId) { (error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
                     self?.presentAlert(error: error)
@@ -162,62 +86,104 @@ class SceneOverviewViewController: UIViewController {
         }
     }
 
-    @IBAction func exitPressed(_ sender: Any) {
-        DispatchQueue.main.async {
-            _ = AppDelegate.leaveScene()
-        }
-    }
-
-    @IBAction func closePressed(_ sender: Any) {
-        let sceneId = scene.id
-        let vc = AlertViewController()
-        vc.alertTitle = String(format: "CloseSceneConfirmation.title".localized, scene.name ?? "")
-        vc.alertMessage = "CloseSceneConfirmation.message".localized
-        vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
-        vc.addAlertAction(title: "Button.close".localized, style: .default) { [weak self] (_) in
-            guard let self = self else { return }
-            AppRealm.closeScene(sceneId: sceneId) { [weak self] (error) in
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.presentAlert(error: error)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        _ = AppDelegate.leaveScene()
-                    }
-                }
-            }
-        }
-        presentAnimated(vc)
-    }
-
-    @IBAction func leavePressed(_ sender: Any) {
-        let sceneId = scene.id
-        let vc = AlertViewController()
-        vc.alertTitle = String(format: "LeaveSceneConfirmation.title".localized, scene.name ?? "")
-        vc.alertMessage = "LeaveSceneConfirmation.message".localized
-        vc.addAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil)
-        vc.addAlertAction(title: "Button.leave".localized, style: .default) { [weak self] (_) in
-            guard let self = self else { return }
-            AppRealm.leaveScene(sceneId: sceneId) { [weak self] (error) in
-                if let error = error {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.presentAlert(error: error)
-                    }
-                } else {
-                    DispatchQueue.main.async {
-                        _ = AppDelegate.leaveScene()
-                    }
-                }
-            }
-        }
-        presentAnimated(vc)
-    }
-
     @IBAction func transferPressed(_ sender: Any) {
     }
 
-    func updateApproxPatientsCounts(priority: Priority?, delta: Int) {
-        AppRealm.updateApproxPatientsCounts(sceneId: scene.id, priority: priority, delta: delta)
+    @IBAction func closePressed(_ sender: Any) {
+        guard let scene = scene else { return }
+        let sceneId = scene.id
+        if scene.mgsResponder?.user?.id == AppSettings.userId {
+            let vc = ModalViewController()
+            vc.isDismissedOnAction = false
+            vc.messageText = "CloseSceneConfirmation.message".localized
+            vc.addAction(UIAlertAction(title: "Button.close".localized, style: .destructive, handler: { [weak self] (_) in
+                guard let self = self else { return }
+                AppRealm.endScene(sceneId: sceneId) { [weak self] (error) in
+                    DispatchQueue.main.async { [weak self] in
+                        vc.dismissAnimated()
+                        if let error = error {
+                            self?.presentAlert(error: error)
+                        } else {
+                            self?.leaveScene()
+                        }
+                    }
+                }
+            }))
+            vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+            presentAnimated(vc)
+        } else {
+            if scene.isResponder(userId: AppSettings.userId) {
+                AppRealm.leaveScene(sceneId: sceneId) { _ in
+                }
+            }
+            leaveScene()
+        }
+    }
+
+    // MARK: - SceneOverviewCounterCellDelegate
+
+    func counterCell(_ cell: SceneOverviewCounterCell, didChange value: Int, for priority: TriagePriority?) {
+        guard let sceneId = scene?.id else { return }
+        AppRealm.updateApproxPatientsCounts(sceneId: sceneId, priority: priority, value: value)
+    }
+
+    // MARK: - UICollectionViewDataSource
+
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 3
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        switch section {
+        case 0: // header and approx patients counter
+            return 2
+        case 1: // approx triage counts header
+            return 1
+        case 2: // triage counters
+            return 5
+        default:
+            return 0
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        var cell: UICollectionViewCell
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
+            default:
+                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
+                if let cell = cell as? SceneOverviewCounterCell {
+                    cell.delegate = self
+                    cell.priority = nil
+                }
+            }
+        case 1:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewTriageTotal", for: indexPath)
+        case 2:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
+            if let cell = cell as? SceneOverviewCounterCell {
+                cell.delegate = self
+                cell.priority = TriagePriority(rawValue: indexPath.row)
+            }
+        default:
+            cell = UICollectionViewCell()
+        }
+        if let cell = cell as? SceneOverviewCell, let scene = scene {
+            cell.configure(from: scene)
+        }
+        return cell
+    }
+
+    // MARK: - UICollectionViewDelegateFlowLayout
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        if section == 1 {
+            return UIEdgeInsets(top: 1, left: 20, bottom: 0, right: 20)
+        }
+        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
 }
