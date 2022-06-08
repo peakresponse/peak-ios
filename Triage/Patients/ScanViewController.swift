@@ -145,7 +145,8 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         // get input
         guard let pin = pinField.text else { return }
         let realm = AppRealm.open()
-        let results = realm.objects(Report.self).filter("canonicalId=%@ AND pin=%@", NSNull(), pin).sorted(byKeyPath: "createdAt", ascending: false)
+        guard let sceneId = AppSettings.sceneId else { return }
+        let results = realm.objects(Report.self).filter("canonicalId=%@ AND pin=%@ AND scene.canonicalId=%@", NSNull(), pin, sceneId).sorted(byKeyPath: "createdAt", ascending: false)
         if results.count > 0 {
             presentReport(report: results[0])
         } else {
