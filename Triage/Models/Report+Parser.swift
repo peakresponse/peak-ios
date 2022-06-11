@@ -108,7 +108,10 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:patient(?:s|'s)? )?name(?: is)? (?<patient0firstName>[^ .,]+)(?: (?<patient0lastName>[^ .,]+))?"#),
     Matcher(pattern: #"first name(?: is)? (?<patient0firstName>[^ .,]+)"#),
     Matcher(pattern: #"last name(?: is)? (?<patient0lastName>[^ .,]+)"#),
-    Matcher(pattern: #"age (?<patient0age>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"age (?<patient0age>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "patient0age": MAPPINGS_NUMBERS
+            ]),
     Matcher(pattern: #"(?<patient0ageArray>(?<patient0age>"# + PATTERN_NUMBERS + #")(?: |-)(?<patient0ageUnits>years?|months?|days?|hours?|minutes?)(?: |-)old)"#,
             mappings: [
                 "patient0age": MAPPINGS_NUMBERS,
@@ -151,10 +154,16 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0medicationAllergies>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0environmentalFoodAllergies>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:performed)|(?:applied))(?:,|\.)? (?:is )?(?<lastProcedure0procedure>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:administered))(?:,|\.)? (?:is )?(?<lastMedication0medication>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#),
-    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#),
+    Matcher(pattern: #"(?:(?:performed)|(?:applied))(?:,|\.)? (?:a )?(?:an )?(?:is )?(?<lastProcedure0procedure>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:administered))(?:,|\.)? (?:a )?(?:an )?(?:is )?(?<lastMedication0medication>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0respiratoryRate": MAPPINGS_NUMBERS
+            ]),
+    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#,
+            mappings: [
+                "lastVital0heartRate": MAPPINGS_NUMBERS
+            ]),
     Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bpSystolic>"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?<lastVital0bpDiastolic>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0bpSystolic": MAPPINGS_NUMBERS,

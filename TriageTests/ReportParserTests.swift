@@ -104,6 +104,33 @@ class ReportParserTests: XCTestCase {
         }
     }
 
+    func testExtractHeartRate() {
+        var samples = [
+            "Heart rate one"
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastVital?.heartRate, "1", "Heart rate failed for: \(sample)")
+            XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
+        }
+
+        samples = [
+            "Heart rate 80",
+            "Heart rate is 80",
+            "Pulse 80",
+            "Pulse is 80"
+        ]
+
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastVital?.heartRate, "80", "Heart rate failed for: \(sample)")
+            XCTAssertNotNil(report.lastVital?.vitalSignsTakenAt)
+        }
+    }
+
     func testExtractPulseOximetry() {
         let samples = [
             "Blood oxygen 96%",
@@ -192,7 +219,8 @@ class ReportParserTests: XCTestCase {
 
     func testExtractMedication() {
         let samples = [
-            "Administered aspirin."
+            "Administered aspirin.",
+            "Administered an aspirin."
         ]
 
         for sample in samples {
