@@ -490,7 +490,7 @@
 				458CA0AA275ADCBA0065F324 /* Data */,
 				45C007C7272A023A0072FF18 /* Incidents */,
 				4566F056236CD1E000A04C75 /* Patients */,
-				45C9DAA527D5987E0003B44B /* RoutED */,
+				45C9DAA527D5987E0003B44B /* Routed */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
 				454EEA9F2524073300EB266A /* Users */,
 				4566F078236D484D00A04C75 /* Views */,
@@ -743,7 +743,7 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		45C9DAA527D5987E0003B44B /* RoutED */ = {
+		45C9DAA527D5987E0003B44B /* Routed */ = {
 			isa = PBXGroup;
 			children = (
 				45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */,
@@ -752,7 +752,7 @@
 				45C5AF8627D28E9C003E630E /* REDApiClient.swift */,
 				45C9DAAA27D598BD0003B44B /* REDRealm.swift */,
 			);
-			path = RoutED;
+			path = Routed;
 			sourceTree = "<group>";
 		};
 		45E267302418AF340010CDE9 /* Fonts */ = {
@@ -1333,7 +1333,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";

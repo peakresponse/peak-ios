@@ -13,6 +13,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     struct Keys {
         static let data = "data"
         static let incidentId = "incidentId"
+        static let filterPriority = "filterPriority"
         static let pin = "pin"
         static let sceneId = "sceneId"
         static let responseId = "responseId"
@@ -31,6 +32,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     }
     @Persisted var _data: Data?
     @Persisted var incident: Incident?
+    @Persisted var filterPriority: Int?
     @Persisted var pin: String?
     @Persisted var scene: Scene?
     @Persisted var response: Response?
@@ -209,6 +211,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.incidentId) != nil {
             incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: data[Keys.incidentId] as? String)
         }
+        filterPriority = data[Keys.filterPriority] as? Int
         pin = data[Keys.pin] as? String
         if data.index(forKey: Keys.sceneId) != nil {
             scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: data[Keys.sceneId] as? String)
@@ -256,6 +259,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         var json = super.asJSON()
         json[Keys.data] = data
         json[Keys.incidentId] = incident?.id
+        json[Keys.filterPriority] = filterPriority ?? NSNull()
         json[Keys.pin] = pin ?? NSNull()
         json[Keys.sceneId] = scene?.id
         json[Keys.responseId] = response?.id

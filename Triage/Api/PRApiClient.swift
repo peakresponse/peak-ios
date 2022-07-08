@@ -90,6 +90,10 @@ class PRApiClient: ApiClient {
         return GET(path: "/api/facilities", params: params, completionHandler: completionHandler)
     }
 
+    func fetchFacilities(payload: [String: [String]], completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return POST(path: "/api/facilities/fetch", body: payload, completionHandler: completionHandler)
+    }
+
     // MARK: - Incidents
 
     func incidents(assignmentId: String, completionHandler: @escaping (WebSocket, [String: Any]?, Error?) -> Void) -> WebSocket {

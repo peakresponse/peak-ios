@@ -40,12 +40,11 @@ class Facility: Base {
     struct Keys {
         static let type = "type"
         static let name = "name"
-        static let stateCode = "stateCode"
-        static let code = "code"
+        static let locationCode = "locationCode"
         static let unit = "unit"
         static let address = "address"
-        static let city = "city"
-        static let state = "state"
+        static let cityId = "cityId"
+        static let stateId = "stateId"
         static let zip = "zip"
         static let country = "country"
         static let lat = "lat"
@@ -54,12 +53,11 @@ class Facility: Base {
 
     @Persisted var type: String?
     @Persisted var name: String?
-    @Persisted var stateCode: String?
-    @Persisted var code: String?
+    @Persisted var locationCode: String?
     @Persisted var unit: String?
     @Persisted var address: String?
-    @Persisted var city: String?
-    @Persisted var state: String?
+    @Persisted var cityId: String?
+    @Persisted var stateId: String?
     @Persisted var zip: String?
     @Persisted var country: String?
     @Persisted var lat: String?
@@ -80,12 +78,11 @@ class Facility: Base {
         super.update(from: data)
         type = data[Keys.type] as? String
         name = data[Keys.name] as? String
-        stateCode = data[Keys.stateCode] as? String
-        code = data[Keys.code] as? String
+        locationCode = data[Keys.locationCode] as? String
         unit = data[Keys.unit] as? String
         address = data[Keys.address] as? String
-        city = data[Keys.city] as? String
-        state = data[Keys.state] as? String
+        cityId = data[Keys.cityId] as? String
+        stateId = data[Keys.stateId] as? String
         zip = data[Keys.zip] as? String
         country = data[Keys.country] as? String
         lat = data[Keys.lat] as? String
@@ -101,11 +98,8 @@ class Facility: Base {
         if let value = name {
             data[Keys.name] = value
         }
-        if let value = stateCode {
-            data[Keys.stateCode] = value
-        }
-        if let value = code {
-            data[Keys.code] = value
+        if let value = locationCode {
+            data[Keys.locationCode] = value
         }
         if let value = unit {
             data[Keys.unit] = value
@@ -113,11 +107,11 @@ class Facility: Base {
         if let value = address {
             data[Keys.address] = value
         }
-        if let value = city {
-            data[Keys.city] = value
+        if let value = cityId {
+            data[Keys.cityId] = value
         }
-        if let value = state {
-            data[Keys.state] = value
+        if let value = stateId {
+            data[Keys.stateId] = value
         }
         if let value = zip {
             data[Keys.zip] = value

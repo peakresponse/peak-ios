@@ -58,13 +58,13 @@ class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            .filter("incident=%@ AND canonicalId=%@ AND filterPriority <> %@", incident, NSNull(), TriagePriority.transported.rawValue)
         if let text = commandHeader.searchField.text, !text.isEmpty {
-            results = results?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
-                                      text, text, text)
+            results = results?
+                .filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)", text, text, text)
         }
         results = results?.sorted(by: [
-            SortDescriptor(keyPath: "patient.priority"),
+            SortDescriptor(keyPath: "filterPriority"),
             SortDescriptor(keyPath: "pin")
         ])
         notificationToken = results?.observe { [weak self] (changes) in

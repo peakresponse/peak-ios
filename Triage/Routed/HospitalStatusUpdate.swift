@@ -13,6 +13,8 @@ class HospitalStatusUpdate: Object {
         static let id = "id"
         static let hospital = "hospital"
         static let name = "name"
+        static let state = "state"
+        static let stateFacilityCode = "stateFacilityCode"
         static let sortSequenceNumber = "sortSequenceNumber"
         static let openEdBedCount = "openEdBedCount"
         static let openPsychBedCount = "openPsychBedCount"
@@ -25,6 +27,8 @@ class HospitalStatusUpdate: Object {
 
     @Persisted(primaryKey: true) var id = UUID().uuidString.lowercased()
     @Persisted var name: String?
+    @Persisted var state: String?
+    @Persisted var stateFacilityCode: String?
     @Persisted var sortSequenceNumber: Int?
     @Persisted var openEdBedCount: Int?
     @Persisted var openPsychBedCount: Int?
@@ -47,6 +51,12 @@ class HospitalStatusUpdate: Object {
             }
             if let value = hospital[Keys.name] as? String {
                 name = value
+            }
+            if let value = hospital[Keys.state] as? String {
+                state = value
+            }
+            if let value = hospital[Keys.stateFacilityCode] as? String {
+                stateFacilityCode = value
             }
             if let value = hospital[Keys.sortSequenceNumber] as? Int {
                 sortSequenceNumber = value

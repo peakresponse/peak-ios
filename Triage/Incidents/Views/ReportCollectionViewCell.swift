@@ -168,7 +168,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
             tagLabel.text = "#\(pin)"
         }
         if isMCI {
-            let priority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+            let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
             priorityChip.color = priority.color
             priorityChip.setTitle(priority.description, for: .normal)
         }

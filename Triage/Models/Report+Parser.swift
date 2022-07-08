@@ -9,6 +9,7 @@
 import Foundation
 import NaturalLanguage
 import PRKit
+import RealmSwift
 
 // swiftlint:disable force_try line_length
 private struct Matcher {
@@ -227,6 +228,7 @@ extension Report {
                                 let results = realm.objects(CodeListItem.self)
                                     .filter("%@ IN list.fields", fieldName)
                                     .filter("search CONTAINS[cd] %@", valueString)
+                                    .sorted(by: [SortDescriptor(keyPath: "code", ascending: true)])
                                 if results.count == 0 {
                                     continue
                                 }
@@ -249,6 +251,7 @@ extension Report {
                                         .filter("%@ IN list.fields", fieldName)
                                         .filter("name CONTAINS[cd] %@",
                                                 tokens.joined(separator: "").trimmingCharacters(in: .whitespacesAndNewlines))
+                                        .sorted(by: [SortDescriptor(keyPath: "code", ascending: true)])
                                     if results.count > 0 {
                                         nemsisValues.append(NemsisValue(text: results[0].code))
                                     }

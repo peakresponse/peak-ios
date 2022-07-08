@@ -10,6 +10,10 @@ import UIKit
 import PRKit
 import RealmSwift
 
+protocol RingdownViewControllerDelegate: AnyObject {
+    func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)
+}
+
 class RingdownViewController: UIViewController, CheckboxDelegate, FormViewController, KeyboardAwareScrollViewController,
                               RingdownFacilityViewDelegate, RingdownStatusViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
@@ -60,6 +64,8 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
 
     var ringdownResults: Results<Ringdown>?
     var ringdownNotificationToken: NotificationToken?
+
+    weak var delegate: RingdownViewControllerDelegate?
 
     deinit {
         notificationToken?.invalidate()
@@ -237,10 +243,14 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     func sendRingdown() {
         var payload = report.asRingdownJSON()
         guard let index = facilityViews.firstIndex(where: { $0.isSelected }) else { return }
+        var facilityId: String?
         if let update = results?[index] {
             payload["hospital"] = [
                 "id": update.id
             ]
+            if let stateId = update.state, let locationCode = update.stateFacilityCode {
+                facilityId = AppRealm.open().objects(Facility.self).filter("stateId=%@ AND locationCode=%@", stateId, locationCode).first?.id
+            }
         }
         let facilityView = facilityViews[index]
         if let eta = facilityView.arrivalText, let etaMinutes = Int(eta) {
@@ -258,6 +268,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
             payload["patient"] = patient
         }
         commandFooter.isLoading = true
+        let reportId = report.id
         REDRealm.sendRingdown(payload: payload) { [weak self] (ringdown, error) in
             if let error = error {
                 DispatchQueue.main.async { [weak self] in
@@ -265,14 +276,20 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
                     self?.presentAlert(error: error)
                 }
             } else if let ringdown = ringdown {
-                let ringdownId = ringdown.id
-                DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
-                    let newReport = Report(clone: self.report)
-                    newReport.ringdownId = ringdownId
+                let realm = AppRealm.open()
+                if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
+                    let newReport = Report(clone: report)
+                    newReport.ringdownId = ringdown.id
+                    if let facilityId = facilityId {
+                        newReport.disposition?.destinationFacility = realm.object(ofType: Facility.self, forPrimaryKey: facilityId)
+                    }
                     AppRealm.saveReport(report: newReport)
-                    self.performRingdownQuery()
-                    self.commandFooter.isLoading = false
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.delegate?.ringdownViewControllerDidSaveReport(self)
+                        self.performRingdownQuery()
+                        self.commandFooter.isLoading = false
+                    }
                 }
             } else {
                 DispatchQueue.main.async { [weak self] in
@@ -297,7 +314,12 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
                 if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
                     let newReport = Report(clone: report)
                     newReport.ringdownId = nil
+                    newReport.disposition?.destinationFacility = nil
                     AppRealm.saveReport(report: newReport)
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.delegate?.ringdownViewControllerDidSaveReport(self)
+                    }
                 }
             }
             DispatchQueue.main.async { [weak self] in

@@ -13,7 +13,7 @@ protocol ReportContainerViewControllerDelegate: NSObject {
     func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController)
 }
 
-class ReportContainerViewController: UIViewController, ReportViewControllerDelegate {
+class ReportContainerViewController: UIViewController, ReportViewControllerDelegate, RingdownViewControllerDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
@@ -71,6 +71,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     }
 
     @objc func cancelPressed() {
+        segmentedControl.isHidden = AppSettings.routedUrl?.isEmpty ?? true
         segmentedControl.isEnabled = true
         commandHeader.leftBarButtonItem = leftBarButtonItem
         commandHeader.rightBarButtonItem = editBarButtonItem
@@ -82,11 +83,15 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     }
 
     @objc func editPressed() {
+        segmentedControl.isHidden = true
         segmentedControl.isEnabled = false
         leftBarButtonItem = commandHeader.leftBarButtonItem
         commandHeader.leftBarButtonItem = cancelBarButtonItem
         commandHeader.rightBarButtonItem = saveBarButtonItem
         if let vc = children[0] as? ReportViewController {
+            if vc.scrollView.contentOffset.y > (segmentedControl.frame.height + 20) {
+                vc.scrollView.contentOffset.y -= segmentedControl.frame.height + 20
+            }
             vc.setEditing(true, animated: true)
         }
     }
@@ -190,7 +195,11 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         } else {
             vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
             if let vc = vc as? RingdownViewController {
+                vc.delegate = self
                 vc.report = report
+            }
+            if cachedViewControllers.count > 0 {
+                cachedViewControllers.append(vc)
             }
         }
         addChild(vc)
@@ -199,7 +208,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         vc.didMove(toParent: self)
     }
 
-    // MARK: - ReportViewController
+    // MARK: - ReportViewControllerDelegate
 
     func reportViewControllerNeedsEditing(_ vc: ReportViewController) {
         editPressed()
@@ -207,5 +216,14 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
     func reportViewControllerNeedsSave(_ vc: ReportViewController) {
         savePressed()
+    }
+
+    // MARK: - RingdownViewControllerDelegate
+
+    func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController) {
+        if let vc = cachedViewControllers[0] as? ReportViewController {
+            vc.report = AppRealm.open().object(ofType: Report.self, forPrimaryKey: vc.report.id)
+            vc.resetFormFields()
+        }
     }
 }

@@ -91,6 +91,29 @@ class REDRealm {
                     try! realm.write {
                         realm.add(updates, update: .modified)
                     }
+                    // search for matching Facility records, compile list of codes without Facility records
+                    var states: [String: [String]] = [:]
+                    for update in updates {
+                        if let stateId = update.state, let stateFacilityCode = update.stateFacilityCode {
+                            if states[stateId] == nil {
+                                states[stateId] = []
+                            }
+                            states[stateId]?.append(stateFacilityCode)
+                        }
+                    }
+                    let apprealm = AppRealm.open()
+                    for (stateId, codes) in states {
+                        let results = apprealm.objects(Facility.self).filter("stateId=%@ AND locationCode IN %@", stateId, codes).map { $0.locationCode }
+                        let filtered = codes.filter { !results.contains($0) }
+                        if filtered.count > 0 {
+                            states[stateId] = filtered
+                        } else {
+                            states.removeValue(forKey: stateId)
+                        }
+                    }
+                    if !states.isEmpty {
+                        AppRealm.fetchFacilities(payload: states)
+                    }
                 }
             }
         })

@@ -128,7 +128,7 @@ class AppRealm {
                 Agency.self,
                 Assignment.self,
                 City.self,
-                Disposition.self,
+                Facility.self,
                 File.self,
                 History.self,
                 Medication.self,
@@ -143,10 +143,12 @@ class AppRealm {
                 Vehicle.self,
                 Vital.self,
                 // models with dependencies on above in dependency order
+                Disposition.self,
                 Responder.self,
                 Scene.self,
                 Incident.self,
                 Dispatch.self,
+                // report has dependencies on all of above
                 Report.self
             ] {
                 var objs: [Base]?
@@ -236,6 +238,22 @@ class AppRealm {
                 completionHandler(nil)
             }
         })
+        task.resume()
+    }
+
+    public static func fetchFacilities(payload: [String: [String]], completionHandler: ((Error?) -> Void)? = nil) {
+        let task = PRApiClient.shared.fetchFacilities(payload: payload) { (_, _, records, error) in
+            if let error = error {
+                completionHandler?(error)
+            } else if let records = records {
+                let facilities = records.map { Facility.instantiate(from: $0)}
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(facilities, update: .modified)
+                }
+                completionHandler?(nil)
+            }
+        }
         task.resume()
     }
 

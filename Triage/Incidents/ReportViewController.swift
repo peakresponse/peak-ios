@@ -29,6 +29,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var recordButton: RecordButton!
     var formInputAccessoryView: UIView!
     var formFields: [PRKit.FormField] = []
+    var destinationFacilityField: PRKit.FormField!
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
     var recordingsSection: FormSection!
@@ -75,6 +76,15 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         if isMCI {
             addTextField(source: report, attributeKey: "pin",
                          attributeType: .integer, tag: &tag, to: colA)
+
+            var zero = 0
+            destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
+            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+            destinationFacilityField.isEnabled = false
+            destinationFacilityField.isEditing = false
+            destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+            colA.addArrangedSubview(destinationFacilityField)
+
             let triageControl = TriageControl()
             triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
             triageControl.addTarget(self, action: #selector(triagePriorityChanged(_:)), for: .valueChanged)
@@ -109,6 +119,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             ])
             self.latLngControl = latLngControl
             colB.addArrangedSubview(locationView)
+
             section.addArrangedSubview(cols)
             containerView.addArrangedSubview(section)
 
@@ -142,6 +153,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             addTextField(source: report, attributeKey: "disposition.unitDisposition",
                          attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
                          tag: &tag, to: colB)
+
+            var zero = 0
+            destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
+            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+            destinationFacilityField.isEnabled = false
+            destinationFacilityField.isEditing = false
+            destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+            colB.addArrangedSubview(destinationFacilityField)
 
             section.addArrangedSubview(cols)
             containerView.addArrangedSubview(section)
@@ -400,6 +419,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         for formField in formFields {
             formField.updateStyle()
         }
+        destinationFacilityField.updateStyle()
         var contentInset = scrollView.contentInset
         contentInset.bottom = commandFooter.frame.height + 16
         scrollView.contentInset = contentInset
@@ -466,7 +486,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newReport
+            if !editing {
+                _ = formField.resignFirstResponder()
+            }
         }
+        // handle special case controls
         latLngControl?.isEditing = editing
         // for brand new reports during an MCI, immedialy initiate location capture
         if editing && (report.scene?.isMCI ?? false) && report.realm == nil {
@@ -483,6 +507,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                 }
             }
         }
+        destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+        destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
     }
 
     func refreshFormFields() {
@@ -613,11 +639,14 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     }
 
     @objc func triagePriorityChanged(_ sender: TriageControl) {
-        if isEditing {
-            newReport?.patient?.priority = sender.priority?.rawValue
-        } else {
+        if !isEditing {
             newReport = Report(clone: report)
-            newReport?.patient?.priority = sender.priority?.rawValue
+        }
+        newReport?.patient?.priority = sender.priority?.rawValue
+        if newReport?.disposition?.destinationFacility == nil {
+            newReport?.filterPriority = newReport?.patient?.priority
+        }
+        if !isEditing {
             delegate?.reportViewControllerNeedsSave(self)
         }
     }

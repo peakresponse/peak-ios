@@ -24,10 +24,12 @@ enum UnitDisposition: String, StringCaseIterable {
 
 class Disposition: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let destinationFacilityId = "destinationFacilityId"
         static let data = "data"
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    @Persisted var destinationFacility: Facility?
 
     @objc var unitDisposition: String? {
         get {
@@ -40,12 +42,19 @@ class Disposition: BaseVersioned, NemsisBacked {
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
+        if let destinationFacilityId = destinationFacility?.id {
+            json[Keys.destinationFacilityId] = destinationFacilityId
+        }
         json[Keys.data] = data
         return json
     }
 
     override func update(from data: [String: Any]) {
         super.update(from: data)
+        let realm = self.realm ?? AppRealm.open()
+        if let destinationFacilityId = data[Keys.destinationFacilityId] as? String {
+            destinationFacility = realm.object(ofType: Facility.self, forPrimaryKey: destinationFacilityId)
+        }
         if data.index(forKey: Keys.data) != nil {
             self.data = data[Keys.data] as? [String: Any] ?? [:]
         }
@@ -53,12 +62,17 @@ class Disposition: BaseVersioned, NemsisBacked {
 
     override func changes(from source: BaseVersioned?) -> [String: Any]? {
         guard let source = source as? Disposition else { return nil }
-        if let dataPatch = self.dataPatch(from: source) {
-            var json = asJSON()
-            json.removeValue(forKey: Keys.data)
-            json[Keys.dataPatch] = dataPatch
-            return json
+        var json: [String: Any] = [:]
+        if destinationFacility != source.destinationFacility {
+            json[Keys.destinationFacilityId] = destinationFacility?.id ?? NSNull()
         }
-        return nil
+        if let dataPatch = self.dataPatch(from: source) {
+            json[Keys.dataPatch] = dataPatch
+        }
+        if json.isEmpty {
+            return nil
+        }
+        json.merge(super.asJSON()) { (_, new) in new }
+        return json
     }
 }

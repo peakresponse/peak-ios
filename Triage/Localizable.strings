@@ -94,6 +94,7 @@
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
 
+"Disposition.destinationFacility" = "Transport Destination";
 "Disposition.unitDisposition" = "Unit Disposition";
 
 "Error.title" = "An error has occurred";

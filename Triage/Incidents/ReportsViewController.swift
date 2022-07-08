@@ -101,7 +101,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                                           text, text, text)
             }
             results = results?.sorted(by: [
-                SortDescriptor(keyPath: "patient.priority"),
+                SortDescriptor(keyPath: "filterPriority"),
                 SortDescriptor(keyPath: "pin")
             ])
         } else {
