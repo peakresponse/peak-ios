@@ -58,6 +58,7 @@ platform :ios do
         workspace: "Triage.xcworkspace",
         scheme: "Triage",
         export_options: {
+          signingCertificate: "Apple Distribution",
           provisioningProfiles: {
             "net.peakresponse.Triage": "net.peakresponse.Triage App Store",
           }
