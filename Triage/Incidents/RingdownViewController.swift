@@ -205,16 +205,29 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
         unregisterFromKeyboardNotifications()
     }
 
+    func showCommandFooter() {
+        commandFooter.isHidden = false
+        let inset = UIEdgeInsets(top: 0, left: 0, bottom: commandFooter.frame.height, right: 0)
+        scrollView.contentInset = inset
+        scrollView.scrollIndicatorInsets = inset
+    }
+
+    func hideCommandFooter() {
+        commandFooter.isHidden = true
+        scrollView.contentInset = .zero
+        scrollView.scrollIndicatorInsets = .zero
+    }
+
     func showRingdown() {
         guard let ringdown = ringdown else { return }
         ringdownStatusView.update(from: ringdown)
         facilitiesSection.isHidden = true
         ringdownSection.isHidden = false
-        commandFooter.isHidden = false
+        showCommandFooter()
         activityIndicatorView.stopAnimating()
         let timestamps = ringdown.timestamps
         if timestamps[RingdownStatus.returnedToService.rawValue] != nil {
-            commandFooter.isHidden = true
+            hideCommandFooter()
         } else if timestamps[RingdownStatus.offloaded.rawValue] != nil {
             actionButton.setTitle("Button.returnToService".localized, for: .normal)
         } else if timestamps[RingdownStatus.arrived.rawValue] != nil {
@@ -230,7 +243,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
             facilityView.isSelected = false
         }
         facilitiesSection.isHidden = false
-        commandFooter.isHidden = true
+        hideCommandFooter()
     }
 
     func validateRingdown() {
@@ -394,10 +407,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     func ringdownFacilityView(_ view: RingdownFacilityView, didChangeEta eta: String?) {
         if let eta = eta, Int(eta) != nil {
             actionButton.setTitle("Button.sendRingdown".localized, for: .normal)
-            commandFooter.isHidden = false
+            hideCommandFooter()
             validateRingdown()
         } else {
-            commandFooter.isHidden = true
+            showCommandFooter()
         }
     }
 
