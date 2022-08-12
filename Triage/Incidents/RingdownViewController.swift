@@ -407,10 +407,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormViewContro
     func ringdownFacilityView(_ view: RingdownFacilityView, didChangeEta eta: String?) {
         if let eta = eta, Int(eta) != nil {
             actionButton.setTitle("Button.sendRingdown".localized, for: .normal)
-            hideCommandFooter()
+            showCommandFooter()
             validateRingdown()
         } else {
-            showCommandFooter()
+            hideCommandFooter()
         }
     }
 
