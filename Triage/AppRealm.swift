@@ -730,7 +730,7 @@ class AppRealm {
         let realm = AppRealm.open()
         if let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId),
            let userId = AppSettings.userId,
-           let responder = scene.responders.filter("user.id=%@", userId).first {
+           let responder = scene.responders.filter("user.id=%@ AND departedAt=%@", userId, NSNull()).first {
             try! realm.write {
                 responder.departedAt = Date()
             }
