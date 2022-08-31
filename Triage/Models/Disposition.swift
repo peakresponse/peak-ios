@@ -22,6 +22,61 @@ enum UnitDisposition: String, StringCaseIterable {
     }
 }
 
+enum PatientEvaluationCare: String, StringCaseIterable {
+    case patientEvaluatedCareProvided = "4228001"
+    case patientEvaluatedRefusedCare = "4228003"
+    case patientEvaluatedNoCare = "4228005"
+    case patientRefused = "4228007"
+    case patientSupportServices = "4228009"
+
+    var description: String {
+        return "PatientEvaluationCare.\(self.rawValue)".localized
+    }
+}
+
+enum CrewDisposition: String, StringCaseIterable {
+    case initiatedContinuedPrimaryCare = "4229001"
+    case initiatedPrimaryCareTransferred = "4229003"
+    case providedCareSupportingPrimary = "4229005"
+    case assumedPrimaryCare = "4229007"
+    case incidentSupportServices = "4229009"
+    case backInServiceNoServices = "4229011"
+    case backInServiceServicesRefused = "4229013"
+
+    var description: String {
+        return "CrewDisposition.\(self.rawValue)".localized
+    }
+}
+
+enum TransportDisposition: String, StringCaseIterable {
+    case transportByThisUnit = "4230001"
+    case transportByThisUnitWithAnotherCrew = "4230003"
+    case transportByAnotherUnit = "4230005"
+    case transportByAnotherUserWithThisCrew = "4230007"
+    case patientRefusedTransport = "4230009"
+    case nonPatientTransport = "4230011"
+    case noTransport = "4230013"
+
+    var description: String {
+        return "TransportDisposition.\(self.rawValue)".localized
+    }
+}
+
+enum ReasonForRefusalRelease: String, StringCaseIterable {
+    case ama = "4231001"
+    case patientIndicatesNotNecessary = "4231003"
+    case releasedFollowingProtocol = "4231005"
+    case releasedToLawEnforcement = "4231007"
+    case patientStatesOtherTransport = "4231009"
+    case DNR = "4231011"
+    case medicalOrders = "4231013"
+    case other = "4231015"
+
+    var description: String {
+        return "ReasonForRefusalRelease.\(self.rawValue)".localized
+    }
+}
+
 class Disposition: BaseVersioned, NemsisBacked {
     struct Keys {
         static let destinationFacilityId = "destinationFacilityId"
@@ -37,6 +92,42 @@ class Disposition: BaseVersioned, NemsisBacked {
         }
         set {
             setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
+        }
+    }
+
+    @objc var patientEvaluationCare: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.28")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.28")
+        }
+    }
+
+    @objc var crewDisposition: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.29")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.29")
+        }
+    }
+
+    @objc var transportDisposition: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.30")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.30")
+        }
+    }
+
+    @objc var reasonForRefusalRelease: [String]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.31")?.map { $0.text ?? "" }
+        }
+        set {
+            setNemsisValues(newValue?.map { NemsisValue(text: $0) }, forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.31")
         }
     }
 

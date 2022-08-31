@@ -74,7 +74,7 @@ open class FormSection: UIStackView {
 public protocol FormViewController: PRKit.FormFieldDelegate {
     var traitCollection: UITraitCollection { get }
     var formInputAccessoryView: UIView! { get }
-    var formFields: [PRKit.FormField] { get set }
+    var formFields: [String: PRKit.FormField] { get set }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
@@ -120,7 +120,7 @@ extension FormViewController {
         } else {
             col.addArrangedSubview(textField)
         }
-        formFields.append(textField)
+        formFields[attributeKey] = textField
     }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button {

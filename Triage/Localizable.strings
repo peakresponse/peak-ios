@@ -94,8 +94,20 @@
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
 
+"CrewDisposition.4229001" = "Initiated and Continued Primary Care";
+"CrewDisposition.4229003" = "Initiated Primary Care and Transferred to Another EMS Crew";
+"CrewDisposition.4229005" = "Provided Care Supporting Primary EMS Crew";
+"CrewDisposition.4229007" = "Assumed Primary Care from Another EMS Crew";
+"CrewDisposition.4229009" = "Incident Support Services Provided (including Standby)";
+"CrewDisposition.4229011" = "Back in Service, No Care/Support Services Required";
+"CrewDisposition.4229013" = "Back in Service, Care/Support Services Refused";
+
 "Disposition.destinationFacility" = "Transport Destination";
 "Disposition.unitDisposition" = "Unit Disposition";
+"Disposition.patientEvaluationCare" = "Patient Evaluation/Care";
+"Disposition.crewDisposition" = "Crew Disposition";
+"Disposition.transportDisposition" = "Transport Disposition";
+"Disposition.reasonForRefusalRelease" = "Reason for Refusal/Release";
 
 "Error.title" = "An error has occurred";
 "Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
@@ -270,6 +282,12 @@
 "Patient.triageMentalStatus.304900007" = "Difficulty complying";
 "Patient.triageMentalStatus.372089002" = "Unable to comply";
 
+"PatientEvaluationCare.4228001" = "Evaluated and Care Provided";
+"PatientEvaluationCare.4228003" = "Evaluated and Refused Care";
+"PatientEvaluationCare.4228005" = "Evaluated, No Care Required";
+"PatientEvaluationCare.4228007" = "Refused Evaluation/Care";
+"PatientEvaluationCare.4228009" = "Support Services Provided";
+
 "PatientTableViewController.triage" = "Triage";
 "PatientTableViewController.location" = "Location";
 "PatientTableViewController.transport" = "Transport";
@@ -291,6 +309,15 @@
 "Procedure.procedurePerformedAt" = "Performed At";
 "Procedure.procedure" = "Treatment";
 "Procedure.responseToProcedure" = "Patient Response";
+
+"ReasonForRefusalRelease.4231001" = "Against Medical Advice";
+"ReasonForRefusalRelease.4231003" = "Patient/Guardian Indicates Not Necessary";
+"ReasonForRefusalRelease.4231005" = "Released Following Protocol Guidelines";
+"ReasonForRefusalRelease.4231007" = "Released to Law Enforcement";
+"ReasonForRefusalRelease.4231009" = "Patient/Guardian States Intent to Transport by Other Means";
+"ReasonForRefusalRelease.4231011" = "DNR";
+"ReasonForRefusalRelease.4231013" = "Medical/Physician Orders for Life Sustaining Treatment";
+"ReasonForRefusalRelease.4231015" = "Other, Not Listed";
 
 "RecordButton.selectInputLabel" = "Select Bluetooth Input";
 
@@ -423,6 +450,14 @@
 
 "TransferCommandConfirmation.title" = "Are you sure you want to transfer MGS command to %@?";
 "TransferCommandConfirmation.message" = "Once you transfer, you will no longer be able to edit the scene overview or close the scene.";
+
+"TransportDisposition.4230001" = "Tranport by This Unit Only";
+"TransportDisposition.4230003" = "Tranport by This Unit, with a Member of Another Crew";
+"TransportDisposition.4230005" = "Tranport by Another Unit";
+"TransportDisposition.4230007" = "Tranport by Another Unit, with a Member of This Crew";
+"TransportDisposition.4230009" = "Patient Refused Transport";
+"TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
+"TransportDisposition.4230013" = "No Transport";
 
 "TriagePriority.0" = "Immediate";
 "TriagePriority.1" = "Delayed";

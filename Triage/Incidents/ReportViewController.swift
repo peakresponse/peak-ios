@@ -28,7 +28,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var recordButton: RecordButton!
     var formInputAccessoryView: UIView!
-    var formFields: [PRKit.FormField] = []
+    var formFields: [String: PRKit.FormField] = [:]
     var destinationFacilityField: PRKit.FormField!
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
@@ -82,7 +82,6 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
-            destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
             colA.addArrangedSubview(destinationFacilityField)
 
             let triageControl = TriageControl()
@@ -98,7 +97,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                          tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colB)
             let locationField = newTextField(source: report, attributeKey: "patient.location", tag: &tag)
-            formFields.append(locationField)
+            formFields["patient.location"] = locationField
             let locationView = UIView()
             locationView.addSubview(locationField)
             NSLayoutConstraint.activate([
@@ -147,11 +146,23 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             colA.addArrangedSubview(innerCols)
             addTextField(source: report, attributeKey: "scene.address", tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
             addTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "disposition.unitDisposition",
                          attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
+                         tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.patientEvaluationCare",
+                         attributeType: .single(EnumKeyboardSource<PatientEvaluationCare>()),
+                         tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.crewDisposition",
+                         attributeType: .single(EnumKeyboardSource<CrewDisposition>()),
+                         tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.transportDisposition",
+                         attributeType: .single(EnumKeyboardSource<TransportDisposition>()),
+                         tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.reasonForRefusalRelease",
+                         attributeType: .multi(EnumKeyboardSource<ReasonForRefusalRelease>()),
                          tag: &tag, to: colB)
 
             var zero = 0
@@ -159,7 +170,6 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
-            destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
             colB.addArrangedSubview(destinationFacilityField)
 
             section.addArrangedSubview(cols)
@@ -263,6 +273,8 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
         recordingsSection.addArrangedSubview(cols)
         containerView.addArrangedSubview(recordingsSection)
+
+        updateFormFieldVisibility()
 
         setEditing(isEditing, animated: false)
     }
@@ -416,7 +428,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        for formField in formFields {
+        for formField in formFields.values {
             formField.updateStyle()
         }
         destinationFacilityField.updateStyle()
@@ -430,8 +442,11 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         for view in containerView.arrangedSubviews {
             if let section = view as? FormSection, section.type == type {
                 if section.index ?? 0 >= count {
-                    let fieldsToRemove = FormSection.fields(in: section)
-                    formFields = formFields.filter { !fieldsToRemove.contains($0) }
+                    for formField in FormSection.fields(in: section) {
+                        if let attributeKey = formField.attributeKey {
+                            formFields.removeValue(forKey: attributeKey)
+                        }
+                    }
                     if let button = section.findLastButton() {
                         button.removeFromSuperview()
                         lastSection?.addLastButton(button)
@@ -482,7 +497,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             }
             self.newReport = nil
         }
-        for formField in formFields {
+        for formField in formFields.values {
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newReport
@@ -499,7 +514,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     }
 
     func resetFormFields() {
-        for formField in formFields {
+        for formField in formFields.values {
             if let attributeKey = formField.attributeKey {
                 formField.attributeValue = formField.source?.value(forKeyPath: attributeKey) as? NSObject
                 if let source = formField.source as? Predictions {
@@ -508,21 +523,55 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             }
         }
         destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
-        destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+        updateFormFieldVisibility()
     }
 
-    func refreshFormFields() {
-        for formField in formFields {
-            if let attributeKey = formField.attributeKey, let target = formField.target {
-                formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                if let target = formField.target as? Predictions {
-                    formField.status = target.predictionStatus(for: attributeKey)
+    func refreshFormFields(_ attributeKeys: [String]? = nil) {
+        if let attributeKeys = attributeKeys {
+            for attributeKey in attributeKeys {
+                if let formField = formFields[attributeKey], let target = formField.target {
+                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let target = formField.target as? Predictions {
+                        formField.status = target.predictionStatus(for: attributeKey)
+                    }
+                }
+            }
+        } else {
+            for formField in formFields.values {
+                if let attributeKey = formField.attributeKey, let target = formField.target {
+                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let target = formField.target as? Predictions {
+                        formField.status = target.predictionStatus(for: attributeKey)
+                    }
                 }
             }
         }
         // if mci, update triage control
         if let triageControl = triageControl {
             triageControl.priority = TriagePriority(rawValue: newReport?.patient?.priority ?? -1)
+        }
+    }
+
+    func updateFormFieldVisibility() {
+        destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+        if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
+            formFields["disposition.patientEvaluationCare"]?.isHidden = false
+            formFields["disposition.crewDisposition"]?.isHidden = false
+            formFields["disposition.transportDisposition"]?.isHidden = false
+        } else {
+            formFields["disposition.patientEvaluationCare"]?.isHidden = true
+            formFields["disposition.crewDisposition"]?.isHidden = true
+            formFields["disposition.transportDisposition"]?.isHidden = true
+        }
+        if let patientEvaluationCare = (newReport ?? report)?.disposition?.patientEvaluationCare,
+           patientEvaluationCare == PatientEvaluationCare.patientEvaluatedRefusedCare.rawValue ||
+            patientEvaluationCare == PatientEvaluationCare.patientRefused.rawValue {
+            formFields["disposition.reasonForRefusalRelease"]?.isHidden = false
+        } else if let transportDisposition = (newReport ?? report)?.disposition?.transportDisposition,
+                  transportDisposition == TransportDisposition.patientRefusedTransport.rawValue {
+            formFields["disposition.reasonForRefusalRelease"]?.isHidden = false
+        } else {
+            formFields["disposition.reasonForRefusalRelease"]?.isHidden = true
         }
     }
 
@@ -656,6 +705,37 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     func formFieldDidChange(_ field: PRKit.FormField) {
         if let attributeKey = field.attributeKey, let target = field.target {
             target.setValue(field.attributeValue, forKeyPath: attributeKey)
+            // some hard-coded field visibility rules, until a more generalized implementation can be designed
+            switch attributeKey {
+            case "time.arrivedAtPatient":
+                // if arrived at patient, set unit disposition to Patient Contact Made automatically if not already set
+                if field.attributeValue != nil, newReport?.disposition?.unitDisposition == nil {
+                    newReport?.disposition?.unitDisposition = UnitDisposition.patientContactMade.rawValue
+                    refreshFormFields(["disposition.unitDisposition"])
+                }
+                updateFormFieldVisibility()
+            case "disposition.unitDisposition":
+                if UnitDisposition.patientContactMade.rawValue != field.attributeValue as? String {
+                    // clear and hide patient/crew/transport/refusal disposition fields
+                    newReport?.disposition?.patientEvaluationCare = nil
+                    newReport?.disposition?.crewDisposition = nil
+                    newReport?.disposition?.transportDisposition = nil
+                    newReport?.disposition?.reasonForRefusalRelease = nil
+                    refreshFormFields(["disposition.patientEvaluationCare", "disposition.crewDisposition",
+                                       "disposition.transportDisposition", "disposition.reasonForRefusalRelease"])
+                }
+                updateFormFieldVisibility()
+            case "disposition.patientEvaluationCare", "disposition.transportDisposition":
+                if newReport?.disposition?.patientEvaluationCare != PatientEvaluationCare.patientEvaluatedRefusedCare.rawValue &&
+                    newReport?.disposition?.patientEvaluationCare != PatientEvaluationCare.patientRefused.rawValue &&
+                    newReport?.disposition?.transportDisposition != TransportDisposition.patientRefusedTransport.rawValue {
+                    newReport?.disposition?.reasonForRefusalRelease = nil
+                    refreshFormFields(["disposition.reasonForRefusalRelease"])
+                }
+                updateFormFieldVisibility()
+            default:
+                break
+            }
         }
     }
 
@@ -730,7 +810,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         } else {
             newReport?.narrative?.text = "\(report.narrative?.text ?? "") \(processedText)"
         }
-        let formField = formFields.first(where: { $0.target == newReport && $0.attributeKey == "narrative.text" })
+        let formField = formFields["narrative.text"]
         formField?.attributeValue = newReport?.narrative?.text as NSObject?
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             self?.newReport?.extractValues(from: processedText, fileId: fileId, transcriptId: transcriptId,
