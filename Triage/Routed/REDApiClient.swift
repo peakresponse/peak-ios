@@ -42,7 +42,7 @@ class REDApiClient: ApiClient {
     }
 
     func connect(completionHandler: @escaping (WebSocket, [String: Any]?, Error?) -> Void) -> WebSocket {
-        return WS(path: "/user", completionHandler: completionHandler)
+        return WS(path: "/wss/user", completionHandler: completionHandler)
     }
 
     func logout(completionHandler: @escaping () -> Void) {

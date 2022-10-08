@@ -1,5 +1,5 @@
 //
-//  FormViewController.swift
+//  FormBuilder.swift
 //  Triage
 //
 //  Created by Francis Li on 12/21/21.
@@ -71,7 +71,7 @@ open class FormSection: UIStackView {
     }
 }
 
-public protocol FormViewController: PRKit.FormFieldDelegate {
+public protocol FormBuilder: PRKit.FormFieldDelegate {
     var traitCollection: UITraitCollection { get }
     var formInputAccessoryView: UIView! { get }
     var formFields: [String: PRKit.FormField] { get set }
@@ -80,6 +80,8 @@ public protocol FormViewController: PRKit.FormFieldDelegate {
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView)
+    func newVerticalSpacer(_ height: CGFloat) -> UIView
+    func newText(_ text: String) -> UILabel
     func newTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
@@ -94,7 +96,7 @@ public protocol FormViewController: PRKit.FormFieldDelegate {
                       to col: UIStackView, withWrapper: Bool)
 }
 
-extension FormViewController {
+extension FormBuilder {
     func addTextField(source: NSObject? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,
@@ -121,6 +123,22 @@ extension FormViewController {
             col.addArrangedSubview(textField)
         }
         formFields[attributeKey] = textField
+    }
+
+    func newVerticalSpacer(_ height: CGFloat = 20) -> UIView {
+        let view = UIView()
+        view.backgroundColor = .clear
+        view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        return view
+    }
+
+    func newText(_ text: String) -> UILabel {
+        let label = UILabel()
+        label.numberOfLines = 0
+        label.text = text
+        label.font = .h4SemiBold
+        label.textColor = .base800
+        return label
     }
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
@@ -184,6 +202,7 @@ extension FormViewController {
         header.font = .h4SemiBold
         header.text = text
         header.textColor = .brandPrimary500
+        header.numberOfLines = 0
         view.addSubview(header)
         NSLayoutConstraint.activate([
             header.topAnchor.constraint(equalTo: view.topAnchor, constant: 40),

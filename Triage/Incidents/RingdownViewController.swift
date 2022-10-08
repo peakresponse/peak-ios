@@ -14,7 +14,7 @@ protocol RingdownViewControllerDelegate: AnyObject {
     func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)
 }
 
-class RingdownViewController: UIViewController, CheckboxDelegate, FormViewController, KeyboardAwareScrollViewController,
+class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
                               RingdownFacilityViewDelegate, RingdownStatusViewDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!

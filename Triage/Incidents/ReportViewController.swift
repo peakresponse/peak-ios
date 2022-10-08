@@ -20,7 +20,7 @@ protocol ReportViewControllerDelegate: AnyObject {
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
-class ReportViewController: UIViewController, FormViewController, KeyboardAwareScrollViewController, LatLngControlDelegate,
+class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate, KeyboardAwareScrollViewController, LatLngControlDelegate,
                             RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -33,6 +33,7 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
     var recordingsSection: FormSection!
+    var signaturesSection: FormSection!
 
     var report: Report!
     var newReport: Report?
@@ -175,6 +176,26 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             section.addArrangedSubview(cols)
             containerView.addArrangedSubview(section)
 
+            (signaturesSection, cols, colA, colB) = newSection()
+            header = newHeader("ReportViewController.signatures".localized)
+            signaturesSection.addArrangedSubview(header)
+            signaturesSection.addArrangedSubview(cols)
+            var prevFormInstanceId: String?
+            var formCount = 0
+            for (i, signature) in report.signatures.enumerated() {
+                if signature.formInstanceId != prevFormInstanceId {
+                    addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? colA : colB)
+                    prevFormInstanceId = signature.formInstanceId
+                    formCount += 1
+                }
+            }
+            let button = newButton(bundleImage: "Plus24px", title: "Button.collectSignatures".localized)
+            button.addTarget(self, action: #selector(collectSignaturesPressed(_:)), for: .touchUpInside)
+            button.tag = tag
+            tag += 1000
+            signaturesSection.addLastButton(button)
+            containerView.addArrangedSubview(signaturesSection)
+
             (section, cols, colA, colB) = newSection()
             header = newHeader("ReportViewController.patientInformation".localized,
                                subheaderText: "ReportViewController.optional".localized)
@@ -299,6 +320,19 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
             }
         }
         col.addArrangedSubview(recordingField)
+    }
+
+    func addSignaturesField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
+        let report = target ?? source
+        let signature = report?.signatures[i]
+        let signaturesField = CellField()
+        signaturesField.isLabelHidden = true
+        signaturesField.source = source
+        signaturesField.target = target
+        signaturesField.attributeKey = "signatures[\(i)]"
+        signaturesField.delegate = self
+        signaturesField.text = signature?.form?.title
+        col.addArrangedSubview(signaturesField)
     }
 
     func newVitalsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
@@ -495,6 +529,28 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
                     recordingField.removeFromSuperview()
                 }
             }
+            if newReport.signatures.count != report.signatures.count {
+                // signatures can be deleted, so brute force reconstruct this section
+                var signatureFields: [CellField] = []
+                FormSection.subviews(&signatureFields, in: signaturesSection)
+                for signatureField in signatureFields {
+                    signatureField.removeFromSuperview()
+                }
+                let button = signaturesSection.findLastButton()
+                button?.removeFromSuperview()
+                var prevFormInstanceId: String?
+                var formCount = 0
+                for (i, signature) in report.signatures.enumerated() {
+                    if signature.formInstanceId != prevFormInstanceId {
+                        addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? signaturesSection.colA : signaturesSection.colB)
+                        prevFormInstanceId = signature.formInstanceId
+                        formCount += 1
+                    }
+                }
+                if let button = button {
+                    signaturesSection.addLastButton(button)
+                }
+            }
             self.newReport = nil
         }
         for formField in formFields.values {
@@ -573,6 +629,22 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         } else {
             formFields["disposition.reasonForRefusalRelease"]?.isHidden = true
         }
+    }
+
+    @objc func collectSignaturesPressed(_ button: PRKit.Button) {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        guard newReport != nil else { return }
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Forms")
+        if let vc = vc as? FormsViewController {
+            vc.delegate = self
+        }
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        navVC.isNavigationBarHidden = true
+        presentAnimated(navVC)
     }
 
     @objc func newVitalsPressed(_ button: PRKit.Button) {
@@ -739,8 +811,83 @@ class ReportViewController: UIViewController, FormViewController, KeyboardAwareS
         }
     }
 
+    func formFieldDidPress(_ field: PRKit.FormField) {
+        if let attributeKey = field.attributeKey, attributeKey.hasPrefix("signatures[") {
+            if let report = newReport ?? report, let signature = report.value(forKeyPath: attributeKey) as? Signature, let form = signature.form {
+                let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Form")
+                if let vc = vc as? FormViewController {
+                    vc.modalPresentationStyle = .fullScreen
+                    vc.form = form
+                    let newReport = Report.newRecord()
+                    newReport.signatures.append(objectsIn: report.signatures.filter { $0.formInstanceId == signature.formInstanceId })
+                    vc.report = report
+                    vc.isEditing = isEditing
+                    if !isEditing {
+                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                    }
+                    vc.delegate = self
+                    presentAnimated(vc)
+                }
+            }
+        }
+    }
+
     func formField(_ field: PRKit.FormField, wantsToPresent vc: UIViewController) {
         presentAnimated(vc)
+    }
+
+    // MARK: - FormViewControllerDelegate
+
+    func formViewController(_ vc: FormViewController, didCollect signatures: [Signature]) {
+        dismissAnimated()
+    }
+
+    func formViewController(_ vc: FormViewController, didDelete signatures: [Signature]) {
+        guard let formInstanceId = signatures.first?.formInstanceId else { return }
+        if let newReport = newReport {
+            // remove the corresponding field
+            var cellFields: [CellField] = []
+            FormSection.subviews(&cellFields, in: signaturesSection)
+            for cellField in cellFields {
+                if let attributeKey = cellField.attributeKey,
+                   let signature = newReport.value(forKeyPath: attributeKey) as? Signature,
+                   signature.formInstanceId == formInstanceId {
+                    cellField.removeFromSuperview()
+                    break
+                }
+            }
+            // remove all the signatures from the target object
+            var newSignatures = Array(newReport.signatures)
+            newSignatures.removeAll(where: { signatures.contains($0) })
+            newReport.signatures.removeAll()
+            newReport.signatures.append(objectsIn: newSignatures)
+        }
+        dismissAnimated()
+    }
+
+    // MARK: - FormsViewControllerDelegate
+
+    func formsViewController(_ vc: FormsViewController, didCollect signatures: [Signature]) {
+        dismissAnimated()
+        if let newReport = newReport {
+            let i = newReport.signatures.count
+            var formCount = 0
+            var prevFormInstanceId: String?
+            for signature in newReport.signatures {
+                if signature.formInstanceId != prevFormInstanceId {
+                    prevFormInstanceId = signature.formInstanceId
+                    formCount += 1
+                }
+            }
+            newReport.signatures.append(objectsIn: signatures)
+
+            let button = signaturesSection.findLastButton()
+            button?.removeFromSuperview()
+            addSignaturesField(i, source: report, target: newReport, to: formCount.isMultiple(of: 2) ? signaturesSection.colA : signaturesSection.colB)
+            if let button = button {
+                signaturesSection.addLastButton(button)
+            }
+        }
     }
 
     // MARK: - LatLngControlDelegate

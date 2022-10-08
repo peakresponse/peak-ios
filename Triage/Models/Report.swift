@@ -27,6 +27,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let vitalIds = "vitalIds"
         static let procedureIds = "procedureIds"
         static let fileIds = "fileIds"
+        static let signatureIds = "signatureIds"
         static let predictions = "predictions"
         static let ringdownId = "ringdownId"
     }
@@ -55,6 +56,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         return procedures.last
     }
     @Persisted var files: List<File>
+    @Persisted var signatures: List<Signature>
     @Persisted var ringdownId: String?
 
     @objc var patientCareReportNumber: String? {
@@ -150,6 +152,8 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         }
         files.removeAll()
         files.append(objectsIn: report.files.map { File(clone: $0) })
+        signatures.removeAll()
+        signatures.append(objectsIn: report.signatures.map { Signature(clone: $0) })
     }
 
     convenience init(transfer report: Report) {
@@ -208,51 +212,62 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.data) != nil {
             self.data = data[Keys.data] as? [String: Any] ?? [:]
         }
+        let realm = self.realm ?? AppRealm.open()
         if data.index(forKey: Keys.incidentId) != nil {
-            incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: data[Keys.incidentId] as? String)
+            incident = realm.object(ofType: Incident.self, forPrimaryKey: data[Keys.incidentId] as? String)
         }
         filterPriority = data[Keys.filterPriority] as? Int
         pin = data[Keys.pin] as? String
         if data.index(forKey: Keys.sceneId) != nil {
-            scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: data[Keys.sceneId] as? String)
+            scene = realm.object(ofType: Scene.self, forPrimaryKey: data[Keys.sceneId] as? String)
         }
         if data.index(forKey: Keys.responseId) != nil {
-            response = (realm ?? AppRealm.open()).object(ofType: Response.self, forPrimaryKey: data[Keys.responseId] as? String)
+            response = realm.object(ofType: Response.self, forPrimaryKey: data[Keys.responseId] as? String)
         }
         if data.index(forKey: Keys.timeId) != nil {
-            time = (realm ?? AppRealm.open()).object(ofType: Time.self, forPrimaryKey: data[Keys.timeId] as? String)
+            time = realm.object(ofType: Time.self, forPrimaryKey: data[Keys.timeId] as? String)
         }
         if data.index(forKey: Keys.patientId) != nil {
-            patient = (realm ?? AppRealm.open()).object(ofType: Patient.self, forPrimaryKey: data[Keys.patientId] as? String)
+            patient = realm.object(ofType: Patient.self, forPrimaryKey: data[Keys.patientId] as? String)
         }
         if data.index(forKey: Keys.situationId) != nil {
-            situation = (realm ?? AppRealm.open()).object(ofType: Situation.self, forPrimaryKey: data[Keys.situationId] as? String)
+            situation = realm.object(ofType: Situation.self, forPrimaryKey: data[Keys.situationId] as? String)
         }
         if data.index(forKey: Keys.historyId) != nil {
-            history = (realm ?? AppRealm.open()).object(ofType: History.self, forPrimaryKey: data[Keys.historyId] as? String)
+            history = realm.object(ofType: History.self, forPrimaryKey: data[Keys.historyId] as? String)
         }
         if data.index(forKey: Keys.dispositionId) != nil {
-            disposition = (realm ?? AppRealm.open()).object(ofType: Disposition.self, forPrimaryKey: data[Keys.dispositionId] as? String)
+            disposition = realm.object(ofType: Disposition.self, forPrimaryKey: data[Keys.dispositionId] as? String)
         }
         if data.index(forKey: Keys.narrativeId) != nil {
-            narrative = (realm ?? AppRealm.open()).object(ofType: Narrative.self, forPrimaryKey: data[Keys.narrativeId] as? String)
+            narrative = realm.object(ofType: Narrative.self, forPrimaryKey: data[Keys.narrativeId] as? String)
         }
-        if data.index(forKey: Keys.vitalIds) != nil {
-            vitals.append(objectsIn: (realm ?? AppRealm.open()).objects(Vital.self).filter("id IN %@", data[Keys.vitalIds] as? [String] as Any))
+        if let ids = data[Keys.vitalIds] as? [String] {
+            vitals.removeAll()
+            vitals.append(objectsIn: ids.map { realm.object(ofType: Vital.self, forPrimaryKey: $0)! })
         }
-        if data.index(forKey: Keys.medicationIds) != nil {
-            medications.append(objectsIn: (realm ?? AppRealm.open()).objects(Medication.self).filter("id IN %@", data[Keys.medicationIds] as? [String] as Any))
+        if let ids = data[Keys.medicationIds] as? [String] {
+            medications.removeAll()
+            medications.append(objectsIn: ids.map { realm.object(ofType: Medication.self, forPrimaryKey: $0)! })
         }
-        if data.index(forKey: Keys.procedureIds) != nil {
-            procedures.append(objectsIn: (realm ?? AppRealm.open()).objects(Procedure.self).filter("id IN %@", data[Keys.procedureIds] as? [String] as Any))
+        if let ids = data[Keys.procedureIds] as? [String] {
+            procedures.removeAll()
+            procedures.append(objectsIn: ids.map { realm.object(ofType: Procedure.self, forPrimaryKey: $0)! })
         }
-        if data.index(forKey: Keys.fileIds) != nil {
-            files.append(objectsIn: (realm ?? AppRealm.open()).objects(File.self).filter("id IN %@", data[Keys.fileIds] as? [String] as Any))
+        if let ids = data[Keys.fileIds] as? [String] {
+            files.removeAll()
+            files.append(objectsIn: ids.map { realm.object(ofType: File.self, forPrimaryKey: $0)! })
+        }
+        if let ids = data[Keys.signatureIds] as? [String] {
+            signatures.removeAll()
+            signatures.append(objectsIn: ids.map { realm.object(ofType: Signature.self, forPrimaryKey: $0)! })
         }
         if data.index(forKey: Keys.predictions) != nil {
             predictions = data[Keys.predictions] as? [String: Any]
         }
-        self.ringdownId = data[Keys.ringdownId] as? String
+        if data.index(forKey: Keys.ringdownId) != nil {
+            ringdownId = data[Keys.ringdownId] as? String
+        }
     }
 
     override func asJSON() -> [String: Any] {
@@ -273,6 +288,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         json[Keys.procedureIds] = Array(procedures.map { $0.id })
         json[Keys.medicationIds] = Array(medications.map { $0.id })
         json[Keys.fileIds] = Array(files.map { $0.id })
+        json[Keys.signatureIds] = Array(signatures.map { $0.id })
         if let value = predictions {
             json[Keys.predictions] = value
         }
@@ -383,6 +399,14 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
             report["fileIds"] = ids
         } else {
             report.removeValue(forKey: "fileIds")
+        }
+
+        (ids, data) = Report.canonicalize(source: parent?.signatures, target: signatures)
+        if data.count > 0 {
+            payload["Signature"] = data
+            report["signatureIds"] = ids
+        } else {
+            report.removeValue(forKey: "signatureIds")
         }
 
         if NSDictionary(dictionary: predictions ?? [:]).isEqual(NSDictionary(dictionary: parent?.predictions ?? [:])) {

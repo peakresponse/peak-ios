@@ -73,6 +73,8 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                 REDApiClient.shared = REDApiClient(baseURL: routedUrl)
                                 REDRealm.connect()
                             }
+                            // update agency forms in the background
+                            AppRealm.getForms()
                             // update code lists in the background
                             AppRealm.getLists { (_) in
                                 // noop

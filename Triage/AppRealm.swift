@@ -102,8 +102,8 @@ class AppRealm {
         }
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,
-            Disposition.self, Facility.self, File.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
-            Procedure.self, Report.self, Responder.self, Response.self, Scene.self, ScenePin.self, Situation.self, State.self,
+            Disposition.self, Facility.self, File.self, Form.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
+            Procedure.self, Report.self, Responder.self, Response.self, Scene.self, ScenePin.self, Signature.self, Situation.self, State.self,
             Time.self, User.self, Vehicle.self, Vital.self
         ])
         let realm = try! Realm(configuration: config)
@@ -130,6 +130,7 @@ class AppRealm {
                 City.self,
                 Facility.self,
                 File.self,
+                Form.self,
                 History.self,
                 Medication.self,
                 Narrative.self,
@@ -145,6 +146,7 @@ class AppRealm {
                 // models with dependencies on above in dependency order
                 Disposition.self,
                 Responder.self,
+                Signature.self,
                 Scene.self,
                 Incident.self,
                 Dispatch.self,
@@ -260,7 +262,6 @@ class AppRealm {
     // MARK: - Files
 
     public static func uploadFile(fileURL: URL) {
-        /// ensure a unique upload filename by prepending the user uuid
         let fileName = fileURL.lastPathComponent
         /// move to the local app file cache
         let cacheFileURL = AppCache.cache(fileURL: fileURL, filename: fileName)
@@ -282,12 +283,30 @@ class AppRealm {
                     } else if let response = response {
                         op.data = response
                         op.retryTime = 0
+                        /// set an arbitrary error so that the operation will be repeated, and the above conditional block will be executed to complete the upload
                         completionHandler(ApiClientError.unexpected)
                     }
                 }
             }
         }
         queue.addOperation(op)
+    }
+
+    // MARK: - Forms
+
+    public static func getForms(completionHandler: ((Error?) -> Void)? = nil) {
+        let task = PRApiClient.shared.getForms { (_, _, data, error) in
+            if let error = error {
+                completionHandler?(error)
+            } else if let data = data {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    realm.add(data.map { Form.instantiate(from: $0) }, update: .modified)
+                }
+                completionHandler?(nil)
+            }
+        }
+        task.resume()
     }
 
     // MARK: - Incidents

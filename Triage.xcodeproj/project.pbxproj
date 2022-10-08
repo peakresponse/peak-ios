@@ -44,6 +44,13 @@
 		454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */; };
 		454EEA542522F0EC00EB266A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA532522F0EC00EB266A /* ImageView.swift */; };
 		454EEAA92524078C00EB266A /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 454EEAA82524078C00EB266A /* Users.storyboard */; };
+		454F9C9E28D38717009F7115 /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9D28D38717009F7115 /* Form.swift */; };
+		454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */; };
+		454F9CA228D3BA19009F7115 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA128D3BA19009F7115 /* FormTests.swift */; };
+		454F9CA428D3D088009F7115 /* FormsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA328D3D088009F7115 /* FormsViewController.swift */; };
+		454F9CA628D3DFE0009F7115 /* ListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */; };
+		454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA728D3E278009F7115 /* FormViewController.swift */; };
+		454F9CB328D90B90009F7115 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CB228D90B90009F7115 /* Signature.swift */; };
 		4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */; };
 		45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A2E24DE26AB007BAE09 /* SearchBar.swift */; };
 		45515A3124DF682A007BAE09 /* SortBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45515A3024DF682A007BAE09 /* SortBar.swift */; };
@@ -103,7 +110,7 @@
 		458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */; };
 		458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */; };
 		458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */; };
-		458CA0CC277293580065F324 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CB277293580065F324 /* FormViewController.swift */; };
+		458CA0CC277293580065F324 /* FormBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CB277293580065F324 /* FormBuilder.swift */; };
 		458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0CE278527FC0065F324 /* ReportsViewController.swift */; };
 		458CA0D1278673C70065F324 /* ReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */; };
 		458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D42788EBD90065F324 /* ReportTests.swift */; };
@@ -138,7 +145,6 @@
 		45C757D2272CC3A200386F07 /* Dispatch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757D1272CC3A200386F07 /* Dispatch.swift */; };
 		45C757DC27349FD500386F07 /* ReportContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DB27349FD500386F07 /* ReportContainerViewController.swift */; };
 		45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DD2734AFC400386F07 /* RingdownViewController.swift */; };
-		45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757DF2734AFE400386F07 /* RefusalViewController.swift */; };
 		45C757E22734B00000386F07 /* ReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757E12734B00000386F07 /* ReportViewController.swift */; };
 		45C9DAA427D57EE40003B44B /* ApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAA327D57EE40003B44B /* ApiClient.swift */; };
 		45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */; };
@@ -242,6 +248,13 @@
 		454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
 		454EEA532522F0EC00EB266A /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		454EEAA82524078C00EB266A /* Users.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
+		454F9C9D28D38717009F7115 /* Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
+		454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObjectExtensions.swift; sourceTree = "<group>"; };
+		454F9CA128D3BA19009F7115 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
+		454F9CA328D3D088009F7115 /* FormsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormsViewController.swift; sourceTree = "<group>"; };
+		454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTableViewCell.swift; sourceTree = "<group>"; };
+		454F9CA728D3E278009F7115 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
+		454F9CB228D90B90009F7115 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		45515A2E24DE26AB007BAE09 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		45515A3024DF682A007BAE09 /* SortBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortBar.swift; sourceTree = "<group>"; };
@@ -307,7 +320,7 @@
 		458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisComboKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNormKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNOMEDKeyboardSource.swift; sourceTree = "<group>"; };
-		458CA0CB277293580065F324 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
+		458CA0CB277293580065F324 /* FormBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormBuilder.swift; sourceTree = "<group>"; };
 		458CA0CE278527FC0065F324 /* ReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsViewController.swift; sourceTree = "<group>"; };
 		458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCollectionViewCell.swift; sourceTree = "<group>"; };
 		458CA0D42788EBD90065F324 /* ReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTests.swift; sourceTree = "<group>"; };
@@ -343,7 +356,6 @@
 		45C757D1272CC3A200386F07 /* Dispatch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dispatch.swift; sourceTree = "<group>"; };
 		45C757DB27349FD500386F07 /* ReportContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContainerViewController.swift; sourceTree = "<group>"; };
 		45C757DD2734AFC400386F07 /* RingdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownViewController.swift; sourceTree = "<group>"; };
-		45C757DF2734AFE400386F07 /* RefusalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefusalViewController.swift; sourceTree = "<group>"; };
 		45C757E12734B00000386F07 /* ReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportViewController.swift; sourceTree = "<group>"; };
 		45C9DAA327D57EE40003B44B /* ApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiClient.swift; sourceTree = "<group>"; };
 		45C9DAA627D598A70003B44B /* HospitalStatusUpdate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalStatusUpdate.swift; sourceTree = "<group>"; };
@@ -515,6 +527,7 @@
 		4566F035236CCC5700A04C75 /* TriageTests */ = {
 			isa = PBXGroup;
 			children = (
+				454F9CA128D3BA19009F7115 /* FormTests.swift */,
 				45917FFE25512DDF002E03E7 /* BaseTests.swift */,
 				45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */,
 				458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */,
@@ -574,6 +587,7 @@
 				454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */,
 				452DDBD2243D628200A8F1FF /* Double+Extensions.swift */,
 				45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */,
+				454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */,
 				4574A045258881AB00198678 /* UIActivityIndicatorView+Extensions.swift */,
 				45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */,
 				45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */,
@@ -598,6 +612,7 @@
 				45F7BACB273AEC1600FBD31F /* Disposition.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				456F050327BC6D03000CEE42 /* File.swift */,
+				454F9C9D28D38717009F7115 /* Form.swift */,
 				45F7BAC9273AEC0800FBD31F /* History.swift */,
 				45C757CC272CAFB000386F07 /* Incident.swift */,
 				45F7BACF273AEC2B00FBD31F /* Medication.swift */,
@@ -614,6 +629,7 @@
 				45F7BAC3273AEBE100FBD31F /* Response.swift */,
 				454E17B124FF159C00F9EB8B /* Scene.swift */,
 				451A178A25364E1E00DC7705 /* ScenePin.swift */,
+				454F9CB228D90B90009F7115 /* Signature.swift */,
 				45F7BAC7273AEBFD00FBD31F /* Situation.swift */,
 				45B7A2D92508331500BCAAAE /* State.swift */,
 				45F7BAC5273AEBF100FBD31F /* Time.swift */,
@@ -634,13 +650,14 @@
 				45E267512418B2510010CDE9 /* Button.swift */,
 				458D1C8824283672003C7C85 /* DropdownButton.swift */,
 				45E35A3324EF8E8B005A8059 /* FacilityView.swift */,
+				458CA0CB277293580065F324 /* FormBuilder.swift */,
 				456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */,
 				4563C74224DA763700217901 /* FormField.swift */,
 				45BA94302502C17F0098E9BD /* FormMultilineField.swift */,
-				458CA0CB277293580065F324 /* FormViewController.swift */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
 				45917FE3254C8A4D002E03E7 /* IconButton.swift */,
 				454EEA532522F0EC00EB266A /* ImageView.swift */,
+				454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */,
 				4543DD4D24DE20B100F9E50B /* NavigationBar.swift */,
 				45E2675724196E5C0010CDE9 /* NavigationController.swift */,
 				45FD73E6243151C200FD7EDB /* ObservationView.swift */,
@@ -710,9 +727,10 @@
 			isa = PBXGroup;
 			children = (
 				45C757CE272CB9CC00386F07 /* Views */,
+				454F9CA728D3E278009F7115 /* FormViewController.swift */,
+				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
-				45C757DF2734AFE400386F07 /* RefusalViewController.swift */,
 				45C757DB27349FD500386F07 /* ReportContainerViewController.swift */,
 				45C757E12734B00000386F07 /* ReportViewController.swift */,
 				453D7984284D542100DA7E32 /* ReportMapViewController.swift */,
@@ -1113,6 +1131,7 @@
 				45E5BEEE2425DA010013D78D /* PatientTableViewHeaderView.swift in Sources */,
 				45515A2F24DE26AB007BAE09 /* SearchBar.swift in Sources */,
 				45E267502418AFAD0010CDE9 /* TextField.swift in Sources */,
+				454F9CA628D3DFE0009F7115 /* ListItemTableViewCell.swift in Sources */,
 				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
 				45F2190024E5D7B50046A39B /* ObservationTableViewController.swift in Sources */,
 				458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */,
@@ -1132,12 +1151,14 @@
 				4566F099236E12A600A04C75 /* BasePatientTableViewCell.swift in Sources */,
 				45D3E944272767A200E5382D /* Vehicle.swift in Sources */,
 				452DDBCB243D22D000A8F1FF /* FacilitiesTableViewController.swift in Sources */,
+				454F9CA428D3D088009F7115 /* FormsViewController.swift in Sources */,
 				456F050427BC6D03000CEE42 /* File.swift in Sources */,
 				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,
 				4543BF6E26545C5C00B72132 /* PatientTriageMentalStatusKeyboardView.swift in Sources */,
 				4566F08E236E117300A04C75 /* AttributeTableViewCell.swift in Sources */,
 				454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */,
 				45FD73EC243158B900FD7EDB /* ObservationTableViewCell.swift in Sources */,
+				454F9C9E28D38717009F7115 /* Form.swift in Sources */,
 				454EE9872520305000EB266A /* PatientTableViewCell.swift in Sources */,
 				45C757DC27349FD500386F07 /* ReportContainerViewController.swift in Sources */,
 				45B7A2DA2508331500BCAAAE /* State.swift in Sources */,
@@ -1157,7 +1178,6 @@
 				4563C74324DA763700217901 /* FormField.swift in Sources */,
 				4566F063236CE18E00A04C75 /* Patient.swift in Sources */,
 				45E35A3624EF9ECC005A8059 /* ConfirmTransportViewController.swift in Sources */,
-				45C757E02734AFE400386F07 /* RefusalViewController.swift in Sources */,
 				45D63569252AAE160045C7CC /* ScrollIndicatorView.swift in Sources */,
 				458CA0AE275FD6610065F324 /* CodeList.swift in Sources */,
 				4574A046258881AB00198678 /* UIActivityIndicatorView+Extensions.swift in Sources */,
@@ -1183,6 +1203,7 @@
 				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,
 				45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */,
 				452AFDE02529AC0A00E5A84D /* PatientGenderKeyboardView.swift in Sources */,
+				454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
@@ -1199,19 +1220,21 @@
 				452AFDE8252A35F000E5A84D /* PriorityTableViewCell.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */,
+				454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */,
 				458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,
 				458CA0B2275FF9F60065F324 /* NemsisKeyboardViewController.swift in Sources */,
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
-				458CA0CC277293580065F324 /* FormViewController.swift in Sources */,
+				458CA0CC277293580065F324 /* FormBuilder.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45F0176028442FE800C14E62 /* ResponderRoleSelector.swift in Sources */,
 				45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
 				45BD803A284418E000BD6F92 /* ResponderCollectionViewCell.swift in Sources */,
 				458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */,
+				454F9CB328D90B90009F7115 /* Signature.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
 				45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */,
 				45917FDF254C8241002E03E7 /* NewScenePinView.swift in Sources */,
@@ -1225,6 +1248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */,
+				454F9CA228D3BA19009F7115 /* FormTests.swift in Sources */,
 				45F7BAD8273B04BF00FBD31F /* TimeTests.swift in Sources */,
 				45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */,
 				458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */,

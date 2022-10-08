@@ -39,6 +39,8 @@ class InterstitialViewController: UIViewController {
                 REDRealm.connect()
             }
             if let user = user, let agency = agency {
+                // update agency forms in the background
+                AppRealm.getForms()
                 // update code lists in the background
                 AppRealm.getLists { (_) in
                     // noop

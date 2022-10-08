@@ -39,6 +39,7 @@ PODS:
     - AlignedCollectionViewFlowLayout
     - Keyboardy (~> 0.2)
     - SVGKit (~> 3.0)
+    - SwiftSignatureView (~> 3.2.0)
   - Realm (10.11.0):
     - Realm/Headers (= 10.11.0)
   - Realm/Headers (10.11.0)
@@ -63,6 +64,7 @@ PODS:
     - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
+  - SwiftSignatureView (3.2.0)
   - TranscriptionKit (0.1.0):
     - AWSTranscribeStreaming (~> 2.27.1)
 
@@ -71,7 +73,7 @@ DEPENDENCIES:
   - GoogleMaps
   - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `signature`)
   - RealmSwift (= 10.11.0)
   - RMJSONPatch (from `https://github.com/raymccrae/swift-jsonpatch.git`, tag `v1.0.4`)
   - RollbarNotifier (= 2.0.3)
@@ -107,12 +109,13 @@ SPEC REPOS:
     - SVGKit
     - SwiftLint
     - SwiftPath
+    - SwiftSignatureView
 
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
-    :branch: dev
+    :branch: signature
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
@@ -123,7 +126,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 0b5fd952298fee65ed642276101017b33305d74c
+    :commit: 9fd119f05e2130359b7ef3de0336afeeb6b48e95
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
@@ -143,7 +146,7 @@ SPEC CHECKSUMS:
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   PLCrashReporter: b30195e509f07299ea277d1997b3a39449d05698
-  PRKit: ba036dd225e79200d99b7de1dcf6651e60579b9b
+  PRKit: 9613c3bdb81b0fc71fd4da6307f7c90f75f79e20
   Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
   RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
@@ -157,8 +160,9 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
+  SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
   TranscriptionKit: 0db92bf7acc8b76963fe5f76f086bb70fad1c83b
 
-PODFILE CHECKSUM: b36adea0cd2cef2a76579d391b4bc3458d71f8aa
+PODFILE CHECKSUM: b3431ade3bc94c07eb6beb7bd0831108b11aca1e
 
 COCOAPODS: 1.11.3

@@ -44,8 +44,10 @@
 "Button.cancel" = "Cancel";
 "Button.cancelTransport" = "Cancel Transport";
 "Button.captureLocation" = "Capture GPS";
+"Button.clear" = "Clear";
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
+"Button.collectSignatures" = "Collect Signatures";
 "Button.confirmCancelTransport" = "Confirm Cancel Transport";
 "Button.confirmRedirectPatient" = "Confirm Redirect Patient";
 "Button.continue" = "Continue";
@@ -80,6 +82,7 @@
 "Button.startScene" = "Start Scene";
 "Button.startSceneAndFillLater" = "Start & Fill Out Later";
 "Button.stopAndSave" = "Stop & Save";
+"Button.tapToSign" = "Tap Here to Sign";
 "Button.transfer" = "Transfer";
 "Button.transferCommand" = "Transfer MGS Role";
 "Button.transport" = "Transport";
@@ -333,6 +336,7 @@
 "ReportViewController.procedures" = "Procedures";
 "ReportViewController.recordings" = "Recordings";
 "ReportViewController.recording" = "Recording %d";
+"ReportViewController.signatures" = "Signatures";
 "ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";
@@ -433,6 +437,87 @@
 
 "Sidebar.item.switch" = "Change Unit/Vehicle";
 "Sidebar.item.logOut" = "Log out";
+
+"Signature.dateTime" = "Date";
+"Signature.firstName" = "First Name";
+"Signature.lastName" = "Last Name";
+"Signature.status" = "Status";
+"Signature.typeOfPatientRepresentative" = "Type of Patient Representative";
+"Signature.typeOfPerson" = "Type of Person";
+
+"SignatureField.clearSignature.title" = "Clear Signature?";
+"SignatureField.clearSignature.message" = "Are you sure you wish to clear this signature? This cannot be undone.";
+
+"SignatureReason.4513001" = "HIPAA acknowledgement/Release";
+"SignatureReason.4513003" = "Permission to Treat";
+"SignatureReason.4513005" = "Release for Billing";
+"SignatureReason.4513007" = "Transfer of Patient Care";
+"SignatureReason.4513009" = "Refusal of Care";
+"SignatureReason.4513011" = "Controlled Substance, Administration";
+"SignatureReason.4513013" = "Controlled Substance, Waste";
+"SignatureReason.4513015" = "Airway Verification";
+"SignatureReason.4513017" = "Patient Belongings (Receipt)";
+"SignatureReason.4513019" = "Permission to Transport";
+"SignatureReason.4513021" = "Refusal of Transport";
+"SignatureReason.4513023" = "Other";
+
+"SignatureStatus.4515001" = "Not Signed - Crew Called out to another call";
+"SignatureStatus.4515003" = "Not Signed - Deceased";
+"SignatureStatus.4515005" = "Not Signed - Due to Distress Level";
+"SignatureStatus.4515007" = "Not Signed - Equipment Failure";
+"SignatureStatus.4515009" = "Not Signed - In Law Enforcement Custody";
+"SignatureStatus.4515011" = "Not Signed - Language Barrier";
+"SignatureStatus.4515013" = "Not Signed - Mental Status/Impaired";
+"SignatureStatus.4515015" = "Not Signed - Minor/Child";
+"SignatureStatus.4515017" = "Not Signed - Physical Impairment of Extremities";
+"SignatureStatus.4515019" = "Not Signed - Refused";
+"SignatureStatus.4515021" = "Not Signed - Transferred Care/No Access to Obtain Signature";
+"SignatureStatus.4515023" = "Not Signed - Unconscious";
+"SignatureStatus.4515025" = "Not Signed - Visually Impaired";
+"SignatureStatus.4515027" = "Physical Signature/Paper Copy Obtained";
+"SignatureStatus.4515031" = "Signed";
+"SignatureStatus.4515033" = "Signed - Not Patient";
+"SignatureStatus.4515035" = "Not Signed - Illiterate (Unable to Read)";
+"SignatureStatus.4515037" = "Not Signed - Restrained";
+"SignatureStatus.4515039" = "Not Signed - Combative or Uncooperative";
+
+"SignatureType.4512001" = "EMS Crew Member (Other)";
+"SignatureType.4512003" = "EMS Primary Care Provider (for this event)";
+"SignatureType.4512005" = "Healthcare Provider";
+"SignatureType.4512007" = "Medical Director";
+"SignatureType.4512009" = "Non-Healthcare Provider";
+"SignatureType.4512011" = "Online Medical Control Healthcare Practitioner";
+"SignatureType.4512013" = "Other";
+"SignatureType.4512015" = "Patient";
+"SignatureType.4512017" = "Patient Representative";
+"SignatureType.4512019" = "Witness";
+
+"SignatureTypeOfPatientRepresentative.4514001" = "Aunt";
+"SignatureTypeOfPatientRepresentative.4514003" = "Brother";
+"SignatureTypeOfPatientRepresentative.4514005" = "Daughter";
+"SignatureTypeOfPatientRepresentative.4514007" = "Discharge Planner";
+"SignatureTypeOfPatientRepresentative.4514009" = "Domestic Partner";
+"SignatureTypeOfPatientRepresentative.4514011" = "Father";
+"SignatureTypeOfPatientRepresentative.4514013" = "Friend";
+"SignatureTypeOfPatientRepresentative.4514015" = "Grandfather";
+"SignatureTypeOfPatientRepresentative.4514017" = "Grandmother";
+"SignatureTypeOfPatientRepresentative.4514019" = "Guardian";
+"SignatureTypeOfPatientRepresentative.4514021" = "Husband";
+"SignatureTypeOfPatientRepresentative.4514023" = "Law Enforcement";
+"SignatureTypeOfPatientRepresentative.4514025" = "MD/DO";
+"SignatureTypeOfPatientRepresentative.4514027" = "Mother";
+"SignatureTypeOfPatientRepresentative.4514029" = "Nurse (RN)";
+"SignatureTypeOfPatientRepresentative.4514031" = "Nurse Practitioner (NP)";
+"SignatureTypeOfPatientRepresentative.4514033" = "Other Care Provider (Home health, hospice, etc.)";
+"SignatureTypeOfPatientRepresentative.4514035" = "Other";
+"SignatureTypeOfPatientRepresentative.4514037" = "Physician's Assistant (PA)";
+"SignatureTypeOfPatientRepresentative.4514039" = "Power of Attorney";
+"SignatureTypeOfPatientRepresentative.4514041" = "Other Relative";
+"SignatureTypeOfPatientRepresentative.4514043" = "Self";
+"SignatureTypeOfPatientRepresentative.4514045" = "Sister";
+"SignatureTypeOfPatientRepresentative.4514047" = "Son";
+"SignatureTypeOfPatientRepresentative.4514049" = "Uncle";
+"SignatureTypeOfPatientRepresentative.4514051" = "Wife";
 
 "Situation.chiefComplaint" = "Chief Complaint";
 "Situation.primarySymptom" = "Primary Symptom";
