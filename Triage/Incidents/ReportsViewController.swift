@@ -69,6 +69,13 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         performQuery()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if incident == nil, isBeingPresented {
+            presentNewReport(incident: nil, animated: false)
+        }
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         if !isMCI {
@@ -124,12 +131,14 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
             if let error = error {
                 print(error)
             }
+            var endRefreshing = true
             if self.firstRefresh {
                 self.firstRefresh = false
                 if !self.isMCI {
                     // show add patient button footer
                     self.customTabBar.isHidden = false
                     if let results = results, results.count == 0 {
+                        endRefreshing = false
                         self.presentNewReport(incident: incident, animated: false) { [weak self] in
                             self?.collectionView.refreshControl?.endRefreshing()
                         }
@@ -137,7 +146,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                     }
                 }
             }
-            self.collectionView.refreshControl?.endRefreshing()
+            if endRefreshing {
+                self.collectionView.refreshControl?.endRefreshing()
+            }
         }
     }
 
@@ -191,6 +202,10 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                                                              style: .done,
                                                              target: self,
                                                              action: #selector(self.dismissAnimated))
+        incident = vc.incident
+        firstRefresh = false
+        customTabBar.isHidden = false
+        performQuery()
     }
 
     // MARK: - UICollectionViewDataSource

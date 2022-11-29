@@ -159,8 +159,8 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
         return nil
     }
 
-    func search(_ query: String?) {
-
+    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
+        callback?(false)
     }
 
     func title(for value: NSObject?) -> String? {

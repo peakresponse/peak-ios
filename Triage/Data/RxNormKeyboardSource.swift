@@ -42,12 +42,13 @@ class RxNormKeyboardSource: KeyboardSource {
         return results?.firstIndex(of: code) ?? nil
     }
 
-    func search(_ query: String?) {
+    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
         if let query = query?.trimmingCharacters(in: .whitespacesAndNewlines), !query.isEmpty {
             filteredResults = results?.filter("name CONTAINS[cd] %@", query, query)
         } else {
             filteredResults = nil
         }
+        callback?(false)
     }
 
     func title(for value: NSObject?) -> String? {

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -30,10 +30,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SceneOverviewHeader" id="ndP-GA-ce5" customClass="SceneOverviewHeaderCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="20" width="374" height="62.5"/>
+                                        <rect key="frame" x="20" y="20" width="374" height="232"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sQu-PN-ken">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="62.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="232"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWO-NY-Y46" userLabel="Incident Number Label">
@@ -55,7 +55,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rsq-D8-wBq" userLabel="Timestamp Label">
-                                                    <rect key="frame" x="0.0" y="41.5" width="42" height="21"/>
+                                                    <rect key="frame" x="0.0" y="41.5" width="41.5" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" name="Base500"/>
                                                     <nil key="highlightedColor"/>
@@ -64,7 +64,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-bm-cia" customClass="Button" customModule="PRKit">
-                                                    <rect key="frame" x="288" y="0.0" width="86" height="42.5"/>
+                                                    <rect key="frame" x="320" y="0.0" width="54" height="34"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <userDefinedRuntimeAttributes>
@@ -76,35 +76,57 @@
                                                         <action selector="closePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="X4g-it-ps7"/>
                                                     </connections>
                                                 </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWd-Za-2Xm" customClass="Button" customModule="PRKit">
+                                                    <rect key="frame" x="320" y="54" width="54" height="34"/>
+                                                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="Size" value="small"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="Style" value="secondary"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="isLayoutVerticalAllowed" value="NO"/>
+                                                        <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.editScene"/>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <action selector="editPressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="i5L-gG-RiS"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="WWO-NY-Y46" firstAttribute="top" secondItem="sQu-PN-ken" secondAttribute="top" id="4Oj-jd-rYt"/>
                                                 <constraint firstItem="h4G-bm-cia" firstAttribute="top" secondItem="sQu-PN-ken" secondAttribute="top" id="9iY-jJ-ZTo"/>
+                                                <constraint firstItem="fWd-Za-2Xm" firstAttribute="top" secondItem="h4G-bm-cia" secondAttribute="bottom" constant="20" id="J1Z-KF-tAp"/>
                                                 <constraint firstItem="rsq-D8-wBq" firstAttribute="leading" secondItem="EOj-QS-rIl" secondAttribute="leading" id="M0i-wA-w2C"/>
                                                 <constraint firstItem="h4G-bm-cia" firstAttribute="trailing" secondItem="sQu-PN-ken" secondAttribute="trailing" id="Y0V-Rm-k6c"/>
-                                                <constraint firstAttribute="bottom" secondItem="rsq-D8-wBq" secondAttribute="bottom" id="Y9i-DP-Bt5"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="rsq-D8-wBq" secondAttribute="bottom" id="Y9i-DP-Bt5"/>
+                                                <constraint firstItem="EOj-QS-rIl" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="h4G-bm-cia" secondAttribute="leading" constant="-10" id="YNT-KO-coH"/>
                                                 <constraint firstItem="EOj-QS-rIl" firstAttribute="leading" secondItem="WWO-NY-Y46" secondAttribute="leading" id="bp4-KT-iEx"/>
                                                 <constraint firstItem="EOj-QS-rIl" firstAttribute="top" secondItem="WWO-NY-Y46" secondAttribute="bottom" id="dXk-Je-2bb"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="fWd-Za-2Xm" secondAttribute="bottom" constant="10" id="goK-zb-zcK"/>
                                                 <constraint firstItem="WWO-NY-Y46" firstAttribute="leading" secondItem="sQu-PN-ken" secondAttribute="leading" id="jao-LY-5se"/>
+                                                <constraint firstItem="WWO-NY-Y46" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="h4G-bm-cia" secondAttribute="leading" constant="-10" id="muX-hd-vem"/>
+                                                <constraint firstItem="fWd-Za-2Xm" firstAttribute="trailing" secondItem="h4G-bm-cia" secondAttribute="trailing" id="mve-cL-ACl"/>
+                                                <constraint firstItem="rsq-D8-wBq" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="h4G-bm-cia" secondAttribute="leading" constant="-10" id="x0e-su-mz5"/>
                                                 <constraint firstItem="rsq-D8-wBq" firstAttribute="top" secondItem="EOj-QS-rIl" secondAttribute="bottom" id="zKZ-rb-XiU"/>
+                                                <constraint firstItem="fWd-Za-2Xm" firstAttribute="leading" secondItem="h4G-bm-cia" secondAttribute="leading" id="zwG-bH-T6y"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
                                             <outlet property="addressLabel" destination="EOj-QS-rIl" id="3kY-nj-RuA"/>
                                             <outlet property="closeButton" destination="h4G-bm-cia" id="9EV-op-Pvg"/>
+                                            <outlet property="editButton" destination="fWd-Za-2Xm" id="usT-0t-TCe"/>
                                             <outlet property="incidentNumberLabel" destination="WWO-NY-Y46" id="CYG-cf-5VQ"/>
                                             <outlet property="timestampLabel" destination="rsq-D8-wBq" id="jHn-Bq-Kfa"/>
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewCounter" id="LME-6G-1lm" customClass="SceneOverviewCounterCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="116.5" width="170" height="40"/>
+                                        <rect key="frame" x="20" y="272" width="374" height="232"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zFO-85-aFy">
-                                            <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="374" height="232"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xcw-sf-Ybn" customClass="CounterControl" customModule="PRKit">
-                                                    <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="232"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <connections>
                                                         <action selector="counterValueChanged:" destination="LME-6G-1lm" eventType="valueChanged" id="BWK-9J-jxu"/>
@@ -123,7 +145,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewTriageTotal" id="RCh-Jd-qdd" customClass="SceneOverviewTriageTotalCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="210" y="102.5" width="42" height="68"/>
+                                        <rect key="frame" x="186" y="524" width="42" height="68"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6LV-Hl-TfL">
                                             <rect key="frame" x="0.0" y="0.0" width="42" height="68"/>
@@ -246,8 +268,11 @@
         <designable name="EEr-QX-Jho">
             <size key="intrinsicContentSize" width="414" height="128"/>
         </designable>
+        <designable name="fWd-Za-2Xm">
+            <size key="intrinsicContentSize" width="54" height="34"/>
+        </designable>
         <designable name="h4G-bm-cia">
-            <size key="intrinsicContentSize" width="86" height="42.70703125"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
     </designables>
     <resources>

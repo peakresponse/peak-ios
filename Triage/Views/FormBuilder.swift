@@ -76,6 +76,15 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
     var formInputAccessoryView: UIView! { get }
     var formFields: [String: PRKit.FormField] { get set }
 
+    func refreshFormFields(attributeKeys: [String]?)
+
+    func addTextField(source: NSObject?, target: NSObject?,
+                      attributeKey: String, attributeType: FormFieldAttributeType,
+                      keyboardType: UIKeyboardType,
+                      unitText: String?,
+                      tag: inout Int,
+                      to col: UIStackView, withWrapper: Bool)
+
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
     func newHeader(_ text: String, subheaderText: String?) -> UIView
@@ -87,16 +96,31 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
                       keyboardType: UIKeyboardType,
                       unitText: String?,
                       tag: inout Int) -> PRKit.TextField
-
-    func addTextField(source: NSObject?, target: NSObject?,
-                      attributeKey: String, attributeType: FormFieldAttributeType,
-                      keyboardType: UIKeyboardType,
-                      unitText: String?,
-                      tag: inout Int,
-                      to col: UIStackView, withWrapper: Bool)
 }
 
 extension FormBuilder {
+    func refreshFormFields(attributeKeys: [String]? = nil) {
+        if let attributeKeys = attributeKeys {
+            for attributeKey in attributeKeys {
+                if let formField = formFields[attributeKey], let target = formField.target ?? formField.source {
+                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let target = (formField.target ?? formField.source) as? Predictions {
+                        formField.status = target.predictionStatus(for: attributeKey)
+                    }
+                }
+            }
+        } else {
+            for formField in formFields.values {
+                if let attributeKey = formField.attributeKey, let target = formField.target ?? formField.source {
+                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let target = (formField.target ?? formField.source) as? Predictions {
+                        formField.status = target.predictionStatus(for: attributeKey)
+                    }
+                }
+            }
+        }
+    }
+
     func addTextField(source: NSObject? = nil, target: NSObject? = nil,
                       attributeKey: String, attributeType: FormFieldAttributeType = .text,
                       keyboardType: UIKeyboardType = .default,

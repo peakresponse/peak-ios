@@ -54,14 +54,17 @@
 "Button.delete" = "Delete";
 "Button.done" = "Done";
 "Button.edit" = "Edit";
+"Button.editScene" = "Edit Scene";
 "Button.exitScene" = "Exit Scene";
 "Button.findTag" = "Find Tag";
+"Button.geocode" = "GPS";
 "Button.joinScene" = "Join Scene";
 "Button.leave" = "Leave";
 "Button.leaveScene" = "Leave Scene";
 "Button.map" = "Map";
 "Button.markArrived" = "Mark Arrived";
 "Button.markOffloaded" = "Mark Offloaded";
+"Button.newIncident" = "New Incident";
 "Button.newVitals" = "New Vitals";
 "Button.no" = "No";
 "Button.ok" = "OK";
@@ -385,6 +388,11 @@
 "ScanViewController.enterTagCode" = "Enter Tag Code";
 
 "Scene.address" = "Location";
+"Scene.address1" = "Street Address";
+"Scene.address2" = "Apt, Suite, or Room";
+"Scene.cityId" = "City";
+"Scene.stateId" = "State";
+"Scene.zip" = "ZIP Code";
 
 "SceneHeaderView.approxPatientsLabel" = "Approx # Patients: ";
 "SceneHeaderView.urgencyLabel" = "Patient Urgency";

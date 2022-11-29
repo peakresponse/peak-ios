@@ -335,6 +335,14 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
 
     func canonicalize(from parent: Report?) -> [String: Any] {
         var payload: [String: Any] = [:]
+        // create/change immutable Incident as needed
+        if incident == nil || incident?.number != response?.incidentNumber {
+            let newIncident = Incident()
+            newIncident.scene = scene
+            newIncident.number = response?.incidentNumber
+            payload["Incident"] = newIncident.asJSON()
+            incident = newIncident
+        }
         var report = asJSON()
         let canonicalize = { (object: String) in
             if let obj = self.value(forKey: object) as? BaseVersioned {

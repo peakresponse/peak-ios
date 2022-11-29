@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import Foundation
 import Keys
 import Starscream
@@ -94,6 +95,18 @@ class PRApiClient: ApiClient {
         return POST(path: "/api/facilities/fetch", body: payload, completionHandler: completionHandler)
     }
 
+    // MARK: - Cities
+
+    func getCities(search: String, lat: String? = nil, lng: String? = nil,
+                   completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        var params = ["search": search]
+        if let lat = lat, let lng = lng {
+            params["lat"] = lat
+            params["lng"] = lng
+        }
+        return GET(path: "/api/cities", params: params, completionHandler: completionHandler)
+    }
+
     // MARK: - Forms
 
     func getForms(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
@@ -160,53 +173,6 @@ class PRApiClient: ApiClient {
         return POST(path: "/api/scenes", body: data, completionHandler: completionHandler)
     }
 
-    func updateScene(data: [String: Any],
-                     completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes", body: data, completionHandler: completionHandler)
-    }
-
-    func getScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/scenes/\(sceneId)", completionHandler: completionHandler)
-    }
-
-    func getScenes(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/scenes", completionHandler: completionHandler)
-    }
-
-    func closeScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes/\(sceneId)/close", completionHandler: completionHandler)
-    }
-
-    func joinScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes/\(sceneId)/join", completionHandler: completionHandler)
-    }
-
-    func addScenePin(sceneId: String, data: [String: Any],
-                     completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return POST(path: "/api/scenes/\(sceneId)/pins", body: data, completionHandler: { (_, _, _: [String: Any]?, error) in
-            completionHandler(error)
-        })
-    }
-
-    func removeScenePin(sceneId: String, scenePinId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return DELETE(path: "/api/scenes/\(sceneId)/pins/\(scenePinId)") { (_, _, _: [String: Any]?, error) in
-            completionHandler(error)
-        }
-    }
-
-    func leaveScene(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes/\(sceneId)/leave", completionHandler: completionHandler)
-    }
-
-    func transferScene(sceneId: String, userId: String, agencyId: String, completionHandler: @escaping (Error?) -> Void) -> URLSessionTask {
-        return PATCH(path: "/api/scenes/\(sceneId)/transfer", body: [
-            "userId": userId,
-            "agencyId": agencyId
-        ], completionHandler: { (_, _, _: [String: Any]?, error: Error?) in
-            completionHandler(error)
-        })
-    }
-
     // MARK: - Responders
 
     func getResponders(sceneId: String, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
@@ -219,6 +185,12 @@ class PRApiClient: ApiClient {
         ], completionHandler: { (_, _, _: [String: Any]?, error: Error?) in
             completionHandler(error)
         })
+    }
+
+    // MARK: - States
+
+    func getStates(search: String, completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/states", params: ["search": search], completionHandler: completionHandler)
     }
 
     // MARK: - Uploads

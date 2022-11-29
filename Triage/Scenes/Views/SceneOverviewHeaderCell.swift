@@ -14,6 +14,7 @@ class SceneOverviewHeaderCell: UICollectionViewCell, SceneOverviewCell {
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var closeButton: PRKit.Button!
+    @IBOutlet weak var editButton: PRKit.Button!
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)

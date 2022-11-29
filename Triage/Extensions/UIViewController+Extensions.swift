@@ -128,7 +128,10 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
                                                                      action: #selector(dismissAnimated))
             }
         }
-        present(vc, animated: animated) {
+        let navVC = NavigationController(rootViewController: vc)
+        navVC.isNavigationBarHidden = true
+        navVC.modalPresentationStyle = .fullScreen
+        present(navVC, animated: animated) {
             completion?()
         }
     }

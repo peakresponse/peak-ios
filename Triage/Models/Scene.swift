@@ -110,9 +110,10 @@ class Scene: BaseVersioned, NemsisBacked {
     }
     @Persisted var zip: String?
     @objc var address: String {
-        return "\(address1?.capitalized ?? "")\n\(address2?.capitalized ?? "")\n\(city?.name ?? ""), \(state?.abbr ?? "") \(zip ?? "")"
+        let text = "\(address1?.capitalized ?? "")\n\(address2?.capitalized ?? "")\n\(city?.name ?? ""), \(state?.abbr ?? "") \(zip ?? "")"
             .replacingOccurrences(of: "\n\n", with: "\n")
             .trimmingCharacters(in: .whitespacesAndNewlines)
+        return text == "," ? " " : text
     }
 
     @Persisted var closedAt: Date?
@@ -222,6 +223,21 @@ class Scene: BaseVersioned, NemsisBacked {
     override func changes(from source: BaseVersioned?) -> [String: Any]? {
         guard let source = source as? Scene else { return nil }
         var json: [String: Any] = [:]
+        if address1 != source.address1 {
+            json[Keys.address1] = address1 ?? NSNull()
+        }
+        if address2 != source.address2 {
+            json[Keys.address2] = address2 ?? NSNull()
+        }
+        if cityId != source.cityId {
+            json[Keys.cityId] = cityId ?? NSNull()
+        }
+        if stateId != source.stateId {
+            json[Keys.stateId] = stateId ?? NSNull()
+        }
+        if zip != source.zip {
+            json[Keys.zip] = zip ?? NSNull()
+        }
         if isMCI != source.isMCI {
             json[Keys.isMCI] = isMCI
         }

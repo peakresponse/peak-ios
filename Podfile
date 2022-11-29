@@ -19,7 +19,7 @@ target 'Triage' do
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'ICD10Kit'
-  pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'signature'
+  pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
   pod 'RealmSwift', '10.11.0'
   pod 'RollbarNotifier', '2.0.3'
   pod 'RollbarPLCrashReporter', '2.0.3'

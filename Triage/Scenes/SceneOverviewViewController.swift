@@ -67,6 +67,18 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
     }
 
     @IBAction func editPressed(_ sender: Any) {
+        guard let scene = scene else { return }
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
+        if let vc = vc as? LocationViewController {
+            vc.modalPresentationStyle = .fullScreen
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
+            vc.scene = scene
+            vc.newScene = Scene(clone: scene)
+            _ = vc.view
+            vc.isEditing = true
+        }
+        presentAnimated(vc)
     }
 
     @IBAction func notePressed(_ sender: Any) {
@@ -117,6 +129,15 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
                 }
             }
             leaveScene()
+        }
+    }
+
+    @objc func saveScenePressed() {
+        if let vc = presentedViewController as? LocationViewController {
+            if let scene = vc.newScene {
+                AppRealm.updateScene(scene: scene)
+            }
+	            dismissAnimated()
         }
     }
 

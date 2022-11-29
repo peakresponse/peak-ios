@@ -39,8 +39,8 @@ class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
         return negatives.firstIndex(of: negativeValue)
     }
 
-    func search(_ query: String?) {
-
+    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
+        callback?(false)
     }
 
     func title(for value: NSObject?) -> String? {

@@ -124,6 +124,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                 AppRealm.saveReport(report: report)
                 if let canonicalId = report.canonicalId {
                     self.report = AppRealm.open().object(ofType: Report.self, forPrimaryKey: canonicalId)
+                    self.incident = self.report?.incident
                     vc.report = self.report
                 }
             }

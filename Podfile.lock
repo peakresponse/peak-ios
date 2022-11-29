@@ -1,11 +1,11 @@
 PODS:
   - AlignedCollectionViewFlowLayout (1.1.2)
-  - AWSCore (2.27.12)
-  - AWSTranscribeStreaming (2.27.12):
-    - AWSCore (= 2.27.12)
-  - CocoaLumberjack (3.7.4):
-    - CocoaLumberjack/Core (= 3.7.4)
-  - CocoaLumberjack/Core (3.7.4)
+  - AWSCore (2.28.3)
+  - AWSTranscribeStreaming (2.28.3):
+    - AWSCore (= 2.28.3)
+  - CocoaLumberjack (3.8.0):
+    - CocoaLumberjack/Core (= 3.8.0)
+  - CocoaLumberjack/Core (3.8.0)
   - Google-Maps-iOS-Utils (4.1.0):
     - Google-Maps-iOS-Utils/Clustering (= 4.1.0)
     - Google-Maps-iOS-Utils/Geometry (= 4.1.0)
@@ -66,14 +66,14 @@ PODS:
   - SwiftPath (0.3.1)
   - SwiftSignatureView (3.2.0)
   - TranscriptionKit (0.1.0):
-    - AWSTranscribeStreaming (~> 2.27.1)
+    - AWSTranscribeStreaming (~> 2.28.3)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `signature`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
   - RMJSONPatch (from `https://github.com/raymccrae/swift-jsonpatch.git`, tag `v1.0.4`)
   - RollbarNotifier (= 2.0.3)
@@ -115,7 +115,7 @@ EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
-    :branch: signature
+    :branch: dev
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
@@ -126,20 +126,20 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 9fd119f05e2130359b7ef3de0336afeeb6b48e95
+    :commit: acfef786c4a9f01037b52e69d3dddc166cfde932
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   RMJSONPatch:
     :git: https://github.com/raymccrae/swift-jsonpatch.git
     :tag: v1.0.4
   TranscriptionKit:
-    :commit: 071219be7c7d6a6057e1f3c1fd79a49b6577edcf
+    :commit: 0481c711d6fe6895281788291ecb6eae459f4cf3
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
-  AWSCore: ac89c3ea1bb884823ff02907be828e38044ac4c0
-  AWSTranscribeStreaming: e3e01a6dd05c2e0aa0048a7bfac9a86acdc1ea3c
-  CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
+  AWSCore: 27c26d9c0a2f072f7aeb26337f3a5f4098eea8b8
+  AWSTranscribeStreaming: a56eb35a2993258eb42a27f6f0aa01bd3a3fe148
+  CocoaLumberjack: 78abfb691154e2a9df8ded4350d504ee19d90732
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
   ICD10Kit: d627ff3bfba6604b86fe637547bdcf4bfe47720d
@@ -161,8 +161,8 @@ SPEC CHECKSUMS:
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
-  TranscriptionKit: 0db92bf7acc8b76963fe5f76f086bb70fad1c83b
+  TranscriptionKit: 6ebcb5db971f26a2fa0353d278d9e6d002bf7d54
 
-PODFILE CHECKSUM: b3431ade3bc94c07eb6beb7bd0831108b11aca1e
+PODFILE CHECKSUM: b36adea0cd2cef2a76579d391b4bc3458d71f8aa
 
 COCOAPODS: 1.11.3

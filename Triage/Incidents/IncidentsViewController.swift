@@ -16,6 +16,7 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var commandFooter: CommandFooter!
     weak var segmentedControl: SegmentedControl!
 
     var notificationToken: NotificationToken?
@@ -64,6 +65,16 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         performQuery()
 
         AppRealm.connectIncidents()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        var contentInset = tableView.contentInset
+        contentInset.bottom = commandFooter.frame.height + 16
+        tableView.contentInset = contentInset
+        var scrollIndicatorInsets = tableView.scrollIndicatorInsets
+        scrollIndicatorInsets.bottom = commandFooter.frame.height + 16
+        tableView.scrollIndicatorInsets = scrollIndicatorInsets
     }
 
     func setCommandHeaderUser(userId: String?, assignmentId: String?) {
@@ -173,6 +184,11 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             }
             self?.view.layoutIfNeeded()
         }
+    }
+
+    @IBAction func newPressed(_ sender: PRKit.Button) {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
+        presentAnimated(vc)
     }
 
     // MARK: - AssignmentViewControllerDelegate

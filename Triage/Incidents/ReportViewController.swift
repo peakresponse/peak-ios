@@ -20,7 +20,8 @@ protocol ReportViewControllerDelegate: AnyObject {
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
-class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate, KeyboardAwareScrollViewController, LatLngControlDelegate,
+class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
+                            KeyboardAwareScrollViewController, LatLngControlDelegate, LocationViewControllerDelegate,
                             RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -30,18 +31,26 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     var formInputAccessoryView: UIView!
     var formFields: [String: PRKit.FormField] = [:]
     var destinationFacilityField: PRKit.FormField!
+    var incidentNumberSpinner: UIActivityIndicatorView?
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
     var recordingsSection: FormSection!
     var signaturesSection: FormSection!
 
-    var report: Report!
+    var report: Report! {
+        didSet { observeReport() }
+    }
+    var notificationToken: NotificationToken?
     var newReport: Report?
 
     var player: Transcriber?
     var playingRecordingField: RecordingField?
 
     weak var delegate: ReportViewControllerDelegate?
+
+    deinit {
+        notificationToken?.invalidate()
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -138,6 +147,18 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             innerCols.spacing = 10
             addTextField(source: report, attributeKey: "response.incidentNumber",
                          keyboardType: .numbersAndPunctuation, tag: &tag, to: innerCols)
+            if let incidentNumberField = formFields["response.incidentNumber"] as? PRKit.TextField {
+                let incidentNumberSpinner = UIActivityIndicatorView.withMediumStyle()
+                incidentNumberSpinner.translatesAutoresizingMaskIntoConstraints = false
+                incidentNumberSpinner.color = .base500
+                incidentNumberSpinner.hidesWhenStopped = true
+                incidentNumberField.contentView.addSubview(incidentNumberSpinner)
+                NSLayoutConstraint.activate([
+                    incidentNumberSpinner.leftAnchor.constraint(equalTo: incidentNumberField.textView.leftAnchor),
+                    incidentNumberSpinner.centerYAnchor.constraint(equalTo: incidentNumberField.textView.centerYAnchor)
+                ])
+                self.incidentNumberSpinner = incidentNumberSpinner
+            }
             let alertButton = PRKit.Button()
             alertButton.style = .destructiveSecondary
             alertButton.setTitle("Button.redAlert".localized, for: .normal)
@@ -145,7 +166,16 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             alertButton.widthAnchor.constraint(equalToConstant: 110).isActive = true
             innerCols.addArrangedSubview(alertButton)
             colA.addArrangedSubview(innerCols)
-            addTextField(source: report, attributeKey: "scene.address", tag: &tag, to: colA)
+
+            let addressField = CellField()
+            addressField.source = report
+            addressField.labelText = "Scene.address".localized
+            addressField.attributeKey = "scene.address"
+            addressField.delegate = self
+            addressField.text = report?.scene?.address
+            formFields["scene.address"] = addressField
+            colA.addArrangedSubview(addressField)
+
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
             addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
@@ -298,6 +328,28 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         updateFormFieldVisibility()
 
         setEditing(isEditing, animated: false)
+    }
+
+    func observeReport() {
+        notificationToken?.invalidate()
+        if report.response?.incidentNumber?.isEmpty ?? true {
+            if report.response?.realm != nil {
+                incidentNumberSpinner?.startAnimating()
+                notificationToken = report.response?.observe { [weak self] (change) in
+                    switch change {
+                    case .change:
+                        self?.refreshFormFieldsAndControls(["response.incidentNumber"])
+                        if !(self?.report.response?.incidentNumber?.isEmpty ?? true) {
+                            self?.incidentNumberSpinner?.stopAnimating()
+                        }
+                    case .error(let error):
+                        self?.presentAlert(error: error)
+                    case .deleted:
+                        self?.dismissAnimated()
+                    }
+                }
+            }
+        }
     }
 
     func addRecordingField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
@@ -582,26 +634,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         updateFormFieldVisibility()
     }
 
-    func refreshFormFields(_ attributeKeys: [String]? = nil) {
-        if let attributeKeys = attributeKeys {
-            for attributeKey in attributeKeys {
-                if let formField = formFields[attributeKey], let target = formField.target {
-                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let target = formField.target as? Predictions {
-                        formField.status = target.predictionStatus(for: attributeKey)
-                    }
-                }
-            }
-        } else {
-            for formField in formFields.values {
-                if let attributeKey = formField.attributeKey, let target = formField.target {
-                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let target = formField.target as? Predictions {
-                        formField.status = target.predictionStatus(for: attributeKey)
-                    }
-                }
-            }
-        }
+    func refreshFormFieldsAndControls(_ attributeKeys: [String]? = nil) {
+        refreshFormFields(attributeKeys: attributeKeys)
         // if mci, update triage control
         if let triageControl = triageControl {
             triageControl.priority = TriagePriority(rawValue: newReport?.patient?.priority ?? -1)
@@ -723,28 +757,27 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         modal.isDismissedOnAction = false
         modal.messageText = "ReportViewController.redAlert.message".localized
         modal.addAction(UIAlertAction(title: "Button.startMCI".localized, style: .destructive, handler: { [weak self] (_) in
-            if let sceneId = self?.report.scene?.canonicalId ?? self?.report.scene?.id {
-                AppRealm.startScene(sceneId: sceneId) { [weak self] (canonicalId, error) in
-                    DispatchQueue.main.async {
-                        modal.dismiss(animated: true)
-                    }
-                    if let canonicalId = canonicalId {
-                        AppSettings.sceneId = canonicalId
-                        if let error = error {
-                            DispatchQueue.main.async { [weak self] in
-                                guard let self = self else { return }
-                                self.presentAlert(error: error)
-                            }
-                        } else {
-                            DispatchQueue.main.async {
-                                AppDelegate.enterScene(id: canonicalId)
-                            }
-                        }
-                    } else {
+            guard let self = self else { return }
+            AppRealm.startScene(report: self.report) { [weak self] (canonicalId, error) in
+                DispatchQueue.main.async {
+                    modal.dismiss(animated: true)
+                }
+                if let canonicalId = canonicalId {
+                    AppSettings.sceneId = canonicalId
+                    if let error = error {
                         DispatchQueue.main.async { [weak self] in
                             guard let self = self else { return }
-                            self.presentAlert(error: ApiClientError.unexpected)
+                            self.presentAlert(error: error)
                         }
+                    } else {
+                        DispatchQueue.main.async {
+                            AppDelegate.enterScene(id: canonicalId)
+                        }
+                    }
+                } else {
+                    DispatchQueue.main.async { [weak self] in
+                        guard let self = self else { return }
+                        self.presentAlert(error: ApiClientError.unexpected)
                     }
                 }
             }
@@ -783,7 +816,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                 // if arrived at patient, set unit disposition to Patient Contact Made automatically if not already set
                 if field.attributeValue != nil, newReport?.disposition?.unitDisposition == nil {
                     newReport?.disposition?.unitDisposition = UnitDisposition.patientContactMade.rawValue
-                    refreshFormFields(["disposition.unitDisposition"])
+                    refreshFormFieldsAndControls(["disposition.unitDisposition"])
                 }
                 updateFormFieldVisibility()
             case "disposition.unitDisposition":
@@ -793,7 +826,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     newReport?.disposition?.crewDisposition = nil
                     newReport?.disposition?.transportDisposition = nil
                     newReport?.disposition?.reasonForRefusalRelease = nil
-                    refreshFormFields(["disposition.patientEvaluationCare", "disposition.crewDisposition",
+                    refreshFormFieldsAndControls(["disposition.patientEvaluationCare", "disposition.crewDisposition",
                                        "disposition.transportDisposition", "disposition.reasonForRefusalRelease"])
                 }
                 updateFormFieldVisibility()
@@ -802,7 +835,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     newReport?.disposition?.patientEvaluationCare != PatientEvaluationCare.patientRefused.rawValue &&
                     newReport?.disposition?.transportDisposition != TransportDisposition.patientRefusedTransport.rawValue {
                     newReport?.disposition?.reasonForRefusalRelease = nil
-                    refreshFormFields(["disposition.reasonForRefusalRelease"])
+                    refreshFormFieldsAndControls(["disposition.reasonForRefusalRelease"])
                 }
                 updateFormFieldVisibility()
             default:
@@ -812,22 +845,34 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     }
 
     func formFieldDidPress(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, attributeKey.hasPrefix("signatures[") {
-            if let report = newReport ?? report, let signature = report.value(forKeyPath: attributeKey) as? Signature, let form = signature.form {
-                let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Form")
-                if let vc = vc as? FormViewController {
-                    vc.modalPresentationStyle = .fullScreen
-                    vc.form = form
-                    let newReport = Report.newRecord()
-                    newReport.signatures.append(objectsIn: report.signatures.filter { $0.formInstanceId == signature.formInstanceId })
-                    vc.report = report
-                    vc.isEditing = isEditing
-                    if !isEditing {
-                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+        if let attributeKey = field.attributeKey {
+            if attributeKey.hasPrefix("signatures[") {
+                if let report = newReport ?? report, let signature = report.value(forKeyPath: attributeKey) as? Signature, let form = signature.form {
+                    let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Form")
+                    if let vc = vc as? FormViewController {
+                        vc.modalPresentationStyle = .fullScreen
+                        vc.form = form
+                        let newReport = Report.newRecord()
+                        newReport.signatures.append(objectsIn: report.signatures.filter { $0.formInstanceId == signature.formInstanceId })
+                        vc.report = report
+                        vc.isEditing = isEditing
+                        if !isEditing {
+                            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                        }
+                        vc.delegate = self
+                        presentAnimated(vc)
                     }
-                    vc.delegate = self
-                    presentAnimated(vc)
                 }
+            } else if attributeKey == "scene.address" {
+                let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
+                if let vc = vc as? LocationViewController {
+                    vc.delegate = self
+                    vc.scene = report.scene
+                    vc.newScene = newReport?.scene
+                    _ = vc.view
+                    vc.isEditing = isEditing
+                }
+                navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
@@ -904,6 +949,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         newReport?.patient?.latLng = control.location
     }
 
+    // MARK: - LocationViewControllerDelegate
+
+    func locationViewControllerDidChange(_ vc: LocationViewController) {
+        refreshFormFieldsAndControls(["scene.address"])
+    }
+
     // MARK: - RecordingFieldDelegate
 
     func recordingField(_ field: RecordingField, didPressPlayButton button: UIButton) {
@@ -964,7 +1015,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                                            metadata: metadata, isFinal: isFinal)
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
-                self.refreshFormFields()
+                self.refreshFormFieldsAndControls()
                 if isFinal {
                     // update recording field with text
                     var recordingFields: [RecordingField] = []

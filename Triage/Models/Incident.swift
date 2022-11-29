@@ -43,7 +43,7 @@ class Incident: Base {
             json[Keys.psapId] = psapId
         }
         if let scene = scene {
-            json[Keys.sceneId] = scene.id
+            json[Keys.sceneId] = scene.canonicalId ?? scene.id
         }
         if let number = number {
             json[Keys.number] = number
