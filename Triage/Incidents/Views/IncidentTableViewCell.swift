@@ -262,6 +262,9 @@ class IncidentTableViewCell: UITableViewCell {
             let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
             date = dispatch.dispatchedAt?.asDateString()
             time = dispatch.dispatchedAt?.asTimeString()
+        } else {
+            date = incident.createdAt?.asDateString()
+            time = incident.createdAt?.asTimeString()
         }
         mciChip.isHidden = !isMCI
         reportsCountChip.color = isMCI ? .brandSecondary800 : .brandPrimary600
