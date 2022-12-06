@@ -52,7 +52,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.viewWillAppear(animated)
         // re-enable camera
         if videoPreviewLayer != nil {
-            captureSession.startRunning()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.startRunning()
+            }
         }
     }
 
@@ -60,7 +62,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.didPresentAnimated()
         // disable camera, if running
         if videoPreviewLayer != nil {
-            captureSession.stopRunning()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.stopRunning()
+            }
         }
     }
 
@@ -127,8 +131,13 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
             cameraView.layer.addSublayer(videoPreviewLayer!)
-            // Start video capture.
-            captureSession.startRunning()
+            // Start video capture, ideally with ~2 megapixels of image data
+            if captureSession.canSetSessionPreset(.hd1920x1080) {
+                captureSession.sessionPreset = .hd1920x1080
+            }
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.startRunning()
+            }
         } catch {
             print(error)
         }
