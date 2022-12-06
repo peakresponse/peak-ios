@@ -72,7 +72,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.didDismissPresentation()
         // re-enable camera
         if videoPreviewLayer != nil {
-            captureSession.startRunning()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.startRunning()
+            }
         }
     }
 
@@ -80,7 +82,9 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         super.viewWillDisappear(animated)
         // disable camera, if running
         if videoPreviewLayer != nil {
-            captureSession.stopRunning()
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.stopRunning()
+            }
         }
     }
 
