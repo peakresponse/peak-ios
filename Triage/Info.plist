@@ -42,6 +42,8 @@
 	<string>To record your observations.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>To convert your recorded observations into text.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>To securely save and retrieve your password for sign in.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Barlow-Regular.ttf</string>

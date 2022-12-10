@@ -24,13 +24,15 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
         }
     }
 
-    func presentAlert(error: Error) {
-        presentAlert(title: "Error.title".localized, message: error.localizedDescription)
+    func presentAlert(error: Error, completion: (() -> Void)? = nil) {
+        presentAlert(title: "Error.title".localized, message: error.localizedDescription, completion: completion)
     }
 
-    func presentAlert(title: String, message: String) {
+    func presentAlert(title: String, message: String, completion: (() -> Void)? = nil) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: { (_) in
+            completion?()
+        }))
         present(alert, animated: true, completion: nil)
     }
 

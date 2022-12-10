@@ -11,6 +11,15 @@ import Foundation
 class AppSettings {
     private static let defaults = UserDefaults.standard
 
+    static func save() {
+        _ = defaults.synchronize()
+    }
+
+    static var email: String? {
+        get { return defaults.string(forKey: "email") }
+        set { defaults.set(newValue, forKey: "email") }
+    }
+
     static var audioInputPortUID: String? {
         get { return defaults.string(forKey: "audioInputPortUID") }
         set { defaults.set(newValue, forKey: "audioInputPortUID") }

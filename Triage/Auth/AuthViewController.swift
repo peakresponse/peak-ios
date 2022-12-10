@@ -6,6 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import LocalAuthentication
 import UIKit
 import Keyboardy
 import PRKit
@@ -20,6 +21,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
 
     @IBOutlet weak var emailField: PRKit.TextField!
     @IBOutlet weak var passwordField: PRKit.PasswordField!
+    @IBOutlet weak var rememberMeCheckbox: PRKit.Checkbox!
     @IBOutlet weak var signInButton: PRKit.Button!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
@@ -29,12 +31,49 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
         super.viewDidLoad()
 
         emailField.keyboardType = .emailAddress
+
+        if let email = AppSettings.email {
+            emailField.text = email
+            rememberMeCheckbox.isChecked = true
+        }
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         registerForKeyboardNotifications(self)
-        _ = emailField.becomeFirstResponder()
+        if let email = AppSettings.email {
+            let context = LAContext()
+            context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+            if context.biometryType == .faceID || context.biometryType == .touchID {
+                context.localizedCancelTitle = "AuthViewController.usePassword".localized
+                context.touchIDAuthenticationAllowableReuseDuration = 60
+                context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "AuthViewController.savePassword".localized) { [weak self] (_, error) in
+                    DispatchQueue.main.async { [weak self] in
+                        if error == nil {
+                            let query: [String: Any] = [kSecClass as String: kSecClassInternetPassword,
+                                                        kSecAttrAccount as String: email,
+                                                        kSecAttrServer as String: PRApiClient.shared.baseURL.absoluteString,
+                                                        kSecMatchLimit as String: kSecMatchLimitOne,
+                                                        kSecReturnAttributes as String: true,
+                                                        kSecReturnData as String: true]
+                            var item: CFTypeRef?
+                            _ = SecItemCopyMatching(query as CFDictionary, &item)
+                            if let item = item as? [String: Any],
+                               let passwordData = item[kSecValueData as String] as? Data,
+                               let password = String(data: passwordData, encoding: .utf8) {
+                                self?.passwordField.text = password
+                            }
+                        }
+                    }
+                }
+                return
+            }
+        }
+        if emailField.text?.isEmpty ?? true {
+            _ = emailField.becomeFirstResponder()
+        } else {
+            _ = passwordField.becomeFirstResponder()
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -42,10 +81,83 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
         unregisterFromKeyboardNotifications()
     }
 
+    func logIn(data: [String: Any], agencies: [[String: Any]]) {
+        if agencies.count > 1 {
+            // TODO navigate to a selection screen
+            activityIndicatorView.stopAnimating()
+            presentUnexpectedErrorAlert()
+        }
+        if let subdomain = agencies[0]["subdomain"] as? String {
+            AppSettings.subdomain = subdomain
+            if let routedUrl = agencies[0]["routedUrl"] as? String {
+                AppSettings.routedUrl = routedUrl
+                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+                REDRealm.connect()
+            }
+            // update agency forms in the background
+            AppRealm.getForms()
+            // update code lists in the background
+            AppRealm.getLists { (_) in
+                // noop
+            }
+            AppRealm.me { [weak self] (user, agency, assignment, vehicle, scene, awsCredentials, error) in
+                let userId = user?.id
+                let agencyId = agency?.id
+                let assignmentId = assignment?.id
+                let vehicleId = vehicle?.id
+                let sceneId = scene?.id
+                AppSettings.awsCredentials = awsCredentials
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    if let error = error {
+                        self.activityIndicatorView.stopAnimating()
+                        self.presentAlert(error: error)
+                    } else if let userId = userId, let agencyId = agencyId {
+                        // check if the user or scene has changed since last login
+                        if userId != AppSettings.userId || sceneId != AppSettings.sceneId {
+                            // set new login ids, and navigate as needed
+                            AppSettings.login(userId: userId, agencyId: agencyId, assignmentId: assignmentId, vehicleId: vehicleId, sceneId: sceneId)
+                            if assignmentId == nil {
+                                let vc = UIStoryboard(name: "Auth",
+                                                      bundle: nil).instantiateViewController(withIdentifier: "Assignment")
+                                if let vc = vc as? AssignmentViewController {
+                                    vc.delegate = self
+                                }
+                                self.presentAnimated(vc)
+                            } else if let sceneId = sceneId {
+                                AppDelegate.enterScene(id: sceneId)
+                            } else {
+                                _ = AppDelegate.leaveScene()
+                            }
+                        } else {
+                            self.delegate?.authViewControllerDidLogin?(self)
+                        }
+                    } else {
+                        self.activityIndicatorView.stopAnimating()
+                        self.presentUnexpectedErrorAlert()
+                    }
+                }
+            }
+        } else {
+            activityIndicatorView.stopAnimating()
+            presentUnexpectedErrorAlert()
+        }
+    }
+
     @IBAction func signInPressed(_ sender: PRKit.Button) {
         let email = emailField.text
         let password = passwordField.text
         if let email = email, let password = password, !email.isEmpty && !password.isEmpty {
+            var isPromptForFaceID = false
+            if rememberMeCheckbox.isChecked {
+                isPromptForFaceID = AppSettings.email != email
+                AppSettings.email = email
+            } else {
+                AppSettings.email = nil
+                let query: [String: Any] = [kSecClass as String: kSecClassInternetPassword]
+                _ = SecItemDelete(query as CFDictionary)
+            }
+            AppSettings.save()
             emailField.isUserInteractionEnabled = false
             passwordField.isUserInteractionEnabled = false
             signInButton.isUserInteractionEnabled = false
@@ -61,65 +173,52 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                             self.presentAlert(error: error)
                         }
                     } else if let data = data, let agencies = data["agencies"] as? [[String: Any]], agencies.count > 0 {
-                        if agencies.count > 1 {
-                            // TODO navigate to a selection screen
-                            self.activityIndicatorView.stopAnimating()
-                            self.presentUnexpectedErrorAlert()
-                        }
-                        if let subdomain = agencies[0]["subdomain"] as? String {
-                            AppSettings.subdomain = subdomain
-                            if let routedUrl = agencies[0]["routedUrl"] as? String {
-                                AppSettings.routedUrl = routedUrl
-                                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
-                                REDRealm.connect()
-                            }
-                            // update agency forms in the background
-                            AppRealm.getForms()
-                            // update code lists in the background
-                            AppRealm.getLists { (_) in
-                                // noop
-                            }
-                            AppRealm.me { [weak self] (user, agency, assignment, vehicle, scene, awsCredentials, error) in
-                                let userId = user?.id
-                                let agencyId = agency?.id
-                                let assignmentId = assignment?.id
-                                let vehicleId = vehicle?.id
-                                let sceneId = scene?.id
-                                AppSettings.awsCredentials = awsCredentials
-                                DispatchQueue.main.async { [weak self] in
-                                    guard let self = self else { return }
-                                    if let error = error {
-                                        self.activityIndicatorView.stopAnimating()
-                                        self.presentAlert(error: error)
-                                    } else if let userId = userId, let agencyId = agencyId {
-                                        // check if the user or scene has changed since last login
-                                        if userId != AppSettings.userId || sceneId != AppSettings.sceneId {
-                                            // set new login ids, and navigate as needed
-                                            AppSettings.login(userId: userId, agencyId: agencyId, assignmentId: assignmentId, vehicleId: vehicleId, sceneId: sceneId)
-                                            if assignmentId == nil {
-                                                let vc = UIStoryboard(name: "Auth",
-                                                                      bundle: nil).instantiateViewController(withIdentifier: "Assignment")
-                                                if let vc = vc as? AssignmentViewController {
-                                                    vc.delegate = self
+                        if isPromptForFaceID {
+                            let context = LAContext()
+                            context.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)
+                            if context.biometryType == .none {
+                                self.logIn(data: data, agencies: agencies)
+                            } else if context.biometryType == .faceID || context.biometryType == .touchID {
+                                context.localizedCancelTitle = "AuthViewController.usePassword".localized
+                                context.touchIDAuthenticationAllowableReuseDuration = 60
+                                let type = "AuthViewController.\(context.biometryType == .faceID ? "faceID" : "touchID")".localized
+                                let prompt = UIAlertController(title: String(format: "AuthViewController.useBiometrics.title".localized, type),
+                                                               message: String(format: "AuthViewController.useBiometrics.message".localized, type),
+                                                               preferredStyle: .alert)
+                                prompt.addAction(UIAlertAction(title: "Button.no".localized, style: .cancel, handler: { [weak self] (_) in
+                                    self?.logIn(data: data, agencies: agencies)
+                                }))
+                                prompt.addAction(UIAlertAction(title: "Button.yes".localized, style: .default, handler: { [weak self] (_) in
+                                    context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: "AuthViewController.savePassword".localized) { [weak self] (_, error) in
+                                        DispatchQueue.main.async { [weak self] in
+                                            if let error = error {
+                                                self?.presentAlert(error: error) { [weak self] in
+                                                    self?.logIn(data: data, agencies: agencies)
                                                 }
-                                                self.presentAnimated(vc)
-                                            } else if let sceneId = sceneId {
-                                                AppDelegate.enterScene(id: sceneId)
                                             } else {
-                                                _ = AppDelegate.leaveScene()
+                                                let query: [String: Any] = [kSecClass as String: kSecClassInternetPassword,
+                                                                            kSecAttrAccount as String: email,
+                                                                            kSecAttrServer as String: PRApiClient.shared.baseURL.absoluteString,
+                                                                            kSecValueData as String: password.data(using: .utf8) as Any]
+                                                var status = SecItemAdd(query as CFDictionary, nil)
+                                                if status == errSecDuplicateItem {
+                                                    status = SecItemUpdate(query as CFDictionary, query as CFDictionary)
+                                                }
+                                                if status != errSecSuccess {
+                                                    self?.presentAlert(title: "Error.title".localized, message: "AuthViewController.useBiometrics.unexpectedError".localized) { [weak self] in
+                                                        self?.logIn(data: data, agencies: agencies)
+                                                    }
+                                                } else {
+                                                    self?.logIn(data: data, agencies: agencies)
+                                                }
                                             }
-                                        } else {
-                                            self.delegate?.authViewControllerDidLogin?(self)
                                         }
-                                    } else {
-                                        self.activityIndicatorView.stopAnimating()
-                                        self.presentUnexpectedErrorAlert()
                                     }
-                                }
+                                }))
+                                self.presentAnimated(prompt)
                             }
                         } else {
-                            self.activityIndicatorView.stopAnimating()
-                            self.presentUnexpectedErrorAlert()
+                            self.logIn(data: data, agencies: agencies)
                         }
                     } else {
                         self.activityIndicatorView.stopAnimating()

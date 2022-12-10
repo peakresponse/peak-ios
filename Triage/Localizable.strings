@@ -22,6 +22,15 @@
 
 "AuthViewController.email" = "Email";
 "AuthViewController.password" = "Password";
+"AuthViewController.rememberMe" = "Remember me";
+"AuthViewController.usePassword" = "Use Email/Password";
+"AuthViewController.retrievePassword" = "Retrieve your password";
+"AuthViewController.savePassword" = "Save your password";
+"AuthViewController.faceID" = "Face ID";
+"AuthViewController.touchID" = "Touch ID";
+"AuthViewController.useBiometrics.title" = "Use %@?";
+"AuthViewController.useBiometrics.message" = "Would you like to use %@ to securely save your password for next time?";
+"AuthViewController.useBiometrics.unexpectedError" = "Unable to save your password at this time. Please try again later.";
 "AuthViewController.createAccount" = "CREATE NEW ACCOUNT";
 "AuthViewController.forgotPassword" = "FORGOT PASSWORD";
 
