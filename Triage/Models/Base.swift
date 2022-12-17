@@ -97,11 +97,20 @@ class BaseVersioned: Base {
 
     convenience init?(current obj: BaseVersioned) {
         self.init(value: obj)
-        guard let currentId = currentId else { return nil}
+        guard let currentId = currentId else { return nil }
         canonicalId = id
         id = currentId
         parentId = nil
         self.currentId = nil
+    }
+
+    convenience init?(canonicalize obj: BaseVersioned) {
+        self.init(value: obj)
+        guard let canonicalId = canonicalId else { return nil }
+        currentId = id
+        id = canonicalId
+        parentId = nil
+        self.canonicalId = nil
     }
 
     static func newRecord() -> Self {

@@ -604,20 +604,10 @@ class AppRealm {
             }
             realm.add(report, update: .modified)
             // create/update the canonical record for the Report and Scene
-            if let canonicalId = report.canonicalId {
-                let canonical = Report(value: report)
-                canonical.id = canonicalId
-                canonical.canonicalId = nil
-                canonical.parentId = nil
-                canonical.currentId = report.id
+            if let canonical = Report(canonicalize: report) {
                 realm.add(canonical, update: .modified)
             }
-            if let scene = report.scene, let canonicalId = scene.canonicalId {
-                let canonical = Scene(value: scene)
-                canonical.id = canonicalId
-                canonical.canonicalId = nil
-                canonical.parentId = nil
-                canonical.currentId = report.id
+            if let scene = report.scene, let canonical = Scene(canonicalize: scene) {
                 realm.add(canonical, update: .modified)
             }
             if report.parentId == nil || report.canonicalId != parent?.canonicalId, let incident = report.incident {
@@ -649,12 +639,7 @@ class AppRealm {
                 let realm = AppRealm.open()
                 try! realm.write {
                     realm.add(scene, update: .modified)
-                    if let canonicalId = scene.canonicalId {
-                        let canonical = Scene(value: scene)
-                        canonical.id = canonicalId
-                        canonical.canonicalId = nil
-                        canonical.parentId = nil
-                        canonical.currentId = scene.id
+                    if let canonical = Scene(canonicalize: scene) {
                         realm.add(canonical, update: .modified)
                     }
                     realm.add(incident, update: .modified)
@@ -696,12 +681,7 @@ class AppRealm {
             let newScene = Scene(clone: scene)
             newScene.isMCI = true
             newScene.mgsResponderId = responder.id
-            if let canonicalId = newScene.canonicalId, let changes = newScene.changes(from: scene) {
-                let canonical = Scene(value: newScene)
-                canonical.id = canonicalId
-                canonical.canonicalId = nil
-                canonical.parentId = nil
-                canonical.currentId = newScene.id
+            if let canonicalId = newScene.canonicalId, let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
                 responder.scene = canonical
                 let data = [
                     "Responder": responder.asJSON(),
@@ -735,16 +715,11 @@ class AppRealm {
         if let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId) {
             let newScene = Scene(clone: scene)
             newScene.closedAt = Date()
-            if let canonicalId = newScene.canonicalId, let changes = newScene.changes(from: scene) {
+            if let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
                 let data = [
                     "Scene": changes
                 ]
                 try! realm.write {
-                    let canonical = Scene(value: newScene)
-                    canonical.id = canonicalId
-                    canonical.canonicalId = nil
-                    canonical.parentId = nil
-                    canonical.currentId = newScene.id
                     realm.add(canonical, update: .modified)
                     realm.add(newScene, update: .modified)
                 }
@@ -838,16 +813,11 @@ class AppRealm {
         case .transport:
             newScene.transportResponderId = responderId
         }
-        if let canonicalId = newScene.canonicalId, let changes = newScene.changes(from: scene) {
+        if let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
             let data = [
                 "Scene": changes
             ]
             try! realm.write {
-                let canonical = Scene(value: newScene)
-                canonical.id = canonicalId
-                canonical.canonicalId = nil
-                canonical.parentId = nil
-                canonical.currentId = newScene.id
                 realm.add(canonical, update: .modified)
                 realm.add(newScene, update: .modified)
             }
@@ -975,16 +945,11 @@ class AppRealm {
             } else {
                 newScene.approxPatientsCount = value
             }
-            if let canonicalId = newScene.canonicalId, let changes = newScene.changes(from: scene) {
+            if let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
                 let data = [
                     "Scene": changes
                 ]
                 try! realm.write {
-                    let canonical = Scene(value: newScene)
-                    canonical.id = canonicalId
-                    canonical.canonicalId = nil
-                    canonical.parentId = nil
-                    canonical.currentId = newScene.id
                     realm.add(canonical, update: .modified)
                     realm.add(newScene, update: .modified)
                 }
