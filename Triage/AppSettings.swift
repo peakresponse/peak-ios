@@ -15,6 +15,14 @@ class AppSettings {
         _ = defaults.synchronize()
     }
 
+    static var version: String? {
+        if let versionNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String,
+           let buildNumber = Bundle.main.object(forInfoDictionaryKey: "CFBundleVersion") as? String {
+            return String(format: "AppSettings.version".localized, versionNumber, buildNumber)
+        }
+        return nil
+    }
+
     static var email: String? {
         get { return defaults.string(forKey: "email") }
         set { defaults.set(newValue, forKey: "email") }

@@ -12,9 +12,10 @@ import UIKit
 
 class IncidentsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
+    @IBOutlet weak var versionLabel: UILabel!
+    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var commandFooter: CommandFooter!
     weak var segmentedControl: SegmentedControl!
@@ -30,6 +31,8 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        versionLabel.text = AppSettings.version
 
         setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
         commandHeader.searchField.delegate = self

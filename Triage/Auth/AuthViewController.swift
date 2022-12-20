@@ -24,12 +24,14 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
     @IBOutlet weak var rememberMeCheckbox: PRKit.Checkbox!
     @IBOutlet weak var signInButton: PRKit.Button!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var versionLabel: UILabel!
 
     weak var delegate: AuthViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        versionLabel.text = AppSettings.version
         emailField.keyboardType = .emailAddress
 
         if let email = AppSettings.email {
@@ -64,6 +66,9 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                                 self?.passwordField.text = password
                             }
                         }
+                        if self?.passwordField.text?.isEmpty ?? true {
+                            _ = self?.passwordField.becomeFirstResponder()
+                        }
                     }
                 }
                 return
@@ -73,6 +78,13 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             _ = emailField.becomeFirstResponder()
         } else {
             _ = passwordField.becomeFirstResponder()
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if !(emailField.text?.isEmpty ?? true) {
+            emailField.updateStyle()
         }
     }
 

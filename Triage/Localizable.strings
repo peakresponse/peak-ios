@@ -16,6 +16,8 @@
 "ActiveSceneView.transportedLabel" = " Patients Transported";
 "ActiveSceneView.respondersLabel" = " Responders on Scene";
 
+"AppSettings.version" = "v%@ build %@";
+
 "AssignmentViewController.other" = "Other:";
 "AssignmentViewController.select" = "Please select your unit:";
 "AssignmentViewController.welcome" = "Welcome %@.";
