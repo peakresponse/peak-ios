@@ -173,6 +173,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         commandFooter.isLoading = true
         AppRealm.createAssignment(number: number, vehicleId: vehicleId) { [weak self] (assignment, error) in
             let assignmentId = assignment?.id
+            let vehicleId = assignment?.vehicleId
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.commandFooter.isLoading = false
@@ -180,6 +181,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
                     self.presentAlert(error: error)
                 } else {
                     AppSettings.assignmentId = assignmentId
+                    AppSettings.vehicleId = vehicleId
                     self.delegate?.assignmentViewController?(self, didCreate: assignmentId ?? "")
                 }
             }
