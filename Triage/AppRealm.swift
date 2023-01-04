@@ -203,12 +203,12 @@ class AppRealm {
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
-                let assignment = Assignment.instantiate(from: data)
-                let realm = AppRealm.open()
-                try! realm.write {
-                    realm.add(assignment, update: .modified)
+                AppRealm.handlePayload(data: data)
+                var assignment: Assignment?
+                if let data = data["Assignment"] as? [String: Any], let id = data["id"] as? String {
+                    assignment = AppRealm.open().object(ofType: Assignment.self, forPrimaryKey: id)
                 }
-                completionHandler(assignment as? Assignment, nil)
+                completionHandler(assignment, nil)
             }
         }
         task.resume()

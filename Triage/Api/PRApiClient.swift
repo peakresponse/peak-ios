@@ -19,7 +19,7 @@ class PRApiClient: ApiClient {
         }
     }
 
-    static let apiLevel = "2"
+    static let apiLevel = "3"
 
     override func urlRequest(for path: String, params: [String: Any]? = nil, method: String = "GET", body: Any? = nil) -> URLRequest {
         var request = super.urlRequest(for: path, params: params, method: method, body: body)
