@@ -204,7 +204,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                                                              action: #selector(self.dismissAnimated))
         incident = vc.incident
         firstRefresh = false
-        customTabBar.isHidden = false
+        if !isMCI {
+            customTabBar.isHidden = false
+        }
         performQuery()
     }
 
