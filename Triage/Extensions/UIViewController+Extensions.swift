@@ -104,7 +104,7 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
             if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == vehicleId }) {
                 report.time?.unitNotifiedByDispatch = dispatch.dispatchedAt
             }
-            if let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+            if !(report.scene?.isMCI ?? false), let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
                 report.response?.unitNumber = vehicle.number
             }
         }
