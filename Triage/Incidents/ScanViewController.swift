@@ -7,6 +7,8 @@
 //
 
 import AVFoundation
+import MLKitBarcodeScanning
+import MLKitVision
 import PRKit
 import RealmSwift
 import UIKit
@@ -22,13 +24,16 @@ class ScanCameraView: UIView {
     }
 }
 
-class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelegate, PRKit.FormFieldDelegate {
+class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var pinField: PRKit.TextField!
 
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
+
+    var barcodeScanner: BarcodeScanner!
+    var scannedValues: [String] = []
 
     var incident: Incident?
 
@@ -120,17 +125,21 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
             print("Failed to get the camera device")
             return
         }
+        // Create a barcode scanner.
+        let barcodeOptions = BarcodeScannerOptions(formats: [BarcodeFormat.code39, BarcodeFormat.code128])
+        barcodeScanner = BarcodeScanner.barcodeScanner(options: barcodeOptions)
         do {
             // Get an instance of the AVCaptureDeviceInput class using the previous device object.
             let input = try AVCaptureDeviceInput(device: captureDevice)
             // Set the input device on the capture session.
             captureSession.addInput(input)
-            // Initialize a AVCaptureMetadataOutput object and set it as the output device to the capture session.
-            let captureMetadataOutput = AVCaptureMetadataOutput()
-            captureSession.addOutput(captureMetadataOutput)
-            // Set delegate and use the default dispatch queue to execute the call back
-            captureMetadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            captureMetadataOutput.metadataObjectTypes = [.code39, .code128, .qr]
+            // Output video frames for MLKit analysis
+            let output = AVCaptureVideoDataOutput()
+            output.videoSettings = [(kCVPixelBufferPixelFormatTypeKey as String): kCVPixelFormatType_32BGRA]
+            output.alwaysDiscardsLateVideoFrames = true
+            let outputQueue = DispatchQueue(label: "net.peakresponse.Triage.VideoDataOutputQueue")
+            output.setSampleBufferDelegate(self, queue: outputQueue)
+            captureSession.addOutput(output)
             // Initialize the video preview layer and add it as a sublayer to the viewPreview view's layer.
             videoPreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession)
             videoPreviewLayer?.videoGravity = AVLayerVideoGravity.resizeAspectFill
@@ -169,20 +178,95 @@ class ScanViewController: UIViewController, AVCaptureMetadataOutputObjectsDelega
         pinField.text = nil
     }
 
-    // MARK: - AVCaptureMetadataOutputObjectsDelegate
-
-    func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject],
-                        from connection: AVCaptureConnection) {
-        // Check if the metadataObjects array is not nil and it contains at least one object.
-        if metadataObjects.count == 0 {
-            return
+    func currentUIOrientation() -> UIDeviceOrientation {
+        let deviceOrientation = { () -> UIDeviceOrientation in
+            switch UIApplication.shared.statusBarOrientation {
+            case .landscapeLeft:
+                return .landscapeRight
+            case .landscapeRight:
+                return .landscapeLeft
+            case .portraitUpsideDown:
+                return .portraitUpsideDown
+            case .portrait, .unknown:
+                return .portrait
+            @unknown default:
+                fatalError()
+            }
         }
-        // Get the metadata object.
-        if let metadataObj = metadataObjects[0] as? AVMetadataMachineReadableCodeObject,
-           let pin = metadataObj.stringValue {
-            captureSession.stopRunning()
-            pinField.text = pin
-            findPIN()
+        guard Thread.isMainThread else {
+            var currentOrientation: UIDeviceOrientation = .portrait
+            DispatchQueue.main.sync {
+                currentOrientation = deviceOrientation()
+            }
+            return currentOrientation
+        }
+        return deviceOrientation()
+    }
+
+    func imageOrientation(fromDevicePosition devicePosition: AVCaptureDevice.Position = .back) -> UIImage.Orientation {
+        var deviceOrientation = UIDevice.current.orientation
+        if deviceOrientation == .faceDown || deviceOrientation == .faceUp || deviceOrientation == .unknown {
+            deviceOrientation = currentUIOrientation()
+        }
+        switch deviceOrientation {
+        case .portrait:
+          return devicePosition == .front ? .leftMirrored : .right
+        case .landscapeLeft:
+          return devicePosition == .front ? .downMirrored : .up
+        case .portraitUpsideDown:
+          return devicePosition == .front ? .rightMirrored : .left
+        case .landscapeRight:
+          return devicePosition == .front ? .upMirrored : .down
+        case .faceDown, .faceUp, .unknown:
+          return .up
+        @unknown default:
+          fatalError()
+        }
+    }
+
+    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
+
+    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
+          print("Failed to get image buffer from sample buffer.")
+          return
+        }
+
+        let visionImage = VisionImage(buffer: sampleBuffer)
+        let orientation = imageOrientation(fromDevicePosition: .back)
+        visionImage.orientation = orientation
+
+        guard let inputImage = MLImage(sampleBuffer: sampleBuffer) else {
+          print("Failed to create MLImage from sample buffer.")
+          return
+        }
+        inputImage.orientation = orientation
+
+        var barcodes: [Barcode] = []
+        do {
+            barcodes = try barcodeScanner.results(in: inputImage)
+            if let pin = barcodes.first?.displayValue {
+                if scannedValues.count > 0 {
+                    if let prevPin = scannedValues.first, pin == prevPin {
+                        scannedValues.append(pin)
+                    } else {
+                        scannedValues = [pin]
+                    }
+                    if scannedValues.count >= 3 {
+                        scannedValues = []
+                        DispatchQueue.main.sync { [weak self] in
+                            guard let self = self else { return }
+                            self.captureSession.stopRunning()
+                            self.pinField.text = pin
+                            self.findPIN()
+                        }
+                    }
+                } else {
+                    scannedValues.append(pin)
+                }
+            }
+        } catch let error {
+            print("Failed to scan barcodes with error: \(error.localizedDescription).")
         }
     }
 
