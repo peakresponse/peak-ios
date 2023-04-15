@@ -133,6 +133,20 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             containerView.addArrangedSubview(section)
 
             (section, cols, colA, colB) = newSection()
+            header = newHeader("ReportViewController.transportInformation".localized)
+            section.addArrangedSubview(header)
+            addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
+            addTextField(source: report,
+                         attributeKey: "disposition.destinationCode",
+                         attributeType: .custom(NemsisComboKeyboard(
+                            source: EnumKeyboardSource<SFFacility>(), isMultiSelect: false, negatives: [.notApplicable, .notReporting]
+                         )),
+                         tag: &tag,
+                         to: colB)
+            section.addArrangedSubview(cols)
+            containerView.addArrangedSubview(section)
+
+            (section, cols, colA, colB) = newSection()
             header = newHeader("ReportViewController.patientInformation".localized,
                                subheaderText: "ReportViewController.optional".localized)
             section.addArrangedSubview(header)

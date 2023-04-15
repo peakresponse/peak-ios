@@ -86,6 +86,15 @@ class Disposition: BaseVersioned, NemsisBacked {
     @Persisted var _data: Data?
     @Persisted var destinationFacility: Facility?
 
+    @objc var destinationCode: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.02")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.02")
+        }
+    }
+
     @objc var unitDisposition: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")?.text

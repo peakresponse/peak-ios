@@ -119,6 +119,7 @@
 "CrewDisposition.4229011" = "Back in Service, No Care/Support Services Required";
 "CrewDisposition.4229013" = "Back in Service, Care/Support Services Refused";
 
+"Disposition.destinationCode" = "Destination";
 "Disposition.destinationFacility" = "Transport Destination";
 "Disposition.unitDisposition" = "Unit Disposition";
 "Disposition.patientEvaluationCare" = "Patient Evaluation/Care";
@@ -351,6 +352,7 @@
 "ReportViewController.recordings" = "Recordings";
 "ReportViewController.recording" = "Recording %d";
 "ReportViewController.signatures" = "Signatures";
+"ReportViewController.transportInformation" = "Transport Information";
 "ReportViewController.vitals" = "Vitals";
 
 "Responder.sort.az" = "Alphabetically";
@@ -453,6 +455,17 @@
 "ScrollIndicatorView.label" = "Scroll down to continue patient entry";
 
 "SearchBar.placeholder" = "Search";
+
+"SFFacility.20386" = "SF General";
+"SFFacility.20050" = "Mission Bernal";
+"SFFacility.20048" = "CPMC Davies";
+"SFFacility.62636" = "CPMC Van Ness";
+"SFFacility.20447" = "St. Francis";
+"SFFacility.20065" = "Chinese Hospital";
+"SFFacility.20199" = "Kaiser SF";
+"SFFacility.20462" = "St. Mary's";
+"SFFacility.20504" = "UCSF Parnassus";
+"SFFacility.20540" = "VA Med. Center";
 
 "Sidebar.item.switch" = "Change Unit/Vehicle";
 "Sidebar.item.logOut" = "Log out";

@@ -62,6 +62,7 @@
 		456F050027B5B983000CEE42 /* Base+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */; };
 		456F050227B5E884000CEE42 /* Predictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050127B5E884000CEE42 /* Predictions.swift */; };
 		456F050427BC6D03000CEE42 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050327BC6D03000CEE42 /* File.swift */; };
+		456F179729EA750E00F2FA23 /* SFFacility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F179629EA750E00F2FA23 /* SFFacility.swift */; };
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
@@ -224,6 +225,7 @@
 		456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+KeyPath.swift"; sourceTree = "<group>"; };
 		456F050127B5E884000CEE42 /* Predictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictions.swift; sourceTree = "<group>"; };
 		456F050327BC6D03000CEE42 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		456F179629EA750E00F2FA23 /* SFFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFFacility.swift; sourceTree = "<group>"; };
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
@@ -555,6 +557,7 @@
 				458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */,
 				458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */,
 				45C9C70D2907706B005D0FDD /* StateKeyboardSource.swift */,
+				456F179629EA750E00F2FA23 /* SFFacility.swift */,
 				458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */,
 			);
 			path = Data;
@@ -971,6 +974,7 @@
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
+				456F179729EA750E00F2FA23 /* SFFacility.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */,
 				45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */,
