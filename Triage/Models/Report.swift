@@ -238,6 +238,9 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         }
         if data.index(forKey: Keys.dispositionId) != nil {
             disposition = realm.object(ofType: Disposition.self, forPrimaryKey: data[Keys.dispositionId] as? String)
+            if let value = disposition?.destinationCode, !value.isNil {
+                filterPriority = TriagePriority.transported.rawValue
+            }
         }
         if data.index(forKey: Keys.narrativeId) != nil {
             narrative = realm.object(ofType: Narrative.self, forPrimaryKey: data[Keys.narrativeId] as? String)

@@ -811,7 +811,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             newReport = Report(clone: report)
         }
         newReport?.patient?.priority = sender.priority?.rawValue
-        if newReport?.disposition?.destinationFacility == nil {
+        if newReport?.disposition?.destinationFacility == nil && newReport?.disposition?.destinationCode == nil {
             newReport?.filterPriority = newReport?.patient?.priority
         }
         if !isEditing {
@@ -833,6 +833,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     refreshFormFieldsAndControls(["disposition.unitDisposition"])
                 }
                 updateFormFieldVisibility()
+            case "disposition.destinationCode":
+                if field.attributeValue == nil {
+                    newReport?.filterPriority = newReport?.patient?.priority
+                } else {
+                    newReport?.filterPriority = TriagePriority.transported.rawValue
+                }
             case "disposition.unitDisposition":
                 if UnitDisposition.patientContactMade.rawValue != field.attributeValue as? String {
                     // clear and hide patient/crew/transport/refusal disposition fields
