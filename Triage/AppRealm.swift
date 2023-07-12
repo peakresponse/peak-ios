@@ -160,10 +160,22 @@ class AppRealm {
                     objs = [model.instantiate(from: record)]
                 }
                 if let objs = objs {
-                    realm.add(objs, update: .modified)
                     // special case handling for Scene, which we reference as both canonical top-level and current dependent records
                     if let objs = objs as? [Scene] {
-                        realm.add(objs.compactMap { Scene(current: $0) }, update: .modified)
+                        for obj in objs {
+                            if let currentId = obj.currentId {
+                                if realm.objects(Scene.self).filter("parentId=%@ OR secondParentId=%@", currentId, currentId).count == 0 {
+                                    realm.add(obj, update: .modified)
+                                    if let current = Scene(current: obj) {
+                                        realm.add(current, update: .modified)
+                                    }
+                                }
+                            } else {
+                                realm.add(obj, update: .modified)
+                            }
+                        }
+                    } else {
+                        realm.add(objs, update: .modified)
                     }
                 }
             }
