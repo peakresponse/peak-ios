@@ -38,7 +38,7 @@ class SceneOverviewCounterCell: UICollectionViewCell, SceneOverviewCell {
             counterControl.labelText = priority.description
         } else {
             counterControl.color = .base500
-            counterControl.labelText = "SceneOverviewCounterCell.approxPatientsLabel".localized
+            counterControl.labelText = "SceneOverviewCounterCell.totalLabel".localized
         }
     }
 
@@ -48,10 +48,15 @@ class SceneOverviewCounterCell: UICollectionViewCell, SceneOverviewCell {
         }
         if let priority = priority {
             counterControl.count = scene.approxPriorityPatientsCounts?[priority.rawValue] ?? 0
+            counterControl.isEnabled = scene.isResponder(userId: AppSettings.userId)
         } else {
-            counterControl.count = scene.approxPatientsCount ?? 0
+            var count = 0
+            if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
+                count = approxPriorityPatientsCounts[0..<5].reduce(count, { return $0 + $1 })
+            }
+            counterControl.count = count
+            counterControl.isEnabled = false
         }
-        counterControl.isEnabled = scene.isResponder(userId: AppSettings.userId)
     }
 
     @IBAction func counterValueChanged(_ sender: CounterControl) {

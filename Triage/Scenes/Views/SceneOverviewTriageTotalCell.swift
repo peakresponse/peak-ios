@@ -8,9 +8,8 @@
 
 import UIKit
 
-class SceneOverviewTriageTotalCell: UICollectionViewCell, SceneOverviewCell {
+class SceneOverviewTriageTotalCell: UICollectionViewCell {
     @IBOutlet weak var headerLabel: UILabel!
-    @IBOutlet weak var totalLabel: UILabel!
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
@@ -20,13 +19,5 @@ class SceneOverviewTriageTotalCell: UICollectionViewCell, SceneOverviewCell {
         }
         attributes.frame = frame
         return attributes
-    }
-
-    func configure(from scene: Scene) {
-        var count = 0
-        if let approxPriorityPatientsCounts = scene.approxPriorityPatientsCounts {
-            count = approxPriorityPatientsCounts[0..<5].reduce(count, { return $0 + $1 })
-        }
-        totalLabel.text = String(format: "SceneOverviewTriageTotalCell.totalLabel".localized, count)
     }
 }

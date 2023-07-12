@@ -133,7 +133,7 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
-  - RMJSONPatch (from `https://github.com/raymccrae/swift-jsonpatch.git`, tag `v1.0.4`)
+  - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (= 2.0.3)
   - RollbarPLCrashReporter (= 2.0.3)
   - RollbarSwift (= 2.0.3)
@@ -170,6 +170,7 @@ SPEC REPOS:
     - Protobuf
     - Realm
     - RealmSwift
+    - RMJSONPatch
     - RollbarCommon
     - RollbarNotifier
     - RollbarPLCrashReporter
@@ -188,20 +189,14 @@ EXTERNAL SOURCES:
   PRKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-prkit.git
-  RMJSONPatch:
-    :git: https://github.com/raymccrae/swift-jsonpatch.git
-    :tag: v1.0.4
   TranscriptionKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: acfef786c4a9f01037b52e69d3dddc166cfde932
+    :commit: dc175df33cbbf3f6d352190afea6f25d31096957
     :git: https://github.com/peakresponse/peak-ios-prkit.git
-  RMJSONPatch:
-    :git: https://github.com/raymccrae/swift-jsonpatch.git
-    :tag: v1.0.4
   TranscriptionKit:
     :commit: 0481c711d6fe6895281788291ecb6eae459f4cf3
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
@@ -236,8 +231,8 @@ SPEC CHECKSUMS:
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   RollbarCommon: 402cfbbca0955ab0f3c3da0b526b1a6e0d180d9f
   RollbarNotifier: bbbd2be42a80a1bc406227edea63dc9517809f43
-  RollbarPLCrashReporter: ef3744b4a36fcd01301ec8e13489231ec076d3bb
-  RollbarSwift: e183721049f122776eaf9c6b63e2282199d0b327
+  RollbarPLCrashReporter: 5ee965b3598ee5b046eba9b93e35a9a089ff1368
+  RollbarSwift: 9fd83d253f5c545c0a2fd29837b3dbc75c2851da
   RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
   SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
@@ -247,6 +242,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
   TranscriptionKit: 6ebcb5db971f26a2fa0353d278d9e6d002bf7d54
 
-PODFILE CHECKSUM: d087944fbaec4131c12e45b6c32b4db7d909feb4
+PODFILE CHECKSUM: 41f8532ac95157e7adc35b7855ff1f8e49783108
 
 COCOAPODS: 1.11.3

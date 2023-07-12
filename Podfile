@@ -26,7 +26,7 @@ target 'Triage' do
   pod 'RollbarPLCrashReporter', '2.0.3'
   pod 'RollbarSwift', '2.0.3'
   pod 'RxNormKit'
-  pod 'RMJSONPatch', :git => 'https://github.com/raymccrae/swift-jsonpatch.git', :tag => 'v1.0.4'
+  pod 'RMJSONPatch', '1.0.4'
   pod 'Starscream'
   pod 'SwiftLint'
   pod 'SwiftPath'

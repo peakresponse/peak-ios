@@ -414,7 +414,8 @@
 "SceneLocationView.zipLabel" = "Zipcode: ";
 "SceneLocationView.startLabel" = "Start Time: ";
 
-"SceneOverviewCounterCell.approxPatientsLabel" = "Approx # Patients";
+"SceneOverviewCounterCell.totalLabel" = "Total from below";
+
 "SceneOverviewTriageTotalCell.headerLabel" = "Approx Triage Counts";
 "SceneOverviewTriageTotalCell.totalLabel" = "Total from below: %d";
 

@@ -137,7 +137,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
             if let scene = vc.newScene {
                 AppRealm.updateScene(scene: scene)
             }
-	            dismissAnimated()
+            dismissAnimated()
         }
     }
 
@@ -157,11 +157,11 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0: // header and approx patients counter
-            return 2
+            return 1
         case 1: // approx triage counts header
             return 1
         case 2: // triage counters
-            return 5
+            return 6
         default:
             return 0
         }
@@ -171,23 +171,18 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         var cell: UICollectionViewCell
         switch indexPath.section {
         case 0:
-            switch indexPath.row {
-            case 0:
-                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
-            default:
-                cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
-                if let cell = cell as? SceneOverviewCounterCell {
-                    cell.delegate = self
-                    cell.priority = nil
-                }
-            }
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
         case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewTriageTotal", for: indexPath)
         case 2:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
             if let cell = cell as? SceneOverviewCounterCell {
                 cell.delegate = self
-                cell.priority = TriagePriority(rawValue: indexPath.row)
+                if indexPath.row > 0 {
+                    cell.priority = TriagePriority(rawValue: indexPath.row - 1)
+                } else {
+                    cell.priority = nil
+                }
             }
         default:
             cell = UICollectionViewCell()

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21225" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21207"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21678"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -64,7 +64,7 @@
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-bm-cia" customClass="Button" customModule="PRKit">
-                                                    <rect key="frame" x="320" y="0.0" width="54" height="34"/>
+                                                    <rect key="frame" x="216" y="0.0" width="158" height="43"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <userDefinedRuntimeAttributes>
@@ -77,7 +77,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWd-Za-2Xm" customClass="Button" customModule="PRKit">
-                                                    <rect key="frame" x="320" y="54" width="54" height="34"/>
+                                                    <rect key="frame" x="216" y="63" width="158" height="42.5"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <userDefinedRuntimeAttributes>
@@ -119,14 +119,14 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewCounter" id="LME-6G-1lm" customClass="SceneOverviewCounterCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="272" width="374" height="232"/>
+                                        <rect key="frame" x="20" y="273.5" width="170" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zFO-85-aFy">
-                                            <rect key="frame" x="0.0" y="0.0" width="374" height="232"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xcw-sf-Ybn" customClass="CounterControl" customModule="PRKit">
-                                                    <rect key="frame" x="0.0" y="0.0" width="374" height="232"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <connections>
                                                         <action selector="counterValueChanged:" destination="LME-6G-1lm" eventType="valueChanged" id="BWK-9J-jxu"/>
@@ -145,10 +145,10 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewTriageTotal" id="RCh-Jd-qdd" customClass="SceneOverviewTriageTotalCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="186" y="524" width="42" height="68"/>
+                                        <rect key="frame" x="210" y="272" width="42" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6LV-Hl-TfL">
-                                            <rect key="frame" x="0.0" y="0.0" width="42" height="68"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="42" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UNQ-98-oXi">
@@ -168,32 +168,19 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="SceneOverviewTriageTotalCell.headerLabel"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kCZ-C9-EIZ">
-                                                    <rect key="frame" x="0.0" y="47" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" name="Base500"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="h4SemiBold"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="kCZ-C9-EIZ" firstAttribute="top" secondItem="nat-JE-0PM" secondAttribute="bottom" constant="4" id="0Cy-AO-chg"/>
-                                                <constraint firstItem="kCZ-C9-EIZ" firstAttribute="trailing" secondItem="nat-JE-0PM" secondAttribute="trailing" id="4ef-hx-ssj"/>
                                                 <constraint firstItem="UNQ-98-oXi" firstAttribute="leading" secondItem="6LV-Hl-TfL" secondAttribute="leading" id="GIX-Ga-ugY"/>
+                                                <constraint firstAttribute="bottom" secondItem="nat-JE-0PM" secondAttribute="bottom" id="Myl-6N-zDo"/>
                                                 <constraint firstAttribute="trailing" secondItem="UNQ-98-oXi" secondAttribute="trailing" id="Ouq-PL-38G"/>
                                                 <constraint firstItem="nat-JE-0PM" firstAttribute="leading" secondItem="6LV-Hl-TfL" secondAttribute="leading" id="QXW-Xq-qjV"/>
                                                 <constraint firstItem="nat-JE-0PM" firstAttribute="top" secondItem="UNQ-98-oXi" secondAttribute="bottom" constant="20" id="fjw-gm-d55"/>
                                                 <constraint firstAttribute="trailing" secondItem="nat-JE-0PM" secondAttribute="trailing" id="kjH-bY-DFq"/>
-                                                <constraint firstItem="kCZ-C9-EIZ" firstAttribute="leading" secondItem="nat-JE-0PM" secondAttribute="leading" id="lOV-qb-osu"/>
-                                                <constraint firstAttribute="bottom" secondItem="kCZ-C9-EIZ" secondAttribute="bottom" id="luO-oq-Siv"/>
                                                 <constraint firstItem="UNQ-98-oXi" firstAttribute="top" secondItem="6LV-Hl-TfL" secondAttribute="top" id="yzp-WF-AZp"/>
                                             </constraints>
                                         </collectionViewCellContentView>
                                         <connections>
                                             <outlet property="headerLabel" destination="nat-JE-0PM" id="DSy-e2-XL0"/>
-                                            <outlet property="totalLabel" destination="kCZ-C9-EIZ" id="c4C-WW-Qdf"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -269,10 +256,10 @@
             <size key="intrinsicContentSize" width="414" height="128"/>
         </designable>
         <designable name="fWd-Za-2Xm">
-            <size key="intrinsicContentSize" width="54" height="34"/>
+            <size key="intrinsicContentSize" width="158" height="42.70703125"/>
         </designable>
         <designable name="h4G-bm-cia">
-            <size key="intrinsicContentSize" width="54" height="34"/>
+            <size key="intrinsicContentSize" width="86" height="42.70703125"/>
         </designable>
     </designables>
     <resources>
