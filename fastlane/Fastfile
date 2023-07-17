@@ -57,6 +57,7 @@ platform :ios do
       build_app(
         workspace: "Triage.xcworkspace",
         scheme: "Triage",
+        export_method: 'app-store',
         export_options: {
           signingCertificate: "Apple Distribution",
           provisioningProfiles: {
