@@ -1,6 +1,5 @@
----
-format_version: '8'
-default_step_lib_source: 'https://github.com/bitrise-io/bitrise-steplib.git'
+format_version: "8"
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
 trigger_map:
 - push_branch: '*'
@@ -62,4 +61,5 @@ app:
     BITRISE_EXPORT_METHOD: development
 meta:
   bitrise.io:
-    stack: osx-xcode-13.4.x
+    stack: osx-xcode-14.3.x-ventura
+    machine_type_id: g2-m1.4core
