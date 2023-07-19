@@ -30,6 +30,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let signatureIds = "signatureIds"
         static let predictions = "predictions"
         static let ringdownId = "ringdownId"
+        static let createdById = "createdById"
     }
     @Persisted var _data: Data?
     @Persisted var incident: Incident?
@@ -58,6 +59,8 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     @Persisted var files: List<File>
     @Persisted var signatures: List<Signature>
     @Persisted var ringdownId: String?
+    @Persisted var createdById: String?
+    @Persisted var createdBy: User?
 
     @objc var patientCareReportNumber: String? {
         get {
@@ -267,6 +270,12 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         }
         if data.index(forKey: Keys.ringdownId) != nil {
             ringdownId = data[Keys.ringdownId] as? String
+        }
+        if data.index(forKey: Keys.createdById) != nil {
+            createdById = data[Keys.createdById] as? String
+            if let createdById = createdById {
+                createdBy = realm.object(ofType: User.self, forPrimaryKey: createdById)
+            }
         }
     }
 

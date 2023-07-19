@@ -99,6 +99,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     @objc func transferPressed() {
         guard let report = report else { return }
         let newReport = Report(transfer: report)
+        newReport.createdById = AppSettings.userId
         let realm = AppRealm.open()
         if let vehicleId = AppSettings.vehicleId {
             if let dispatch = incident?.dispatches.first(where: { $0.vehicleId == vehicleId }) {
@@ -175,9 +176,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             let realm = AppRealm.open()
             if report.scene?.isMCI ?? false {
                 commandHeader.rightBarButtonItem = editBarButtonItem
-            } else if let vehicleId = AppSettings.vehicleId,
-               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId),
-               vehicle.number == report.response?.unitNumber {
+            } else if report.createdById == AppSettings.userId {
                 commandHeader.rightBarButtonItem = editBarButtonItem
             } else {
                 commandHeader.rightBarButtonItem = transferBarButtonItem

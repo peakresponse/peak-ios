@@ -95,6 +95,7 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
         let report = Report.newRecord()
         report.pin = pin
         report.incident = incident
+        report.createdById = AppSettings.userId
         if let scene = incident?.scene {
             report.scene = Scene(clone: scene)
         }
