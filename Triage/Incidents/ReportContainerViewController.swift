@@ -173,7 +173,6 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         if vc.isEditing {
             commandHeader.rightBarButtonItem = saveBarButtonItem
         } else {
-            let realm = AppRealm.open()
             if report.scene?.isMCI ?? false {
                 commandHeader.rightBarButtonItem = editBarButtonItem
             } else if report.createdById == AppSettings.userId {
