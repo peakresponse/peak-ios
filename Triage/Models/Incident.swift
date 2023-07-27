@@ -13,6 +13,7 @@ class Incident: Base {
         static let psapId = "psapId"
         static let sceneId = "sceneId"
         static let number = "number"
+        static let sort = "sort"
         static let calledAt = "calledAt"
         static let dispatchNotifiedAt = "dispatchNotifiedAt"
         static let reportsCount = "reportsCount"
@@ -20,6 +21,7 @@ class Incident: Base {
     @Persisted var psapId: String?
     @Persisted var scene: Scene?
     @Persisted var number: String?
+    @Persisted var sort: Int?
     @Persisted var calledAt: Date?
     @Persisted var dispatchNotifiedAt: Date?
     @Persisted var reportsCount: Int?
@@ -32,6 +34,7 @@ class Incident: Base {
             scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: sceneId)
         }
         number = data[Keys.number] as? String
+        sort = data[Keys.sort] as? Int
         calledAt = ISO8601DateFormatter.date(from: data[Keys.calledAt])
         dispatchNotifiedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchNotifiedAt])
         reportsCount = data[Keys.reportsCount] as? Int
@@ -47,6 +50,9 @@ class Incident: Base {
         }
         if let number = number {
             json[Keys.number] = number
+        }
+        if let sort = sort {
+            json[Keys.sort] = sort
         }
         if let calledAt = calledAt?.asISO8601String() {
             json[Keys.calledAt] = calledAt
