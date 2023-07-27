@@ -124,7 +124,10 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
 
         let realm = AppRealm.open()
         results = realm.objects(Incident.self)
-            .sorted(by: [SortDescriptor(keyPath: "number", ascending: false)])
+            .sorted(by: [
+                SortDescriptor(keyPath: "sort", ascending: false),
+                SortDescriptor(keyPath: "number", ascending: false)
+            ])
         if let vehicleId = AppSettings.vehicleId {
             if segmentedControl.segmentsCount < 2 {
                 segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
