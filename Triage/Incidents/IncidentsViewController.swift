@@ -10,13 +10,15 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class IncidentsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activeIncidentsView: ActiveIncidentsView!
+    @IBOutlet weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
     weak var segmentedControl: SegmentedControl!
 
@@ -73,10 +75,10 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var contentInset = tableView.contentInset
-        contentInset.bottom = commandFooter.frame.height + 16
+        contentInset.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
         tableView.contentInset = contentInset
         var scrollIndicatorInsets = tableView.scrollIndicatorInsets
-        scrollIndicatorInsets.bottom = commandFooter.frame.height + 16
+        scrollIndicatorInsets.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
         tableView.scrollIndicatorInsets = scrollIndicatorInsets
     }
 
@@ -197,6 +199,12 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         presentAnimated(vc)
     }
 
+    // MARK: - ActiveIncidentsViewDelegate
+
+    func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat) {
+        activeIncidentsViewHeightConstraint.constant = height
+    }
+
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
@@ -242,6 +250,26 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             return 2
         }
         return results?.count ?? 0
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if tableView == sidebarTableView {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "SidebarItem", for: indexPath)
+            switch indexPath.row {
+            case 0:
+                cell.textLabel?.text = "Sidebar.item.switch".localized
+            case 1:
+                cell.textLabel?.text = "Sidebar.item.logOut".localized
+            default:
+                break
+            }
+            return cell
+        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
+        if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
+            cell.update(from: incident)
+        }
+        return cell
     }
 
     // MARK: - UITableViewDelegate
@@ -291,25 +319,5 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
                 tableView.deselectRow(at: indexPath, animated: false)
             }
         }
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == sidebarTableView {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "SidebarItem", for: indexPath)
-            switch indexPath.row {
-            case 0:
-                cell.textLabel?.text = "Sidebar.item.switch".localized
-            case 1:
-                cell.textLabel?.text = "Sidebar.item.logOut".localized
-            default:
-                break
-            }
-            return cell
-        }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
-        if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
-            cell.update(from: incident)
-        }
-        return cell
     }
 }
