@@ -256,7 +256,8 @@ class IncidentTableViewCell: UITableViewCell {
         number = "#\(incident.number ?? "")"
         address = incident.scene?.address
         let isMCI = incident.scene?.isMCI ?? false
-        contentView.backgroundColor = isMCI ? .brandSecondary300 : .white
+        let isActiveMCI = isMCI && (incident.scene?.isActive ?? false)
+        contentView.backgroundColor = isActiveMCI ? .brandSecondary300 : .white
         numberLabel.textColor = isMCI ? .brandSecondary800 : .brandPrimary600
         if incident.dispatches.count > 0 {
             let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
