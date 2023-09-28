@@ -23,6 +23,7 @@ private class ActiveIncidentsTableView: UITableView {
 
 class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var delegate: ActiveIncidentsViewDelegate?
+    weak var headerView: UIView!
     fileprivate var tableView: ActiveIncidentsTableView!
 
     var notificationToken: NotificationToken?
@@ -43,7 +44,31 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     private func commonInit() {
-        addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .base800, opacity: 0.2)
+        addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .base800, opacity: 0.4)
+
+        backgroundColor = .brandSecondary800
+        let headerView = UIView()
+        headerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(headerView)
+        NSLayoutConstraint.activate([
+            headerView.topAnchor.constraint(equalTo: topAnchor),
+            headerView.leftAnchor.constraint(equalTo: leftAnchor),
+            headerView.rightAnchor.constraint(equalTo: rightAnchor),
+            headerView.heightAnchor.constraint(equalToConstant: 24)
+        ])
+        self.headerView = headerView
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        headerView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
+            label.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 20),
+            label.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: 20)
+        ])
+        label.text = "ActiveIncidentsView.header".localized
+        label.font = .body14Bold
+        label.textColor = .white
 
         tableView = ActiveIncidentsTableView(frame: .zero, style: .plain)
         tableView.isScrollEnabled = false
@@ -54,10 +79,10 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.delegate = self
         addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: self.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            tableView.rightAnchor.constraint(equalTo: self.rightAnchor),
-            tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         performQuery()
     }
@@ -97,13 +122,13 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     fileprivate func dispatchHeight() {
-        delegate?.activeIncidentsView(self, didChangeHeight: tableView.contentSize.height)
+        delegate?.activeIncidentsView(self, didChangeHeight: tableView.contentSize.height + headerView.frame.height)
     }
 
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results?.count ?? 0
+        return min(1, results?.count ?? 0)
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
