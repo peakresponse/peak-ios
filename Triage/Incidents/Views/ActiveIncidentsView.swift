@@ -11,6 +11,7 @@ import RealmSwift
 
 @objc protocol ActiveIncidentsViewDelegate: AnyObject {
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat)
+    @objc func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident)
 }
 
 private class ActiveIncidentsTableView: UITableView {
@@ -111,5 +112,14 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
             cell.update(from: incident)
         }
         return cell
+    }
+
+    // MARK: - UITableViewDelegate
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let incident = results?[indexPath.row] {
+            delegate?.activeIncidentsView(self, didSelectIncident: incident)
+        }
     }
 }

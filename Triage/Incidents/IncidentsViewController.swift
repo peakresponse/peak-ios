@@ -199,10 +199,44 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         presentAnimated(vc)
     }
 
+    func incidentPressed(_ incident: Incident) {
+        if let scene = incident.scene, scene.isMCI && scene.isActive {
+            let sceneId = scene.canonicalId ?? scene.id
+            let vc = ModalViewController()
+            vc.messageText = "ActiveScene.message".localized
+            vc.isDismissedOnAction = false
+            vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
+                AppRealm.joinScene(sceneId: scene.id) { (_) in
+                    DispatchQueue.main.async {
+                        vc.dismissAnimated()
+                        AppSettings.sceneId = sceneId
+                        AppDelegate.enterScene(id: sceneId)
+                    }
+                }
+            }))
+            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
+                vc.dismissAnimated()
+                AppSettings.sceneId = sceneId
+                AppDelegate.enterScene(id: sceneId)
+            }))
+            presentAnimated(vc)
+        } else {
+            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
+            if let vc = vc as? ReportsViewController {
+                vc.incident = incident
+            }
+            present(vc, animated: true)
+        }
+    }
+
     // MARK: - ActiveIncidentsViewDelegate
 
     func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat) {
         activeIncidentsViewHeightConstraint.constant = height
+    }
+
+    func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident) {
+        incidentPressed(incident)
     }
 
     // MARK: - AssignmentViewControllerDelegate
@@ -290,34 +324,11 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             default:
                 break
             }
-        } else if let incident = results?[indexPath.row], let scene = incident.scene, scene.isMCI && scene.isActive {
-            let sceneId = scene.canonicalId ?? scene.id
-            let vc = ModalViewController()
-            vc.messageText = "ActiveScene.message".localized
-            vc.isDismissedOnAction = false
-            vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
-                AppRealm.joinScene(sceneId: scene.id) { (_) in
-                    DispatchQueue.main.async {
-                        vc.dismissAnimated()
-                        AppSettings.sceneId = sceneId
-                        AppDelegate.enterScene(id: sceneId)
-                    }
-                }
-            }))
-            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
-                vc.dismissAnimated()
-                AppSettings.sceneId = sceneId
-                AppDelegate.enterScene(id: sceneId)
-            }))
-            presentAnimated(vc)
-        } else {
-            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
-            if let vc = vc as? ReportsViewController {
-                vc.incident = results?[indexPath.row]
-            }
-            present(vc, animated: true) {
-                tableView.deselectRow(at: indexPath, animated: false)
-            }
+            return
         }
+        if let incident = results?[indexPath.row] {
+            incidentPressed(incident)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
