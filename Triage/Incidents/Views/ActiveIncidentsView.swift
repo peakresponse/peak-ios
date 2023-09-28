@@ -122,7 +122,11 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     fileprivate func dispatchHeight() {
-        delegate?.activeIncidentsView(self, didChangeHeight: tableView.contentSize.height + headerView.frame.height)
+        var height = tableView.contentSize.height
+        if height > 0 {
+            height += headerView.frame.height
+        }
+        delegate?.activeIncidentsView(self, didChangeHeight: height)
     }
 
     // MARK: - UITableViewDataSource
