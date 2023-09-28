@@ -65,6 +65,9 @@ class IncidentTableViewCell: UITableViewCell {
     func commonInit() {
         let isCompact = traitCollection.horizontalSizeClass == .compact
 
+        backgroundView = UIView()
+        selectedBackgroundView = UIView()
+
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(containerView)
@@ -257,7 +260,9 @@ class IncidentTableViewCell: UITableViewCell {
         address = incident.scene?.address
         let isMCI = incident.scene?.isMCI ?? false
         let isActiveMCI = isMCI && (incident.scene?.isActive ?? false)
-        contentView.backgroundColor = isActiveMCI ? .brandSecondary300 : .white
+        let backgroundColor: UIColor = isActiveMCI ? .brandSecondary300 : .white
+        backgroundView?.backgroundColor = backgroundColor
+        selectedBackgroundView?.backgroundColor = backgroundColor.colorWithBrightnessMultiplier(multiplier: 0.8)
         numberLabel.textColor = isMCI ? .brandSecondary800 : .brandPrimary600
         if incident.dispatches.count > 0 {
             let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
