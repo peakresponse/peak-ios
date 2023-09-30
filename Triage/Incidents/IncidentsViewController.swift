@@ -10,13 +10,15 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class IncidentsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var sidebarTableView: SidebarTableView!
     @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     @IBOutlet weak var versionLabel: UILabel!
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var activeIncidentsView: ActiveIncidentsView!
+    @IBOutlet weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
     weak var segmentedControl: SegmentedControl!
 
@@ -73,10 +75,10 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var contentInset = tableView.contentInset
-        contentInset.bottom = commandFooter.frame.height + 16
+        contentInset.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
         tableView.contentInset = contentInset
         var scrollIndicatorInsets = tableView.scrollIndicatorInsets
-        scrollIndicatorInsets.bottom = commandFooter.frame.height + 16
+        scrollIndicatorInsets.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
         tableView.scrollIndicatorInsets = scrollIndicatorInsets
     }
 
@@ -197,6 +199,46 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         presentAnimated(vc)
     }
 
+    func incidentPressed(_ incident: Incident) {
+        if let scene = incident.scene, scene.isMCI && scene.isActive {
+            let sceneId = scene.canonicalId ?? scene.id
+            let vc = ModalViewController()
+            vc.messageText = "ActiveScene.message".localized
+            vc.isDismissedOnAction = false
+            vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
+                AppRealm.joinScene(sceneId: scene.id) { (_) in
+                    DispatchQueue.main.async {
+                        vc.dismissAnimated()
+                        AppSettings.sceneId = sceneId
+                        AppDelegate.enterScene(id: sceneId)
+                    }
+                }
+            }))
+            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
+                vc.dismissAnimated()
+                AppSettings.sceneId = sceneId
+                AppDelegate.enterScene(id: sceneId)
+            }))
+            presentAnimated(vc)
+        } else {
+            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
+            if let vc = vc as? ReportsViewController {
+                vc.incident = incident
+            }
+            present(vc, animated: true)
+        }
+    }
+
+    // MARK: - ActiveIncidentsViewDelegate
+
+    func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat) {
+        activeIncidentsViewHeightConstraint.constant = height
+    }
+
+    func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident) {
+        incidentPressed(incident)
+    }
+
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
@@ -244,55 +286,6 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
         return results?.count ?? 0
     }
 
-    // MARK: - UITableViewDelegate
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView == sidebarTableView {
-            switch indexPath.row {
-            case 0:
-                let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "Assignment")
-                if let vc = vc as? AssignmentViewController {
-                    vc.delegate = self
-                }
-                present(vc, animated: true) { [weak self] in
-                    self?.toggleSidebar()
-                }
-            case 1:
-                logout()
-            default:
-                break
-            }
-        } else if let incident = results?[indexPath.row], let scene = incident.scene, scene.isMCI && scene.isActive {
-            let sceneId = scene.canonicalId ?? scene.id
-            let vc = ModalViewController()
-            vc.messageText = "ActiveScene.message".localized
-            vc.isDismissedOnAction = false
-            vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
-                AppRealm.joinScene(sceneId: scene.id) { (_) in
-                    DispatchQueue.main.async {
-                        vc.dismissAnimated()
-                        AppSettings.sceneId = sceneId
-                        AppDelegate.enterScene(id: sceneId)
-                    }
-                }
-            }))
-            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
-                vc.dismissAnimated()
-                AppSettings.sceneId = sceneId
-                AppDelegate.enterScene(id: sceneId)
-            }))
-            presentAnimated(vc)
-        } else {
-            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
-            if let vc = vc as? ReportsViewController {
-                vc.incident = results?[indexPath.row]
-            }
-            present(vc, animated: true) {
-                tableView.deselectRow(at: indexPath, animated: false)
-            }
-        }
-    }
-
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if tableView == sidebarTableView {
             let cell = tableView.dequeueReusableCell(withIdentifier: "SidebarItem", for: indexPath)
@@ -311,5 +304,31 @@ class IncidentsViewController: UIViewController, AssignmentViewControllerDelegat
             cell.update(from: incident)
         }
         return cell
+    }
+
+    // MARK: - UITableViewDelegate
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView == sidebarTableView {
+            switch indexPath.row {
+            case 0:
+                let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "Assignment")
+                if let vc = vc as? AssignmentViewController {
+                    vc.delegate = self
+                }
+                present(vc, animated: true) { [weak self] in
+                    self?.toggleSidebar()
+                }
+            case 1:
+                logout()
+            default:
+                break
+            }
+            return
+        }
+        if let incident = results?[indexPath.row] {
+            incidentPressed(incident)
+        }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

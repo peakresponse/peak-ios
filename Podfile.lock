@@ -1,8 +1,8 @@
 PODS:
   - AlignedCollectionViewFlowLayout (1.1.2)
-  - AWSCore (2.28.3)
-  - AWSTranscribeStreaming (2.28.3):
-    - AWSCore (= 2.28.3)
+  - AWSCore (2.33.4)
+  - AWSTranscribeStreaming (2.33.4):
+    - AWSCore (= 2.33.4)
   - CocoaLumberjack (3.8.0):
     - CocoaLumberjack/Core (= 3.8.0)
   - CocoaLumberjack/Core (3.8.0)
@@ -123,7 +123,7 @@ PODS:
   - SwiftPath (0.3.1)
   - SwiftSignatureView (3.2.0)
   - TranscriptionKit (0.1.0):
-    - AWSTranscribeStreaming (~> 2.28.3)
+    - AWSTranscribeStreaming (~> 2.33.4)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
@@ -198,13 +198,13 @@ CHECKOUT OPTIONS:
     :commit: dc175df33cbbf3f6d352190afea6f25d31096957
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
-    :commit: 0481c711d6fe6895281788291ecb6eae459f4cf3
+    :commit: 06c1c23a3159411dd01243a23207c724a81111cb
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
-  AWSCore: 27c26d9c0a2f072f7aeb26337f3a5f4098eea8b8
-  AWSTranscribeStreaming: a56eb35a2993258eb42a27f6f0aa01bd3a3fe148
+  AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
+  AWSTranscribeStreaming: a48a78cb78cf0aa351f28444826ec643e81bb305
   CocoaLumberjack: 78abfb691154e2a9df8ded4350d504ee19d90732
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
@@ -240,8 +240,8 @@ SPEC CHECKSUMS:
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
-  TranscriptionKit: 6ebcb5db971f26a2fa0353d278d9e6d002bf7d54
+  TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
 PODFILE CHECKSUM: 41f8532ac95157e7adc35b7855ff1f8e49783108
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.13.0

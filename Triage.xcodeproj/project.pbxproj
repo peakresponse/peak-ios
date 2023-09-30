@@ -18,6 +18,7 @@
 		452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC8243CF40600A8F1FF /* Facility.swift */; };
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */ = {isa = PBXBuildFile; fileRef = 452FBE0D276D5EE600874DF0 /* SNOMED.realm */; };
+		4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */; };
 		453D7985284D542100DA7E32 /* ReportMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7984284D542100DA7E32 /* ReportMapViewController.swift */; };
 		453D7987284D5DA400DA7E32 /* SceneMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */; };
 		454096A824452CEA00AEE53E /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454096A724452CEA00AEE53E /* AppSettings.swift */; };
@@ -174,6 +175,7 @@
 		452DDBC8243CF40600A8F1FF /* Facility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Facility.swift; sourceTree = "<group>"; };
 		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		452FBE0D276D5EE600874DF0 /* SNOMED.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = SNOMED.realm; sourceTree = "<group>"; };
+		4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsView.swift; sourceTree = "<group>"; };
 		453D7984284D542100DA7E32 /* ReportMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapViewController.swift; sourceTree = "<group>"; };
 		453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneMapViewController.swift; sourceTree = "<group>"; };
 		454096A724452CEA00AEE53E /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
@@ -592,6 +594,7 @@
 		45C757CE272CB9CC00386F07 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */,
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 				452BD606284D2A3200D6E408 /* LatLngControl.swift */,
 				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
@@ -982,6 +985,7 @@
 				458CA0AE275FD6610065F324 /* CodeList.swift in Sources */,
 				458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
+				4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */,
 				458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */,
 				45C9DAA427D57EE40003B44B /* ApiClient.swift in Sources */,
 				458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */,
