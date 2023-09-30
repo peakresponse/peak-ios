@@ -1236,7 +1236,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.10;
+				MARKETING_VERSION = 2.1.11;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1259,7 +1259,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.10;
+				MARKETING_VERSION = 2.1.11;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";
