@@ -110,7 +110,7 @@ class PRApiClient: ApiClient {
     // MARK: - Forms
 
     func getForms(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/demographics/forms", completionHandler: completionHandler)
+        return GET(path: "/api/forms", completionHandler: completionHandler)
     }
 
     // MARK: - Incidents
@@ -247,6 +247,6 @@ class PRApiClient: ApiClient {
     // MARK: - Vehicles
 
     func getVehicles(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
-        return GET(path: "/api/demographics/vehicles", completionHandler: completionHandler)
+        return GET(path: "/api/vehicles", completionHandler: completionHandler)
     }
 }
