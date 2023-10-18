@@ -50,11 +50,13 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
         let headerView = UIView()
         headerView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(headerView)
+        let headerHeightContstraint = headerView.heightAnchor.constraint(equalToConstant: 24)
+        headerHeightContstraint.priority = .defaultLow
         NSLayoutConstraint.activate([
             headerView.topAnchor.constraint(equalTo: topAnchor),
             headerView.leftAnchor.constraint(equalTo: leftAnchor),
             headerView.rightAnchor.constraint(equalTo: rightAnchor),
-            headerView.heightAnchor.constraint(equalToConstant: 24)
+            headerHeightContstraint
         ])
         self.headerView = headerView
 
