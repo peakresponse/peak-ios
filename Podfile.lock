@@ -89,7 +89,6 @@ PODS:
     - nanopb/encode (= 2.30909.0)
   - nanopb/decode (2.30909.0)
   - nanopb/encode (2.30909.0)
-  - PLCrashReporter (1.10.1)
   - PRKit (0.1.0):
     - AlignedCollectionViewFlowLayout
     - Keyboardy (~> 0.2)
@@ -103,15 +102,14 @@ PODS:
   - RealmSwift (10.11.0):
     - Realm (= 10.11.0)
   - RMJSONPatch (1.0.4)
-  - RollbarCommon (2.0.3)
-  - RollbarNotifier (2.0.3):
-    - RollbarCommon (~> 2.0.3)
-  - RollbarPLCrashReporter (2.0.3):
-    - PLCrashReporter (~> 1.10.0)
-    - RollbarCommon (~> 2.0.3)
-  - RollbarSwift (2.0.3):
-    - RollbarCommon (~> 2.0.3)
-    - RollbarNotifier (~> 2.0.3)
+  - RollbarCommon (3.2.0)
+  - RollbarCrash (3.2.0)
+  - RollbarNotifier (3.2.0):
+    - RollbarCommon (~> 3.2.0)
+    - RollbarCrash (~> 3.2.0)
+    - RollbarReport (~> 3.2.0)
+  - RollbarReport (3.2.0):
+    - RollbarCrash (~> 3.2.0)
   - RxNormKit (0.1.0):
     - RealmSwift (>= 10.11.0)
   - SNOMEDKit (0.1.0):
@@ -134,9 +132,7 @@ DEPENDENCIES:
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (= 10.11.0)
   - RMJSONPatch (= 1.0.4)
-  - RollbarNotifier (= 2.0.3)
-  - RollbarPLCrashReporter (= 2.0.3)
-  - RollbarSwift (= 2.0.3)
+  - RollbarNotifier (~> 3.2)
   - RxNormKit
   - SNOMEDKit
   - Starscream
@@ -165,16 +161,15 @@ SPEC REPOS:
     - MLKitCommon
     - MLKitVision
     - nanopb
-    - PLCrashReporter
     - PromisesObjC
     - Protobuf
     - Realm
     - RealmSwift
     - RMJSONPatch
     - RollbarCommon
+    - RollbarCrash
     - RollbarNotifier
-    - RollbarPLCrashReporter
-    - RollbarSwift
+    - RollbarReport
     - RxNormKit
     - SNOMEDKit
     - Starscream
@@ -222,17 +217,16 @@ SPEC CHECKSUMS:
   MLKitCommon: f6da6c5659618c070b50a80db01248ebe2964175
   MLKitVision: 96c96571190b7f63eddf4a12068ce8a8689e0d2c
   nanopb: b552cce312b6c8484180ef47159bc0f65a1f0431
-  PLCrashReporter: b30195e509f07299ea277d1997b3a39449d05698
   PRKit: 9613c3bdb81b0fc71fd4da6307f7c90f75f79e20
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   Protobuf: d03938d5f7e974a97964fb0567771e36fbe9ecce
   Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
   RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
-  RollbarCommon: 402cfbbca0955ab0f3c3da0b526b1a6e0d180d9f
-  RollbarNotifier: bbbd2be42a80a1bc406227edea63dc9517809f43
-  RollbarPLCrashReporter: 5ee965b3598ee5b046eba9b93e35a9a089ff1368
-  RollbarSwift: 9fd83d253f5c545c0a2fd29837b3dbc75c2851da
+  RollbarCommon: 6813e5b68d77a01dd04e89659de867097f6a476e
+  RollbarCrash: 781e33880338cf8d5fcfbe097baf9077783775c6
+  RollbarNotifier: ce8430ff55a3048b7a8014829d0943fcb9c8f8cf
+  RollbarReport: 70d4cea00abecff10b776214a53ba3d03ccebe6f
   RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
   SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
@@ -242,6 +236,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 41f8532ac95157e7adc35b7855ff1f8e49783108
+PODFILE CHECKSUM: 0b247cd243bc28ca0cd2e77c454b26c3e9fb78ba
 
 COCOAPODS: 1.13.0

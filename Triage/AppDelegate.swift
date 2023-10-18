@@ -9,7 +9,6 @@
 import GoogleMaps
 import Keys
 import RollbarNotifier
-import RollbarPLCrashReporter
 import UIKit
 import ICD10Kit
 import RxNormKit
@@ -43,12 +42,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         let keys = TriageKeys()
 
-        let rollbarConfig = RollbarConfig()
-        rollbarConfig.destination.accessToken = keys.rollbarPostClientItemAccessToken
+        let rollbarConfig = RollbarConfig.mutableConfig(withAccessToken: keys.rollbarPostClientItemAccessToken)
         rollbarConfig.destination.environment = keys.rollbarEnvironment
         rollbarConfig.developerOptions.suppressSdkInfoLogging = true
-        let rollbarCrashCollector = RollbarPLCrashCollector(observer: nil)
-        Rollbar.initWithConfiguration(rollbarConfig, crashCollector: rollbarCrashCollector)
+        Rollbar.initWithConfiguration(rollbarConfig)
 
         GMSServices.provideAPIKey(keys.googleMapsSdkApiKey)
 
