@@ -22,7 +22,6 @@ class REDRealm {
 
     public static func open() -> Realm {
         if Thread.current.isMainThread && REDRealm.main != nil {
-            REDRealm.main.refresh()
             return REDRealm.main
         }
         var url: URL! = mainUrl

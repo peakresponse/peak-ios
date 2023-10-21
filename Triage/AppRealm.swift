@@ -91,7 +91,6 @@ class AppRealm {
 
     public static func open() -> Realm {
         if Thread.current.isMainThread && AppRealm.main != nil {
-            AppRealm.main.refresh()
             return AppRealm.main
         }
         var url: URL! = mainUrl
