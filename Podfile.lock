@@ -96,11 +96,11 @@ PODS:
     - SwiftSignatureView (~> 3.2.0)
   - PromisesObjC (2.2.0)
   - Protobuf (3.22.3)
-  - Realm (10.11.0):
-    - Realm/Headers (= 10.11.0)
-  - Realm/Headers (10.11.0)
-  - RealmSwift (10.11.0):
-    - Realm (= 10.11.0)
+  - Realm (10.43.1):
+    - Realm/Headers (= 10.43.1)
+  - Realm/Headers (10.43.1)
+  - RealmSwift (10.43.1):
+    - Realm (= 10.43.1)
   - RMJSONPatch (1.0.4)
   - RollbarCommon (3.2.0)
   - RollbarCrash (3.2.0)
@@ -130,7 +130,7 @@ DEPENDENCIES:
   - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
-  - RealmSwift (= 10.11.0)
+  - RealmSwift (~> 10.43)
   - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (~> 3.2)
   - RxNormKit
@@ -220,8 +220,8 @@ SPEC CHECKSUMS:
   PRKit: 9613c3bdb81b0fc71fd4da6307f7c90f75f79e20
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   Protobuf: d03938d5f7e974a97964fb0567771e36fbe9ecce
-  Realm: 39ff23f0f709cd4ed93eb47ee6593c2158945b38
-  RealmSwift: 42713e09a8631070d6c12c3c5fb22b8edc1daa41
+  Realm: d97b438de77459e443bd2c8ad5ca0f95107aee4b
+  RealmSwift: 6be3f27a7fd3f5cc8f99f4b187cc4e7150299e32
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   RollbarCommon: 6813e5b68d77a01dd04e89659de867097f6a476e
   RollbarCrash: 781e33880338cf8d5fcfbe097baf9077783775c6
@@ -236,6 +236,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 0b247cd243bc28ca0cd2e77c454b26c3e9fb78ba
+PODFILE CHECKSUM: 4332431fba1efc1e3f7127cf38700479730fc6b7
 
 COCOAPODS: 1.13.0
