@@ -769,7 +769,8 @@ class AppRealm {
                 "Responder": responder.asJSON()
             ]
             try! realm.write {
-                realm.add(responder, update: .modified)
+                // instantiate from JSON, this allows the Responder override of instantiate to check if the user has already joined
+                realm.add(Responder.instantiate(from: responder.asJSON(), with: realm), update: .modified)
             }
             let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
                 completionHandler(error)

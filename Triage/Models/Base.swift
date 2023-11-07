@@ -49,7 +49,7 @@ class Base: Object {
         return data
     }
 
-    static func instantiate(from data: [String: Any], with realm: Realm) -> Base {
+    class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
         let obj = self.init()
         obj.update(from: data, with: realm)
         return obj
