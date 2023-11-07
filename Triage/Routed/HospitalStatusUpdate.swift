@@ -38,7 +38,7 @@ class HospitalStatusUpdate: Object {
     @Persisted var ambulancesOffloading: Int?
     @Persisted var updatedAt: Date?
 
-    static func instantiate(from data: [String: Any]) -> HospitalStatusUpdate {
+    static func instantiate(from data: [String: Any], with realm: Realm) -> HospitalStatusUpdate {
         let obj = HospitalStatusUpdate()
         obj.update(from: data)
         return obj

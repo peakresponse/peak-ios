@@ -20,10 +20,10 @@ class Dispatch: BaseVersioned {
     @Persisted var dispatchedAt: Date?
     @Persisted var acknowledgedAt: Date?
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if let incidentId = data[Keys.incidentId] as? String {
-            incident = (realm ?? AppRealm.open()).object(ofType: Incident.self, forPrimaryKey: incidentId)
+            incident = realm.object(ofType: Incident.self, forPrimaryKey: incidentId)
         }
         vehicleId = data[Keys.vehicleId] as? String
         dispatchedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchedAt])

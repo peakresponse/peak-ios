@@ -140,9 +140,8 @@ class Disposition: BaseVersioned, NemsisBacked {
         return json
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
-        let realm = self.realm ?? AppRealm.open()
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if let destinationFacilityId = data[Keys.destinationFacilityId] as? String {
             destinationFacility = realm.object(ofType: Facility.self, forPrimaryKey: destinationFacilityId)
         }

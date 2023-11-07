@@ -205,10 +205,10 @@ class Signature: BaseVersioned, NemsisBacked {
         return json
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if data.index(forKey: Keys.formId) != nil {
-            self.form = (realm ?? AppRealm.open()).object(ofType: Form.self, forPrimaryKey: data[Keys.formId] as? String)
+            self.form = realm.object(ofType: Form.self, forPrimaryKey: data[Keys.formId] as? String)
         }
         if data.index(forKey: Keys.formInstanceId) != nil {
             self.formInstanceId = data[Keys.formInstanceId] as? String

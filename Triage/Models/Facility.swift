@@ -74,8 +74,8 @@ class Facility: Base {
         return name ?? ""
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         type = data[Keys.type] as? String
         name = data[Keys.name] as? String
         locationCode = data[Keys.locationCode] as? String

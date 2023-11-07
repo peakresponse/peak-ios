@@ -29,8 +29,8 @@ class User: Base {
         return "\((firstName?.prefix(1) ?? "").uppercased())\((lastName?.prefix(1) ?? "").uppercased())"
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         firstName = data[Keys.firstName] as? String
         lastName = data[Keys.lastName] as? String
         position = data[Keys.position] as? String

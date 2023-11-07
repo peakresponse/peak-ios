@@ -46,8 +46,8 @@ class City: Base {
         return name
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         featureName = data[Keys.featureName] as? String
         stateNumeric = data[Keys.stateNumeric] as? String
         stateAlpha = data[Keys.stateAlpha] as? String

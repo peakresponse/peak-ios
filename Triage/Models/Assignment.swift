@@ -16,8 +16,8 @@ class Assignment: Base {
     @Persisted var userId: String?
     @Persisted var vehicleId: String?
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         userId = data[Keys.userId] as? String
         vehicleId = data[Keys.vehicleId] as? String
     }

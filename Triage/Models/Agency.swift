@@ -24,8 +24,8 @@ class Agency: Base {
         return name ?? ""
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         stateNumber = data[Keys.stateNumber] as? String
         number = data[Keys.number] as? String
         name = data[Keys.name] as? String

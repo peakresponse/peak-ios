@@ -13,9 +13,9 @@ class PatientTests: XCTestCase {
     var sourceId = UUID().uuidString
     var metadata = ["provider": "test"]
 
-    override func setUp() {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
-        AppRealm.deleteAll()
+    override func setUpWithError() throws {
+        let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
+        AppRealm.configure(url: url)
     }
 
     override func tearDown() {
@@ -61,7 +61,8 @@ class PatientTests: XCTestCase {
         """
         let data = try! JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: []) as? [String: Any]
         XCTAssertNotNil(data)
-        let patient = Patient.instantiate(from: data!) as? Patient
+        let realm = AppRealm.open()
+        let patient = Patient.instantiate(from: data!, with: realm) as? Patient
         XCTAssertNotNil(patient)
         XCTAssertEqual(patient?.id, "ae7c2351-bea3-47be-bb68-d5e338046c62")
         XCTAssertEqual(patient?.pin, "6")
