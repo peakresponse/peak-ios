@@ -27,11 +27,11 @@ class Incident: Base {
     @Persisted var reportsCount: Int?
     @Persisted(originProperty: "incident") var dispatches: LinkingObjects<Dispatch>
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         psapId = data[Keys.psapId] as? String
         if let sceneId = data[Keys.sceneId] as? String {
-            scene = (realm ?? AppRealm.open()).object(ofType: Scene.self, forPrimaryKey: sceneId)
+            scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         }
         number = data[Keys.number] as? String
         sort = data[Keys.sort] as? Int

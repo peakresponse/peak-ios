@@ -12,7 +12,8 @@ import XCTest
 class FormTests: XCTestCase {
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
+        AppRealm.configure(url: url)
     }
 
     override func tearDownWithError() throws {
@@ -56,7 +57,9 @@ class FormTests: XCTestCase {
         """
         let data = try! JSONSerialization.jsonObject(with: json.data(using: .utf8)!, options: []) as? [String: Any]
         XCTAssertNotNil(data)
-        let form = Form.instantiate(from: data!) as? Form
+
+        let realm = AppRealm.open()
+        let form = Form.instantiate(from: data!, with: realm) as? Form
         XCTAssertNotNil(form)
         XCTAssertNotNil(form?.reasons)
         XCTAssertEqual(form?.reasons?.count, 2)

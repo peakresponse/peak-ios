@@ -60,8 +60,8 @@ class Situation: BaseVersioned, NemsisBacked {
         return json
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if data.index(forKey: Keys.data) != nil {
             self.data = data[Keys.data] as? [String: Any] ?? [:]
         }

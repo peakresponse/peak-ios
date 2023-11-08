@@ -17,8 +17,8 @@ class CodeList: Base {
     @Persisted(originProperty: "list") var sections: LinkingObjects<CodeListSection>
     @Persisted(originProperty: "list") var items: LinkingObjects<CodeListItem>
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         fields.removeAll()
         if let fields = data[Keys.fields] as? [String] {
             self.fields.append(objectsIn: fields)
@@ -43,9 +43,9 @@ class CodeListSection: Base {
     @Persisted var position: Int?
     @Persisted(originProperty: "section") var items: LinkingObjects<CodeListItem>
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
-        list = (realm ?? AppRealm.open()).object(ofType: CodeList.self, forPrimaryKey: data[Keys.listId])
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
+        list = realm.object(ofType: CodeList.self, forPrimaryKey: data[Keys.listId])
         name = data[Keys.name] as? String
         position = data[Keys.position] as? Int
     }
@@ -77,11 +77,11 @@ class CodeListItem: Base {
     @Persisted var name: String?
     @Persisted var search: String?
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
-        list = (realm ?? AppRealm.open()).object(ofType: CodeList.self, forPrimaryKey: data[Keys.listId])
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
+        list = realm.object(ofType: CodeList.self, forPrimaryKey: data[Keys.listId])
         if let sectionId = data[Keys.sectionId] as? String {
-            section = (realm ?? AppRealm.open()).object(ofType: CodeListSection.self, forPrimaryKey: sectionId)
+            section = realm.object(ofType: CodeListSection.self, forPrimaryKey: sectionId)
         }
         system = data[Keys.system] as? String
         code = data[Keys.code] as? String

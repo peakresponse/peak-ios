@@ -31,7 +31,7 @@ class Base: Object {
         id = UUID().uuidString.lowercased()
     }
 
-    func update(from data: [String: Any]) {
+    func update(from data: [String: Any], with realm: Realm) {
         if let value = data[Keys.id] as? String {
             id = value
         }
@@ -49,9 +49,9 @@ class Base: Object {
         return data
     }
 
-    static func instantiate(from data: [String: Any]) -> Base {
+    class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
         let obj = self.init()
-        obj.update(from: data)
+        obj.update(from: data, with: realm)
         return obj
     }
 }
@@ -123,8 +123,8 @@ class BaseVersioned: Base {
         canonicalId = UUID().uuidString.lowercased()
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         canonicalId = data[Keys.canonicalId] as? String
         currentId = data[Keys.currentId] as? String
         parentId = data[Keys.parentId] as? String

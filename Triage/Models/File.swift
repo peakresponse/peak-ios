@@ -88,8 +88,8 @@ class File: BaseVersioned, NemsisBacked {
         return json
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if data.index(forKey: Keys.file) != nil {
             self.file = data[Keys.file] as? String
         }

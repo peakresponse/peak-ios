@@ -33,8 +33,8 @@ class Form: BaseVersioned {
         return json
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         self.title = data[Keys.title] as? String
         self.body = data[Keys.body] as? String
         self.reasons = data[Keys.reasons] as? [[String: Any]]

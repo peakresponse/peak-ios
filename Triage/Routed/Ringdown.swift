@@ -93,7 +93,7 @@ class Ringdown: Object {
     }
     @Persisted var foo: Int?
 
-    static func instantiate(from data: [String: Any]) -> Ringdown {
+    static func instantiate(from data: [String: Any], with realm: Realm) -> Ringdown {
         let obj = Ringdown()
         obj.update(from: data)
         return obj

@@ -22,8 +22,8 @@ class Vehicle: Base {
     @Persisted var type: String?
     @Persisted var createdByAgencyId: String?
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         number = data[Keys.number] as? String
         vin = data[Keys.vin] as? String
         callSign = data[Keys.callSign] as? String

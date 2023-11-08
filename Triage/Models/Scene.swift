@@ -131,8 +131,8 @@ class Scene: BaseVersioned, NemsisBacked {
         return name ?? ""
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         self.data = data[Keys.data] as? [String: Any] ?? [:]
         name = data[Keys.name] as? String
         desc = data[Keys.desc] as? String

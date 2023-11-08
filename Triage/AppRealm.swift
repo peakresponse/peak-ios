@@ -152,13 +152,11 @@ class AppRealm {
                 // report has dependencies on all of above
                 Report.self
             ] {
-                var objs: [Base]?
-                if let records = data?[String(describing: model)] as? [[String: Any]] {
-                    objs = records.map { model.instantiate(from: $0) }
-                } else if let record = data?[String(describing: model)] as? [String: Any] {
-                    objs = [model.instantiate(from: record)]
+                var records = data?[String(describing: model)] as? [[String: Any]]
+                if records == nil, let record = data?[String(describing: model)] as? [String: Any] {
+                    records = [record]
                 }
-                if let objs = objs {
+                if let objs = records?.map({ model.instantiate(from: $0, with: realm) }) {
                     // special case handling for Scene, which we reference as both canonical top-level and current dependent records
                     if let objs = objs as? [Scene] {
                         for obj in objs {
@@ -188,9 +186,9 @@ class AppRealm {
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
-                let agencies = records.map({ Agency.instantiate(from: $0) })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let agencies = records.map({ Agency.instantiate(from: $0, with: realm) })
                     realm.add(agencies, update: .modified)
                 }
                 completionHandler(nil)
@@ -242,15 +240,15 @@ class AppRealm {
                 if let location = location {
                     loc = CLLocation(latitude: location.latitude, longitude: location.longitude)
                 }
-                let cities: [Base] = records.map({
-                    let obj = City.instantiate(from: $0)
-                    if let loc = loc, let city = obj as? City, let primaryLocation = city.primaryLocation {
-                        city.distance = loc.distance(from: primaryLocation)
-                    }
-                    return obj
-                })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let cities: [Base] = records.map({
+                        let obj = City.instantiate(from: $0, with: realm)
+                        if let loc = loc, let city = obj as? City, let primaryLocation = city.primaryLocation {
+                            city.distance = loc.distance(from: primaryLocation)
+                        }
+                        return obj
+                    })
                     realm.add(cities, update: .modified)
                 }
                 completionHandler(nil)
@@ -271,15 +269,15 @@ class AppRealm {
                 if let lat = Double(lat), let lng = Double(lng) {
                     origin = CLLocation(latitude: lat, longitude: lng)
                 }
-                let facilities = records.map({ (record) -> Base in
-                    let facility = Facility.instantiate(from: record)
-                    if let facility = facility as? Facility, let latlng = facility.latlng, let origin = origin {
-                        facility.distance = latlng.distance(from: origin)
-                    }
-                    return facility
-                })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let facilities = records.map({ (record) -> Base in
+                        let facility = Facility.instantiate(from: record, with: realm)
+                        if let facility = facility as? Facility, let latlng = facility.latlng, let origin = origin {
+                            facility.distance = latlng.distance(from: origin)
+                        }
+                        return facility
+                    })
                     realm.add(facilities, update: .modified)
                 }
                 completionHandler(nil)
@@ -293,9 +291,9 @@ class AppRealm {
             if let error = error {
                 completionHandler?(error)
             } else if let records = records {
-                let facilities = records.map { Facility.instantiate(from: $0)}
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let facilities = records.map { Facility.instantiate(from: $0, with: realm)}
                     realm.add(facilities, update: .modified)
                 }
                 completionHandler?(nil)
@@ -346,7 +344,7 @@ class AppRealm {
             } else if let data = data {
                 let realm = AppRealm.open()
                 try! realm.write {
-                    realm.add(data.map { Form.instantiate(from: $0) }, update: .modified)
+                    realm.add(data.map { Form.instantiate(from: $0, with: realm) }, update: .modified)
                 }
                 completionHandler?(nil)
             }
@@ -364,9 +362,9 @@ class AppRealm {
                 let realm = AppRealm.open()
                 try! realm.write {
                     if let data = data["state"] as? [String: Any] {
-                        realm.add(State.instantiate(from: data), update: .modified)
+                        realm.add(State.instantiate(from: data, with: realm), update: .modified)
                     }
-                    if let data = data["city"] as? [String: Any], let city = City.instantiate(from: data) as? City {
+                    if let data = data["city"] as? [String: Any], let city = City.instantiate(from: data, with: realm) as? City {
                         if let primaryLocation = city.primaryLocation {
                             city.distance = CLLocation(latitude: location.latitude, longitude: location.longitude).distance(from: primaryLocation)
                         }
@@ -453,13 +451,13 @@ class AppRealm {
                 let realm = AppRealm.open()
                 try! realm.write {
                     if let lists = data["lists"] as? [[String: Any]] {
-                        realm.add(lists.map { CodeList.instantiate(from: $0) }, update: .modified)
+                        realm.add(lists.map { CodeList.instantiate(from: $0, with: realm) }, update: .modified)
                     }
                     if let sections = data["sections"] as? [[String: Any]] {
-                        realm.add(sections.map { CodeListSection.instantiate(from: $0) }, update: .modified)
+                        realm.add(sections.map { CodeListSection.instantiate(from: $0, with: realm) }, update: .modified)
                     }
                     if let items = data["items"] as? [[String: Any]] {
-                        realm.add(items.map { CodeListItem.instantiate(from: $0) }, update: .modified)
+                        realm.add(items.map { CodeListItem.instantiate(from: $0, with: realm) }, update: .modified)
                     }
                 }
                 completionHandler(nil)
@@ -475,9 +473,9 @@ class AppRealm {
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
-                let patients = records.map({ Patient.instantiate(from: $0) })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let patients = records.map({ Patient.instantiate(from: $0, with: realm) })
                     realm.add(patients, update: .modified)
                 }
                 completionHandler(nil)
@@ -489,9 +487,9 @@ class AppRealm {
     public static func getPatient(idOrPin: String, completionHandler: @escaping (Error?) -> Void) {
         let task = PRApiClient.shared.getPatient(idOrPin: idOrPin) { (_, _, record, error) in
             if let record = record {
-                if let patient = Patient.instantiate(from: record) as? Patient {
-                    let realm = AppRealm.open()
-                    try! realm.write {
+                let realm = AppRealm.open()
+                try! realm.write {
+                    if let patient = Patient.instantiate(from: record, with: realm) as? Patient {
                         realm.add(patient, update: .modified)
                     }
                 }
@@ -512,9 +510,9 @@ class AppRealm {
         op.request = { (completionHandler) in
             return PRApiClient.shared.createOrUpdatePatient(data: data) { (_, _, record, error) in
                 if let record = record {
-                    if let patient = Patient.instantiate(from: record) as? Patient {
-                        let realm = AppRealm.open()
-                        try! realm.write {
+                    let realm = AppRealm.open()
+                    try! realm.write {
+                        if let patient = Patient.instantiate(from: record, with: realm) as? Patient {
                             realm.add(patient, update: .modified)
                         }
                     }
@@ -771,7 +769,8 @@ class AppRealm {
                 "Responder": responder.asJSON()
             ]
             try! realm.write {
-                realm.add(responder, update: .modified)
+                // instantiate from JSON, this allows the Responder override of instantiate to check if the user has already joined
+                realm.add(Responder.instantiate(from: responder.asJSON(), with: realm), update: .modified)
             }
             let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
                 completionHandler(error)
@@ -887,9 +886,9 @@ class AppRealm {
         }
         let sceneData = ["Scene": scene.asJSON()]
         let task = PRApiClient.shared.createOrUpdateScene(data: sceneData) { (_, _, data, error) in
-            if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
-                let realm = AppRealm.open()
-                try! realm.write {
+            let realm = AppRealm.open()
+            try! realm.write {
+                if let data = data, let scene = Scene.instantiate(from: data, with: realm) as? Scene {
                     realm.add(scene, update: .modified)
                 }
             }
@@ -899,9 +898,9 @@ class AppRealm {
                 op.queuePriority = .veryHigh
                 op.request = { (internalCompletionHandler) in
                     return PRApiClient.shared.createOrUpdateScene(data: sceneData) { (_, _, data, error) in
-                        if let data = data, let scene = Scene.instantiate(from: data) as? Scene {
-                            let realm = AppRealm.open()
-                            try! realm.write {
+                        let realm = AppRealm.open()
+                        try! realm.write {
+                            if let data = data, let scene = Scene.instantiate(from: data, with: realm) as? Scene {
                                 realm.add(scene, update: .modified)
                             }
                         }
@@ -983,9 +982,9 @@ class AppRealm {
             if let error = error {
                 completionHandler(error)
             } else if let responders = responders {
-                let responders = responders.map({ Responder.instantiate(from: $0) })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let responders = responders.map({ Responder.instantiate(from: $0, with: realm) })
                     realm.add(responders, update: .modified)
                 }
                 completionHandler(nil)
@@ -1001,9 +1000,9 @@ class AppRealm {
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
-                let states = records.map({ State.instantiate(from: $0) })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let states = records.map({ State.instantiate(from: $0, with: realm) })
                     realm.add(states, update: .modified)
                 }
                 completionHandler(nil)
@@ -1063,9 +1062,9 @@ class AppRealm {
             if let error = error {
                 completionHandler(error)
             } else if let records = records {
-                let vehicles = records.map({ Vehicle.instantiate(from: $0) })
                 let realm = AppRealm.open()
                 try! realm.write {
+                    let vehicles = records.map({ Vehicle.instantiate(from: $0, with: realm) })
                     realm.add(vehicles, update: .modified)
                 }
                 if let links = PRApiClient.parseLinkHeader(from: response), let next = links["next"] {

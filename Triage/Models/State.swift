@@ -16,8 +16,8 @@ class State: Base {
     @Persisted var name: String?
     @Persisted var abbr: String?
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         name = data[Keys.name] as? String
         abbr = data[Keys.abbr] as? String
     }

@@ -468,8 +468,8 @@ class Patient: BaseVersioned {
     }
 
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if data.index(forKey: Keys.sceneId) != nil {
             sceneId = data[Keys.sceneId] as? String
         }
@@ -567,17 +567,17 @@ class Patient: BaseVersioned {
             isTransportedLeftIndependently = data[Keys.isTransportedLeftIndependently] as? Bool ?? false
         }
         if let data = data[Keys.transportAgency] as? [String: Any],
-            let agency = Agency.instantiate(from: data) as? Agency {
+            let agency = Agency.instantiate(from: data, with: realm) as? Agency {
             transportAgency = agency
         } else if let agencyId = data[Keys.transportAgencyId] as? String,
-            let agency = AppRealm.open().object(ofType: Agency.self, forPrimaryKey: agencyId) {
+            let agency = realm.object(ofType: Agency.self, forPrimaryKey: agencyId) {
             transportAgency = agency
         }
         if let data = data[Keys.transportFacility] as? [String: Any],
-            let facility = Facility.instantiate(from: data) as? Facility {
+            let facility = Facility.instantiate(from: data, with: realm) as? Facility {
             transportFacility = facility
         } else if let facilityId = data[Keys.transportFacilityId] as? String,
-            let facility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: facilityId) {
+            let facility = realm.object(ofType: Facility.self, forPrimaryKey: facilityId) {
             transportFacility = facility
         }
         if data.index(forKey: Keys.predictions) != nil {

@@ -76,6 +76,26 @@ class Responder: Base {
     @Persisted var arrivedAt: Date?
     @Persisted var departedAt: Date?
 
+    override class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
+        if data[Keys.departedAt] as? String == nil {
+            // for users logged into multiple devices, delete all but the canonical record
+            let id = data[Base.Keys.id] as? String
+            var scene: Scene?
+            var user: User?
+            if let sceneId = data[Keys.sceneId] as? String {
+                scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+            }
+            if let userId = data[Keys.userId] as? String {
+                user = realm.object(ofType: User.self, forPrimaryKey: userId)
+            }
+            if let id = id, let scene = scene, let user = user {
+                let results = realm.objects(Responder.self).filter("id<>%@ AND scene=%@ AND user=%@ AND departedAt=NULL", id, scene, user)
+                realm.delete(results)
+            }
+        }
+        return super.instantiate(from: data, with: realm)
+    }
+
     var role: String? {
         if let scene = scene {
             if scene.mgsResponderId == id {
@@ -97,9 +117,8 @@ class Responder: Base {
         return nil
     }
 
-    override func update(from data: [String: Any]) {
-        super.update(from: data)
-        let realm = self.realm ?? AppRealm.open()
+    override func update(from data: [String: Any], with realm: Realm) {
+        super.update(from: data, with: realm)
         if let sceneId = data[Keys.sceneId] as? String {
             scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         }
@@ -112,8 +131,12 @@ class Responder: Base {
         if let vehicleId = data[Keys.vehicleId] as? String {
             vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId)
         }
-        arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
-        departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
+        if arrivedAt == nil {
+            arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
+        }
+        if departedAt == nil {
+            departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
+        }
     }
 
     override func asJSON() -> [String: Any] {

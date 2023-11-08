@@ -80,13 +80,13 @@ class REDRealm {
             } else if let data = data {
                 let realm = REDRealm.open()
                 if let records = data["ringdowns"] as? [[String: Any]] {
-                    let ringdowns = records.map { Ringdown.instantiate(from: $0) }
+                    let ringdowns = records.map { Ringdown.instantiate(from: $0, with: realm) }
                     try! realm.write {
                         realm.add(ringdowns, update: .modified)
                     }
                 }
                 if let records = data["statusUpdates"] as? [[String: Any]] {
-                    let updates = records.map { HospitalStatusUpdate.instantiate(from: $0) }
+                    let updates = records.map { HospitalStatusUpdate.instantiate(from: $0, with: realm) }
                     try! realm.write {
                         realm.add(updates, update: .modified)
                     }
@@ -137,8 +137,8 @@ class REDRealm {
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
-                let ringdown = Ringdown.instantiate(from: data)
                 let realm = REDRealm.open()
+                let ringdown = Ringdown.instantiate(from: data, with: realm)
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
@@ -155,8 +155,8 @@ class REDRealm {
             if let error = error {
                 completionHandler(nil, error)
             } else if let data = data {
-                let ringdown = Ringdown.instantiate(from: data)
                 let realm = REDRealm.open()
+                let ringdown = Ringdown.instantiate(from: data, with: realm)
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
