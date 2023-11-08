@@ -12,7 +12,7 @@ import RealmSwift
 import AlignedCollectionViewFlowLayout
 
 class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, PRKit.FormFieldDelegate,
-                             UICollectionViewDataSource, UICollectionViewDelegate {
+                             UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var customTabBar: CustomTabBar!
@@ -42,15 +42,18 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
             isMCI = scene.isMCI
         }
 
-        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-        collectionView.setCollectionViewLayout(layout, animated: false)
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        if let layout = layout {
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            layout.sectionHeadersPinToVisibleBounds = true
+        }
 
         if isMCI {
             commandHeader.isSearchHidden = false
             commandHeader.searchField.delegate = self
+
+            collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
         } else {
             commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
                                                                 self, action: #selector(dismissAnimated))
@@ -84,7 +87,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
             collectionView.contentInset = contentInset
         }
         if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
+            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 var sectionInset = layout.sectionInset
                 let inset = max(0, (collectionView.frame.width - 744) / 2)
                 sectionInset.left = inset
@@ -228,6 +231,11 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         return cell
     }
 
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
+        return headerView
+    }
+
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -236,5 +244,18 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                 collectionView.deselectItem(at: indexPath, animated: false)
             }
         }
+    }
+
+    // MARK: - UICollectionViewDelegateFlowLayout
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if traitCollection.horizontalSizeClass == .regular {
+            return CGSize(width: 372, height: 160)
+        }
+        return CGSize(width: view.frame.width, height: 160)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: 0, height: 100)
     }
 }

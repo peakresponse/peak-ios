@@ -20,8 +20,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
     weak var updatedAtLabel: UILabel!
     weak var vr: UIView!
 
-    var calculatedSize: CGSize?
-
     override init(frame: CGRect) {
         super.init(frame: frame)
         commonInit()
@@ -141,23 +139,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
             vr.widthAnchor.constraint(equalToConstant: 2)
         ])
         self.vr = vr
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        calculatedSize = nil
-    }
-
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        if calculatedSize == nil {
-            if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 372, height: 160)
-            } else {
-                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 160)
-            }
-        }
-        layoutAttributes.size = calculatedSize ?? .zero
-        return layoutAttributes
     }
 
     func configure(report: Report?, index: Int) {
