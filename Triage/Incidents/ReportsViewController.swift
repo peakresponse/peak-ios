@@ -233,6 +233,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
+        if let headerView = headerView as? ReportsCountsHeaderView {
+            headerView.configure(from: results)
+        }
         return headerView
     }
 
@@ -256,6 +259,6 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 100)
+        return CGSize(width: 0, height: 118)
     }
 }
