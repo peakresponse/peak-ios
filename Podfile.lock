@@ -114,7 +114,7 @@ PODS:
     - RealmSwift (>= 10.11.0)
   - SNOMEDKit (0.1.0):
     - RealmSwift (>= 10.11.0)
-  - Starscream (4.0.4)
+  - Starscream (4.0.6)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
@@ -229,7 +229,7 @@ SPEC CHECKSUMS:
   RollbarReport: 70d4cea00abecff10b776214a53ba3d03ccebe6f
   RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
   SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
-  Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb

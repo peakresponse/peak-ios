@@ -61,7 +61,7 @@ class REDRealm {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                     if let error = error as? HTTPUpgradeError {
                         switch error {
-                        case .notAnUpgrade(let code):
+                        case .notAnUpgrade(let code, _):
                             if code == 401 {
                                 let task = REDApiClient.shared?.login { (_, _, _) in
                                     connect()

@@ -165,6 +165,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                 self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
                 self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
             }, completion: nil)
+            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? ReportsCountsHeaderView {
+                headerView.configure(from: results)
+            }
         case .error(let error):
             presentAlert(error: error)
         }

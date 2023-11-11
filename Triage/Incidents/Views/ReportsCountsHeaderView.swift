@@ -40,10 +40,12 @@ class ReportsCountsHeaderView: UICollectionReusableView {
     func configure(from results: Results<Report>?) {
         countsView.setTotalCount(results?.count ?? 0)
         for priority in TriagePriority.allCases {
-            if priority == .unknown {
+            if priority == .transported {
+                let count = results?.filter("filterPriority=%d", priority.rawValue).count ?? 0
+                countsView.setCount(count, for: priority)
                 break
             }
-            let count = results?.filter("filterPriority=%d", priority.rawValue).count ?? 0
+            let count = results?.filter("patient.priority=%d", priority.rawValue).count ?? 0
             countsView.setCount(count, for: priority)
         }
     }
