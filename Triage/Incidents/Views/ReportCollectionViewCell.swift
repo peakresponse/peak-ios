@@ -12,6 +12,7 @@ import UIKit
 class ReportCollectionViewCell: UICollectionViewCell {
     weak var mciView: UIView!
     weak var priorityChip: Chip!
+    weak var originalPriorityChip: Chip!
     weak var tagLabel: UILabel!
     weak var ageLabel: UILabel!
     weak var genderLabel: UILabel!
@@ -71,6 +72,18 @@ class ReportCollectionViewCell: UICollectionViewCell {
             mciView.bottomAnchor.constraint(equalTo: priorityChip.bottomAnchor)
         ])
         self.priorityChip = priorityChip
+
+        let originalPriorityChip = Chip()
+        originalPriorityChip.isHidden = true
+        originalPriorityChip.translatesAutoresizingMaskIntoConstraints = false
+        originalPriorityChip.isUserInteractionEnabled = false
+        mciView.addSubview(originalPriorityChip)
+        NSLayoutConstraint.activate([
+            originalPriorityChip.topAnchor.constraint(equalTo: priorityChip.bottomAnchor, constant: 4),
+            originalPriorityChip.leftAnchor.constraint(equalTo: priorityChip.leftAnchor),
+            originalPriorityChip.rightAnchor.constraint(equalTo: mciView.rightAnchor)
+        ])
+        self.originalPriorityChip = originalPriorityChip
 
         let tagLabel = UILabel()
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -152,6 +165,15 @@ class ReportCollectionViewCell: UICollectionViewCell {
             let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
             priorityChip.color = priority.color
             priorityChip.setTitle(priority.description, for: .normal)
+
+            if priority == .transported {
+                let originalPriority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+                originalPriorityChip.color = originalPriority.color
+                originalPriorityChip.setTitle(originalPriority.description, for: .normal)
+                originalPriorityChip.isHidden = false
+            } else {
+                originalPriorityChip.isHidden = true
+            }
         }
         if !isMCI, let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
             unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "\(unitNumber)\n")
