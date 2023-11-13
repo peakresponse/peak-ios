@@ -18,6 +18,7 @@
 		452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBC8243CF40600A8F1FF /* Facility.swift */; };
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */ = {isa = PBXBuildFile; fileRef = 452FBE0D276D5EE600874DF0 /* SNOMED.realm */; };
+		4532180C2AFC34C400F2891B /* ReportsCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4532180B2AFC34C400F2891B /* ReportsCountsHeaderView.swift */; };
 		4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */; };
 		453D7985284D542100DA7E32 /* ReportMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7984284D542100DA7E32 /* ReportMapViewController.swift */; };
 		453D7987284D5DA400DA7E32 /* SceneMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */; };
@@ -175,6 +176,7 @@
 		452DDBC8243CF40600A8F1FF /* Facility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Facility.swift; sourceTree = "<group>"; };
 		452DDBD2243D628200A8F1FF /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		452FBE0D276D5EE600874DF0 /* SNOMED.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = SNOMED.realm; sourceTree = "<group>"; };
+		4532180B2AFC34C400F2891B /* ReportsCountsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportsCountsHeaderView.swift; sourceTree = "<group>"; };
 		4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsView.swift; sourceTree = "<group>"; };
 		453D7984284D542100DA7E32 /* ReportMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportMapViewController.swift; sourceTree = "<group>"; };
 		453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneMapViewController.swift; sourceTree = "<group>"; };
@@ -598,6 +600,7 @@
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 				452BD606284D2A3200D6E408 /* LatLngControl.swift */,
 				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
+				4532180B2AFC34C400F2891B /* ReportsCountsHeaderView.swift */,
 				45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */,
 				45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */,
 			);
@@ -1005,6 +1008,7 @@
 				45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */,
 				454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
+				4532180C2AFC34C400F2891B /* ReportsCountsHeaderView.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
@@ -1152,7 +1156,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1211,7 +1215,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

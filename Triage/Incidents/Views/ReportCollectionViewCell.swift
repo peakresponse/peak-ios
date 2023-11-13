@@ -12,6 +12,7 @@ import UIKit
 class ReportCollectionViewCell: UICollectionViewCell {
     weak var mciView: UIView!
     weak var priorityChip: Chip!
+    weak var originalPriorityChip: Chip!
     weak var tagLabel: UILabel!
     weak var ageLabel: UILabel!
     weak var genderLabel: UILabel!
@@ -19,8 +20,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
     weak var unitLabel: UILabel!
     weak var updatedAtLabel: UILabel!
     weak var vr: UIView!
-
-    var calculatedSize: CGSize?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,6 +72,18 @@ class ReportCollectionViewCell: UICollectionViewCell {
             mciView.bottomAnchor.constraint(equalTo: priorityChip.bottomAnchor)
         ])
         self.priorityChip = priorityChip
+
+        let originalPriorityChip = Chip()
+        originalPriorityChip.isHidden = true
+        originalPriorityChip.translatesAutoresizingMaskIntoConstraints = false
+        originalPriorityChip.isUserInteractionEnabled = false
+        mciView.addSubview(originalPriorityChip)
+        NSLayoutConstraint.activate([
+            originalPriorityChip.topAnchor.constraint(equalTo: priorityChip.bottomAnchor, constant: 4),
+            originalPriorityChip.leftAnchor.constraint(equalTo: priorityChip.leftAnchor),
+            originalPriorityChip.rightAnchor.constraint(equalTo: mciView.rightAnchor)
+        ])
+        self.originalPriorityChip = originalPriorityChip
 
         let tagLabel = UILabel()
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -143,23 +154,6 @@ class ReportCollectionViewCell: UICollectionViewCell {
         self.vr = vr
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        calculatedSize = nil
-    }
-
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        if calculatedSize == nil {
-            if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 372, height: 160)
-            } else {
-                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 160)
-            }
-        }
-        layoutAttributes.size = calculatedSize ?? .zero
-        return layoutAttributes
-    }
-
     func configure(report: Report?, index: Int) {
         guard let report = report else { return }
         let isMCI = report.scene?.isMCI ?? false
@@ -171,6 +165,15 @@ class ReportCollectionViewCell: UICollectionViewCell {
             let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
             priorityChip.color = priority.color
             priorityChip.setTitle(priority.description, for: .normal)
+
+            if priority == .transported {
+                let originalPriority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+                originalPriorityChip.color = originalPriority.color
+                originalPriorityChip.setTitle(originalPriority.description, for: .normal)
+                originalPriorityChip.isHidden = false
+            } else {
+                originalPriorityChip.isHidden = true
+            }
         }
         if !isMCI, let unitNumber = report.response?.unitNumber, !unitNumber.isEmpty {
             unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "\(unitNumber)\n")

@@ -144,10 +144,10 @@ class ApiClient {
             var data: Data?
             switch event {
             case .connected(let headers):
-                print("websocket is connected: \(headers)")
+                print("websocket is connected to \(urlString): \(headers)")
                 self?.pingWebSocket(socket: socket)
             case .disconnected(let reason, let code):
-                print("websocket is disconnected: \(reason) with code: \(code)")
+                print("websocket is disconnected from \(urlString): \(reason) with code: \(code)")
                 completionHandler(socket, nil, ApiClientError.disconnected)
             case .text(let text):
                 data = text.data(using: .utf8)
@@ -165,6 +165,11 @@ class ApiClient {
                 break
             case .error(let error):
                 completionHandler(socket, nil, error)
+            case .peerClosed:
+                print("websocket peer closed from \(urlString)")
+                completionHandler(socket, nil, ApiClientError.disconnected)
+            @unknown default:
+                break
             }
             if let data = data {
                 do {

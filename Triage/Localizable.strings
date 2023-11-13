@@ -566,6 +566,9 @@
 "TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
 "TransportDisposition.4230013" = "No Transport";
 
+"TriageCounts.total" = "Total: %d";
+"TriageCounts.transported" = "Transp: %d";
+
 "TriagePriority.0" = "Immediate";
 "TriagePriority.1" = "Delayed";
 "TriagePriority.2" = "Minimal";
