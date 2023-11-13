@@ -264,7 +264,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let report = results?[indexPath.row] {
+        if let report = filteredResults?[indexPath.row] {
             presentReport(report: report, animated: true) {
                 collectionView.deselectItem(at: indexPath, animated: false)
             }
