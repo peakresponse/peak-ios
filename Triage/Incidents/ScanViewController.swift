@@ -157,7 +157,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     }
 
     @IBAction func didTap(_ sender: Any) {
-        pinField.text = nil
+        pinField.clearPressed()
         _ = pinField.resignFirstResponder()
     }
 
@@ -175,7 +175,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             presentNewReport(incident: incident, pin: pin)
         }
         // clear pinfield
-        pinField.text = nil
+        pinField.clearPressed()
     }
 
     func currentUIOrientation() -> UIDeviceOrientation {
@@ -257,7 +257,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
                         DispatchQueue.main.sync { [weak self] in
                             guard let self = self else { return }
                             self.captureSession.stopRunning()
-                            self.pinField.text = pin
+                            self.pinField.attributeValue = pin as NSObject
                             self.findPIN()
                         }
                     }
