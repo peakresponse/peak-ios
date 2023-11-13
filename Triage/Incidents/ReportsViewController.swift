@@ -281,6 +281,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 118)
+        if isMCI {
+            return CGSize(width: 0, height: 118)
+        }
+        return .zero
     }
 }
