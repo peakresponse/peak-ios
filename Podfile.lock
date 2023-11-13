@@ -190,7 +190,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: de5bcb7ac755bd7f24544a5a9f4469a76943a5d5
+    :commit: cd151149d9908167237bcbb630e1102111276e07
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -236,6 +236,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 6ebb45f80a4e6013decfa1d7fa04b644dc4173b0
+PODFILE CHECKSUM: 4332431fba1efc1e3f7127cf38700479730fc6b7
 
 COCOAPODS: 1.13.0

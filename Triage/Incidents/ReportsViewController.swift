@@ -11,7 +11,7 @@ import PRKit
 import RealmSwift
 import AlignedCollectionViewFlowLayout
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, PRKit.FormFieldDelegate,
+class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, PRKit.FormFieldDelegate, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -19,7 +19,9 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     var incident: Incident?
     var isMCI = false
+    var filterPriority: TriagePriority?
     var results: Results<Report>?
+    var filteredResults: Results<Report>?
     var notificationToken: NotificationToken?
     var firstRefresh = true
 
@@ -105,22 +107,30 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
             .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+        filteredResults = results
         if isMCI {
             if let text = commandHeader.searchField.text, !text.isEmpty {
-                results = results?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
+                filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
                                           text, text, text)
             }
-            results = results?.sorted(by: [
+            if let filterPriority = filterPriority {
+                if filterPriority == .transported {
+                    filteredResults = filteredResults?.filter("filterPriority=%d", filterPriority.rawValue)
+                } else {
+                    filteredResults = filteredResults?.filter("patient.priority=%d", filterPriority.rawValue)
+                }
+            }
+            filteredResults = filteredResults?.sorted(by: [
                 SortDescriptor(keyPath: "filterPriority"),
                 SortDescriptor(keyPath: "pin")
             ])
         } else {
-            results = results?.sorted(by: [
+            filteredResults = filteredResults?.sorted(by: [
                 SortDescriptor(keyPath: "patient.canonicalId"),
                 SortDescriptor(keyPath: "patient.parentId", ascending: false)
             ])
         }
-        notificationToken = results?.observe { [weak self] (changes) in
+        notificationToken = filteredResults?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }
         refresh()
@@ -129,6 +139,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     @objc func refresh() {
         guard let incident = incident else { return }
         collectionView.refreshControl?.beginRefreshing()
+        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
         AppRealm.getReports(incident: incident) { [weak self] (results, error) in
             guard let self = self else { return }
             if let error = error {
@@ -216,6 +227,13 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         performQuery()
     }
 
+    // MARK: - ReportsCountsHeaderViewDelegate
+
+    func reportsCountsHeaderView(_ view: ReportsCountsHeaderView, didSelect priority: TriagePriority?) {
+        filterPriority = priority
+        performQuery()
+    }
+
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -223,13 +241,13 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results?.count ?? 0
+        return filteredResults?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
         if let cell = cell as? ReportCollectionViewCell {
-            cell.configure(report: results?[indexPath.row], index: indexPath.row)
+            cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
         }
         return cell
     }
@@ -237,6 +255,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
         if let headerView = headerView as? ReportsCountsHeaderView {
+            headerView.delegate = self
             headerView.configure(from: results)
         }
         return headerView
