@@ -16,6 +16,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
 
     private var scene: Scene?
     private var notificationToken: NotificationToken?
+    private var isExpectantHidden = true
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -161,7 +162,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         case 1: // approx triage counts header
             return 1
         case 2: // triage counters
-            return 6
+            return isExpectantHidden ? 5 : 6
         default:
             return 0
         }
@@ -179,7 +180,11 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
             if let cell = cell as? SceneOverviewCounterCell {
                 cell.delegate = self
                 if indexPath.row > 0 {
-                    cell.priority = TriagePriority(rawValue: indexPath.row - 1)
+                    var value = indexPath.row - 1
+                    if isExpectantHidden && value >= TriagePriority.expectant.rawValue {
+                        value += 1
+                    }
+                    cell.priority = TriagePriority(rawValue: value)
                 } else {
                     cell.priority = nil
                 }
