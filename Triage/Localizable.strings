@@ -88,7 +88,6 @@
 "Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
 "Button.scanLicense" = "Scan License";
-"Button.scanPatient" = "Scan Patient";
 "Button.search" = "Search";
 "Button.sendRingdown" = "Send Ringdown";
 "Button.select" = "Select";

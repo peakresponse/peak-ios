@@ -22,7 +22,7 @@ class SceneTabBarController: CustomTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        customTabBar.buttonTitle = "Button.scanPatient".localized
+        customTabBar.buttonTitle = "Button.addPatient".localized
 
         if let sceneId = AppSettings.sceneId {
             // disconnect from agency updates
