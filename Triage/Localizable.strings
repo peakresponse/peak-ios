@@ -417,7 +417,7 @@
 
 "SceneOverviewCounterCell.totalLabel" = "Total from below";
 
-"SceneOverviewTriageTotalCell.headerLabel" = "Approx Triage Counts";
+"SceneOverviewTriageTotalCell.headerLabel" = "Estimated Patient Counts";
 "SceneOverviewTriageTotalCell.totalLabel" = "Total from below: %d";
 
 "ScenePatientsView.approxLabel" = "Approximate #s";
@@ -546,10 +546,10 @@
 
 "SortBar.sortBy" = "Sort By :";
 
-"TabBarItem.patientDetails" = "Patient\nDetails";
+"TabBarItem.patientDetails" = "Treat";
 "TabBarItem.rolesResources" = "Roles/\nResources";
 "TabBarItem.sceneMap" = "Scene\nMap";
-"TabBarItem.sceneOverview" = "Scene\nOverview";
+"TabBarItem.sceneOverview" = "Triage";
 
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
 "Time.arrivedAtPatient" = "Arrived at Patient";
