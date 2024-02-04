@@ -121,6 +121,16 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     @objc func savePressed() {
         if let vc = children[0] as? ReportViewController {
             if let report = vc.newReport {
+                if report.scene?.isMCI ?? false {
+                    let priority = report.patient?.priority
+                    if priority == nil || priority == TriagePriority.unknown.rawValue {
+                        let modal = ModalViewController()
+                        modal.messageText = "ReportContainerViewController.modal.priorityRequired".localized
+                        modal.addAction(UIAlertAction(title: "Button.ok".localized, style: .default))
+                        vc.presentAnimated(modal)
+                        return
+                    }
+                }
                 AppRealm.saveReport(report: report)
                 if let canonicalId = report.canonicalId {
                     self.report = AppRealm.open().object(ofType: Report.self, forPrimaryKey: canonicalId)
