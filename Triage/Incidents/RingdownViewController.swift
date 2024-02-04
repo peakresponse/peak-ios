@@ -80,7 +80,6 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         }
 
         codeCheckboxes = [code2Checkbox, code3Checkbox]
-        code3Checkbox.isEnabled = false
         stabilityCheckboxes = [stableCheckbox, unstableCheckbox]
 
         var (section, cols, colA, colB) = newSection()
