@@ -119,7 +119,6 @@
 		45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C9DAAA27D598BD0003B44B /* REDRealm.swift */; };
 		45D3E944272767A200E5382D /* Vehicle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E943272767A200E5382D /* Vehicle.swift */; };
 		45D3E94627276C8D00E5382D /* Assignment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D3E94527276C8D00E5382D /* Assignment.swift */; };
-		45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D63575252AD0AE0045C7CC /* Patient+Parser.swift */; };
 		45E1215C282AEA2300D8DDBE /* SceneOverviewCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */; };
 		45E1215E282AF06900D8DDBE /* Barlow-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */; };
 		45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */; };
@@ -284,7 +283,6 @@
 		45C9DAAA27D598BD0003B44B /* REDRealm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REDRealm.swift; sourceTree = "<group>"; };
 		45D3E943272767A200E5382D /* Vehicle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Vehicle.swift; sourceTree = "<group>"; };
 		45D3E94527276C8D00E5382D /* Assignment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Assignment.swift; sourceTree = "<group>"; };
-		45D63575252AD0AE0045C7CC /* Patient+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Patient+Parser.swift"; sourceTree = "<group>"; };
 		45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCounterCell.swift; sourceTree = "<group>"; };
 		45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Bold.ttf"; sourceTree = "<group>"; };
 		45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCell.swift; sourceTree = "<group>"; };
@@ -505,7 +503,6 @@
 				458CA0BF27680BFF0065F324 /* NemsisBacked.swift */,
 				458CA0BB2767DAFB0065F324 /* NemsisValue.swift */,
 				4566F062236CE18E00A04C75 /* Patient.swift */,
-				45D63575252AD0AE0045C7CC /* Patient+Parser.swift */,
 				456F050127B5E884000CEE42 /* Predictions.swift */,
 				45F7BAD1273AEC3500FBD31F /* Procedure.swift */,
 				45F7BAC12739E37300FBD31F /* Report.swift */,
@@ -1022,7 +1019,6 @@
 				45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */,
 				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
-				45D63576252AD0AE0045C7CC /* Patient+Parser.swift in Sources */,
 				454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */,
 				458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,

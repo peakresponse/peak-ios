@@ -36,6 +36,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     var triageControl: TriageControl?
     var recordingsSection: FormSection!
     var signaturesSection: FormSection!
+    var narrativeText: String?
 
     var report: Report! {
         didSet { observeReport() }
@@ -749,6 +750,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             guard let delegate = delegate else { return }
             delegate.reportViewControllerNeedsEditing(self)
         }
+        narrativeText = newReport?.narrative?.text
         performSegue(withIdentifier: "Record", sender: self)
     }
 
@@ -1003,11 +1005,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         // fix weird number handling from AWS Transcribe (i.e. one-twenty recognized as "1 20" instead of "120")
         let processedText = numbersExpr.stringByReplacingMatches(in: text, options: [], range: NSRange(location: 0, length: text.count),
                                                                  withTemplate: "$1$2$3")
-        if newReport == report {
-            newReport?.narrative?.text = processedText
-        } else {
-            newReport?.narrative?.text = "\(report.narrative?.text ?? "") \(processedText)"
-        }
+        newReport?.narrative?.text = "\(narrativeText ?? "") \(processedText)".trimmingCharacters(in: .whitespacesAndNewlines)
         let formField = formFields["narrative.text"]
         formField?.attributeValue = newReport?.narrative?.text as NSObject?
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
