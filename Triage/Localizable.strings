@@ -261,7 +261,7 @@
 "Patient.triageMentalStatus" = "Mental Status";
 "Patient.transportAgency" = "Transport Agency";
 "Patient.transportFacility" = "Facility";
-"Patient.updatedAt" = "Last Update: %@";
+"Patient.updatedAt" = "Last Update";
 
 "Patient.ageUnits.2516001" = "days";
 "Patient.ageUnits.2516003" = "hours";

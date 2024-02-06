@@ -401,10 +401,6 @@ class Patient: BaseVersioned {
         }
     }
 
-    override var updatedAtRelativeString: String {
-        return updatedAt?.asRelativeString() ?? "Patient.new".localized
-    }
-
     func setPriority(_ priority: Priority) {
         self.priority = priority.rawValue
         if !isTransported {

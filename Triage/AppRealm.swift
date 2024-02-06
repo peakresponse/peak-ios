@@ -598,6 +598,7 @@ class AppRealm {
                 fatalError()
             }
         }
+        report.updatedAt = Date()
         var data = report.canonicalize(from: parent)
         try! realm.write {
             // if new Incident, create Dispatch for current vehicle, if any

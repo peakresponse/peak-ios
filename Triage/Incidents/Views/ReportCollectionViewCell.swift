@@ -130,6 +130,14 @@ class ReportCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(nameLabel)
         self.nameLabel = nameLabel
 
+        let updatedAtLabel = UILabel()
+        updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
+        updatedAtLabel.font = .h4
+        updatedAtLabel.textColor = .base500
+        updatedAtLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.updatedAt".localized): ", text: "")
+        stackView.addArrangedSubview(updatedAtLabel)
+        self.updatedAtLabel = updatedAtLabel
+
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
         hr.backgroundColor = .base300
@@ -198,6 +206,12 @@ class ReportCollectionViewCell: UICollectionViewCell {
             nameLabel.isHidden = false
         } else {
             nameLabel.isHidden = true
+        }
+        if let updatedAt = report.updatedAt {
+            updatedAtLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.updatedAt".localized): ", text: updatedAt.asRelativeString())
+            updatedAtLabel.isHidden = false
+        } else {
+            updatedAtLabel.isHidden = true
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
