@@ -23,7 +23,6 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     var results: Results<Report>?
     var filteredResults: Results<Report>?
     var notificationToken: NotificationToken?
-    var firstRefresh = true
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -72,6 +71,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
 
         performQuery()
+
+        if let incident = incident, incident.reportsCount == 0 {
+            DispatchQueue.main.async { [weak self] in
+                self?.presentNewReport(incident: incident, animated: false)
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -140,29 +145,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         guard let incident = incident else { return }
         collectionView.refreshControl?.beginRefreshing()
         collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
-        AppRealm.getReports(incident: incident) { [weak self] (results, error) in
+        AppRealm.getReports(incident: incident) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
                 print(error)
             }
-            var endRefreshing = true
-            if self.firstRefresh {
-                self.firstRefresh = false
-                if !self.isMCI {
-                    // show add patient button footer
-                    self.customTabBar.isHidden = false
-                    if let results = results, results.count == 0 {
-                        endRefreshing = false
-                        self.presentNewReport(incident: incident, animated: false) { [weak self] in
-                            self?.collectionView.refreshControl?.endRefreshing()
-                        }
-                        return
-                    }
-                }
-            }
-            if endRefreshing {
-                self.collectionView.refreshControl?.endRefreshing()
-            }
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
 
@@ -220,7 +208,6 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
                                                              target: self,
                                                              action: #selector(self.dismissAnimated))
         incident = vc.incident
-        firstRefresh = false
         if !isMCI {
             customTabBar.isHidden = false
         }
