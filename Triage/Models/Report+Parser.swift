@@ -109,6 +109,7 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:patient(?:s|'s)? )?name(?: is)? (?<patient0firstName>[^ .,]+)(?: (?<patient0lastName>[^ .,]+))?"#),
     Matcher(pattern: #"first name(?: is)? (?<patient0firstName>[^ .,]+)"#),
     Matcher(pattern: #"last name(?: is)? (?<patient0lastName>[^ .,]+)"#),
+    Matcher(pattern: #"located(?: at| in| by| under | next to)? (?<patient0location>[^.,]+)"#),
     Matcher(pattern: #"age (?<patient0age>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "patient0age": MAPPINGS_NUMBERS
