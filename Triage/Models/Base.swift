@@ -18,9 +18,6 @@ class Base: Object {
     @Persisted(primaryKey: true) var id = UUID().uuidString.lowercased()
     @Persisted var createdAt: Date?
     @Persisted var updatedAt: Date?
-    var updatedAtRelativeString: String {
-        return updatedAt?.asRelativeString() ?? "Unknown".localized
-    }
 
     override required init() {
         super.init()
@@ -46,6 +43,8 @@ class Base: Object {
     func asJSON() -> [String: Any] {
         var data: [String: Any] = [:]
         data[Keys.id] = id
+        data[Keys.createdAt] = createdAt?.asISO8601String()
+        data[Keys.updatedAt] = updatedAt?.asISO8601String()
         return data
     }
 
