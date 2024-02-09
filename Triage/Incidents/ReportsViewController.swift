@@ -72,7 +72,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
         performQuery()
 
-        if let incident = incident, incident.reportsCount == 0 {
+        if !isMCI, let incident = incident, incident.reportsCount == 0 {
             DispatchQueue.main.async { [weak self] in
                 self?.presentNewReport(incident: incident, animated: false)
             }
