@@ -128,7 +128,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         results = realm.objects(Incident.self)
             .sorted(by: [
                 SortDescriptor(keyPath: "sort", ascending: false),
-                SortDescriptor(keyPath: "number", ascending: false)
+                SortDescriptor(keyPath: "createdAt", ascending: false)
             ])
         if let vehicleId = AppSettings.vehicleId {
             if segmentedControl.segmentsCount < 2 {
