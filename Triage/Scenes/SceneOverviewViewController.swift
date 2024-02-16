@@ -32,7 +32,8 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         super.viewDidLoad()
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width, height: 120)
+            layout.itemSize = CGSize(width: UIScreen.main.bounds.width - layout.sectionInset.left - layout.sectionInset.right, height: 120)
+            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         }
 
         guard let sceneId = AppSettings.sceneId else { return }
@@ -157,7 +158,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: // header and approx patients counter
+        case 0: // header
             return 1
         case 1: // approx triage counts header
             return 1
