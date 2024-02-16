@@ -44,6 +44,7 @@ class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
         }
 
         let mapView = GMSMapView(frame: mapContainerView.bounds, camera: camera)
+        mapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         mapView.isMyLocationEnabled = true
         mapContainerView.addSubview(mapView)
         self.mapView = mapView
