@@ -214,11 +214,12 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                     }
                 }
             }))
-            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .cancel, handler: { (_) in
+            vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .default, handler: { (_) in
                 vc.dismissAnimated()
                 AppSettings.sceneId = sceneId
                 AppDelegate.enterScene(id: sceneId)
             }))
+            vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
             presentAnimated(vc)
         } else {
             let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
