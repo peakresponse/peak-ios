@@ -27,6 +27,8 @@ class SceneOverviewCounterCell: UICollectionViewCell, SceneOverviewCell {
         var frame = attributes.frame
         if traitCollection.horizontalSizeClass == .compact {
             frame.size.width = UIScreen.main.bounds.width - 40
+        } else {
+            frame.size.width = 340
         }
         attributes.frame = frame
         return attributes
