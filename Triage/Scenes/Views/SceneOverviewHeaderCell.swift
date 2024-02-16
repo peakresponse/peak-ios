@@ -16,6 +16,15 @@ class SceneOverviewHeaderCell: UICollectionViewCell, SceneOverviewCell {
     @IBOutlet weak var closeButton: PRKit.Button!
     @IBOutlet weak var editButton: PRKit.Button!
 
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        let width = UIScreen.main.bounds.width - 40
+        if attributes.frame.size.width < width {
+            attributes.frame.size.width = width
+        }
+        return attributes
+    }
+
     func configure(from scene: Scene) {
         if let incident = scene.incident.first {
             incidentNumberLabel.text = "#\(incident.number ?? "")"

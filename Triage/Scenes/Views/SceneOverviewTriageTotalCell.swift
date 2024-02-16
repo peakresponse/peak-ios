@@ -13,11 +13,10 @@ class SceneOverviewTriageTotalCell: UICollectionViewCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        var frame = attributes.frame
-        if traitCollection.horizontalSizeClass == .compact {
-            frame.size.width = UIScreen.main.bounds.width - 40
+        let width = UIScreen.main.bounds.width - 40
+        if attributes.frame.size.width < width {
+            attributes.frame.size.width = width
         }
-        attributes.frame = frame
         return attributes
     }
 }

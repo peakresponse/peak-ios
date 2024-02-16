@@ -32,7 +32,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         super.viewDidLoad()
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.itemSize = CGSize(width: UIScreen.main.bounds.width - layout.sectionInset.left - layout.sectionInset.right, height: 120)
+            layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 120)
             layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         }
 
