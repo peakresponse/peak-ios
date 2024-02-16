@@ -359,10 +359,10 @@
 
 "Responder.role.assign" = "Assign";
 "Responder.role.MGS" = "Medical Group Supervisor";
-"Responder.role.STAGING" = "Staging Officer";
-"Responder.role.TRANSPORT" = "Transport Officer";
-"Responder.role.TREATMENT" = "Treatment Officer";
-"Responder.role.TRIAGE" = "Triage Officer";
+"Responder.role.STAGING" = "Staging Team Leader";
+"Responder.role.TRANSPORT" = "Transport Team Leader";
+"Responder.role.TREATMENT" = "Treatment Team Leader";
+"Responder.role.TRIAGE" = "Triage Team Leader";
 
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
