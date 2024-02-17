@@ -10,7 +10,6 @@ import UIKit
 
 class ResponderCollectionViewCell: UICollectionViewCell {
     weak var unitLabel: UILabel!
-    weak var agencyLabel: UILabel!
     weak var roleSelector: ResponderRoleSelector!
     weak var vr: UIView!
 
@@ -34,21 +33,10 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20)
+            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            unitLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
         ])
         self.unitLabel = unitLabel
-
-        let agencyLabel = UILabel()
-        agencyLabel.translatesAutoresizingMaskIntoConstraints = false
-        agencyLabel.font = .body14Bold
-        agencyLabel.textColor = .base800
-        contentView.addSubview(agencyLabel)
-        NSLayoutConstraint.activate([
-            agencyLabel.firstBaselineAnchor.constraint(equalTo: unitLabel.firstBaselineAnchor),
-            agencyLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            agencyLabel.leftAnchor.constraint(greaterThanOrEqualTo: unitLabel.rightAnchor)
-        ])
-        self.agencyLabel = agencyLabel
 
         let roleSelector = ResponderRoleSelector()
         roleSelector.translatesAutoresizingMaskIntoConstraints = false
@@ -109,7 +97,6 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             name = "\(vehicle.number ?? ""): \(name ?? "")"
         }
         unitLabel.text = name
-        agencyLabel.text = responder.agency?.name
         roleSelector.source = responder
         roleSelector.attributeValue = responder.role as? NSObject
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
