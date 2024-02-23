@@ -1,18 +1,19 @@
 //
-//  ResponderRolesViewController.swift
+//  RespondersViewController.swift
 //  Triage
 //
-//  Created by Francis Li on 5/29/22.
-//  Copyright © 2022 Francis Li. All rights reserved.
+//  Created by Francis Li on 2/23/24.
+//  Copyright © 2024 Francis Li. All rights reserved.
 //
 
 import AlignedCollectionViewFlowLayout
+import Foundation
 import PRKit
 import RealmSwift
 import UIKit
 
-class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
-                                    UICollectionViewDataSource, UICollectionViewDelegate {
+class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+                                UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     var formInputAccessoryView: UIView!
@@ -24,7 +25,7 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        tabBarItem.title = "TabBarItem.rolesResources".localized
+        tabBarItem.title = "TabBarItem.stage".localized
         tabBarItem.image = UIImage(named: "Transport", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
@@ -48,7 +49,7 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
 
-        collectionView.register(ResponderRoleCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
 
         performQuery()
     }
@@ -111,69 +112,9 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
     }
 
     // MARK: - FormFieldDelegate
-    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
-        if let responder = field.source as? Responder {
-            let isSelf = AppSettings.userId == responder.user?.id
-            let isMGS = scene?.mgsResponderId == responder.id
-            if isMGS && isSelf {
-                // cannot edit own roles until MGS transferred to another responder
-                return false
-            }
-            roles = [.triage, .treatment, .staging, .transport]
-            if isMGS || isSelf {
-                roles.insert(.mgs, at: 0)
-            }
-        }
-        return true
-    }
 
     func formFieldDidChange(_ field: PRKit.FormField) {
-        if field == commandHeader.searchField {
-            performQuery()
-        } else {
-            if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
-               let responder = field.source as? Responder {
-                AppRealm.assignResponder(responderId: responder.id, role: role)
-            }
-        }
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        if field == commandHeader.searchField {
-            field.resignFirstResponder()
-        }
-        return false
-    }
-
-    // MARK: - KeyboardSource
-
-    var name: String {
-        return "ResponderRole"
-    }
-
-    func count() -> Int {
-        return roles.count
-    }
-
-    func firstIndex(of value: NSObject) -> Int? {
-        return nil
-    }
-
-    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
-        callback?(false)
-    }
-
-    func title(for value: NSObject?) -> String? {
-        guard let value = value as? String else { return nil }
-        return roles.first(where: {$0.rawValue == value})?.description
-    }
-
-    func title(at index: Int) -> String? {
-        return roles[index].description
-    }
-
-    func value(at index: Int) -> NSObject? {
-        return roles[index].rawValue as NSObject
+        performQuery()
     }
 
     // MARK: - UICollectionViewDataSource
@@ -188,12 +129,10 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? ResponderRoleCollectionViewCell {
+        if let cell = cell as? ResponderCollectionViewCell {
             let responder = results?[indexPath.row]
             let isMGS = scene?.mgsResponderId == responder?.id
             cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
-            cell.roleSelector.delegate = self
-            cell.roleSelector.inputAccessoryView = formInputAccessoryView
         }
         return cell
     }

@@ -1,19 +1,16 @@
 //
-//  ResponderCollectionViewCell.swift
+//  ResponderRoleCollectionViewCell.swift
 //  Triage
 //
-//  Created by Francis Li on 2/23/24.
-//  Copyright © 2024 Francis Li. All rights reserved.
+//  Created by Francis Li on 5/29/22.
+//  Copyright © 2022 Francis Li. All rights reserved.
 //
 
-import Foundation
-import PRKit
 import UIKit
 
-class ResponderCollectionViewCell: UICollectionViewCell {
+class ResponderRoleCollectionViewCell: UICollectionViewCell {
     weak var unitLabel: UILabel!
-    weak var agencyLabel: UILabel!
-    weak var timestampChip: Chip!
+    weak var roleSelector: ResponderRoleSelector!
     weak var vr: UIView!
 
     var calculatedSize: CGSize?
@@ -29,45 +26,28 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
-        let timestampChip = Chip()
-        timestampChip.translatesAutoresizingMaskIntoConstraints = false
-        timestampChip.size = .small
-        timestampChip.color = .brandPrimary500
-        timestampChip.tintColor = .white
-        timestampChip.bundleImage = "Clock24px"
-        timestampChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contentView.addSubview(timestampChip)
-        NSLayoutConstraint.activate([
-            timestampChip.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            timestampChip.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
-        ])
-        self.timestampChip = timestampChip
-
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
         unitLabel.font = .h3SemiBold
         unitLabel.textColor = .base800
-        unitLabel.numberOfLines = 1
-        unitLabel.lineBreakMode = .byTruncatingTail
         contentView.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            unitLabel.centerYAnchor.constraint(equalTo: timestampChip.centerYAnchor),
-            unitLabel.rightAnchor.constraint(equalTo: timestampChip.leftAnchor, constant: -20)
+            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            unitLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
         ])
         self.unitLabel = unitLabel
 
-        let agencyLabel = UILabel()
-        agencyLabel.translatesAutoresizingMaskIntoConstraints = false
-        agencyLabel.font = .body14Regular
-        agencyLabel.textColor = .base800
-        contentView.addSubview(agencyLabel)
+        let roleSelector = ResponderRoleSelector()
+        roleSelector.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(roleSelector)
         NSLayoutConstraint.activate([
-            agencyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            agencyLabel.topAnchor.constraint(equalTo: unitLabel.bottomAnchor, constant: 4),
-            agencyLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
+            roleSelector.topAnchor.constraint(equalTo: unitLabel.bottomAnchor, constant: 16),
+            roleSelector.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            roleSelector.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            contentView.bottomAnchor.constraint(greaterThanOrEqualTo: roleSelector.bottomAnchor, constant: 20)
         ])
-        self.agencyLabel = agencyLabel
+        self.roleSelector = roleSelector
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -112,14 +92,13 @@ class ResponderCollectionViewCell: UICollectionViewCell {
 
     func configure(from responder: Responder?, index: Int, isMGS: Bool) {
         guard let responder = responder else { return }
-        unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number
-        agencyLabel.text = responder.agency?.name
-        if let arrivedAt = responder.arrivedAt {
-            timestampChip.isHidden = false
-            timestampChip.setTitle(String(format: "ResponderCollectionViewCell.arrivedAt".localized, arrivedAt.asRelativeString()), for: .normal)
-        } else {
-            timestampChip.isHidden = true
+        var name = responder.user?.fullName
+        if let vehicle = responder.vehicle {
+            name = "\(vehicle.number ?? ""): \(name ?? "")"
         }
+        unitLabel.text = name
+        roleSelector.source = responder
+        roleSelector.attributeValue = responder.role as? NSObject
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }
