@@ -241,6 +241,21 @@
                                 <rect key="frame" x="0.0" y="684" width="375" height="128"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LpL-ms-b5u" customClass="RoundButton" customModule="PRKit">
+                                <rect key="frame" x="261" y="684" width="94" height="94"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="94" id="REB-V6-PcC"/>
+                                    <constraint firstAttribute="width" secondItem="LpL-ms-b5u" secondAttribute="height" multiplier="1:1" id="pxF-SH-dzi"/>
+                                </constraints>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Button"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addPatient"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="addPressed:" destination="3xr-9r-eE4" eventType="touchUpInside" id="mJN-Dc-MBe"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="e4i-fK-bL8"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -252,12 +267,15 @@
                             <constraint firstItem="36M-Oo-Prq" firstAttribute="trailing" secondItem="XID-e6-jx9" secondAttribute="trailing" id="YdD-7X-Wgs"/>
                             <constraint firstAttribute="trailing" secondItem="8cd-NT-ekp" secondAttribute="trailing" id="abl-Ub-PPf"/>
                             <constraint firstItem="8cd-NT-ekp" firstAttribute="top" secondItem="ssB-kE-P5A" secondAttribute="bottom" id="cki-9Q-EJN"/>
+                            <constraint firstItem="LpL-ms-b5u" firstAttribute="bottom" secondItem="e4i-fK-bL8" secondAttribute="bottom" id="e9Z-fO-sQX"/>
                             <constraint firstAttribute="trailing" secondItem="ssB-kE-P5A" secondAttribute="trailing" id="enb-pS-LSp"/>
                             <constraint firstItem="ssB-kE-P5A" firstAttribute="top" secondItem="XID-e6-jx9" secondAttribute="top" id="lFO-9x-Ot9"/>
+                            <constraint firstItem="LpL-ms-b5u" firstAttribute="trailing" secondItem="e4i-fK-bL8" secondAttribute="trailing" constant="-20" id="sLJ-Mu-eww"/>
                             <constraint firstItem="8cd-NT-ekp" firstAttribute="leading" secondItem="XID-e6-jx9" secondAttribute="leading" id="v8o-U3-56m"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="LpL-ms-b5u" id="aXB-Du-ZoG"/>
                         <outlet property="collectionView" destination="8cd-NT-ekp" id="RJx-Bt-KuE"/>
                         <outlet property="commandHeader" destination="ssB-kE-P5A" id="Asc-i0-lZX"/>
                         <outlet property="customTabBar" destination="36M-Oo-Prq" id="V1c-1u-gyn"/>
@@ -1055,7 +1073,7 @@
             <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
         </designable>
         <designable name="PEB-lg-fQy">
-            <size key="intrinsicContentSize" width="54" height="34"/>
+            <size key="intrinsicContentSize" width="293" height="68.799999999999997"/>
         </designable>
         <designable name="Rci-2n-3m4">
             <size key="intrinsicContentSize" width="374" height="72"/>

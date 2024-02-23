@@ -49,6 +49,7 @@
 "Button.addNote" = "Add Note";
 "Button.addPatient" = "Add Patient";
 "Button.addPhoto" = "Add Photo";
+"Button.addUnit" = "Add\nUnit";
 "Button.addProcedure" = "Add Procedure";
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
