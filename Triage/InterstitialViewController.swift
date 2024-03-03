@@ -46,7 +46,7 @@ class InterstitialViewController: UIViewController {
                     // noop
                 }
                 AppSettings.awsCredentials = awsCredentials
-                AppSettings.login(userId: user.id, agencyId: agency.id, assignmentId: assignment?.id, vehicleId: vehicle?.id, sceneId: scene?.id)
+                AppSettings.login(userId: user.id, regionId: agency.regionId, agencyId: agency.id, assignmentId: assignment?.id, vehicleId: vehicle?.id, sceneId: scene?.id)
                 if let sceneId = scene?.id {
                     DispatchQueue.main.async {
                         AppDelegate.enterScene(id: sceneId)

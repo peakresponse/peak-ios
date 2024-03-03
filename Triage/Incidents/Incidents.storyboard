@@ -238,7 +238,7 @@
                                 </connections>
                             </collectionView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="36M-Oo-Prq" customClass="CustomTabBar" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="684" width="375" height="128"/>
+                                <rect key="frame" x="0.0" y="631" width="375" height="181"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LpL-ms-b5u" customClass="RoundButton" customModule="PRKit">
@@ -1071,6 +1071,9 @@
         </designable>
         <designable name="KcX-PN-o40">
             <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
+        </designable>
+        <designable name="LpL-ms-b5u">
+            <size key="intrinsicContentSize" width="60" height="36"/>
         </designable>
         <designable name="PEB-lg-fQy">
             <size key="intrinsicContentSize" width="293" height="68.799999999999997"/>

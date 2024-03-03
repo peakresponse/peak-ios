@@ -6,6 +6,7 @@
   Copyright © 2019 Francis Li. All rights reserved.
 */
 
+"Agency" = "Agency";
 "Agency.name" = "Agency Name";
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
@@ -356,6 +357,11 @@
 "ReportViewController.signatures" = "Signatures";
 "ReportViewController.vitals" = "Vitals";
 
+"Responder.agency" = "Agency";
+"Responder.capability" = "Capability";
+"Responder.status" = "Status";
+"Responder.unitNumber" = "Unit Number";
+
 "Responder.sort.az" = "Alphabetically";
 
 "Responder.role.assign" = "Assign";
@@ -366,6 +372,16 @@
 "Responder.role.TRIAGE" = "Triage Team Leader";
 
 "ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
+
+"Response.unitTransportAndEquipmentCapability.2207011" = "Air Transport-Helicopter";
+"Response.unitTransportAndEquipmentCapability.2207013" = "Air Transport-Fixed Wing";
+"Response.unitTransportAndEquipmentCapability.2207015" = "Ground Transport (ALS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207017" = "Ground Transport (BLS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207019" = "Ground Transport (Critical Care Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207021" = "Non-Transport-Medical Treatment (ALS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207023" = "Non-Transport-Medical Treatment (BLS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207025" = "Wheel Chair Van/Ambulette";
+"Response.unitTransportAndEquipmentCapability.2207027" = "Non-Transport-No Medical Equipment";
 
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";

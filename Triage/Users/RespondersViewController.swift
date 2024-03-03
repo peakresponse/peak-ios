@@ -81,6 +81,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
                                       text, text, text)
         }
         results = results?.sorted(by: [
+            SortDescriptor(keyPath: "arrivedAt"),
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),
             SortDescriptor(keyPath: "user.lastName")
@@ -109,6 +110,19 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
 
     @objc func refresh() {
 
+    }
+
+    @IBAction
+    func addPressed(_ sender: RoundButton) {
+        let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+        if let vc = vc as? ResponderViewController {
+            let responder = Responder()
+            responder.scene = scene
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.responder = responder
+            vc.isEditing = true
+        }
+        presentAnimated(vc)
     }
 
     // MARK: - FormFieldDelegate
