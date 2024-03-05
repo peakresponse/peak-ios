@@ -80,6 +80,17 @@ class Responder: Base {
     @Persisted var arrivedAt: Date?
     @Persisted var departedAt: Date?
 
+    @objc var status: Bool {
+        get { return arrivedAt != nil }
+        set {
+            if newValue {
+                arrivedAt = Date()
+            } else {
+                arrivedAt = nil
+            }
+        }
+    }
+
     override class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
         if data[Keys.departedAt] as? String == nil {
             // for users logged into multiple devices, delete all but the canonical record

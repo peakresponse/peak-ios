@@ -91,6 +91,10 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView)
     func newVerticalSpacer(_ height: CGFloat) -> UIView
     func newText(_ text: String) -> UILabel
+
+    func newRadioGroup(source: NSObject?, target: NSObject?,
+                       attributeKey: String) -> PRKit.FormRadioGroup
+
     func newTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
@@ -181,6 +185,26 @@ extension FormBuilder {
         stackView.distribution = .fillEqually
         stackView.spacing = 20
         return stackView
+    }
+
+    func newRadioGroup(source: NSObject? = nil, target: NSObject? = nil,
+                       attributeKey: String) -> PRKit.FormRadioGroup {
+        let radioGroup = PRKit.FormRadioGroup()
+        radioGroup.translatesAutoresizingMaskIntoConstraints = false
+        radioGroup.delegate = self
+        radioGroup.source = source
+        radioGroup.target = target
+        radioGroup.attributeKey = attributeKey
+        let obj = source ?? target
+        if let index = attributeKey.lastIndex(of: ".") {
+            let child = obj?.value(forKeyPath: String(attributeKey[attributeKey.startIndex..<index])) as? NSObject
+            let childAttributeKey = attributeKey[attributeKey.index(after: index)..<attributeKey.endIndex]
+            radioGroup.labelText = "\(String(describing: type(of: child ?? NSNull()))).\(childAttributeKey)".localized
+        } else {
+            radioGroup.labelText = "\(String(describing: type(of: obj ?? NSNull()))).\(attributeKey)".localized
+        }
+        radioGroup.attributeValue = obj?.value(forKeyPath: attributeKey) as? NSObject
+        return radioGroup
     }
 
     func newTextField(source: NSObject? = nil, target: NSObject? = nil,

@@ -359,6 +359,8 @@
 
 "Responder.agency" = "Agency";
 "Responder.capability" = "Capability";
+"Responder.capability.als" = "ALS";
+"Responder.capability.bls" = "BLS";
 "Responder.status" = "Status";
 "Responder.status.arrived" = "Arrived";
 "Responder.status.enroute" = "En Route";

@@ -51,52 +51,26 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
                      attributeType: .single(AgencyKeyboardSource()), tag: &tag, to: colA)
         addTextField(source: responder, attributeKey: "unitNumber",
                      attributeType: .integer, tag: &tag, to: colB)
-        section.addArrangedSubview(cols)
 
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.alignment = .top
 
-        var view = UIView()
-        var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = .h4SemiBold
-        label.textColor = .base500
-        label.text = "Responder.status".localized
-        view.addSubview(label)
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
-            label.leftAnchor.constraint(equalTo: view.leftAnchor),
-            label.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
+        var radioGroup = newRadioGroup(source: responder, attributeKey: "status")
+        radioGroup.addRadioButton(labelText: "Responder.status.arrived".localized, value: true as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.status.enroute".localized, value: false as NSObject)
+        stackView.addArrangedSubview(radioGroup)
 
-        var checkbox = Checkbox()
-        checkbox.delegate = self
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        checkbox.labelText = "Responder.status.arrived".localized
-        checkbox.isRadioButton = true
-        view.addSubview(checkbox)
-        NSLayoutConstraint.activate([
-            checkbox.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
-            checkbox.leftAnchor.constraint(equalTo: label.leftAnchor),
-            checkbox.rightAnchor.constraint(equalTo: label.rightAnchor)
-        ])
-        var prevView = checkbox
+        radioGroup = newRadioGroup(source: responder, attributeKey: "capability")
+        radioGroup.isDeselectable = true
+        radioGroup.addRadioButton(labelText: "Responder.capability.als".localized, value: "" as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.capability.bls".localized, value: "" as NSObject)
+        stackView.addArrangedSubview(radioGroup)
 
-        checkbox = Checkbox()
-        checkbox.delegate = self
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        checkbox.labelText = "Responder.status.enroute".localized
-        checkbox.isRadioButton = true
-        view.addSubview(checkbox)
-        NSLayoutConstraint.activate([
-            checkbox.topAnchor.constraint(equalTo: prevView.bottomAnchor, constant: 12),
-            checkbox.leftAnchor.constraint(equalTo: label.leftAnchor),
-            checkbox.rightAnchor.constraint(equalTo: label.rightAnchor),
-            view.bottomAnchor.constraint(equalTo: checkbox.bottomAnchor )
-        ])
-        stackView.addArrangedSubview(view)
+        colA.addArrangedSubview(stackView)
 
-        section.addArrangedSubview(stackView)
+        section.addArrangedSubview(cols)
 
         containerView.addArrangedSubview(section)
         setEditing(isEditing, animated: false)
@@ -154,5 +128,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     // MARK: - FormFieldDelegate
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let attributeKey = component.attributeKey, let target = component.target {
+            target.setValue(component.attributeValue, forKeyPath: attributeKey)
+        }
     }
 }
