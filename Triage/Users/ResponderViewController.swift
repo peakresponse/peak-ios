@@ -52,6 +52,52 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         addTextField(source: responder, attributeKey: "unitNumber",
                      attributeType: .integer, tag: &tag, to: colB)
         section.addArrangedSubview(cols)
+
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+
+        var view = UIView()
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .h4SemiBold
+        label.textColor = .base500
+        label.text = "Responder.status".localized
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: view.topAnchor, constant: 16),
+            label.leftAnchor.constraint(equalTo: view.leftAnchor),
+            label.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+
+        var checkbox = Checkbox()
+        checkbox.delegate = self
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
+        checkbox.labelText = "Responder.status.arrived".localized
+        checkbox.isRadioButton = true
+        view.addSubview(checkbox)
+        NSLayoutConstraint.activate([
+            checkbox.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
+            checkbox.leftAnchor.constraint(equalTo: label.leftAnchor),
+            checkbox.rightAnchor.constraint(equalTo: label.rightAnchor)
+        ])
+        var prevView = checkbox
+
+        checkbox = Checkbox()
+        checkbox.delegate = self
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
+        checkbox.labelText = "Responder.status.enroute".localized
+        checkbox.isRadioButton = true
+        view.addSubview(checkbox)
+        NSLayoutConstraint.activate([
+            checkbox.topAnchor.constraint(equalTo: prevView.bottomAnchor, constant: 12),
+            checkbox.leftAnchor.constraint(equalTo: label.leftAnchor),
+            checkbox.rightAnchor.constraint(equalTo: label.rightAnchor),
+            view.bottomAnchor.constraint(equalTo: checkbox.bottomAnchor )
+        ])
+        stackView.addArrangedSubview(view)
+
+        section.addArrangedSubview(stackView)
+
         containerView.addArrangedSubview(section)
         setEditing(isEditing, animated: false)
     }
@@ -102,14 +148,11 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     // MARK: - CheckboxDelegate
 
     func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
-
+        print(checkbox, isChecked)
     }
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
-
-        }
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
     }
 }

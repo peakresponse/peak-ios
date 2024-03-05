@@ -199,8 +199,8 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, let attributeKey = field.attributeKey, let target = field.target {
             target.setValue(field.attributeValue, forKeyPath: attributeKey)
             if attributeKey == "cityId" {
                 if let cityId = newScene?.cityId, let city = AppRealm.open().object(ofType: City.self, forPrimaryKey: cityId) {

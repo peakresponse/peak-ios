@@ -220,8 +220,8 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if !(field.text?.isEmpty ?? true) {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, !(field.text?.isEmpty ?? true) {
             for checkbox in checkboxes {
                 checkbox.isChecked = false
             }

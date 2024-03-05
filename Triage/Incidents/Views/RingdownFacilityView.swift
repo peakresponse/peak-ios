@@ -281,14 +281,16 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if field.text?.isEmpty ?? true {
-            if !field.isFirstResponder && isSelected {
-                isSelected = false
-                delegate?.ringdownFacilityView(self, didSelect: isSelected)
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField {
+            if field.text?.isEmpty ?? true {
+                if !field.isFirstResponder && isSelected {
+                    isSelected = false
+                    delegate?.ringdownFacilityView(self, didSelect: isSelected)
+                }
             }
+            delegate?.ringdownFacilityView(self, didChangeEta: field.text?.trimmingCharacters(in: .whitespacesAndNewlines))
         }
-        delegate?.ringdownFacilityView(self, didChangeEta: field.text?.trimmingCharacters(in: .whitespacesAndNewlines))
     }
 
     func formFieldDidEndEditing(_ field: PRKit.FormField) {

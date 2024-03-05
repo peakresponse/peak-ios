@@ -809,8 +809,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, let attributeKey = field.attributeKey, let target = field.target {
             target.setValue(field.attributeValue, forKeyPath: attributeKey)
             // some hard-coded field visibility rules, until a more generalized implementation can be designed
             switch attributeKey {

@@ -174,13 +174,13 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
 
     // MARK: - FormFieldDelegate
 
-    open override func formFieldDidChange(_ field: PRKit.FormField) {
-        if fieldList != nil, segmentedControl.selectedIndex == 0 {
+    open override func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if fieldList != nil, segmentedControl.selectedIndex == 0, let field = component as? PRKit.FormField {
             performQuery(field.text)
             containerView.isHidden = !(field.text?.isEmpty ?? true)
             return
         }
-        super.formFieldDidChange(field)
+        super.formComponentDidChange(component)
     }
 
     // MARK: - UICollectionViewDataSource

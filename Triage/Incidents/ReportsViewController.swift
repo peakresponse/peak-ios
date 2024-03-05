@@ -204,7 +204,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
     }
 

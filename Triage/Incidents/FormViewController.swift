@@ -237,8 +237,8 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, let attributeKey = field.attributeKey, let target = field.target {
             if attributeKey.hasSuffix(".file"), let field = field as? SignatureField {
                 if let signatureImage = field.signatureImage {
                     let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)

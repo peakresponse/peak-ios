@@ -127,13 +127,15 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
         return true
     }
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if field == commandHeader.searchField {
-            performQuery()
-        } else {
-            if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
-               let responder = field.source as? Responder {
-                AppRealm.assignResponder(responderId: responder.id, role: role)
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField {
+            if field == commandHeader.searchField {
+                performQuery()
+            } else {
+                if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
+                   let responder = field.source as? Responder {
+                    AppRealm.assignResponder(responderId: responder.id, role: role)
+                }
             }
         }
     }
