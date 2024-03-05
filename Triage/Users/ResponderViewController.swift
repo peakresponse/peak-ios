@@ -19,7 +19,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     weak var delegate: FormViewControllerDelegate?
 
     var formInputAccessoryView: UIView!
-    var formFields: [String: PRKit.FormField] = [:]
+    var formComponents: [String: PRKit.FormComponent] = [:]
 
     var responder: Responder!
     var newResponder: Responder?
@@ -104,7 +104,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.updateStyle()
         }
     }
@@ -128,7 +128,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         } else if newResponder != nil {
             newResponder = nil
         }
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newResponder
@@ -137,7 +137,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
             }
         }
         if editing {
-            _ = formFields["agency"]?.becomeFirstResponder()
+            _ = formComponents["agency"]?.becomeFirstResponder()
         }
     }
 

@@ -74,7 +74,7 @@ open class FormSection: UIStackView {
 public protocol FormBuilder: PRKit.FormFieldDelegate {
     var traitCollection: UITraitCollection { get }
     var formInputAccessoryView: UIView! { get }
-    var formFields: [String: PRKit.FormField] { get set }
+    var formComponents: [String: PRKit.FormComponent] { get set }
 
     func refreshFormFields(attributeKeys: [String]?)
 
@@ -102,18 +102,18 @@ extension FormBuilder {
     func refreshFormFields(attributeKeys: [String]? = nil) {
         if let attributeKeys = attributeKeys {
             for attributeKey in attributeKeys {
-                if let formField = formFields[attributeKey], let target = formField.target ?? formField.source {
-                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let target = (formField.target ?? formField.source) as? Predictions {
+                if let formComponent = formComponents[attributeKey], let target = formComponent.target ?? formComponent.source {
+                    formComponent.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let formField = formComponent as? PRKit.FormField, let target = (formField.target ?? formField.source) as? Predictions {
                         formField.status = target.predictionStatus(for: attributeKey)
                     }
                 }
             }
         } else {
-            for formField in formFields.values {
-                if let attributeKey = formField.attributeKey, let target = formField.target ?? formField.source {
-                    formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let target = (formField.target ?? formField.source) as? Predictions {
+            for formComponent in formComponents.values {
+                if let attributeKey = formComponent.attributeKey, let target = formComponent.target ?? formComponent.source {
+                    formComponent.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
+                    if let formField = formComponent as? PRKit.FormField, let target = (formField.target ?? formField.source) as? Predictions {
                         formField.status = target.predictionStatus(for: attributeKey)
                     }
                 }
@@ -146,7 +146,7 @@ extension FormBuilder {
         } else {
             col.addArrangedSubview(textField)
         }
-        formFields[attributeKey] = textField
+        formComponents[attributeKey] = textField
     }
 
     func newVerticalSpacer(_ height: CGFloat = 20) -> UIView {

@@ -22,7 +22,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
     @IBOutlet weak var containerView: UIStackView!
 
     var formInputAccessoryView: UIView!
-    var formFields: [String: PRKit.FormField] = [:]
+    var formComponents: [String: PRKit.FormComponent] = [:]
 
     weak var delegate: LocationViewControllerDelegate?
 
@@ -150,7 +150,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
                         self.newScene?.stateId = stateId
                         attributeKeys.append("stateId")
                         DispatchQueue.main.async { [weak self] in
-                            if let cityField = self?.formFields["cityId"], let inputView = cityField.inputView as? CityKeyboard {
+                            if let cityField = self?.formComponents["cityId"] as? PRKit.FormField, let inputView = cityField.inputView as? CityKeyboard {
                                 inputView.stateId = self?.newScene?.stateId
                             }
                         }
@@ -186,7 +186,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newScene
@@ -207,7 +207,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
                     newScene?.stateId = city.stateNumeric
                     refreshFormFields(attributeKeys: ["stateId"])
                 }
-                if let cityField = formFields["cityId"], let inputView = cityField.inputView as? CityKeyboard {
+                if let cityField = formComponents["cityId"] as? PRKit.FormField, let inputView = cityField.inputView as? CityKeyboard {
                     inputView.stateId = newScene?.stateId
                 }
             } else if attributeKey == "stateId" {
@@ -216,7 +216,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
                     newScene?.cityId = nil
                     refreshFormFields(attributeKeys: ["cityId"])
                 }
-                if let cityField = formFields["cityId"], let inputView = cityField.inputView as? CityKeyboard {
+                if let cityField = formComponents["cityId"] as? PRKit.FormField, let inputView = cityField.inputView as? CityKeyboard {
                     inputView.stateId = newScene?.stateId
                 }
             }
@@ -234,7 +234,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
         isWaitingForLocation = false
         if locations.count > 0 {
             currentLocation = locations.first?.coordinate
-            if let cityField = formFields["cityId"], let inputView = cityField.inputView as? CityKeyboard {
+            if let cityField = formComponents["cityId"] as? PRKit.FormField, let inputView = cityField.inputView as? CityKeyboard {
                 inputView.currentLocation = currentLocation
             }
         }
