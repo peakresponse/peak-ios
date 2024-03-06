@@ -43,8 +43,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
-        var (section, cols, colA, colB) = newSection()
-        var header: UIView
+        let (section, cols, colA, colB) = newSection()
         var tag = 1
 
         addTextField(source: responder, attributeKey: "agency",
@@ -69,6 +68,12 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         stackView.addArrangedSubview(radioGroup)
 
         colA.addArrangedSubview(stackView)
+
+        let button = newButton(title: "Button.done".localized)
+        button.size = .medium
+        button.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
+        colB.addArrangedSubview(UIView())
+        colB.addArrangedSubview(button)
 
         section.addArrangedSubview(cols)
 

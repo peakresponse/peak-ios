@@ -169,7 +169,7 @@ extension FormBuilder {
         return label
     }
 
-    func newButton(bundleImage: String?, title: String?) -> PRKit.Button {
+    func newButton(bundleImage: String? = nil, title: String? = nil) -> PRKit.Button {
         let button = PRKit.Button()
         button.bundleImage = bundleImage
         button.setTitle(title, for: .normal)
@@ -191,6 +191,7 @@ extension FormBuilder {
                        attributeKey: String) -> PRKit.FormRadioGroup {
         let radioGroup = PRKit.FormRadioGroup()
         radioGroup.translatesAutoresizingMaskIntoConstraints = false
+        radioGroup.inputAccessoryView = formInputAccessoryView
         radioGroup.delegate = self
         radioGroup.source = source
         radioGroup.target = target
