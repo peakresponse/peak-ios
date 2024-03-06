@@ -122,6 +122,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="hHA-ZO-bJm" id="sat-Ay-9rf"/>
                         <outlet property="collectionView" destination="0ru-Wr-NVM" id="ams-4e-mAq"/>
                         <outlet property="commandHeader" destination="7cJ-t7-x9C" id="ET2-UT-hDe"/>
                     </connections>

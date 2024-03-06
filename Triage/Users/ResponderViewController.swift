@@ -10,13 +10,17 @@ import Foundation
 import PRKit
 import UIKit
 
+@objc protocol ResponderViewControllerDelegate {
+    @objc optional func responderViewControllerDidSave(_ vc: ResponderViewController)
+}
+
 class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrollViewController, CheckboxDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
 
-    weak var delegate: FormViewControllerDelegate?
+    weak var delegate: ResponderViewControllerDelegate?
 
     var formInputAccessoryView: UIView!
     var formComponents: [String: PRKit.FormComponent] = [:]
@@ -60,12 +64,14 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         radioGroup.addRadioButton(labelText: "Responder.status.arrived".localized, value: true as NSObject)
         radioGroup.addRadioButton(labelText: "Responder.status.enroute".localized, value: false as NSObject)
         stackView.addArrangedSubview(radioGroup)
+        formComponents["status"] = radioGroup
 
         radioGroup = newRadioGroup(source: responder, attributeKey: "capability")
         radioGroup.isDeselectable = true
         radioGroup.addRadioButton(labelText: "Responder.capability.als".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue as NSObject)
         radioGroup.addRadioButton(labelText: "Responder.capability.bls".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportBls.rawValue as NSObject)
         stackView.addArrangedSubview(radioGroup)
+        formComponents["capability"] = radioGroup
 
         colA.addArrangedSubview(stackView)
 
@@ -103,6 +109,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         if editing {
             if responder.realm != nil {
                 newResponder = Responder(clone: responder)
+            } else {
+                newResponder = responder
             }
         } else if newResponder != nil {
             newResponder = nil
@@ -121,7 +129,10 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     }
 
     @objc func donePressed() {
-
+        guard let newResponder = newResponder else { return }
+        AppRealm.addResponder(responder: newResponder) { _ in
+        }
+        delegate?.responderViewControllerDidSave?(self)
     }
 
     // MARK: - CheckboxDelegate

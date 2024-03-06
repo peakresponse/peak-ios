@@ -10,11 +10,19 @@ import Foundation
 import PRKit
 import UIKit
 
+@objc protocol ResponderCollectionViewCellDelegate {
+    @objc optional func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?)
+}
+
 class ResponderCollectionViewCell: UICollectionViewCell {
+    var responderId: String?
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
     weak var timestampChip: Chip!
+    weak var button: PRKit.Button!
     weak var vr: UIView!
+
+    weak var delegate: ResponderCollectionViewCellDelegate?
 
     var calculatedSize: CGSize?
 
@@ -69,6 +77,19 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         ])
         self.agencyLabel = agencyLabel
 
+        let button = PRKit.Button()
+        button.style = .primary
+        button.size = .small
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Button.markArrived".localized, for: .normal)
+        contentView.addSubview(button)
+        NSLayoutConstraint.activate([
+            button.topAnchor.constraint(equalTo: agencyLabel.bottomAnchor, constant: 4),
+            button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
+        ])
+        button.addTarget(self, action: #selector(markArrivedPressed(_:)), for: .touchUpInside)
+        self.button = button
+
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
         hr.backgroundColor = .base300
@@ -111,15 +132,23 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(from responder: Responder?, index: Int, isMGS: Bool) {
+        responderId = responder?.id
         guard let responder = responder else { return }
-        unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number
+        unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber
         agencyLabel.text = responder.agency?.name
         if let arrivedAt = responder.arrivedAt {
-            timestampChip.isHidden = false
+            timestampChip.color = .brandPrimary500
             timestampChip.setTitle(String(format: "ResponderCollectionViewCell.arrivedAt".localized, arrivedAt.asRelativeString()), for: .normal)
+            button.isHidden = true
         } else {
-            timestampChip.isHidden = true
+            timestampChip.color = .base500
+            timestampChip.setTitle("Responder.status.enroute".localized, for: .normal)
+            button.isHidden = false
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
+    }
+
+    @objc func markArrivedPressed(_ sender: RoundButton) {
+        delegate?.responderCollectionViewCellDidMarkArrived?(self, responderId: responderId)
     }
 }

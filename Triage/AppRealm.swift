@@ -792,6 +792,59 @@ class AppRealm {
         }
     }
 
+    public static func addResponder(responder: Responder, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        try! realm.write {
+            // instantiate from JSON, this allows the Responder override of instantiate to check if the user has already joined
+            realm.add(responder, update: .modified)
+        }
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
+    }
+
+    public static func markResponderArrived(responderId: String, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), responder.arrivedAt == nil else {
+            completionHandler(nil)
+            return
+        }
+        try! realm.write {
+            responder.arrivedAt = Date()
+        }
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
+    }
+
     public static func assignResponder(responderId: String, role: ResponderRole?, completionHandler: ((Error?) -> Void)? = nil) {
         let realm = AppRealm.open()
         guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), let scene = responder.scene,

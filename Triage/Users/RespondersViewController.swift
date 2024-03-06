@@ -12,10 +12,11 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,
-                                UICollectionViewDataSource, UICollectionViewDelegate {
+class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, ResponderViewControllerDelegate,
+                                ResponderCollectionViewCellDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var addButton: PRKit.RoundButton!
     var formInputAccessoryView: UIView!
 
     var scene: Scene?
@@ -44,6 +45,10 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         collectionView.setCollectionViewLayout(layout, animated: false)
+
+        var contentInset = collectionView.contentInset
+        contentInset.bottom += addButton.frame.height
+        collectionView.contentInset = contentInset
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -77,8 +82,8 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         guard let scene = scene else { return }
         results = scene.responders.filter("departedAt=%@", NSNull())
         if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
-            results = results?.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
-                                      text, text, text)
+            results = results?.filter("(unitNumber CONTAINS[cd] %@) OR (vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
+                                      text, text, text, text)
         }
         results = results?.sorted(by: [
             SortDescriptor(keyPath: "arrivedAt"),
@@ -109,13 +114,26 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
     }
 
     @objc func refresh() {
-
+        guard let sceneId = scene?.id else { return }
+        collectionView.reloadData()
+        collectionView.refreshControl?.beginRefreshing()
+        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
+        AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
+            guard let self = self else { return }
+            if let error = error {
+                print(error)
+            }
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.refreshControl?.endRefreshing()
+            }
+        }
     }
 
     @IBAction
     func addPressed(_ sender: RoundButton) {
         let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController {
+            vc.delegate = self
             let responder = Responder()
             responder.scene = scene
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
@@ -131,6 +149,20 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         performQuery()
     }
 
+    // MARK: - ResponderCollectionViewCellDelegate
+
+    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
+        guard let responderId = responderId else { return }
+        AppRealm.markResponderArrived(responderId: responderId) { _ in
+        }
+    }
+
+    // MARK: - ResponderViewControllerDelegate
+
+    func responderViewControllerDidSave(_ vc: ResponderViewController) {
+        dismissAnimated()
+    }
+
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -144,6 +176,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
         if let cell = cell as? ResponderCollectionViewCell {
+            cell.delegate = self
             let responder = results?[indexPath.row]
             let isMGS = scene?.mgsResponderId == responder?.id
             cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
