@@ -25,7 +25,7 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.rolesResources".localized
-        tabBarItem.image = UIImage(named: "Transport", in: PRKitBundle.instance, compatibleWith: nil)
+        tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
     deinit {

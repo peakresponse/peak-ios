@@ -27,7 +27,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.stage".localized
-        tabBarItem.image = UIImage(named: "Transport", in: PRKitBundle.instance, compatibleWith: nil)
+        tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
     deinit {
