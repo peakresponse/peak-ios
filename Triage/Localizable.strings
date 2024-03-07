@@ -591,6 +591,10 @@
 "TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
 "TransportDisposition.4230013" = "No Transport";
 
+"TransportViewController.segment.patients" = "Patients";
+"TransportViewController.segment.units" = "Units";
+"TransportViewController.segment.hospitals" = "Hospitals";
+
 "TriageCounts.total" = "Total: %d";
 "TriageCounts.transported" = "Transp: %d";
 
