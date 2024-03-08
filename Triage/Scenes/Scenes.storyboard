@@ -393,15 +393,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="125" translatesAutoresizingMaskIntoConstraints="NO" id="kju-A3-f0D" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="125"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSearchHidden" value="NO"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="100" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="wWZ-JZ-eVL">
+                                <rect key="frame" x="20" y="48" width="374" height="100"/>
+                            </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="74I-1O-Yyb">
-                                <rect key="frame" x="0.0" y="125" width="414" height="771"/>
+                                <rect key="frame" x="0.0" y="148" width="414" height="748"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gsJ-hC-hqj">
                                     <size key="itemSize" width="128" height="128"/>
@@ -424,31 +420,31 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addUnit"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.transport"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
-                                    <action selector="addPressed:" destination="U6t-xw-obo" eventType="touchUpInside" id="Z2C-Ey-e6V"/>
+                                    <action selector="transportPressed:" destination="U6t-xw-obo" eventType="touchUpInside" id="veF-JY-MgG"/>
                                 </connections>
                             </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="X2U-IX-5GY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="kju-A3-f0D" firstAttribute="top" secondItem="DhS-0e-scQ" secondAttribute="top" id="6xa-Zb-ucX"/>
-                            <constraint firstItem="kju-A3-f0D" firstAttribute="leading" secondItem="DhS-0e-scQ" secondAttribute="leading" id="7qb-vS-xq0"/>
+                            <constraint firstItem="74I-1O-Yyb" firstAttribute="top" secondItem="wWZ-JZ-eVL" secondAttribute="bottom" id="4x3-aE-eNZ"/>
                             <constraint firstAttribute="trailing" secondItem="74I-1O-Yyb" secondAttribute="trailing" id="8K6-Tq-twx"/>
                             <constraint firstItem="hCu-dR-eRF" firstAttribute="trailing" secondItem="X2U-IX-5GY" secondAttribute="trailing" constant="-20" id="8pe-I0-CXY"/>
-                            <constraint firstItem="74I-1O-Yyb" firstAttribute="top" secondItem="kju-A3-f0D" secondAttribute="bottom" id="DJ9-pM-dar"/>
+                            <constraint firstItem="wWZ-JZ-eVL" firstAttribute="trailing" secondItem="DhS-0e-scQ" secondAttribute="trailing" constant="-20" id="Oev-qk-oVV"/>
+                            <constraint firstItem="wWZ-JZ-eVL" firstAttribute="top" secondItem="X2U-IX-5GY" secondAttribute="top" id="Tyt-ec-IJ8"/>
                             <constraint firstItem="hCu-dR-eRF" firstAttribute="bottom" secondItem="X2U-IX-5GY" secondAttribute="bottom" id="ZUu-Pk-nBi"/>
                             <constraint firstAttribute="bottom" secondItem="74I-1O-Yyb" secondAttribute="bottom" id="dTg-21-sDI"/>
                             <constraint firstItem="74I-1O-Yyb" firstAttribute="leading" secondItem="DhS-0e-scQ" secondAttribute="leading" id="j2g-6j-7XO"/>
-                            <constraint firstAttribute="trailing" secondItem="kju-A3-f0D" secondAttribute="trailing" id="xMm-92-174"/>
+                            <constraint firstItem="wWZ-JZ-eVL" firstAttribute="leading" secondItem="DhS-0e-scQ" secondAttribute="leading" constant="20" id="mvJ-NL-R0D"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="addButton" destination="hCu-dR-eRF" id="7qg-zi-gqQ"/>
                         <outlet property="collectionView" destination="74I-1O-Yyb" id="xFe-cF-zIp"/>
-                        <outlet property="commandHeader" destination="kju-A3-f0D" id="r3r-r3-Ju9"/>
+                        <outlet property="stackView" destination="wWZ-JZ-eVL" id="JTL-NY-TmF"/>
+                        <outlet property="transportButton" destination="hCu-dR-eRF" id="gc0-p0-0Xo"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="s7J-o5-ha3" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -537,7 +533,7 @@
             <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="c9i-vy-ee4">
-            <size key="intrinsicContentSize" width="60" height="36"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="fWd-Za-2Xm">
             <size key="intrinsicContentSize" width="54" height="34"/>
@@ -547,9 +543,6 @@
         </designable>
         <designable name="hCu-dR-eRF">
             <size key="intrinsicContentSize" width="54" height="34"/>
-        </designable>
-        <designable name="kju-A3-f0D">
-            <size key="intrinsicContentSize" width="375" height="125"/>
         </designable>
         <designable name="lyj-3c-P8U">
             <size key="intrinsicContentSize" width="414" height="128"/>

@@ -140,7 +140,7 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
     func configure(from responder: Responder?, index: Int, isSelected: Bool) {
         guard let responder = responder else { return }
         checkbox.isChecked = isSelected
-        unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber
+        unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.name
         if let capability = responder.capability {
             capabilityChip.alpha = 1

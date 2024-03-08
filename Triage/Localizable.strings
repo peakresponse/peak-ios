@@ -365,7 +365,7 @@
 "Responder.status" = "Status";
 "Responder.status.arrived" = "Arrived";
 "Responder.status.enroute" = "En Route";
-"Responder.unitNumber" = "Unit Number";
+"Responder.unitNumber" = "Unit #";
 
 "Responder.sort.az" = "Alphabetically";
 

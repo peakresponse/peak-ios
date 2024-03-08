@@ -22,7 +22,8 @@ protocol TransportCartViewController: UIViewController {
     func updateCart()
 }
 
-class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate {
+class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
+                               TransportFacilitiesViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -81,6 +82,12 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                     vc.delegate = self
                 }
                 cachedViewControllers[1] = vc
+            case 2:
+                vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportFacilities")
+                if let vc = vc as? TransportFacilitiesViewController {
+                    vc.delegate = self
+                }
+                cachedViewControllers[2] = vc
             default:
                 break
             }
@@ -93,6 +100,28 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             containerView.addSubview(vc.view)
             vc.view.frame = containerView.bounds
             vc.didMove(toParent: self)
+        }
+    }
+
+    // MARK: - TransportFacilitiesViewControllerDelegate
+
+    func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveReport report: Report?) {
+        if let report = report {
+            if let index = cart.reports.firstIndex(of: report) {
+                cart.reports.remove(at: index)
+            }
+            vc.cart = cart
+            vc.updateCart()
+        }
+    }
+
+    func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveResponder responder: Responder?) {
+        if let responder = responder {
+            if cart.responder == responder {
+                cart.responder = nil
+            }
+            vc.cart = cart
+            vc.updateCart()
         }
     }
 
