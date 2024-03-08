@@ -17,6 +17,8 @@ class TransportViewController: UIViewController {
 
     var cachedViewControllers: [UIViewController?] = [nil, nil, nil]
 
+    var incident: Incident?
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.transport".localized
@@ -25,6 +27,11 @@ class TransportViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if incident == nil, let sceneId = AppSettings.sceneId,
+           let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
+            incident = scene.incident.first
+        }
 
         segmentedControl.addSegment(title: "TransportViewController.segment.patients".localized)
         segmentedControl.addSegment(title: "TransportViewController.segment.units".localized)
@@ -50,6 +57,9 @@ class TransportViewController: UIViewController {
             switch sender.selectedIndex {
             case 0:
                 vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportReports")
+                if let vc = vc as? TransportReportsViewController {
+                    vc.incident = incident
+                }
                 cachedViewControllers[0] = vc
             default:
                 break

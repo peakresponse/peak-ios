@@ -475,7 +475,7 @@
                                     <outlet property="delegate" destination="EUa-si-tbX" id="Y65-E7-jYM"/>
                                 </connections>
                             </collectionView>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eym-Ue-ZTn" customClass="RoundButton" customModule="PRKit">
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eym-Ue-ZTn" customClass="RoundButton" customModule="PRKit">
                                 <rect key="frame" x="300" y="768" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="9k3-IR-6Q8"/>
@@ -484,7 +484,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button"/>
                                 <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addPatient"/>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.scanTag"/>
                                 </userDefinedRuntimeAttributes>
                                 <connections>
                                     <action selector="addPressed:" destination="EUa-si-tbX" eventType="touchUpInside" id="35X-p6-XH2"/>

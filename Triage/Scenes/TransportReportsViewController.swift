@@ -11,19 +11,101 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class TransportReportsViewController: UIViewController,
+class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
                                       UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: RoundButton!
 
+    var incident: Incident?
     var results: Results<Report>?
     var filteredResults: Results<Report>?
     var notificationToken: NotificationToken?
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         commandHeader.isSearchHidden = false
+        commandHeader.searchField.delegate = self
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+
+        collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+
+        performQuery()
+    }
+
+    @objc func performQuery() {
+        guard let incident = incident else { return }
+
+        notificationToken?.invalidate()
+
+        let realm = AppRealm.open()
+        results = realm.objects(Report.self)
+            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+        filteredResults = results
+        if let text = commandHeader.searchField.text, !text.isEmpty {
+            filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
+                                      text, text, text)
+        }
+        filteredResults = filteredResults?.sorted(by: [
+            SortDescriptor(keyPath: "filterPriority"),
+            SortDescriptor(keyPath: "updatedAt")
+        ])
+        notificationToken = filteredResults?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+        refresh()
+    }
+
+    @objc func refresh() {
+        guard let incident = incident else { return }
+        collectionView.refreshControl?.beginRefreshing()
+        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
+        AppRealm.getReports(incident: incident) { [weak self] (_, error) in
+            guard let self = self else { return }
+            if let error = error {
+                print(error)
+            }
+            self.collectionView.refreshControl?.endRefreshing()
+        }
+    }
+
+    func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Report>>) {
+        switch changes {
+        case .initial:
+            collectionView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            }, completion: nil)
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    @IBAction
+    func addPressed(_ sender: RoundButton) {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
+        if let vc = vc as? ScanViewController {
+            vc.incident = incident
+        }
+        presentAnimated(vc)
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        performQuery()
+    }
+
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
+        field.resignFirstResponder()
+        return false
     }
 
     // MARK: - UICollectionViewDataSource
@@ -38,7 +120,7 @@ class TransportReportsViewController: UIViewController,
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
-        if let cell = cell as? ReportCollectionViewCell {
+        if let cell = cell as? TransportReportCollectionViewCell {
             cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
         }
         return cell
@@ -55,8 +137,8 @@ class TransportReportsViewController: UIViewController,
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 160)
+            return CGSize(width: 372, height: 125)
         }
-        return CGSize(width: view.frame.width, height: 160)
+        return CGSize(width: view.frame.width, height: 125)
     }
 }
