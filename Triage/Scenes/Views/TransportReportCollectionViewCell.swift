@@ -12,12 +12,10 @@ import UIKit
 
 class TransportReportCollectionViewCell: UICollectionViewCell {
     weak var checkbox: Checkbox!
-    weak var mciView: UIView!
     weak var priorityChip: Chip!
     weak var tagLabel: UILabel!
     weak var descLabel: UILabel!
     weak var updatedAtLabel: UILabel!
-    weak var vr: UIView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -58,19 +56,18 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
         ])
 
-        let mciView = UIView()
-        mciView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(mciView)
-        self.mciView = mciView
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(view)
 
         let priorityChip = Chip()
         priorityChip.translatesAutoresizingMaskIntoConstraints = false
         priorityChip.isUserInteractionEnabled = false
-        mciView.addSubview(priorityChip)
+        view.addSubview(priorityChip)
         NSLayoutConstraint.activate([
-            priorityChip.topAnchor.constraint(equalTo: mciView.topAnchor),
-            priorityChip.rightAnchor.constraint(equalTo: mciView.rightAnchor),
-            mciView.bottomAnchor.constraint(equalTo: priorityChip.bottomAnchor)
+            priorityChip.topAnchor.constraint(equalTo: view.topAnchor),
+            priorityChip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            view.bottomAnchor.constraint(equalTo: priorityChip.bottomAnchor)
         ])
         self.priorityChip = priorityChip
 
@@ -78,9 +75,9 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
         tagLabel.font = .h3SemiBold
         tagLabel.textColor = .base800
-        mciView.addSubview(tagLabel)
+        view.addSubview(tagLabel)
         NSLayoutConstraint.activate([
-            tagLabel.leftAnchor.constraint(equalTo: mciView.leftAnchor),
+            tagLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
             tagLabel.centerYAnchor.constraint(equalTo: priorityChip.centerYAnchor),
             tagLabel.rightAnchor.constraint(lessThanOrEqualTo: priorityChip.leftAnchor, constant: -10)
         ])
@@ -110,18 +107,6 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
             hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             hr.heightAnchor.constraint(equalToConstant: 2)
         ])
-
-        let vr = UIView()
-        vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
-        contentView.addSubview(vr)
-        NSLayoutConstraint.activate([
-            vr.topAnchor.constraint(equalTo: contentView.topAnchor),
-            vr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            vr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            vr.widthAnchor.constraint(equalToConstant: 2)
-        ])
-        self.vr = vr
     }
 
     func configure(report: Report?, index: Int, selected: Bool) {
@@ -139,7 +124,5 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
 
         descLabel.text = report.description
         updatedAtLabel.text = report.updatedAt?.asRelativeString() ?? " "
-
-        vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }

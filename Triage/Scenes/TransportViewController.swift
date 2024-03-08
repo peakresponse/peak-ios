@@ -16,7 +16,7 @@ struct TransportCart {
     var facility: Facility?
 }
 
-class TransportViewController: UIViewController, TransportReportsViewControllerDelegate {
+class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -70,6 +70,13 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                     vc.incident = incident
                 }
                 cachedViewControllers[0] = vc
+            case 1:
+                vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportResponders")
+                if let vc = vc as? TransportRespondersViewController {
+                    vc.delegate = self
+                    vc.cart = cart
+                }
+                cachedViewControllers[1] = vc
             default:
                 break
             }
@@ -92,6 +99,19 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                 cart.reports.append(report)
             }
             vc.selectedReports = cart.reports
+        }
+    }
+
+    // MARK: - TransportRespondersViewControllerDelegate
+
+    func transportRespondersViewController(_ vc: TransportRespondersViewController, didSelect responder: Responder?) {
+        if let responder = responder {
+            if cart.responder == responder {
+                cart.responder = nil
+            } else {
+                cart.responder = responder
+            }
+            vc.cart = cart
         }
     }
 }
