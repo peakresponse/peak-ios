@@ -30,10 +30,10 @@
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="SceneOverviewHeader" id="ndP-GA-ce5" customClass="SceneOverviewHeaderCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="107" y="20" width="200" height="115.5"/>
+                                        <rect key="frame" x="20" y="20" width="106" height="98"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="sQu-PN-ken">
-                                            <rect key="frame" x="0.0" y="0.0" width="200" height="115.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="106" height="98"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WWO-NY-Y46" userLabel="Incident Number Label">
@@ -63,8 +63,8 @@
                                                         <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="body14Bold"/>
                                                     </userDefinedRuntimeAttributes>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-bm-cia" customClass="Button" customModule="PRKit">
-                                                    <rect key="frame" x="52" y="0.0" width="148" height="34"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h4G-bm-cia" customClass="Button" customModule="PRKit">
+                                                    <rect key="frame" x="52" y="0.0" width="54" height="34"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <userDefinedRuntimeAttributes>
@@ -76,8 +76,8 @@
                                                         <action selector="closePressed:" destination="W8o-Cx-Ace" eventType="touchUpInside" id="X4g-it-ps7"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWd-Za-2Xm" customClass="Button" customModule="PRKit">
-                                                    <rect key="frame" x="52" y="54" width="148" height="34"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fWd-Za-2Xm" customClass="Button" customModule="PRKit">
+                                                    <rect key="frame" x="52" y="54" width="54" height="34"/>
                                                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                     <state key="normal" title="Button"/>
                                                     <userDefinedRuntimeAttributes>
@@ -119,14 +119,14 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewCounter" id="LME-6G-1lm" customClass="SceneOverviewCounterCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="157" width="170" height="40"/>
+                                        <rect key="frame" x="146" y="44" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zFO-85-aFy">
-                                            <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xcw-sf-Ybn" customClass="CounterControl" customModule="PRKit">
-                                                    <rect key="frame" x="0.0" y="0.0" width="170" height="40"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                     <connections>
                                                         <action selector="counterValueChanged:" destination="LME-6G-1lm" eventType="valueChanged" id="BWK-9J-jxu"/>
@@ -145,7 +145,7 @@
                                         </connections>
                                     </collectionViewCell>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewTriageTotal" id="RCh-Jd-qdd" customClass="SceneOverviewTriageTotalCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="210" y="155.5" width="42" height="43"/>
+                                        <rect key="frame" x="216" y="47.5" width="42" height="43"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6LV-Hl-TfL">
                                             <rect key="frame" x="0.0" y="0.0" width="42" height="43"/>
@@ -316,15 +316,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="100" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="U7k-Pt-zPa">
+                                <rect key="frame" x="20" y="48" width="374" height="100"/>
+                            </stackView>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="125" translatesAutoresizingMaskIntoConstraints="NO" id="D4O-rI-4ug" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="125"/>
+                                <rect key="frame" x="0.0" y="148" width="414" height="125"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="isSearchHidden" value="NO"/>
                                 </userDefinedRuntimeAttributes>
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rgP-Ya-pzu">
-                                <rect key="frame" x="0.0" y="125" width="414" height="771"/>
+                                <rect key="frame" x="0.0" y="273" width="414" height="623"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="tM5-ut-Gqs">
                                     <size key="itemSize" width="128" height="128"/>
@@ -357,12 +360,15 @@
                         <viewLayoutGuide key="safeArea" id="7jL-8I-a1b"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="U7k-Pt-zPa" firstAttribute="leading" secondItem="IxR-im-n1u" secondAttribute="leading" constant="20" id="3Qf-rD-5Hi"/>
+                            <constraint firstItem="D4O-rI-4ug" firstAttribute="top" secondItem="U7k-Pt-zPa" secondAttribute="bottom" id="9WC-oE-ZaW"/>
                             <constraint firstAttribute="trailing" secondItem="rgP-Ya-pzu" secondAttribute="trailing" id="CHD-8q-WFI"/>
                             <constraint firstAttribute="trailing" secondItem="D4O-rI-4ug" secondAttribute="trailing" id="Hwr-cF-R7s"/>
-                            <constraint firstItem="D4O-rI-4ug" firstAttribute="top" secondItem="IxR-im-n1u" secondAttribute="top" id="T1R-Vs-e1Y"/>
+                            <constraint firstItem="U7k-Pt-zPa" firstAttribute="trailing" secondItem="IxR-im-n1u" secondAttribute="trailing" constant="-20" id="Pk7-BJ-ftP"/>
                             <constraint firstItem="c9i-vy-ee4" firstAttribute="trailing" secondItem="7jL-8I-a1b" secondAttribute="trailing" constant="-20" id="TZC-Rp-R4x"/>
                             <constraint firstItem="rgP-Ya-pzu" firstAttribute="top" secondItem="D4O-rI-4ug" secondAttribute="bottom" id="YkC-cv-bnD"/>
                             <constraint firstItem="c9i-vy-ee4" firstAttribute="bottom" secondItem="7jL-8I-a1b" secondAttribute="bottom" id="f6Q-Dw-v3g"/>
+                            <constraint firstItem="U7k-Pt-zPa" firstAttribute="top" secondItem="7jL-8I-a1b" secondAttribute="top" id="jV1-Ds-GVs"/>
                             <constraint firstAttribute="bottom" secondItem="rgP-Ya-pzu" secondAttribute="bottom" id="laO-kM-fOK"/>
                             <constraint firstItem="rgP-Ya-pzu" firstAttribute="leading" secondItem="IxR-im-n1u" secondAttribute="leading" id="v1K-IT-HY6"/>
                             <constraint firstItem="D4O-rI-4ug" firstAttribute="leading" secondItem="IxR-im-n1u" secondAttribute="leading" id="y3W-vd-v9r"/>
@@ -372,6 +378,7 @@
                         <outlet property="addButton" destination="c9i-vy-ee4" id="cPk-sY-5WP"/>
                         <outlet property="collectionView" destination="rgP-Ya-pzu" id="aDX-SZ-o1X"/>
                         <outlet property="commandHeader" destination="D4O-rI-4ug" id="2XU-tp-Ev0"/>
+                        <outlet property="stackView" destination="U7k-Pt-zPa" id="RLO-7s-12m"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fOc-65-Okm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -527,19 +534,19 @@
             <size key="intrinsicContentSize" width="414" height="128"/>
         </designable>
         <designable name="Eym-Ue-ZTn">
-            <size key="intrinsicContentSize" width="60" height="36"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="c9i-vy-ee4">
             <size key="intrinsicContentSize" width="60" height="36"/>
         </designable>
         <designable name="fWd-Za-2Xm">
-            <size key="intrinsicContentSize" width="148" height="42.799999999999997"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="h4G-bm-cia">
-            <size key="intrinsicContentSize" width="82" height="42.799999999999997"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="hCu-dR-eRF">
-            <size key="intrinsicContentSize" width="60" height="36"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="kju-A3-f0D">
             <size key="intrinsicContentSize" width="375" height="125"/>

@@ -14,10 +14,12 @@ import UIKit
 
 @objc protocol TransportRespondersViewControllerDelegate {
     @objc optional func transportRespondersViewController(_ vc: TransportRespondersViewController, didSelect responder: Responder?)
+    @objc optional func transportRespondersViewController(_ vc: TransportRespondersViewController, didRemove report: Report?)
 }
 
-class TransportRespondersViewController: UIViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
+class TransportRespondersViewController: UIViewController, TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
+    @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: PRKit.RoundButton!
@@ -37,6 +39,10 @@ class TransportRespondersViewController: UIViewController, ResponderViewControll
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        updateCart()
+
         commandHeader.searchField.delegate = self
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
@@ -142,10 +148,40 @@ class TransportRespondersViewController: UIViewController, ResponderViewControll
         presentAnimated(vc)
     }
 
+    func updateCart() {
+        guard let cart = cart, let stackView = stackView else { return }
+        for view in stackView.arrangedSubviews {
+            view.removeFromSuperview()
+        }
+        if cart.reports.count > 0 {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.heightAnchor.constraint(equalToConstant: 6).isActive = true
+            stackView.addArrangedSubview(view)
+            for report in cart.reports {
+                let field = TransportCartReportField()
+                field.delegate = self
+                field.configure(from: report)
+                stackView.addArrangedSubview(field)
+            }
+        } else {
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.heightAnchor.constraint(equalToConstant: 0).isActive = true
+            stackView.addArrangedSubview(view)
+        }
+    }
+
     // MARK: - FormFieldDelegate
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
+    }
+
+    func formFieldDidPress(_ field: FormField) {
+        if let field = field as? TransportCartReportField {
+            delegate?.transportRespondersViewController?(self, didRemove: field.report)
+        }
     }
 
     // MARK: - ResponderViewControllerDelegate

@@ -15,14 +15,14 @@ import UIKit
     @objc optional func transportReportsViewController(_ vc: TransportReportsViewController, didSelect report: Report?)
 }
 
-class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
+class TransportReportsViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
                                       UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: RoundButton!
 
     weak var delegate: TransportReportsViewControllerDelegate?
-    var selectedReports: [Report]?
+    var cart: TransportCart?
 
     var incident: Incident?
     var results: Results<Report>?
@@ -104,6 +104,10 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
         presentAnimated(vc)
     }
 
+    func updateCart() {
+
+    }
+
     // MARK: - FormFieldDelegate
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
@@ -142,7 +146,7 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
         if let cell = cell as? TransportReportCollectionViewCell, let report = filteredResults?[indexPath.row] {
-            cell.configure(report: report, index: indexPath.row, selected: selectedReports?.contains(report) ?? false)
+            cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
         }
         return cell
     }

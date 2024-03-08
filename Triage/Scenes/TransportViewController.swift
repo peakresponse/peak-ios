@@ -16,6 +16,12 @@ struct TransportCart {
     var facility: Facility?
 }
 
+protocol TransportCartViewController: UIViewController {
+    var cart: TransportCart? { get set }
+    var collectionView: UICollectionView! { get }
+    func updateCart()
+}
+
 class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
@@ -66,7 +72,6 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                 vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportReports")
                 if let vc = vc as? TransportReportsViewController {
                     vc.delegate = self
-                    vc.selectedReports = cart.reports
                     vc.incident = incident
                 }
                 cachedViewControllers[0] = vc
@@ -74,14 +79,16 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                 vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportResponders")
                 if let vc = vc as? TransportRespondersViewController {
                     vc.delegate = self
-                    vc.cart = cart
                 }
                 cachedViewControllers[1] = vc
             default:
                 break
             }
         }
-        if let vc = vc {
+        if let vc = vc as? TransportCartViewController {
+            vc.cart = cart
+            vc.updateCart()
+            vc.collectionView?.reloadData()
             addChild(vc)
             containerView.addSubview(vc.view)
             vc.view.frame = containerView.bounds
@@ -98,7 +105,7 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             } else {
                 cart.reports.append(report)
             }
-            vc.selectedReports = cart.reports
+            vc.cart = cart
         }
     }
 
@@ -112,6 +119,16 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                 cart.responder = responder
             }
             vc.cart = cart
+        }
+    }
+
+    func transportRespondersViewController(_ vc: TransportRespondersViewController, didRemove report: Report?) {
+        if let report = report {
+            if let index = cart.reports.firstIndex(of: report) {
+                cart.reports.remove(at: index)
+            }
+            vc.cart = cart
+            vc.updateCart()
         }
     }
 }
