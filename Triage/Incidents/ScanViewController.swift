@@ -24,10 +24,16 @@ class ScanCameraView: UIView {
     }
 }
 
+@objc protocol ScanViewControllerDelegate {
+    @objc optional func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?)
+}
+
 class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var pinField: PRKit.TextField!
+
+    weak var delegate: ScanViewControllerDelegate?
 
     var captureSession = AVCaptureSession()
     var videoPreviewLayer: AVCaptureVideoPreviewLayer?
@@ -169,10 +175,14 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         let realm = AppRealm.open()
         guard let sceneId = AppSettings.sceneId else { return }
         let results = realm.objects(Report.self).filter("canonicalId=%@ AND pin=%@ AND scene.canonicalId=%@", NSNull(), pin, sceneId).sorted(byKeyPath: "createdAt", ascending: false)
-        if results.count > 0 {
-            presentReport(report: results[0])
+        if let delegate = delegate {
+            delegate.scanViewController?(self, didScan: pin, report: results.first)
         } else {
-            presentNewReport(incident: incident, pin: pin)
+            if results.count > 0 {
+                presentReport(report: results[0])
+            } else {
+                presentNewReport(incident: incident, pin: pin)
+            }
         }
         // clear pinfield
         pinField.clearPressed()

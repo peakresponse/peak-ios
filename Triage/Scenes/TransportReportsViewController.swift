@@ -11,11 +11,18 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
+@objc protocol TransportReportsViewControllerDelegate {
+    @objc optional func transportReportsViewController(_ vc: TransportReportsViewController, didSelect report: Report?)
+}
+
+class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
                                       UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: RoundButton!
+
+    weak var delegate: TransportReportsViewControllerDelegate?
+    var selectedReports: [Report]?
 
     var incident: Incident?
     var results: Results<Report>?
@@ -92,7 +99,7 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
     func addPressed(_ sender: RoundButton) {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
         if let vc = vc as? ScanViewController {
-            vc.incident = incident
+            vc.delegate = self
         }
         presentAnimated(vc)
     }
@@ -108,6 +115,20 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
         return false
     }
 
+    // MARK: - ScanViewControllerDelegate
+
+    func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?) {
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            if let report = report {
+                self.delegate?.transportReportsViewController?(self, didSelect: report)
+                if let index = filteredResults?.firstIndex(of: report) {
+                    collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+                }
+            }
+        }
+    }
+
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -120,8 +141,8 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
-        if let cell = cell as? TransportReportCollectionViewCell {
-            cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
+        if let cell = cell as? TransportReportCollectionViewCell, let report = filteredResults?[indexPath.row] {
+            cell.configure(report: report, index: indexPath.row, selected: selectedReports?.contains(report) ?? false)
         }
         return cell
     }
@@ -130,6 +151,8 @@ class TransportReportsViewController: UIViewController, PRKit.FormFieldDelegate,
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let report = filteredResults?[indexPath.row] {
+            delegate?.transportReportsViewController?(self, didSelect: report)
+            collectionView.reloadItems(at: [indexPath])
         }
     }
 

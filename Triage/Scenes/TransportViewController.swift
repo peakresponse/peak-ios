@@ -10,7 +10,13 @@ import Foundation
 import PRKit
 import UIKit
 
-class TransportViewController: UIViewController {
+struct TransportCart {
+    var reports: [Report] = []
+    var responder: Responder?
+    var facility: Facility?
+}
+
+class TransportViewController: UIViewController, TransportReportsViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -18,6 +24,7 @@ class TransportViewController: UIViewController {
     var cachedViewControllers: [UIViewController?] = [nil, nil, nil]
 
     var incident: Incident?
+    var cart = TransportCart()
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -58,6 +65,8 @@ class TransportViewController: UIViewController {
             case 0:
                 vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportReports")
                 if let vc = vc as? TransportReportsViewController {
+                    vc.delegate = self
+                    vc.selectedReports = cart.reports
                     vc.incident = incident
                 }
                 cachedViewControllers[0] = vc
@@ -70,6 +79,19 @@ class TransportViewController: UIViewController {
             containerView.addSubview(vc.view)
             vc.view.frame = containerView.bounds
             vc.didMove(toParent: self)
+        }
+    }
+
+    // MARK: - TransportReportsViewControllerDelegate
+
+    func transportReportsViewController(_ vc: TransportReportsViewController, didSelect report: Report?) {
+        if let report = report {
+            if let index = cart.reports.firstIndex(of: report) {
+                cart.reports.remove(at: index)
+            } else {
+                cart.reports.append(report)
+            }
+            vc.selectedReports = cart.reports
         }
     }
 }

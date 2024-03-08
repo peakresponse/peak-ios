@@ -124,8 +124,10 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         self.vr = vr
     }
 
-    func configure(report: Report?, index: Int) {
+    func configure(report: Report?, index: Int, selected: Bool) {
         guard let report = report else { return }
+
+        checkbox.isChecked = selected
 
         if let pin = report.pin, !pin.isEmpty {
             tagLabel.text = "#\(pin)"
