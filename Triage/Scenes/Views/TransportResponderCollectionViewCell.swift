@@ -15,7 +15,7 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
     weak var updatedAtLabel: UILabel!
-    weak var timestampChip: Chip!
+    weak var capabilityChip: Chip!
     weak var button: PRKit.Button!
 
     var calculatedSize: CGSize?
@@ -65,19 +65,19 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         view.translatesAutoresizingMaskIntoConstraints = false
         stackView.addArrangedSubview(view)
 
-        let timestampChip = Chip()
-        timestampChip.translatesAutoresizingMaskIntoConstraints = false
-        timestampChip.color = .brandPrimary500
-        timestampChip.tintColor = .white
-        timestampChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        timestampChip.alpha = 0
-        view.addSubview(timestampChip)
+        let capabilityChip = Chip()
+        capabilityChip.translatesAutoresizingMaskIntoConstraints = false
+        capabilityChip.color = .brandPrimary500
+        capabilityChip.tintColor = .white
+        capabilityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        capabilityChip.alpha = 0
+        view.addSubview(capabilityChip)
         NSLayoutConstraint.activate([
-            timestampChip.topAnchor.constraint(equalTo: view.topAnchor),
-            timestampChip.rightAnchor.constraint(equalTo: view.rightAnchor),
-            view.bottomAnchor.constraint(equalTo: timestampChip.bottomAnchor)
+            capabilityChip.topAnchor.constraint(equalTo: view.topAnchor),
+            capabilityChip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            view.bottomAnchor.constraint(equalTo: capabilityChip.bottomAnchor)
         ])
-        self.timestampChip = timestampChip
+        self.capabilityChip = capabilityChip
 
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -88,8 +88,8 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         view.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
-            unitLabel.centerYAnchor.constraint(equalTo: timestampChip.centerYAnchor),
-            unitLabel.rightAnchor.constraint(equalTo: timestampChip.leftAnchor, constant: -10)
+            unitLabel.centerYAnchor.constraint(equalTo: capabilityChip.centerYAnchor),
+            unitLabel.rightAnchor.constraint(equalTo: capabilityChip.leftAnchor, constant: -10)
         ])
         self.unitLabel = unitLabel
 
@@ -142,8 +142,19 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         checkbox.isChecked = isSelected
         unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber
         agencyLabel.text = responder.agency?.name
-        timestampChip.color = .brandPrimary500
-        timestampChip.setTitle(responder.arrivedAt?.asRelativeString() ?? "", for: .normal)
+        if let capability = responder.capability {
+            capabilityChip.alpha = 1
+            capabilityChip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
+            if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
+                capabilityChip.setTitleColor(.white, for: .normal)
+                capabilityChip.color = .brandPrimary500
+            } else {
+                capabilityChip.setTitleColor(.base800, for: .normal)
+                capabilityChip.color = .triageDelayedMedium
+            }
+        } else {
+            capabilityChip.alpha = 0
+        }
         updatedAtLabel.text = responder.arrivedAt?.asRelativeString()
     }
 }

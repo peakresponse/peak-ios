@@ -68,8 +68,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
 
         radioGroup = newRadioGroup(source: responder, attributeKey: "capability")
         radioGroup.isDeselectable = true
-        radioGroup.addRadioButton(labelText: "Responder.capability.als".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue as NSObject)
-        radioGroup.addRadioButton(labelText: "Responder.capability.bls".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportBls.rawValue as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.capability.2207015".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.capability.2207017".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportBls.rawValue as NSObject)
         stackView.addArrangedSubview(radioGroup)
         formComponents["capability"] = radioGroup
 
