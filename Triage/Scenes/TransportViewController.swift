@@ -125,6 +125,17 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
         }
     }
 
+    func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didSelect facility: Facility?) {
+        if let facility = facility {
+            if cart.facility == facility {
+                cart.facility = nil
+            } else {
+                cart.facility = facility
+            }
+            vc.cart = cart
+        }
+    }
+
     // MARK: - TransportReportsViewControllerDelegate
 
     func transportReportsViewController(_ vc: TransportReportsViewController, didSelect report: Report?) {

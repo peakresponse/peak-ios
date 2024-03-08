@@ -592,6 +592,10 @@
 "TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
 "TransportDisposition.4230013" = "No Transport";
 
+"TransportFacilityCollectionViewCell.row.capacity" = "Capacity";
+"TransportFacilityCollectionViewCell.row.transported" = "- Transported";
+"TransportFacilityCollectionViewCell.row.available" = "= Available";
+
 "TransportViewController.segment.patients" = "Patients";
 "TransportViewController.segment.units" = "Units";
 "TransportViewController.segment.hospitals" = "Hospitals";

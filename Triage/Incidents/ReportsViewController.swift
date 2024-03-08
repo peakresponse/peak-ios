@@ -74,6 +74,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
         collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
 
+        if isMCI {
+            var contentInset = collectionView.contentInset
+            contentInset.bottom += addButton.frame.height
+            collectionView.contentInset = contentInset
+        }
+
         performQuery()
 
         if !isMCI, let incident = incident, incident.reportsCount == 0 {

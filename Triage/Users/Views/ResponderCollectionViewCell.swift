@@ -67,7 +67,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
 
         let agencyLabel = UILabel()
         agencyLabel.translatesAutoresizingMaskIntoConstraints = false
-        agencyLabel.font = .body14Regular
+        agencyLabel.font = .h4
         agencyLabel.textColor = .base800
         contentView.addSubview(agencyLabel)
         NSLayoutConstraint.activate([
@@ -134,7 +134,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     func configure(from responder: Responder?, index: Int, isMGS: Bool) {
         responderId = responder?.id
         guard let responder = responder else { return }
-        unitLabel.text = responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber
+        unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.name
         if let arrivedAt = responder.arrivedAt {
             timestampChip.color = .brandPrimary500

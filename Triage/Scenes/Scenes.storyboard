@@ -397,7 +397,7 @@
                                 <rect key="frame" x="20" y="48" width="374" height="100"/>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="74I-1O-Yyb">
-                                <rect key="frame" x="0.0" y="148" width="414" height="748"/>
+                                <rect key="frame" x="0.0" y="154" width="414" height="742"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gsJ-hC-hqj">
                                     <size key="itemSize" width="128" height="128"/>
@@ -430,7 +430,7 @@
                         <viewLayoutGuide key="safeArea" id="X2U-IX-5GY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="74I-1O-Yyb" firstAttribute="top" secondItem="wWZ-JZ-eVL" secondAttribute="bottom" id="4x3-aE-eNZ"/>
+                            <constraint firstItem="74I-1O-Yyb" firstAttribute="top" secondItem="wWZ-JZ-eVL" secondAttribute="bottom" constant="6" id="4x3-aE-eNZ"/>
                             <constraint firstAttribute="trailing" secondItem="74I-1O-Yyb" secondAttribute="trailing" id="8K6-Tq-twx"/>
                             <constraint firstItem="hCu-dR-eRF" firstAttribute="trailing" secondItem="X2U-IX-5GY" secondAttribute="trailing" constant="-20" id="8pe-I0-CXY"/>
                             <constraint firstItem="wWZ-JZ-eVL" firstAttribute="trailing" secondItem="DhS-0e-scQ" secondAttribute="trailing" constant="-20" id="Oev-qk-oVV"/>

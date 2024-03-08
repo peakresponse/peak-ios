@@ -40,7 +40,6 @@ class TransportRespondersViewController: UIViewController, TransportCartViewCont
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         updateCart()
 
         commandHeader.searchField.delegate = self

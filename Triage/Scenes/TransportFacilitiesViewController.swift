@@ -6,8 +6,10 @@
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
+import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
+import RealmSwift
 import UIKit
 
 @objc protocol TransportFacilitiesViewControllerDelegate {
@@ -25,12 +27,74 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     weak var delegate: TransportFacilitiesViewControllerDelegate?
     var cart: TransportCart?
 
+    var results: Results<RegionFacility>?
+    var notificationToken: NotificationToken?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         transportButton.titleLabel?.font = UIFont(name: "Barlow-SemiBold", size: 18) ?? .boldSystemFont(ofSize: 18)
 
+        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        collectionView.setCollectionViewLayout(layout, animated: false)
+
+        var contentInset = collectionView.contentInset
+        contentInset.bottom += transportButton.frame.height
+        collectionView.contentInset = contentInset
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+
+        collectionView.register(TransportFacilityCollectionViewCell.self, forCellWithReuseIdentifier: "Facility")
+
         updateCart()
+
+        performQuery()
+    }
+
+    func performQuery() {
+        guard let regionId = AppSettings.regionId else { return }
+        results = AppRealm.open().objects(RegionFacility.self).filter("regionId=%@", regionId).sorted(byKeyPath: "position", ascending: true)
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+        refresh()
+    }
+
+    func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<RegionFacility>>) {
+        switch changes {
+        case .initial:
+            collectionView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            }, completion: nil)
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    @objc func refresh() {
+//        guard let sceneId = scene?.id else { return }
+//        collectionView.reloadData()
+//        collectionView.refreshControl?.beginRefreshing()
+//        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
+//        AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
+//            guard let self = self else { return }
+//            if let error = error {
+//                print(error)
+//            }
+//            DispatchQueue.main.async { [weak self] in
+//                self?.collectionView.refreshControl?.endRefreshing()
+//            }
+//        }
+        collectionView.refreshControl?.endRefreshing()
     }
 
     func updateCart() {
@@ -87,16 +151,34 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 0
-//        return results?.count ?? 0
+        return results?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Facility", for: indexPath)
-//        if let cell = cell as? TransportResponderCollectionViewCell {
-//            let responder = results?[indexPath.row]
-//            cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
-//        }
+        if let cell = cell as? TransportFacilityCollectionViewCell {
+            let regionFacility = results?[indexPath.row]
+            cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
+        }
         return cell
+    }
+
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        var indexPaths: [IndexPath] = []
+        if let facility = cart?.facility {
+            if let index = results?.firstIndex(where: { $0.facility == facility }) {
+                indexPaths.append(IndexPath(row: index, section: 0))
+            }
+        }
+        if let regionFacility = results?[indexPath.row] {
+            delegate?.transportFacilitiesViewController?(self, didSelect: regionFacility.facility)
+            indexPaths.append(indexPath)
+        }
+        collectionView.reloadItems(at: indexPaths)
+
+        guard let cart = cart else { return }
+        transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
     }
 }

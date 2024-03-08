@@ -102,8 +102,8 @@ class AppRealm {
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,
             Disposition.self, Facility.self, File.self, Form.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
-            Procedure.self, Region.self, RegionAgency.self, Report.self, Responder.self, Response.self, Scene.self, ScenePin.self, Signature.self,
-            Situation.self, State.self, Time.self, User.self, Vehicle.self, Vital.self
+            Procedure.self, Region.self, RegionAgency.self, RegionFacility.self, Report.self, Responder.self, Response.self,
+            Scene.self, ScenePin.self, Signature.self, Situation.self, State.self, Time.self, User.self, Vehicle.self, Vital.self
         ])
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {
@@ -146,6 +146,7 @@ class AppRealm {
                 // models with dependencies on above in dependency order
                 Disposition.self,
                 RegionAgency.self,
+                RegionFacility.self,
                 Responder.self,
                 Signature.self,
                 Scene.self,
