@@ -23,10 +23,10 @@ protocol TransportCartViewController: UIViewController {
 }
 
 class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
-                               TransportFacilitiesViewControllerDelegate {
+                               TransportFacilitiesViewControllerDelegate, TransportConfirmViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet weak var overlayView: UIView!
 
     var cachedViewControllers: [UIViewController?] = [nil, nil, nil]
 
@@ -52,7 +52,6 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
         segmentedControl.addSegment(title: "TransportViewController.segment.hospitals".localized)
 
         segmentedControlChanged(segmentedControl)
-        activityIndicatorView.stopAnimating()
     }
 
     func removeCurrentViewController() {
@@ -103,6 +102,17 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
         }
     }
 
+    // MARK: - TransportConfirmViewControllerDelegate
+
+    func transportConfirmViewControllerDidCancel(_ vc: TransportConfirmViewController) {
+        UIView.animate(withDuration: 0.25, animations: { [weak self] in
+            self?.overlayView.alpha = 0
+        }, completion: { [weak self] _ in
+            self?.overlayView.isHidden = true
+        })
+        dismissAnimated()
+    }
+
     // MARK: - TransportFacilitiesViewControllerDelegate
 
     func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveReport report: Report?) {
@@ -134,6 +144,20 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             }
             vc.cart = cart
         }
+    }
+
+    func transportFacilitiesViewControllerDidPressTransport(_ vc: TransportFacilitiesViewController) {
+        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportConfirm")
+        if let vc = vc as? TransportConfirmViewController {
+            vc.delegate = self
+            vc.cart = cart
+        }
+        overlayView.alpha = 0
+        overlayView.isHidden = false
+        UIView.animate(withDuration: 0.25) { [weak self] in
+            self?.overlayView.alpha = 0.6
+        }
+        presentAnimated(vc)
     }
 
     // MARK: - TransportReportsViewControllerDelegate

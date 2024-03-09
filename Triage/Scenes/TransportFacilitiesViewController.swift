@@ -16,6 +16,7 @@ import UIKit
     @objc optional func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveReport report: Report?)
     @objc optional func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveResponder responder: Responder?)
     @objc optional func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didSelect facility: Facility?)
+    @objc optional func transportFacilitiesViewControllerDidPressTransport(_ vc: TransportFacilitiesViewController)
 }
 
 class TransportFacilitiesViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate,
@@ -131,7 +132,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
 
     @IBAction
     func transportPressed(_ sender: RoundButton) {
-
+        delegate?.transportFacilitiesViewControllerDidPressTransport?(self)
     }
 
     // MARK: - FormFieldDelegate

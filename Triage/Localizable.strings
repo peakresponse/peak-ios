@@ -55,7 +55,6 @@
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
 "Button.back" = "Back";
-"Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.cancelTransport" = "Cancel Transport";
 "Button.captureLocation" = "Capture GPS";
@@ -63,6 +62,7 @@
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.collectSignatures" = "Collect Signatures";
+"Button.confirm" = "Confirm";
 "Button.confirmCancelTransport" = "Confirm Cancel Transport";
 "Button.confirmRedirectPatient" = "Confirm Redirect Patient";
 "Button.continue" = "Continue";
@@ -591,6 +591,10 @@
 "TransportDisposition.4230009" = "Patient Refused Transport";
 "TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
 "TransportDisposition.4230013" = "No Transport";
+
+"TransportConfirmViewController.reports" = "Transport:";
+"TransportConfirmViewController.responder" = "By:";
+"TransportConfirmViewController.facility" = "To:";
 
 "TransportFacilityCollectionViewCell.row.capacity" = "Capacity";
 "TransportFacilityCollectionViewCell.row.transported" = "- Transported";
