@@ -98,6 +98,18 @@ class AppRealm {
             let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
                                                                  appropriateFor: nil, create: false)
             url = documentDirectory?.appendingPathComponent( "app.realm")
+            if !FileManager.default.fileExists(atPath: url.path) {
+                // make sure there are no leftover lock/management files that will prevent launch
+                if let url = documentDirectory?.appendingPathComponent("app.realm.lock") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+                if let url = documentDirectory?.appendingPathComponent("app.realm.management") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+                if let url = documentDirectory?.appendingPathComponent("app.realm.note") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+            }
         }
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,

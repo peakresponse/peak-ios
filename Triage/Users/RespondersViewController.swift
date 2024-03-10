@@ -177,9 +177,10 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
         if let cell = cell as? ResponderCollectionViewCell {
             cell.delegate = self
-            let responder = results?[indexPath.row]
-            let isMGS = scene?.mgsResponderId == responder?.id
-            cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+            if indexPath.row < (results?.count ?? 0), let responder = results?[indexPath.row] {
+                let isMGS = scene?.mgsResponderId == responder.id
+                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+            }
         }
         return cell
     }

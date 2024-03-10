@@ -116,6 +116,7 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
     func transportConfirmViewControllerDidConfirm(_ vc: TransportConfirmViewController) {
         for report in cart.reports {
             let newReport = Report(clone: report)
+            newReport.response?.agency = cart.responder?.agency
             newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
             newReport.disposition?.destinationFacility = cart.facility
             AppRealm.saveReport(report: newReport)
