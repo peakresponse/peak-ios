@@ -609,7 +609,7 @@
 
 "TriagePriority.0" = "Immediate";
 "TriagePriority.1" = "Delayed";
-"TriagePriority.2" = "Minimal";
+"TriagePriority.2" = "Minor";
 "TriagePriority.3" = "Expectant";
 "TriagePriority.4" = "Dead";
 "TriagePriority.5" = "Transported";
