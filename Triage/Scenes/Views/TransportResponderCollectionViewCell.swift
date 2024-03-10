@@ -10,13 +10,21 @@ import Foundation
 import PRKit
 import UIKit
 
+@objc protocol TransportResponderCollectionViewCellDelegate {
+    @objc optional func transportResponderCollectionViewCellDidPressMarkArrived(_ cell: TransportResponderCollectionViewCell)
+}
+
 class TransportResponderCollectionViewCell: UICollectionViewCell {
+    var responderId: String?
+
     weak var checkbox: Checkbox!
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
     weak var updatedAtLabel: UILabel!
     weak var capabilityChip: Chip!
     weak var button: PRKit.Button!
+
+    weak var delegate: TransportResponderCollectionViewCellDelegate?
 
     var calculatedSize: CGSize?
 
@@ -35,35 +43,36 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         selectedBackgroundView.backgroundColor = .base100
         self.selectedBackgroundView = selectedBackgroundView
 
+        let row = UIStackView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 20
+        contentView.addSubview(row)
+        NSLayoutConstraint.activate([
+            row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            row.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        ])
+
         let checkbox = Checkbox()
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
         checkbox.isUserInteractionEnabled = false
         checkbox.isRadioButton = true
         checkbox.isRadioButtonDeselectable = true
-        checkbox.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contentView.addSubview(checkbox)
-        NSLayoutConstraint.activate([
-            checkbox.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            checkbox.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
+        checkbox.label.superview?.isHidden = true
+        checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        row.addArrangedSubview(checkbox)
         self.checkbox = checkbox
 
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 4
-        stackView.alignment = .fill
-        contentView.addSubview(stackView)
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: checkbox.rightAnchor, constant: 12),
-            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
-        ])
+        let col = UIStackView()
+        col.axis = .vertical
+        col.spacing = 4
+        col.alignment = .fill
+        row.addArrangedSubview(col)
 
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(view)
+        col.addArrangedSubview(view)
 
         let capabilityChip = Chip()
         capabilityChip.translatesAutoresizingMaskIntoConstraints = false
@@ -85,6 +94,7 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         unitLabel.textColor = .base800
         unitLabel.numberOfLines = 1
         unitLabel.lineBreakMode = .byTruncatingTail
+        unitLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         view.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -97,15 +107,23 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         agencyLabel.translatesAutoresizingMaskIntoConstraints = false
         agencyLabel.font = .h4
         agencyLabel.textColor = .base500
-        stackView.addArrangedSubview(agencyLabel)
+        col.addArrangedSubview(agencyLabel)
         self.agencyLabel = agencyLabel
 
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
         updatedAtLabel.textColor = .base500
-        stackView.addArrangedSubview(updatedAtLabel)
+        col.addArrangedSubview(updatedAtLabel)
         self.updatedAtLabel = updatedAtLabel
+
+        let button = PRKit.Button()
+        button.style = .primary
+        button.size = .small
+        button.setTitle("Button.markArrived".localized, for: .normal)
+        button.addTarget(self, action: #selector(markArrivedPressed(_:)), for: .touchUpInside)
+        row.addArrangedSubview(button)
+        self.button = button
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
@@ -117,7 +135,6 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
             hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             hr.heightAnchor.constraint(equalToConstant: 2)
         ])
-
     }
 
     override func prepareForReuse() {
@@ -138,8 +155,10 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(from responder: Responder?, index: Int, isSelected: Bool) {
-        guard let responder = responder else { return }
+        responderId = responder?.id
         checkbox.isChecked = isSelected
+
+        guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.name
         if let capability = responder.capability {
@@ -155,6 +174,18 @@ class TransportResponderCollectionViewCell: UICollectionViewCell {
         } else {
             capabilityChip.alpha = 0
         }
-        updatedAtLabel.text = responder.arrivedAt?.asRelativeString()
+        if let arrivedAt = responder.arrivedAt {
+            checkbox.isHidden = false
+            updatedAtLabel.text = arrivedAt.asRelativeString()
+            button.isHidden = true
+        } else {
+            checkbox.isHidden = true
+            updatedAtLabel.text = "Responder.status.enroute".localized
+            button.isHidden = false
+        }
+    }
+
+    @objc func markArrivedPressed(_ sender: PRKit.Button) {
+        delegate?.transportResponderCollectionViewCellDidPressMarkArrived?(self)
     }
 }

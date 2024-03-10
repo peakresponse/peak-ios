@@ -3,9 +3,9 @@ PODS:
   - AWSCore (2.33.4)
   - AWSTranscribeStreaming (2.33.4):
     - AWSCore (= 2.33.4)
-  - CocoaLumberjack (3.8.4):
-    - CocoaLumberjack/Core (= 3.8.4)
-  - CocoaLumberjack/Core (3.8.4)
+  - CocoaLumberjack (3.8.5):
+    - CocoaLumberjack/Core (= 3.8.5)
+  - CocoaLumberjack/Core (3.8.5)
   - Google-Maps-iOS-Utils (4.1.0):
     - Google-Maps-iOS-Utils/Clustering (= 4.1.0)
     - Google-Maps-iOS-Utils/Geometry (= 4.1.0)
@@ -190,7 +190,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 613ec873ceff6204a51c56dcb023825dedc254ac
+    :commit: 9f920067d8dd1f9dedd8f6a1fee23907d9fc810c
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -200,7 +200,7 @@ SPEC CHECKSUMS:
   AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
   AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
   AWSTranscribeStreaming: a48a78cb78cf0aa351f28444826ec643e81bb305
-  CocoaLumberjack: df59726690390bb8aaaa585938564ba1c8dbbb44
+  CocoaLumberjack: 6a459bc897d6d80bd1b8c78482ec7ad05dffc3f0
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleDataTransport: 8378d1fa8ac49753ea6ce70d65a7cb70ce5f66e6
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4

@@ -17,7 +17,8 @@ import UIKit
     @objc optional func transportRespondersViewController(_ vc: TransportRespondersViewController, didRemove report: Report?)
 }
 
-class TransportRespondersViewController: UIViewController, TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
+class TransportRespondersViewController: UIViewController, TransportResponderCollectionViewCellDelegate,
+                                         TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var commandHeader: CommandHeader!
@@ -84,7 +85,7 @@ class TransportRespondersViewController: UIViewController, TransportCartViewCont
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
-        results = scene.responders.filter("arrivedAt<>%@ AND departedAt=%@", NSNull(), NSNull())
+        results = scene.responders.filter("departedAt=%@", NSNull())
         if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             results = results?.filter("(unitNumber CONTAINS[cd] %@) OR (vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
                                       text, text, text, text)
@@ -189,6 +190,14 @@ class TransportRespondersViewController: UIViewController, TransportCartViewCont
         dismissAnimated()
     }
 
+    // MARK: - TransportResponderCollectionViewCellDelegate
+
+    func transportResponderCollectionViewCellDidPressMarkArrived(_ cell: TransportResponderCollectionViewCell) {
+        guard let responderId = cell.responderId else { return }
+        AppRealm.markResponderArrived(responderId: responderId) { _ in
+        }
+    }
+
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -219,6 +228,7 @@ class TransportRespondersViewController: UIViewController, TransportCartViewCont
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
         if let cell = cell as? TransportResponderCollectionViewCell {
             let responder = results?[indexPath.row]
+            cell.delegate = self
             cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
         }
         return cell
