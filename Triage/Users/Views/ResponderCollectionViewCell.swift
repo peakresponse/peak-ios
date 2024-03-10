@@ -18,7 +18,8 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     var responderId: String?
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
-    weak var timestampChip: Chip!
+    weak var timestampLabel: UILabel!
+    weak var chip: Chip!
     weak var button: PRKit.Button!
     weak var vr: UIView!
 
@@ -37,19 +38,40 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
-        let timestampChip = Chip()
-        timestampChip.translatesAutoresizingMaskIntoConstraints = false
-        timestampChip.size = .small
-        timestampChip.color = .brandPrimary500
-        timestampChip.tintColor = .white
-        timestampChip.bundleImage = "Clock24px"
-        timestampChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contentView.addSubview(timestampChip)
+        let row = UIStackView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+        row.axis = .horizontal
+        row.spacing = 20
+        row.alignment = .center
+        contentView.addSubview(row)
         NSLayoutConstraint.activate([
-            timestampChip.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            timestampChip.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
+            row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            row.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
-        self.timestampChip = timestampChip
+
+        let col = UIStackView()
+        col.axis = .vertical
+        col.spacing = 4
+        col.alignment = .fill
+        row.addArrangedSubview(col)
+
+        let view = UIView()
+        col.addArrangedSubview(view)
+
+        let chip = Chip()
+        chip.translatesAutoresizingMaskIntoConstraints = false
+        chip.color = .brandPrimary500
+        chip.tintColor = .white
+        chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.addSubview(chip)
+        NSLayoutConstraint.activate([
+            chip.topAnchor.constraint(equalTo: view.topAnchor),
+            chip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            view.bottomAnchor.constraint(equalTo: chip.bottomAnchor)
+        ])
+        self.chip = chip
 
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -57,37 +79,32 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         unitLabel.textColor = .base800
         unitLabel.numberOfLines = 1
         unitLabel.lineBreakMode = .byTruncatingTail
-        contentView.addSubview(unitLabel)
+        view.addSubview(unitLabel)
         NSLayoutConstraint.activate([
-            unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            unitLabel.centerYAnchor.constraint(equalTo: timestampChip.centerYAnchor),
-            unitLabel.rightAnchor.constraint(equalTo: timestampChip.leftAnchor, constant: -20)
+            unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+            unitLabel.centerYAnchor.constraint(equalTo: chip.centerYAnchor),
+            unitLabel.rightAnchor.constraint(equalTo: chip.leftAnchor, constant: -8)
         ])
         self.unitLabel = unitLabel
 
         let agencyLabel = UILabel()
-        agencyLabel.translatesAutoresizingMaskIntoConstraints = false
         agencyLabel.font = .h4
-        agencyLabel.textColor = .base800
-        contentView.addSubview(agencyLabel)
-        NSLayoutConstraint.activate([
-            agencyLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            agencyLabel.topAnchor.constraint(equalTo: unitLabel.bottomAnchor, constant: 4),
-            agencyLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
-        ])
+        agencyLabel.textColor = .base500
+        col.addArrangedSubview(agencyLabel)
         self.agencyLabel = agencyLabel
+
+        let timestampLabel = UILabel()
+        timestampLabel.font = .body14Bold
+        timestampLabel.textColor = .base500
+        col.addArrangedSubview(timestampLabel)
+        self.timestampLabel = timestampLabel
 
         let button = PRKit.Button()
         button.style = .primary
         button.size = .small
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Button.markArrived".localized, for: .normal)
-        contentView.addSubview(button)
-        NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: agencyLabel.bottomAnchor, constant: 4),
-            button.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
-        ])
         button.addTarget(self, action: #selector(markArrivedPressed(_:)), for: .touchUpInside)
+        row.addArrangedSubview(button)
         self.button = button
 
         let hr = UIView()
@@ -122,9 +139,9 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         if calculatedSize == nil {
             if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 372, height: 136)
+                calculatedSize = CGSize(width: 372, height: 125)
             } else {
-                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 136)
+                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 125)
             }
         }
         layoutAttributes.size = calculatedSize ?? .zero
@@ -137,13 +154,24 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.name
         if let arrivedAt = responder.arrivedAt {
-            timestampChip.color = .brandPrimary500
-            timestampChip.setTitle(String(format: "ResponderCollectionViewCell.arrivedAt".localized, arrivedAt.asRelativeString()), for: .normal)
+            timestampLabel.text = arrivedAt.asRelativeString()
             button.isHidden = true
         } else {
-            timestampChip.color = .base500
-            timestampChip.setTitle("Responder.status.enroute".localized, for: .normal)
+            timestampLabel.text = "Responder.status.enroute".localized
             button.isHidden = false
+        }
+        if let capability = responder.capability {
+            chip.alpha = 1
+            chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
+            if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
+                chip.setTitleColor(.white, for: .normal)
+                chip.color = .brandPrimary500
+            } else {
+                chip.setTitleColor(.base800, for: .normal)
+                chip.color = .triageDelayedMedium
+            }
+        } else {
+            chip.alpha = 0
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
