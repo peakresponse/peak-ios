@@ -95,6 +95,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             destinationFacilityField.isEditing = false
             colA.addArrangedSubview(destinationFacilityField)
 
+            addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
+
             let triageControl = TriageControl()
             triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
             triageControl.addTarget(self, action: #selector(triagePriorityChanged(_:)), for: .valueChanged)
@@ -645,6 +647,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func updateFormFieldVisibility() {
         destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+        if report.scene?.isMCI ?? false {
+            formComponents["response.unitNumber"]?.isHidden = destinationFacilityField.attributeValue == nil
+        }
         if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
             formComponents["disposition.patientEvaluationCare"]?.isHidden = false
             formComponents["disposition.crewDisposition"]?.isHidden = false

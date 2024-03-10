@@ -846,6 +846,34 @@ class AppRealm {
         task.resume()
     }
 
+    public static func markResponderDeparted(responderId: String, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), responder.departedAt == nil else {
+            completionHandler(nil)
+            return
+        }
+        try! realm.write {
+            responder.departedAt = Date()
+        }
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
+    }
+
     public static func assignResponder(responderId: String, role: ResponderRole?, completionHandler: ((Error?) -> Void)? = nil) {
         let realm = AppRealm.open()
         guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), let scene = responder.scene,

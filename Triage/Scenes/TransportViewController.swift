@@ -120,6 +120,10 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             newReport.disposition?.destinationFacility = cart.facility
             AppRealm.saveReport(report: newReport)
         }
+        if let responderId = cart.responder?.id {
+            AppRealm.markResponderDeparted(responderId: responderId) { _ in
+            }
+        }
         cart = TransportCart()
         segmentedControlChanged(segmentedControl)
         transportConfirmViewControllerDidCancel(vc)
