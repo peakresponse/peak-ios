@@ -13,8 +13,12 @@ import UIKit
 class TransportReportCollectionViewCell: UICollectionViewCell {
     weak var checkbox: Checkbox!
     weak var priorityChip: Chip!
+    weak var originalPriorityChip: Chip!
+    var originalPriorityChipWidthConstraint: NSLayoutConstraint!
     weak var tagLabel: UILabel!
     weak var descLabel: UILabel!
+    var descLabelRightViewConstraint: NSLayoutConstraint!
+    var descLabelRightPriorityChipConstraint: NSLayoutConstraint!
     weak var updatedAtLabel: UILabel!
 
     override init(frame: CGRect) {
@@ -32,37 +36,40 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         selectedBackgroundView.backgroundColor = .base100
         self.selectedBackgroundView = selectedBackgroundView
 
+        let row = UIStackView()
+        row.translatesAutoresizingMaskIntoConstraints = false
+        row.axis = .horizontal
+        row.alignment = .center
+        row.spacing = 20
+        contentView.addSubview(row)
+        NSLayoutConstraint.activate([
+            row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            row.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        ])
+
         let checkbox = Checkbox()
         checkbox.isUserInteractionEnabled = false
-        checkbox.translatesAutoresizingMaskIntoConstraints = false
-        checkbox.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        contentView.addSubview(checkbox)
-        NSLayoutConstraint.activate([
-            checkbox.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            checkbox.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
-        ])
+        checkbox.label.superview?.isHidden = true
+        checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        row.addArrangedSubview(checkbox)
         self.checkbox = checkbox
 
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.axis = .vertical
-        stackView.spacing = 4
-        stackView.alignment = .fill
-        contentView.addSubview(stackView)
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: checkbox.rightAnchor, constant: 12),
-            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
-        ])
+        let col = UIStackView()
+        col.axis = .vertical
+        col.spacing = 4
+        col.alignment = .fill
+        row.addArrangedSubview(col)
 
-        let view = UIView()
+        var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        stackView.addArrangedSubview(view)
+        col.addArrangedSubview(view)
 
         let priorityChip = Chip()
         priorityChip.translatesAutoresizingMaskIntoConstraints = false
         priorityChip.isUserInteractionEnabled = false
+        priorityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.addSubview(priorityChip)
         NSLayoutConstraint.activate([
             priorityChip.topAnchor.constraint(equalTo: view.topAnchor),
@@ -83,18 +90,44 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         ])
         self.tagLabel = tagLabel
 
+        view = UIView()
+        col.addArrangedSubview(view)
+
+        let originalPriorityChip = Chip()
+        originalPriorityChip.translatesAutoresizingMaskIntoConstraints = false
+        originalPriorityChip.isUserInteractionEnabled = false
+        originalPriorityChip.isHidden = true
+        originalPriorityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        view.addSubview(originalPriorityChip)
+        originalPriorityChipWidthConstraint = originalPriorityChip.widthAnchor.constraint(equalTo: priorityChip.widthAnchor)
+        NSLayoutConstraint.activate([
+            originalPriorityChip.topAnchor.constraint(equalTo: view.topAnchor),
+            originalPriorityChip.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        self.originalPriorityChip = originalPriorityChip
+
         let descLabel = UILabel()
         descLabel.translatesAutoresizingMaskIntoConstraints = false
         descLabel.font = .h4
         descLabel.textColor = .base500
-        stackView.addArrangedSubview(descLabel)
+        descLabel.numberOfLines = 1
+        view.addSubview(descLabel)
+        descLabelRightViewConstraint = descLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
+        descLabelRightPriorityChipConstraint = descLabel.rightAnchor.constraint(equalTo: originalPriorityChip.leftAnchor, constant: -10)
+        descLabelRightPriorityChipConstraint.isActive = false
+        NSLayoutConstraint.activate([
+            descLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+            descLabel.topAnchor.constraint(equalTo: view.topAnchor),
+            descLabelRightViewConstraint,
+            view.bottomAnchor.constraint(equalTo: descLabel.bottomAnchor)
+        ])
         self.descLabel = descLabel
 
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
         updatedAtLabel.textColor = .base500
-        stackView.addArrangedSubview(updatedAtLabel)
+        col.addArrangedSubview(updatedAtLabel)
         self.updatedAtLabel = updatedAtLabel
 
         let hr = UIView()
@@ -121,6 +154,23 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
         priorityChip.color = priority.color
         priorityChip.setTitle(priority.description, for: .normal)
+
+        if priority == .transported {
+            let originalPriority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+            originalPriorityChip.color = originalPriority.color
+            originalPriorityChip.setTitle(originalPriority.description, for: .normal)
+            originalPriorityChip.isHidden = false
+            originalPriorityChipWidthConstraint.isActive = true
+            descLabelRightViewConstraint.isActive = false
+            descLabelRightPriorityChipConstraint.isActive = true
+            checkbox.isHidden = true
+        } else {
+            originalPriorityChip.isHidden = true
+            originalPriorityChipWidthConstraint.isActive = false
+            descLabelRightViewConstraint.isActive = true
+            descLabelRightPriorityChipConstraint.isActive = false
+            checkbox.isHidden = false
+        }
 
         descLabel.text = report.description
         updatedAtLabel.text = report.updatedAt?.asRelativeString() ?? " "

@@ -182,7 +182,7 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
         if let report = report {
             if let index = cart.reports.firstIndex(of: report) {
                 cart.reports.remove(at: index)
-            } else {
+            } else if report.filterPriority != TriagePriority.transported.rawValue {
                 cart.reports.append(report)
             }
             vc.cart = cart
