@@ -12,6 +12,7 @@ import UIKit
 
 @objc protocol TransportConfirmViewControllerDelegate {
     @objc optional func transportConfirmViewControllerDidCancel(_ vc: TransportConfirmViewController)
+    @objc optional func transportConfirmViewControllerDidConfirm(_ vc: TransportConfirmViewController)
 }
 
 class TransportConfirmViewController: UIViewController {
@@ -30,7 +31,7 @@ class TransportConfirmViewController: UIViewController {
         contentView.clipsToBounds = true
         contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         contentView.layer.cornerRadius = 16
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "Button.cancel".localized, style: .plain, target: self, action: #selector(cancelPressed))
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.cancel".localized, style: .plain, target: self, action: #selector(cancelPressed))
 
         guard let cart = cart else { return }
 
@@ -69,5 +70,10 @@ class TransportConfirmViewController: UIViewController {
     @IBAction
     func cancelPressed() {
         delegate?.transportConfirmViewControllerDidCancel?(self)
+    }
+
+    @IBAction
+    func confirmPressed() {
+        delegate?.transportConfirmViewControllerDidConfirm?(self)
     }
 }

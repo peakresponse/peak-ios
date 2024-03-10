@@ -487,6 +487,9 @@
                                             <userDefinedRuntimeAttribute type="string" keyPath="Size" value="medium"/>
                                             <userDefinedRuntimeAttribute type="string" keyPath="Style" value="primary"/>
                                         </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="confirmPressed" destination="FM0-61-AOM" eventType="touchUpInside" id="bQJ-ub-kCH"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>

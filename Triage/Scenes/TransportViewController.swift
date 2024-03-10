@@ -113,6 +113,18 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
         dismissAnimated()
     }
 
+    func transportConfirmViewControllerDidConfirm(_ vc: TransportConfirmViewController) {
+        for report in cart.reports {
+            let newReport = Report(clone: report)
+            newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
+            newReport.disposition?.destinationFacility = cart.facility
+            AppRealm.saveReport(report: newReport)
+        }
+        cart = TransportCart()
+        segmentedControlChanged(segmentedControl)
+        transportConfirmViewControllerDidCancel(vc)
+    }
+
     // MARK: - TransportFacilitiesViewControllerDelegate
 
     func transportFacilitiesViewController(_ vc: TransportFacilitiesViewController, didRemoveReport report: Report?) {
