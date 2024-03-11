@@ -58,7 +58,7 @@ class TransportConfirmViewController: UIViewController {
         stackView.addArrangedSubview(view)
 
         if let facility = cart.facility {
-            let regionFacility = facility.realm?.objects(RegionFacility.self).filter("regionId=%@", AppSettings.regionId as Any).first
+            let regionFacility = facility.realm?.objects(RegionFacility.self).filter("regionId=%@ && facility=%@", AppSettings.regionId as Any, facility).first
             let field = CellField()
             field.isLabelHidden = true
             field.text = regionFacility?.facilityName ?? facility.name
