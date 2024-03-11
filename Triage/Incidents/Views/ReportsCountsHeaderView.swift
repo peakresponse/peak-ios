@@ -53,7 +53,7 @@ class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
                 countsView.setCount(count, for: priority)
                 break
             }
-            let count = results?.filter("filterPriority<>%d AND patient.priority=%d", TriagePriority.transported.rawValue, priority.rawValue).count ?? 0
+            let count = results?.filter("patient.priority=%d", priority.rawValue).count ?? 0
             countsView.setCount(count, for: priority)
         }
     }
