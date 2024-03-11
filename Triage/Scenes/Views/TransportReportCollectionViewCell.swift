@@ -97,7 +97,6 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         originalPriorityChip.translatesAutoresizingMaskIntoConstraints = false
         originalPriorityChip.isUserInteractionEnabled = false
         originalPriorityChip.isHidden = true
-        originalPriorityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         view.addSubview(originalPriorityChip)
         originalPriorityChipWidthConstraint = originalPriorityChip.widthAnchor.constraint(equalTo: priorityChip.widthAnchor)
         NSLayoutConstraint.activate([
@@ -113,7 +112,8 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         descLabel.numberOfLines = 1
         view.addSubview(descLabel)
         descLabelRightViewConstraint = descLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
-        descLabelRightPriorityChipConstraint = descLabel.rightAnchor.constraint(equalTo: originalPriorityChip.leftAnchor, constant: -10)
+        descLabelRightViewConstraint.isActive = false
+        descLabelRightPriorityChipConstraint = descLabel.rightAnchor.constraint(lessThanOrEqualTo: originalPriorityChip.leftAnchor, constant: -10)
         descLabelRightPriorityChipConstraint.isActive = false
         NSLayoutConstraint.activate([
             descLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -167,8 +167,8 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         } else {
             originalPriorityChip.isHidden = true
             originalPriorityChipWidthConstraint.isActive = false
-            descLabelRightViewConstraint.isActive = true
             descLabelRightPriorityChipConstraint.isActive = false
+            descLabelRightViewConstraint.isActive = true
             checkbox.isHidden = false
         }
 

@@ -37,7 +37,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         transportButton.titleLabel?.font = UIFont(name: "Barlow-SemiBold", size: 18) ?? .boldSystemFont(ofSize: 18)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: 372, height: 276)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         collectionView.setCollectionViewLayout(layout, animated: false)
