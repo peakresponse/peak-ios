@@ -31,6 +31,10 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     var results: Results<RegionFacility>?
     var notificationToken: NotificationToken?
 
+    var incident: Incident?
+    var reports: Results<Report>?
+    var reportsNotificationToken: NotificationToken?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,11 +62,26 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     }
 
     func performQuery() {
-        guard let regionId = AppSettings.regionId else { return }
-        results = AppRealm.open().objects(RegionFacility.self).filter("regionId=%@", regionId).sorted(byKeyPath: "position", ascending: true)
-        notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
+        let realm = AppRealm.open()
+
+        // query for Facility
+        notificationToken?.invalidate()
+        if let regionId = AppSettings.regionId {
+            results = realm.objects(RegionFacility.self).filter("regionId=%@", regionId).sorted(byKeyPath: "position", ascending: true)
+            notificationToken = results?.observe { [weak self] (changes) in
+                self?.didObserveRealmChanges(changes)
+            }
         }
+
+        // query for Report to populate Transported counts
+        reportsNotificationToken?.invalidate()
+        if let incident = incident {
+            reports = realm.objects(Report.self).filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            reportsNotificationToken = reports?.observe { [weak self] (changes) in
+                self?.didObserveReportsChanges(changes)
+            }
+        }
+
         refresh()
     }
 
@@ -78,6 +97,14 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
+        }
+    }
+
+    func didObserveReportsChanges(_ changes: RealmCollectionChange<Results<Report>>) {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? TransportFacilityCollectionViewCell {
+                cell.updateTransportedCounts(from: reports)
+            }
         }
     }
 
@@ -160,6 +187,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         if let cell = cell as? TransportFacilityCollectionViewCell {
             let regionFacility = results?[indexPath.row]
             cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
+            cell.updateTransportedCounts(from: reports)
         }
         return cell
     }

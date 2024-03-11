@@ -85,6 +85,7 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
                 vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportFacilities")
                 if let vc = vc as? TransportFacilitiesViewController {
                     vc.delegate = self
+                    vc.incident = incident
                 }
                 cachedViewControllers[2] = vc
             default:

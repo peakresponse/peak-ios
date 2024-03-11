@@ -8,6 +8,7 @@
 
 import Foundation
 import PRKit
+import RealmSwift
 import UIKit
 
 private class CountRow: UIView {
@@ -87,6 +88,7 @@ private class CountRow: UIView {
 }
 
 class TransportFacilityCollectionViewCell: UICollectionViewCell {
+    var facilityId: String?
     weak var checkbox: Checkbox!
     weak var facilityLabel: UILabel!
     fileprivate var rows: [CountRow] = []
@@ -181,8 +183,21 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(from regionFacility: RegionFacility?, index: Int, isSelected: Bool) {
-        guard let regionFacility = regionFacility else { return }
+        facilityId = regionFacility?.facility?.id
         checkbox.isChecked = isSelected
-        facilityLabel.text = regionFacility.facilityName ?? regionFacility.facility?.name
+        facilityLabel.text = regionFacility?.facilityName ?? regionFacility?.facility?.name
+    }
+
+    func updateTransportedCounts(from reports: Results<Report>?) {
+        if let facilityId = facilityId, rows.count > 1 {
+            let row = rows[1]
+            for (i, priority) in [TriagePriority.immediate, TriagePriority.delayed, TriagePriority.minimal].enumerated() {
+                if let count = reports?.filter("patient.priority=%d AND disposition.destinationFacility.id=%@", priority.rawValue, facilityId).count {
+                    row.countLabels[i].text = "\(count)"
+                } else {
+                    row.countLabels[i].text = "-"
+                }
+            }
+        }
     }
 }
