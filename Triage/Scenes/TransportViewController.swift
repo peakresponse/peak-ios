@@ -126,6 +126,7 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             }
         }
         cart = TransportCart()
+        segmentedControl.selectedIndex = 0
         segmentedControlChanged(segmentedControl)
         transportConfirmViewControllerDidCancel(vc)
     }

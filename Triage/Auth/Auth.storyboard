@@ -85,7 +85,7 @@
                                                         </connections>
                                                     </button>
                                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="UFK-H6-Gq4">
-                                                        <rect key="frame" x="110" y="361.66666666666663" width="20" height="20"/>
+                                                        <rect key="frame" x="110" y="362" width="20" height="20"/>
                                                     </activityIndicatorView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -330,13 +330,13 @@
             <size key="intrinsicContentSize" width="388" height="50"/>
         </designable>
         <designable name="cEJ-de-7Dm">
-            <size key="intrinsicContentSize" width="201" height="68.640625"/>
+            <size key="intrinsicContentSize" width="198" height="68.799999999999997"/>
         </designable>
         <designable name="eze-ch-Blg">
-            <size key="intrinsicContentSize" width="149" height="42.70703125"/>
+            <size key="intrinsicContentSize" width="140" height="42.799999999999997"/>
         </designable>
         <designable name="giv-Sb-Cls">
-            <size key="intrinsicContentSize" width="118" height="42.70703125"/>
+            <size key="intrinsicContentSize" width="112" height="42.799999999999997"/>
         </designable>
         <designable name="vIM-aN-FPe">
             <size key="intrinsicContentSize" width="428" height="108"/>
