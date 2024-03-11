@@ -154,9 +154,12 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         if let report = filteredResults?[indexPath.row] {
             delegate?.transportReportsViewController?(self, didSelect: report)
-            collectionView.reloadItems(at: [indexPath])
+            if let cell = collectionView.cellForItem(at: indexPath) as? TransportReportCollectionViewCell {
+                cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
+            }
         }
     }
 

@@ -201,6 +201,7 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         var indexPaths: [IndexPath] = []
         if let responder = cart?.responder {
             if let index = results?.firstIndex(of: responder) {
@@ -210,7 +211,12 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
         if let responder = results?[indexPath.row] {
             delegate?.transportRespondersViewController?(self, didSelect: responder)
             indexPaths.append(indexPath)
-            collectionView.reloadItems(at: indexPaths)
+        }
+        for indexPath in indexPaths {
+            if let cell = collectionView.cellForItem(at: indexPath) as? TransportResponderCollectionViewCell {
+                let responder = results?[indexPath.row]
+                cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
+            }
         }
     }
 
