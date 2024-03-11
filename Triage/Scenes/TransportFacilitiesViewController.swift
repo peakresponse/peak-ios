@@ -167,6 +167,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
         var indexPaths: [IndexPath] = []
         if let facility = cart?.facility {
             if let index = results?.firstIndex(where: { $0.facility == facility }) {
@@ -177,8 +178,12 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             delegate?.transportFacilitiesViewController?(self, didSelect: regionFacility.facility)
             indexPaths.append(indexPath)
         }
-        collectionView.reloadItems(at: indexPaths)
-
+        for indexPath in indexPaths {
+            if let cell = collectionView.cellForItem(at: indexPath) as? TransportFacilityCollectionViewCell {
+                let regionFacility = results?[indexPath.row]
+                cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
+            }
+        }
         guard let cart = cart else { return }
         transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
     }
