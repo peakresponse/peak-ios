@@ -232,7 +232,7 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? TransportResponderCollectionViewCell {
+        if let cell = cell as? TransportResponderCollectionViewCell, indexPath.row < (results?.count ?? 0) {
             let responder = results?[indexPath.row]
             cell.delegate = self
             cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
