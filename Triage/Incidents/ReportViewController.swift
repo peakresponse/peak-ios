@@ -91,7 +91,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
-            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
             colA.addArrangedSubview(destinationFacilityField)
@@ -208,7 +208,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
-            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+            destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
             colB.addArrangedSubview(destinationFacilityField)
@@ -641,7 +641,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                 }
             }
         }
-        destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+        destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
         agencyField?.attributeValue = report.response?.agency?.displayName as? NSObject
         updateFormFieldVisibility()
     }
