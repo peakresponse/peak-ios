@@ -388,6 +388,7 @@
 "Response.unitTransportAndEquipmentCapability.2207025" = "Wheel Chair Van/Ambulette";
 "Response.unitTransportAndEquipmentCapability.2207027" = "Non-Transport-No Medical Equipment";
 
+"Response.agency" = "Agency";
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
 

@@ -31,6 +31,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     var formInputAccessoryView: UIView!
     var formComponents: [String: PRKit.FormComponent] = [:]
     var destinationFacilityField: PRKit.FormField!
+    var agencyField: PRKit.FormField?
     var incidentNumberSpinner: UIActivityIndicatorView?
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
@@ -94,6 +95,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
             colA.addArrangedSubview(destinationFacilityField)
+
+            agencyField = newTextField(source: report, attributeKey: "response.agency", tag: &zero)
+            agencyField?.attributeValue = report.response?.agency?.name as? NSObject
+            agencyField?.isEnabled = false
+            agencyField?.isEditing = false
+            colA.addArrangedSubview(agencyField!)
 
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
 
@@ -521,6 +528,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             formField.updateStyle()
         }
         destinationFacilityField.updateStyle()
+        agencyField?.updateStyle()
         var contentInset = scrollView.contentInset
         contentInset.bottom = commandFooter.frame.height + 16
         scrollView.contentInset = contentInset
@@ -634,6 +642,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             }
         }
         destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+        agencyField?.attributeValue = report.response?.agency?.name as? NSObject
         updateFormFieldVisibility()
     }
 
@@ -648,6 +657,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     func updateFormFieldVisibility() {
         destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
         if report.scene?.isMCI ?? false {
+            formComponents["response.agency"]?.isHidden = agencyField?.attributeValue == nil
             formComponents["response.unitNumber"]?.isHidden = destinationFacilityField.attributeValue == nil
         }
         if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
