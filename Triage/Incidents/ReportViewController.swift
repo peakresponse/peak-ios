@@ -657,7 +657,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     func updateFormFieldVisibility() {
         destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
         if report.scene?.isMCI ?? false {
-            formComponents["response.agency"]?.isHidden = agencyField?.attributeValue == nil
+            agencyField?.isHidden = agencyField?.attributeValue == nil
             formComponents["response.unitNumber"]?.isHidden = destinationFacilityField.attributeValue == nil
         }
         if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
