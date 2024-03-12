@@ -28,7 +28,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.patientDetails".localized
-        tabBarItem.image = UIImage(named: "Patient", in: PRKitBundle.instance, compatibleWith: nil)
+        tabBarItem.image = UIImage(named: "Treat", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
     deinit {
@@ -60,8 +60,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         } else {
             addButton.isHidden = true
             commandHeader.isSearchHidden = true
-            commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
-                                                                self, action: #selector(dismissAnimated))
+            commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
         }
 
         customTabBar.buttonTitle = "Button.addPatient".localized

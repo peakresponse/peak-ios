@@ -12,13 +12,14 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
 
     var incident: Incident?
     var results: Results<Report>?
+    var filterPriority: TriagePriority?
     var filteredResults: Results<Report>?
     var notificationToken: NotificationToken?
 
@@ -55,6 +56,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         collectionView.refreshControl = refreshControl
 
         collectionView.register(ReunifyCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+        collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
 
         performQuery()
     }
@@ -83,7 +85,10 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         filteredResults = results
         if let text = commandHeader.searchField.text, !text.isEmpty {
             filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
-                                      text, text, text)
+                                                      text, text, text)
+        }
+        if let filterPriority = filterPriority {
+            filteredResults = filteredResults?.filter("patient.priority=%d", filterPriority.rawValue)
         }
         filteredResults = filteredResults?.sorted(by: [
             SortDescriptor(keyPath: "updatedAt", ascending: false)
@@ -136,6 +141,13 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         return false
     }
 
+    // MARK: - ReportsCountsHeaderViewDelegate
+
+    func reportsCountsHeaderView(_ view: ReportsCountsHeaderView, didSelect priority: TriagePriority?) {
+        filterPriority = priority
+        performQuery()
+    }
+
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -152,6 +164,16 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
             cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
         }
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
+        if let headerView = headerView as? ReportsCountsHeaderView {
+            headerView.countsView.arrangedSubviews.last?.isHidden = true
+            headerView.delegate = self
+            headerView.configure(from: results)
+        }
+        return headerView
     }
 
     // MARK: - UICollectionViewDelegate
@@ -171,5 +193,9 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
             return CGSize(width: 372, height: 213)
         }
         return CGSize(width: view.frame.width, height: 213)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: 0, height: 60)
     }
 }
