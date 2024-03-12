@@ -66,6 +66,8 @@ class Responder: Base {
         static let agencyId = "agencyId"
         static let userId = "userId"
         static let vehicleId = "vehicleId"
+        static let unitNumber = "unitNumber"
+        static let capability = "capability"
         static let arrivedAt = "arrivedAt"
         static let departedAt = "departedAt"
     }
@@ -73,8 +75,21 @@ class Responder: Base {
     @Persisted var agency: Agency?
     @Persisted var user: User?
     @Persisted var vehicle: Vehicle?
+    @Persisted var unitNumber: String?
+    @Persisted var capability: String?
     @Persisted var arrivedAt: Date?
     @Persisted var departedAt: Date?
+
+    @objc var status: Bool {
+        get { return arrivedAt != nil }
+        set {
+            if newValue {
+                arrivedAt = Date()
+            } else {
+                arrivedAt = nil
+            }
+        }
+    }
 
     override class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
         if data[Keys.departedAt] as? String == nil {
@@ -131,6 +146,8 @@ class Responder: Base {
         if let vehicleId = data[Keys.vehicleId] as? String {
             vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId)
         }
+        unitNumber = data[Keys.unitNumber] as? String
+        capability = data[Keys.capability] as? String
         if arrivedAt == nil {
             arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
         }
@@ -153,6 +170,8 @@ class Responder: Base {
         if let vehicleId = vehicle?.id {
             json[Keys.vehicleId] = vehicleId
         }
+        json[Keys.unitNumber] = unitNumber ?? NSNull()
+        json[Keys.capability] = capability ?? NSNull()
         if let arrivedAt = arrivedAt?.asISO8601String() {
             json[Keys.arrivedAt] = arrivedAt
         }

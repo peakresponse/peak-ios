@@ -1,8 +1,8 @@
 //
-//  ResponderCollectionViewCell.swift
+//  TransportResponderCollectionViewCell.swift
 //  Triage
 //
-//  Created by Francis Li on 2/23/24.
+//  Created by Francis Li on 3/7/24.
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
@@ -10,20 +10,21 @@ import Foundation
 import PRKit
 import UIKit
 
-@objc protocol ResponderCollectionViewCellDelegate {
-    @objc optional func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?)
+@objc protocol TransportResponderCollectionViewCellDelegate {
+    @objc optional func transportResponderCollectionViewCellDidPressMarkArrived(_ cell: TransportResponderCollectionViewCell)
 }
 
-class ResponderCollectionViewCell: UICollectionViewCell {
+class TransportResponderCollectionViewCell: UICollectionViewCell {
     var responderId: String?
+
+    weak var checkbox: Checkbox!
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
-    weak var timestampLabel: UILabel!
-    weak var chip: Chip!
+    weak var updatedAtLabel: UILabel!
+    weak var capabilityChip: Chip!
     weak var button: PRKit.Button!
-    weak var vr: UIView!
 
-    weak var delegate: ResponderCollectionViewCellDelegate?
+    weak var delegate: TransportResponderCollectionViewCellDelegate?
 
     var calculatedSize: CGSize?
 
@@ -38,11 +39,15 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .base100
+        self.selectedBackgroundView = selectedBackgroundView
+
         let row = UIStackView()
         row.translatesAutoresizingMaskIntoConstraints = false
         row.axis = .horizontal
-        row.spacing = 20
         row.alignment = .center
+        row.spacing = 20
         contentView.addSubview(row)
         NSLayoutConstraint.activate([
             row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
@@ -50,6 +55,15 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
             row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+
+        let checkbox = Checkbox()
+        checkbox.isUserInteractionEnabled = false
+        checkbox.isRadioButton = true
+        checkbox.isRadioButtonDeselectable = true
+        checkbox.label.superview?.isHidden = true
+        checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        row.addArrangedSubview(checkbox)
+        self.checkbox = checkbox
 
         let col = UIStackView()
         col.axis = .vertical
@@ -60,18 +74,19 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         let view = UIView()
         col.addArrangedSubview(view)
 
-        let chip = Chip()
-        chip.translatesAutoresizingMaskIntoConstraints = false
-        chip.color = .brandPrimary500
-        chip.tintColor = .white
-        chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        view.addSubview(chip)
+        let capabilityChip = Chip()
+        capabilityChip.translatesAutoresizingMaskIntoConstraints = false
+        capabilityChip.color = .brandPrimary500
+        capabilityChip.tintColor = .white
+        capabilityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        capabilityChip.alpha = 0
+        view.addSubview(capabilityChip)
         NSLayoutConstraint.activate([
-            chip.topAnchor.constraint(equalTo: view.topAnchor),
-            chip.rightAnchor.constraint(equalTo: view.rightAnchor),
-            view.bottomAnchor.constraint(equalTo: chip.bottomAnchor)
+            capabilityChip.topAnchor.constraint(equalTo: view.topAnchor),
+            capabilityChip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            view.bottomAnchor.constraint(equalTo: capabilityChip.bottomAnchor)
         ])
-        self.chip = chip
+        self.capabilityChip = capabilityChip
 
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -79,25 +94,28 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         unitLabel.textColor = .base800
         unitLabel.numberOfLines = 1
         unitLabel.lineBreakMode = .byTruncatingTail
+        unitLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         view.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
-            unitLabel.centerYAnchor.constraint(equalTo: chip.centerYAnchor),
-            unitLabel.rightAnchor.constraint(equalTo: chip.leftAnchor, constant: -8)
+            unitLabel.centerYAnchor.constraint(equalTo: capabilityChip.centerYAnchor),
+            unitLabel.rightAnchor.constraint(equalTo: capabilityChip.leftAnchor, constant: -10)
         ])
         self.unitLabel = unitLabel
 
         let agencyLabel = UILabel()
+        agencyLabel.translatesAutoresizingMaskIntoConstraints = false
         agencyLabel.font = .h4
         agencyLabel.textColor = .base500
         col.addArrangedSubview(agencyLabel)
         self.agencyLabel = agencyLabel
 
-        let timestampLabel = UILabel()
-        timestampLabel.font = .body14Bold
-        timestampLabel.textColor = .base500
-        col.addArrangedSubview(timestampLabel)
-        self.timestampLabel = timestampLabel
+        let updatedAtLabel = UILabel()
+        updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
+        updatedAtLabel.font = .body14Bold
+        updatedAtLabel.textColor = .base500
+        col.addArrangedSubview(updatedAtLabel)
+        self.updatedAtLabel = updatedAtLabel
 
         let button = PRKit.Button()
         button.style = .primary
@@ -117,18 +135,6 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             hr.heightAnchor.constraint(equalToConstant: 2)
         ])
-
-        let vr = UIView()
-        vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
-        contentView.addSubview(vr)
-        NSLayoutConstraint.activate([
-            vr.topAnchor.constraint(equalTo: contentView.topAnchor),
-            vr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            vr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            vr.widthAnchor.constraint(equalToConstant: 2)
-        ])
-        self.vr = vr
     }
 
     override func prepareForReuse() {
@@ -148,35 +154,38 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
 
-    func configure(from responder: Responder?, index: Int, isMGS: Bool) {
+    func configure(from responder: Responder?, index: Int, isSelected: Bool) {
         responderId = responder?.id
+        checkbox.isChecked = isSelected
+
         guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.name
-        if let arrivedAt = responder.arrivedAt {
-            timestampLabel.text = arrivedAt.asRelativeString()
-            button.isHidden = true
-        } else {
-            timestampLabel.text = "Responder.status.enroute".localized
-            button.isHidden = false
-        }
         if let capability = responder.capability {
-            chip.alpha = 1
-            chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
+            capabilityChip.alpha = 1
+            capabilityChip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
             if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
-                chip.setTitleColor(.white, for: .normal)
-                chip.color = .brandPrimary500
+                capabilityChip.setTitleColor(.white, for: .normal)
+                capabilityChip.color = .brandPrimary500
             } else {
-                chip.setTitleColor(.base800, for: .normal)
-                chip.color = .triageDelayedMedium
+                capabilityChip.setTitleColor(.base800, for: .normal)
+                capabilityChip.color = .triageDelayedMedium
             }
         } else {
-            chip.alpha = 0
+            capabilityChip.alpha = 0
         }
-        vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
+        if let arrivedAt = responder.arrivedAt {
+            checkbox.isHidden = false
+            updatedAtLabel.text = arrivedAt.asRelativeString()
+            button.isHidden = true
+        } else {
+            checkbox.isHidden = true
+            updatedAtLabel.text = "Responder.status.enroute".localized
+            button.isHidden = false
+        }
     }
 
-    @objc func markArrivedPressed(_ sender: RoundButton) {
-        delegate?.responderCollectionViewCellDidMarkArrived?(self, responderId: responderId)
+    @objc func markArrivedPressed(_ sender: PRKit.Button) {
+        delegate?.transportResponderCollectionViewCellDidPressMarkArrived?(self)
     }
 }

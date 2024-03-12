@@ -99,8 +99,10 @@ private let MAPPINGS_PRIORITY = [
     "delayed": Priority.delayed.rawValue,
     "expectant": Priority.expectant.rawValue,
     "minimal": Priority.minimal.rawValue,
+    "minor": Priority.minimal.rawValue,
     "green": Priority.minimal.rawValue,
     "black": Priority.dead.rawValue,
+    "zebra": Priority.dead.rawValue,
     "dead": Priority.dead.rawValue,
     "deceased": Priority.dead.rawValue
 ]
@@ -123,7 +125,7 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0gender": MAPPINGS_GENDER
             ]),
-    Matcher(pattern: #"(?:patient|priority) (?:is )?(?<patient0priority>read|red|immediate|yellow|delayed|expectant|deceased|dead|minimal|green)"#,
+    Matcher(pattern: #"(?:patient|priority) (?:is )?(?<patient0priority>read|red|immediate|yellow|delayed|expectant|deceased|dead|zebra|minimal|minor|green)"#,
             mappings: [
                 "patient0priority": MAPPINGS_PRIORITY
             ]),

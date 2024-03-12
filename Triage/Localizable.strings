@@ -6,6 +6,7 @@
   Copyright © 2019 Francis Li. All rights reserved.
 */
 
+"Agency" = "Agency";
 "Agency.name" = "Agency Name";
 
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
@@ -49,11 +50,11 @@
 "Button.addNote" = "Add Note";
 "Button.addPatient" = "Add Patient";
 "Button.addPhoto" = "Add Photo";
+"Button.addUnit" = "Add\nUnit";
 "Button.addProcedure" = "Add Procedure";
 "Button.addRecording" = "Add Recording";
 "Button.assignRole" = "Assign Role";
 "Button.back" = "Back";
-"Button.confirm" = "Confirm";
 "Button.cancel" = "Cancel";
 "Button.cancelTransport" = "Cancel Transport";
 "Button.captureLocation" = "Capture GPS";
@@ -61,6 +62,7 @@
 "Button.close" = "Close";
 "Button.closeScene" = "Close Scene";
 "Button.collectSignatures" = "Collect Signatures";
+"Button.confirm" = "Confirm";
 "Button.confirmCancelTransport" = "Confirm Cancel Transport";
 "Button.confirmRedirectPatient" = "Confirm Redirect Patient";
 "Button.continue" = "Continue";
@@ -87,6 +89,7 @@
 "Button.retry" = "Retry";
 "Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
+"Button.scanTag" = "Scan\nTag";
 "Button.scanLicense" = "Scan License";
 "Button.search" = "Search";
 "Button.sendRingdown" = "Send Ringdown";
@@ -355,6 +358,15 @@
 "ReportViewController.signatures" = "Signatures";
 "ReportViewController.vitals" = "Vitals";
 
+"Responder.agency" = "Agency";
+"Responder.capability" = "Capability";
+"Responder.capability.2207015" = "ALS";
+"Responder.capability.2207017" = "BLS";
+"Responder.status" = "Status";
+"Responder.status.arrived" = "Arrived";
+"Responder.status.enroute" = "En Route";
+"Responder.unitNumber" = "Unit #";
+
 "Responder.sort.az" = "Alphabetically";
 
 "Responder.role.assign" = "Assign";
@@ -364,6 +376,19 @@
 "Responder.role.TREATMENT" = "Treatment Team Leader";
 "Responder.role.TRIAGE" = "Triage Team Leader";
 
+"ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
+
+"Response.unitTransportAndEquipmentCapability.2207011" = "Air Transport-Helicopter";
+"Response.unitTransportAndEquipmentCapability.2207013" = "Air Transport-Fixed Wing";
+"Response.unitTransportAndEquipmentCapability.2207015" = "Ground Transport (ALS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207017" = "Ground Transport (BLS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207019" = "Ground Transport (Critical Care Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207021" = "Non-Transport-Medical Treatment (ALS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207023" = "Non-Transport-Medical Treatment (BLS Equipped)";
+"Response.unitTransportAndEquipmentCapability.2207025" = "Wheel Chair Van/Ambulette";
+"Response.unitTransportAndEquipmentCapability.2207027" = "Non-Transport-No Medical Equipment";
+
+"Response.agency" = "Agency";
 "Response.incidentNumber" = "Incident #";
 "Response.unitNumber" = "Unit #";
 
@@ -551,6 +576,8 @@
 "TabBarItem.rolesResources" = "Roles/\nResources";
 "TabBarItem.sceneMap" = "Scene\nMap";
 "TabBarItem.sceneOverview" = "Triage";
+"TabBarItem.stage" = "Stage";
+"TabBarItem.transport" = "Transport";
 
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
 "Time.arrivedAtPatient" = "Arrived at Patient";
@@ -566,12 +593,24 @@
 "TransportDisposition.4230011" = "Non-Patient Transport (Not Otherwise Listed)";
 "TransportDisposition.4230013" = "No Transport";
 
+"TransportConfirmViewController.reports" = "Transport:";
+"TransportConfirmViewController.responder" = "By:";
+"TransportConfirmViewController.facility" = "To:";
+
+"TransportFacilityCollectionViewCell.row.capacity" = "Capacity";
+"TransportFacilityCollectionViewCell.row.transported" = "- Transported";
+"TransportFacilityCollectionViewCell.row.available" = "= Available";
+
+"TransportViewController.segment.patients" = "Patients";
+"TransportViewController.segment.units" = "Units";
+"TransportViewController.segment.hospitals" = "Hospitals";
+
 "TriageCounts.total" = "Total: %d";
 "TriageCounts.transported" = "Transp: %d";
 
 "TriagePriority.0" = "Immediate";
 "TriagePriority.1" = "Delayed";
-"TriagePriority.2" = "Minimal";
+"TriagePriority.2" = "Minor";
 "TriagePriority.3" = "Expectant";
 "TriagePriority.4" = "Dead";
 "TriagePriority.5" = "Transported";

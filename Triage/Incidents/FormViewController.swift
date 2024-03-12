@@ -24,7 +24,7 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
     weak var delegate: FormViewControllerDelegate?
 
     var formInputAccessoryView: UIView!
-    var formFields: [String: PRKit.FormField] = [:]
+    var formComponents: [String: PRKit.FormComponent] = [:]
 
     var form: Form!
     var report: Report!
@@ -103,7 +103,7 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
                 signatureField.source = report
                 signatureField.tag = tag
                 tag += 1
-                formFields[signatureField.attributeKey ?? ""] = signatureField
+                formComponents[signatureField.attributeKey ?? ""] = signatureField
                 if let fileUrl = report.signatures[signatureIndex].fileUrl {
                     AppCache.cachedImage(from: fileUrl) { (image, _) in
                         DispatchQueue.main.async {
@@ -136,7 +136,7 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.updateStyle()
         }
     }
@@ -161,7 +161,7 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
         } else if newReport != nil {
             self.newReport = nil
         }
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newReport
@@ -186,12 +186,12 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
     func refreshFormFields(_ attributeKeys: [String]? = nil) {
         if let attributeKeys = attributeKeys {
             for attributeKey in attributeKeys {
-                if let formField = formFields[attributeKey], let target = formField.target {
+                if let formField = formComponents[attributeKey], let target = formField.target {
                     formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
                 }
             }
         } else {
-            for formField in formFields.values {
+            for formField in formComponents.values {
                 if let attributeKey = formField.attributeKey, let target = formField.target {
                     formField.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
                 }
@@ -201,13 +201,13 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
 
     func updateFormFieldVisibility() {
         for (i, signature) in (newReport ?? report).signatures.enumerated() {
-            if let formField = formFields["signatures[\(i)].typeOfPatientRepresentative"] {
+            if let formField = formComponents["signatures[\(i)].typeOfPatientRepresentative"] {
                 formField.isHidden = signature.typeOfPerson != SignatureType.patientRepresentative.rawValue
             }
-            if let formField = formFields["signatures[\(i)].firstName"] {
+            if let formField = formComponents["signatures[\(i)].firstName"] {
                 formField.isHidden = signature.typeOfPerson == nil || signature.typeOfPerson == SignatureType.patient.rawValue
             }
-            if let formField = formFields["signatures[\(i)].lastName"] {
+            if let formField = formComponents["signatures[\(i)].lastName"] {
                 formField.isHidden = signature.typeOfPerson == nil || signature.typeOfPerson == SignatureType.patient.rawValue
             }
         }
@@ -237,8 +237,8 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, let attributeKey = field.attributeKey, let target = field.target {
             if attributeKey.hasSuffix(".file"), let field = field as? SignatureField {
                 if let signatureImage = field.signatureImage {
                     let tempDirURL = URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)

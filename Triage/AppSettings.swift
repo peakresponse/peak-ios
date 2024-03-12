@@ -38,6 +38,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "userId") }
     }
 
+    static var regionId: String? {
+        get { return defaults.string(forKey: "regionId") }
+        set { defaults.set(newValue, forKey: "regionId") }
+    }
+
     static var agencyId: String? {
         get { return defaults.string(forKey: "agencyId") }
         set { defaults.set(newValue, forKey: "agencyId") }
@@ -83,8 +88,9 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "awsCredentials") }
     }
 
-    static func login(userId: String, agencyId: String, assignmentId: String?, vehicleId: String?, sceneId: String?) {
+    static func login(userId: String, regionId: String?, agencyId: String, assignmentId: String?, vehicleId: String?, sceneId: String?) {
         AppSettings.userId = userId
+        AppSettings.regionId = regionId
         AppSettings.agencyId = agencyId
         AppSettings.assignmentId = assignmentId
         AppSettings.vehicleId = vehicleId
@@ -93,6 +99,7 @@ class AppSettings {
 
     static func logout() {
         AppSettings.userId = nil
+        AppSettings.regionId = nil
         AppSettings.agencyId = nil
         AppSettings.assignmentId = nil
         AppSettings.vehicleId = nil

@@ -29,8 +29,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var recordButton: RecordButton!
     var formInputAccessoryView: UIView!
-    var formFields: [String: PRKit.FormField] = [:]
+    var formComponents: [String: PRKit.FormComponent] = [:]
     var destinationFacilityField: PRKit.FormField!
+    var agencyField: PRKit.FormField?
     var incidentNumberSpinner: UIActivityIndicatorView?
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
@@ -95,6 +96,14 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             destinationFacilityField.isEditing = false
             colA.addArrangedSubview(destinationFacilityField)
 
+            agencyField = newTextField(source: report, attributeKey: "response.agency", tag: &zero)
+            agencyField?.attributeValue = report.response?.agency?.name as? NSObject
+            agencyField?.isEnabled = false
+            agencyField?.isEditing = false
+            colA.addArrangedSubview(agencyField!)
+
+            addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
+
             let triageControl = TriageControl()
             triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
             triageControl.addTarget(self, action: #selector(triagePriorityChanged(_:)), for: .valueChanged)
@@ -108,7 +117,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                          tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colB)
             let locationField = newTextField(source: report, attributeKey: "patient.location", tag: &tag)
-            formFields["patient.location"] = locationField
+            formComponents["patient.location"] = locationField
             let locationView = UIView()
             locationView.addSubview(locationField)
             NSLayoutConstraint.activate([
@@ -148,7 +157,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             innerCols.spacing = 10
             addTextField(source: report, attributeKey: "response.incidentNumber",
                          keyboardType: .numbersAndPunctuation, tag: &tag, to: innerCols)
-            if let incidentNumberField = formFields["response.incidentNumber"] as? PRKit.TextField {
+            if let incidentNumberField = formComponents["response.incidentNumber"] as? PRKit.TextField {
                 let incidentNumberSpinner = UIActivityIndicatorView.withMediumStyle()
                 incidentNumberSpinner.translatesAutoresizingMaskIntoConstraints = false
                 incidentNumberSpinner.color = .base500
@@ -174,7 +183,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             addressField.attributeKey = "scene.address"
             addressField.delegate = self
             addressField.text = report?.scene?.address
-            formFields["scene.address"] = addressField
+            formComponents["scene.address"] = addressField
             colA.addArrangedSubview(addressField)
 
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
@@ -515,10 +524,11 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.updateStyle()
         }
         destinationFacilityField.updateStyle()
+        agencyField?.updateStyle()
         var contentInset = scrollView.contentInset
         contentInset.bottom = commandFooter.frame.height + 16
         scrollView.contentInset = contentInset
@@ -531,7 +541,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                 if section.index ?? 0 >= count {
                     for formField in FormSection.fields(in: section) {
                         if let attributeKey = formField.attributeKey {
-                            formFields.removeValue(forKey: attributeKey)
+                            formComponents.removeValue(forKey: attributeKey)
                         }
                     }
                     if let button = section.findLastButton() {
@@ -606,7 +616,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             }
             self.newReport = nil
         }
-        for formField in formFields.values {
+        for formField in formComponents.values {
             formField.isEditing = editing
             formField.isEnabled = editing
             formField.target = newReport
@@ -623,15 +633,16 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     }
 
     func resetFormFields() {
-        for formField in formFields.values {
-            if let attributeKey = formField.attributeKey {
-                formField.attributeValue = formField.source?.value(forKeyPath: attributeKey) as? NSObject
-                if let source = formField.source as? Predictions {
+        for formComponent in formComponents.values {
+            if let attributeKey = formComponent.attributeKey {
+                formComponent.attributeValue = formComponent.source?.value(forKeyPath: attributeKey) as? NSObject
+                if let formField = formComponent as? PRKit.FormField, let source = formField.source as? Predictions {
                     formField.status = source.predictionStatus(for: attributeKey)
                 }
             }
         }
         destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.name as? NSObject
+        agencyField?.attributeValue = report.response?.agency?.name as? NSObject
         updateFormFieldVisibility()
     }
 
@@ -645,24 +656,28 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func updateFormFieldVisibility() {
         destinationFacilityField.isHidden = destinationFacilityField.attributeValue == nil
+        if report.scene?.isMCI ?? false {
+            formComponents["response.agency"]?.isHidden = agencyField?.attributeValue == nil
+            formComponents["response.unitNumber"]?.isHidden = destinationFacilityField.attributeValue == nil
+        }
         if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
-            formFields["disposition.patientEvaluationCare"]?.isHidden = false
-            formFields["disposition.crewDisposition"]?.isHidden = false
-            formFields["disposition.transportDisposition"]?.isHidden = false
+            formComponents["disposition.patientEvaluationCare"]?.isHidden = false
+            formComponents["disposition.crewDisposition"]?.isHidden = false
+            formComponents["disposition.transportDisposition"]?.isHidden = false
         } else {
-            formFields["disposition.patientEvaluationCare"]?.isHidden = true
-            formFields["disposition.crewDisposition"]?.isHidden = true
-            formFields["disposition.transportDisposition"]?.isHidden = true
+            formComponents["disposition.patientEvaluationCare"]?.isHidden = true
+            formComponents["disposition.crewDisposition"]?.isHidden = true
+            formComponents["disposition.transportDisposition"]?.isHidden = true
         }
         if let patientEvaluationCare = (newReport ?? report)?.disposition?.patientEvaluationCare,
            patientEvaluationCare == PatientEvaluationCare.patientEvaluatedRefusedCare.rawValue ||
             patientEvaluationCare == PatientEvaluationCare.patientRefused.rawValue {
-            formFields["disposition.reasonForRefusalRelease"]?.isHidden = false
+            formComponents["disposition.reasonForRefusalRelease"]?.isHidden = false
         } else if let transportDisposition = (newReport ?? report)?.disposition?.transportDisposition,
                   transportDisposition == TransportDisposition.patientRefusedTransport.rawValue {
-            formFields["disposition.reasonForRefusalRelease"]?.isHidden = false
+            formComponents["disposition.reasonForRefusalRelease"]?.isHidden = false
         } else {
-            formFields["disposition.reasonForRefusalRelease"]?.isHidden = true
+            formComponents["disposition.reasonForRefusalRelease"]?.isHidden = true
         }
     }
 
@@ -809,8 +824,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
-        if let attributeKey = field.attributeKey, let target = field.target {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField, let attributeKey = field.attributeKey, let target = field.target {
             target.setValue(field.attributeValue, forKeyPath: attributeKey)
             // some hard-coded field visibility rules, until a more generalized implementation can be designed
             switch attributeKey {
@@ -1006,7 +1021,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         let processedText = numbersExpr.stringByReplacingMatches(in: text, options: [], range: NSRange(location: 0, length: text.count),
                                                                  withTemplate: "$1$2$3")
         newReport?.narrative?.text = "\(narrativeText ?? "") \(processedText)".trimmingCharacters(in: .whitespacesAndNewlines)
-        let formField = formFields["narrative.text"]
+        let formField = formComponents["narrative.text"]
         formField?.attributeValue = newReport?.narrative?.text as NSObject?
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             self?.newReport?.extractValues(from: processedText, fileId: fileId, transcriptId: transcriptId,

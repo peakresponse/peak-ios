@@ -54,7 +54,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
     weak var ringdownSection: FormSection!
 
     var formInputAccessoryView: UIView!
-    var formFields: [String: PRKit.FormField] = [:]
+    var formComponents: [String: PRKit.FormComponent] = [:]
 
     var report: Report!
     var ringdown: Ringdown?

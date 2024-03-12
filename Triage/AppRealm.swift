@@ -98,12 +98,24 @@ class AppRealm {
             let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
                                                                  appropriateFor: nil, create: false)
             url = documentDirectory?.appendingPathComponent( "app.realm")
+            if !FileManager.default.fileExists(atPath: url.path) {
+                // make sure there are no leftover lock/management files that will prevent launch
+                if let url = documentDirectory?.appendingPathComponent("app.realm.lock") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+                if let url = documentDirectory?.appendingPathComponent("app.realm.management") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+                if let url = documentDirectory?.appendingPathComponent("app.realm.note") {
+                    try? FileManager.default.removeItem(at: url)
+                }
+            }
         }
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,
             Disposition.self, Facility.self, File.self, Form.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
-            Procedure.self, Report.self, Responder.self, Response.self, Scene.self, ScenePin.self, Signature.self, Situation.self, State.self,
-            Time.self, User.self, Vehicle.self, Vital.self
+            Procedure.self, Region.self, RegionAgency.self, RegionFacility.self, Report.self, Responder.self, Response.self,
+            Scene.self, ScenePin.self, Signature.self, Situation.self, State.self, Time.self, User.self, Vehicle.self, Vital.self
         ])
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {
@@ -135,6 +147,7 @@ class AppRealm {
                 Narrative.self,
                 Patient.self,
                 Procedure.self,
+                Region.self,
                 Response.self,
                 Situation.self,
                 State.self,
@@ -144,6 +157,8 @@ class AppRealm {
                 Vital.self,
                 // models with dependencies on above in dependency order
                 Disposition.self,
+                RegionAgency.self,
+                RegionFacility.self,
                 Responder.self,
                 Signature.self,
                 Scene.self,
@@ -788,6 +803,87 @@ class AppRealm {
             }
             task.resume()
         }
+    }
+
+    public static func addResponder(responder: Responder, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        try! realm.write {
+            // instantiate from JSON, this allows the Responder override of instantiate to check if the user has already joined
+            realm.add(responder, update: .modified)
+        }
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
+    }
+
+    public static func markResponderArrived(responderId: String, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), responder.arrivedAt == nil else {
+            completionHandler(nil)
+            return
+        }
+        try! realm.write {
+            responder.arrivedAt = Date()
+        }
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
+    }
+
+    public static func markResponderDeparted(responderId: String, completionHandler: @escaping (Error?) -> Void) {
+        let realm = AppRealm.open()
+        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), responder.departedAt == nil else {
+            completionHandler(nil)
+            return
+        }
+        try! realm.write {
+            responder.departedAt = Date()
+        }
+        let data = [
+            "Responder": responder.asJSON()
+        ]
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
     }
 
     public static func assignResponder(responderId: String, role: ResponderRole?, completionHandler: ((Error?) -> Void)? = nil) {

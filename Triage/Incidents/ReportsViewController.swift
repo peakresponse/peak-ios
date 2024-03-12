@@ -16,6 +16,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var customTabBar: CustomTabBar!
+    @IBOutlet weak var addButton: RoundButton!
 
     var incident: Incident?
     var isMCI = false
@@ -51,11 +52,14 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         }
 
         if isMCI {
+            addButton.isHidden = false
             commandHeader.isSearchHidden = false
             commandHeader.searchField.delegate = self
 
             collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
         } else {
+            addButton.isHidden = true
+            commandHeader.isSearchHidden = true
             commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target:
                                                                 self, action: #selector(dismissAnimated))
         }
@@ -69,6 +73,12 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         collectionView.refreshControl = refreshControl
 
         collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+
+        if isMCI {
+            var contentInset = collectionView.contentInset
+            contentInset.bottom += addButton.frame.height
+            collectionView.contentInset = contentInset
+        }
 
         performQuery()
 
@@ -172,6 +182,15 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         }
     }
 
+    @IBAction
+    func addPressed(_ sender: RoundButton) {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
+        if let vc = vc as? ScanViewController {
+            vc.incident = incident
+        }
+        presentAnimated(vc)
+    }
+
     @objc override func newReportCancelled() {
         view.isHidden = true
         dismiss(animated: true) { [weak self] in
@@ -191,7 +210,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     // MARK: - FormFieldDelegate
 
-    func formFieldDidChange(_ field: PRKit.FormField) {
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
     }
 

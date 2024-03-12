@@ -85,6 +85,12 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         }
     }
 
+    override var description: String {
+        var parts = [patient?.fullName ?? "", patient?.genderString ?? "", patient?.ageString ?? ""]
+        parts = parts.compactMap { $0.isEmpty ? nil : $0 }
+        return parts.joined(separator: ", ")
+    }
+
     convenience init(clone report: Report) {
         self.init(value: report)
         id = UUID().uuidString.lowercased()
