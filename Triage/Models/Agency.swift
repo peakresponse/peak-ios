@@ -21,6 +21,13 @@ class Agency: Base {
     @Persisted var number: String?
     @Persisted var name: String?
 
+    var displayName: String? {
+        if let regionAgency = realm?.objects(RegionAgency.self).filter("regionId=%@ && agency=%@", AppSettings.regionId as Any, self).first, let agencyName = regionAgency.agencyName {
+            return agencyName
+        }
+        return name
+    }
+
     override var description: String {
         return displayName ?? id
     }

@@ -63,7 +63,7 @@ class TransportCartResponderField: CellField {
     func configure(from responder: Responder?) {
         self.responder = responder
         text = "\("Responder.unitNumber".localized)\(responder?.vehicle?.callSign ?? responder?.vehicle?.number ?? responder?.unitNumber ?? "")"
-        agencyLabel.text = responder?.agency?.name
+        agencyLabel.text = responder?.agency?.displayName
 
         if let capability = responder?.capability {
             chipWidthConstraint.isActive = false

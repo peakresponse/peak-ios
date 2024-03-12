@@ -97,7 +97,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             colA.addArrangedSubview(destinationFacilityField)
 
             agencyField = newTextField(source: report, attributeKey: "response.agency", tag: &zero)
-            agencyField?.attributeValue = report.response?.agency?.name as? NSObject
+            agencyField?.attributeValue = report.response?.agency?.displayName as? NSObject
             agencyField?.isEnabled = false
             agencyField?.isEditing = false
             colA.addArrangedSubview(agencyField!)
@@ -642,7 +642,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             }
         }
         destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
-        agencyField?.attributeValue = report.response?.agency?.name as? NSObject
+        agencyField?.attributeValue = report.response?.agency?.displayName as? NSObject
         updateFormFieldVisibility()
     }
 
