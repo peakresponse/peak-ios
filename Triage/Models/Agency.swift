@@ -29,7 +29,7 @@ class Agency: Base {
     }
 
     override var description: String {
-        return name ?? ""
+        return displayName ?? id
     }
 
     override func update(from data: [String: Any], with realm: Realm) {

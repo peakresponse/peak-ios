@@ -58,10 +58,9 @@ class TransportConfirmViewController: UIViewController {
         stackView.addArrangedSubview(view)
 
         if let facility = cart.facility {
-            let regionFacility = facility.realm?.objects(RegionFacility.self).filter("regionId=%@ && facility=%@", AppSettings.regionId as Any, facility).first
             let field = CellField()
             field.isLabelHidden = true
-            field.text = regionFacility?.facilityName ?? facility.name
+            field.text = facility.displayName
             field.disclosureIndicatorView.widthAnchor.constraint(equalToConstant: 0).isActive = true
             stackView.addArrangedSubview(field)
         }

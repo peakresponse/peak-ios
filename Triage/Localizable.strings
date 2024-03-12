@@ -123,7 +123,7 @@
 "CrewDisposition.4229011" = "Back in Service, No Care/Support Services Required";
 "CrewDisposition.4229013" = "Back in Service, Care/Support Services Refused";
 
-"Disposition.destinationFacility" = "Transport Destination";
+"Disposition.destinationFacility" = "Destination Facility";
 "Disposition.unitDisposition" = "Unit Disposition";
 "Disposition.patientEvaluationCare" = "Patient Evaluation/Care";
 "Disposition.crewDisposition" = "Crew Disposition";

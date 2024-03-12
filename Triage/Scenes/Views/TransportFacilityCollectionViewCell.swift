@@ -183,9 +183,9 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(from regionFacility: RegionFacility?, index: Int, isSelected: Bool) {
-        facilityId = regionFacility?.facility?.id
         checkbox.isChecked = isSelected
-        facilityLabel.text = regionFacility?.facilityName ?? regionFacility?.facility?.name
+        facilityId = regionFacility?.facility?.id
+        facilityLabel.text = regionFacility?.facility?.displayName
     }
 
     func updateTransportedCounts(from reports: Results<Report>?) {
