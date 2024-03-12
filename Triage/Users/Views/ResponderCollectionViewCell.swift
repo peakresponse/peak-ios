@@ -152,7 +152,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         responderId = responder?.id
         guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
-        agencyLabel.text = responder.agency?.name
+        agencyLabel.text = responder.agency?.displayName
         if let arrivedAt = responder.arrivedAt {
             timestampLabel.text = arrivedAt.asRelativeString()
             button.isHidden = true

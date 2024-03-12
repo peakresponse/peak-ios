@@ -59,7 +59,7 @@ class AgencyKeyboardSource: KeyboardSource {
 
     func title(for value: NSObject?) -> String? {
         guard let agency = value as? Agency else { return nil }
-        return agency.name ?? ""
+        return agency.displayName ?? ""
     }
 
     func title(at index: Int) -> String? {
@@ -69,7 +69,7 @@ class AgencyKeyboardSource: KeyboardSource {
         } else {
             agency = results?[index].agency
         }
-        return agency?.name ?? ""
+        return agency?.displayName ?? ""
     }
 
     func value(at index: Int) -> NSObject? {
