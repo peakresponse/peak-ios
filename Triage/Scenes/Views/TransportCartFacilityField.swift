@@ -18,6 +18,6 @@ class TransportCartFacilityField: CellField {
     }
 
     func configure(from facility: Facility?) {
-        text = facility?.name // displayName
+        text = facility?.displayName
     }
 }

@@ -82,4 +82,13 @@ class TransportCartResponderField: CellField {
             chip.setTitle("", for: .normal)
         }
     }
+
+    func configure(from report: Report?) {
+        text = "\("Responder.unitNumber".localized)\(report?.response?.unitNumber ?? "")"
+        agencyLabel.text = report?.response?.agency?.displayName
+
+        chipWidthConstraint.isActive = true
+        chip.alpha = 0
+        chip.setTitle("", for: .normal)
+    }
 }

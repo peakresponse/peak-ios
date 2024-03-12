@@ -54,7 +54,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
 
-        collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+        collectionView.register(ReunifyCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
 
         performQuery()
     }
@@ -79,7 +79,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            .filter("incident=%@ AND canonicalId=%@ AND filterPriority=%d", incident, NSNull(), TriagePriority.transported.rawValue)
         filteredResults = results
         if let text = commandHeader.searchField.text, !text.isEmpty {
             filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
@@ -148,7 +148,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
-        if let cell = cell as? ReportCollectionViewCell {
+        if let cell = cell as? ReunifyCollectionViewCell {
             cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
         }
         return cell
@@ -168,8 +168,8 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 160)
+            return CGSize(width: 372, height: 213)
         }
-        return CGSize(width: view.frame.width, height: 160)
+        return CGSize(width: view.frame.width, height: 213)
     }
 }

@@ -61,7 +61,7 @@ class TransportCartReportField: CellField {
         text = "#\(report?.pin ?? "")"
         descLabel.text = report?.description
 
-        let priority = TriagePriority(rawValue: report?.filterPriority ?? -1) ?? .unknown
+        let priority = TriagePriority(rawValue: report?.patient?.priority ?? -1) ?? .unknown
         priorityChip.color = priority.color
         priorityChip.setTitle(priority.description, for: .normal)
     }
