@@ -61,12 +61,18 @@ class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
     // MARK: - TriageCountsDelegate
 
     func triageCounts(_ view: TriageCounts, didPress button: Button, with priority: TriagePriority) {
-        countsView.totalButton.isSelected = false
-        for button in countsView.priorityButtons {
+        if button.isSelected {
             button.isSelected = false
+            countsView.totalButton.isSelected = true
+            delegate?.reportsCountsHeaderView(self, didSelect: nil)
+        } else {
+            countsView.totalButton.isSelected = false
+            for button in countsView.priorityButtons {
+                button.isSelected = false
+            }
+            button.isSelected = true
+            delegate?.reportsCountsHeaderView(self, didSelect: priority)
         }
-        button.isSelected = true
-        delegate?.reportsCountsHeaderView(self, didSelect: priority)
     }
 
     func triageCounts(_ view: TriageCounts, didPressTotal button: Button) {

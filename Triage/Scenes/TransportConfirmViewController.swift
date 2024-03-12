@@ -58,10 +58,8 @@ class TransportConfirmViewController: UIViewController {
         stackView.addArrangedSubview(view)
 
         if let facility = cart.facility {
-            let field = CellField()
-            field.isLabelHidden = true
-            field.text = facility.displayName
-            field.disclosureIndicatorView.widthAnchor.constraint(equalToConstant: 0).isActive = true
+            let field = TransportCartFacilityField()
+            field.configure(from: facility)
             stackView.addArrangedSubview(field)
         }
     }

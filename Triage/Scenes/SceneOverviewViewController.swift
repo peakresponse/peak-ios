@@ -21,7 +21,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.sceneOverview".localized
-        tabBarItem.image = UIImage(named: "Dashboard", in: PRKitBundle.instance, compatibleWith: nil)
+        tabBarItem.image = UIImage(named: "Triage", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
     deinit {
