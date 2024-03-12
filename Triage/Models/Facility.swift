@@ -70,8 +70,15 @@ class Facility: Base {
     }
     @Persisted var distance: Double = Double.greatestFiniteMagnitude
 
+    var displayName: String? {
+        if let regionFacility = realm?.objects(RegionFacility.self).filter("regionId=%@ && facility=%@", AppSettings.regionId as Any, self).first, let facilityName = regionFacility.facilityName {
+            return facilityName
+        }
+        return name
+    }
+
     override var description: String {
-        return name ?? ""
+        return displayName ?? id
     }
 
     override func update(from data: [String: Any], with realm: Realm) {
