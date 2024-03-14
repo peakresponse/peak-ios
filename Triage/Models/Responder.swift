@@ -148,36 +148,20 @@ class Responder: Base {
         }
         unitNumber = data[Keys.unitNumber] as? String
         capability = data[Keys.capability] as? String
-        if arrivedAt == nil {
-            arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
-        }
-        if departedAt == nil {
-            departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
-        }
+        arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
+        departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
     }
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
-        if let sceneId = scene?.id {
-            json[Keys.sceneId] = sceneId
-        }
-        if let agencyId = agency?.id {
-            json[Keys.agencyId] = agencyId
-        }
-        if let userId = user?.id {
-            json[Keys.userId] = userId
-        }
-        if let vehicleId = vehicle?.id {
-            json[Keys.vehicleId] = vehicleId
-        }
+        json[Keys.sceneId] = scene?.id ?? NSNull()
+        json[Keys.agencyId] = agency?.id ?? NSNull()
+        json[Keys.userId] = user?.id ?? NSNull()
+        json[Keys.vehicleId] = vehicle?.id ?? NSNull()
         json[Keys.unitNumber] = unitNumber ?? NSNull()
         json[Keys.capability] = capability ?? NSNull()
-        if let arrivedAt = arrivedAt?.asISO8601String() {
-            json[Keys.arrivedAt] = arrivedAt
-        }
-        if let departedAt = departedAt?.asISO8601String() {
-            json[Keys.departedAt] = departedAt
-        }
+        json[Keys.arrivedAt] = arrivedAt?.asISO8601String() ?? NSNull()
+        json[Keys.departedAt] = departedAt?.asISO8601String() ?? NSNull()
         return json
     }
 }
