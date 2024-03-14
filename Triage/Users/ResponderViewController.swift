@@ -108,7 +108,7 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
         super.setEditing(editing, animated: animated)
         if editing {
             if responder.realm != nil {
-                newResponder = Responder(clone: responder)
+                newResponder = Responder(value: responder as Any)
             } else {
                 newResponder = responder
             }

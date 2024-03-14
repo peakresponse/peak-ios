@@ -38,6 +38,10 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .base100
+        self.selectedBackgroundView = selectedBackgroundView
+
         let row = UIStackView()
         row.translatesAutoresizingMaskIntoConstraints = false
         row.axis = .horizontal
@@ -104,6 +108,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         button.size = .small
         button.setTitle("Button.markArrived".localized, for: .normal)
         button.addTarget(self, action: #selector(markArrivedPressed(_:)), for: .touchUpInside)
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         row.addArrangedSubview(button)
         self.button = button
 
@@ -165,7 +170,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
             if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
                 chip.setTitleColor(.white, for: .normal)
-                chip.color = .brandPrimary500
+                chip.color = .triageMinimalMedium
             } else {
                 chip.setTitleColor(.base800, for: .normal)
                 chip.color = .triageDelayedMedium

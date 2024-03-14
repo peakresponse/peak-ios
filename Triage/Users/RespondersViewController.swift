@@ -184,4 +184,23 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         }
         return cell
     }
+
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let responder = results?[indexPath.row] else { return }
+        if responder.user != nil || responder.vehicle != nil {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        } else {
+            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
+                vc.delegate = self
+                vc.responder = responder
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                vc.isEditing = true
+            }
+            presentAnimated(vc)
+            collectionView.deselectItem(at: indexPath, animated: false)
+        }
+    }
 }
