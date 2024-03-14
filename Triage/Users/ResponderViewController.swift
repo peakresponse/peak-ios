@@ -20,10 +20,13 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
 
+    var rightBarButtonItem: UIBarButtonItem!
+
     weak var delegate: ResponderViewControllerDelegate?
 
     var formInputAccessoryView: UIView!
     var formComponents: [String: PRKit.FormComponent] = [:]
+    weak var doneButton: PRKit.Button!
 
     var responder: Responder!
     var newResponder: Responder?
@@ -31,8 +34,10 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        rightBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target: self, action: #selector(donePressed))
+
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
-        commandHeader.rightBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target: self, action: #selector(donePressed))
+        commandHeader.rightBarButtonItem = rightBarButtonItem
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -75,11 +80,12 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
 
         colA.addArrangedSubview(stackView)
 
-        let button = newButton(title: "Button.done".localized)
-        button.size = .medium
-        button.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
+        let doneButton = newButton(title: "Button.done".localized)
+        doneButton.size = .medium
+        doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
         colB.addArrangedSubview(UIView())
-        colB.addArrangedSubview(button)
+        colB.addArrangedSubview(doneButton)
+        self.doneButton = doneButton
 
         section.addArrangedSubview(cols)
 
@@ -130,9 +136,27 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
 
     @objc func donePressed() {
         guard let newResponder = newResponder else { return }
-        AppRealm.addResponder(responder: newResponder) { _ in
+
+        doneButton.isEnabled = false
+
+        let spinner = UIActivityIndicatorView.withMediumStyle()
+        spinner.color = .base500
+        spinner.startAnimating()
+        let spinnerItem = UIBarButtonItem(customView: spinner)
+        commandHeader.rightBarButtonItem = spinnerItem
+
+        AppRealm.addResponder(responder: newResponder) { [weak self] (error) in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.doneButton.isEnabled = true
+                self.commandHeader.rightBarButtonItem = self.rightBarButtonItem
+                if let error = error as? ApiClientError, error == .conflict {
+                    presentAlert(title: "ResponderViewController.alert.duplicate.title".localized, message: "ResponderViewController.alert.duplicate.message".localized)
+                } else {
+                    delegate?.responderViewControllerDidSave?(self)
+                }
+            }
         }
-        delegate?.responderViewControllerDidSave?(self)
     }
 
     // MARK: - CheckboxDelegate

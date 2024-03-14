@@ -807,6 +807,12 @@ class AppRealm {
 
     public static func addResponder(responder: Responder, completionHandler: @escaping (Error?) -> Void) {
         let realm = AppRealm.open()
+        // check for duplicates
+        let results = realm.objects(Responder.self).filter("id<>%@ AND agency=%@ AND unitNumber=%@", responder.id, responder.agency as Any, responder.unitNumber as Any)
+        if results.count > 0 {
+            completionHandler(ApiClientError.conflict)
+            return
+        }
         let data = [
             "Responder": responder.asJSON()
         ]
@@ -815,7 +821,7 @@ class AppRealm {
         }
         let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
             completionHandler(error)
-            if error != nil {
+            if error != nil && (error as? ApiClientError) != ApiClientError.conflict {
                 let op = RequestOperation()
                 op.queuePriority = .veryHigh
                 op.request = { (completionHandler) in

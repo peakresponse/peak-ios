@@ -172,7 +172,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
                 chip.setTitleColor(.white, for: .normal)
                 chip.color = .triageMinimalMedium
             } else {
-                chip.setTitleColor(.base800, for: .normal)
+                chip.setTitleColor(.white, for: .normal)
                 chip.color = .triageDelayedMedium
             }
         } else {

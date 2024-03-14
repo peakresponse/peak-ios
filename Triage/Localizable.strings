@@ -378,6 +378,9 @@
 
 "ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
 
+"ResponderViewController.alert.duplicate.title" = "Duplicate Unit";
+"ResponderViewController.alert.duplicate.message" = "A unit with this agency and number already exists.";
+
 "Response.unitTransportAndEquipmentCapability.2207011" = "Air Transport-Helicopter";
 "Response.unitTransportAndEquipmentCapability.2207013" = "Air Transport-Fixed Wing";
 "Response.unitTransportAndEquipmentCapability.2207015" = "Ground Transport (ALS Equipped)";
