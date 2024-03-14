@@ -179,7 +179,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
             cell.delegate = self
             if indexPath.row < (results?.count ?? 0), let responder = results?[indexPath.row] {
                 let isMGS = scene?.mgsResponderId == responder.id
-                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+                cell.configure(from: responder, index: indexPath.row)
             }
         }
         return cell

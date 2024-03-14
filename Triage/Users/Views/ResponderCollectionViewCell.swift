@@ -16,6 +16,9 @@ import UIKit
 
 class ResponderCollectionViewCell: UICollectionViewCell {
     var responderId: String?
+    var isSelectable = false
+
+    weak var checkbox: Checkbox!
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
     weak var timestampLabel: UILabel!
@@ -55,6 +58,16 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
 
+        let checkbox = Checkbox()
+        checkbox.isHidden = !isSelectable
+        checkbox.isUserInteractionEnabled = false
+        checkbox.isRadioButton = true
+        checkbox.isRadioButtonDeselectable = true
+        checkbox.label.superview?.isHidden = true
+        checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        row.addArrangedSubview(checkbox)
+        self.checkbox = checkbox
+
         let col = UIStackView()
         col.axis = .vertical
         col.spacing = 4
@@ -69,6 +82,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         chip.color = .brandPrimary500
         chip.tintColor = .white
         chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        chip.alpha = 0
         view.addSubview(chip)
         NSLayoutConstraint.activate([
             chip.topAnchor.constraint(equalTo: view.topAnchor),
@@ -153,15 +167,19 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
 
-    func configure(from responder: Responder?, index: Int, isMGS: Bool) {
+    func configure(from responder: Responder?, index: Int, isSelected: Bool = false) {
         responderId = responder?.id
+        checkbox.isChecked = isSelected
+
         guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
         agencyLabel.text = responder.agency?.displayName
         if let arrivedAt = responder.arrivedAt {
+            checkbox.isHidden = !isSelectable
             timestampLabel.text = arrivedAt.asRelativeString()
             button.isHidden = true
         } else {
+            checkbox.isHidden = true
             timestampLabel.text = "Responder.status.enroute".localized
             button.isHidden = false
         }

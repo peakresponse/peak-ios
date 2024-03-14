@@ -145,7 +145,6 @@
 		45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3924F09B1E005A8059 /* RecordingViewController.swift */; };
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
 		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
-		45E934E62B9AB85A007164AC /* TransportResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E52B9AB85A007164AC /* TransportResponderCollectionViewCell.swift */; };
 		45E934E82B9B7DBC007164AC /* TransportCartReportField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */; };
 		45F0176028442FE800C14E62 /* ResponderRoleSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
@@ -329,7 +328,6 @@
 		45E35A3924F09B1E005A8059 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Scenes.storyboard; sourceTree = "<group>"; };
-		45E934E52B9AB85A007164AC /* TransportResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportCartReportField.swift; sourceTree = "<group>"; };
 		45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleSelector.swift; sourceTree = "<group>"; };
 		45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Extensions.swift"; sourceTree = "<group>"; };
@@ -408,7 +406,6 @@
 				45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */,
 				45C207D92B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift */,
 				454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */,
-				45E934E52B9AB85A007164AC /* TransportResponderCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1068,7 +1065,6 @@
 				458CA0B8276040980065F324 /* CodeListItemsViewController.swift in Sources */,
 				452BD607284D2A3200D6E408 /* LatLngControl.swift in Sources */,
 				458CA0B0275FF9CE0065F324 /* NemsisKeyboard.swift in Sources */,
-				45E934E62B9AB85A007164AC /* TransportResponderCollectionViewCell.swift in Sources */,
 				456F050227B5E884000CEE42 /* Predictions.swift in Sources */,
 				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */,
