@@ -192,16 +192,8 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     // MARK: - ResponderCollectionViewCellDelegate
 
-    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
-        guard let responderId = responderId else { return }
-        AppRealm.markResponderArrived(responderId: responderId) { _ in
-        }
-    }
-
-    // MARK: - UICollectionViewDelegate
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+    func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
         var indexPaths: [IndexPath] = []
         if let responder = cart?.responder {
             if let index = results?.firstIndex(of: responder) {
@@ -217,6 +209,31 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
                 let responder = results?[indexPath.row]
                 cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
             }
+        }
+    }
+
+    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
+        guard let responderId = responderId else { return }
+        AppRealm.markResponderArrived(responderId: responderId) { _ in
+        }
+    }
+
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let responder = results?[indexPath.row] else { return }
+        if responder.user != nil || responder.vehicle != nil {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        } else {
+            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
+                vc.delegate = self
+                vc.responder = responder
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                vc.isEditing = true
+            }
+            presentAnimated(vc)
+            collectionView.deselectItem(at: indexPath, animated: false)
         }
     }
 

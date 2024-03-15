@@ -11,10 +11,11 @@ import PRKit
 import UIKit
 
 @objc protocol ResponderCollectionViewCellDelegate {
+    @objc optional func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool)
     @objc optional func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?)
 }
 
-class ResponderCollectionViewCell: UICollectionViewCell {
+class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
     var responderId: String?
     var isSelectable = false
 
@@ -60,11 +61,12 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         ])
 
         let checkbox = Checkbox()
+        checkbox.delegate = self
         checkbox.isHidden = !isSelectable
-        checkbox.isUserInteractionEnabled = false
         checkbox.isRadioButton = true
         checkbox.isRadioButtonDeselectable = true
         checkbox.label.superview?.isHidden = true
+        checkbox.heightAnchor.constraint(equalToConstant: 40).isActive = true
         checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
         row.addArrangedSubview(checkbox)
         self.checkbox = checkbox
@@ -209,5 +211,11 @@ class ResponderCollectionViewCell: UICollectionViewCell {
 
     @objc func markArrivedPressed(_ sender: RoundButton) {
         delegate?.responderCollectionViewCellDidMarkArrived?(self, responderId: responderId)
+    }
+
+    // MARK: - CheckboxDelegate
+
+    func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
+        delegate?.responderCollectionViewCell?(self, didToggle: isChecked)
     }
 }
