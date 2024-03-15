@@ -23,6 +23,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     weak var agencyLabel: UILabel!
     weak var timestampLabel: UILabel!
     weak var chip: Chip!
+    var chipZeroWidthConstraint: NSLayoutConstraint!
     weak var button: PRKit.Button!
     weak var vr: UIView!
 
@@ -84,9 +85,11 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         chip.alpha = 0
         view.addSubview(chip)
+        chipZeroWidthConstraint = chip.widthAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             chip.topAnchor.constraint(equalTo: view.topAnchor),
             chip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            chipZeroWidthConstraint,
             view.bottomAnchor.constraint(equalTo: chip.bottomAnchor)
         ])
         self.chip = chip
@@ -173,6 +176,9 @@ class ResponderCollectionViewCell: UICollectionViewCell {
 
         guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
+        if let user = responder.user {
+            unitLabel.text = "\(unitLabel.text ?? ""): \(user.fullNameLastFirst)"
+        }
         agencyLabel.text = responder.agency?.displayName
         if let arrivedAt = responder.arrivedAt {
             checkbox.isHidden = !isSelectable
@@ -185,6 +191,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         }
         if let capability = responder.capability {
             chip.alpha = 1
+            chipZeroWidthConstraint.isActive = false
             chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
             if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
                 chip.setTitleColor(.white, for: .normal)
@@ -195,6 +202,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             }
         } else {
             chip.alpha = 0
+            chipZeroWidthConstraint.isActive = true
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }

@@ -25,6 +25,10 @@ class User: Base {
         return "\(firstName ?? "") \(lastName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
     }
 
+    var fullNameLastFirst: String {
+        return "\(lastName ?? ""), \(firstName ?? "")".trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     var initials: String {
         return "\((firstName?.prefix(1) ?? "").uppercased())\((lastName?.prefix(1) ?? "").uppercased())"
     }
