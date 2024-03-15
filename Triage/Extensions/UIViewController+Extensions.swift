@@ -6,6 +6,7 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import PRKit
 import UIKit
 
 extension UIViewController: AuthViewControllerDelegate, ReportContainerViewControllerDelegate, UIAdaptivePresentationControllerDelegate {
@@ -28,12 +29,14 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
         presentAlert(title: "Error.title".localized, message: error.localizedDescription, completion: completion)
     }
 
-    func presentAlert(title: String, message: String, completion: (() -> Void)? = nil) {
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: { (_) in
+    func presentAlert(title: String?, message: String?, completion: (() -> Void)? = nil) {
+        let vc = ModalViewController()
+        vc.titleText = title
+        vc.messageText = message
+        vc.addAction(UIAlertAction(title: "OK".localized, style: .default, handler: { (_) in
             completion?()
         }))
-        present(alert, animated: true, completion: nil)
+        presentAnimated(vc)
     }
 
     func presentUnexpectedErrorAlert() {

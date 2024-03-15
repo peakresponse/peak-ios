@@ -11,15 +11,20 @@ import PRKit
 import UIKit
 
 @objc protocol ResponderCollectionViewCellDelegate {
+    @objc optional func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool)
     @objc optional func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?)
 }
 
-class ResponderCollectionViewCell: UICollectionViewCell {
+class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
     var responderId: String?
+    var isSelectable = false
+
+    weak var checkbox: Checkbox!
     weak var unitLabel: UILabel!
     weak var agencyLabel: UILabel!
     weak var timestampLabel: UILabel!
     weak var chip: Chip!
+    var chipZeroWidthConstraint: NSLayoutConstraint!
     weak var button: PRKit.Button!
     weak var vr: UIView!
 
@@ -38,6 +43,10 @@ class ResponderCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
+        let selectedBackgroundView = UIView()
+        selectedBackgroundView.backgroundColor = .base100
+        self.selectedBackgroundView = selectedBackgroundView
+
         let row = UIStackView()
         row.translatesAutoresizingMaskIntoConstraints = false
         row.axis = .horizontal
@@ -50,6 +59,17 @@ class ResponderCollectionViewCell: UICollectionViewCell {
             row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
             row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
+
+        let checkbox = Checkbox()
+        checkbox.delegate = self
+        checkbox.isHidden = !isSelectable
+        checkbox.isRadioButton = true
+        checkbox.isRadioButtonDeselectable = true
+        checkbox.label.superview?.isHidden = true
+        checkbox.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        row.addArrangedSubview(checkbox)
+        self.checkbox = checkbox
 
         let col = UIStackView()
         col.axis = .vertical
@@ -65,10 +85,13 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         chip.color = .brandPrimary500
         chip.tintColor = .white
         chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        chip.alpha = 0
         view.addSubview(chip)
+        chipZeroWidthConstraint = chip.widthAnchor.constraint(equalToConstant: 0)
         NSLayoutConstraint.activate([
             chip.topAnchor.constraint(equalTo: view.topAnchor),
             chip.rightAnchor.constraint(equalTo: view.rightAnchor),
+            chipZeroWidthConstraint,
             view.bottomAnchor.constraint(equalTo: chip.bottomAnchor)
         ])
         self.chip = chip
@@ -104,6 +127,7 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         button.size = .small
         button.setTitle("Button.markArrived".localized, for: .normal)
         button.addTarget(self, action: #selector(markArrivedPressed(_:)), for: .touchUpInside)
+        button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         row.addArrangedSubview(button)
         self.button = button
 
@@ -148,35 +172,50 @@ class ResponderCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
 
-    func configure(from responder: Responder?, index: Int, isMGS: Bool) {
+    func configure(from responder: Responder?, index: Int, isSelected: Bool = false) {
         responderId = responder?.id
+        checkbox.isChecked = isSelected
+
         guard let responder = responder else { return }
         unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
+        if let user = responder.user {
+            unitLabel.text = "\(unitLabel.text ?? ""): \(user.fullNameLastFirst)"
+        }
         agencyLabel.text = responder.agency?.displayName
         if let arrivedAt = responder.arrivedAt {
+            checkbox.isHidden = !isSelectable
             timestampLabel.text = arrivedAt.asRelativeString()
             button.isHidden = true
         } else {
+            checkbox.isHidden = true
             timestampLabel.text = "Responder.status.enroute".localized
             button.isHidden = false
         }
         if let capability = responder.capability {
             chip.alpha = 1
+            chipZeroWidthConstraint.isActive = false
             chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)
             if capability == ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue {
                 chip.setTitleColor(.white, for: .normal)
-                chip.color = .brandPrimary500
+                chip.color = .triageMinimalMedium
             } else {
-                chip.setTitleColor(.base800, for: .normal)
+                chip.setTitleColor(.white, for: .normal)
                 chip.color = .triageDelayedMedium
             }
         } else {
             chip.alpha = 0
+            chipZeroWidthConstraint.isActive = true
         }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 
     @objc func markArrivedPressed(_ sender: RoundButton) {
         delegate?.responderCollectionViewCellDidMarkArrived?(self, responderId: responderId)
+    }
+
+    // MARK: - CheckboxDelegate
+
+    func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
+        delegate?.responderCollectionViewCell?(self, didToggle: isChecked)
     }
 }

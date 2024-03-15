@@ -17,7 +17,7 @@ import UIKit
     @objc optional func transportRespondersViewController(_ vc: TransportRespondersViewController, didRemove report: Report?)
 }
 
-class TransportRespondersViewController: UIViewController, TransportResponderCollectionViewCellDelegate,
+class TransportRespondersViewController: UIViewController, ResponderCollectionViewCellDelegate,
                                          TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var stackView: UIStackView!
@@ -59,7 +59,7 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
 
-        collectionView.register(TransportResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
 
         performQuery()
     }
@@ -190,18 +190,10 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
         dismissAnimated()
     }
 
-    // MARK: - TransportResponderCollectionViewCellDelegate
+    // MARK: - ResponderCollectionViewCellDelegate
 
-    func transportResponderCollectionViewCellDidPressMarkArrived(_ cell: TransportResponderCollectionViewCell) {
-        guard let responderId = cell.responderId else { return }
-        AppRealm.markResponderArrived(responderId: responderId) { _ in
-        }
-    }
-
-    // MARK: - UICollectionViewDelegate
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+    func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
         var indexPaths: [IndexPath] = []
         if let responder = cart?.responder {
             if let index = results?.firstIndex(of: responder) {
@@ -213,10 +205,35 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
             indexPaths.append(indexPath)
         }
         for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? TransportResponderCollectionViewCell {
+            if let cell = collectionView.cellForItem(at: indexPath) as? ResponderCollectionViewCell {
                 let responder = results?[indexPath.row]
                 cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
             }
+        }
+    }
+
+    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
+        guard let responderId = responderId else { return }
+        AppRealm.markResponderArrived(responderId: responderId) { _ in
+        }
+    }
+
+    // MARK: - UICollectionViewDelegate
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let responder = results?[indexPath.row] else { return }
+        if responder.user != nil || responder.vehicle != nil {
+            collectionView.deselectItem(at: indexPath, animated: true)
+        } else {
+            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
+                vc.delegate = self
+                vc.responder = responder
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                vc.isEditing = true
+            }
+            presentAnimated(vc)
+            collectionView.deselectItem(at: indexPath, animated: false)
         }
     }
 
@@ -232,9 +249,10 @@ class TransportRespondersViewController: UIViewController, TransportResponderCol
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? TransportResponderCollectionViewCell, indexPath.row < (results?.count ?? 0) {
+        if let cell = cell as? ResponderCollectionViewCell, indexPath.row < (results?.count ?? 0) {
             let responder = results?[indexPath.row]
             cell.delegate = self
+            cell.isSelectable = true
             cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
         }
         return cell

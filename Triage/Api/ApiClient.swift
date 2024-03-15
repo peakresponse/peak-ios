@@ -16,6 +16,7 @@ enum ApiClientError: Error {
     case unexpected
     case notFound
     case disconnected
+    case conflict
 }
 
 class ApiClient {
@@ -108,6 +109,8 @@ class ApiClient {
                     completionHandler(request, response, nil, ApiClientError.forbidden)
                 } else if response.statusCode == 404 {
                     completionHandler(request, response, nil, ApiClientError.notFound)
+                } else if response.statusCode == 409 {
+                    completionHandler(request, response, nil, ApiClientError.conflict)
                 } else {
                     completionHandler(request, response, nil, ApiClientError.unexpected)
                 }
