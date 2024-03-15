@@ -12,9 +12,8 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, ResponderViewControllerDelegate,
+class RespondersViewController: SceneViewController, CommandHeaderDelegate, ResponderViewControllerDelegate,
                                 ResponderCollectionViewCellDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: PRKit.RoundButton!
     var formInputAccessoryView: UIView!
@@ -36,7 +35,8 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        commandHeader.searchField.delegate = self
+
+        initSceneCommandHeader()
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
@@ -72,7 +72,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         }
     }
 
-    func performQuery() {
+    override func performQuery() {
         notificationToken?.invalidate()
 
         let realm = AppRealm.open()
@@ -141,12 +141,6 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
             vc.isEditing = true
         }
         presentAnimated(vc)
-    }
-
-    // MARK: - FormFieldDelegate
-
-    func formComponentDidChange(_ component: PRKit.FormComponent) {
-        performQuery()
     }
 
     // MARK: - ResponderCollectionViewCellDelegate

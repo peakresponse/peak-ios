@@ -11,9 +11,8 @@ import PRKit
 import RealmSwift
 import AlignedCollectionViewFlowLayout
 
-class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabBarDelegate, PRKit.FormFieldDelegate, ReportsCountsHeaderViewDelegate,
+class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomTabBarDelegate, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var customTabBar: CustomTabBar!
     @IBOutlet weak var addButton: RoundButton!
@@ -53,9 +52,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
         if isMCI {
             addButton.isHidden = false
-            commandHeader.isSearchHidden = false
-            commandHeader.searchField.delegate = self
-
+            initSceneCommandHeader()
             collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
         } else {
             addButton.isHidden = true
@@ -113,7 +110,7 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
         }
     }
 
-    @objc func performQuery() {
+    @objc override func performQuery() {
         guard let incident = incident else { return }
 
         notificationToken?.invalidate()
@@ -205,17 +202,6 @@ class ReportsViewController: UIViewController, CommandHeaderDelegate, CustomTabB
 
     func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
         presentNewReport(incident: incident)
-    }
-
-    // MARK: - FormFieldDelegate
-
-    func formComponentDidChange(_ component: PRKit.FormComponent) {
-        performQuery()
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        field.resignFirstResponder()
-        return false
     }
 
     // MARK: - ReportContainerViewControllerDelegate
