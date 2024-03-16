@@ -84,50 +84,56 @@ class Disposition: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        if let _data = _data, let migrate = (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any])?["eDisposition"] as? [String: Any] {
+            return try? JSONSerialization.data(withJSONObject: migrate, options: [])
+        }
+        return _data
+    }
     @Persisted var destinationFacility: Facility?
 
     @objc var unitDisposition: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")?.text
+            return getFirstNemsisValue(forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.27")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.27")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.27")
         }
     }
 
     @objc var patientEvaluationCare: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.28")?.text
+            return getFirstNemsisValue(forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.28")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.28")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.28")
         }
     }
 
     @objc var crewDisposition: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.29")?.text
+            return getFirstNemsisValue(forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.29")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.29")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.29")
         }
     }
 
     @objc var transportDisposition: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.30")?.text
+            return getFirstNemsisValue(forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.30")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.30")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.30")
         }
     }
 
     @objc var reasonForRefusalRelease: [String]? {
         get {
-            return getNemsisValues(forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.31")?.map { $0.text ?? "" }
+            return getNemsisValues(forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.31")?.map { $0.text ?? "" }
         }
         set {
-            setNemsisValues(newValue?.map { NemsisValue(text: $0) }, forJSONPath: "/eDisposition/IncidentDispositionGroup/eDisposition.31")
+            setNemsisValues(newValue?.map { NemsisValue(text: $0) }, forJSONPath: "/eDisposition.IncidentDispositionGroup/eDisposition.31")
         }
     }
 

@@ -114,6 +114,9 @@ class Signature: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        return _data
+    }
     @Persisted var form: Form?
     @Persisted var formInstanceId: String?
 

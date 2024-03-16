@@ -20,6 +20,8 @@ let NemsisBackedPropertyMap: [String: (String, Bool)] = [
 ]
 
 protocol NemsisBacked: AnyObject {
+    var _tmpMigrateData: Data? { get }
+
     var _data: Data? { get set }
     var data: [String: Any] { get set }
 
@@ -33,7 +35,7 @@ protocol NemsisBacked: AnyObject {
 extension NemsisBacked {
     var data: [String: Any] {
         get {
-            if let _data = _data {
+            if let _data = _tmpMigrateData {
                 return (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any]) ?? [:]
             }
             return [:]
@@ -45,7 +47,7 @@ extension NemsisBacked {
 
     func dataPatch(from source: NemsisBacked) -> NSArray? {
         if let patch = try? JSONPatch(source: source._data ?? "{}".data(using: .utf8)!,
-                                      target: _data ?? "{}".data(using: .utf8)!) {
+                                      target: _tmpMigrateData ?? "{}".data(using: .utf8)!) {
             let jsonArray = patch.jsonArray
             if jsonArray.count > 0 {
                 return jsonArray
@@ -55,7 +57,7 @@ extension NemsisBacked {
     }
 
     func data(forJSONPath jsonPath: String) -> Any? {
-        if let _data = _data {
+        if let _data = _tmpMigrateData {
             let parts = jsonPath.split(separator: "/")
             let jsonPath = "$\(parts.map { #"["\#($0)"]"# }.joined())"
             if let path = SwiftPath(jsonPath) {
@@ -104,7 +106,7 @@ extension NemsisBacked {
             }
         }
         let patch = try! JSONPatch(jsonArray: patches as NSArray)
-        _data = try! patch.apply(to: _data ?? "{}".data(using: .utf8)!)
+        _data = try! patch.apply(to: _tmpMigrateData ?? "{}".data(using: .utf8)!)
     }
 
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue? {
@@ -172,7 +174,7 @@ extension NemsisBacked {
             }
         }
         let patch = try! JSONPatch(jsonArray: patches as NSArray)
-        _data = try! patch.apply(to: _data ?? "{}".data(using: .utf8)!)
+        _data = try! patch.apply(to: _tmpMigrateData ?? "{}".data(using: .utf8)!)
     }
 
     func getNemsisValues(forJSONPath jsonPath: String) -> [NemsisValue]? {

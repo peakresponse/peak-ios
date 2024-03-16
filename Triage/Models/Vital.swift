@@ -60,6 +60,9 @@ class Vital: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        return _data
+    }
 
     @objc var vitalSignsTakenAt: Date? {
         get {

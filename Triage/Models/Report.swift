@@ -32,6 +32,9 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let ringdownId = "ringdownId"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        return _data
+    }
     @Persisted var incident: Incident?
     @Persisted var filterPriority: Int?
     @Persisted var pin: String?
