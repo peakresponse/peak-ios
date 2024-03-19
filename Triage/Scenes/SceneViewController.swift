@@ -18,9 +18,55 @@ class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
         commandHeader.isSearchHidden = false
         commandHeader.searchField.returnKeyType = .done
         commandHeader.searchField.delegate = self
+        commandHeader.stackView.spacing = 10
+
+        let sceneButton = PRKit.Button()
+        sceneButton.size = .small
+        sceneButton.style = .secondary
+        sceneButton.setTitle("#", for: .normal)
+        sceneButton.addTarget(self, action: #selector(scenePressed(_:)), for: .touchUpInside)
+        commandHeader.centerBarButtonItem = UIBarButtonItem(customView: sceneButton)
+
+        var contentEdgeInsets = sceneButton.contentEdgeInsets
+        contentEdgeInsets.left = 6
+        contentEdgeInsets.right = 6
+        sceneButton.contentEdgeInsets = contentEdgeInsets
+        sceneButton.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        if let superview = sceneButton.superview {
+            sceneButton.widthAnchor.constraint(equalTo: superview.widthAnchor).isActive = true
+        }
+
+        let realm = AppRealm.open()
+        if let userId = AppSettings.userId {
+            let user = realm.object(ofType: User.self, forPrimaryKey: userId)
+            AppCache.cachedImage(from: user?.iconUrl) { [weak self] (image, _) in
+                let image = image?.rounded()
+                DispatchQueue.main.async { [weak self] in
+                    self?.commandHeader.userImage = image
+                }
+            }
+            var userLabelText = user?.fullName
+            if let assignmentId = AppSettings.assignmentId,
+               let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
+               let vehicleId = assignment.vehicleId,
+               let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+                userLabelText = "\(vehicle.number ?? ""): \(userLabelText ?? "")"
+            }
+            commandHeader.userLabelText = userLabelText
+        }
+        if let sceneId = AppSettings.sceneId {
+            let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+            if let incident = scene?.incident.first {
+                sceneButton.setTitle("#\(incident.number ?? "")", for: .normal)
+            }
+        }
     }
 
     func performQuery() {
+
+    }
+
+    @objc func scenePressed(_ sender: PRKit.Button) {
 
     }
 
