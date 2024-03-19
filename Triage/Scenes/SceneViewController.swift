@@ -50,7 +50,7 @@ class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
                let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
                let vehicleId = assignment.vehicleId,
                let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
-                userLabelText = "\(vehicle.number ?? ""): \(userLabelText ?? "")"
+                userLabelText = "\(vehicle.number ?? "")"
             }
             commandHeader.userLabelText = userLabelText
         }

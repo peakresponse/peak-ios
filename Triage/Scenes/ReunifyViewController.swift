@@ -12,9 +12,8 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, ReportsCountsHeaderViewDelegate,
+class ReunifyViewController: SceneViewController, CommandHeaderDelegate, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
 
     var incident: Incident?
@@ -48,8 +47,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
             layout.sectionHeadersPinToVisibleBounds = true
         }
 
-        commandHeader.isSearchHidden = false
-        commandHeader.searchField.delegate = self
+        initSceneCommandHeader()
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -74,7 +72,7 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         }
     }
 
-    @objc func performQuery() {
+    @objc override func performQuery() {
         guard let incident = incident else { return }
 
         notificationToken?.invalidate()
@@ -128,17 +126,6 @@ class ReunifyViewController: UIViewController, CommandHeaderDelegate, PRKit.Form
         case .error(let error):
             presentAlert(error: error)
         }
-    }
-
-    // MARK: - FormFieldDelegate
-
-    func formComponentDidChange(_ component: PRKit.FormComponent) {
-        performQuery()
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        field.resignFirstResponder()
-        return false
     }
 
     // MARK: - ReportsCountsHeaderViewDelegate
