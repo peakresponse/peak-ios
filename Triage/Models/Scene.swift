@@ -41,6 +41,9 @@ class Scene: BaseVersioned, NemsisBacked {
     }
     @Persisted(originProperty: "scene") var incident: LinkingObjects<Incident>
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        return _data
+    }
     @Persisted var name: String?
     @Persisted var desc: String?
     @Persisted var urgency: String?

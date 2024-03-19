@@ -33,32 +33,38 @@ class Response: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        if let _data = _data, let migrate = (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any])?["eResponse"] as? [String: Any] {
+            return try? JSONSerialization.data(withJSONObject: migrate, options: [])
+        }
+        return _data
+    }
     @Persisted var agency: Agency?
 
     @objc var incidentNumber: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.03")?.text
+            return getFirstNemsisValue(forJSONPath: "/eResponse.03")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.03")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse.03")
         }
     }
 
     @objc var unitTransportAndEquipmentCapability: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.07")?.text
+            return getFirstNemsisValue(forJSONPath: "/eResponse.07")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.07")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse.07")
         }
     }
 
     @objc var unitNumber: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eResponse/eResponse.13")?.text
+            return getFirstNemsisValue(forJSONPath: "/eResponse.13")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse/eResponse.13")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse.13")
         }
     }
 
