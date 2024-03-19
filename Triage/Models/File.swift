@@ -39,6 +39,9 @@ class File: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        return _data
+    }
     @Persisted var file: String? {
         didSet {
             setNemsisValue(NemsisValue(text: file), forJSONPath: "/eOther.22")

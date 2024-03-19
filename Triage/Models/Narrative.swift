@@ -14,13 +14,19 @@ class Narrative: BaseVersioned, NemsisBacked {
         static let dataPatch = "data_patch"
     }
     @Persisted var _data: Data?
+    var _tmpMigrateData: Data? {
+        if let _data = _data, let migrate = (try? JSONSerialization.jsonObject(with: _data, options: []) as? [String: Any])?["eNarrative"] as? [String: Any] {
+            return try? JSONSerialization.data(withJSONObject: migrate, options: [])
+        }
+        return _data
+    }
 
     @objc var text: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eNarrative/eNarrative.01")?.text
+            return getFirstNemsisValue(forJSONPath: "/eNarrative.01")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eNarrative/eNarrative.01")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eNarrative.01")
         }
     }
 

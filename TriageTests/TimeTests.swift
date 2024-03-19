@@ -37,9 +37,10 @@ class TimeTests: XCTestCase {
         let patch = changes?["data_patch"] as? [[String: Any]]
         XCTAssertNotNil(patch)
         XCTAssertEqual(patch?.count, 1)
+        print(patch)
         XCTAssertEqual(patch?[0]["op"] as? String, "add")
-        XCTAssertEqual(patch?[0]["path"] as? String, "/eTimes")
-        XCTAssertEqual((patch?[0]["value"] as? [String: Any])?["eTimes.03"] as? [String: String], [
+        XCTAssertEqual(patch?[0]["path"] as? String, "/eTimes.03")
+        XCTAssertEqual(patch?[0]["value"] as? [String: String], [
             "_text": now.asISO8601String()
         ])
 
@@ -55,10 +56,8 @@ class TimeTests: XCTestCase {
 
         time._data = """
         {
-            "eTimes": {
-                "eTimes.03": {
-                    "_text": "2020-04-06T21:22:10.102Z"
-                }
+            "eTimes.03": {
+                "_text": "2020-04-06T21:22:10.102Z"
             }
         }
         """.data(using: .utf8)!
