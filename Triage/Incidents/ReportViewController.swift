@@ -495,7 +495,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                                subheaderText: "ReportViewController.optional".localized)
         section.addArrangedSubview(header)
         addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].medicationAdministeredAt", attributeType: .datetime, tag: &tag, to: colA)
+                     attributeKey: "medications[\(i)].administeredAt", attributeType: .datetime, tag: &tag, to: colA)
         addTextField(source: source, target: target,
                      attributeKey: "medications[\(i)].medication",
                      attributeType: .custom(NemsisComboKeyboard(
@@ -509,6 +509,31 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                         isNegativeExclusive: false,
                         includeSystem: true)),
                      tag: &tag, to: colA)
+        addTextField(source: source, target: target,
+                     attributeKey: "medications[\(i)].administeredRoute",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        source: EnumKeyboardSource<MedicationAdministrationRoute>(),
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable,
+                            .notRecorded,
+                            .unabletoComplete
+                        ])),
+                     tag: &tag, to: colB)
+        addTextField(source: source, target: target,
+                     attributeKey: "medications[\(i)].dosage",
+                     attributeType: .decimal,
+                     tag: &tag, to: colB)
+        addTextField(source: source, target: target,
+                     attributeKey: "medications[\(i)].dosageUnits",
+                     attributeType: .custom(NemsisComboKeyboard(
+                        source: EnumKeyboardSource<MedicationDosageUnits>(),
+                        isMultiSelect: false,
+                        negatives: [
+                            .notApplicable,
+                            .notRecorded
+                        ])),
+                     tag: &tag, to: colB)
         addTextField(source: source, target: target,
                      attributeKey: "medications[\(i)].responseToMedication",
                      attributeType: .custom(NemsisComboKeyboard(

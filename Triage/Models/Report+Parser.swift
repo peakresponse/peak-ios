@@ -283,8 +283,8 @@ extension Report {
                             }
                             keyPath = keyPath.replacingOccurrences(of: "lastProcedure.", with: "procedures[\(procedures.count - 1)].")
                         } else if keyPath.starts(with: "lastMedication."), let lastMedication = lastMedication {
-                            if lastMedication.medicationAdministeredAt == nil {
-                                lastMedication.medicationAdministeredAt = Date()
+                            if lastMedication.administeredAt == nil {
+                                lastMedication.administeredAt = Date()
                             }
                             keyPath = keyPath.replacingOccurrences(of: "lastMedication.", with: "medications[\(medications.count - 1)].")
                         }
