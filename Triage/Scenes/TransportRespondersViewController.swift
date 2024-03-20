@@ -128,7 +128,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     @IBAction
     func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController {
             vc.delegate = self
             let responder = Responder()
@@ -217,7 +217,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         if responder.user != nil || responder.vehicle != nil {
             collectionView.deselectItem(at: indexPath, animated: true)
         } else {
-            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
             if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
                 vc.delegate = self
                 vc.responder = responder

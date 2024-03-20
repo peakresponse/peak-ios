@@ -35,7 +35,6 @@
 		454E17BB24FFF5FB00F9EB8B /* TriageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */; };
 		454EE968251C62D800EB266A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE967251C62D800EB266A /* LocationHelper.swift */; };
 		454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */; };
-		454EEAA92524078C00EB266A /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 454EEAA82524078C00EB266A /* Users.storyboard */; };
 		454F9C9E28D38717009F7115 /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9D28D38717009F7115 /* Form.swift */; };
 		454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */; };
 		454F9CA228D3BA19009F7115 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA128D3BA19009F7115 /* FormTests.swift */; };
@@ -212,7 +211,6 @@
 		454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageViewController.swift; sourceTree = "<group>"; };
 		454EE967251C62D800EB266A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
-		454EEAA82524078C00EB266A /* Users.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		454F9C9D28D38717009F7115 /* Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
 		454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObjectExtensions.swift; sourceTree = "<group>"; };
 		454F9CA128D3BA19009F7115 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
@@ -398,6 +396,9 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
+				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
+				45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
 				45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */,
 				458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */,
@@ -410,18 +411,6 @@
 				45E12168282B341200D8DDBE /* TriageHeaderCell.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		454EEA9F2524073300EB266A /* Users */ = {
-			isa = PBXGroup;
-			children = (
-				45F1303B25253A8E001495C7 /* Views */,
-				45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */,
-				455958CA2B893587005962F5 /* ResponderViewController.swift */,
-				45761BF12B89137B00530E42 /* RespondersViewController.swift */,
-				454EEAA82524078C00EB266A /* Users.storyboard */,
-			);
-			path = Users;
 			sourceTree = "<group>";
 		};
 		4566F013236CCC5500A04C75 = {
@@ -457,7 +446,6 @@
 				45C007C7272A023A0072FF18 /* Incidents */,
 				45C9DAA527D5987E0003B44B /* Routed */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
-				454EEA9F2524073300EB266A /* Users */,
 				4566F078236D484D00A04C75 /* Views */,
 				45ACBDC7237E718600C99EBB /* AppCache.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
@@ -683,6 +671,9 @@
 			children = (
 				454E17B324FF28BF00F9EB8B /* Views */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
+				45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */,
+				455958CA2B893587005962F5 /* ResponderViewController.swift */,
+				45761BF12B89137B00530E42 /* RespondersViewController.swift */,
 				45C207DD2BA0CB9100150184 /* ReunifyViewController.swift */,
 				453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */,
 				45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */,
@@ -695,16 +686,6 @@
 				454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */,
 			);
 			path = Scenes;
-			sourceTree = "<group>";
-		};
-		45F1303B25253A8E001495C7 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
-				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
-				45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		90CCACB3DC232FDED43273D4 /* Frameworks */ = {
@@ -830,7 +811,6 @@
 			files = (
 				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
 				452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */,
-				454EEAA92524078C00EB266A /* Users.storyboard in Resources */,
 				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
