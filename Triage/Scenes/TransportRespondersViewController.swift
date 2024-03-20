@@ -84,6 +84,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
                                       searchText, searchText, searchText, searchText)
         }
         results = results?.sorted(by: [
+            SortDescriptor(keyPath: "sort"),
             SortDescriptor(keyPath: "arrivedAt"),
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),

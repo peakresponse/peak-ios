@@ -130,6 +130,10 @@ class Scene: BaseVersioned, NemsisBacked {
     @Persisted var transportResponderId: String?
     @Persisted(originProperty: "scene") var responders: LinkingObjects<Responder>
 
+    var leaderIds: [String] {
+        return [mgsResponderId ?? "", triageResponderId ?? "", treatmentResponderId ?? "", stagingResponderId ?? "", transportResponderId ?? ""].filter({ !$0.isEmpty })
+    }
+
     override var description: String {
         return name ?? ""
     }
@@ -280,5 +284,11 @@ class Scene: BaseVersioned, NemsisBacked {
 
     func isResponder(userId: String?) -> Bool {
         return responders.filter("user.id=%@", userId as Any).count > 0
+    }
+
+    func updateRespondersSort() {
+        responders.setValue(0, forKey: "sort")
+        let leaders = responders.filter("id IN %@", leaderIds)
+        leaders.setValue(10, forKey: "sort")
     }
 }

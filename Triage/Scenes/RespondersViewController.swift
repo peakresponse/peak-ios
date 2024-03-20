@@ -86,6 +86,7 @@ class RespondersViewController: SceneViewController, CommandHeaderDelegate, Resp
                                       text, text, text, text)
         }
         results = results?.sorted(by: [
+            SortDescriptor(keyPath: "sort"),
             SortDescriptor(keyPath: "arrivedAt"),
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),
