@@ -1,5 +1,5 @@
 //
-//  SceneOverviewViewController.swift
+//  TriageViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 9/2/20.
@@ -10,8 +10,8 @@ import RealmSwift
 import UIKit
 import PRKit
 
-class SceneOverviewViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
-                                   SceneOverviewCounterCellDelegate {
+class TriageViewController: SceneViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
+                            SceneOverviewCounterCellDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
 
     private var scene: Scene?
@@ -30,6 +30,9 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        initSceneCommandHeader()
+        commandHeader.searchField.alpha = 0
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
             layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 120)
@@ -153,16 +156,14 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: // header
+        case 0: // approx triage counts header
             return 1
-        case 1: // approx triage counts header
-            return 1
-        case 2: // triage counters
+        case 1: // triage counters
             return isExpectantHidden ? 5 : 6
         default:
             return 0
@@ -173,10 +174,8 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         var cell: UICollectionViewCell
         switch indexPath.section {
         case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
-        case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewTriageTotal", for: indexPath)
-        case 2:
+        case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
             if let cell = cell as? SceneOverviewCounterCell {
                 cell.delegate = self
@@ -203,7 +202,7 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section == 1 {
+        if section == 0 {
             return UIEdgeInsets(top: 1, left: 20, bottom: 0, right: 20)
         }
         return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)

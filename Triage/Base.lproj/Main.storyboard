@@ -40,10 +40,10 @@
             </objects>
             <point key="canvasLocation" x="391" y="0.0"/>
         </scene>
-        <!--Overview-->
+        <!--Triage-->
         <scene sceneID="13a-du-irn">
             <objects>
-                <viewControllerPlaceholder storyboardName="Scenes" referencedIdentifier="Overview" id="HOx-Le-ka0" sceneMemberID="viewController">
+                <viewControllerPlaceholder storyboardName="Scenes" referencedIdentifier="Triage" id="HOx-Le-ka0" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Triage" id="6zm-h1-3ev"/>
                 </viewControllerPlaceholder>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZBT-S8-v5z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
