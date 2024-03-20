@@ -1,5 +1,5 @@
 //
-//  ResponderRolesViewController.swift
+//  SceneOverviewViewController.swift
 //  Triage
 //
 //  Created by Francis Li on 5/29/22.
@@ -11,8 +11,8 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
-                                    UICollectionViewDataSource, UICollectionViewDelegate {
+class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
+                                   UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     var formInputAccessoryView: UIView!
@@ -34,6 +34,8 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         commandHeader.searchField.delegate = self
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
@@ -74,7 +76,7 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
-        results = scene.responders.filter("departedAt=%@", NSNull())
+        results = scene.responders.filter("user<>%@ AND departedAt=%@", NSNull(), NSNull())
         if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             results = results?.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
                                       text, text, text)
@@ -111,6 +113,7 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
     }
 
     // MARK: - FormFieldDelegate
+
     func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
         if let responder = field.source as? Responder {
             let isSelf = AppSettings.userId == responder.user?.id
@@ -147,6 +150,65 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
         return false
     }
 
+    private func leaveScene() {
+        _ = AppDelegate.leaveScene()
+    }
+
+    @IBAction func closePressed(_ sender: Any) {
+        guard let scene = scene else { return }
+        let sceneId = scene.id
+        if scene.mgsResponder?.user?.id == AppSettings.userId {
+            let vc = ModalViewController()
+            vc.isDismissedOnAction = false
+            vc.messageText = "CloseSceneConfirmation.message".localized
+            vc.addAction(UIAlertAction(title: "Button.close".localized, style: .destructive, handler: { [weak self] (_) in
+                guard let self = self else { return }
+                AppRealm.endScene(sceneId: sceneId) { [weak self] (error) in
+                    DispatchQueue.main.async { [weak self] in
+                        vc.dismissAnimated()
+                        if let error = error {
+                            self?.presentAlert(error: error)
+                        } else {
+                            self?.leaveScene()
+                        }
+                    }
+                }
+            }))
+            vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+            presentAnimated(vc)
+        } else {
+            if scene.isResponder(userId: AppSettings.userId) {
+                AppRealm.leaveScene(sceneId: sceneId) { _ in
+                }
+            }
+            leaveScene()
+        }
+    }
+
+    @IBAction func editPressed(_ sender: Any) {
+        guard let scene = scene else { return }
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
+        if let vc = vc as? LocationViewController {
+            vc.modalPresentationStyle = .fullScreen
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
+            vc.scene = scene
+            vc.newScene = Scene(clone: scene)
+            _ = vc.view
+            vc.isEditing = true
+        }
+        presentAnimated(vc)
+    }
+
+    @objc func saveScenePressed() {
+        if let vc = presentedViewController as? LocationViewController {
+            if let scene = vc.newScene {
+                AppRealm.updateScene(scene: scene)
+            }
+            dismissAnimated()
+        }
+    }
+
     // MARK: - KeyboardSource
 
     var name: String {
@@ -181,21 +243,39 @@ class ResponderRolesViewController: UIViewController, CommandHeaderDelegate, PRK
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return results?.count ?? 0
+        switch section {
+        case 0: // overview header
+            return 1
+        case 1: // responders
+            return results?.count ?? 0
+        default:
+            return 0
+        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? ResponderRoleCollectionViewCell {
-            let responder = results?[indexPath.row]
-            let isMGS = scene?.mgsResponderId == responder?.id
-            cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
-            cell.roleSelector.delegate = self
-            cell.roleSelector.inputAccessoryView = formInputAccessoryView
+        let cell: UICollectionViewCell
+        switch indexPath.section {
+        case 0:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
+            if let cell = cell as? SceneOverviewHeaderCell, let scene = scene {
+                cell.configure(from: scene)
+            }
+        case 1:
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
+            if let cell = cell as? ResponderRoleCollectionViewCell {
+                let responder = results?[indexPath.row]
+                let isMGS = scene?.mgsResponderId == responder?.id
+                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+                cell.roleSelector.delegate = self
+                cell.roleSelector.inputAccessoryView = formInputAccessoryView
+            }
+        default:
+            cell = UICollectionViewCell()
         }
         return cell
     }

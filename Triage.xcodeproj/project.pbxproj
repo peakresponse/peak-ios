@@ -104,7 +104,7 @@
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
-		45BD803828440C5A00BD6F92 /* ResponderRolesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */; };
+		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -139,7 +139,6 @@
 		45D422C32B94FB2300E75D7E /* RegionAgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422C22B94FB2300E75D7E /* RegionAgency.swift */; };
 		45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */; };
 		45E1215E282AF06900D8DDBE /* Barlow-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */; };
-		45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */; };
 		45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12168282B341200D8DDBE /* TriageHeaderCell.swift */; };
 		45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3724F06A8E005A8059 /* RecordButton.swift */; };
 		45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3924F09B1E005A8059 /* RecordingViewController.swift */; };
@@ -287,7 +286,7 @@
 		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
-		45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRolesViewController.swift; sourceTree = "<group>"; };
+		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -322,7 +321,6 @@
 		45D422C22B94FB2300E75D7E /* RegionAgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionAgency.swift; sourceTree = "<group>"; };
 		45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageCounterCell.swift; sourceTree = "<group>"; };
 		45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Bold.ttf"; sourceTree = "<group>"; };
-		45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCell.swift; sourceTree = "<group>"; };
 		45E12168282B341200D8DDBE /* TriageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageHeaderCell.swift; sourceTree = "<group>"; };
 		45E35A3724F06A8E005A8059 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 		45E35A3924F09B1E005A8059 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
@@ -400,7 +398,6 @@
 				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
 				45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
-				45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */,
 				458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */,
 				45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */,
 				45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */,
@@ -671,11 +668,11 @@
 			children = (
 				454E17B324FF28BF00F9EB8B /* Views */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
-				45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */,
 				455958CA2B893587005962F5 /* ResponderViewController.swift */,
 				45761BF12B89137B00530E42 /* RespondersViewController.swift */,
 				45C207DD2BA0CB9100150184 /* ReunifyViewController.swift */,
 				453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */,
+				45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */,
 				45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */,
 				45C207E32BA3E03700150184 /* SceneViewController.swift */,
 				45C207DB2B9BE28A00150184 /* TransportConfirmViewController.swift */,
@@ -1068,7 +1065,7 @@
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
 				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
-				45BD803828440C5A00BD6F92 /* ResponderRolesViewController.swift in Sources */,
+				45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */,
 				45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */,
 				45C207DA2B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift in Sources */,
 				45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */,
@@ -1088,7 +1085,6 @@
 				458CA0CC277293580065F324 /* FormBuilder.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45F0176028442FE800C14E62 /* ResponderRoleSelector.swift in Sources */,
-				45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */,
 				454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
 				45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */,

@@ -9,20 +9,30 @@
 import UIKit
 import PRKit
 
-class SceneOverviewHeaderCell: UICollectionViewCell, SceneOverviewCell {
+class SceneOverviewHeaderCell: UICollectionViewCell {
     @IBOutlet weak var incidentNumberLabel: UILabel!
     @IBOutlet weak var addressLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var closeButton: PRKit.Button!
     @IBOutlet weak var editButton: PRKit.Button!
 
+    var calculatedSize: CGSize?
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        calculatedSize = nil
+    }
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        let width = UIScreen.main.bounds.width - 40
-        if attributes.frame.size.width < width {
-            attributes.frame.size.width = width
+        if calculatedSize == nil {
+            if traitCollection.horizontalSizeClass == .regular {
+                calculatedSize = CGSize(width: 372, height: 136)
+            } else {
+                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 136)
+            }
         }
-        return attributes
+        layoutAttributes.size = calculatedSize ?? .zero
+        return layoutAttributes
     }
 
     func configure(from scene: Scene) {

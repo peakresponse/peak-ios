@@ -65,84 +65,9 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     private func refresh() {
         guard let scene = scene else { return }
         for cell in collectionView.visibleCells {
-            if let cell = cell as? SceneOverviewCell {
+            if let cell = cell as? TriageCounterCell {
                 cell.configure(from: scene)
             }
-        }
-    }
-
-    @IBAction func editPressed(_ sender: Any) {
-        guard let scene = scene else { return }
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
-        if let vc = vc as? LocationViewController {
-            vc.modalPresentationStyle = .fullScreen
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
-            vc.scene = scene
-            vc.newScene = Scene(clone: scene)
-            _ = vc.view
-            vc.isEditing = true
-        }
-        presentAnimated(vc)
-    }
-
-    @IBAction func notePressed(_ sender: Any) {
-    }
-
-    @IBAction func photoPressed(_ sender: Any) {
-    }
-
-    @IBAction func joinPressed(_ sender: Any) {
-        guard let sceneId = scene?.id else { return }
-        AppRealm.joinScene(sceneId: sceneId) { (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
-                }
-            }
-        }
-    }
-
-    @IBAction func transferPressed(_ sender: Any) {
-    }
-
-    @IBAction func closePressed(_ sender: Any) {
-        guard let scene = scene else { return }
-        let sceneId = scene.id
-        if scene.mgsResponder?.user?.id == AppSettings.userId {
-            let vc = ModalViewController()
-            vc.isDismissedOnAction = false
-            vc.messageText = "CloseSceneConfirmation.message".localized
-            vc.addAction(UIAlertAction(title: "Button.close".localized, style: .destructive, handler: { [weak self] (_) in
-                guard let self = self else { return }
-                AppRealm.endScene(sceneId: sceneId) { [weak self] (error) in
-                    DispatchQueue.main.async { [weak self] in
-                        vc.dismissAnimated()
-                        if let error = error {
-                            self?.presentAlert(error: error)
-                        } else {
-                            self?.leaveScene()
-                        }
-                    }
-                }
-            }))
-            vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
-            presentAnimated(vc)
-        } else {
-            if scene.isResponder(userId: AppSettings.userId) {
-                AppRealm.leaveScene(sceneId: sceneId) { _ in
-                }
-            }
-            leaveScene()
-        }
-    }
-
-    @objc func saveScenePressed() {
-        if let vc = presentedViewController as? LocationViewController {
-            if let scene = vc.newScene {
-                AppRealm.updateScene(scene: scene)
-            }
-            dismissAnimated()
         }
     }
 

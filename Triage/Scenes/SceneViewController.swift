@@ -67,7 +67,11 @@ class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
     }
 
     @objc func scenePressed(_ sender: PRKit.Button) {
-
+        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "ResponderRoles")
+        if let vc = vc as? SceneOverviewViewController {
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+        }
+        presentAnimated(vc)
     }
 
     // MARK: - FormFieldDelegate
