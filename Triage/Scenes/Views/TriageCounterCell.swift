@@ -1,5 +1,5 @@
 //
-//  SceneOverviewCounterCell.swift
+//  TriageCounterCell.swift
 //  Triage
 //
 //  Created by Francis Li on 5/10/22.
@@ -9,14 +9,14 @@
 import UIKit
 import PRKit
 
-protocol SceneOverviewCounterCellDelegate: AnyObject {
-    func counterCell(_ cell: SceneOverviewCounterCell, didChange value: Int, for priority: TriagePriority?)
+protocol TriageCounterCellDelegate: AnyObject {
+    func counterCell(_ cell: TriageCounterCell, didChange value: Int, for priority: TriagePriority?)
 }
 
-class SceneOverviewCounterCell: UICollectionViewCell, SceneOverviewCell {
+class TriageCounterCell: UICollectionViewCell, SceneOverviewCell {
     @IBOutlet weak var counterControl: CounterControl!
 
-    weak var delegate: SceneOverviewCounterCellDelegate?
+    weak var delegate: TriageCounterCellDelegate?
 
     var priority: TriagePriority? {
         didSet { updatePriority() }

@@ -138,10 +138,10 @@
 		45D422BF2B8D359900E75D7E /* AgencyKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422BE2B8D359900E75D7E /* AgencyKeyboardSource.swift */; };
 		45D422C12B94FB1400E75D7E /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422C02B94FB1400E75D7E /* Region.swift */; };
 		45D422C32B94FB2300E75D7E /* RegionAgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422C22B94FB2300E75D7E /* RegionAgency.swift */; };
-		45E1215C282AEA2300D8DDBE /* SceneOverviewCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */; };
+		45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */; };
 		45E1215E282AF06900D8DDBE /* Barlow-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */; };
 		45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */; };
-		45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */; };
+		45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12168282B341200D8DDBE /* TriageHeaderCell.swift */; };
 		45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3724F06A8E005A8059 /* RecordButton.swift */; };
 		45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3924F09B1E005A8059 /* RecordingViewController.swift */; };
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
@@ -322,10 +322,10 @@
 		45D422BE2B8D359900E75D7E /* AgencyKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgencyKeyboardSource.swift; sourceTree = "<group>"; };
 		45D422C02B94FB1400E75D7E /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		45D422C22B94FB2300E75D7E /* RegionAgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionAgency.swift; sourceTree = "<group>"; };
-		45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCounterCell.swift; sourceTree = "<group>"; };
+		45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageCounterCell.swift; sourceTree = "<group>"; };
 		45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Bold.ttf"; sourceTree = "<group>"; };
 		45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCell.swift; sourceTree = "<group>"; };
-		45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewTriageTotalCell.swift; sourceTree = "<group>"; };
+		45E12168282B341200D8DDBE /* TriageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageHeaderCell.swift; sourceTree = "<group>"; };
 		45E35A3724F06A8E005A8059 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 		45E35A3924F09B1E005A8059 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
@@ -400,14 +400,14 @@
 			children = (
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
 				45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */,
-				45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */,
 				458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */,
-				45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */,
 				45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */,
 				45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */,
 				45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */,
 				45C207D92B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift */,
 				454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */,
+				45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */,
+				45E12168282B341200D8DDBE /* TriageHeaderCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1077,7 +1077,7 @@
 				451F9DCC291ED0C500B5E73A /* ImageView.swift in Sources */,
 				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,
 				45C207E22BA0D2B900150184 /* TransportCartFacilityField.swift in Sources */,
-				45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */,
+				45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */,
 				45C207D82B9BAB7E00150184 /* RegionFacility.swift in Sources */,
 				454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
@@ -1091,7 +1091,7 @@
 				45BD803828440C5A00BD6F92 /* ResponderRolesViewController.swift in Sources */,
 				45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */,
 				45C207DA2B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift in Sources */,
-				45E1215C282AEA2300D8DDBE /* SceneOverviewCounterCell.swift in Sources */,
+				45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */,
 				45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* PRApiClient.swift in Sources */,
 				45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */,

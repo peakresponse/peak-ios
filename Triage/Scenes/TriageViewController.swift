@@ -11,7 +11,7 @@ import UIKit
 import PRKit
 
 class TriageViewController: SceneViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
-                            SceneOverviewCounterCellDelegate {
+                            TriageCounterCellDelegate {
     @IBOutlet weak var collectionView: UICollectionView!
 
     private var scene: Scene?
@@ -146,9 +146,9 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         }
     }
 
-    // MARK: - SceneOverviewCounterCellDelegate
+    // MARK: - TriageCounterCellDelegate
 
-    func counterCell(_ cell: SceneOverviewCounterCell, didChange value: Int, for priority: TriagePriority?) {
+    func counterCell(_ cell: TriageCounterCell, didChange value: Int, for priority: TriagePriority?) {
         guard let sceneId = scene?.id else { return }
         AppRealm.updateApproxPatientsCounts(sceneId: sceneId, priority: priority, value: value)
     }
@@ -174,10 +174,10 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         var cell: UICollectionViewCell
         switch indexPath.section {
         case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewTriageTotal", for: indexPath)
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TriageHeader", for: indexPath)
         case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
-            if let cell = cell as? SceneOverviewCounterCell {
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TriageCounter", for: indexPath)
+            if let cell = cell as? TriageCounterCell {
                 cell.delegate = self
                 if indexPath.row > 0 {
                     var value = indexPath.row - 1
@@ -188,12 +188,12 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
                 } else {
                     cell.priority = nil
                 }
+                if let scene = scene {
+                    cell.configure(from: scene)
+                }
             }
         default:
             cell = UICollectionViewCell()
-        }
-        if let cell = cell as? SceneOverviewCell, let scene = scene {
-            cell.configure(from: scene)
         }
         return cell
     }
@@ -203,7 +203,7 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 1, left: 20, bottom: 0, right: 20)
+            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         }
         return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }

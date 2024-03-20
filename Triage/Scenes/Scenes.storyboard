@@ -122,7 +122,7 @@
                                             <outlet property="timestampLabel" destination="rsq-D8-wBq" id="jHn-Bq-Kfa"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewCounter" id="LME-6G-1lm" customClass="SceneOverviewCounterCell" customModule="Peak_Response" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="TriageCounter" id="LME-6G-1lm" customClass="TriageCounterCell" customModule="Peak_Response" customModuleProvider="target">
                                         <rect key="frame" x="146" y="44" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zFO-85-aFy">
@@ -148,7 +148,7 @@
                                             <outlet property="counterControl" destination="Xcw-sf-Ybn" id="gu7-tC-Uvh"/>
                                         </connections>
                                     </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="SceneOverviewTriageTotal" id="RCh-Jd-qdd" customClass="SceneOverviewTriageTotalCell" customModule="Peak_Response" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="TriageHeader" id="RCh-Jd-qdd" customClass="TriageHeaderCell" customModule="Peak_Response" customModuleProvider="target">
                                         <rect key="frame" x="216" y="55.5" width="42" height="27"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6LV-Hl-TfL">
