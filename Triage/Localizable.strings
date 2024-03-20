@@ -575,13 +575,13 @@
 
 "SortBar.sortBy" = "Sort By :";
 
-"TabBarItem.patientDetails" = "Treat";
 "TabBarItem.reunify" = "Reunify";
 "TabBarItem.rolesResources" = "Roles/\nResources";
 "TabBarItem.sceneMap" = "Scene\nMap";
-"TabBarItem.sceneOverview" = "Triage";
 "TabBarItem.stage" = "Stage";
 "TabBarItem.transport" = "Transport";
+"TabBarItem.treat" = "Treat";
+"TabBarItem.triage" = "Triage";
 
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
 "Time.arrivedAtPatient" = "Arrived at Patient";

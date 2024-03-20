@@ -20,7 +20,7 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        tabBarItem.title = "TabBarItem.sceneOverview".localized
+        tabBarItem.title = "TabBarItem.triage".localized
         tabBarItem.image = UIImage(named: "Triage", in: PRKitBundle.instance, compatibleWith: nil)
     }
 

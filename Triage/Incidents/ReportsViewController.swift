@@ -26,7 +26,7 @@ class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomT
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        tabBarItem.title = "TabBarItem.patientDetails".localized
+        tabBarItem.title = "TabBarItem.treat".localized
         tabBarItem.image = UIImage(named: "Treat", in: PRKitBundle.instance, compatibleWith: nil)
     }
 

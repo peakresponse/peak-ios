@@ -13,7 +13,7 @@ protocol TriageCounterCellDelegate: AnyObject {
     func counterCell(_ cell: TriageCounterCell, didChange value: Int, for priority: TriagePriority?)
 }
 
-class TriageCounterCell: UICollectionViewCell, SceneOverviewCell {
+class TriageCounterCell: UICollectionViewCell {
     @IBOutlet weak var counterControl: CounterControl!
 
     weak var delegate: TriageCounterCellDelegate?
