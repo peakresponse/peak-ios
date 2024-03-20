@@ -68,8 +68,8 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
 
     @IBAction func segmentedControlChanged(_ sender: SegmentedControl) {
         removeCurrentViewController()
-        _ = commandHeader.searchField.resignFirstResponder()
         commandHeader.searchField.clearPressed()
+        _ = formFieldShouldReturn(commandHeader.searchField)
         var vc = cachedViewControllers[sender.selectedIndex]
         if vc == nil {
             switch sender.selectedIndex {
