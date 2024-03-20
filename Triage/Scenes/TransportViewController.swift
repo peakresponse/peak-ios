@@ -20,9 +20,10 @@ protocol TransportCartViewController: UIViewController {
     var cart: TransportCart? { get set }
     var collectionView: UICollectionView! { get }
     func updateCart()
+    func performQuery(_ searchText: String?)
 }
 
-class TransportViewController: UIViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
+class TransportViewController: SceneViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
                                TransportFacilitiesViewControllerDelegate, TransportConfirmViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
@@ -41,6 +42,8 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        initSceneCommandHeader()
 
         if incident == nil, let sceneId = AppSettings.sceneId,
            let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
@@ -65,6 +68,8 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
 
     @IBAction func segmentedControlChanged(_ sender: SegmentedControl) {
         removeCurrentViewController()
+        _ = commandHeader.searchField.resignFirstResponder()
+        commandHeader.searchField.clearPressed()
         var vc = cachedViewControllers[sender.selectedIndex]
         if vc == nil {
             switch sender.selectedIndex {
@@ -93,13 +98,19 @@ class TransportViewController: UIViewController, TransportReportsViewControllerD
             }
         }
         if let vc = vc as? TransportCartViewController {
-            vc.cart = cart
-            vc.updateCart()
-            vc.collectionView?.reloadData()
             addChild(vc)
             containerView.addSubview(vc.view)
+            vc.cart = cart
+            vc.updateCart()
+            vc.performQuery(nil)
             vc.view.frame = containerView.bounds
             vc.didMove(toParent: self)
+        }
+    }
+
+    override func performQuery() {
+        if let vc = children.first as? TransportCartViewController {
+            vc.performQuery(commandHeader.searchField.text)
         }
     }
 

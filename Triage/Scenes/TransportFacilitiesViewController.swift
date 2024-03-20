@@ -56,29 +56,29 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
 
         collectionView.register(TransportFacilityCollectionViewCell.self, forCellWithReuseIdentifier: "Facility")
 
-        updateCart()
-
-        performQuery()
+        // query for Report to populate Transported counts
+        reportsNotificationToken?.invalidate()
+        if let incident = incident {
+            let realm = AppRealm.open()
+            reports = realm.objects(Report.self).filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            reportsNotificationToken = reports?.observe { [weak self] (changes) in
+                self?.didObserveReportsChanges(changes)
+            }
+        }
     }
 
-    func performQuery() {
+    @objc func performQuery(_ searchText: String? = nil) {
         let realm = AppRealm.open()
 
         // query for Facility
         notificationToken?.invalidate()
         if let regionId = AppSettings.regionId {
             results = realm.objects(RegionFacility.self).filter("regionId=%@", regionId).sorted(byKeyPath: "position", ascending: true)
+            if let searchText = searchText, !searchText.isEmpty {
+                results = results?.filter("(facilityName CONTAINS[cd] %@) OR (facility.name CONTAINS[cd] %@)", searchText, searchText)
+            }
             notificationToken = results?.observe { [weak self] (changes) in
                 self?.didObserveRealmChanges(changes)
-            }
-        }
-
-        // query for Report to populate Transported counts
-        reportsNotificationToken?.invalidate()
-        if let incident = incident {
-            reports = realm.objects(Report.self).filter("incident=%@ AND canonicalId=%@", incident, NSNull())
-            reportsNotificationToken = reports?.observe { [weak self] (changes) in
-                self?.didObserveReportsChanges(changes)
             }
         }
 

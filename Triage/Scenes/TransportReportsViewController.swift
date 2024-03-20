@@ -17,7 +17,6 @@ import UIKit
 
 class TransportReportsViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
                                       UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: RoundButton!
 
@@ -32,19 +31,14 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        commandHeader.isSearchHidden = false
-        commandHeader.searchField.delegate = self
-
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
 
         collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
-
-        performQuery()
     }
 
-    @objc func performQuery() {
+    @objc func performQuery(_ searchText: String? = nil) {
         guard let incident = incident else { return }
 
         notificationToken?.invalidate()
@@ -53,9 +47,9 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         results = realm.objects(Report.self)
             .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
         filteredResults = results
-        if let text = commandHeader.searchField.text, !text.isEmpty {
+        if let searchText = searchText, !searchText.isEmpty {
             filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
-                                      text, text, text)
+                                                      searchText, searchText, searchText)
         }
         filteredResults = filteredResults?.sorted(by: [
             SortDescriptor(keyPath: "filterPriority"),
@@ -69,8 +63,6 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
 
     @objc func refresh() {
         guard let incident = incident else { return }
-        collectionView.refreshControl?.beginRefreshing()
-        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
         AppRealm.getReports(incident: incident) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
