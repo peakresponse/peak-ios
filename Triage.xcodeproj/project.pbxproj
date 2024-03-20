@@ -32,10 +32,9 @@
 		454E17B224FF159C00F9EB8B /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B124FF159C00F9EB8B /* Scene.swift */; };
 		454E17B724FFF5BF00F9EB8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B624FFF5BF00F9EB8B /* User.swift */; };
 		454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B824FFF5C900F9EB8B /* Responder.swift */; };
-		454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */; };
+		454E17BB24FFF5FB00F9EB8B /* TriageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */; };
 		454EE968251C62D800EB266A /* LocationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EE967251C62D800EB266A /* LocationHelper.swift */; };
 		454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */; };
-		454EEAA92524078C00EB266A /* Users.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 454EEAA82524078C00EB266A /* Users.storyboard */; };
 		454F9C9E28D38717009F7115 /* Form.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9D28D38717009F7115 /* Form.swift */; };
 		454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */; };
 		454F9CA228D3BA19009F7115 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA128D3BA19009F7115 /* FormTests.swift */; };
@@ -105,7 +104,7 @@
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
-		45BD803828440C5A00BD6F92 /* ResponderRolesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */; };
+		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -116,6 +115,7 @@
 		45C207DE2BA0CB9100150184 /* ReunifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207DD2BA0CB9100150184 /* ReunifyViewController.swift */; };
 		45C207E02BA0D23700150184 /* ReunifyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */; };
 		45C207E22BA0D2B900150184 /* TransportCartFacilityField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */; };
+		45C207E42BA3E03700150184 /* SceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207E32BA3E03700150184 /* SceneViewController.swift */; };
 		45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */; };
 		45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C5AF8627D28E9C003E630E /* REDApiClient.swift */; };
 		45C757CD272CAFB000386F07 /* Incident.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C757CC272CAFB000386F07 /* Incident.swift */; };
@@ -137,10 +137,9 @@
 		45D422BF2B8D359900E75D7E /* AgencyKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422BE2B8D359900E75D7E /* AgencyKeyboardSource.swift */; };
 		45D422C12B94FB1400E75D7E /* Region.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422C02B94FB1400E75D7E /* Region.swift */; };
 		45D422C32B94FB2300E75D7E /* RegionAgency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45D422C22B94FB2300E75D7E /* RegionAgency.swift */; };
-		45E1215C282AEA2300D8DDBE /* SceneOverviewCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */; };
+		45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */; };
 		45E1215E282AF06900D8DDBE /* Barlow-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */; };
-		45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */; };
-		45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */; };
+		45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E12168282B341200D8DDBE /* TriageHeaderCell.swift */; };
 		45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3724F06A8E005A8059 /* RecordButton.swift */; };
 		45E35A3A24F09B1E005A8059 /* RecordingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3924F09B1E005A8059 /* RecordingViewController.swift */; };
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
@@ -208,10 +207,9 @@
 		454E17B124FF159C00F9EB8B /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		454E17B624FFF5BF00F9EB8B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		454E17B824FFF5C900F9EB8B /* Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responder.swift; sourceTree = "<group>"; };
-		454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
+		454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageViewController.swift; sourceTree = "<group>"; };
 		454EE967251C62D800EB266A /* LocationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationHelper.swift; sourceTree = "<group>"; };
 		454EEA4E2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLLocationCoordinate2D+Extensions.swift"; sourceTree = "<group>"; };
-		454EEAA82524078C00EB266A /* Users.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Users.storyboard; sourceTree = "<group>"; };
 		454F9C9D28D38717009F7115 /* Form.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Form.swift; sourceTree = "<group>"; };
 		454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObjectExtensions.swift; sourceTree = "<group>"; };
 		454F9CA128D3BA19009F7115 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
@@ -288,7 +286,7 @@
 		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
-		45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRolesViewController.swift; sourceTree = "<group>"; };
+		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -299,6 +297,7 @@
 		45C207DD2BA0CB9100150184 /* ReunifyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReunifyViewController.swift; sourceTree = "<group>"; };
 		45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReunifyCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportCartFacilityField.swift; sourceTree = "<group>"; };
+		45C207E32BA3E03700150184 /* SceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneViewController.swift; sourceTree = "<group>"; };
 		45C5AF8427D199C6003E630E /* RingdownFacilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownFacilityView.swift; sourceTree = "<group>"; };
 		45C5AF8627D28E9C003E630E /* REDApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = REDApiClient.swift; sourceTree = "<group>"; };
 		45C757CC272CAFB000386F07 /* Incident.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Incident.swift; sourceTree = "<group>"; };
@@ -320,10 +319,9 @@
 		45D422BE2B8D359900E75D7E /* AgencyKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgencyKeyboardSource.swift; sourceTree = "<group>"; };
 		45D422C02B94FB1400E75D7E /* Region.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Region.swift; sourceTree = "<group>"; };
 		45D422C22B94FB2300E75D7E /* RegionAgency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionAgency.swift; sourceTree = "<group>"; };
-		45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCounterCell.swift; sourceTree = "<group>"; };
+		45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageCounterCell.swift; sourceTree = "<group>"; };
 		45E1215D282AF06900D8DDBE /* Barlow-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Bold.ttf"; sourceTree = "<group>"; };
-		45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewCell.swift; sourceTree = "<group>"; };
-		45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewTriageTotalCell.swift; sourceTree = "<group>"; };
+		45E12168282B341200D8DDBE /* TriageHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageHeaderCell.swift; sourceTree = "<group>"; };
 		45E35A3724F06A8E005A8059 /* RecordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordButton.swift; sourceTree = "<group>"; };
 		45E35A3924F09B1E005A8059 /* RecordingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordingViewController.swift; sourceTree = "<group>"; };
 		45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
@@ -396,30 +394,20 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
+				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
+				45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
-				45E12166282B2C6600D8DDBE /* SceneOverviewCell.swift */,
-				45E1215B282AEA2300D8DDBE /* SceneOverviewCounterCell.swift */,
 				458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */,
-				45E12168282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift */,
 				45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */,
 				45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */,
 				45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */,
 				45C207D92B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift */,
 				454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */,
+				45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */,
+				45E12168282B341200D8DDBE /* TriageHeaderCell.swift */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		454EEA9F2524073300EB266A /* Users */ = {
-			isa = PBXGroup;
-			children = (
-				45F1303B25253A8E001495C7 /* Views */,
-				45BD803728440C5A00BD6F92 /* ResponderRolesViewController.swift */,
-				455958CA2B893587005962F5 /* ResponderViewController.swift */,
-				45761BF12B89137B00530E42 /* RespondersViewController.swift */,
-				454EEAA82524078C00EB266A /* Users.storyboard */,
-			);
-			path = Users;
 			sourceTree = "<group>";
 		};
 		4566F013236CCC5500A04C75 = {
@@ -455,7 +443,6 @@
 				45C007C7272A023A0072FF18 /* Incidents */,
 				45C9DAA527D5987E0003B44B /* Routed */,
 				45E35A3D24FDD836005A8059 /* Scenes */,
-				454EEA9F2524073300EB266A /* Users */,
 				4566F078236D484D00A04C75 /* Views */,
 				45ACBDC7237E718600C99EBB /* AppCache.swift */,
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
@@ -681,27 +668,21 @@
 			children = (
 				454E17B324FF28BF00F9EB8B /* Views */,
 				45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */,
+				455958CA2B893587005962F5 /* ResponderViewController.swift */,
+				45761BF12B89137B00530E42 /* RespondersViewController.swift */,
 				45C207DD2BA0CB9100150184 /* ReunifyViewController.swift */,
 				453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */,
-				454E17BA24FFF5FB00F9EB8B /* SceneOverviewViewController.swift */,
+				45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */,
 				45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */,
+				45C207E32BA3E03700150184 /* SceneViewController.swift */,
 				45C207DB2B9BE28A00150184 /* TransportConfirmViewController.swift */,
 				454A8BCB2B9959B8003C82D6 /* TransportFacilitiesViewController.swift */,
 				454A8BC72B995975003C82D6 /* TransportReportsViewController.swift */,
 				454A8BC92B995991003C82D6 /* TransportRespondersViewController.swift */,
 				454A8BC52B994EB0003C82D6 /* TransportViewController.swift */,
+				454E17BA24FFF5FB00F9EB8B /* TriageViewController.swift */,
 			);
 			path = Scenes;
-			sourceTree = "<group>";
-		};
-		45F1303B25253A8E001495C7 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
-				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
-				45F0175F28442FE800C14E62 /* ResponderRoleSelector.swift */,
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		90CCACB3DC232FDED43273D4 /* Frameworks */ = {
@@ -827,7 +808,6 @@
 			files = (
 				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
 				452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */,
-				454EEAA92524078C00EB266A /* Users.storyboard in Resources */,
 				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
@@ -1020,6 +1000,7 @@
 				458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */,
 				454EE968251C62D800EB266A /* LocationHelper.swift in Sources */,
 				45C9C70C29077056005D0FDD /* CityKeyboardSource.swift in Sources */,
+				45C207E42BA3E03700150184 /* SceneViewController.swift in Sources */,
 				45C9C70A29035685005D0FDD /* LocationViewController.swift in Sources */,
 				454A8BCC2B9959B8003C82D6 /* TransportFacilitiesViewController.swift in Sources */,
 				45C9DAA927D598B20003B44B /* Ringdown.swift in Sources */,
@@ -1031,7 +1012,7 @@
 				454F9CA428D3D088009F7115 /* FormsViewController.swift in Sources */,
 				45C207D62B9B8A2400150184 /* TransportCartResponderField.swift in Sources */,
 				456F050427BC6D03000CEE42 /* File.swift in Sources */,
-				454E17BB24FFF5FB00F9EB8B /* SceneOverviewViewController.swift in Sources */,
+				454E17BB24FFF5FB00F9EB8B /* TriageViewController.swift in Sources */,
 				454A8BC62B994EB0003C82D6 /* TransportViewController.swift in Sources */,
 				454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */,
 				454F9C9E28D38717009F7115 /* Form.swift in Sources */,
@@ -1073,7 +1054,7 @@
 				451F9DCC291ED0C500B5E73A /* ImageView.swift in Sources */,
 				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,
 				45C207E22BA0D2B900150184 /* TransportCartFacilityField.swift in Sources */,
-				45E12169282B341200D8DDBE /* SceneOverviewTriageTotalCell.swift in Sources */,
+				45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */,
 				45C207D82B9BAB7E00150184 /* RegionFacility.swift in Sources */,
 				454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
@@ -1084,10 +1065,10 @@
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
 				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
-				45BD803828440C5A00BD6F92 /* ResponderRolesViewController.swift in Sources */,
+				45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */,
 				45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */,
 				45C207DA2B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift in Sources */,
-				45E1215C282AEA2300D8DDBE /* SceneOverviewCounterCell.swift in Sources */,
+				45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */,
 				45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* PRApiClient.swift in Sources */,
 				45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */,
@@ -1104,7 +1085,6 @@
 				458CA0CC277293580065F324 /* FormBuilder.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				45F0176028442FE800C14E62 /* ResponderRoleSelector.swift in Sources */,
-				45E12167282B2C6600D8DDBE /* SceneOverviewCell.swift in Sources */,
 				454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
 				45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */,
@@ -1313,7 +1293,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.21;
+				MARKETING_VERSION = 2.1.22;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1336,7 +1316,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.21;
+				MARKETING_VERSION = 2.1.22;
 				PRODUCT_BUNDLE_IDENTIFIER = net.peakresponse.Triage;
 				PRODUCT_NAME = "Peak Response";
 				PROVISIONING_PROFILE_SPECIFIER = "";

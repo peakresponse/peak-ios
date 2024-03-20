@@ -85,6 +85,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         chip.color = .brandPrimary500
         chip.tintColor = .white
         chip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+        chip.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
         chip.alpha = 0
         view.addSubview(chip)
         chipZeroWidthConstraint = chip.widthAnchor.constraint(equalToConstant: 0)
@@ -102,6 +103,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         unitLabel.textColor = .base800
         unitLabel.numberOfLines = 1
         unitLabel.lineBreakMode = .byTruncatingTail
+        unitLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         view.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -191,7 +193,13 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
             timestampLabel.text = "Responder.status.enroute".localized
             button.isHidden = false
         }
-        if let capability = responder.capability {
+        if let role = responder.role {
+            chip.alpha = 1
+            chipZeroWidthConstraint.isActive = false
+            chip.setTitle("Responder.role.short.\(role)".localized, for: .normal)
+            chip.setTitleColor(.white, for: .normal)
+            chip.color = .base500
+        } else if let capability = responder.capability {
             chip.alpha = 1
             chipZeroWidthConstraint.isActive = false
             chip.setTitle("Responder.capability.\(capability)".localized, for: .normal)

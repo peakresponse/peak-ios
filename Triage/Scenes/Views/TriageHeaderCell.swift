@@ -1,5 +1,5 @@
 //
-//  SceneOverviewTriageTotalCell.swift
+//  TriageHeaderCell.swift
 //  Triage
 //
 //  Created by Francis Li on 5/10/22.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SceneOverviewTriageTotalCell: UICollectionViewCell {
+class TriageHeaderCell: UICollectionViewCell {
     @IBOutlet weak var headerLabel: UILabel!
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {

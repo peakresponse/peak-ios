@@ -181,6 +181,7 @@ class AppRealm {
                                     if let current = Scene(current: obj) {
                                         realm.add(current, update: .modified)
                                     }
+                                    obj.updateRespondersSort()
                                 }
                             } else {
                                 realm.add(obj, update: .modified)
@@ -932,6 +933,7 @@ class AppRealm {
             try! realm.write {
                 realm.add(canonical, update: .modified)
                 realm.add(newScene, update: .modified)
+                canonical.updateRespondersSort()
             }
             let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
                 completionHandler?(error)

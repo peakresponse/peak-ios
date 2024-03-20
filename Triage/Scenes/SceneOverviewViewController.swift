@@ -2,26 +2,30 @@
 //  SceneOverviewViewController.swift
 //  Triage
 //
-//  Created by Francis Li on 9/2/20.
-//  Copyright © 2020 Francis Li. All rights reserved.
+//  Created by Francis Li on 5/29/22.
+//  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import AlignedCollectionViewFlowLayout
+import PRKit
 import RealmSwift
 import UIKit
-import PRKit
 
-class SceneOverviewViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
-                                   SceneOverviewCounterCellDelegate {
+class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
+                                   UICollectionViewDataSource, UICollectionViewDelegate {
+    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    var formInputAccessoryView: UIView!
 
-    private var scene: Scene?
-    private var notificationToken: NotificationToken?
-    private var isExpectantHidden = true
+    var scene: Scene?
+    var results: Results<Responder>?
+    var roles: [ResponderRole] = []
+    var notificationToken: NotificationToken?
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        tabBarItem.title = "TabBarItem.sceneOverview".localized
-        tabBarItem.image = UIImage(named: "Triage", in: PRKitBundle.instance, compatibleWith: nil)
+        tabBarItem.title = "TabBarItem.rolesResources".localized
+        tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
     }
 
     deinit {
@@ -31,76 +35,123 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 120)
-            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
+        commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
+        commandHeader.searchField.delegate = self
 
-        guard let sceneId = AppSettings.sceneId else { return }
-        let realm = AppRealm.open()
-        scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
-        notificationToken = scene?.observe { [weak self] (change) in
-            self?.didObserveChange(change)
-        }
+        formInputAccessoryView = FormInputAccessoryView(rootView: view)
+
+        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        collectionView.setCollectionViewLayout(layout, animated: false)
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+
+        collectionView.register(ResponderRoleCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+
+        performQuery()
     }
 
-    func didObserveChange(_ change: ObjectChange<Scene>) {
-        switch change {
-        case .change:
-            refresh()
-        case .error(let error):
-            presentAlert(error: error)
-        case .deleted:
-            leaveScene()
-        }
-    }
-
-    private func leaveScene() {
-        _ = AppDelegate.leaveScene()
-    }
-
-    private func refresh() {
-        guard let scene = scene else { return }
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? SceneOverviewCell {
-                cell.configure(from: scene)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if traitCollection.horizontalSizeClass == .regular {
+            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
+                var sectionInset = layout.sectionInset
+                let inset = max(0, (collectionView.frame.width - 744) / 2)
+                sectionInset.left = inset
+                sectionInset.right = inset
+                layout.sectionInset = sectionInset
             }
         }
     }
 
-    @IBAction func editPressed(_ sender: Any) {
+    func performQuery() {
+        notificationToken?.invalidate()
+
+        let realm = AppRealm.open()
+        guard let sceneId = AppSettings.sceneId else { return }
+        scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+
         guard let scene = scene else { return }
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
-        if let vc = vc as? LocationViewController {
-            vc.modalPresentationStyle = .fullScreen
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
-            vc.scene = scene
-            vc.newScene = Scene(clone: scene)
-            _ = vc.view
-            vc.isEditing = true
+        results = scene.responders.filter("user<>%@ AND departedAt=%@", NSNull(), NSNull())
+        if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+            results = results?.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
+                                      text, text, text)
         }
-        presentAnimated(vc)
+        results = results?.sorted(by: [
+            SortDescriptor(keyPath: "vehicle.number"),
+            SortDescriptor(keyPath: "user.firstName"),
+            SortDescriptor(keyPath: "user.lastName")
+        ])
+
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+        refresh()
     }
 
-    @IBAction func notePressed(_ sender: Any) {
+    func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
+        switch changes {
+        case .initial:
+            collectionView.reloadData()
+        case .update(_, let deletions, let insertions, let modifications):
+            collectionView.performBatchUpdates({
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            }, completion: nil)
+        case .error(let error):
+            presentAlert(error: error)
+        }
     }
 
-    @IBAction func photoPressed(_ sender: Any) {
+    @objc func refresh() {
+
     }
 
-    @IBAction func joinPressed(_ sender: Any) {
-        guard let sceneId = scene?.id else { return }
-        AppRealm.joinScene(sceneId: sceneId) { (error) in
-            if let error = error {
-                DispatchQueue.main.async { [weak self] in
-                    self?.presentAlert(error: error)
+    // MARK: - FormFieldDelegate
+
+    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
+        if let responder = field.source as? Responder {
+            let isSelf = AppSettings.userId == responder.user?.id
+            let isMGS = scene?.mgsResponderId == responder.id
+            if isMGS && isSelf {
+                // cannot edit own roles until MGS transferred to another responder
+                return false
+            }
+            roles = [.triage, .treatment, .staging, .transport]
+            if isMGS || isSelf {
+                roles.insert(.mgs, at: 0)
+            }
+        }
+        return true
+    }
+
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField {
+            if field == commandHeader.searchField {
+                performQuery()
+            } else {
+                if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
+                   let responder = field.source as? Responder {
+                    AppRealm.assignResponder(responderId: responder.id, role: role)
                 }
             }
         }
     }
 
-    @IBAction func transferPressed(_ sender: Any) {
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
+        if field == commandHeader.searchField {
+            field.resignFirstResponder()
+        }
+        return false
+    }
+
+    private func leaveScene() {
+        _ = AppDelegate.leaveScene()
     }
 
     @IBAction func closePressed(_ sender: Any) {
@@ -134,6 +185,21 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         }
     }
 
+    @IBAction func editPressed(_ sender: Any) {
+        guard let scene = scene else { return }
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
+        if let vc = vc as? LocationViewController {
+            vc.modalPresentationStyle = .fullScreen
+            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
+            vc.scene = scene
+            vc.newScene = Scene(clone: scene)
+            _ = vc.view
+            vc.isEditing = true
+        }
+        presentAnimated(vc)
+    }
+
     @objc func saveScenePressed() {
         if let vc = presentedViewController as? LocationViewController {
             if let scene = vc.newScene {
@@ -143,69 +209,74 @@ class SceneOverviewViewController: UIViewController, UICollectionViewDataSource,
         }
     }
 
-    // MARK: - SceneOverviewCounterCellDelegate
+    // MARK: - KeyboardSource
 
-    func counterCell(_ cell: SceneOverviewCounterCell, didChange value: Int, for priority: TriagePriority?) {
-        guard let sceneId = scene?.id else { return }
-        AppRealm.updateApproxPatientsCounts(sceneId: sceneId, priority: priority, value: value)
+    var name: String {
+        return "ResponderRole"
+    }
+
+    func count() -> Int {
+        return roles.count
+    }
+
+    func firstIndex(of value: NSObject) -> Int? {
+        return nil
+    }
+
+    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
+        callback?(false)
+    }
+
+    func title(for value: NSObject?) -> String? {
+        guard let value = value as? String else { return nil }
+        return roles.first(where: {$0.rawValue == value})?.description
+    }
+
+    func title(at index: Int) -> String? {
+        return roles[index].description
+    }
+
+    func value(at index: Int) -> NSObject? {
+        return roles[index].rawValue as NSObject
     }
 
     // MARK: - UICollectionViewDataSource
 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 3
+        return 2
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
-        case 0: // header
+        case 0: // overview header
             return 1
-        case 1: // approx triage counts header
-            return 1
-        case 2: // triage counters
-            return isExpectantHidden ? 5 : 6
+        case 1: // responders
+            return results?.count ?? 0
         default:
             return 0
         }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        var cell: UICollectionViewCell
+        let cell: UICollectionViewCell
         switch indexPath.section {
         case 0:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
+            if let cell = cell as? SceneOverviewHeaderCell, let scene = scene {
+                cell.configure(from: scene)
+            }
         case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewTriageTotal", for: indexPath)
-        case 2:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewCounter", for: indexPath)
-            if let cell = cell as? SceneOverviewCounterCell {
-                cell.delegate = self
-                if indexPath.row > 0 {
-                    var value = indexPath.row - 1
-                    if isExpectantHidden && value >= TriagePriority.expectant.rawValue {
-                        value += 1
-                    }
-                    cell.priority = TriagePriority(rawValue: value)
-                } else {
-                    cell.priority = nil
-                }
+            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
+            if let cell = cell as? ResponderRoleCollectionViewCell {
+                let responder = results?[indexPath.row]
+                let isMGS = scene?.mgsResponderId == responder?.id
+                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+                cell.roleSelector.delegate = self
+                cell.roleSelector.inputAccessoryView = formInputAccessoryView
             }
         default:
             cell = UICollectionViewCell()
         }
-        if let cell = cell as? SceneOverviewCell, let scene = scene {
-            cell.configure(from: scene)
-        }
         return cell
-    }
-
-    // MARK: - UICollectionViewDelegateFlowLayout
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section == 1 {
-            return UIEdgeInsets(top: 1, left: 20, bottom: 0, right: 20)
-        }
-        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
     }
 }

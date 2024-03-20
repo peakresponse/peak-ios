@@ -12,9 +12,8 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, ResponderViewControllerDelegate,
+class RespondersViewController: SceneViewController, CommandHeaderDelegate, ResponderViewControllerDelegate,
                                 ResponderCollectionViewCellDelegate, UICollectionViewDataSource, UICollectionViewDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: PRKit.RoundButton!
     var formInputAccessoryView: UIView!
@@ -36,7 +35,8 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        commandHeader.searchField.delegate = self
+
+        initSceneCommandHeader()
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
@@ -72,7 +72,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         }
     }
 
-    func performQuery() {
+    override func performQuery() {
         notificationToken?.invalidate()
 
         let realm = AppRealm.open()
@@ -86,6 +86,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
                                       text, text, text, text)
         }
         results = results?.sorted(by: [
+            SortDescriptor(keyPath: "sort"),
             SortDescriptor(keyPath: "arrivedAt"),
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),
@@ -131,7 +132,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
 
     @IBAction
     func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController {
             vc.delegate = self
             let responder = Responder()
@@ -141,12 +142,6 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
             vc.isEditing = true
         }
         presentAnimated(vc)
-    }
-
-    // MARK: - FormFieldDelegate
-
-    func formComponentDidChange(_ component: PRKit.FormComponent) {
-        performQuery()
     }
 
     // MARK: - ResponderCollectionViewCellDelegate
@@ -192,7 +187,7 @@ class RespondersViewController: UIViewController, CommandHeaderDelegate, PRKit.F
         if responder.user != nil || responder.vehicle != nil {
             collectionView.deselectItem(at: indexPath, animated: true)
         } else {
-            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
             if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
                 vc.delegate = self
                 vc.responder = responder

@@ -21,7 +21,6 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
                                          TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var addButton: PRKit.RoundButton!
 
@@ -41,10 +40,6 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        updateCart()
-
-        commandHeader.searchField.delegate = self
-
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 0
@@ -60,8 +55,6 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         collectionView.refreshControl = refreshControl
 
         collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
-
-        performQuery()
     }
 
     override func viewDidLayoutSubviews() {
@@ -77,7 +70,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         }
     }
 
-    func performQuery() {
+    func performQuery(_ searchText: String? = nil) {
         notificationToken?.invalidate()
 
         let realm = AppRealm.open()
@@ -86,11 +79,12 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
         guard let scene = scene else { return }
         results = scene.responders.filter("departedAt=%@", NSNull())
-        if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
+        if let searchText = searchText, !searchText.isEmpty {
             results = results?.filter("(unitNumber CONTAINS[cd] %@) OR (vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
-                                      text, text, text, text)
+                                      searchText, searchText, searchText, searchText)
         }
         results = results?.sorted(by: [
+            SortDescriptor(keyPath: "sort"),
             SortDescriptor(keyPath: "arrivedAt"),
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),
@@ -120,9 +114,8 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     @objc func refresh() {
         guard let sceneId = scene?.id else { return }
+        // force reload of all cells to update timestamps
         collectionView.reloadData()
-        collectionView.refreshControl?.beginRefreshing()
-        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
         AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
@@ -136,7 +129,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     @IBAction
     func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController {
             vc.delegate = self
             let responder = Responder()
@@ -225,7 +218,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         if responder.user != nil || responder.vehicle != nil {
             collectionView.deselectItem(at: indexPath, animated: true)
         } else {
-            let vc = UIStoryboard(name: "Users", bundle: nil).instantiateViewController(withIdentifier: "Responder")
+            let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
             if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
                 vc.delegate = self
                 vc.responder = responder

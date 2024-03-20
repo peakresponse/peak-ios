@@ -370,6 +370,11 @@
 "Responder.sort.az" = "Alphabetically";
 
 "Responder.role.assign" = "Assign";
+"Responder.role.short.MGS" = "MGS";
+"Responder.role.short.STAGING" = "Staging";
+"Responder.role.short.TRANSPORT" = "Transport";
+"Responder.role.short.TREATMENT" = "Treatment";
+"Responder.role.short.TRIAGE" = "Triage";
 "Responder.role.MGS" = "Medical Group Supervisor";
 "Responder.role.STAGING" = "Staging Team Leader";
 "Responder.role.TRANSPORT" = "Transport Team Leader";
@@ -575,13 +580,13 @@
 
 "SortBar.sortBy" = "Sort By :";
 
-"TabBarItem.patientDetails" = "Treat";
 "TabBarItem.reunify" = "Reunify";
 "TabBarItem.rolesResources" = "Roles/\nResources";
 "TabBarItem.sceneMap" = "Scene\nMap";
-"TabBarItem.sceneOverview" = "Triage";
 "TabBarItem.stage" = "Stage";
 "TabBarItem.transport" = "Transport";
+"TabBarItem.treat" = "Treat";
+"TabBarItem.triage" = "Triage";
 
 "Time.unitNotifiedByDispatch" = "Unit Notified by Dispatch";
 "Time.arrivedAtPatient" = "Arrived at Patient";
