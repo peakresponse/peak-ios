@@ -90,9 +90,9 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         return layoutAttributes
     }
 
-    func configure(from responder: Responder?, index: Int, isMGS: Bool) {
+    func configure(from responder: Responder?, index: Int) {
         guard let responder = responder else { return }
-        var name = responder.user?.fullName
+        var name = responder.user?.fullNameLastFirst
         if let vehicle = responder.vehicle {
             name = "\(vehicle.number ?? ""): \(name ?? "")"
         }

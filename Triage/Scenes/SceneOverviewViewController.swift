@@ -270,7 +270,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             if let cell = cell as? ResponderRoleCollectionViewCell {
                 let responder = results?[indexPath.row]
                 let isMGS = scene?.mgsResponderId == responder?.id
-                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+                cell.configure(from: responder, index: indexPath.row)
                 cell.roleSelector.delegate = self
                 cell.roleSelector.inputAccessoryView = formInputAccessoryView
             }
