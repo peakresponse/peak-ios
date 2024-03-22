@@ -111,10 +111,14 @@ extension NemsisBacked {
 
     func getFirstNemsisValue(forJSONPath jsonPath: String) -> NemsisValue? {
         if let result = data(forJSONPath: jsonPath) {
+            var value: NemsisValue?
             if let results = result as? [[String: Any]], results.count > 0 {
-                return NemsisValue(data: results[0])
+                value = NemsisValue(data: results[0])
             } else if let result = result as? [String: Any] {
-                return NemsisValue(data: result)
+                value = NemsisValue(data: result)
+            }
+            if let value = value {
+                return value.isNil && value.NegativeValue == .notRecorded ? nil : value
             }
         }
         return nil

@@ -550,7 +550,7 @@ class ReportParserTests: XCTestCase {
             let report = Report.newRecord()
             report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastProcedure?.procedure?.text, "89666000", "Procedure failed for: \(sample)")
-            XCTAssertNotNil(report.lastProcedure?.procedurePerformedAt)
+            XCTAssertNotNil(report.lastProcedure?.performedAt)
         }
     }
 
@@ -564,7 +564,7 @@ class ReportParserTests: XCTestCase {
             let report = Report.newRecord()
             report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.lastMedication?.medication?.text, "1191", "Medication failed for: \(sample)")
-            XCTAssertNotNil(report.lastMedication?.medicationAdministeredAt)
+            XCTAssertNotNil(report.lastMedication?.administeredAt)
         }
     }
 

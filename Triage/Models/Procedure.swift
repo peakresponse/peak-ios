@@ -29,7 +29,7 @@ class Procedure: BaseVersioned, NemsisBacked {
         return _data
     }
 
-    @objc var procedurePerformedAt: Date? {
+    @objc var performedAt: Date? {
         get {
             return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eProcedures.01")?.text)
         }
@@ -53,6 +53,42 @@ class Procedure: BaseVersioned, NemsisBacked {
         }
         set {
             setNemsisValue(newValue, forJSONPath: "/eProcedures.03")
+        }
+    }
+
+    @objc var sizeOfEquipment: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.04")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eProcedures.03")
+        }
+    }
+
+    @objc var numberOfAttempts: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.05")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eProcedures.05")
+        }
+    }
+
+    @objc var successful: NemsisValue? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eProcedures.06")
+        }
+        set {
+            setNemsisValue(newValue, forJSONPath: "/eProcedures.06")
+        }
+    }
+
+    @objc var complication: [NemsisValue]? {
+        get {
+            return getNemsisValues(forJSONPath: "/eProcedures.07")
+        }
+        set {
+            setNemsisValues(newValue, forJSONPath: "/eProcedures.07")
         }
     }
 
