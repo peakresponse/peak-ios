@@ -535,6 +535,8 @@ class ReportParserTests: XCTestCase {
             report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
             XCTAssertEqual(report.history?.medicationAllergies?.count, 1, "Allergies history failed for: \(sample)")
             XCTAssertEqual(report.history?.medicationAllergies?[0].text, "Z88.0", "Allergies history failed for: \(sample)")
+            XCTAssertEqual(report.history?.medicationAllergies?[0].attributes?["CodeType"], "9924001", "Allergies history failed for: \(sample)")
+// Apple has removed the lemma (word stem) tagger from iOS simulator, so can't singularize text for testing.
 //            XCTAssertEqual(report.history?.environmentalFoodAllergies?.count, 2, "Allergies history failed for: \(sample)")
             XCTAssertEqual(report.history?.environmentalFoodAllergies?[0].text, "441831003", "Allergies history failed for: \(sample)")
 //            XCTAssertEqual(report.history?.environmentalFoodAllergies?[1].text, "91935009", "Allergies history failed for: \(sample)")

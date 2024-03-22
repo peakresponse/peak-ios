@@ -215,7 +215,7 @@ extension Report {
                             }
                         }
                         var keyPath = group.replacingOccurrences(of: "0", with: ".")
-                        if let (fieldName, isMultiSelect) = NemsisBackedPropertyMap[keyPath], var valueString = value as? String {
+                        if let (fieldName, isMultiSelect, isCodeTypeIncluded) = NemsisBackedPropertyMap[keyPath], var valueString = value as? String {
                             let tagger = NLTagger(tagSchemes: [.lemma])
                             var tokens: [String] = []
                             if !isMultiSelect {
@@ -236,6 +236,9 @@ extension Report {
                                     continue
                                 }
                                 value = NemsisValue(text: results[0].code)
+                                if isCodeTypeIncluded, let value = value as? NemsisValue, let system = results[0].system {
+                                    value.attributes = ["CodeType": system]
+                                }
                             } else {
                                 valueString = valueString.replacingOccurrences(of: " and ", with: ",")
                                 let values = valueString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
@@ -256,7 +259,11 @@ extension Report {
                                                 tokens.joined(separator: "").trimmingCharacters(in: .whitespacesAndNewlines))
                                         .sorted(by: [SortDescriptor(keyPath: "code", ascending: true)])
                                     if results.count > 0 {
-                                        nemsisValues.append(NemsisValue(text: results[0].code))
+                                        let value = NemsisValue(text: results[0].code)
+                                        if isCodeTypeIncluded, let system = results[0].system {
+                                            value.attributes = ["CodeType": system]
+                                        }
+                                        nemsisValues.append(value)
                                     }
                                 }
                                 if nemsisValues.count == 0 {
