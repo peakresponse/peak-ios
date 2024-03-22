@@ -11,10 +11,13 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
+class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource, KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionViewBottomConstraint: NSLayoutConstraint!
+    var scrollView: UIScrollView! { return collectionView }
+    var scrollViewBottomConstraint: NSLayoutConstraint! { return collectionViewBottomConstraint }
     var formInputAccessoryView: UIView!
 
     var scene: Scene?
@@ -30,6 +33,16 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     deinit {
         notificationToken?.invalidate()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
     }
 
     override func viewDidLoad() {
@@ -109,7 +122,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     }
 
     @objc func refresh() {
-
+        collectionView.refreshControl?.endRefreshing()
     }
 
     // MARK: - FormFieldDelegate
