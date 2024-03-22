@@ -10,13 +10,14 @@ import Foundation
 import JSONPatch
 import SwiftPath
 
-let NemsisBackedPropertyMap: [String: (String, Bool)] = [
-    "situation.primarySymptom": ("eSituation.09", false),
-    "history.medicalSurgicalHistory": ("eHistory.08", true),
-    "history.medicationAllergies": ("eHistory.06", true),
-    "history.environmentalFoodAllergies": ("eHistory.07", true),
-    "lastProcedure.procedure": ("eProcedures.03", false),
-    "lastMedication.medication": ("eMedications.03", false)
+// map from attribute to (Nemsis element, is multi-select, include system)
+let NemsisBackedPropertyMap: [String: (String, Bool, Bool)] = [
+    "situation.primarySymptom": ("eSituation.09", false, false),
+    "history.medicalSurgicalHistory": ("eHistory.08", true, false),
+    "history.medicationAllergies": ("eHistory.06", true, true),
+    "history.environmentalFoodAllergies": ("eHistory.07", true, false),
+    "lastProcedure.procedure": ("eProcedures.03", false, false),
+    "lastMedication.medication": ("eMedications.03", false, true)
 ]
 
 protocol NemsisBacked: AnyObject {
