@@ -151,6 +151,14 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                 if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
                    let responder = field.source as? Responder {
                     AppRealm.assignResponder(responderId: responder.id, role: role)
+                    for cell in collectionView.visibleCells {
+                        if let cell = cell as? ResponderRoleCollectionViewCell,
+                           let responderId = cell.responderId,
+                           let responder = results?.filter("id=%@", responderId).first,
+                           let index = results?.firstIndex(of: responder) {
+                            cell.configure(from: responder, index: index)
+                        }
+                    }
                 }
             }
         }
@@ -282,7 +290,6 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
             if let cell = cell as? ResponderRoleCollectionViewCell {
                 let responder = results?[indexPath.row]
-                let isMGS = scene?.mgsResponderId == responder?.id
                 cell.configure(from: responder, index: indexPath.row)
                 cell.roleSelector.delegate = self
                 cell.roleSelector.inputAccessoryView = formInputAccessoryView

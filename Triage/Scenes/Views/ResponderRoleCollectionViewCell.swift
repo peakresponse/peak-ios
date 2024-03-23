@@ -9,6 +9,7 @@
 import UIKit
 
 class ResponderRoleCollectionViewCell: UICollectionViewCell {
+    var responderId: String?
     weak var unitLabel: UILabel!
     weak var roleSelector: ResponderRoleSelector!
     weak var vr: UIView!
@@ -91,6 +92,8 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
     }
 
     func configure(from responder: Responder?, index: Int) {
+        responderId = responder?.id
+
         guard let responder = responder else { return }
         var name = responder.user?.fullNameLastFirst
         if let vehicle = responder.vehicle {
