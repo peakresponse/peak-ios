@@ -11,10 +11,13 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource,
+class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource, KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionViewBottomConstraint: NSLayoutConstraint!
+    var scrollView: UIScrollView! { return collectionView }
+    var scrollViewBottomConstraint: NSLayoutConstraint! { return collectionViewBottomConstraint }
     var formInputAccessoryView: UIView!
 
     var scene: Scene?
@@ -30,6 +33,16 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     deinit {
         notificationToken?.invalidate()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        registerForKeyboardNotifications(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        unregisterFromKeyboardNotifications()
     }
 
     override func viewDidLoad() {
@@ -109,7 +122,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     }
 
     @objc func refresh() {
-
+        collectionView.refreshControl?.endRefreshing()
     }
 
     // MARK: - FormFieldDelegate
@@ -138,6 +151,14 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                 if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
                    let responder = field.source as? Responder {
                     AppRealm.assignResponder(responderId: responder.id, role: role)
+                    for cell in collectionView.visibleCells {
+                        if let cell = cell as? ResponderRoleCollectionViewCell,
+                           let responderId = cell.responderId,
+                           let responder = results?.filter("id=%@", responderId).first,
+                           let index = results?.firstIndex(of: responder) {
+                            cell.configure(from: responder, index: index)
+                        }
+                    }
                 }
             }
         }
@@ -269,8 +290,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
             if let cell = cell as? ResponderRoleCollectionViewCell {
                 let responder = results?[indexPath.row]
-                let isMGS = scene?.mgsResponderId == responder?.id
-                cell.configure(from: responder, index: indexPath.row, isMGS: isMGS)
+                cell.configure(from: responder, index: indexPath.row)
                 cell.roleSelector.delegate = self
                 cell.roleSelector.inputAccessoryView = formInputAccessoryView
             }

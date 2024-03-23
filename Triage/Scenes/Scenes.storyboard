@@ -693,12 +693,13 @@
                             <constraint firstItem="Q60-9j-hSU" firstAttribute="top" secondItem="zpG-sX-3dd" secondAttribute="bottom" id="L1z-DG-W0d"/>
                             <constraint firstItem="zpG-sX-3dd" firstAttribute="top" secondItem="1ay-g6-im3" secondAttribute="top" id="Znb-jx-9bk"/>
                             <constraint firstAttribute="trailing" secondItem="zpG-sX-3dd" secondAttribute="trailing" id="d7c-m9-ffR"/>
-                            <constraint firstAttribute="bottom" secondItem="Q60-9j-hSU" secondAttribute="bottom" id="hKl-AY-B8n"/>
+                            <constraint firstItem="Q60-9j-hSU" firstAttribute="bottom" secondItem="1ay-g6-im3" secondAttribute="bottom" id="hKl-AY-B8n"/>
                             <constraint firstAttribute="trailing" secondItem="Q60-9j-hSU" secondAttribute="trailing" id="yfe-fx-imx"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="collectionView" destination="Q60-9j-hSU" id="qjd-mw-VfU"/>
+                        <outlet property="collectionViewBottomConstraint" destination="hKl-AY-B8n" id="yhO-mC-3QF"/>
                         <outlet property="commandHeader" destination="zpG-sX-3dd" id="BZf-jb-peI"/>
                     </connections>
                 </viewController>
@@ -836,11 +837,17 @@
         <designable name="DTQ-9R-Hr5">
             <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
+        <designable name="E9o-ja-RVR">
+            <size key="intrinsicContentSize" width="240" height="128"/>
+        </designable>
         <designable name="EEr-QX-Jho">
             <size key="intrinsicContentSize" width="414" height="128"/>
         </designable>
         <designable name="Eym-Ue-ZTn">
             <size key="intrinsicContentSize" width="54" height="34"/>
+        </designable>
+        <designable name="Fn1-dd-NQH">
+            <size key="intrinsicContentSize" width="414" height="128"/>
         </designable>
         <designable name="QOj-xp-kql">
             <size key="intrinsicContentSize" width="54" height="34"/>
