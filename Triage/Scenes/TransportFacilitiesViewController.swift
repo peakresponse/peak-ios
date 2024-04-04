@@ -35,6 +35,9 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     var reports: Results<Report>?
     var reportsNotificationToken: NotificationToken?
 
+    var hospitalStatusUpdates: Results<HospitalStatusUpdate>?
+    var hospitalStatusUpdatesNotificationToken: NotificationToken?
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -64,6 +67,13 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             reportsNotificationToken = reports?.observe { [weak self] (changes) in
                 self?.didObserveReportsChanges(changes)
             }
+        }
+        // query for HospitalStatusUpdate to populate Capacity counts
+        hospitalStatusUpdatesNotificationToken?.invalidate()
+        let realm = REDRealm.open()
+        hospitalStatusUpdates = realm.objects(HospitalStatusUpdate.self)
+        hospitalStatusUpdatesNotificationToken = hospitalStatusUpdates?.observe { [weak self] (changes) in
+            self?.didObserveHospitalStatusUpdatesChanges(changes)
         }
     }
 
@@ -104,6 +114,14 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         for cell in collectionView.visibleCells {
             if let cell = cell as? TransportFacilityCollectionViewCell {
                 cell.updateTransportedCounts(from: reports)
+            }
+        }
+    }
+
+    func didObserveHospitalStatusUpdatesChanges(_ changes: RealmCollectionChange<Results<HospitalStatusUpdate>>) {
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? TransportFacilityCollectionViewCell {
+                cell.updateCapacityCounts(from: hospitalStatusUpdates)
             }
         }
     }
@@ -188,6 +206,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             let regionFacility = results?[indexPath.row]
             cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
             cell.updateTransportedCounts(from: reports)
+            cell.updateCapacityCounts(from: hospitalStatusUpdates)
         }
         return cell
     }

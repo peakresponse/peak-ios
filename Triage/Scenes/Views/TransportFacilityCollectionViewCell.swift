@@ -89,6 +89,7 @@ private class CountRow: UIView {
 
 class TransportFacilityCollectionViewCell: UICollectionViewCell {
     var facilityId: String?
+    var facilityLocationCode: String?
     weak var checkbox: Checkbox!
     weak var facilityLabel: UILabel!
     fileprivate var rows: [CountRow] = []
@@ -185,7 +186,21 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
     func configure(from regionFacility: RegionFacility?, index: Int, isSelected: Bool) {
         checkbox.isChecked = isSelected
         facilityId = regionFacility?.facility?.id
+        facilityLocationCode = regionFacility?.facility?.locationCode
         facilityLabel.text = regionFacility?.facility?.displayName
+    }
+
+    func updateCapacityCounts(from hospitalStatusUpdates: Results<HospitalStatusUpdate>?) {
+        let row = rows[0]
+        row.countLabels[0].text = "-"
+        row.countLabels[1].text = "-"
+        row.countLabels[2].text = "-"
+        if let hospitalStatusUpdate = hospitalStatusUpdates?.filter("stateFacilityCode=%@", facilityLocationCode ?? "").first {
+            row.countLabels[0].text = hospitalStatusUpdate.mciRedCapacity != nil ? "\(hospitalStatusUpdate.mciRedCapacity ?? 0)" : "-"
+            row.countLabels[1].text = hospitalStatusUpdate.mciYellowCapacity != nil ? "\(hospitalStatusUpdate.mciYellowCapacity ?? 0)" : "-"
+            row.countLabels[2].text = hospitalStatusUpdate.mciGreenCapacity != nil ? "\(hospitalStatusUpdate.mciGreenCapacity ?? 0)" : "-"
+        }
+        updateRemainingCounts()
     }
 
     func updateTransportedCounts(from reports: Results<Report>?) {
@@ -197,6 +212,19 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
                 } else {
                     row.countLabels[i].text = "-"
                 }
+            }
+        }
+        updateRemainingCounts()
+    }
+
+    func updateRemainingCounts() {
+        for i in 0...2 {
+            let capacityText = rows[0].countLabels[i].text ?? "-"
+            let transportedText = rows[1].countLabels[i].text ?? "-"
+            if capacityText != "-" && transportedText != "-", let capacity = Int(capacityText), let transported = Int(transportedText) {
+                rows[2].countLabels[i].text = "\(capacity - transported)"
+            } else {
+                rows[2].countLabels[i].text = "-"
             }
         }
     }
