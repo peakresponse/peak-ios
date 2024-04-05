@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PRKit
 
 extension Report {
     func asRingdownJSON() -> [String: Any] {
@@ -28,6 +29,19 @@ extension Report {
         json["hospital"] = [
             "id": NSNull()
         ]
+        var triageTag: Any = pin ?? NSNull()
+        var triagePriority: Any = NSNull()
+        let patientPriority = patient?.priority
+        switch patientPriority {
+        case TriagePriority.immediate.rawValue:
+            triagePriority = "RED"
+        case TriagePriority.delayed.rawValue:
+            triagePriority = "YELLOW"
+        case TriagePriority.minimal.rawValue:
+            triagePriority = "GREEN"
+        default:
+            break
+        }
         var age = 0
         if patient?.AgeUnits == .years, let value = patient?.age {
             age = value
@@ -61,6 +75,8 @@ extension Report {
             }
         }
         json["patient"] = [
+            "triageTag": triageTag,
+            "triagePriority": triagePriority,
             "age": age,
             "sex": sex,
             "emergencyServiceResponseType": NSNull(),
