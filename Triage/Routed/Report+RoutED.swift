@@ -63,6 +63,8 @@ extension Report {
         var chiefComplaintDescription: Any = NSNull()
         if let value = situation?.chiefComplaint {
             chiefComplaintDescription = value
+        } else if let value = narrative?.text {
+            chiefComplaintDescription = value
         }
         var systolicBloodPressure: Any = NSNull()
         var diastolicBloodPressure: Any = NSNull()
