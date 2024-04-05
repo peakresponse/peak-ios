@@ -26,21 +26,31 @@ extension Report {
         json["emsCall"] = [
             "dispatchCallNumber": emsCall
         ]
-        json["hospital"] = [
-            "id": NSNull()
-        ]
-        var triageTag: Any = pin ?? NSNull()
+        if let facility = disposition?.destinationFacility,
+           let hospitalStatusUpdate = REDRealm.open().objects(HospitalStatusUpdate.self).filter("state=%@ AND stateFacilityCode=%@", facility.stateId ?? "", facility.locationCode ?? "").first {
+            json["hospital"] = ["id": hospitalStatusUpdate.id]
+        } else {
+            json["hospital"] = [
+                "id": NSNull()
+            ]
+        }
+        let triageTag: Any = pin ?? NSNull()
         var triagePriority: Any = NSNull()
-        let patientPriority = patient?.priority
-        switch patientPriority {
-        case TriagePriority.immediate.rawValue:
-            triagePriority = "RED"
-        case TriagePriority.delayed.rawValue:
-            triagePriority = "YELLOW"
-        case TriagePriority.minimal.rawValue:
-            triagePriority = "GREEN"
-        default:
-            break
+        var emergencyServiceResponseType: Any = NSNull()
+        if let patientPriority = patient?.priority {
+            switch patientPriority {
+            case TriagePriority.immediate.rawValue:
+                triagePriority = "RED"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code3.rawValue
+            case TriagePriority.delayed.rawValue:
+                triagePriority = "YELLOW"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code2.rawValue
+            case TriagePriority.minimal.rawValue:
+                triagePriority = "GREEN"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code2.rawValue
+            default:
+                break
+            }
         }
         var age = 0
         if patient?.AgeUnits == .years, let value = patient?.age {
@@ -79,7 +89,7 @@ extension Report {
             "triagePriority": triagePriority,
             "age": age,
             "sex": sex,
-            "emergencyServiceResponseType": NSNull(),
+            "emergencyServiceResponseType": emergencyServiceResponseType,
             "chiefComplaintDescription": chiefComplaintDescription,
             "stableIndicator": NSNull(),
             "systolicBloodPressure": systolicBloodPressure,

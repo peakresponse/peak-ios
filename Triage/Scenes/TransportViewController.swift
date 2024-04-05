@@ -132,6 +132,18 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
             newReport.disposition?.destinationFacility = cart.facility
             AppRealm.saveReport(report: newReport)
+            if AppSettings.routedUrl != nil {
+                let ringdownReport = Report(clone: newReport)
+                let payload = newReport.asRingdownJSON()
+                REDRealm.sendRingdown(payload: payload) { (ringdown, _) in
+                    if let ringdown = ringdown {
+                        ringdownReport.ringdownId = ringdown.id
+                        DispatchQueue.main.async {
+                            AppRealm.saveReport(report: ringdownReport)
+                        }
+                    }
+                }
+            }
         }
         if let responderId = cart.responder?.id {
             AppRealm.markResponderDeparted(responderId: responderId) { _ in
