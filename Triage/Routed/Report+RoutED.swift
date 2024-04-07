@@ -19,6 +19,14 @@ extension Report {
         json["ambulance"] = [
             "ambulanceIdentifier": ambulanceIdentifier
         ]
+        if let agency = response?.agency, let state = agency.stateId, let stateUniqueId = agency.stateUniqueId, var ambulance = json["ambulance"] as? [String: Any] {
+            let organization: [String: Any] = [
+                "state": state,
+                "stateUniqueId": stateUniqueId
+            ]
+            ambulance["organization"] = organization
+            json["ambulance"] = ambulance
+        }
         var emsCall: Any = NSNull()
         if let value = response?.incidentNumber {
             emsCall = value

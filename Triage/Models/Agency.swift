@@ -12,11 +12,13 @@ import UIKit
 class Agency: Base {
     struct Keys {
         static let regionId = "regionId"
+        static let stateId = "stateId"
         static let stateUniqueId = "stateUniqueId"
         static let number = "number"
         static let name = "name"
     }
     @Persisted var regionId: String?
+    @Persisted var stateId: String?
     @Persisted var stateUniqueId: String?
     @Persisted var number: String?
     @Persisted var name: String?
@@ -35,6 +37,7 @@ class Agency: Base {
     override func update(from data: [String: Any], with realm: Realm) {
         super.update(from: data, with: realm)
         regionId = data[Keys.regionId] as? String
+        stateId = data[Keys.stateId] as? String
         stateUniqueId = data[Keys.stateUniqueId] as? String
         number = data[Keys.number] as? String
         name = data[Keys.name] as? String
@@ -44,6 +47,9 @@ class Agency: Base {
         var data = super.asJSON()
         if let value = regionId {
             data[Keys.regionId] = value
+        }
+        if let value = stateId {
+            data[Keys.stateId] = stateId
         }
         if let value = stateUniqueId {
             data[Keys.stateUniqueId] = value
