@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import PRKit
 
 extension Report {
     func asRingdownJSON() -> [String: Any] {
@@ -18,6 +19,14 @@ extension Report {
         json["ambulance"] = [
             "ambulanceIdentifier": ambulanceIdentifier
         ]
+        if let agency = response?.agency, let state = agency.stateId, let stateUniqueId = agency.stateUniqueId, var ambulance = json["ambulance"] as? [String: Any] {
+            let organization: [String: Any] = [
+                "state": state,
+                "stateUniqueId": stateUniqueId
+            ]
+            ambulance["organization"] = organization
+            json["ambulance"] = ambulance
+        }
         var emsCall: Any = NSNull()
         if let value = response?.incidentNumber {
             emsCall = value
@@ -25,9 +34,32 @@ extension Report {
         json["emsCall"] = [
             "dispatchCallNumber": emsCall
         ]
-        json["hospital"] = [
-            "id": NSNull()
-        ]
+        if let facility = disposition?.destinationFacility,
+           let hospitalStatusUpdate = REDRealm.open().objects(HospitalStatusUpdate.self).filter("state=%@ AND stateFacilityCode=%@", facility.stateId ?? "", facility.locationCode ?? "").first {
+            json["hospital"] = ["id": hospitalStatusUpdate.id]
+        } else {
+            json["hospital"] = [
+                "id": NSNull()
+            ]
+        }
+        let triageTag: Any = pin ?? NSNull()
+        var triagePriority: Any = NSNull()
+        var emergencyServiceResponseType: Any = NSNull()
+        if let patientPriority = patient?.priority {
+            switch patientPriority {
+            case TriagePriority.immediate.rawValue:
+                triagePriority = "RED"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code3.rawValue
+            case TriagePriority.delayed.rawValue:
+                triagePriority = "YELLOW"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code2.rawValue
+            case TriagePriority.minimal.rawValue:
+                triagePriority = "GREEN"
+                emergencyServiceResponseType = RingdownEmergencyServiceResponseType.code2.rawValue
+            default:
+                break
+            }
+        }
         var age = 0
         if patient?.AgeUnits == .years, let value = patient?.age {
             age = value
@@ -38,6 +70,8 @@ extension Report {
         }
         var chiefComplaintDescription: Any = NSNull()
         if let value = situation?.chiefComplaint {
+            chiefComplaintDescription = value
+        } else if let value = narrative?.text {
             chiefComplaintDescription = value
         }
         var systolicBloodPressure: Any = NSNull()
@@ -61,9 +95,11 @@ extension Report {
             }
         }
         json["patient"] = [
+            "triageTag": triageTag,
+            "triagePriority": triagePriority,
             "age": age,
             "sex": sex,
-            "emergencyServiceResponseType": NSNull(),
+            "emergencyServiceResponseType": emergencyServiceResponseType,
             "chiefComplaintDescription": chiefComplaintDescription,
             "stableIndicator": NSNull(),
             "systolicBloodPressure": systolicBloodPressure,

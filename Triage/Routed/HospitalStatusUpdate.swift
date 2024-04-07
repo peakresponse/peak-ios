@@ -16,6 +16,10 @@ class HospitalStatusUpdate: Object {
         static let state = "state"
         static let stateFacilityCode = "stateFacilityCode"
         static let sortSequenceNumber = "sortSequenceNumber"
+        static let mciRedCapacity = "mciRedCapacity"
+        static let mciYellowCapacity = "mciYellowCapacity"
+        static let mciGreenCapacity = "mciGreenCapacity"
+        static let mciUpdateDateTime = "mciUpdateDateTime"
         static let openEdBedCount = "openEdBedCount"
         static let openPsychBedCount = "openPsychBedCount"
         static let divertStatus = "divertStatusIndicator"
@@ -30,6 +34,10 @@ class HospitalStatusUpdate: Object {
     @Persisted var state: String?
     @Persisted var stateFacilityCode: String?
     @Persisted var sortSequenceNumber: Int?
+    @Persisted var mciRedCapacity: Int?
+    @Persisted var mciYellowCapacity: Int?
+    @Persisted var mciGreenCapacity: Int?
+    @Persisted var mciUpdateDateTime: Date?
     @Persisted var openEdBedCount: Int?
     @Persisted var openPsychBedCount: Int?
     @Persisted var divertStatus: Bool?
@@ -68,9 +76,10 @@ class HospitalStatusUpdate: Object {
                 ambulancesOffloading = value
             }
         }
-        if let value = data[Keys.openEdBedCount] as? Int {
-            openEdBedCount = value
-        }
+        mciRedCapacity = data[Keys.mciRedCapacity] as? Int
+        mciYellowCapacity = data[Keys.mciYellowCapacity] as? Int
+        mciGreenCapacity = data[Keys.mciGreenCapacity] as? Int
+        mciUpdateDateTime = ISO8601DateFormatter.date(from: data[Keys.mciUpdateDateTime])
         if let value = data[Keys.openPsychBedCount] as? Int {
             openPsychBedCount = value
         }
