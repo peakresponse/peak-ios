@@ -121,7 +121,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     @objc func savePressed() {
         if let vc = children[0] as? ReportViewController {
             if let report = vc.newReport {
-                if report.scene?.isMCI ?? false {
+                // special case handling for MCI reports
+                if let scene = report.scene, scene.isMCI {
+                    // require a triage priority
                     let priority = report.patient?.priority
                     if priority == nil || priority == TriagePriority.unknown.rawValue {
                         let modal = ModalViewController()
@@ -129,6 +131,10 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                         modal.addAction(UIAlertAction(title: "Button.ok".localized, style: .default))
                         vc.presentAnimated(modal)
                         return
+                    }
+                    // update the scene to the latest
+                    if let canonical = scene.canonical, let current = canonical.current {
+                        report.scene = Scene(clone: current)
                     }
                 }
                 AppRealm.saveReport(report: report)
