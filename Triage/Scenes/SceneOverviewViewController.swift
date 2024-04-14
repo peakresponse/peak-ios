@@ -125,52 +125,6 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
         collectionView.refreshControl?.endRefreshing()
     }
 
-    // MARK: - FormFieldDelegate
-
-    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
-        if let responder = field.source as? Responder {
-            let isSelf = AppSettings.userId == responder.user?.id
-            let isMGS = scene?.mgsResponderId == responder.id
-            if isMGS && isSelf {
-                // cannot edit own roles until MGS transferred to another responder
-                return false
-            }
-            roles = [.triage, .treatment, .staging, .transport]
-            if isMGS || isSelf {
-                roles.insert(.mgs, at: 0)
-            }
-        }
-        return true
-    }
-
-    func formComponentDidChange(_ component: PRKit.FormComponent) {
-        if let field = component as? PRKit.FormField {
-            if field == commandHeader.searchField {
-                performQuery()
-            } else {
-                if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
-                   let responder = field.source as? Responder {
-                    AppRealm.assignResponder(responderId: responder.id, role: role)
-                    for cell in collectionView.visibleCells {
-                        if let cell = cell as? ResponderRoleCollectionViewCell,
-                           let responderId = cell.responderId,
-                           let responder = results?.filter("id=%@", responderId).first,
-                           let index = results?.firstIndex(of: responder) {
-                            cell.configure(from: responder, index: index)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        if field == commandHeader.searchField {
-            field.resignFirstResponder()
-        }
-        return false
-    }
-
     private func leaveScene() {
         _ = AppDelegate.leaveScene()
     }
@@ -228,6 +182,52 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             }
             dismissAnimated()
         }
+    }
+
+    // MARK: - FormFieldDelegate
+
+    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
+        if let responder = field.source as? Responder {
+            let isSelf = AppSettings.userId == responder.user?.id
+            let isMGS = scene?.mgsResponderId == responder.id
+            if isMGS && isSelf {
+                // cannot edit own roles until MGS transferred to another responder
+                return false
+            }
+            roles = [.triage, .treatment, .staging, .transport]
+            if isMGS || isSelf {
+                roles.insert(.mgs, at: 0)
+            }
+        }
+        return true
+    }
+
+    func formComponentDidChange(_ component: PRKit.FormComponent) {
+        if let field = component as? PRKit.FormField {
+            if field == commandHeader.searchField {
+                performQuery()
+            } else {
+                if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
+                   let responder = field.source as? Responder {
+                    AppRealm.assignResponder(responderId: responder.id, role: role)
+                    for cell in collectionView.visibleCells {
+                        if let cell = cell as? ResponderRoleCollectionViewCell,
+                           let responderId = cell.responderId,
+                           let responder = results?.filter("id=%@", responderId).first,
+                           let index = results?.firstIndex(of: responder) {
+                            cell.configure(from: responder, index: index)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
+        if field == commandHeader.searchField {
+            field.resignFirstResponder()
+        }
+        return false
     }
 
     // MARK: - KeyboardSource

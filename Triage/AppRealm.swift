@@ -173,17 +173,23 @@ class AppRealm {
                 }
                 if let objs = records?.map({ model.instantiate(from: $0, with: realm) }) {
                     // special case handling for Scene, which we reference as both canonical top-level and current dependent records
-                    if let objs = objs as? [Scene] {
+                    if model == Scene.self, let objs = objs as? [Scene] {
                         for obj in objs {
+                            // check if this is the canonical Scene record
                             if let currentId = obj.currentId {
-                                if realm.objects(Scene.self).filter("parentId=%@ OR secondParentId=%@", currentId, currentId).count == 0 {
+                                // check if any local updates have been made since this update
+                                let newer = realm.objects(Scene.self).filter("parentId=%@ OR secondParentId=%@", currentId, currentId)
+                                if newer.count == 0 {
+                                    // if no local updates, save canonical and convert to current as well
                                     realm.add(obj, update: .modified)
                                     if let current = Scene(current: obj) {
                                         realm.add(current, update: .modified)
                                     }
+                                    // apply any role assignment changes to responder sort
                                     obj.updateRespondersSort()
                                 }
                             } else {
+                                // if not canonical Scene record, add/update in db
                                 realm.add(obj, update: .modified)
                             }
                         }
@@ -763,8 +769,10 @@ class AppRealm {
                     }
                 }
                 task.resume()
+                return
             }
         }
+        completionHandler(ApiClientError.unexpected)
     }
 
     public static func joinScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {
@@ -981,9 +989,10 @@ class AppRealm {
     }
 
     public static func updateScene(scene: Scene, completionHandler: ((Error?) -> Void)? = nil) {
-        let canonical = Scene(clone: scene)
-        canonical.id = canonical.canonicalId!
-        canonical.canonicalId = nil
+        guard let canonical = Scene(canonicalize: scene) else {
+            completionHandler?(ApiClientError.unexpected)
+            return
+        }
         let realm = AppRealm.open()
         try! realm.write {
             realm.add([scene, canonical], update: .modified)
