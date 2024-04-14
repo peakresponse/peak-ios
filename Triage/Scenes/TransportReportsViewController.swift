@@ -119,7 +119,9 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
             if let report = report {
                 self.delegate?.transportReportsViewController?(self, didSelect: report)
                 if let index = filteredResults?.firstIndex(of: report) {
-                    collectionView.reloadItems(at: [IndexPath(row: index, section: 0)])
+                    let indexPath = IndexPath(row: index, section: 0)
+                    collectionView.reloadItems(at: [indexPath])
+                    collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: true)
                 }
             }
         }
