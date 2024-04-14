@@ -89,6 +89,11 @@ class Responder: Base {
             } else {
                 arrivedAt = nil
             }
+            if role != nil {
+                sort = arrivedAt != nil ? 0 : 5
+            } else {
+                sort = 10
+            }
         }
     }
 

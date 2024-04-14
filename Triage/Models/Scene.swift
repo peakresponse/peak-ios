@@ -288,6 +288,8 @@ class Scene: BaseVersioned, NemsisBacked {
 
     func updateRespondersSort() {
         responders.setValue(0, forKey: "sort")
+        let enroute = responders.filter("arrivedAt=NULL")
+        enroute.setValue(5, forKey: "sort")
         let leaders = responders.filter("id IN %@", leaderIds)
         leaders.setValue(10, forKey: "sort")
     }
