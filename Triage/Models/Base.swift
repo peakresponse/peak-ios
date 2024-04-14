@@ -72,6 +72,13 @@ class BaseVersioned: Base {
         return nil
     }
     @Persisted var currentId: String?
+    var current: BaseVersioned? {
+        if let currentId = currentId {
+            let realm = self.realm ?? AppRealm.open()
+            return realm.object(ofType: type(of: self), forPrimaryKey: currentId)
+        }
+        return nil
+    }
     @Persisted var parentId: String?
     var parent: BaseVersioned? {
         if let parentId = parentId {
