@@ -192,6 +192,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                     commandHeader.rightBarButtonItem = editBarButtonItem
                 } else {
                     commandHeader.rightBarButtonItem = nil
+                    if let vc = vc as? ReportViewController {
+                        vc.disableEditing()
+                    }
                 }
             } else if let vehicleId = AppSettings.vehicleId,
                let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId),

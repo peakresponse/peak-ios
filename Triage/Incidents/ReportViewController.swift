@@ -590,6 +590,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func disableEditing() {
         commandFooter.isHidden = true
+        triageControl?.updateButton.isEnabled = false
         for view in containerView.arrangedSubviews {
             if let section = view as? FormSection {
                 if let button = section.findLastButton() {
