@@ -80,17 +80,10 @@ class HospitalStatusUpdate: Object {
         mciYellowCapacity = data[Keys.mciYellowCapacity] as? Int
         mciGreenCapacity = data[Keys.mciGreenCapacity] as? Int
         mciUpdateDateTime = ISO8601DateFormatter.date(from: data[Keys.mciUpdateDateTime])
-        if let value = data[Keys.openPsychBedCount] as? Int {
-            openPsychBedCount = value
-        }
-        if let value = data[Keys.divertStatus] as? Bool {
-            divertStatus = value
-        }
-        if let value = data[Keys.notes] as? String {
-            notes = value
-        }
-        if data.index(forKey: Keys.updatedAt) != nil {
-            updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt]) ?? Date()
-        }
+        openEdBedCount = data[Keys.openEdBedCount] as? Int
+        openPsychBedCount = data[Keys.openPsychBedCount] as? Int
+        divertStatus = data[Keys.divertStatus] as? Bool
+        notes = data[Keys.notes] as? String
+        updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt])
     }
 }
