@@ -293,6 +293,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                 cell.configure(from: responder, index: indexPath.row)
                 cell.roleSelector.delegate = self
                 cell.roleSelector.inputAccessoryView = formInputAccessoryView
+                cell.roleSelector.isEnabled = scene?.isResponder(userId: AppSettings.userId) ?? false
             }
         default:
             cell = UICollectionViewCell()
