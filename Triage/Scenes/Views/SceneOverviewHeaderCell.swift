@@ -47,6 +47,7 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
             closeButton.setTitle("Button.leaveScene".localized, for: .normal)
         } else {
             closeButton.setTitle("Button.exitScene".localized, for: .normal)
+            editButton.isHidden = true
         }
     }
 }
