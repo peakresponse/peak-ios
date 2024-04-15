@@ -143,8 +143,8 @@ class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewCo
             collectionView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             collectionView.performBatchUpdates({
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
                 self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
                 self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
             }, completion: nil)
         case .error(let error):

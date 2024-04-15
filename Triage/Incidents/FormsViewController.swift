@@ -59,8 +59,8 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
             tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             tableView.performBatchUpdates({
-                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
                 self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
                 self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
             }, completion: nil)
         case .error(let error):
