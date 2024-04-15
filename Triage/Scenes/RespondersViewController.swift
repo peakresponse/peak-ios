@@ -57,6 +57,17 @@ class RespondersViewController: SceneViewController, CommandHeaderDelegate, Resp
         collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
 
         performQuery()
+
+        isEditing = scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            addButton.isHidden = false
+        } else {
+            addButton.isHidden = true
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -173,8 +184,8 @@ class RespondersViewController: SceneViewController, CommandHeaderDelegate, Resp
         if let cell = cell as? ResponderCollectionViewCell {
             cell.delegate = self
             if indexPath.row < (results?.count ?? 0), let responder = results?[indexPath.row] {
-                let isMGS = scene?.mgsResponderId == responder.id
                 cell.configure(from: responder, index: indexPath.row)
+                cell.button.isEnabled = isEditing
             }
         }
         return cell
@@ -184,9 +195,7 @@ class RespondersViewController: SceneViewController, CommandHeaderDelegate, Resp
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let responder = results?[indexPath.row] else { return }
-        if responder.user != nil || responder.vehicle != nil {
-            collectionView.deselectItem(at: indexPath, animated: true)
-        } else {
+        if isEditing && responder.user == nil && responder.vehicle == nil {
             let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
             if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
                 vc.delegate = self
@@ -195,7 +204,7 @@ class RespondersViewController: SceneViewController, CommandHeaderDelegate, Resp
                 vc.isEditing = true
             }
             presentAnimated(vc)
-            collectionView.deselectItem(at: indexPath, animated: false)
         }
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
