@@ -55,6 +55,19 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         collectionView.refreshControl = refreshControl
 
         collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+
+        isEditing = scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        addButton.isHidden = !editing
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? ResponderCollectionViewCell {
+                cell.checkbox.isEnabled = editing
+                cell.button.isEnabled = editing
+            }
+        }
     }
 
     override func viewDidLayoutSubviews() {
@@ -215,9 +228,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let responder = results?[indexPath.row] else { return }
-        if responder.user != nil || responder.vehicle != nil {
-            collectionView.deselectItem(at: indexPath, animated: true)
-        } else {
+        if isEditing && responder.user == nil && responder.vehicle == nil {
             let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
             if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
                 vc.delegate = self
@@ -226,8 +237,8 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
                 vc.isEditing = true
             }
             presentAnimated(vc)
-            collectionView.deselectItem(at: indexPath, animated: false)
         }
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 
     // MARK: - UICollectionViewDataSource
@@ -247,6 +258,8 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
             cell.delegate = self
             cell.isSelectable = true
             cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
+            cell.checkbox.isEnabled = isEditing
+            cell.button.isEnabled = isEditing
         }
         return cell
     }
