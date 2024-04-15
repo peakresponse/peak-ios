@@ -188,7 +188,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         } else {
             let realm = AppRealm.open()
             if report.scene?.isMCI ?? false {
-                if report.scene?.isResponder(userId: AppSettings.userId) ?? false {
+                if let scene = report.scene?.canonical as? Scene, scene.isResponder(userId: AppSettings.userId) {
                     commandHeader.rightBarButtonItem = editBarButtonItem
                 } else {
                     commandHeader.rightBarButtonItem = nil
@@ -233,7 +233,11 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
         let realm = AppRealm.open()
         if report?.scene?.isMCI ?? false {
-            vc.isEditing = report?.scene?.isResponder(userId: AppSettings.userId) ?? false
+            if let scene = report?.scene?.canonical as? Scene {
+                vc.isEditing = scene.isResponder(userId: AppSettings.userId)
+            } else {
+                vc.isEditing = false
+            }
         } else if let vehicleId = AppSettings.vehicleId,
                   let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
             vc.isEditing = vehicle.number == report?.response?.unitNumber
