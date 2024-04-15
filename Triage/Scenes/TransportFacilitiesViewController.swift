@@ -75,6 +75,18 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         hospitalStatusUpdatesNotificationToken = hospitalStatusUpdates?.observe { [weak self] (changes) in
             self?.didObserveHospitalStatusUpdatesChanges(changes)
         }
+
+        isEditing = incident?.scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        transportButton.isHidden = !editing
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? TransportFacilityCollectionViewCell {
+                cell.checkbox.isEnabled = editing
+            }
+        }
     }
 
     @objc func performQuery(_ searchText: String? = nil) {
@@ -207,6 +219,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
             cell.updateTransportedCounts(from: reports)
             cell.updateCapacityCounts(from: hospitalStatusUpdates)
+            cell.checkbox.isEnabled = isEditing
         }
         return cell
     }
@@ -215,23 +228,25 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        var indexPaths: [IndexPath] = []
-        if let facility = cart?.facility {
-            if let index = results?.firstIndex(where: { $0.facility == facility }) {
-                indexPaths.append(IndexPath(row: index, section: 0))
+        if isEditing {
+            var indexPaths: [IndexPath] = []
+            if let facility = cart?.facility {
+                if let index = results?.firstIndex(where: { $0.facility == facility }) {
+                    indexPaths.append(IndexPath(row: index, section: 0))
+                }
             }
-        }
-        if let regionFacility = results?[indexPath.row] {
-            delegate?.transportFacilitiesViewController?(self, didSelect: regionFacility.facility)
-            indexPaths.append(indexPath)
-        }
-        for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? TransportFacilityCollectionViewCell {
-                let regionFacility = results?[indexPath.row]
-                cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
+            if let regionFacility = results?[indexPath.row] {
+                delegate?.transportFacilitiesViewController?(self, didSelect: regionFacility.facility)
+                indexPaths.append(indexPath)
             }
+            for indexPath in indexPaths {
+                if let cell = collectionView.cellForItem(at: indexPath) as? TransportFacilityCollectionViewCell {
+                    let regionFacility = results?[indexPath.row]
+                    cell.configure(from: regionFacility, index: indexPath.row, isSelected: regionFacility?.facility == cart?.facility)
+                }
+            }
+            guard let cart = cart else { return }
+            transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
         }
-        guard let cart = cart else { return }
-        transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
     }
 }

@@ -144,6 +144,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         facilityView.inputAccessoryView = formInputAccessoryView
         facilityView.delegate = self
         facilityView.update(from: update)
+        facilityView.selectButton.isEnabled = isEditing
         facilityViews.append(facilityView)
 
         let col = ((update.sortSequenceNumber ?? 1) - 1).isMultiple(of: 2) ? facilitiesSection.colA : facilitiesSection.colB
@@ -204,6 +205,36 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         unregisterFromKeyboardNotifications()
     }
 
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        if editing {
+            for checkbox in codeCheckboxes {
+                checkbox.isEnabled = true
+            }
+            for checkbox in stabilityCheckboxes {
+                checkbox.isEnabled = true
+            }
+            for facilityView in facilityViews {
+                facilityView.selectButton.isEnabled = true
+            }
+            ringdownStatusView.cancelButton.isEnabled = true
+            ringdownStatusView.redirectButton.isEnabled = true
+        } else {
+            hideCommandFooter()
+            for checkbox in codeCheckboxes {
+                checkbox.isEnabled = false
+            }
+            for checkbox in stabilityCheckboxes {
+                checkbox.isEnabled = false
+            }
+            for facilityView in facilityViews {
+                facilityView.selectButton.isEnabled = false
+            }
+            ringdownStatusView.cancelButton.isEnabled = false
+            ringdownStatusView.redirectButton.isEnabled = false
+        }
+    }
+
     func showCommandFooter() {
         commandFooter.isHidden = false
         let inset = UIEdgeInsets(top: 0, left: 0, bottom: commandFooter.frame.height, right: 0)
@@ -222,7 +253,9 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         ringdownStatusView.update(from: ringdown)
         facilitiesSection.isHidden = true
         ringdownSection.isHidden = false
-        showCommandFooter()
+        if isEditing {
+            showCommandFooter()
+        }
         activityIndicatorView.stopAnimating()
         let timestamps = ringdown.timestamps
         if timestamps[RingdownStatus.returnedToService.rawValue] != nil {

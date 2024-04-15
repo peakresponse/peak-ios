@@ -60,10 +60,8 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         removeCurrentViewController()
         switch segmentedControl.selectedIndex {
         case 0:
-            commandHeader.rightBarButtonItem = editBarButtonItem
             showReport()
         case 1:
-            commandHeader.rightBarButtonItem = nil
             showRingdown()
         default:
             break
@@ -190,7 +188,14 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         } else {
             let realm = AppRealm.open()
             if report.scene?.isMCI ?? false {
-                commandHeader.rightBarButtonItem = editBarButtonItem
+                if report.scene?.isResponder(userId: AppSettings.userId) ?? false {
+                    commandHeader.rightBarButtonItem = editBarButtonItem
+                } else {
+                    commandHeader.rightBarButtonItem = nil
+                    if let vc = vc as? ReportViewController {
+                        vc.disableEditing()
+                    }
+                }
             } else if let vehicleId = AppSettings.vehicleId,
                let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId),
                vehicle.number == report.response?.unitNumber {
@@ -206,6 +211,8 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     }
 
     func showRingdown() {
+        commandHeader.rightBarButtonItem = nil
+
         var vc: UIViewController
         if cachedViewControllers.count > 1 {
             vc = cachedViewControllers[1]
@@ -223,6 +230,16 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         containerView.addSubview(vc.view)
         vc.view.frame = containerView.bounds
         vc.didMove(toParent: self)
+
+        let realm = AppRealm.open()
+        if report?.scene?.isMCI ?? false {
+            vc.isEditing = report?.scene?.isResponder(userId: AppSettings.userId) ?? false
+        } else if let vehicleId = AppSettings.vehicleId,
+                  let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+            vc.isEditing = vehicle.number == report?.response?.unitNumber
+        } else {
+            vc.isEditing = false
+        }
     }
 
     // MARK: - ReportViewControllerDelegate

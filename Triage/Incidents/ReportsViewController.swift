@@ -18,6 +18,7 @@ class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomT
     @IBOutlet weak var addButton: RoundButton!
 
     var incident: Incident?
+    var scene: Scene?
     var isMCI = false
     var filterPriority: TriagePriority?
     var results: Results<Report>?
@@ -37,12 +38,6 @@ class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomT
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if incident == nil, let sceneId = AppSettings.sceneId,
-           let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
-            incident = scene.incident.first
-            isMCI = scene.isMCI
-        }
-
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
             layout.minimumLineSpacing = 0
@@ -50,8 +45,14 @@ class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomT
             layout.sectionHeadersPinToVisibleBounds = true
         }
 
+        if incident == nil, let sceneId = AppSettings.sceneId {
+            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+            incident = scene?.incident.first
+            isMCI = scene?.isMCI ?? false
+        }
+
         if isMCI {
-            addButton.isHidden = false
+            addButton.isHidden = !(scene?.isResponder(userId: AppSettings.userId) ?? false)
             initSceneCommandHeader()
             collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
         } else {

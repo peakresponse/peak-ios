@@ -36,6 +36,18 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         collectionView.refreshControl = refreshControl
 
         collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+
+        isEditing = incident?.scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    override func setEditing(_ editing: Bool, animated: Bool) {
+        super.setEditing(editing, animated: animated)
+        addButton.isHidden = !isEditing
+        for cell in collectionView.visibleCells {
+            if let cell = cell as? TransportReportCollectionViewCell {
+                cell.checkbox.isEnabled = isEditing
+            }
+        }
     }
 
     @objc func performQuery(_ searchText: String? = nil) {
@@ -143,6 +155,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
         if let cell = cell as? TransportReportCollectionViewCell, let report = filteredResults?[indexPath.row] {
             cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
+            cell.checkbox.isEnabled = isEditing
         }
         return cell
     }
@@ -151,7 +164,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        if let report = filteredResults?[indexPath.row] {
+        if isEditing, let report = filteredResults?[indexPath.row] {
             delegate?.transportReportsViewController?(self, didSelect: report)
             if let cell = collectionView.cellForItem(at: indexPath) as? TransportReportCollectionViewCell {
                 cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
