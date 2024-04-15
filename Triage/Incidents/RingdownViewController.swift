@@ -126,12 +126,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
             ringdownNotificationToken = ringdownResults?.observe { [weak self] (changes) in
                 self?.didObserveRingdownRealmChanges(changes)
             }
-            if ringdownResults?.count == 0 {
-                REDRealm.getRingdown(id: ringdownId) { [weak self] (_, error) in
-                    if let error = error {
-                        DispatchQueue.main.async { [weak self] in
-                            self?.presentAlert(error: error)
-                        }
+            REDRealm.getRingdown(id: ringdownId) { [weak self] (_, error) in
+                if let error = error {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentAlert(error: error)
                     }
                 }
             }
