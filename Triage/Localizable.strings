@@ -684,6 +684,9 @@
 "TransportFacilityCollectionViewCell.row.transported" = "- Transported";
 "TransportFacilityCollectionViewCell.row.available" = "= Available";
 
+"TransportReportsViewController.notFound.title" = "Not found";
+"TransportReportsViewController.notFound.message" = "A patient with tag number %@ was not found.";
+
 "TransportViewController.segment.patients" = "Patients";
 "TransportViewController.segment.units" = "Units";
 "TransportViewController.segment.hospitals" = "Hospitals";
