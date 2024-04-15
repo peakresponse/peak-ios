@@ -112,9 +112,9 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             collectionView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             collectionView.performBatchUpdates({
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 1) })
+                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 1) })
+                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 1) })
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
