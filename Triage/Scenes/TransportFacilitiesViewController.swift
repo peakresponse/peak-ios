@@ -85,6 +85,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         for cell in collectionView.visibleCells {
             if let cell = cell as? TransportFacilityCollectionViewCell {
                 cell.checkbox.isEnabled = editing
+                cell.checkbox.isUserInteractionEnabled = false
             }
         }
     }
@@ -220,6 +221,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             cell.updateTransportedCounts(from: reports)
             cell.updateCapacityCounts(from: hospitalStatusUpdates)
             cell.checkbox.isEnabled = isEditing
+            cell.checkbox.isUserInteractionEnabled = false
         }
         return cell
     }

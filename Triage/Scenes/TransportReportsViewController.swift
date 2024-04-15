@@ -46,6 +46,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         for cell in collectionView.visibleCells {
             if let cell = cell as? TransportReportCollectionViewCell {
                 cell.checkbox.isEnabled = isEditing
+                cell.checkbox.isUserInteractionEnabled = false
             }
         }
     }
@@ -156,6 +157,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         if let cell = cell as? TransportReportCollectionViewCell, let report = filteredResults?[indexPath.row] {
             cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
             cell.checkbox.isEnabled = isEditing
+            cell.checkbox.isUserInteractionEnabled = false
         }
         return cell
     }
