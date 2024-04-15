@@ -230,6 +230,16 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         containerView.addSubview(vc.view)
         vc.view.frame = containerView.bounds
         vc.didMove(toParent: self)
+
+        let realm = AppRealm.open()
+        if report?.scene?.isMCI ?? false {
+            vc.isEditing = report?.scene?.isResponder(userId: AppSettings.userId) ?? false
+        } else if let vehicleId = AppSettings.vehicleId,
+                  let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+            vc.isEditing = vehicle.number == report?.response?.unitNumber
+        } else {
+            vc.isEditing = false
+        }
     }
 
     // MARK: - ReportViewControllerDelegate
