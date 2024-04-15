@@ -56,6 +56,9 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
         collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
 
+        let realm = AppRealm.open()
+        guard let sceneId = AppSettings.sceneId else { return }
+        scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         isEditing = scene?.isResponder(userId: AppSettings.userId) ?? false
     }
 
@@ -85,10 +88,6 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     func performQuery(_ searchText: String? = nil) {
         notificationToken?.invalidate()
-
-        let realm = AppRealm.open()
-        guard let sceneId = AppSettings.sceneId else { return }
-        scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
         results = scene.responders.filter("departedAt=%@", NSNull())
