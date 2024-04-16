@@ -112,6 +112,7 @@
 "Button.yes" = "Yes";
 
 "CloseSceneConfirmation.message" = "Are you sure you want to close the scene?";
+"LeaveSceneConfirmation.message" = "Are you sure you want to leave the scene?";
 
 "ConfirmTransportViewController.confirmLabel" = "Are you sure you want to transport this patient?";
 
@@ -177,9 +178,6 @@
 "InputAccessoryView.done" = "Done";
 "InputAccessoryView.go" = "Go";
 "InputAccessoryView.search" = "Search";
-
-"LeaveSceneConfirmation.title" = "Are you sure you want to leave the %@ scene?";
-"LeaveSceneConfirmation.message" = "You can join again later if your plans change.\n\nYou may also be asked to fill out more information after the scene is closed.";
 
 "LatLngControl.capturingLocation" = "Capturing location...";
 

@@ -12,7 +12,7 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class ReunifyViewController: SceneViewController, CommandHeaderDelegate, ReportsCountsHeaderViewDelegate, ScanViewControllerDelegate,
+class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegate, ScanViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var scanButton: RoundButton!

@@ -12,7 +12,7 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class RespondersViewController: SceneViewController, CommandHeaderDelegate, ResponderViewControllerDelegate,
+class RespondersViewController: SceneViewController, ResponderViewControllerDelegate,
                                 ResponderCollectionViewCellDelegate, RespondersCountsHeaderViewDelegate,
                                 UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var collectionView: UICollectionView!

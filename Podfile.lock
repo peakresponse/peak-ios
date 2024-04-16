@@ -119,7 +119,7 @@ PODS:
     - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
-  - SwiftSignatureView (3.2.0)
+  - SwiftSignatureView (3.2.1)
   - TranscriptionKit (0.1.0):
     - AWSTranscribeStreaming (~> 2.33.4)
 
@@ -190,7 +190,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 2daf3383e255b3ff25350b406b199df5130473ee
+    :commit: 52d254246933fcd4f28d6ccc2f79f46c745da3ba
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -233,7 +233,7 @@ SPEC CHECKSUMS:
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
-  SwiftSignatureView: cd8cca297cc2ca6a6c174da22fb908c33d03d3c0
+  SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
 PODFILE CHECKSUM: 2a704a7e4fda58bbaefb694a1c948557bc6fbb6a

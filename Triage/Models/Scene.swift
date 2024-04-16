@@ -283,7 +283,11 @@ class Scene: BaseVersioned, NemsisBacked {
     }
 
     func isResponder(userId: String?) -> Bool {
-        return responders.filter("user.id=%@ AND departedAt=NULL", userId as Any).count > 0
+        return responder(userId: userId) != nil
+    }
+
+    func responder(userId: String?) -> Responder? {
+        return responders.filter("user.id=%@ AND departedAt=NULL", userId as Any).first
     }
 
     func updateRespondersSort() {
