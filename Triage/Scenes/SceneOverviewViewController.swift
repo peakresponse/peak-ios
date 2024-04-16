@@ -153,10 +153,27 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
             presentAnimated(vc)
         } else {
             if scene.isResponder(userId: AppSettings.userId) {
-                AppRealm.leaveScene(sceneId: sceneId) { _ in
-                }
+                let vc = ModalViewController()
+                vc.isDismissedOnAction = false
+                vc.messageText = "LeaveSceneConfirmation.message".localized
+                vc.addAction(UIAlertAction(title: "Button.leave".localized, style: .destructive, handler: { [weak self] (_) in
+                    guard let self = self else { return }
+                    AppRealm.leaveScene(sceneId: sceneId) { [weak self] (error) in
+                        DispatchQueue.main.async { [weak self] in
+                            vc.dismissAnimated()
+                            if let error = error {
+                                self?.presentAlert(error: error)
+                            } else {
+                                self?.leaveScene()
+                            }
+                        }
+                    }
+                }))
+                vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+                presentAnimated(vc)
+            } else {
+                leaveScene()
             }
-            leaveScene()
         }
     }
 
