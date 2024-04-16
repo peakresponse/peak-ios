@@ -11,7 +11,7 @@ import PRKit
 import RealmSwift
 import AlignedCollectionViewFlowLayout
 
-class ReportsViewController: SceneViewController, CommandHeaderDelegate, CustomTabBarDelegate, ReportsCountsHeaderViewDelegate,
+class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var customTabBar: CustomTabBar!

@@ -10,10 +10,11 @@ import Foundation
 import PRKit
 import UIKit
 
-class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
+class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
 
     func initSceneCommandHeader() {
+        commandHeader.delegate = self
         commandHeader.isUserHidden = false
         commandHeader.isSearchHidden = false
         commandHeader.searchField.returnKeyType = .done
@@ -45,7 +46,7 @@ class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
                     self?.commandHeader.userImage = image
                 }
             }
-            var userLabelText = user?.fullName
+            var userLabelText = user?.fullNameLastFirst
             if let assignmentId = AppSettings.assignmentId,
                let assignment = realm.object(ofType: Assignment.self, forPrimaryKey: assignmentId),
                let vehicleId = assignment.vehicleId,
@@ -71,6 +72,94 @@ class SceneViewController: UIViewController, PRKit.FormFieldDelegate {
         if let vc = vc as? SceneOverviewViewController {
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
         }
+        presentAnimated(vc)
+    }
+
+    // MARK: - CommandHeaderDelegae
+
+    func commandHeaderDidPressUser(_ header: CommandHeader) {
+        let realm = AppRealm.open()
+        var messageText = ""
+        var isResponder = false
+        var isMGS = false
+        if let vehicleId = AppSettings.vehicleId,
+           let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
+            messageText = vehicle.callSign ?? vehicle.number ?? ""
+        }
+        if let userId = AppSettings.userId,
+           let user = realm.object(ofType: User.self, forPrimaryKey: userId) {
+            if messageText != "" {
+                messageText = "\(messageText): "
+            }
+            messageText = "\(messageText)\(user.fullNameLastFirst)"
+        }
+        if let sceneId = AppSettings.sceneId,
+           let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId),
+           let responder = scene.responder(userId: AppSettings.userId) {
+            isResponder = true
+            if let role = responder.role {
+                if messageText != "" {
+                    messageText = "\(messageText)\n"
+                }
+                messageText = "\(messageText)\("Responder.role.\(role)".localized)"
+                isMGS = role == ResponderRole.mgs.rawValue
+            }
+        }
+        let vc = ModalViewController()
+        vc.isDismissedOnAction = false
+        vc.messageText = messageText
+        var title = "Button.exitScene".localized
+        if isMGS {
+            title = "Button.closeScene".localized
+        } else if isResponder {
+            title = "Button.leaveScene".localized
+        }
+        vc.addAction(UIAlertAction(title: title, style: .destructive, handler: { [weak self] (_) in
+            guard let self = self else { return }
+            vc.dismiss(animated: false)
+            if isMGS {
+                let vc = ModalViewController()
+                vc.isDismissedOnAction = false
+                vc.messageText = "CloseSceneConfirmation.message".localized
+                vc.addAction(UIAlertAction(title: "Button.close".localized, style: .destructive, handler: { [weak self] (_) in
+                    guard let sceneId = AppSettings.sceneId else { return }
+                    AppRealm.endScene(sceneId: sceneId) { [weak self] (error) in
+                        DispatchQueue.main.async { [weak self] in
+                            vc.dismissAnimated()
+                            if let error = error {
+                                self?.presentAlert(error: error)
+                            } else {
+                                _ = AppDelegate.leaveScene()
+                            }
+                        }
+                    }
+                }))
+                vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+                self.presentAnimated(vc)
+            } else if isResponder {
+                let vc = ModalViewController()
+                vc.isDismissedOnAction = false
+                vc.messageText = "LeaveSceneConfirmation.message".localized
+                vc.addAction(UIAlertAction(title: "Button.leave".localized, style: .destructive, handler: { [weak self] (_) in
+                    guard let sceneId = AppSettings.sceneId else { return }
+                    AppRealm.leaveScene(sceneId: sceneId) { [weak self] (error) in
+                        DispatchQueue.main.async { [weak self] in
+                            vc.dismissAnimated()
+                            if let error = error {
+                                self?.presentAlert(error: error)
+                            } else {
+                                _ = AppDelegate.leaveScene()
+                            }
+                        }
+                    }
+                }))
+                vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+                self.presentAnimated(vc)
+            } else {
+                _ = AppDelegate.leaveScene()
+            }
+        }))
+        vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
         presentAnimated(vc)
     }
 
