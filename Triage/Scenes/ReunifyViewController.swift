@@ -12,9 +12,10 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class ReunifyViewController: SceneViewController, CommandHeaderDelegate, ReportsCountsHeaderViewDelegate,
+class ReunifyViewController: SceneViewController, CommandHeaderDelegate, ReportsCountsHeaderViewDelegate, ScanViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var scanButton: RoundButton!
 
     var incident: Incident?
     var results: Results<Report>?
@@ -128,11 +129,33 @@ class ReunifyViewController: SceneViewController, CommandHeaderDelegate, Reports
         }
     }
 
+    @IBAction
+    func scanPressed(_ sender: RoundButton) {
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
+        if let vc = vc as? ScanViewController {
+            vc.delegate = self
+        }
+        presentAnimated(vc)
+    }
+
     // MARK: - ReportsCountsHeaderViewDelegate
 
     func reportsCountsHeaderView(_ view: ReportsCountsHeaderView, didSelect priority: TriagePriority?) {
         filterPriority = priority
         performQuery()
+    }
+
+    // MARK: - ScanViewControllerDelegate
+
+    func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?) {
+        dismiss(animated: true) { [weak self] in
+            guard let self = self else { return }
+            if let report = report {
+                presentReport(report: report, animated: true)
+            } else {
+                self.presentAlert(title: "TransportReportsViewController.notFound.title".localized, message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
+            }
+        }
     }
 
     // MARK: - UICollectionViewDataSource
