@@ -19,9 +19,11 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     var incident: Incident?
     var results: Results<Report>?
+    var notificationToken: NotificationToken?
+
     var filterPriority: TriagePriority?
     var filteredResults: Results<Report>?
-    var notificationToken: NotificationToken?
+    var filteredNotificationToken: NotificationToken?
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -31,6 +33,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     deinit {
         notificationToken?.invalidate()
+        filteredNotificationToken?.invalidate()
     }
 
     override func viewDidLoad() {
@@ -77,10 +80,15 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         guard let incident = incident else { return }
 
         notificationToken?.invalidate()
+        filteredNotificationToken?.invalidate()
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
             .filter("incident=%@ AND canonicalId=%@ AND filterPriority=%d", incident, NSNull(), TriagePriority.transported.rawValue)
+        notificationToken = results?.observe { [weak self] (changes) in
+            self?.didObserveRealmChanges(changes)
+        }
+
         filteredResults = results
         if let text = commandHeader.searchField.text, !text.isEmpty {
             filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
@@ -92,8 +100,8 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         filteredResults = filteredResults?.sorted(by: [
             SortDescriptor(keyPath: "updatedAt", ascending: false)
         ])
-        notificationToken = filteredResults?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
+        filteredNotificationToken = filteredResults?.observe { [weak self] (changes) in
+            self?.didObserveFilteredRealmChanges(changes)
         }
         refresh()
     }
@@ -114,6 +122,19 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Report>>) {
         switch changes {
         case .initial:
+            fallthrough
+        case .update:
+            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? ReportsCountsHeaderView {
+                headerView.configure(from: results)
+            }
+        case .error(let error):
+            presentAlert(error: error)
+        }
+    }
+
+    func didObserveFilteredRealmChanges(_ changes: RealmCollectionChange<Results<Report>>) {
+        switch changes {
+        case .initial:
             collectionView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
             collectionView.performBatchUpdates({
@@ -121,9 +142,6 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
                 self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
                 self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
             }, completion: nil)
-            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? ReportsCountsHeaderView {
-                headerView.configure(from: results)
-            }
         case .error(let error):
             presentAlert(error: error)
         }
@@ -179,7 +197,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
         if let headerView = headerView as? ReportsCountsHeaderView {
-            headerView.countsView.arrangedSubviews.last?.isHidden = true
+            headerView.countsView.priorityButtons.last?.isHidden = true
             headerView.delegate = self
             headerView.configure(from: results)
         }
@@ -206,6 +224,6 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 60)
+        return CGSize(width: 0, height: 118)
     }
 }
