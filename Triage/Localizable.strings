@@ -438,7 +438,7 @@
 "Responder.capability.2207017" = "BLS";
 "Responder.status" = "Status";
 "Responder.status.arrived" = "Arrived";
-"Responder.status.enroute" = "En Route";
+"Responder.status.enroute" = "En route";
 "Responder.unitNumber" = "Unit #";
 
 "Responder.sort.az" = "Alphabetically";
@@ -459,6 +459,10 @@
 
 "ResponderViewController.alert.duplicate.title" = "Duplicate Unit";
 "ResponderViewController.alert.duplicate.message" = "A unit with this agency and number already exists.";
+
+"RespondersCountsHeaderView.enroute" = "En rte: %d";
+"RespondersCountsHeaderView.arrived" = "Arr: %d";
+"RespondersCountsHeaderView.total" = "Total: %d";
 
 "Response.unitTransportAndEquipmentCapability.2207011" = "Air Transport-Helicopter";
 "Response.unitTransportAndEquipmentCapability.2207013" = "Air Transport-Fixed Wing";
