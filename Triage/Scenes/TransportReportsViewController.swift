@@ -134,7 +134,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
                 if let index = filteredResults?.firstIndex(of: report) {
                     let indexPath = IndexPath(row: index, section: 0)
                     collectionView.reloadItems(at: [indexPath])
-                    collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredVertically, animated: true)
+                    collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
                 }
             } else {
                 self.presentAlert(title: "TransportReportsViewController.notFound.title".localized, message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
