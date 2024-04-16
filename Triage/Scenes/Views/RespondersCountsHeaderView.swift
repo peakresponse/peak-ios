@@ -93,21 +93,23 @@ class RespondersCountsHeaderView: UICollectionReusableView {
     }
 
     @objc func buttonPressed(_ sender: Button) {
-        if sender == totalButton {
+        if sender != totalButton && !sender.isSelected {
+            if sender == enrouteButton {
+                arrivedButton.isSelected = false
+                enrouteButton.isSelected = true
+                totalButton.isSelected = false
+                delegate?.respondersCountsHeaderView?(self, didPressEnroute: sender)
+            } else if sender == arrivedButton {
+                arrivedButton.isSelected = true
+                enrouteButton.isSelected = false
+                totalButton.isSelected = false
+                delegate?.respondersCountsHeaderView?(self, didPressArrived: sender)
+            }
+        } else {
             arrivedButton.isSelected = false
             enrouteButton.isSelected = false
             totalButton.isSelected = true
             delegate?.respondersCountsHeaderView?(self, didPressTotal: sender)
-        } else if sender == enrouteButton {
-            arrivedButton.isSelected = false
-            enrouteButton.isSelected = true
-            totalButton.isSelected = false
-            delegate?.respondersCountsHeaderView?(self, didPressEnroute: sender)
-        } else if sender == arrivedButton {
-            arrivedButton.isSelected = true
-            enrouteButton.isSelected = false
-            totalButton.isSelected = false
-            delegate?.respondersCountsHeaderView?(self, didPressArrived: sender)
         }
     }
 
