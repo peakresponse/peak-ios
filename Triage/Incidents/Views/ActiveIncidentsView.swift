@@ -106,16 +106,9 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Incident>>) {
         switch changes {
         case .initial:
+            fallthrough
+        case .update:
             tableView.reloadData()
-        case .update(_, let deletions, let insertions, let modifications):
-            self.tableView.beginUpdates()
-            self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) },
-               with: .automatic)
-            self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) },
-               with: .automatic)
-            self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) },
-               with: .automatic)
-            self.tableView.endUpdates()
         case .error(let error):
             // presentAlert(error: error)
             print(error)
