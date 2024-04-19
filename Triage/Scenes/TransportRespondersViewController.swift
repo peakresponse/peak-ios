@@ -177,6 +177,26 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         }
     }
 
+    func didToggleItem(at indexPath: IndexPath) {
+        guard isEditing else { return }
+        var indexPaths: [IndexPath] = []
+        if let responder = cart?.responder {
+            if let index = results?.firstIndex(of: responder) {
+                indexPaths.append(IndexPath(row: index, section: 0))
+            }
+        }
+        if let responder = results?[indexPath.row] {
+            delegate?.transportRespondersViewController?(self, didSelect: responder)
+            indexPaths.append(indexPath)
+        }
+        for indexPath in indexPaths {
+            if let cell = collectionView.cellForItem(at: indexPath) as? ResponderCollectionViewCell {
+                let responder = results?[indexPath.row]
+                cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
+            }
+        }
+    }
+
     // MARK: - FormFieldDelegate
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
@@ -199,22 +219,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
     func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool) {
         guard let indexPath = collectionView.indexPath(for: cell) else { return }
-        var indexPaths: [IndexPath] = []
-        if let responder = cart?.responder {
-            if let index = results?.firstIndex(of: responder) {
-                indexPaths.append(IndexPath(row: index, section: 0))
-            }
-        }
-        if let responder = results?[indexPath.row] {
-            delegate?.transportRespondersViewController?(self, didSelect: responder)
-            indexPaths.append(indexPath)
-        }
-        for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? ResponderCollectionViewCell {
-                let responder = results?[indexPath.row]
-                cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
-            }
-        }
+        didToggleItem(at: indexPath)
     }
 
     func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
@@ -226,18 +231,8 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let responder = results?[indexPath.row] else { return }
-        if isEditing && responder.user == nil && responder.vehicle == nil {
-            let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
-            if let vc = vc as? ResponderViewController, let responder = results?[indexPath.row] {
-                vc.delegate = self
-                vc.responder = responder
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-                vc.isEditing = true
-            }
-            presentAnimated(vc)
-        }
         collectionView.deselectItem(at: indexPath, animated: true)
+        didToggleItem(at: indexPath)
     }
 
     // MARK: - UICollectionViewDataSource
