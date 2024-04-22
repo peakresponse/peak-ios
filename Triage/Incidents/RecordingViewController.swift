@@ -91,7 +91,6 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
                                            duration: transcriber.recordingLength, formattedDuration: transcriber.recordingLengthFormatted)
         stopButton.layer.opacity = 0
         activityIndicatorView.startAnimating()
-        cancelButton.isHidden = true
     }
 
     // MARK: - TranscriberDelegate
