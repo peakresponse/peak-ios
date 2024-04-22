@@ -137,6 +137,15 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     @objc func donePressed() {
         guard let newResponder = newResponder else { return }
 
+        if newResponder.agency == nil {
+            presentAlert(title: "ResponderViewController.alert.agency.title".localized, message: "ResponderViewController.alert.agency.message".localized)
+            return
+        }
+        if newResponder.unitNumber?.isEmpty ?? true {
+            presentAlert(title: "ResponderViewController.alert.unitNumber.title".localized, message: "ResponderViewController.alert.unitNumber.message".localized)
+            return
+        }
+
         doneButton.isEnabled = false
 
         let spinner = UIActivityIndicatorView.withMediumStyle()
