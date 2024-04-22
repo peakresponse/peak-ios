@@ -455,8 +455,12 @@
 
 "ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
 
+"ResponderViewController.alert.agency.title" = "Agency required";
+"ResponderViewController.alert.agency.message" = "Please select an agency for this unit.";
 "ResponderViewController.alert.duplicate.title" = "Duplicate Unit";
 "ResponderViewController.alert.duplicate.message" = "A unit with this agency and number already exists.";
+"ResponderViewController.alert.unitNumber.title" = "Unit # required";
+"ResponderViewController.alert.unitNumber.message" = "Please enter the number for this unit.";
 
 "RespondersCountsHeaderView.enroute" = "En rte: %d";
 "RespondersCountsHeaderView.arrived" = "Arr: %d";
