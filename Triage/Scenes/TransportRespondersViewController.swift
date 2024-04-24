@@ -146,6 +146,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
             vc.delegate = self
             let responder = Responder()
             responder.scene = scene
+            responder.status = true
             vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
             vc.responder = responder
             vc.isEditing = true
