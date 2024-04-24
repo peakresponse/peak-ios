@@ -21,18 +21,13 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     var formInputAccessoryView: UIView!
 
     var scene: Scene?
-    var results: Results<Responder>?
+    var responders: [Responder]?
     var roles: [ResponderRole] = []
-    var notificationToken: NotificationToken?
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.rolesResources".localized
         tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
-    }
-
-    deinit {
-        notificationToken?.invalidate()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -82,27 +77,23 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     }
 
     func performQuery() {
-        notificationToken?.invalidate()
-
         let realm = AppRealm.open()
         guard let sceneId = AppSettings.sceneId else { return }
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
-        results = scene.responders.filter("user<>%@ AND departedAt=%@", NSNull(), NSNull())
+        var results = scene.responders.filter("user<>%@ AND departedAt=%@", NSNull(), NSNull())
         if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
-            results = results?.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
+            results = results.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
                                       text, text, text)
         }
-        results = results?.sorted(by: [
+        results = results.sorted(by: [
             SortDescriptor(keyPath: "vehicle.number"),
             SortDescriptor(keyPath: "user.firstName"),
             SortDescriptor(keyPath: "user.lastName")
         ])
 
-        notificationToken = results?.observe { [weak self] (changes) in
-            self?.didObserveRealmChanges(changes)
-        }
+        responders = Array(results)
         refresh()
     }
 
@@ -123,6 +114,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     @objc func refresh() {
         collectionView.refreshControl?.endRefreshing()
+        collectionView.reloadData()
     }
 
     private func leaveScene() {
@@ -230,8 +222,8 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                     for cell in collectionView.visibleCells {
                         if let cell = cell as? ResponderRoleCollectionViewCell,
                            let responderId = cell.responderId,
-                           let responder = results?.filter("id=%@", responderId).first,
-                           let index = results?.firstIndex(of: responder) {
+                           let responder = responders?.first(where: { $0.id == responderId }),
+                           let index = responders?.firstIndex(of: responder) {
                             cell.configure(from: responder, index: index)
                         }
                     }
@@ -289,7 +281,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
         case 0: // overview header
             return 1
         case 1: // responders
-            return results?.count ?? 0
+            return responders?.count ?? 0
         default:
             return 0
         }
@@ -306,7 +298,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
         case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
             if let cell = cell as? ResponderRoleCollectionViewCell {
-                let responder = results?[indexPath.row]
+                let responder = responders?[indexPath.row]
                 cell.configure(from: responder, index: indexPath.row)
                 cell.roleSelector.delegate = self
                 cell.roleSelector.inputAccessoryView = formInputAccessoryView
