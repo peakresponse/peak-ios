@@ -22,13 +22,13 @@ class SceneTabBarController: CustomTabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if let sceneId = AppSettings.sceneId {
+        let realm = AppRealm.open()
+        if let sceneId = AppSettings.sceneId, let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId), scene.isActive {
             // disconnect from agency updates
             AppRealm.disconnectIncidents()
             // conenct to scene updates
             AppRealm.connect(sceneId: sceneId)
 
-            let realm = AppRealm.open()
             results = realm.objects(Scene.self).filter("id=%@", sceneId)
             notificationToken = results?.observe({ [weak self] (changes) in
                 self?.didObserveChanges(changes)
