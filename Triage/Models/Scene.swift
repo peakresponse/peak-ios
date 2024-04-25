@@ -283,7 +283,7 @@ class Scene: BaseVersioned, NemsisBacked {
     }
 
     func isResponder(userId: String?) -> Bool {
-        return responder(userId: userId) != nil
+        return isActive && responder(userId: userId) != nil
     }
 
     func responder(userId: String?) -> Responder? {
