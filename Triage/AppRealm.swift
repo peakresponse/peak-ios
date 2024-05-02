@@ -712,6 +712,7 @@ class AppRealm {
             responder.arrivedAt = Date()
             let newScene = Scene(clone: scene)
             newScene.isMCI = true
+            newScene.isActive = true
             newScene.mgsResponderId = responder.id
             if let canonicalId = newScene.canonicalId, let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
                 responder.scene = canonical
