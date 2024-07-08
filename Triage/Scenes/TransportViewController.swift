@@ -130,6 +130,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             let newReport = Report(clone: report)
             newReport.response?.agency = cart.responder?.agency
             newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
+            newReport.response?.callSign = cart.responder?.vehicle?.callSign ?? (cart.responder?.vehicle?.number ?? cart.responder?.unitNumber)
             newReport.disposition?.destinationFacility = cart.facility
             AppRealm.saveReport(report: newReport)
             if AppSettings.routedUrl != nil {

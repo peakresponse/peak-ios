@@ -104,6 +104,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             }
             if let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
                 newReport.response?.unitNumber = vehicle.number
+                newReport.response?.callSign = vehicle.callSign
             }
         }
         self.report = newReport

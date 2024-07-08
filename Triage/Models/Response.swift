@@ -68,6 +68,15 @@ class Response: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var callSign: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eResponse.14")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eResponse.14")
+        }
+    }
+
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
         if let agencyId = agency?.id {
