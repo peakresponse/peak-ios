@@ -109,6 +109,7 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
             }
             if let vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId) {
                 report.response?.unitNumber = vehicle.number
+                report.response?.callSign = vehicle.callSign
             }
         }
         presentReport(report: report, animated: animated, completion: completion)
