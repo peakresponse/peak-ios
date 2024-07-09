@@ -131,6 +131,10 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             newReport.response?.agency = cart.responder?.agency
             newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
             newReport.response?.callSign = cart.responder?.vehicle?.callSign ?? (cart.responder?.vehicle?.number ?? cart.responder?.unitNumber)
+            newReport.disposition?.unitDisposition = UnitDisposition.patientContactMade.rawValue
+            newReport.disposition?.patientEvaluationCare = PatientEvaluationCare.patientEvaluatedCareProvided.rawValue
+            newReport.disposition?.crewDisposition = CrewDisposition.assumedPrimaryCare.rawValue
+            newReport.disposition?.transportDisposition = TransportDisposition.transportByThisUnit.rawValue
             newReport.disposition?.destinationFacility = cart.facility
             AppRealm.saveReport(report: newReport)
             if AppSettings.routedUrl != nil {
