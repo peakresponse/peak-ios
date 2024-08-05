@@ -18,7 +18,7 @@ import PRKit
 class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var emailField: PRKit.TextField!
     @IBOutlet weak var passwordField: PRKit.PasswordField!
     @IBOutlet weak var rememberMeCheckbox: PRKit.Checkbox!
@@ -31,6 +31,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        contentView.backgroundColor = .background
         versionLabel.text = AppSettings.version
         emailField.keyboardType = .emailAddress
 
