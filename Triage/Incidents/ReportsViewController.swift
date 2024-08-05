@@ -38,6 +38,7 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
             layout.minimumLineSpacing = 0

@@ -31,6 +31,7 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
         initSceneCommandHeader()
         commandHeader.searchField.alpha = 0
 
