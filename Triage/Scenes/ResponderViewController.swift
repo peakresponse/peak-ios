@@ -34,6 +34,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.backgroundColor = .background
+
         rightBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target: self, action: #selector(donePressed))
 
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem

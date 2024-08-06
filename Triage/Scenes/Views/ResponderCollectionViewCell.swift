@@ -44,7 +44,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
 
     func commonInit() {
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .base100
+        selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
         let row = UIStackView()
@@ -100,7 +100,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
         unitLabel.font = .h3SemiBold
-        unitLabel.textColor = .base800
+        unitLabel.textColor = .text
         unitLabel.numberOfLines = 1
         unitLabel.lineBreakMode = .byTruncatingTail
         unitLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
@@ -114,13 +114,13 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
 
         let agencyLabel = UILabel()
         agencyLabel.font = .h4
-        agencyLabel.textColor = .base500
+        agencyLabel.textColor = .labelText
         col.addArrangedSubview(agencyLabel)
         self.agencyLabel = agencyLabel
 
         let timestampLabel = UILabel()
         timestampLabel.font = .body14Bold
-        timestampLabel.textColor = .base500
+        timestampLabel.textColor = .labelText
         col.addArrangedSubview(timestampLabel)
         self.timestampLabel = timestampLabel
 
@@ -135,7 +135,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -146,7 +146,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
 
         let vr = UIView()
         vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
+        vr.backgroundColor = .disabledBorder
         contentView.addSubview(vr)
         NSLayoutConstraint.activate([
             vr.topAnchor.constraint(equalTo: contentView.topAnchor),

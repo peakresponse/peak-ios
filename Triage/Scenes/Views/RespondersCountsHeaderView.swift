@@ -36,7 +36,7 @@ class RespondersCountsHeaderView: UICollectionReusableView {
     }
 
     func commonInit() {
-        backgroundColor = .white
+        backgroundColor = .background
 
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false

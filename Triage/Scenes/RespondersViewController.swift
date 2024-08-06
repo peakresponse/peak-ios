@@ -41,6 +41,8 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
+
         initSceneCommandHeader()
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
