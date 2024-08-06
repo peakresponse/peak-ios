@@ -50,6 +50,9 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        cameraLabel.textColor = .text
+        view.backgroundColor = .background
+
         addKeyboardListener()
         isModal = true
 
