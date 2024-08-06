@@ -21,7 +21,9 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var contentView: UIView!
     @IBOutlet weak var containerView: UIView!
+    @IBOutlet weak var label: UILabel!
     @IBOutlet weak var otherTextField: PRKit.TextField!
     @IBOutlet weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
     @IBOutlet weak var commandFooter: CommandFooter!
@@ -40,6 +42,10 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        contentView.backgroundColor = .background
+        containerView.backgroundColor = .background
+        label.textColor = .text
 
         if view.traitCollection.horizontalSizeClass == .regular {
             otherTextFieldWidthConstraint.isActive = false
