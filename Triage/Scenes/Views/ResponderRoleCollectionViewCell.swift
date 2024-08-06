@@ -30,7 +30,7 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
         unitLabel.font = .h3SemiBold
-        unitLabel.textColor = .base800
+        unitLabel.textColor = .text
         contentView.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
@@ -52,7 +52,7 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -63,7 +63,7 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
 
         let vr = UIView()
         vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
+        vr.backgroundColor = .disabledBorder
         contentView.addSubview(vr)
         NSLayoutConstraint.activate([
             vr.topAnchor.constraint(equalTo: contentView.topAnchor),

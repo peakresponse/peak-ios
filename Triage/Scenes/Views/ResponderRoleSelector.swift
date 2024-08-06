@@ -97,7 +97,7 @@ class ResponderRoleSelector: PRKit.FormField, UITextFieldDelegate {
 
     override func updateStyle() {
         super.updateStyle()
-        textField.textColor = isEnabled ? .base800 : .base300
+        textField.textColor = isEnabled ? .text : .disabledLabelText
     }
 
     override var canBecomeFirstResponder: Bool {

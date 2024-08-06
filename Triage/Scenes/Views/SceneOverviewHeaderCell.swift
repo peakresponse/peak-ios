@@ -15,8 +15,17 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
     @IBOutlet weak var timestampLabel: UILabel!
     @IBOutlet weak var closeButton: PRKit.Button!
     @IBOutlet weak var editButton: PRKit.Button!
+    @IBOutlet weak var hr: UIView!
 
     var calculatedSize: CGSize?
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        incidentNumberLabel.textColor = .text
+        addressLabel.textColor = .labelText
+        timestampLabel.textColor = .labelText
+        hr.backgroundColor = .disabledBorder
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
