@@ -41,6 +41,9 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+        collectionView.backgroundColor = .background
+
         transportButton.titleLabel?.font = UIFont(name: "Barlow-SemiBold", size: 18) ?? .boldSystemFont(ofSize: 18)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)

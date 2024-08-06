@@ -40,6 +40,9 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+        collectionView.backgroundColor = .background
+
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 0

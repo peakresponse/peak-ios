@@ -43,6 +43,9 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+        overlayView.backgroundColor = .modalBackdrop
+
         initSceneCommandHeader()
 
         if incident == nil, let sceneId = AppSettings.sceneId,

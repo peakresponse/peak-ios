@@ -31,6 +31,8 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
