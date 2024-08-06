@@ -34,6 +34,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.backgroundColor = .background
+
         versionLabel.text = AppSettings.version
 
         setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)

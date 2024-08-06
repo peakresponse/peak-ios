@@ -23,10 +23,12 @@ class ListItemTableViewCell: UITableViewCell {
     }
 
     func commonInit() {
+        backgroundColor = .background
+
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .h4SemiBold
-        label.textColor = .base800
+        label.textColor = .text
         label.numberOfLines = 0
         contentView.addSubview(label)
         NSLayoutConstraint.activate([

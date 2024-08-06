@@ -31,6 +31,8 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.backgroundColor = .background
+
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
                                                           style: .plain,
                                                           target: self,

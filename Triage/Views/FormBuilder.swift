@@ -165,7 +165,7 @@ extension FormBuilder {
         label.numberOfLines = 0
         label.text = text
         label.font = .h4SemiBold
-        label.textColor = .base800
+        label.textColor = .text
         return label
     }
 
@@ -250,7 +250,7 @@ extension FormBuilder {
         header.translatesAutoresizingMaskIntoConstraints = false
         header.font = .h4SemiBold
         header.text = text
-        header.textColor = .brandPrimary500
+        header.textColor = .headingText
         header.numberOfLines = 0
         view.addSubview(header)
         NSLayoutConstraint.activate([
@@ -263,7 +263,7 @@ extension FormBuilder {
             subheader.translatesAutoresizingMaskIntoConstraints = false
             subheader.font = .h4SemiBold
             subheader.text = subheaderText
-            subheader.textColor = .base500
+            subheader.textColor = .labelText
             view.addSubview(subheader)
             NSLayoutConstraint.activate([
                 subheader.firstBaselineAnchor.constraint(equalTo: header.firstBaselineAnchor),
@@ -276,7 +276,7 @@ extension FormBuilder {
 
         let rule = UIView()
         rule.translatesAutoresizingMaskIntoConstraints = false
-        rule.backgroundColor = .base300
+        rule.backgroundColor = .disabledBorder
         view.addSubview(rule)
         NSLayoutConstraint.activate([
             rule.topAnchor.constraint(equalTo: header.bottomAnchor, constant: 3),
