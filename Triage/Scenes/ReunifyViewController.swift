@@ -39,6 +39,8 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
+
         if incident == nil, let sceneId = AppSettings.sceneId,
            let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
             incident = scene.incident.first
