@@ -169,7 +169,7 @@ class FormButton: UIControl {
 
         let button = FormIconButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 5, color: .black, opacity: 0.06)
+        button.addShadow(withOffset: CGSize(width: 0, height: 4), radius: 5, color: .dropShadow, opacity: 0.06)
         button.formButton = self
         button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 22, bottom: 0, right: 22)
         addSubview(button)
