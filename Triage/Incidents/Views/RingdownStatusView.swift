@@ -46,7 +46,7 @@ class RingdownStatusRowView: UIView {
         let iconButton = UIButton(type: .custom)
         iconButton.translatesAutoresizingMaskIntoConstraints = false
         iconButton.isUserInteractionEnabled = false
-        iconButton.tintColor = .base300
+        iconButton.tintColor = .disabledBorder
         iconButton.setImage(UIImage(named: "NoCheck24px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
         iconButton.setImage(UIImage(named: "Check24px", in: PRKitBundle.instance, compatibleWith: nil), for: .selected)
         addSubview(iconButton)
@@ -61,7 +61,7 @@ class RingdownStatusRowView: UIView {
 
         let topLine = UIView()
         topLine.translatesAutoresizingMaskIntoConstraints = false
-        topLine.backgroundColor = .base300
+        topLine.backgroundColor = .disabledBorder
         addSubview(topLine)
         NSLayoutConstraint.activate([
             topLine.topAnchor.constraint(equalTo: topAnchor),
@@ -73,7 +73,7 @@ class RingdownStatusRowView: UIView {
 
         let bottomLine = UIView()
         bottomLine.translatesAutoresizingMaskIntoConstraints = false
-        bottomLine.backgroundColor = .base300
+        bottomLine.backgroundColor = .disabledBorder
         addSubview(bottomLine)
         NSLayoutConstraint.activate([
             bottomLine.topAnchor.constraint(equalTo: iconButton.bottomAnchor, constant: -1),
@@ -86,7 +86,7 @@ class RingdownStatusRowView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .h4SemiBold
-        label.textColor = .base500
+        label.textColor = .labelText
         addSubview(label)
         NSLayoutConstraint.activate([
             label.leftAnchor.constraint(equalTo: iconButton.rightAnchor, constant: 14),
@@ -97,7 +97,7 @@ class RingdownStatusRowView: UIView {
         let timeLabel = UILabel()
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.font = .body14Bold
-        timeLabel.textColor = .base500
+        timeLabel.textColor = .labelText
         addSubview(timeLabel)
         NSLayoutConstraint.activate([
             timeLabel.leftAnchor.constraint(equalTo: label.leftAnchor),
@@ -110,19 +110,19 @@ class RingdownStatusRowView: UIView {
         if let date = date {
             timeLabel.text = date.asTimeString()
             timeLabel.isHidden = false
-            label.textColor = .base800
+            label.textColor = .text
             iconButton.isSelected = true
-            iconButton.tintColor = .brandPrimary500
-            topLine.backgroundColor = .brandPrimary500
-            bottomLine.backgroundColor = .brandPrimary500
+            iconButton.tintColor = .focusedBorder
+            topLine.backgroundColor = .focusedBorder
+            bottomLine.backgroundColor = .focusedBorder
         } else {
             timeLabel.text = nil
             timeLabel.isHidden = true
-            label.textColor = .base500
+            label.textColor = .labelText
             iconButton.isSelected = false
-            iconButton.tintColor = .base300
-            topLine.backgroundColor = .base300
-            bottomLine.backgroundColor = .base300
+            iconButton.tintColor = .disabledBorder
+            topLine.backgroundColor = .disabledBorder
+            bottomLine.backgroundColor = .disabledBorder
         }
     }
 }
@@ -160,7 +160,7 @@ class RingdownStatusView: UIView {
         let hospitalNameLabel = UILabel()
         hospitalNameLabel.translatesAutoresizingMaskIntoConstraints = false
         hospitalNameLabel.font = .h3SemiBold
-        hospitalNameLabel.textColor = .base800
+        hospitalNameLabel.textColor = .text
         hospitalNameLabel.numberOfLines = 0
         addSubview(hospitalNameLabel)
         NSLayoutConstraint.activate([
@@ -173,7 +173,7 @@ class RingdownStatusView: UIView {
         let ringdownStatusLabel = UILabel()
         ringdownStatusLabel.translatesAutoresizingMaskIntoConstraints = false
         ringdownStatusLabel.font = .h4
-        ringdownStatusLabel.textColor = .base500
+        ringdownStatusLabel.textColor = .labelText
         ringdownStatusLabel.text = "RingdownStatusView.ringdownStatus".localized
         addSubview(ringdownStatusLabel)
         NSLayoutConstraint.activate([
@@ -196,7 +196,7 @@ class RingdownStatusView: UIView {
         let arrivalLabel = UILabel()
         arrivalLabel.translatesAutoresizingMaskIntoConstraints = false
         arrivalLabel.font = .h4
-        arrivalLabel.textColor = .base500
+        arrivalLabel.textColor = .labelText
         arrivalLabel.text = "RingdownStatusView.eta".localized
         addSubview(arrivalLabel)
         NSLayoutConstraint.activate([
@@ -208,7 +208,7 @@ class RingdownStatusView: UIView {
         let arrivalTimeLabel = UILabel()
         arrivalTimeLabel.translatesAutoresizingMaskIntoConstraints = false
         arrivalTimeLabel.font = .h4SemiBold
-        arrivalTimeLabel.textColor = .base800
+        arrivalTimeLabel.textColor = .text
         addSubview(arrivalTimeLabel)
         NSLayoutConstraint.activate([
             arrivalTimeLabel.firstBaselineAnchor.constraint(equalTo: arrivalLabel.firstBaselineAnchor),
