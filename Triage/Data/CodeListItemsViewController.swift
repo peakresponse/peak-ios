@@ -37,6 +37,7 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CodeListV
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
         collectionView.register(SelectCheckboxCell.self, forCellWithReuseIdentifier: "Checkbox")
 
         let realm = AppRealm.open()
@@ -51,7 +52,7 @@ class CodeListItemsViewController: UIViewController, CheckboxDelegate, CodeListV
             let titleLabel = UILabel()
             titleLabel.translatesAutoresizingMaskIntoConstraints = false
             titleLabel.font = .h3SemiBold
-            titleLabel.textColor = .base800
+            titleLabel.textColor = .text
             titleLabel.numberOfLines = 1
             titleLabel.text = section.name
             if let view = commandHeader.leftBarButtonView, let button = view.subviews.first,

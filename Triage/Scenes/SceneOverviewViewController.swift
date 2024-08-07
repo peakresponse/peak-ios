@@ -43,6 +43,8 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
+
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         commandHeader.searchField.delegate = self
 

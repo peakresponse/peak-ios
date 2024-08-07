@@ -39,7 +39,7 @@ class TransportCartResponderField: CellField {
         let agencyLabel = UILabel()
         agencyLabel.translatesAutoresizingMaskIntoConstraints = false
         agencyLabel.font = .body14Bold
-        agencyLabel.textColor = .base500
+        agencyLabel.textColor = .labelText
         contentView.addSubview(agencyLabel)
         NSLayoutConstraint.activate([
             agencyLabel.centerYAnchor.constraint(equalTo: chip.centerYAnchor),

@@ -35,7 +35,7 @@ class TransportCartReportField: CellField {
         let descLabel = UILabel()
         descLabel.translatesAutoresizingMaskIntoConstraints = false
         descLabel.font = .body14Bold
-        descLabel.textColor = .base500
+        descLabel.textColor = .labelText
         contentView.addSubview(descLabel)
         NSLayoutConstraint.activate([
             descLabel.centerYAnchor.constraint(equalTo: priorityChip.centerYAnchor),

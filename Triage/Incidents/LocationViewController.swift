@@ -40,6 +40,8 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.backgroundColor = .background
+
         let locationHelper = LocationHelper()
         locationHelper.delegate = self
         self.locationHelper = locationHelper

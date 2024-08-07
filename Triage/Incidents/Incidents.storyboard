@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5Ay-gC-PdX">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="5Ay-gC-PdX">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -237,10 +237,6 @@
                                     <outlet property="delegate" destination="3xr-9r-eE4" id="uyQ-ry-EDk"/>
                                 </connections>
                             </collectionView>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="36M-Oo-Prq" customClass="CustomTabBar" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="684" width="375" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LpL-ms-b5u" customClass="RoundButton" customModule="PRKit">
                                 <rect key="frame" x="261" y="664" width="94" height="94"/>
                                 <constraints>
@@ -260,11 +256,8 @@
                         <viewLayoutGuide key="safeArea" id="e4i-fK-bL8"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="36M-Oo-Prq" firstAttribute="bottom" secondItem="XID-e6-jx9" secondAttribute="bottom" id="1FE-vb-qQF"/>
                             <constraint firstAttribute="bottom" secondItem="8cd-NT-ekp" secondAttribute="bottom" id="56I-aM-AiV"/>
                             <constraint firstItem="ssB-kE-P5A" firstAttribute="leading" secondItem="XID-e6-jx9" secondAttribute="leading" id="A4W-cA-3cG"/>
-                            <constraint firstItem="36M-Oo-Prq" firstAttribute="leading" secondItem="XID-e6-jx9" secondAttribute="leading" id="CtI-J1-7sZ"/>
-                            <constraint firstItem="36M-Oo-Prq" firstAttribute="trailing" secondItem="XID-e6-jx9" secondAttribute="trailing" id="YdD-7X-Wgs"/>
                             <constraint firstAttribute="trailing" secondItem="8cd-NT-ekp" secondAttribute="trailing" id="abl-Ub-PPf"/>
                             <constraint firstItem="8cd-NT-ekp" firstAttribute="top" secondItem="ssB-kE-P5A" secondAttribute="bottom" id="cki-9Q-EJN"/>
                             <constraint firstItem="LpL-ms-b5u" firstAttribute="bottom" secondItem="e4i-fK-bL8" secondAttribute="bottom" constant="-20" id="e9Z-fO-sQX"/>
@@ -278,7 +271,6 @@
                         <outlet property="addButton" destination="LpL-ms-b5u" id="aXB-Du-ZoG"/>
                         <outlet property="collectionView" destination="8cd-NT-ekp" id="RJx-Bt-KuE"/>
                         <outlet property="commandHeader" destination="ssB-kE-P5A" id="Asc-i0-lZX"/>
-                        <outlet property="customTabBar" destination="36M-Oo-Prq" id="V1c-1u-gyn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vOq-0C-89q" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -402,7 +394,7 @@
                                                                 </connections>
                                                             </view>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="WRh-99-NUh" firstAttribute="leading" secondItem="hkS-nk-8tc" secondAttribute="leading" id="2UF-qB-x06"/>
                                                             <constraint firstItem="gop-Rk-4M3" firstAttribute="top" secondItem="KcX-PN-o40" secondAttribute="bottom" constant="12" id="3Ie-KY-DG8"/>
@@ -465,7 +457,7 @@
                                                                 </connections>
                                                             </view>
                                                         </subviews>
-                                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <constraints>
                                                             <constraint firstItem="cMQ-b0-3f9" firstAttribute="top" secondItem="DU0-lD-lHN" secondAttribute="top" constant="16" id="1yY-ir-qOF"/>
                                                             <constraint firstItem="VlJ-af-Tvg" firstAttribute="top" secondItem="DU0-lD-lHN" secondAttribute="top" constant="16" id="9EW-Ch-rJs"/>
@@ -1057,9 +1049,6 @@
         </scene>
     </scenes>
     <designables>
-        <designable name="36M-Oo-Prq">
-            <size key="intrinsicContentSize" width="414" height="128"/>
-        </designable>
         <designable name="6JE-bp-oG9">
             <size key="intrinsicContentSize" width="375" height="128"/>
         </designable>

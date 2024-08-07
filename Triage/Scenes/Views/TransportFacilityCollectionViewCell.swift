@@ -33,7 +33,7 @@ private class CountRow: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .body14Bold
-        label.textColor = .base500
+        label.textColor = .labelText
         addSubview(label)
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: topAnchor),
@@ -67,7 +67,7 @@ private class CountRow: UIView {
             let countLabel = UILabel()
             countLabel.translatesAutoresizingMaskIntoConstraints = false
             countLabel.font = .h4SemiBold
-            countLabel.textColor = .base800
+            countLabel.textColor = .text
             countLabel.text = "-"
             view.addSubview(countLabel)
             NSLayoutConstraint.activate([
@@ -108,7 +108,7 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
 
     func commonInit() {
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .base100
+        selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
         let checkbox = Checkbox()
@@ -140,7 +140,7 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         let facilityLabel = UILabel()
         facilityLabel.translatesAutoresizingMaskIntoConstraints = false
         facilityLabel.font = .h3SemiBold
-        facilityLabel.textColor = .base800
+        facilityLabel.textColor = .text
         facilityLabel.numberOfLines = 1
         facilityLabel.lineBreakMode = .byTruncatingTail
         stackView.addArrangedSubview(facilityLabel)
@@ -156,7 +156,7 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),

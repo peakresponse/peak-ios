@@ -28,6 +28,7 @@ class TransportConfirmViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        contentView.backgroundColor = .background
         contentView.clipsToBounds = true
         contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         contentView.layer.cornerRadius = 16

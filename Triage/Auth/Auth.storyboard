@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uxH-ap-OfM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="uxH-ap-OfM">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="335" placeholderIntrinsicHeight="400" translatesAutoresizingMaskIntoConstraints="NO" id="k8m-p2-y2C">
-                                                <rect key="frame" x="20" y="259.66666666666663" width="388" height="406.66666666666663"/>
+                                                <rect key="frame" x="20" y="263" width="388" height="400"/>
                                                 <subviews>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fJc-sC-Ssv" customClass="LogoView" customModule="PRKit">
                                                         <rect key="frame" x="69" y="0.0" width="250" height="72"/>
@@ -36,11 +36,11 @@
                                                         </constraints>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="Style" value="full"/>
-                                                            <userDefinedRuntimeAttribute type="string" keyPath="Variant" value="dark"/>
+                                                            <userDefinedRuntimeAttribute type="string" keyPath="Variant" value="auto"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="72.666666666666686" translatesAutoresizingMaskIntoConstraints="NO" id="9rW-wC-R4I" userLabel="Email Field" customClass="TextField" customModule="PRKit">
-                                                        <rect key="frame" x="0.0" y="100" width="388" height="73"/>
+                                                        <rect key="frame" x="0.0" y="100" width="388" height="72.666666666666686"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AuthViewController.email"/>
@@ -51,7 +51,7 @@
                                                         </connections>
                                                     </view>
                                                     <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="117.33333333333331" translatesAutoresizingMaskIntoConstraints="NO" id="6EK-b5-Szf" userLabel="Password Field" customClass="PasswordField" customModule="PRKit">
-                                                        <rect key="frame" x="0.0" y="189" width="388" height="73"/>
+                                                        <rect key="frame" x="0.0" y="188.66666666666669" width="388" height="117.33333333333331"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AuthViewController.password"/>
@@ -62,14 +62,14 @@
                                                         </connections>
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="f88-PW-n2R" customClass="Checkbox" customModule="PRKit">
-                                                        <rect key="frame" x="0.0" y="277.99999999999994" width="388" height="40"/>
+                                                        <rect key="frame" x="0.0" y="322" width="388" height="24"/>
                                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                         <userDefinedRuntimeAttributes>
                                                             <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AuthViewController.rememberMe"/>
                                                         </userDefinedRuntimeAttributes>
                                                     </view>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cEJ-de-7Dm" customClass="Button" customModule="PRKit">
-                                                        <rect key="frame" x="94" y="337.99999999999994" width="200" height="68.666666666666686"/>
+                                                        <rect key="frame" x="94" y="366" width="200" height="34"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="200" id="8KE-Kx-klu"/>
                                                         </constraints>
@@ -85,7 +85,7 @@
                                                         </connections>
                                                     </button>
                                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="UFK-H6-Gq4">
-                                                        <rect key="frame" x="110" y="362.33333333333331" width="20" height="20"/>
+                                                        <rect key="frame" x="110" y="373" width="20" height="20"/>
                                                     </activityIndicatorView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -160,6 +160,7 @@
                     </userDefinedRuntimeAttributes>
                     <connections>
                         <outlet property="activityIndicatorView" destination="UFK-H6-Gq4" id="iaI-vZ-n1S"/>
+                        <outlet property="contentView" destination="Ruh-iu-iUb" id="Dpd-yi-swl"/>
                         <outlet property="emailField" destination="9rW-wC-R4I" id="CC1-e3-gNP"/>
                         <outlet property="passwordField" destination="6EK-b5-Szf" id="83W-bd-eRj"/>
                         <outlet property="rememberMeCheckbox" destination="f88-PW-n2R" id="UWp-3a-upH"/>
@@ -182,14 +183,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="428" placeholderIntrinsicHeight="64" translatesAutoresizingMaskIntoConstraints="NO" id="ycX-FD-H1F" customClass="WelcomeHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="428" height="119"/>
+                                <rect key="frame" x="0.0" y="0.0" width="428" height="64"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1iv-yg-HzC">
-                                <rect key="frame" x="0.0" y="119" width="428" height="699"/>
+                                <rect key="frame" x="0.0" y="64" width="428" height="754"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yTi-DX-pxj">
-                                        <rect key="frame" x="0.0" y="0.0" width="428" height="418"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="428" height="395.33333333333331"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EbZ-ea-QiJ">
                                                 <rect key="frame" x="20" y="20" width="388" height="20.333333333333329"/>
@@ -202,11 +203,11 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="245" translatesAutoresizingMaskIntoConstraints="NO" id="3r6-6w-ARK">
-                                                <rect key="frame" x="20" y="40.333333333333343" width="388" height="245.00000000000003"/>
+                                                <rect key="frame" x="20" y="40.333333333333314" width="388" height="245"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                             </view>
                                             <view contentMode="scaleToFill" placeholderIntrinsicWidth="388" placeholderIntrinsicHeight="50" translatesAutoresizingMaskIntoConstraints="NO" id="LTc-RD-9v1" customClass="TextField" customModule="PRKit">
-                                                <rect key="frame" x="20" y="315.33333333333331" width="388" height="72.666666666666686"/>
+                                                <rect key="frame" x="20" y="315.33333333333331" width="388" height="50"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="AssignmentViewController.other"/>
@@ -305,7 +306,9 @@
                         <outlet property="activityIndicatorView" destination="J6c-DA-S38" id="KtI-YA-d7C"/>
                         <outlet property="commandFooter" destination="vIM-aN-FPe" id="uL9-7Z-LLq"/>
                         <outlet property="containerView" destination="3r6-6w-ARK" id="Pmm-3a-qQk"/>
+                        <outlet property="contentView" destination="yTi-DX-pxj" id="wDj-qb-KLT"/>
                         <outlet property="continueButton" destination="eze-ch-Blg" id="TgH-mW-Jdi"/>
+                        <outlet property="label" destination="EbZ-ea-QiJ" id="qqU-Zl-V5S"/>
                         <outlet property="otherTextField" destination="LTc-RD-9v1" id="B43-QQ-PBj"/>
                         <outlet property="otherTextFieldWidthConstraint" destination="yxo-TX-gsW" id="ZKD-oq-Fqf"/>
                         <outlet property="scrollView" destination="1iv-yg-HzC" id="Rwh-tF-1hw"/>
@@ -330,13 +333,13 @@
             <size key="intrinsicContentSize" width="388" height="50"/>
         </designable>
         <designable name="cEJ-de-7Dm">
-            <size key="intrinsicContentSize" width="198" height="68.799999999999997"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="eze-ch-Blg">
-            <size key="intrinsicContentSize" width="140" height="42.799999999999997"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="giv-Sb-Cls">
-            <size key="intrinsicContentSize" width="112" height="42.799999999999997"/>
+            <size key="intrinsicContentSize" width="54" height="34"/>
         </designable>
         <designable name="vIM-aN-FPe">
             <size key="intrinsicContentSize" width="428" height="108"/>

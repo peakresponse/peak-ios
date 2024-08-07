@@ -67,6 +67,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.backgroundColor = .background
+
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
                 containerView.widthAnchor.constraint(equalToConstant: 690)

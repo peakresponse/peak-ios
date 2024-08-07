@@ -11,6 +11,11 @@ import UIKit
 class TriageHeaderCell: UICollectionViewCell {
     @IBOutlet weak var headerLabel: UILabel!
 
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        headerLabel.textColor = .text
+    }
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
         let width = UIScreen.main.bounds.width - 40

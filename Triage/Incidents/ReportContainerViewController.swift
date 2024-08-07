@@ -33,6 +33,8 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         segmentedControl.addSegment(title: "ReportContainerViewController.tab.incident".localized)
         segmentedControl.addSegment(title: "ReportContainerViewController.tab.ringdown".localized)
 

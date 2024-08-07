@@ -38,7 +38,7 @@ class RingdownFacilityCountView: UIView {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .h4SemiBold
-        label.textColor = .base500
+        label.textColor = .labelText
         addSubview(label)
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: topAnchor, constant: 4),
@@ -50,7 +50,7 @@ class RingdownFacilityCountView: UIView {
         let countLabel = UILabel()
         countLabel.translatesAutoresizingMaskIntoConstraints = false
         countLabel.font = .h4SemiBold
-        countLabel.textColor = .base800
+        countLabel.textColor = .text
         addSubview(countLabel)
         NSLayoutConstraint.activate([
             countLabel.topAnchor.constraint(equalTo: label.topAnchor),
@@ -157,7 +157,7 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .h3SemiBold
-        nameLabel.textColor = .base800
+        nameLabel.textColor = .text
         addSubview(nameLabel)
         NSLayoutConstraint.activate([
             nameLabel.topAnchor.constraint(equalTo: selectButton.topAnchor),
@@ -169,7 +169,7 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
-        updatedAtLabel.textColor = .base500
+        updatedAtLabel.textColor = .labelText
         addSubview(updatedAtLabel)
         NSLayoutConstraint.activate([
             updatedAtLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),

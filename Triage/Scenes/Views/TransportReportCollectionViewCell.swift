@@ -33,7 +33,7 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
 
     func commonInit() {
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .base100
+        selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
         let row = UIStackView()
@@ -81,7 +81,7 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         let tagLabel = UILabel()
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
         tagLabel.font = .h3SemiBold
-        tagLabel.textColor = .base800
+        tagLabel.textColor = .text
         view.addSubview(tagLabel)
         NSLayoutConstraint.activate([
             tagLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
@@ -108,7 +108,7 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         let descLabel = UILabel()
         descLabel.translatesAutoresizingMaskIntoConstraints = false
         descLabel.font = .h4
-        descLabel.textColor = .base500
+        descLabel.textColor = .labelText
         descLabel.numberOfLines = 1
         view.addSubview(descLabel)
         descLabelRightViewConstraint = descLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
@@ -126,13 +126,13 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
-        updatedAtLabel.textColor = .base500
+        updatedAtLabel.textColor = .labelText
         col.addArrangedSubview(updatedAtLabel)
         self.updatedAtLabel = updatedAtLabel
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),

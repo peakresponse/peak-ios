@@ -95,7 +95,7 @@ class IncidentTableViewCell: UITableViewCell {
         let numberLabel = UILabel()
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         numberLabel.font = .h2Bold
-        numberLabel.textColor = .brandPrimary600
+        numberLabel.textColor = .headingText
         containerView.addSubview(numberLabel)
         NSLayoutConstraint.activate([
             numberLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -119,7 +119,7 @@ class IncidentTableViewCell: UITableViewCell {
         let addressLabel = UILabel()
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         addressLabel.font = .h4
-        addressLabel.textColor = .base800
+        addressLabel.textColor = .text
         addressLabel.numberOfLines = 0
         containerView.addSubview(addressLabel)
         if isCompact {
@@ -143,7 +143,7 @@ class IncidentTableViewCell: UITableViewCell {
         let dateLabel = UILabel()
         dateLabel.translatesAutoresizingMaskIntoConstraints = false
         dateLabel.font = .h4
-        dateLabel.textColor = .base500
+        dateLabel.textColor = .labelText
         containerView.addSubview(dateLabel)
         if isCompact {
             NSLayoutConstraint.activate([
@@ -162,7 +162,7 @@ class IncidentTableViewCell: UITableViewCell {
         let timeLabel = UILabel()
         timeLabel.translatesAutoresizingMaskIntoConstraints = false
         timeLabel.font = .h4
-        timeLabel.textColor = .base500
+        timeLabel.textColor = .labelText
         containerView.addSubview(timeLabel)
         self.timeLabel = timeLabel
         if isCompact {
@@ -180,7 +180,7 @@ class IncidentTableViewCell: UITableViewCell {
         let chevronImageView = UIImageView()
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
-        chevronImageView.tintColor = .base500
+        chevronImageView.tintColor = .labelText
         containerView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
             chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
@@ -189,7 +189,7 @@ class IncidentTableViewCell: UITableViewCell {
 
         let reportsCountChip = Chip()
         reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
-        reportsCountChip.color = .brandPrimary600
+        reportsCountChip.color = .headingText
         reportsCountChip.setTitleColor(.white, for: .normal)
         reportsCountChip.isUserInteractionEnabled = false
         containerView.addSubview(reportsCountChip)
@@ -201,7 +201,7 @@ class IncidentTableViewCell: UITableViewCell {
 
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false
-        separatorView.backgroundColor = .base300
+        separatorView.backgroundColor = .disabledBorder
         contentView.addSubview(separatorView)
         NSLayoutConstraint.activate([
             separatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -260,10 +260,10 @@ class IncidentTableViewCell: UITableViewCell {
         address = incident.scene?.address
         let isMCI = incident.scene?.isMCI ?? false
         let isActiveMCI = isMCI && (incident.scene?.isActive ?? false)
-        let backgroundColor: UIColor = isActiveMCI ? .brandSecondary300 : .white
+        let backgroundColor: UIColor = isActiveMCI ? .brandSecondary300 : .background
         backgroundView?.backgroundColor = backgroundColor
         selectedBackgroundView?.backgroundColor = backgroundColor.colorWithBrightnessMultiplier(multiplier: 0.8)
-        numberLabel.textColor = isMCI ? .brandSecondary800 : .brandPrimary600
+        numberLabel.textColor = isMCI ? .brandSecondary800 : .headingText
         if incident.dispatches.count > 0 {
             let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
             date = dispatch.dispatchedAt?.asDateString()
@@ -273,7 +273,7 @@ class IncidentTableViewCell: UITableViewCell {
             time = incident.createdAt?.asTimeString()
         }
         mciChip.isHidden = !isMCI
-        reportsCountChip.color = isMCI ? .brandSecondary800 : .brandPrimary600
+        reportsCountChip.color = isMCI ? .brandSecondary800 : .headingText
         reportsCount = incident.reportsCount
     }
 }

@@ -29,7 +29,7 @@ class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
     }
 
     private func commonInit() {
-        backgroundColor = .white
+        backgroundColor = .background
 
         countsView = TriageCounts()
         countsView.delegate = self

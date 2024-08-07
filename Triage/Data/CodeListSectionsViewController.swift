@@ -17,6 +17,12 @@ protocol CodeListViewController: AnyObject {
 
 class CodeListSectionTableViewCell: UITableViewCell {
     @IBOutlet weak var label: UILabel!
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = .background
+        label.textColor = .text
+    }
 }
 
 protocol CodeListSectionsViewControllerDelegate: AnyObject {
@@ -40,6 +46,7 @@ class CodeListSectionsViewController: UITableViewController, CodeListViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        tableView.backgroundColor = .background
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 60
 

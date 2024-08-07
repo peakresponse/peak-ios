@@ -75,6 +75,8 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.backgroundColor = .background
+
         if report.ringdownId == nil {
             activityIndicatorView.stopAnimating()
         }

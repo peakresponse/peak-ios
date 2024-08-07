@@ -11,10 +11,9 @@ import PRKit
 import RealmSwift
 import AlignedCollectionViewFlowLayout
 
-class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsCountsHeaderViewDelegate,
+class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var customTabBar: CustomTabBar!
     @IBOutlet weak var addButton: RoundButton!
 
     var incident: Incident?
@@ -38,6 +37,7 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        collectionView.backgroundColor = .background
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
             layout.minimumLineSpacing = 0
@@ -61,10 +61,6 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
             commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
         }
 
-        customTabBar.buttonTitle = "Button.addPatient".localized
-        customTabBar.delegate = self
-        customTabBar.isHidden = true
-
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
@@ -79,9 +75,13 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
 
         performQuery()
 
-        if !isMCI, let incident = incident, incident.reportsCount == 0 {
-            DispatchQueue.main.async { [weak self] in
-                self?.presentNewReport(incident: incident, animated: false)
+        if !isMCI {
+            if let incident = incident, incident.reportsCount == 0 {
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentNewReport(incident: incident, animated: false)
+                }
+            } else if incident != nil {
+                addButton.isHidden = false
             }
         }
     }
@@ -95,11 +95,6 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if !isMCI {
-            var contentInset = collectionView.contentInset
-            contentInset.bottom = customTabBar.frame.height
-            collectionView.contentInset = contentInset
-        }
         if traitCollection.horizontalSizeClass == .regular {
             if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
                 var sectionInset = layout.sectionInset
@@ -181,11 +176,15 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
 
     @IBAction
     func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
-        if let vc = vc as? ScanViewController {
-            vc.incident = incident
+        if isMCI {
+            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
+            if let vc = vc as? ScanViewController {
+                vc.incident = incident
+            }
+            presentAnimated(vc)
+        } else {
+            presentNewReport(incident: incident)
         }
-        presentAnimated(vc)
     }
 
     @objc override func newReportCancelled() {
@@ -193,16 +192,6 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
         dismiss(animated: true) { [weak self] in
             self?.dismiss(animated: false)
         }
-    }
-
-    // MARK: - CustomTabBarDelegate
-
-    func customTabBar(_ tabBar: CustomTabBar, didSelect index: Int) {
-
-    }
-
-    func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
-        presentNewReport(incident: incident)
     }
 
     // MARK: - ReportContainerViewControllerDelegate
@@ -214,7 +203,7 @@ class ReportsViewController: SceneViewController, CustomTabBarDelegate, ReportsC
                                                              action: #selector(self.dismissAnimated))
         incident = vc.incident
         if !isMCI {
-            customTabBar.isHidden = false
+            addButton.isHidden = false
         }
         performQuery()
     }

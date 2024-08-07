@@ -44,7 +44,7 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     }
 
     private func commonInit() {
-        addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .base800, opacity: 0.4)
+        addShadow(withOffset: CGSize(width: 4, height: -4), radius: 20, color: .dropShadow, opacity: 0.4)
 
         backgroundColor = .brandSecondary800
         let headerView = UIView()
@@ -119,7 +119,10 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     fileprivate func dispatchHeight() {
         var height = tableView.contentSize.height
         if height > 0 {
+            headerView.isHidden = false
             height += headerView.frame.height
+        } else {
+            headerView.isHidden = true
         }
         delegate?.activeIncidentsView(self, didChangeHeight: height)
     }

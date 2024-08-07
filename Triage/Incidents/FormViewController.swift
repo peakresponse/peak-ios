@@ -33,6 +33,8 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        scrollView.backgroundColor = .background
+
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         if isEditing {
             if commandHeader.leftBarButtonItem == nil {

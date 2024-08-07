@@ -29,8 +29,10 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
     }
 
     func commonInit() {
+        backgroundColor = .background
+
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .base100
+        selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
         let stackView = UIStackView()
@@ -68,7 +70,7 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
-        updatedAtLabel.textColor = .base500
+        updatedAtLabel.textColor = .labelText
         view.addSubview(updatedAtLabel)
         NSLayoutConstraint.activate([
             updatedAtLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 16),
@@ -80,7 +82,7 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -91,7 +93,7 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
 
         let vr = UIView()
         vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
+        vr.backgroundColor = .disabledBorder
         contentView.addSubview(vr)
         NSLayoutConstraint.activate([
             vr.topAnchor.constraint(equalTo: contentView.topAnchor),

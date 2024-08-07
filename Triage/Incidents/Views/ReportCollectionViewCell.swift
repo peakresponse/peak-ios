@@ -33,13 +33,13 @@ class ReportCollectionViewCell: UICollectionViewCell {
 
     func commonInit() {
         let selectedBackgroundView = UIView()
-        selectedBackgroundView.backgroundColor = .base100
+        selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
         let chevronImageView = UIImageView()
         chevronImageView.translatesAutoresizingMaskIntoConstraints = false
         chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
-        chevronImageView.tintColor = .base500
+        chevronImageView.tintColor = .labelText
         contentView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
             chevronImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
@@ -88,7 +88,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let tagLabel = UILabel()
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
         tagLabel.font = .h3SemiBold
-        tagLabel.textColor = .base800
+        tagLabel.textColor = .text
         mciView.addSubview(tagLabel)
         NSLayoutConstraint.activate([
             tagLabel.leftAnchor.constraint(equalTo: mciView.leftAnchor),
@@ -100,7 +100,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let unitLabel = UILabel()
         unitLabel.translatesAutoresizingMaskIntoConstraints = false
         unitLabel.font = .h4
-        unitLabel.textColor = .base500
+        unitLabel.textColor = .labelText
         unitLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Response.unitNumber".localized): ", text: "")
         unitLabel.numberOfLines = 2
         stackView.addArrangedSubview(unitLabel)
@@ -109,7 +109,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let ageLabel = UILabel()
         ageLabel.translatesAutoresizingMaskIntoConstraints = false
         ageLabel.font = .h4
-        ageLabel.textColor = .base500
+        ageLabel.textColor = .labelText
         ageLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.age".localized): ", text: "")
         stackView.addArrangedSubview(ageLabel)
         self.ageLabel = ageLabel
@@ -117,7 +117,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let genderLabel = UILabel()
         genderLabel.translatesAutoresizingMaskIntoConstraints = false
         genderLabel.font = .h4
-        genderLabel.textColor = .base500
+        genderLabel.textColor = .labelText
         genderLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.gender".localized): ", text: "")
         stackView.addArrangedSubview(genderLabel)
         self.genderLabel = genderLabel
@@ -125,7 +125,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let nameLabel = UILabel()
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = .h4
-        nameLabel.textColor = .base500
+        nameLabel.textColor = .labelText
         nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.fullName".localized): ", text: "")
         stackView.addArrangedSubview(nameLabel)
         self.nameLabel = nameLabel
@@ -133,14 +133,14 @@ class ReportCollectionViewCell: UICollectionViewCell {
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .h4
-        updatedAtLabel.textColor = .base500
+        updatedAtLabel.textColor = .labelText
         updatedAtLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.updatedAt".localized): ", text: "")
         stackView.addArrangedSubview(updatedAtLabel)
         self.updatedAtLabel = updatedAtLabel
 
         let hr = UIView()
         hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .base300
+        hr.backgroundColor = .disabledBorder
         contentView.addSubview(hr)
         NSLayoutConstraint.activate([
             hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
@@ -151,7 +151,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
 
         let vr = UIView()
         vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .base300
+        vr.backgroundColor = .disabledBorder
         contentView.addSubview(vr)
         NSLayoutConstraint.activate([
             vr.topAnchor.constraint(equalTo: contentView.topAnchor),

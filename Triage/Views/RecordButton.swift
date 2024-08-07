@@ -97,7 +97,7 @@ class RecordButton: UIControl {
         bluetoothButton.adjustsImageWhenHighlighted = false
         bluetoothButton.setImage(UIImage(named: "Bluetooth"), for: .normal)
         bluetoothButton.addTarget(self, action: #selector(bluetoothPressed), for: .touchUpInside)
-        bluetoothButton.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 10, color: .black, opacity: 0.15)
+        bluetoothButton.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 10, color: .dropShadow, opacity: 0.15)
         addSubview(bluetoothButton)
         NSLayoutConstraint.activate([
             bluetoothButton.centerYAnchor.constraint(equalTo: recordButton.centerYAnchor),
