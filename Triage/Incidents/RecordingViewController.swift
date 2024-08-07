@@ -37,6 +37,7 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
 
         isModal = true
 
+        sheetView.backgroundColor = .primaryButtonNormal
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.layer.cornerRadius = 10
 
