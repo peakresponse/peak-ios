@@ -127,6 +127,30 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
 
     // swiftlint:disable:next function_body_length
     private func commonInit() {
+        let nameLabel = UILabel()
+        nameLabel.translatesAutoresizingMaskIntoConstraints = false
+        nameLabel.font = .h3SemiBold
+        nameLabel.textColor = .text
+        addSubview(nameLabel)
+        NSLayoutConstraint.activate([
+            nameLabel.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            nameLabel.leftAnchor.constraint(equalTo: leftAnchor),
+            nameLabel.rightAnchor.constraint(equalTo: rightAnchor)
+        ])
+        self.nameLabel = nameLabel
+
+        let updatedAtLabel = UILabel()
+        updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
+        updatedAtLabel.font = .body14Bold
+        updatedAtLabel.textColor = .labelText
+        addSubview(updatedAtLabel)
+        NSLayoutConstraint.activate([
+            updatedAtLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
+            updatedAtLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
+            updatedAtLabel.rightAnchor.constraint(equalTo: nameLabel.rightAnchor)
+        ])
+        self.updatedAtLabel = updatedAtLabel
+
         let selectButton = PRKit.Button()
         selectButton.style = .secondary
         selectButton.translatesAutoresizingMaskIntoConstraints = false
@@ -134,7 +158,7 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         selectButton.addTarget(self, action: #selector(selectPressed), for: .touchUpInside)
         addSubview(selectButton)
         NSLayoutConstraint.activate([
-            selectButton.topAnchor.constraint(equalTo: topAnchor, constant: 20),
+            selectButton.topAnchor.constraint(equalTo: updatedAtLabel.bottomAnchor, constant: 16),
             selectButton.rightAnchor.constraint(equalTo: rightAnchor)
         ])
         self.selectButton = selectButton
@@ -154,38 +178,18 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         ])
         self.arrivalField = arrivalField
 
-        let nameLabel = UILabel()
-        nameLabel.translatesAutoresizingMaskIntoConstraints = false
-        nameLabel.font = .h3SemiBold
-        nameLabel.textColor = .text
-        addSubview(nameLabel)
-        NSLayoutConstraint.activate([
-            nameLabel.topAnchor.constraint(equalTo: selectButton.topAnchor),
-            nameLabel.leftAnchor.constraint(equalTo: leftAnchor),
-            nameLabel.rightAnchor.constraint(lessThanOrEqualTo: selectButton.leftAnchor, constant: -16)
-        ])
-        self.nameLabel = nameLabel
-
-        let updatedAtLabel = UILabel()
-        updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
-        updatedAtLabel.font = .body14Bold
-        updatedAtLabel.textColor = .labelText
-        addSubview(updatedAtLabel)
-        NSLayoutConstraint.activate([
-            updatedAtLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 4),
-            updatedAtLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-            updatedAtLabel.rightAnchor.constraint(lessThanOrEqualTo: selectButton.leftAnchor, constant: -16)
-        ])
-        self.updatedAtLabel = updatedAtLabel
-
         let statsStackView = UIStackView()
         statsStackView.translatesAutoresizingMaskIntoConstraints = false
         statsStackView.axis = .vertical
         addSubview(statsStackView)
+        let widthConstraint = statsStackView.widthAnchor.constraint(equalToConstant: 180)
+        widthConstraint.priority = .defaultLow
         NSLayoutConstraint.activate([
-            statsStackView.topAnchor.constraint(equalTo: updatedAtLabel.bottomAnchor, constant: 16),
+            statsStackView.topAnchor.constraint(equalTo: selectButton.topAnchor),
             statsStackView.leftAnchor.constraint(equalTo: updatedAtLabel.leftAnchor),
-            statsStackView.widthAnchor.constraint(equalToConstant: 180)
+            widthConstraint,
+            statsStackView.widthAnchor.constraint(lessThanOrEqualToConstant: 180),
+            statsStackView.rightAnchor.constraint(lessThanOrEqualTo: selectButton.leftAnchor, constant: -4)
         ])
         self.statsStackView = statsStackView
 
