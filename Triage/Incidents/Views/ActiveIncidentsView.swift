@@ -12,6 +12,7 @@ import RealmSwift
 @objc protocol ActiveIncidentsViewDelegate: AnyObject {
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat)
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident)
+    @objc func activeIncidentsViewDidSelectAll(_ view: ActiveIncidentsView)
 }
 
 private class ActiveIncidentsTableView: UITableView {
@@ -95,6 +96,7 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
         let realm = AppRealm.open()
         results = realm.objects(Incident.self)
             .sorted(by: [
+                SortDescriptor(keyPath: "createdAt", ascending: false),
                 SortDescriptor(keyPath: "sort", ascending: false),
                 SortDescriptor(keyPath: "number", ascending: false)
             ])
@@ -160,7 +162,7 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         if indexPath.row > 0 {
-
+            delegate?.activeIncidentsViewDidSelectAll(self)
         } else {
             if let incident = results?[indexPath.row] {
                 delegate?.activeIncidentsView(self, didSelectIncident: incident)

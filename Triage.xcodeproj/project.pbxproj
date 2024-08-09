@@ -98,6 +98,7 @@
 		45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */; };
 		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
+		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */; };
 		45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */; };
@@ -280,6 +281,7 @@
 		45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
+		45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+RoutED.swift"; sourceTree = "<group>"; };
 		45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownStatusView.swift; sourceTree = "<group>"; };
@@ -605,6 +607,7 @@
 			isa = PBXGroup;
 			children = (
 				45C757CE272CB9CC00386F07 /* Views */,
+				45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */,
 				454F9CA728D3E278009F7115 /* FormViewController.swift */,
 				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
@@ -1000,6 +1003,7 @@
 				451F9DC6291ECF8700B5E73A /* NavigationController.swift in Sources */,
 				454F9CA628D3DFE0009F7115 /* ListItemTableViewCell.swift in Sources */,
 				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
+				45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */,
 				454A8BCA2B995991003C82D6 /* TransportRespondersViewController.swift in Sources */,
 				458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */,
 				454EE968251C62D800EB266A /* LocationHelper.swift in Sources */,
