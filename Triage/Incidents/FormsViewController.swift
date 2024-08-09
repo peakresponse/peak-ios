@@ -90,7 +90,6 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "Form", for: indexPath)
         if let cell = cell as? ListItemTableViewCell {
             cell.label.text = results?[indexPath.row].title
-            cell.accessoryType = .disclosureIndicator
         }
         return cell
     }
