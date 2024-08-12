@@ -35,7 +35,7 @@ class ActiveIncidentsViewController: UIViewController, UITableViewDataSource, UI
         ])
         self.commandHeader = commandHeader
 
-        let tableView = UITableView()
+        let tableView = TableView()
         tableView.dataSource = self
         tableView.delegate = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,8 +47,6 @@ class ActiveIncidentsViewController: UIViewController, UITableViewDataSource, UI
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         self.tableView = tableView
-
-        tableView.backgroundColor = .background
 
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
                                                           style: .done,

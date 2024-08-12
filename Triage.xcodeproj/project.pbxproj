@@ -39,7 +39,6 @@
 		454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */; };
 		454F9CA228D3BA19009F7115 /* FormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA128D3BA19009F7115 /* FormTests.swift */; };
 		454F9CA428D3D088009F7115 /* FormsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA328D3D088009F7115 /* FormsViewController.swift */; };
-		454F9CA628D3DFE0009F7115 /* ListItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */; };
 		454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CA728D3E278009F7115 /* FormViewController.swift */; };
 		454F9CB328D90B90009F7115 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CB228D90B90009F7115 /* Signature.swift */; };
 		4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */; };
@@ -216,7 +215,6 @@
 		454F9C9F28D3B09F009F7115 /* NSObjectExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSObjectExtensions.swift; sourceTree = "<group>"; };
 		454F9CA128D3BA19009F7115 /* FormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTests.swift; sourceTree = "<group>"; };
 		454F9CA328D3D088009F7115 /* FormsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormsViewController.swift; sourceTree = "<group>"; };
-		454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListItemTableViewCell.swift; sourceTree = "<group>"; };
 		454F9CA728D3E278009F7115 /* FormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormViewController.swift; sourceTree = "<group>"; };
 		454F9CB228D90B90009F7115 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
@@ -571,7 +569,6 @@
 				451F9DC7291ED03C00B5E73A /* IconButton.swift */,
 				4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */,
 				451F9DCB291ED0C500B5E73A /* ImageView.swift */,
-				454F9CA528D3DFE0009F7115 /* ListItemTableViewCell.swift */,
 				451F9DC5291ECF8700B5E73A /* NavigationController.swift */,
 				45E35A3724F06A8E005A8059 /* RecordButton.swift */,
 				451F9DC9291ED09F00B5E73A /* RoundImageView.swift */,
@@ -1001,7 +998,6 @@
 				45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */,
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				451F9DC6291ECF8700B5E73A /* NavigationController.swift in Sources */,
-				454F9CA628D3DFE0009F7115 /* ListItemTableViewCell.swift in Sources */,
 				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
 				45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */,
 				454A8BCA2B995991003C82D6 /* TransportRespondersViewController.swift in Sources */,

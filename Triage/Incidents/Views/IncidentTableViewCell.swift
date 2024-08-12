@@ -207,7 +207,7 @@ class IncidentTableViewCell: UITableViewCell {
             separatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             separatorView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 1)
+            separatorView.heightAnchor.constraint(equalToConstant: 2)
         ])
 
         if isCompact {

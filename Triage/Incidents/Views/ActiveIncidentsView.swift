@@ -6,8 +6,9 @@
 //  Copyright © 2023 Francis Li. All rights reserved.
 //
 
-import UIKit
+import PRKit
 import RealmSwift
+import UIKit
 
 @objc protocol ActiveIncidentsViewDelegate: AnyObject {
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat)
@@ -15,7 +16,7 @@ import RealmSwift
     @objc func activeIncidentsViewDidSelectAll(_ view: ActiveIncidentsView)
 }
 
-private class ActiveIncidentsTableView: UITableView {
+private class ActiveIncidentsTableView: TableView {
     weak var activeIncidentsView: ActiveIncidentsView?
     override var contentSize: CGSize {
         didSet { activeIncidentsView?.dispatchHeight() }
