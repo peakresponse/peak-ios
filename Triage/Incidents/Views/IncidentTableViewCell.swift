@@ -207,7 +207,7 @@ class IncidentTableViewCell: UITableViewCell {
             separatorView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             separatorView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
             separatorView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            separatorView.heightAnchor.constraint(equalToConstant: 1)
+            separatorView.heightAnchor.constraint(equalToConstant: 2)
         ])
 
         if isCompact {
@@ -260,10 +260,13 @@ class IncidentTableViewCell: UITableViewCell {
         address = incident.scene?.address
         let isMCI = incident.scene?.isMCI ?? false
         let isActiveMCI = isMCI && (incident.scene?.isActive ?? false)
-        let backgroundColor: UIColor = isActiveMCI ? .brandSecondary300 : .background
+        let backgroundColor: UIColor = isActiveMCI ? .activeBackground : .background
         backgroundView?.backgroundColor = backgroundColor
         selectedBackgroundView?.backgroundColor = backgroundColor.colorWithBrightnessMultiplier(multiplier: 0.8)
-        numberLabel.textColor = isMCI ? .brandSecondary800 : .headingText
+        numberLabel.textColor = isMCI ? .activeHeadingText : .headingText
+        addressLabel.textColor = isActiveMCI ? .activeText : .text
+        dateLabel.textColor = isActiveMCI ? .activeLabelText : .labelText
+        timeLabel.textColor = isActiveMCI ? .activeLabelText : .labelText
         if incident.dispatches.count > 0 {
             let dispatch = incident.dispatches.sorted(byKeyPath: "dispatchedAt", ascending: true)[0]
             date = dispatch.dispatchedAt?.asDateString()

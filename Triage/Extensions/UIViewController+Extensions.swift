@@ -142,6 +142,42 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
         }
     }
 
+    func incidentPressed(_ incident: Incident) {
+        if let scene = incident.scene, scene.isMCI {
+            let sceneId = scene.canonicalId ?? scene.id
+            if scene.isActive {
+                let vc = ModalViewController()
+                vc.messageText = "ActiveScene.message".localized
+                vc.isDismissedOnAction = false
+                vc.addAction(UIAlertAction(title: "Button.joinScene".localized, style: .destructive, handler: { (_) in
+                    AppRealm.joinScene(sceneId: scene.id) { (_) in
+                        DispatchQueue.main.async {
+                            vc.dismissAnimated()
+                            AppSettings.sceneId = sceneId
+                            AppDelegate.enterScene(id: sceneId)
+                        }
+                    }
+                }))
+                vc.addAction(UIAlertAction(title: "Button.viewScene".localized, style: .default, handler: { (_) in
+                    vc.dismissAnimated()
+                    AppSettings.sceneId = sceneId
+                    AppDelegate.enterScene(id: sceneId)
+                }))
+                vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+                presentAnimated(vc)
+            } else {
+                AppSettings.sceneId = sceneId
+                AppDelegate.enterScene(id: sceneId)
+            }
+        } else {
+            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
+            if let vc = vc as? ReportsViewController {
+                vc.incident = incident
+            }
+            present(vc, animated: true)
+        }
+    }
+
     // MARK: - AuthViewControllerDelegate
 
     func authViewControllerDidLogin(_ vc: AuthViewController) {

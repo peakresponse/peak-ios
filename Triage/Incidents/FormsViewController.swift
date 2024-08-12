@@ -31,8 +31,6 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.backgroundColor = .background
-
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
                                                           style: .plain,
                                                           target: self,
@@ -40,7 +38,7 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
 
         tableView.register(ListItemTableViewCell.self, forCellReuseIdentifier: "Form")
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 60
+        tableView.estimatedRowHeight = 62
 
         performQuery()
     }
@@ -90,7 +88,6 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
         let cell = tableView.dequeueReusableCell(withIdentifier: "Form", for: indexPath)
         if let cell = cell as? ListItemTableViewCell {
             cell.label.text = results?[indexPath.row].title
-            cell.accessoryType = .disclosureIndicator
         }
         return cell
     }

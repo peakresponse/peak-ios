@@ -6,15 +6,17 @@
 //  Copyright © 2023 Francis Li. All rights reserved.
 //
 
-import UIKit
+import PRKit
 import RealmSwift
+import UIKit
 
 @objc protocol ActiveIncidentsViewDelegate: AnyObject {
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat)
     @objc func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident)
+    @objc func activeIncidentsViewDidSelectAll(_ view: ActiveIncidentsView)
 }
 
-private class ActiveIncidentsTableView: UITableView {
+private class ActiveIncidentsTableView: TableView {
     weak var activeIncidentsView: ActiveIncidentsView?
     override var contentSize: CGSize {
         didSet { activeIncidentsView?.dispatchHeight() }
@@ -77,6 +79,7 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
         tableView.activeIncidentsView = self
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
+        tableView.register(ListItemTableViewCell.self, forCellReuseIdentifier: "Item")
         tableView.dataSource = self
         tableView.delegate = self
         addSubview(tableView)
@@ -94,6 +97,7 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
         let realm = AppRealm.open()
         results = realm.objects(Incident.self)
             .sorted(by: [
+                SortDescriptor(keyPath: "createdAt", ascending: false),
                 SortDescriptor(keyPath: "sort", ascending: false),
                 SortDescriptor(keyPath: "number", ascending: false)
             ])
@@ -130,13 +134,26 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
     // MARK: - UITableViewDataSource
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return min(1, results?.count ?? 0)
+        let count = results?.count ?? 0
+        if count > 1 {
+            return 2
+        }
+        return count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
-        if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
-            cell.update(from: incident)
+        var cell: UITableViewCell!
+        if indexPath.row > 0 {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Item", for: indexPath)
+            if let cell = cell as? ListItemTableViewCell {
+                let count = results?.count ?? 0
+                cell.label.text = String(format: "ActiveIncidentsView.viewAll".localized, count)
+            }
+        } else {
+            cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
+            if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
+                cell.update(from: incident)
+            }
         }
         return cell
     }
@@ -145,8 +162,12 @@ class ActiveIncidentsView: UIView, UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let incident = results?[indexPath.row] {
-            delegate?.activeIncidentsView(self, didSelectIncident: incident)
+        if indexPath.row > 0 {
+            delegate?.activeIncidentsViewDidSelectAll(self)
+        } else {
+            if let incident = results?[indexPath.row] {
+                delegate?.activeIncidentsView(self, didSelectIncident: incident)
+            }
         }
     }
 }

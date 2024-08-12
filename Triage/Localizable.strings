@@ -12,6 +12,7 @@
 "AgenciesTableViewController.selectLabel" = "Select the agency transporting this patient:";
 
 "ActiveIncidentsView.header" = "Active MCIs";
+"ActiveIncidentsView.viewAll" = "View all %d active MCIs...";
 
 "ActiveScene.message" = "This is an active MCI in progress.";
 
