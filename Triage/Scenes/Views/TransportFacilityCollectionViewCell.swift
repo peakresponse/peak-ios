@@ -58,6 +58,7 @@ private class CountRow: UIView {
 
         for priority in [TriagePriority.immediate, TriagePriority.delayed, TriagePriority.minimal] {
             let view = UIView()
+            view.backgroundColor = .textBackground
             view.layer.cornerRadius = 8
             view.layer.borderWidth = 2
             view.layer.borderColor = priority.color.cgColor
@@ -80,6 +81,7 @@ private class CountRow: UIView {
 
     func updateHighlight() {
         for (i, countLabel) in countLabels.enumerated() {
+            countLabel.textColor = .base800
             if let view = countLabel.superview, let priority = TriagePriority(rawValue: i) {
                 view.backgroundColor = priority.lightenedColor
             }
