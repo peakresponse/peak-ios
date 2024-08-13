@@ -321,16 +321,17 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                     self?.presentAlert(error: error)
                 }
             } else if let ringdown = ringdown {
-                let realm = AppRealm.open()
-                if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
-                    let newReport = Report(clone: report)
-                    newReport.ringdownId = ringdown.id
-                    if let facilityId = facilityId {
-                        newReport.disposition?.destinationFacility = realm.object(ofType: Facility.self, forPrimaryKey: facilityId)
-                    }
-                    AppRealm.saveReport(report: newReport)
-                    DispatchQueue.main.async { [weak self] in
-                        guard let self = self else { return }
+                let ringdownId = ringdown.id
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    let realm = AppRealm.open()
+                    if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
+                        let newReport = Report(clone: report)
+                        newReport.ringdownId = ringdownId
+                        if let facilityId = facilityId {
+                            newReport.disposition?.destinationFacility = realm.object(ofType: Facility.self, forPrimaryKey: facilityId)
+                        }
+                        AppRealm.saveReport(report: newReport)
                         self.delegate?.ringdownViewControllerDidSaveReport(self)
                         self.performRingdownQuery()
                         self.commandFooter.isLoading = false
