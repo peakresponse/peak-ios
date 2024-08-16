@@ -96,6 +96,7 @@ class IncidentTableViewCell: UITableViewCell {
         numberLabel.translatesAutoresizingMaskIntoConstraints = false
         numberLabel.font = .h2Bold
         numberLabel.textColor = .headingText
+        numberLabel.lineBreakMode = .byTruncatingMiddle
         containerView.addSubview(numberLabel)
         NSLayoutConstraint.activate([
             numberLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
@@ -103,17 +104,46 @@ class IncidentTableViewCell: UITableViewCell {
         ])
         self.numberLabel = numberLabel
 
+        let chevronImageView = UIImageView()
+        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
+        chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
+        chevronImageView.tintColor = .labelText
+        chevronImageView.setContentCompressionResistancePriority(.required, for: .horizontal)
+        chevronImageView.setContentHuggingPriority(.required, for: .horizontal)
+        containerView.addSubview(chevronImageView)
+        NSLayoutConstraint.activate([
+            chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
+            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+
+        let chipStackView = UIStackView()
+        chipStackView.translatesAutoresizingMaskIntoConstraints = false
+        chipStackView.axis = .vertical
+        chipStackView.distribution = .fill
+        chipStackView.spacing = 4
+        containerView.addSubview(chipStackView)
+        NSLayoutConstraint.activate([
+            chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+            chipStackView.topAnchor.constraint(equalTo: chevronImageView.topAnchor, constant: 1),
+            chipStackView.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 10)
+        ])
+
+        let reportsCountChip = Chip()
+        reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
+        reportsCountChip.color = .headingText
+        reportsCountChip.setTitleColor(.white, for: .normal)
+        reportsCountChip.isUserInteractionEnabled = false
+        reportsCountChip.setContentCompressionResistancePriority(.required, for: .horizontal)
+        reportsCountChip.setContentHuggingPriority(.required, for: .horizontal)
+        chipStackView.addArrangedSubview(reportsCountChip)
+        self.reportsCountChip = reportsCountChip
+
         let mciChip = Chip()
         mciChip.translatesAutoresizingMaskIntoConstraints = false
-        mciChip.size = .small
         mciChip.color = .brandSecondary800
         mciChip.isUserInteractionEnabled = false
         mciChip.setTitle("MCI".localized, for: .normal)
-        containerView.addSubview(mciChip)
-        NSLayoutConstraint.activate([
-            mciChip.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 1),
-            mciChip.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 4)
-        ])
+        chipStackView.addArrangedSubview(mciChip)
         self.mciChip = mciChip
 
         let addressLabel = UILabel()
@@ -125,7 +155,8 @@ class IncidentTableViewCell: UITableViewCell {
         if isCompact {
             NSLayoutConstraint.activate([
                 addressLabel.topAnchor.constraint(equalTo: numberLabel.bottomAnchor),
-                addressLabel.leftAnchor.constraint(equalTo: numberLabel.leftAnchor)
+                addressLabel.leftAnchor.constraint(equalTo: numberLabel.leftAnchor),
+                addressLabel.rightAnchor.constraint(equalTo: chipStackView.leftAnchor, constant: -4)
             ])
         } else {
             numberWidthConstraint = numberLabel.widthAnchor.constraint(equalToConstant: 190)
@@ -176,28 +207,6 @@ class IncidentTableViewCell: UITableViewCell {
                 timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor)
             ])
         }
-
-        let chevronImageView = UIImageView()
-        chevronImageView.translatesAutoresizingMaskIntoConstraints = false
-        chevronImageView.image = UIImage(named: "ChevronRight40px", in: PRKitBundle.instance, compatibleWith: nil)
-        chevronImageView.tintColor = .labelText
-        containerView.addSubview(chevronImageView)
-        NSLayoutConstraint.activate([
-            chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
-            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
-        ])
-
-        let reportsCountChip = Chip()
-        reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
-        reportsCountChip.color = .headingText
-        reportsCountChip.setTitleColor(.white, for: .normal)
-        reportsCountChip.isUserInteractionEnabled = false
-        containerView.addSubview(reportsCountChip)
-        NSLayoutConstraint.activate([
-            reportsCountChip.centerYAnchor.constraint(equalTo: chevronImageView.centerYAnchor),
-            reportsCountChip.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor)
-        ])
-        self.reportsCountChip = reportsCountChip
 
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false

@@ -34,7 +34,11 @@ class Incident: Base {
             scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         }
         number = data[Keys.number] as? String
-        sort = data[Keys.sort] as? Int
+        if let sort = data[Keys.sort] as? String {
+            self.sort = Int(sort)
+        } else {
+            sort = data[Keys.sort] as? Int
+        }
         calledAt = ISO8601DateFormatter.date(from: data[Keys.calledAt])
         dispatchNotifiedAt = ISO8601DateFormatter.date(from: data[Keys.dispatchNotifiedAt])
         reportsCount = data[Keys.reportsCount] as? Int
