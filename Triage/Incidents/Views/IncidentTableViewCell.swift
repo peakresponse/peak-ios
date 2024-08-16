@@ -113,20 +113,27 @@ class IncidentTableViewCell: UITableViewCell {
         containerView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
             chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
-            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+            chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
 
         let chipStackView = UIStackView()
         chipStackView.translatesAutoresizingMaskIntoConstraints = false
         chipStackView.axis = .vertical
-        chipStackView.distribution = .fill
+        chipStackView.alignment = .fill
         chipStackView.spacing = 4
         containerView.addSubview(chipStackView)
-        NSLayoutConstraint.activate([
-            chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
-            chipStackView.topAnchor.constraint(equalTo: chevronImageView.topAnchor, constant: 1),
-            chipStackView.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 10)
-        ])
+        if isCompact {
+            NSLayoutConstraint.activate([
+                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+                chipStackView.topAnchor.constraint(equalTo: chevronImageView.topAnchor, constant: 1),
+                chipStackView.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 10)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+                chipStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
+            ])
+        }
 
         let reportsCountChip = Chip()
         reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
