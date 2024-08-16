@@ -72,6 +72,10 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         performQuery()
 
         AppRealm.connectIncidents()
+
+        // request an initial location on the list screen, because it can take quite a few seconds, so that
+        // an accurate location is ready hopefully by the time the user needs one...
+        LocationHelper.instance.requestLocation()
     }
 
     override func viewDidLayoutSubviews() {
