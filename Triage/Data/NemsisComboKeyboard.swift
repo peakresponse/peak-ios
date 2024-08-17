@@ -18,10 +18,10 @@ class NemsisComboKeyboard: ComboKeyboard {
          isNegativeExclusive: Bool = true, includeSystem: Bool = false) {
         super.init(keyboards: [
             SelectKeyboard(source: source, isMultiSelect: isMultiSelect),
-            NemsisNegativeKeyboard(negatives: negatives)
+            SelectKeyboard(source: NemsisNegativesKeyboardSource(negatives: negatives))
         ], titles: [
             "NemsisKeyboard.title".localized,
-            "NemsisNegativeKeyboard.title".localized
+            "NemsisNegativesKeyboard.title".localized
         ])
         self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive
@@ -32,10 +32,10 @@ class NemsisComboKeyboard: ComboKeyboard {
          isNegativeExclusive: Bool = true, includeSystem: Bool = false) {
         super.init(keyboards: [
             NemsisKeyboard(field: field, sources: sources, isMultiSelect: isMultiSelect, includeSystem: includeSystem),
-            NemsisNegativeKeyboard(negatives: negatives)
+            SelectKeyboard(source: NemsisNegativesKeyboardSource(negatives: negatives))
         ], titles: [
             "NemsisKeyboard.title".localized,
-            "NemsisNegativeKeyboard.title".localized
+            "NemsisNegativesKeyboard.title".localized
         ])
         self.isMultiSelect = isMultiSelect
         self.isNegativeExclusive = isNegativeExclusive

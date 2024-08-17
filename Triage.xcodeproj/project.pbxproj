@@ -86,7 +86,6 @@
 		458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BB2767DAFB0065F324 /* NemsisValue.swift */; };
 		458CA0BE2767F0B30065F324 /* NemsisValueTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */; };
 		458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0BF27680BFF0065F324 /* NemsisBacked.swift */; };
-		458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */; };
 		458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */; };
 		458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */; };
 		458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */; };
@@ -96,6 +95,7 @@
 		458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D42788EBD90065F324 /* ReportTests.swift */; };
 		45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */; };
 		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
+		45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
@@ -268,7 +268,6 @@
 		458CA0BB2767DAFB0065F324 /* NemsisValue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisValue.swift; sourceTree = "<group>"; };
 		458CA0BD2767F0B30065F324 /* NemsisValueTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisValueTests.swift; sourceTree = "<group>"; };
 		458CA0BF27680BFF0065F324 /* NemsisBacked.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisBacked.swift; sourceTree = "<group>"; };
-		458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativeKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisComboKeyboard.swift; sourceTree = "<group>"; };
 		458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RxNormKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SNOMEDKeyboardSource.swift; sourceTree = "<group>"; };
@@ -278,6 +277,7 @@
 		458CA0D42788EBD90065F324 /* ReportTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTests.swift; sourceTree = "<group>"; };
 		45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIResponder+Extensions.swift"; sourceTree = "<group>"; };
 		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
+		45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativesKeyboardSource.swift; sourceTree = "<group>"; };
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
 		45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
@@ -592,7 +592,7 @@
 				458CA0C5276950290065F324 /* NemsisComboKeyboard.swift */,
 				458CA0AF275FF9CE0065F324 /* NemsisKeyboard.swift */,
 				458CA0B1275FF9F60065F324 /* NemsisKeyboardViewController.swift */,
-				458CA0C127681EB20065F324 /* NemsisNegativeKeyboard.swift */,
+				45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */,
 				458CA0C7276973040065F324 /* RxNormKeyboardSource.swift */,
 				45C9C70D2907706B005D0FDD /* StateKeyboardSource.swift */,
 				458CA0C9276D73560065F324 /* SNOMEDKeyboardSource.swift */,
@@ -999,6 +999,7 @@
 				45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */,
 				451F9DC6291ECF8700B5E73A /* NavigationController.swift in Sources */,
 				45D3E94627276C8D00E5382D /* Assignment.swift in Sources */,
+				45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */,
 				45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */,
 				454A8BCA2B995991003C82D6 /* TransportRespondersViewController.swift in Sources */,
 				458CA0B627603F750065F324 /* CodeListSectionsViewController.swift in Sources */,
@@ -1079,7 +1080,6 @@
 				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,
 				452DDBC7243CF3F000A8F1FF /* Agency.swift in Sources */,
 				454F9CA028D3B09F009F7115 /* NSObjectExtensions.swift in Sources */,
-				458CA0C227681EB20065F324 /* NemsisNegativeKeyboard.swift in Sources */,
 				45C207E02BA0D23700150184 /* ReunifyCollectionViewCell.swift in Sources */,
 				4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */,
 				4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */,

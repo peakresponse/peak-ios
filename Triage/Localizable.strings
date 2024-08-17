@@ -302,7 +302,7 @@
 "NemsisNegative.8801031" = "Symptom Not Present";
 
 "NemsisKeyboard.title" = "Search";
-"NemsisNegativeKeyboard.title" = "Negatives";
+"NemsisNegativesKeyboard.title" = "Negatives";
 
 "NewScenePinView.nameField.label" = "Pin Name";
 "NewScenePinView.descField.label" = "Description";
