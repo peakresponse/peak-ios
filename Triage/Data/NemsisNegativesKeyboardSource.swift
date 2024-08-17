@@ -1,33 +1,25 @@
 //
-//  NemsisNegativeKeyboard.swift
+//  NemsisNegativesKeyboardSource.swift
 //  Triage
 //
-//  Created by Francis Li on 12/13/21.
-//  Copyright © 2021 Francis Li. All rights reserved.
+//  Created by Francis Li on 8/17/24.
+//  Copyright © 2024 Francis Li. All rights reserved.
 //
 
 import Foundation
 import PRKit
 
-class NemsisNegativeKeyboard: SelectKeyboard, KeyboardSource {
+class NemsisNegativesKeyboardSource: KeyboardSource {
     var negatives: [NemsisNegative]
 
     init(negatives: [NemsisNegative]) {
         self.negatives = negatives
-        super.init()
-        source = self
-    }
-
-    required init?(coder: NSCoder) {
-        self.negatives = []
-        super.init(coder: coder)
-        source = self
     }
 
     // MARK: - KeyboardSource
 
     var name: String {
-        return "NemsisNegativeKeyboard.title".localized
+        return "NemsisNegativesKeyboard.title".localized
     }
 
     func count() -> Int {
