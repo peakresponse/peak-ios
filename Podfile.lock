@@ -129,7 +129,7 @@ DEPENDENCIES:
   - GoogleMLKit/BarcodeScanning (= 3.2.0)
   - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `381-memory`)
   - RealmSwift (~> 10.43)
   - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (~> 3.2)
@@ -182,7 +182,7 @@ EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
-    :branch: dev
+    :branch: 381-memory
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :branch: dev
@@ -190,7 +190,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: bed35ad53908e295a1024cf80f20a22408363643
+    :commit: a4cce0ccba151c89e4a214d11cf1c5aacdfcb6c3
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -236,6 +236,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 2a704a7e4fda58bbaefb694a1c948557bc6fbb6a
+PODFILE CHECKSUM: a918199bdfaf8a6674758a867880455999b0d0bf
 
 COCOAPODS: 1.13.0
