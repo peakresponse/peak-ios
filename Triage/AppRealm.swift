@@ -82,8 +82,6 @@ class AppRealm {
     private static var incidentsSocket: WebSocket?
     private static var sceneSocket: WebSocket?
 
-    private static var locationHelper: LocationHelper?
-
     public static func configure(url: URL?) {
         mainUrl = url
         main = nil

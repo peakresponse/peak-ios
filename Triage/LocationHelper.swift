@@ -15,10 +15,19 @@ import Foundation
 }
 
 class LocationHelper: NSObject, CLLocationManagerDelegate {
+    static let instance = LocationHelper()
+
     var locationManager: CLLocationManager!
     weak var delegate: LocationHelperDelegate?
     var didUpdateLocations: (([CLLocation]) -> Void)?
     var didFailWithError: ((Error) -> Void)?
+
+    var locations: [CLLocation] = []
+    var latestLocation: CLLocation? {
+        return locations.last
+    }
+    var latestError: Error?
+    var isMonitoringSignificantLocationChanges = false
 
     override init() {
         super.init()
@@ -27,7 +36,11 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
         locationManager.desiredAccuracy = kCLLocationAccuracyBestForNavigation
     }
 
-    func requestLocation() {
+    deinit {
+        stopMonitoringSignificationLocationChanges()
+    }
+
+    private func checkAuthorization(_ onAuthorized: () -> Void) {
         var authorizationStatus: CLAuthorizationStatus
         if #available(iOS 14.0, *) {
             authorizationStatus = locationManager.authorizationStatus
@@ -38,10 +51,28 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
         case .notDetermined:
             locationManager.requestWhenInUseAuthorization()
         case .authorizedAlways, .authorizedWhenInUse:
-            locationManager.requestLocation()
+            onAuthorized()
         default:
             break
         }
+    }
+
+    func requestLocation() {
+        checkAuthorization {
+            self.locationManager.requestLocation()
+        }
+    }
+
+    func startMonitoringSignificantLocationChanges() {
+        isMonitoringSignificantLocationChanges = true
+        checkAuthorization {
+            self.locationManager.startMonitoringSignificantLocationChanges()
+        }
+    }
+
+    func stopMonitoringSignificationLocationChanges() {
+        locationManager.stopMonitoringSignificantLocationChanges()
+        isMonitoringSignificantLocationChanges = false
     }
 
     // MARK: - CLLocationManagerDelegate
@@ -51,11 +82,16 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.locations = locations
         delegate?.locationHelper?(self, didUpdateLocations: locations)
         didUpdateLocations?(locations)
+        if !isMonitoringSignificantLocationChanges {
+            startMonitoringSignificantLocationChanges()
+        }
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        self.latestError = error
         delegate?.locationHelper?(self, didFailWithError: error)
         didFailWithError?(error)
     }

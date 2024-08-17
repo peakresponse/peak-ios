@@ -31,7 +31,6 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
 
     var isDirty = false
 
-    var locationHelper: LocationHelper?
     var isWaitingForLocation = true
     var currentLocation: CLLocationCoordinate2D?
     var spinnerBarButtonItem: UIBarButtonItem?
@@ -41,10 +40,6 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
         super.viewDidLoad()
 
         scrollView.backgroundColor = .background
-
-        let locationHelper = LocationHelper()
-        locationHelper.delegate = self
-        self.locationHelper = locationHelper
 
         if let leftBarButtonItem = navigationItem.leftBarButtonItem {
             commandHeader.leftBarButtonItem = leftBarButtonItem
@@ -69,6 +64,14 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
         }
 
         geocodeBarButtonItem = UIBarButtonItem(title: "Button.geocode".localized, style: .done, target: self, action: #selector(geocodePressed))
+
+        LocationHelper.instance.delegate = self
+        currentLocation = LocationHelper.instance.latestLocation?.coordinate
+        isWaitingForLocation = currentLocation == nil
+        if isWaitingForLocation {
+            LocationHelper.instance.requestLocation()
+        }
+        setGeocodeButton()
 
         if traitCollection.horizontalSizeClass == .regular {
             NSLayoutConstraint.activate([
@@ -102,7 +105,6 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        locationHelper?.requestLocation()
         registerForKeyboardNotifications(self)
     }
 

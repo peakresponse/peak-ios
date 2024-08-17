@@ -29,7 +29,6 @@ class LatLngControl: UIStackView, LocationHelperDelegate {
     var location: CLLocationCoordinate2D? {
         didSet { didUpdateLocation() }
     }
-    var locationHelper: LocationHelper!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -44,9 +43,6 @@ class LatLngControl: UIStackView, LocationHelperDelegate {
     func commonInit() {
         spacing = 8
         axis = .vertical
-
-        locationHelper = LocationHelper()
-        locationHelper.delegate = self
 
         let label = UILabel()
         label.font = .body14Bold
@@ -83,9 +79,15 @@ class LatLngControl: UIStackView, LocationHelperDelegate {
     }
 
     @objc func capturePressed() {
-        isCapturing = true
-        locationHelper.requestLocation()
-        label.text = "LatLngControl.capturingLocation".localized
+        location = LocationHelper.instance.latestLocation?.coordinate
+        if location == nil {
+            isCapturing = true
+            LocationHelper.instance.delegate = self
+            LocationHelper.instance.requestLocation()
+            label.text = "LatLngControl.capturingLocation".localized
+        } else {
+            delegate?.latLngControlDidCaptureLocation(self)
+        }
         updateButtons()
     }
 
@@ -118,7 +120,7 @@ class LatLngControl: UIStackView, LocationHelperDelegate {
 
     func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
         if isEditing && isCapturing {
-            if let location = locations.first {
+            if let location = locations.last {
                 isCapturing = false
                 self.location = location.coordinate
                 delegate?.latLngControlDidCaptureLocation(self)

@@ -26,8 +26,10 @@ class SceneTabBarController: CustomTabBarController {
         if let sceneId = AppSettings.sceneId, let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId), scene.isActive {
             // disconnect from agency updates
             AppRealm.disconnectIncidents()
-            // conenct to scene updates
+            // connect to scene updates
             AppRealm.connect(sceneId: sceneId)
+            // get an initial location fix
+            LocationHelper.instance.requestLocation()
 
             results = realm.objects(Scene.self).filter("id=%@", sceneId)
             notificationToken = results?.observe({ [weak self] (changes) in
