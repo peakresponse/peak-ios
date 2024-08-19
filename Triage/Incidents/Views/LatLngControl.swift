@@ -76,13 +76,18 @@ class LatLngControl: UIStackView, LocationHelperDelegate {
         mapButton.addTarget(self, action: #selector(mapPressed), for: .touchUpInside)
         row.addArrangedSubview(mapButton)
         self.mapButton = mapButton
+
+        LocationHelper.instance.addDelegate(self)
+    }
+
+    deinit {
+        LocationHelper.instance.removeDelegate(self)
     }
 
     @objc func capturePressed() {
         location = LocationHelper.instance.latestLocation?.coordinate
         if location == nil {
             isCapturing = true
-            LocationHelper.instance.delegate = self
             LocationHelper.instance.requestLocation()
             label.text = "LatLngControl.capturingLocation".localized
         } else {
