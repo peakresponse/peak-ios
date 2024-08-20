@@ -25,9 +25,9 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
     static let instance = LocationHelper()
 
     var locationManager: CLLocationManager!
+
     fileprivate var delegates: [WeakLocationHelperDelegate] = []
-    var didUpdateLocations: (([CLLocation]) -> Void)?
-    var didFailWithError: ((Error) -> Void)?
+    private var callbacks: [([CLLocation]?, Error?) -> Void] = []
 
     var locations: [CLLocation] = []
     var latestLocation: CLLocation? {
@@ -64,7 +64,7 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
         }
     }
 
-    func requestLocation() {
+    func requestLocation(_ callback: (([CLLocation]?, Error?) -> Void)? = nil) {
         checkAuthorization {
             self.locationManager.requestLocation()
         }
@@ -102,7 +102,11 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
         for delegate in delegates {
             delegate.ref?.locationHelper?(self, didUpdateLocations: locations)
         }
-        didUpdateLocations?(locations)
+        let callbacks: [([CLLocation]?, Error?) -> Void] = Array(self.callbacks)
+        self.callbacks.removeAll()
+        for callback in callbacks {
+            callback(locations, nil)
+        }
         if !isMonitoringSignificantLocationChanges {
             startMonitoringSignificantLocationChanges()
         }
@@ -113,6 +117,10 @@ class LocationHelper: NSObject, CLLocationManagerDelegate {
         for delegate in delegates {
             delegate.ref?.locationHelper?(self, didFailWithError: error)
         }
-        didFailWithError?(error)
+        let callbacks: [([CLLocation]?, Error?) -> Void] = Array(self.callbacks)
+        self.callbacks.removeAll()
+        for callback in callbacks {
+            callback(nil, error)
+        }
     }
 }
