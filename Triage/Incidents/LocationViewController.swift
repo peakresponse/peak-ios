@@ -36,6 +36,10 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
     var spinnerBarButtonItem: UIBarButtonItem?
     var geocodeBarButtonItem: UIBarButtonItem?
 
+    deinit {
+        LocationHelper.instance.removeDelegate(self)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -65,7 +69,7 @@ class LocationViewController: UIViewController, FormBuilder, KeyboardAwareScroll
 
         geocodeBarButtonItem = UIBarButtonItem(title: "Button.geocode".localized, style: .done, target: self, action: #selector(geocodePressed))
 
-        LocationHelper.instance.delegate = self
+        LocationHelper.instance.addDelegate(self)
         currentLocation = LocationHelper.instance.latestLocation?.coordinate
         isWaitingForLocation = currentLocation == nil
         if isWaitingForLocation {

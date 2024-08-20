@@ -6,15 +6,17 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import CoreLocation
 import UIKit
 import RealmSwift
 import PRKit
 
-class SceneTabBarController: CustomTabBarController {
+class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
     var results: Results<Scene>?
     var notificationToken: NotificationToken?
 
     deinit {
+        LocationHelper.instance.removeDelegate(self)
         AppRealm.disconnectScene()
         notificationToken?.invalidate()
     }
@@ -28,13 +30,19 @@ class SceneTabBarController: CustomTabBarController {
             AppRealm.disconnectIncidents()
             // connect to scene updates
             AppRealm.connect(sceneId: sceneId)
-            // get an initial location fix
-            LocationHelper.instance.requestLocation()
 
             results = realm.objects(Scene.self).filter("id=%@", sceneId)
             notificationToken = results?.observe({ [weak self] (changes) in
                 self?.didObserveChanges(changes)
             })
+
+            LocationHelper.instance.addDelegate(self)
+            // if latest location available and scene address empty, set as scene address
+            if scene.isAddressEmpty, let location = LocationHelper.instance.latestLocation {
+                locationHelper(LocationHelper.instance, didUpdateLocations: [location])
+            }
+            // get an initial location fix
+            LocationHelper.instance.requestLocation()
         }
     }
 
@@ -73,5 +81,38 @@ class SceneTabBarController: CustomTabBarController {
             vc.incident = results?.first?.incident.first
         }
         presentAnimated(vc)
+    }
+
+    // MARK: - LocationHelperDelegate
+
+    func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
+        // if no address set yet, reverse geocode and save
+        if let scene = results?.first, scene.isAddressEmpty, let location = locations.last {
+            let sceneId = scene.id
+            AppRealm.geocode(location: location.coordinate) { [weak self] (data, _) in
+                guard let _ = self, let data = data else { return }
+                let realm = AppRealm.open()
+                // double-check and make sure scene address hasn't been set in the meantime
+                guard let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId), scene.isAddressEmpty else { return }
+                let newScene = Scene(clone: scene)
+                if let address1 = data["address1"] as? String {
+                    newScene.address1 = address1
+                }
+                if let cityId = data["cityId"] as? String {
+                    newScene.cityId = cityId
+                }
+                if let stateId = data["stateId"] as? String {
+                    newScene.stateId = stateId
+                }
+                if let zip = data["zip"] as? String {
+                    newScene.zip = zip
+                }
+                AppRealm.updateScene(scene: newScene)
+            }
+        }
+    }
+
+    func locationHelper(_ helper: LocationHelper, didFailWithError error: any Error) {
+
     }
 }

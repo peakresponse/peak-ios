@@ -118,6 +118,9 @@ class Scene: BaseVersioned, NemsisBacked {
             .trimmingCharacters(in: .whitespacesAndNewlines)
         return text == "," ? " " : text
     }
+    var isAddressEmpty: Bool {
+        return lat == nil && lng == nil && address1 == nil && address2 == nil && cityId == nil && countyId == nil && stateId == nil && zip == nil && zip == nil
+    }
 
     @Persisted var closedAt: Date?
     @Persisted var mgsResponderId: String?
