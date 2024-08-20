@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+import CoreLocation
 import MLKitBarcodeScanning
 import MLKitVision
 import PRKit
@@ -28,7 +29,7 @@ class ScanCameraView: UIView {
     @objc optional func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?)
 }
 
-class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, PRKit.FormFieldDelegate {
+class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, LocationHelperDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var pinField: PRKit.TextField!
@@ -170,7 +171,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         _ = pinField.resignFirstResponder()
     }
 
-    func findPIN() {
+    func findPIN(fromScan: Bool) {
         // hide keyboard
         _ = pinField.resignFirstResponder()
         // get input
@@ -181,14 +182,38 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         if let delegate = delegate {
             delegate.scanViewController?(self, didScan: pin, report: results.first)
         } else {
-            if results.count > 0 {
-                presentReport(report: results[0])
+            if let report = results.first {
+                presentReport(report: report)
+                if fromScan {
+                    updateReportLocation(report: report)
+                }
             } else {
                 presentNewReport(incident: incident, pin: pin)
             }
         }
         // clear pinfield
         pinField.clearPressed()
+    }
+
+    func updateReportLocation(report: Report) {
+        if let location = LocationHelper.instance.latestLocation {
+            let newReport = Report(clone: report)
+            newReport.patient?.latLng = location.coordinate
+            AppRealm.saveReport(report: newReport)
+        } else {
+            let reportId = report.id
+            LocationHelper.instance.requestLocation { [weak self] (locations, _) in
+                guard self != nil else { return }
+                if let location = locations?.last {
+                    let realm = AppRealm.open()
+                    if let report = realm.object(ofType: Report.self, forPrimaryKey: reportId) {
+                        let newReport = Report(clone: report)
+                        newReport.patient?.latLng = location.coordinate
+                        AppRealm.saveReport(report: newReport)
+                    }
+                }
+            }
+        }
     }
 
     func currentUIOrientation() -> UIDeviceOrientation {
@@ -271,7 +296,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
                             guard let self = self else { return }
                             self.captureSession.stopRunning()
                             self.pinField.attributeValue = pin as NSObject
-                            self.findPIN()
+                            self.findPIN(fromScan: true)
                         }
                     }
                 } else {
@@ -291,7 +316,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
 
     func formFieldDidEndEditing(_ field: PRKit.FormField) {
         if !(pinField.text?.isEmpty ?? true) {
-            findPIN()
+            findPIN(fromScan: false)
         } else {
             captureSession.startRunning()
         }
