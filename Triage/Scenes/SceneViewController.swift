@@ -80,6 +80,7 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
     func commandHeaderDidPressUser(_ header: CommandHeader) {
         let realm = AppRealm.open()
         var messageText = ""
+        var isActive = false
         var isResponder = false
         var isMGS = false
         if let vehicleId = AppSettings.vehicleId,
@@ -96,28 +97,29 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
         if let sceneId = AppSettings.sceneId,
            let scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId),
            let responder = scene.responder(userId: AppSettings.userId) {
+            isActive = scene.isActive
             isResponder = true
+            isMGS = scene.isMgs(userId: AppSettings.userId)
             if let role = responder.role {
                 if messageText != "" {
                     messageText = "\(messageText)\n"
                 }
                 messageText = "\(messageText)\("Responder.role.\(role)".localized)"
-                isMGS = role == ResponderRole.mgs.rawValue
             }
         }
         let vc = ModalViewController()
         vc.isDismissedOnAction = false
         vc.messageText = messageText
         var title = "Button.exitScene".localized
-        if isMGS {
+        if isActive && isMGS {
             title = "Button.closeScene".localized
-        } else if isResponder {
+        } else if isActive && isResponder {
             title = "Button.leaveScene".localized
         }
         vc.addAction(UIAlertAction(title: title, style: .destructive, handler: { [weak self] (_) in
             guard let self = self else { return }
             vc.dismiss(animated: false)
-            if isMGS {
+            if isActive && isMGS {
                 let vc = ModalViewController()
                 vc.isDismissedOnAction = false
                 vc.messageText = "CloseSceneConfirmation.message".localized
@@ -136,7 +138,7 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
                 }))
                 vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
                 self.presentAnimated(vc)
-            } else if isResponder {
+            } else if isActive && isResponder {
                 let vc = ModalViewController()
                 vc.isDismissedOnAction = false
                 vc.messageText = "LeaveSceneConfirmation.message".localized

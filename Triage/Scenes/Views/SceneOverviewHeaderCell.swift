@@ -50,7 +50,7 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         }
         addressLabel.text = scene.address
         timestampLabel.text = scene.createdAt?.asDateTimeString()
-        if scene.mgsResponder?.user?.id == AppSettings.userId {
+        if scene.isMgs(userId: AppSettings.userId) {
             closeButton.setTitle("Button.closeScene".localized, for: .normal)
         } else if scene.isResponder(userId: AppSettings.userId) {
             closeButton.setTitle("Button.leaveScene".localized, for: .normal)
