@@ -35,7 +35,7 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
             unitLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
         ])
         self.unitLabel = unitLabel
