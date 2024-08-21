@@ -6,12 +6,13 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import PRKit
 import UIKit
 
 class ResponderRoleCollectionViewCell: UICollectionViewCell {
     var responderId: String?
     weak var unitLabel: UILabel!
-    weak var roleSelector: ResponderRoleSelector!
+    weak var roleSelector: PRKit.TextField!
     weak var vr: UIView!
 
     var calculatedSize: CGSize?
@@ -34,12 +35,16 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(unitLabel)
         NSLayoutConstraint.activate([
             unitLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            unitLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 18),
             unitLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
         ])
         self.unitLabel = unitLabel
 
-        let roleSelector = ResponderRoleSelector()
+        let roleSelector = PRKit.TextField()
+        roleSelector.attributeType = .single(EnumKeyboardSource<ResponderRole>())
+        roleSelector.placeholderText = "Responder.role.assign".localized
+        roleSelector.isLabelHidden = true
+        roleSelector.clearButton.alpha = 0
         roleSelector.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(roleSelector)
         NSLayoutConstraint.activate([

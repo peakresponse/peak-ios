@@ -51,7 +51,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: 372, height: 136)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
         collectionView.setCollectionViewLayout(layout, animated: false)
