@@ -285,6 +285,10 @@ class Scene: BaseVersioned, NemsisBacked {
         return json
     }
 
+    func isMgs(userId: String?) -> Bool {
+        return isActive && responder(userId: userId)?.id == mgsResponderId
+    }
+
     func isResponder(userId: String?) -> Bool {
         return isActive && responder(userId: userId) != nil
     }

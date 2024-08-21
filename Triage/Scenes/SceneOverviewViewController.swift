@@ -126,7 +126,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     @IBAction func closePressed(_ sender: Any) {
         guard let scene = scene else { return }
         let sceneId = scene.id
-        if scene.mgsResponder?.user?.id == AppSettings.userId {
+        if scene.isMgs(userId: AppSettings.userId) {
             let vc = ModalViewController()
             vc.isDismissedOnAction = false
             vc.messageText = "CloseSceneConfirmation.message".localized
