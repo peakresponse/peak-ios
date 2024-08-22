@@ -74,19 +74,54 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         ])
         self.versionLabel = versionLabel
 
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = .background
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
             tableView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
             tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         self.tableView = tableView
+
+        let segmentedControl = SegmentedControl()
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
+        segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
+        segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
+        if traitCollection.horizontalSizeClass == .regular {
+            commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
+            commandHeader.stackView.distribution = .fillProportionally
+            commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
+            commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
+            tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor).isActive = true
+        } else {
+            let containerView = UIView()
+            containerView.translatesAutoresizingMaskIntoConstraints = false
+            containerView.backgroundColor = .background
+            containerView.addSubview(segmentedControl)
+            view.addSubview(containerView)
+            NSLayoutConstraint.activate([
+                containerView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                containerView.heightAnchor.constraint(equalToConstant: 56),
+                segmentedControl.topAnchor.constraint(equalTo: containerView.topAnchor),
+                segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+                segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                containerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
+                tableView.topAnchor.constraint(equalTo: containerView.bottomAnchor)
+            ])
+        }
+        self.segmentedControl = segmentedControl
 
         let commandFooter = CommandFooter()
         commandFooter.translatesAutoresizingMaskIntoConstraints = false
@@ -119,34 +154,6 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         ])
         self.activeIncidentsView = activeIncidentsView
         self.activeIncidentsViewHeightConstraint = activeIncidentsViewHeightConstraint
-
-        let segmentedControl = SegmentedControl()
-        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
-        segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
-        segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
-        if traitCollection.horizontalSizeClass == .regular {
-            commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
-            commandHeader.stackView.distribution = .fillProportionally
-            commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-        } else {
-            let view = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 56))
-            view.addSubview(segmentedControl)
-            NSLayoutConstraint.activate([
-                segmentedControl.topAnchor.constraint(equalTo: view.topAnchor),
-                segmentedControl.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-                segmentedControl.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-                view.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor)
-            ])
-            tableView.tableHeaderView = view
-        }
-        self.segmentedControl = segmentedControl
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-        tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
 
         performQuery()
 
