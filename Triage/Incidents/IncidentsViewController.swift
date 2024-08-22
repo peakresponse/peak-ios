@@ -12,14 +12,14 @@ import UIKit
 
 class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
-    @IBOutlet weak var sidebarTableView: SidebarTableView!
-    @IBOutlet weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
-    @IBOutlet weak var versionLabel: UILabel!
-    @IBOutlet weak var commandHeader: CommandHeader!
-    @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var activeIncidentsView: ActiveIncidentsView!
-    @IBOutlet weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
-    @IBOutlet weak var commandFooter: CommandFooter!
+    weak var commandHeader: CommandHeader!
+    weak var sidebarTableView: SidebarTableView!
+    weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
+    weak var versionLabel: UILabel!
+    weak var tableView: UITableView!
+    weak var commandFooter: CommandFooter!
+    weak var activeIncidentsView: ActiveIncidentsView!
+    weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     weak var segmentedControl: SegmentedControl!
 
     var notificationToken: NotificationToken?
@@ -34,12 +34,91 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        tableView.backgroundColor = .background
-
-        versionLabel.text = AppSettings.version
-
-        setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.delegate = self
         commandHeader.searchField.delegate = self
+        view.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: view.topAnchor),
+            commandHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            commandHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        self.commandHeader = commandHeader
+        setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
+
+        let sidebarTableView = SidebarTableView()
+        sidebarTableView.translatesAutoresizingMaskIntoConstraints = false
+        sidebarTableView.dataSource = self
+        sidebarTableView.delegate = self
+        view.addSubview(sidebarTableView)
+        let sidebarTableViewLeadingConstraint = sidebarTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -300)
+        NSLayoutConstraint.activate([
+            sidebarTableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+            sidebarTableViewLeadingConstraint,
+            sidebarTableView.widthAnchor.constraint(equalToConstant: 300),
+            sidebarTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.sidebarTableView = sidebarTableView
+        self.sidebarTableViewLeadingConstraint = sidebarTableViewLeadingConstraint
+
+        let versionLabel = UILabel()
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.font = .body14Bold
+        versionLabel.text = AppSettings.version
+        versionLabel.textColor = .interactiveText
+        view.addSubview(versionLabel)
+        NSLayoutConstraint.activate([
+            versionLabel.leadingAnchor.constraint(equalTo: sidebarTableView.leadingAnchor, constant: 20),
+            versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        ])
+        self.versionLabel = versionLabel
+
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        view.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
+            tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.tableView = tableView
+
+        let commandFooter = CommandFooter()
+        commandFooter.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(commandFooter)
+        NSLayoutConstraint.activate([
+            commandFooter.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            commandFooter.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            commandFooter.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.commandFooter = commandFooter
+
+        let newButton = PRKit.Button()
+        newButton.translatesAutoresizingMaskIntoConstraints = false
+        newButton.bundleImage = "Plus24px"
+        newButton.style = .primary
+        newButton.addTarget(self, action: #selector(newPressed(_:)), for: .touchUpInside)
+        newButton.setTitle("Button.newIncident".localized, for: .normal)
+        commandFooter.addSubview(newButton)
+
+        let activeIncidentsView = ActiveIncidentsView()
+        activeIncidentsView.translatesAutoresizingMaskIntoConstraints = false
+        activeIncidentsView.delegate = self
+        view.addSubview(activeIncidentsView)
+        let activeIncidentsViewHeightConstraint = activeIncidentsView.heightAnchor.constraint(equalToConstant: 128)
+        NSLayoutConstraint.activate([
+            activeIncidentsViewHeightConstraint,
+            activeIncidentsView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
+            activeIncidentsView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
+            activeIncidentsView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
+        ])
+        self.activeIncidentsView = activeIncidentsView
+        self.activeIncidentsViewHeightConstraint = activeIncidentsViewHeightConstraint
 
         let segmentedControl = SegmentedControl()
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -200,7 +279,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         }
     }
 
-    @IBAction func newPressed(_ sender: PRKit.Button) {
+    @objc func newPressed(_ sender: PRKit.Button) {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
         presentAnimated(vc)
     }
