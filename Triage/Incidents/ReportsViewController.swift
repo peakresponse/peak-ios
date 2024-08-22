@@ -37,6 +37,16 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if incident == nil, let sceneId = AppSettings.sceneId {
+            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+            incident = scene?.incident.first
+            isMCI = scene?.isMCI ?? false
+        }
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        collectionView.refreshControl = refreshControl
+
         collectionView.backgroundColor = .background
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
@@ -45,32 +55,18 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
             layout.sectionHeadersPinToVisibleBounds = true
         }
 
-        if incident == nil, let sceneId = AppSettings.sceneId {
-            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
-            incident = scene?.incident.first
-            isMCI = scene?.isMCI ?? false
-        }
-
         if isMCI {
-            addButton.isHidden = !(scene?.isResponder(userId: AppSettings.userId) ?? false)
             initSceneCommandHeader()
             collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
+            if scene?.isResponder(userId: AppSettings.userId) ?? false {
+                showAddButton()
+            }
+            collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
         } else {
             addButton.isHidden = true
             commandHeader.isSearchHidden = true
             commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-        }
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-
-        collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
-
-        if isMCI {
-            var contentInset = collectionView.contentInset
-            contentInset.bottom += addButton.frame.height
-            collectionView.contentInset = contentInset
+            collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
         }
 
         performQuery()
@@ -84,6 +80,13 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
                 addButton.isHidden = false
             }
         }
+    }
+
+    func showAddButton() {
+        addButton.isHidden = false
+        var contentInset = collectionView.contentInset
+        contentInset.bottom = addButton.frame.height
+        collectionView.contentInset = contentInset
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -203,7 +206,7 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
                                                              action: #selector(self.dismissAnimated))
         incident = vc.incident
         if !isMCI {
-            addButton.isHidden = false
+            showAddButton()
         }
         performQuery()
     }
@@ -229,6 +232,9 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
         if let cell = cell as? ReportCollectionViewCell {
             cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
+        } else if let cell = cell as? TransportReportCollectionViewCell {
+            cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row, selected: false)
+            cell.checkbox.isHidden = true
         }
         return cell
     }
@@ -256,9 +262,9 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 160)
+            return CGSize(width: 372, height: isMCI ? 125 : 160)
         }
-        return CGSize(width: view.frame.width, height: 160)
+        return CGSize(width: view.frame.width, height: isMCI ? 125 : 160)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
