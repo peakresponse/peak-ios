@@ -67,6 +67,7 @@ class Responder: Base {
         static let userId = "userId"
         static let vehicleId = "vehicleId"
         static let unitNumber = "unitNumber"
+        static let callSign = "callSign"
         static let capability = "capability"
         static let arrivedAt = "arrivedAt"
         static let departedAt = "departedAt"
@@ -76,10 +77,15 @@ class Responder: Base {
     @Persisted var user: User?
     @Persisted var vehicle: Vehicle?
     @Persisted var unitNumber: String?
+    @Persisted var callSign: String?
     @Persisted var capability: String?
     @Persisted var arrivedAt: Date?
     @Persisted var departedAt: Date?
     @Persisted var sort: Int = 0
+
+    var identifier: String? {
+        return callSign ?? unitNumber
+    }
 
     @objc var status: Bool {
         get { return arrivedAt != nil }
@@ -153,6 +159,7 @@ class Responder: Base {
             vehicle = realm.object(ofType: Vehicle.self, forPrimaryKey: vehicleId)
         }
         unitNumber = data[Keys.unitNumber] as? String
+        callSign = data[Keys.callSign] as? String
         capability = data[Keys.capability] as? String
         arrivedAt = ISO8601DateFormatter.date(from: data[Keys.arrivedAt])
         departedAt = ISO8601DateFormatter.date(from: data[Keys.departedAt])
@@ -165,6 +172,7 @@ class Responder: Base {
         json[Keys.userId] = user?.id ?? NSNull()
         json[Keys.vehicleId] = vehicle?.id ?? NSNull()
         json[Keys.unitNumber] = unitNumber ?? NSNull()
+        json[Keys.callSign] = callSign ?? NSNull()
         json[Keys.capability] = capability ?? NSNull()
         json[Keys.arrivedAt] = arrivedAt?.asISO8601String() ?? NSNull()
         json[Keys.departedAt] = departedAt?.asISO8601String() ?? NSNull()

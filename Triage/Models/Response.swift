@@ -77,6 +77,10 @@ class Response: BaseVersioned, NemsisBacked {
         }
     }
 
+    var identifier: String? {
+        return callSign ?? unitNumber
+    }
+
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
         if let agencyId = agency?.id {

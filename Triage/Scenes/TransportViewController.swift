@@ -133,7 +133,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             let newReport = Report(clone: report)
             newReport.response?.agency = cart.responder?.agency
             newReport.response?.unitNumber = cart.responder?.vehicle?.number ?? cart.responder?.unitNumber
-            newReport.response?.callSign = cart.responder?.vehicle?.callSign ?? (cart.responder?.vehicle?.number ?? cart.responder?.unitNumber)
+            newReport.response?.callSign = cart.responder?.vehicle?.callSign ?? cart.responder?.callSign
             newReport.disposition?.unitDisposition = UnitDisposition.patientContactMade.rawValue
             newReport.disposition?.patientEvaluationCare = PatientEvaluationCare.patientEvaluatedCareProvided.rawValue
             newReport.disposition?.crewDisposition = CrewDisposition.assumedPrimaryCare.rawValue
