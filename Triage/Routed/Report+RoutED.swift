@@ -13,7 +13,7 @@ extension Report {
     func asRingdownJSON() -> [String: Any] {
         var json: [String: Any] = [:]
         var ambulanceIdentifier: Any = NSNull()
-        if let value = response?.unitNumber {
+        if let value = response?.identifier {
             ambulanceIdentifier = value
         }
         json["ambulance"] = [

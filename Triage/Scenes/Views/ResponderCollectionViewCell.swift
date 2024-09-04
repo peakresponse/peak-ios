@@ -179,7 +179,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         checkbox.isChecked = isSelected
 
         guard let responder = responder else { return }
-        unitLabel.text = "\("Responder.unitNumber".localized)\(responder.vehicle?.callSign ?? responder.vehicle?.number ?? responder.unitNumber ?? "")"
+        unitLabel.text = "\(responder.vehicle?.identifier ?? responder.identifier ?? "")"
         if let user = responder.user {
             unitLabel.text = "\(unitLabel.text ?? ""): \(user.fullNameLastFirst)"
         }

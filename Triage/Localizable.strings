@@ -432,13 +432,14 @@
 "ReportViewController.vitals" = "Vitals";
 
 "Responder.agency" = "Agency";
+"Responder.callSign" = "Call Sign";
 "Responder.capability" = "Capability";
 "Responder.capability.2207015" = "ALS";
 "Responder.capability.2207017" = "BLS";
 "Responder.status" = "Status";
 "Responder.status.arrived" = "Arrived";
 "Responder.status.enroute" = "En route";
-"Responder.unitNumber" = "Unit #";
+"Responder.unitNumber" = "Vehicle/Unit #";
 
 "Responder.sort.az" = "Alphabetically";
 
@@ -460,8 +461,8 @@
 "ResponderViewController.alert.agency.message" = "Please select an agency for this unit.";
 "ResponderViewController.alert.duplicate.title" = "Duplicate Unit";
 "ResponderViewController.alert.duplicate.message" = "A unit with this agency and number already exists.";
-"ResponderViewController.alert.unitNumber.title" = "Unit # required";
-"ResponderViewController.alert.unitNumber.message" = "Please enter the number for this unit.";
+"ResponderViewController.alert.identifier.title" = "Identifier required";
+"ResponderViewController.alert.identifier.message" = "Please enter the Vehicle/Unit # and/or Call Sign for this unit.";
 
 "RespondersCountsHeaderView.enroute" = "En rte: %d";
 "RespondersCountsHeaderView.arrived" = "Arr: %d";
@@ -478,8 +479,9 @@
 "Response.unitTransportAndEquipmentCapability.2207027" = "Non-Transport-No Medical Equipment";
 
 "Response.agency" = "Agency";
+"Response.callSign" = "Call Sign";
 "Response.incidentNumber" = "Incident #";
-"Response.unitNumber" = "Unit #";
+"Response.unitNumber" = "Vehicle/Unit #";
 
 "RingdownFacilityView.eta" = "ETA";
 "RingdownFacilityView.eta.mins" = " min";

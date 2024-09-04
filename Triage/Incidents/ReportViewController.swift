@@ -105,6 +105,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             colA.addArrangedSubview(agencyField!)
 
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "response.callSign", keyboardType: .default, tag: &tag, to: colA)
 
             let triageControl = TriageControl()
             triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
@@ -189,6 +190,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             colA.addArrangedSubview(addressField)
 
             addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "response.callSign", keyboardType: .default, tag: &tag, to: colB)
             addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
             addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
             addTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
@@ -694,6 +696,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         if report.scene?.isMCI ?? false {
             agencyField?.isHidden = agencyField?.attributeValue == nil
             formComponents["response.unitNumber"]?.isHidden = destinationFacilityField.attributeValue == nil
+            formComponents["response.callSign"]?.isHidden = destinationFacilityField.attributeValue == nil
         }
         if let unitDisposition = (newReport ?? report)?.disposition?.unitDisposition, unitDisposition == UnitDisposition.patientContactMade.rawValue {
             formComponents["disposition.patientEvaluationCare"]?.isHidden = false

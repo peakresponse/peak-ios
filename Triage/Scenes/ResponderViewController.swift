@@ -61,6 +61,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
                      attributeType: .single(AgencyKeyboardSource()), tag: &tag, to: colA)
         addTextField(source: responder, attributeKey: "unitNumber",
                      attributeType: .integer, tag: &tag, to: colB)
+        addTextField(source: responder, attributeKey: "callSign",
+                     attributeType: .text, tag: &tag, to: colB)
 
         let stackView = UIStackView()
         stackView.axis = .horizontal
@@ -143,8 +145,8 @@ class ResponderViewController: UIViewController, FormBuilder, KeyboardAwareScrol
             presentAlert(title: "ResponderViewController.alert.agency.title".localized, message: "ResponderViewController.alert.agency.message".localized)
             return
         }
-        if newResponder.unitNumber?.isEmpty ?? true {
-            presentAlert(title: "ResponderViewController.alert.unitNumber.title".localized, message: "ResponderViewController.alert.unitNumber.message".localized)
+        if newResponder.identifier?.isEmpty ?? true {
+            presentAlert(title: "ResponderViewController.alert.identifier.title".localized, message: "ResponderViewController.alert.identifier.message".localized)
             return
         }
 
