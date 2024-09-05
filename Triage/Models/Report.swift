@@ -30,6 +30,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         static let signatureIds = "signatureIds"
         static let predictions = "predictions"
         static let ringdownId = "ringdownId"
+        static let deletedAt = "deletedAt"
     }
     @Persisted var _data: Data?
     var _tmpMigrateData: Data? {
@@ -61,6 +62,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
     @Persisted var files: List<File>
     @Persisted var signatures: List<Signature>
     @Persisted var ringdownId: String?
+    @Persisted var deletedAt: Date?
 
     @objc var patientCareReportNumber: String? {
         get {
@@ -276,6 +278,9 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
         if data.index(forKey: Keys.ringdownId) != nil {
             ringdownId = data[Keys.ringdownId] as? String
         }
+        if data.index(forKey: Keys.deletedAt) != nil {
+            deletedAt = ISO8601DateFormatter.date(from: data[Keys.deletedAt])
+        }
     }
 
     override func asJSON() -> [String: Any] {
@@ -305,6 +310,7 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
             value = ringdownId
         }
         json[Keys.ringdownId] = value
+        json[Keys.deletedAt] = deletedAt?.asISO8601String()
         return json
     }
 
@@ -431,6 +437,10 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
 
         if ringdownId == parent?.ringdownId {
             report.removeValue(forKey: "ringdownId")
+        }
+
+        if deletedAt == parent?.deletedAt {
+            report.removeValue(forKey: "deletedAt")
         }
 
         payload["Report"] = report

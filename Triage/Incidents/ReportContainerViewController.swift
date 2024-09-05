@@ -75,7 +75,22 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     }
 
     @objc func deletePressed() {
-        
+        let vc = ModalViewController()
+        vc.isDismissedOnAction = false
+        vc.messageText = "ReportContainerViewController.modal.confirmDelete".localized
+        vc.addAction(UIAlertAction(title: "Button.delete".localized, style: .destructive, handler: { [weak self] (_) in
+            guard let self = self else { return }
+            if let vc = self.children[0] as? ReportViewController {
+                if let report = vc.newReport {
+                    report.deletedAt = Date()
+                    self.savePressed()
+                }
+            }
+            vc.dismissAnimated()
+            self.dismissAnimated()
+        }))
+        vc.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
+        presentAnimated(vc)
     }
 
     @objc func cancelPressed() {

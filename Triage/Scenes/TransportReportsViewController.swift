@@ -60,7 +60,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            .filter("incident=%@ AND canonicalId=%@ AND deletedAt=%@", incident, NSNull(), NSNull())
         filteredResults = results
         if let searchText = searchText, !searchText.isEmpty {
             filteredResults = filteredResults?.filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)",
