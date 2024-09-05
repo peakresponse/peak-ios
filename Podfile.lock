@@ -129,7 +129,7 @@ DEPENDENCIES:
   - GoogleMLKit/BarcodeScanning (= 3.2.0)
   - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `25-bar-button-item-tint`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RealmSwift (~> 10.43)
   - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (~> 3.2)
@@ -182,7 +182,7 @@ EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
-    :branch: 25-bar-button-item-tint
+    :branch: dev
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :branch: dev
@@ -190,7 +190,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: 59de987d9161251edaebde24cf1bc2110d37bd51
+    :commit: 4a4cc0c56797955c8717299d09a8e07aa569e3b7
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -236,6 +236,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 54324e74b7b5e6aa7954abfd432688d1f0891c28
+PODFILE CHECKSUM: 2a704a7e4fda58bbaefb694a1c948557bc6fbb6a
 
 COCOAPODS: 1.13.0
