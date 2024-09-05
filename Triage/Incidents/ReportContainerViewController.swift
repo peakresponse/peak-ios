@@ -27,6 +27,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
     var transferBarButtonItem: UIBarButtonItem?
     var saveBarButtonItem: UIBarButtonItem?
     var cancelBarButtonItem: UIBarButtonItem?
+    var deleteBarButtonItem: UIBarButtonItem?
 
     var cachedViewControllers: [UIViewController] = []
 
@@ -55,6 +56,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                                                target: self,
                                                action: #selector(cancelPressed))
 
+        deleteBarButtonItem = UIBarButtonItem(title: "NavigationBar.delete".localized, style: .plain, target: self, action: #selector(deletePressed))
+        deleteBarButtonItem?.tintColor = .destructiveText
+
         showReport()
     }
 
@@ -70,10 +74,15 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         }
     }
 
+    @objc func deletePressed() {
+        
+    }
+
     @objc func cancelPressed() {
         segmentedControl.isHidden = AppSettings.routedUrl?.isEmpty ?? true
         segmentedControl.isEnabled = true
         commandHeader.leftBarButtonItem = leftBarButtonItem
+        commandHeader.centerBarButtonItem = nil
         commandHeader.rightBarButtonItem = editBarButtonItem
         if let vc = children[0] as? ReportViewController {
             vc.setEditing(false, animated: true)
@@ -87,6 +96,9 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         segmentedControl.isEnabled = false
         leftBarButtonItem = commandHeader.leftBarButtonItem
         commandHeader.leftBarButtonItem = cancelBarButtonItem
+        if report?.scene?.isMCI ?? false {
+            commandHeader.centerBarButtonItem = deleteBarButtonItem
+        }
         commandHeader.rightBarButtonItem = saveBarButtonItem
         if let vc = children[0] as? ReportViewController {
             if vc.scrollView.contentOffset.y > (segmentedControl.frame.height + 20) {
@@ -148,6 +160,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
             vc.setEditing(false, animated: true)
             vc.scrollView.setContentOffset(.zero, animated: true)
         }
+        commandHeader.centerBarButtonItem = nil
         commandHeader.rightBarButtonItem = editBarButtonItem
         segmentedControl.isHidden = AppSettings.routedUrl?.isEmpty ?? true
         segmentedControl.isEnabled = true

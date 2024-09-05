@@ -266,6 +266,7 @@
 "Narrative.text" = "Narrative";
 
 "NavigationBar.cancel" = "Cancel";
+"NavigationBar.delete" = "Delete";
 "NavigationBar.done" = "Done";
 "NavigationBar.edit" = "Edit";
 "NavigationBar.save" = "Save";
