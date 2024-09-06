@@ -178,7 +178,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         guard let pin = pinField.text else { return }
         let realm = AppRealm.open()
         guard let sceneId = AppSettings.sceneId else { return }
-        let results = realm.objects(Report.self).filter("canonicalId=%@ AND pin=%@ AND scene.canonicalId=%@", NSNull(), pin, sceneId).sorted(byKeyPath: "createdAt", ascending: false)
+        let results = realm.objects(Report.self).filter("canonicalId=%@ AND deletedAt=%@ AND pin=%@ AND scene.canonicalId=%@", NSNull(), NSNull(), pin, sceneId).sorted(byKeyPath: "createdAt", ascending: false)
         if let delegate = delegate {
             delegate.scanViewController?(self, didScan: pin, report: results.first)
         } else {

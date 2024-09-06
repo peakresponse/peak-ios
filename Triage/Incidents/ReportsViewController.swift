@@ -116,7 +116,7 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            .filter("incident=%@ AND canonicalId=%@ AND deletedAt=%@", incident, NSNull(), NSNull())
         filteredResults = results
         if isMCI {
             if let text = commandHeader.searchField.text, !text.isEmpty {
