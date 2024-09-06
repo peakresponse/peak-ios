@@ -66,7 +66,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         reportsNotificationToken?.invalidate()
         if let incident = incident {
             let realm = AppRealm.open()
-            reports = realm.objects(Report.self).filter("incident=%@ AND canonicalId=%@", incident, NSNull())
+            reports = realm.objects(Report.self).filter("incident=%@ AND canonicalId=%@ AND deletedAt=%@", incident, NSNull(), NSNull())
             reportsNotificationToken = reports?.observe { [weak self] (changes) in
                 self?.didObserveReportsChanges(changes)
             }

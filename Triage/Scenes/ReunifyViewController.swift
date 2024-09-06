@@ -86,7 +86,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@ AND filterPriority=%d", incident, NSNull(), TriagePriority.transported.rawValue)
+            .filter("incident=%@ AND canonicalId=%@ AND deletedAt=%@ AND filterPriority=%d", incident, NSNull(), NSNull(), TriagePriority.transported.rawValue)
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }

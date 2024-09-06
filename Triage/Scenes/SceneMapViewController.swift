@@ -59,7 +59,7 @@ class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
 
         let realm = AppRealm.open()
         results = realm.objects(Report.self)
-            .filter("incident=%@ AND canonicalId=%@ AND filterPriority <> %@", incident, NSNull(), TriagePriority.transported.rawValue)
+            .filter("incident=%@ AND canonicalId=%@ AND deletedAt=%@ AND filterPriority <> %@", incident, NSNull(), NSNull(), TriagePriority.transported.rawValue)
         if let text = commandHeader.searchField.text, !text.isEmpty {
             results = results?
                 .filter("(pin CONTAINS[cd] %@) OR (patient.firstName CONTAINS[cd] %@) OR (patient.lastName CONTAINS[cd] %@)", text, text, text)
