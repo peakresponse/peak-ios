@@ -111,12 +111,12 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             view.addSubview(containerView)
             NSLayoutConstraint.activate([
                 containerView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-                containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-                containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                containerView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
+                containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
                 containerView.heightAnchor.constraint(equalToConstant: 56),
                 segmentedControl.topAnchor.constraint(equalTo: containerView.topAnchor),
-                segmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-                segmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
+                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
                 containerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
                 tableView.topAnchor.constraint(equalTo: containerView.bottomAnchor)
             ])
