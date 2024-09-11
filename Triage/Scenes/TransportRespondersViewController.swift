@@ -93,7 +93,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         notificationToken?.invalidate()
 
         guard let scene = scene else { return }
-        results = scene.responders.filter("departedAt=%@", NSNull())
+        results = scene.responders.filter("(user=%@ OR vehicle<>%@) AND departedAt=%@", NSNull(), NSNull(), NSNull())
         if let searchText = searchText, !searchText.isEmpty {
             results = results?.filter("(unitNumber CONTAINS[cd] %@) OR (vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",
                                       searchText, searchText, searchText, searchText)
