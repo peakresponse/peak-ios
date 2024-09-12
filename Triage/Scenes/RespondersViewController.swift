@@ -101,7 +101,7 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
-        results = scene.responders.filter("departedAt=%@", NSNull())
+        results = scene.responders.filter("(user=%@ OR vehicle<>%@) AND departedAt=%@", NSNull(), NSNull(), NSNull())
         results = results?.sorted(by: [
             SortDescriptor(keyPath: "sort"),
             SortDescriptor(keyPath: "arrivedAt"),
