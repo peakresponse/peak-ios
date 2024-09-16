@@ -867,6 +867,22 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             target.setValue(field.attributeValue, forKeyPath: attributeKey)
             // some hard-coded field visibility rules, until a more generalized implementation can be designed
             switch attributeKey {
+            case "patient.dob":
+                // calculate age
+                if let dob = ISO8601DateFormatter.date(from: field.attributeValue) {
+                    let (years, months, days) = dob.age
+                    if years > 0 {
+                        newReport?.patient?.age = years
+                        newReport?.patient?.ageUnits = PatientAgeUnits.years.rawValue
+                    } else if months > 0 {
+                        newReport?.patient?.age = months
+                        newReport?.patient?.ageUnits = PatientAgeUnits.months.rawValue
+                    } else {
+                        newReport?.patient?.age = days
+                        newReport?.patient?.ageUnits = PatientAgeUnits.days.rawValue
+                    }
+                    refreshFormFieldsAndControls(["patient.ageArray"])
+                }
             case "time.arrivedAtPatient":
                 // if arrived at patient, set unit disposition to Patient Contact Made automatically if not already set
                 if field.attributeValue != nil, newReport?.disposition?.unitDisposition == nil {
