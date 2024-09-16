@@ -46,7 +46,7 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
         collectionView.backgroundColor = .background
 
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
-        commandHeader.searchField.delegate = self
+        commandHeader.searchFieldDelegate = self
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
@@ -232,13 +232,6 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                 }
             }
         }
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        if field == commandHeader.searchField {
-            field.resignFirstResponder()
-        }
-        return false
     }
 
     // MARK: - KeyboardSource

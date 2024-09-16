@@ -34,7 +34,7 @@ class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
             incident = scene.incident.first
         }
 
-        commandHeader.searchField.delegate = self
+        commandHeader.searchFieldDelegate = self
 
         var camera: GMSCameraPosition
         if let latLng = incident?.scene?.latLng {
@@ -123,10 +123,5 @@ class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        field.resignFirstResponder()
-        return false
     }
 }

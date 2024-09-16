@@ -37,7 +37,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.delegate = self
-        commandHeader.searchField.delegate = self
+        commandHeader.searchFieldDelegate = self
         view.addSubview(commandHeader)
         NSLayoutConstraint.activate([
             commandHeader.topAnchor.constraint(equalTo: view.topAnchor),
@@ -325,11 +325,6 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        field.resignFirstResponder()
-        return false
     }
 
     // MARK: - UIScrollViewDelegate
