@@ -18,7 +18,7 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
         commandHeader.isUserHidden = false
         commandHeader.isSearchHidden = false
         commandHeader.searchField.returnKeyType = .done
-        commandHeader.searchField.delegate = self
+        commandHeader.searchFieldDelegate = self
         commandHeader.stackView.spacing = 10
 
         let sceneButton = PRKit.Button()
@@ -169,30 +169,5 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
 
     func formComponentDidChange(_ component: PRKit.FormComponent) {
         performQuery()
-    }
-
-    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            guard let self = self else { return }
-            for subview in commandHeader.stackView.arrangedSubviews {
-                if subview != field {
-                    subview.isHidden = true
-                }
-            }
-        }
-        return true
-    }
-
-    func formFieldShouldReturn(_ field: PRKit.FormField) -> Bool {
-        field.resignFirstResponder()
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            guard let self = self else { return }
-            for subview in commandHeader.stackView.arrangedSubviews {
-                if subview != field {
-                    subview.isHidden = false
-                }
-            }
-        }
-        return false
     }
 }
