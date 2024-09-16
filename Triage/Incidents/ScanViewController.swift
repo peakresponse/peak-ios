@@ -63,44 +63,44 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         setupCamera()
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    func start() {
         // re-enable camera
         if videoPreviewLayer != nil {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
                 self?.captureSession.startRunning()
             }
+            MotionHelper.instance.startDeviceMotionUpdates()
         }
+    }
+
+    func stop() {
+        // disable camera, if running
+        if videoPreviewLayer != nil {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                self?.captureSession.stopRunning()
+            }
+            MotionHelper.instance.stopDeviceMotionUpdates()
+        }
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        start()
     }
 
     override func didPresentAnimated() {
         super.didPresentAnimated()
-        // disable camera, if running
-        if videoPreviewLayer != nil {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.captureSession.stopRunning()
-            }
-        }
+        stop()
     }
 
     override func didDismissPresentation() {
         super.didDismissPresentation()
-        // re-enable camera
-        if videoPreviewLayer != nil {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.captureSession.startRunning()
-            }
-        }
+        start()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        // disable camera, if running
-        if videoPreviewLayer != nil {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.captureSession.stopRunning()
-            }
-        }
+        stop()
     }
 
     @objc override func keyboardWillShow(_ notification: NSNotification) {
@@ -158,9 +158,7 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             if captureSession.canSetSessionPreset(.hd1920x1080) {
                 captureSession.sessionPreset = .hd1920x1080
             }
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                self?.captureSession.startRunning()
-            }
+            start()
         } catch {
             print(error)
         }
@@ -284,17 +282,19 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
         do {
             barcodes = try barcodeScanner.results(in: inputImage)
             if let pin = barcodes.first?.displayValue {
-                if scannedValues.count > 0 {
+                if let magnitude = MotionHelper.instance.deviceMotion?.userAcceleration.magnitude, magnitude >= 0.1 {
+                    scannedValues = []
+                } else if scannedValues.count > 0 {
                     if let prevPin = scannedValues.first, pin == prevPin {
                         scannedValues.append(pin)
                     } else {
                         scannedValues = [pin]
                     }
-                    if scannedValues.count >= 3 {
+                    if scannedValues.count >= 5 {
                         scannedValues = []
                         DispatchQueue.main.sync { [weak self] in
                             guard let self = self else { return }
-                            self.captureSession.stopRunning()
+                            self.stop()
                             self.pinField.attributeValue = pin as NSObject
                             self.findPIN(fromScan: true)
                         }
@@ -311,14 +311,14 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     // MARK: - FormFieldDelegate
 
     func formFieldDidBeginEditing(_ field: PRKit.FormField) {
-        captureSession.stopRunning()
+        stop()
     }
 
     func formFieldDidEndEditing(_ field: PRKit.FormField) {
         if !(pinField.text?.isEmpty ?? true) {
             findPIN(fromScan: false)
         } else {
-            captureSession.startRunning()
+            start()
         }
     }
 

@@ -61,6 +61,7 @@
 		4566F077236D450400A04C75 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4566F076236D450400A04C75 /* Localizable.strings */; };
 		4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */; };
 		4566F082236DE94400A04C75 /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F081236DE94400A04C75 /* ScanViewController.swift */; };
+		4567E6642C98D54800BBD036 /* MotionHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4567E6632C98D54800BBD036 /* MotionHelper.swift */; };
 		456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */; };
 		456E5A6B2BCDF971001370BE /* RespondersCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */; };
 		456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04F927ACAA47000CEE42 /* Report+Parser.swift */; };
@@ -242,6 +243,7 @@
 		4566F076236D450400A04C75 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		4566F07B236D4AC600A04C75 /* HorizontalRuleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontalRuleView.swift; sourceTree = "<group>"; };
 		4566F081236DE94400A04C75 /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
+		4567E6632C98D54800BBD036 /* MotionHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionHelper.swift; sourceTree = "<group>"; };
 		456B7C0B24DBB4BC00E42EB8 /* FormButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormButton.swift; sourceTree = "<group>"; };
 		456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersCountsHeaderView.swift; sourceTree = "<group>"; };
 		456F04F927ACAA47000CEE42 /* Report+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+Parser.swift"; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
 				45994121261BDE4D0062D141 /* InterstitialViewController.swift */,
 				454EE967251C62D800EB266A /* LocationHelper.swift */,
+				4567E6632C98D54800BBD036 /* MotionHelper.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
 				45E267302418AF340010CDE9 /* Fonts */,
@@ -1034,6 +1037,7 @@
 				45C9C710291078D7005D0FDD /* CityKeyboard.swift in Sources */,
 				458CA0AE275FD6610065F324 /* CodeList.swift in Sources */,
 				458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */,
+				4567E6642C98D54800BBD036 /* MotionHelper.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				45C207DE2BA0CB9100150184 /* ReunifyViewController.swift in Sources */,
 				45D422C32B94FB2300E75D7E /* RegionAgency.swift in Sources */,
