@@ -106,7 +106,7 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         }
         unitLabel.text = name
         roleSelector.source = responder
-        roleSelector.attributeValue = responder.role as? NSObject
+        roleSelector.attributeValue = responder.sceneRole as? NSObject
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }

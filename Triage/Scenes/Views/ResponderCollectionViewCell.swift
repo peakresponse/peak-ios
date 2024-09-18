@@ -193,7 +193,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
             timestampLabel.text = "Responder.status.enroute".localized
             button.isHidden = false
         }
-        if let role = responder.role {
+        if let role = responder.sceneRole {
             chip.alpha = 1
             chipZeroWidthConstraint.isActive = false
             chip.setTitle("Responder.role.short.\(role)".localized, for: .normal)

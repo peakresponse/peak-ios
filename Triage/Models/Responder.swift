@@ -13,21 +13,25 @@ import PRKit
 enum ResponderRole: String, StringCaseIterable {
     case mgs = "MGS"
     case triage = "TRIAGE"
+    case triageLeader = "TRIAGE_LEADER"
     case treatment = "TREATMENT"
+    case treatmentLeader = "TREATMENT_LEADER"
     case staging = "STAGING"
+    case stagingLeader = "STAGING_LEADER"
     case transport = "TRANSPORT"
+    case transportLeader = "TRANSPORT_LEADER"
 
     var color: UIColor {
         switch self {
         case .mgs:
             return .red
-        case .triage:
+        case .triage, .triageLeader:
             return .red
-        case .treatment:
+        case .treatment, .treatmentLeader:
             return .purple2
-        case .staging:
+        case .staging, .stagingLeader:
             return .yellow
-        case .transport:
+        case .transport, .transportLeader:
             return .green3
         }
     }
@@ -36,17 +40,26 @@ enum ResponderRole: String, StringCaseIterable {
         return "Responder.role.\(rawValue)".localized
     }
 
+    var isLeader: Bool {
+        switch self {
+        case .mgs, .triageLeader, .treatmentLeader, .stagingLeader, .transportLeader:
+            return true
+        default:
+            return false
+        }
+    }
+
     var image: UIImage {
         switch self {
         case .mgs:
             return UIImage(named: "MGS24px", in: PRKitBundle.instance, compatibleWith: nil)!
-        case .triage:
+        case .triage, .triageLeader:
             return UIImage(named: "Triage24px", in: PRKitBundle.instance, compatibleWith: nil)!
-        case .treatment:
+        case .treatment, .treatmentLeader:
             return UIImage(named: "Treatment24px", in: PRKitBundle.instance, compatibleWith: nil)!
-        case .staging:
+        case .staging, .stagingLeader:
             return UIImage(named: "Staging24px", in: PRKitBundle.instance, compatibleWith: nil)!
-        case .transport:
+        case .transport, .transportLeader:
             return UIImage(named: "Transport24px", in: PRKitBundle.instance, compatibleWith: nil)!
         }
     }
@@ -63,6 +76,7 @@ enum ResponderSort: String, CaseIterable, CustomStringConvertible {
 class Responder: Base {
     struct Keys {
         static let sceneId = "sceneId"
+        static let role = "role"
         static let agencyId = "agencyId"
         static let userId = "userId"
         static let vehicleId = "vehicleId"
@@ -73,6 +87,15 @@ class Responder: Base {
         static let departedAt = "departedAt"
     }
     @Persisted var scene: Scene?
+    @Persisted var role: String? {
+        didSet {
+            if sceneRole != nil {
+                sort = 10
+            } else {
+                sort = arrivedAt != nil ? 0 : 5
+            }
+        }
+    }
     @Persisted var agency: Agency?
     @Persisted var user: User?
     @Persisted var vehicle: Vehicle?
@@ -95,7 +118,7 @@ class Responder: Base {
             } else {
                 arrivedAt = nil
             }
-            if role != nil {
+            if sceneRole != nil {
                 sort = arrivedAt != nil ? 0 : 5
             } else {
                 sort = 10
@@ -103,25 +126,25 @@ class Responder: Base {
         }
     }
 
-    var role: String? {
+    var sceneRole: String? {
         if let scene = scene {
             if scene.mgsResponderId == id {
                 return ResponderRole.mgs.rawValue
             }
             if scene.triageResponderId == id {
-                return ResponderRole.triage.rawValue
+                return ResponderRole.triageLeader.rawValue
             }
             if scene.treatmentResponderId == id {
-                return ResponderRole.treatment.rawValue
+                return ResponderRole.treatmentLeader.rawValue
             }
             if scene.stagingResponderId == id {
-                return ResponderRole.staging.rawValue
+                return ResponderRole.stagingLeader.rawValue
             }
             if scene.transportResponderId == id {
-                return ResponderRole.transport.rawValue
+                return ResponderRole.transportLeader.rawValue
             }
         }
-        return nil
+        return role
     }
 
     override class func instantiate(from data: [String: Any], with realm: Realm) -> Base {
@@ -149,6 +172,7 @@ class Responder: Base {
         if let sceneId = data[Keys.sceneId] as? String {
             scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         }
+        role = data[Keys.role] as? String
         if let agencyId = data[Keys.agencyId] as? String {
             agency = realm.object(ofType: Agency.self, forPrimaryKey: agencyId)
         }
@@ -168,6 +192,7 @@ class Responder: Base {
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
         json[Keys.sceneId] = scene?.id ?? NSNull()
+        json[Keys.role] = role ?? NSNull()
         json[Keys.agencyId] = agency?.id ?? NSNull()
         json[Keys.userId] = user?.id ?? NSNull()
         json[Keys.vehicleId] = vehicle?.id ?? NSNull()

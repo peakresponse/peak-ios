@@ -816,7 +816,16 @@ class AppRealm {
     public static func addResponder(responder: Responder, completionHandler: @escaping (Error?) -> Void) {
         let realm = AppRealm.open()
         // check for duplicates
-        let results = realm.objects(Responder.self).filter("id<>%@ AND scene=%@ AND agency=%@ AND (unitNumber=%@ OR callSign=%@) AND departedAt=NULL", responder.id, responder.scene as Any, responder.agency as Any, responder.unitNumber as Any, responder.callSign as Any)
+        let unitNumber = responder.unitNumber?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let callSign = responder.callSign?.trimmingCharacters(in: .whitespacesAndNewlines)
+        var results = realm.objects(Responder.self).filter("id<>%@ AND scene=%@ AND agency=%@ AND departedAt=NULL", responder.id, responder.scene as Any, responder.agency as Any)
+        if !(unitNumber?.isEmpty ?? true) && !(callSign?.isEmpty ?? true) {
+            results = results.filter("unitNumber=%@ OR callSign=%@", unitNumber as Any, callSign as Any)
+        } else if !(unitNumber?.isEmpty ?? true) {
+            results = results.filter("unitNumber=%@", unitNumber as Any)
+        } else if !(callSign?.isEmpty ?? true) {
+            results = results.filter("callSign=%@", callSign as Any)
+        }
         if results.count > 0 {
             completionHandler(ApiClientError.conflict)
             return
@@ -901,10 +910,10 @@ class AppRealm {
 
     public static func assignResponder(responderId: String, role: ResponderRole?, completionHandler: ((Error?) -> Void)? = nil) {
         let realm = AppRealm.open()
-        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), let scene = responder.scene,
-                let role = role else { return }
+        guard let responder = realm.object(ofType: Responder.self, forPrimaryKey: responderId), let scene = responder.scene else { return }
+        var data: [String: Any] = [:]
         let newScene = Scene(clone: scene)
-        // first remove from any existing role
+        // first remove from any existing leadership role
         if newScene.mgsResponderId == responderId {
             newScene.mgsResponderId = nil
         }
@@ -920,43 +929,63 @@ class AppRealm {
         if newScene.transportResponderId == responderId {
             newScene.transportResponderId = nil
         }
-        // then assign to new role
-        switch role {
-        case .mgs:
-            newScene.mgsResponderId = responderId
-        case .triage:
-            newScene.triageResponderId = responderId
-        case .treatment:
-            newScene.treatmentResponderId = responderId
-        case .staging:
-            newScene.stagingResponderId = responderId
-        case .transport:
-            newScene.transportResponderId = responderId
+        if let role = role {
+            if role.isLeader {
+                // then assign to new leadership role
+                switch role {
+                case .mgs:
+                    newScene.mgsResponderId = responderId
+                case .triageLeader:
+                    newScene.triageResponderId = responderId
+                case .treatmentLeader:
+                    newScene.treatmentResponderId = responderId
+                case .stagingLeader:
+                    newScene.stagingResponderId = responderId
+                case .transportLeader:
+                    newScene.transportResponderId = responderId
+                default:
+                    break
+                }
+            } else {
+                // simply assign new role to the responder
+                try! realm.write {
+                    responder.role = role.rawValue
+                }
+                data["Responder"] = [
+                    [ "id": responder.id, "role": responder.role ]
+                ]
+            }
+        } else {
+            // remove role
+            try! realm.write {
+                responder.role = nil
+            }
+            data["Responder"] = [
+                [ "id": responder.id, "role": NSNull() ]
+            ]
         }
         if let canonical = Scene(canonicalize: newScene), let changes = newScene.changes(from: scene) {
-            let data = [
-                "Scene": changes
-            ]
+            data["Scene"] = changes
             try! realm.write {
                 realm.add(canonical, update: .modified)
                 realm.add(newScene, update: .modified)
                 canonical.updateRespondersSort()
             }
-            let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
-                completionHandler?(error)
-                if error != nil {
-                    let op = RequestOperation()
-                    op.queuePriority = .veryHigh
-                    op.request = { (completionHandler) in
-                        return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
-                            completionHandler(error)
-                        }
-                    }
-                    AppRealm.queue.addOperation(op)
-                }
-            }
-            task.resume()
         }
+        let task = PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+            completionHandler?(error)
+            if error != nil {
+                let op = RequestOperation()
+                op.queuePriority = .veryHigh
+                op.request = { (completionHandler) in
+                    return PRApiClient.shared.createOrUpdateScene(data: data) { (_, _, _, error) in
+                        completionHandler(error)
+                    }
+                }
+                AppRealm.queue.addOperation(op)
+            }
+        }
+        task.resume()
     }
 
     public static func leaveScene(sceneId: String, completionHandler: @escaping (Error?) -> Void) {

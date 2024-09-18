@@ -448,14 +448,22 @@
 "Responder.role.assign" = "Assign";
 "Responder.role.short.MGS" = "MGS";
 "Responder.role.short.STAGING" = "Staging";
+"Responder.role.short.STAGING_LEADER" = "Staging Leader";
 "Responder.role.short.TRANSPORT" = "Transport";
+"Responder.role.short.TRANSPORT_LEADER" = "Transport Leader";
 "Responder.role.short.TREATMENT" = "Treatment";
+"Responder.role.short.TREATMENT_LEADER" = "Treatment Leader";
 "Responder.role.short.TRIAGE" = "Triage";
+"Responder.role.short.TRIAGE_LEADER" = "Triage Leader";
 "Responder.role.MGS" = "Medical Group Supervisor";
-"Responder.role.STAGING" = "Staging Team Leader";
-"Responder.role.TRANSPORT" = "Transport Team Leader";
-"Responder.role.TREATMENT" = "Treatment Team Leader";
-"Responder.role.TRIAGE" = "Triage Team Leader";
+"Responder.role.STAGING" = "Staging Team";
+"Responder.role.STAGING_LEADER" = "Staging Team Leader";
+"Responder.role.TRANSPORT" = "Transport Team";
+"Responder.role.TRANSPORT_LEADER" = "Transport Team Leader";
+"Responder.role.TREATMENT" = "Treatment Team";
+"Responder.role.TREATMENT_LEADER" = "Treatment Team Leader";
+"Responder.role.TRIAGE" = "Triage Team";
+"Responder.role.TRIAGE_LEADER" = "Triage Team Leader";
 
 "ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
 
