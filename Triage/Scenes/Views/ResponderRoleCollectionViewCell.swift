@@ -107,6 +107,12 @@ class ResponderRoleCollectionViewCell: UICollectionViewCell {
         unitLabel.text = name
         roleSelector.source = responder
         roleSelector.attributeValue = responder.sceneRole as? NSObject
+        let role = ResponderRole(rawValue: responder.sceneRole ?? "")
+        if role?.isLeader ?? false {
+            roleSelector.clearButton.alpha = 0
+        } else {
+            roleSelector.clearButton.alpha = 1
+        }
         vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }
