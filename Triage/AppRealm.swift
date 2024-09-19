@@ -820,11 +820,11 @@ class AppRealm {
         let callSign = responder.callSign?.trimmingCharacters(in: .whitespacesAndNewlines)
         var results = realm.objects(Responder.self).filter("id<>%@ AND scene=%@ AND agency=%@ AND departedAt=NULL", responder.id, responder.scene as Any, responder.agency as Any)
         if !(unitNumber?.isEmpty ?? true) && !(callSign?.isEmpty ?? true) {
-            results = results.filter("unitNumber=%@ OR callSign=%@", unitNumber as Any, callSign as Any)
+            results = results.filter("unitNumber=%@ OR callSign=[cd]%@", unitNumber as Any, callSign as Any)
         } else if !(unitNumber?.isEmpty ?? true) {
             results = results.filter("unitNumber=%@", unitNumber as Any)
         } else if !(callSign?.isEmpty ?? true) {
-            results = results.filter("callSign=%@", callSign as Any)
+            results = results.filter("callSign=[cd]%@", callSign as Any)
         }
         if results.count > 0 {
             completionHandler(ApiClientError.conflict)
