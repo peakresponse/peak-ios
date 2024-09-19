@@ -301,7 +301,7 @@ class Scene: BaseVersioned, NemsisBacked {
         responders.setValue(0, forKey: "sort")
         let enroute = responders.filter("arrivedAt=NULL")
         enroute.setValue(5, forKey: "sort")
-        let leaders = responders.filter("id IN %@", leaderIds)
+        let leaders = responders.filter("id IN %@ OR role<>NULL", leaderIds)
         leaders.setValue(10, forKey: "sort")
     }
 }

@@ -100,7 +100,7 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
             isActive = scene.isActive
             isResponder = true
             isMGS = scene.isMgs(userId: AppSettings.userId)
-            if let role = responder.role {
+            if let role = responder.sceneRole {
                 if messageText != "" {
                     messageText = "\(messageText)\n"
                 }

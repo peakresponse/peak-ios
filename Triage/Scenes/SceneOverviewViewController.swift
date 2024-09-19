@@ -11,7 +11,7 @@ import PRKit
 import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, PRKit.KeyboardSource, KeyboardAwareScrollViewController,
+class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -22,7 +22,6 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     var scene: Scene?
     var responders: [Responder]?
-    var roles: [ResponderRole] = []
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
@@ -197,29 +196,14 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     // MARK: - FormFieldDelegate
 
-    func formFieldShouldBeginEditing(_ field: PRKit.FormField) -> Bool {
-        if let responder = field.source as? Responder {
-            let isSelf = AppSettings.userId == responder.user?.id
-            let isMGS = scene?.mgsResponderId == responder.id
-            if isMGS && isSelf {
-                // cannot edit own roles until MGS transferred to another responder
-                return false
-            }
-            roles = [.triage, .treatment, .staging, .transport]
-            if isMGS || isSelf {
-                roles.insert(.mgs, at: 0)
-            }
-        }
-        return true
-    }
-
     func formComponentDidChange(_ component: PRKit.FormComponent) {
         if let field = component as? PRKit.FormField {
             if field == commandHeader.searchField {
                 performQuery()
             } else {
-                if let roleValue = field.attributeValue as? String, let role = ResponderRole(rawValue: roleValue),
-                   let responder = field.source as? Responder {
+                let roleValue = field.attributeValue as? String
+                let role = ResponderRole(rawValue: roleValue ?? "")
+                if let responder = field.source as? Responder {
                     AppRealm.assignResponder(responderId: responder.id, role: role)
                     for cell in collectionView.visibleCells {
                         if let cell = cell as? ResponderRoleCollectionViewCell,
@@ -232,37 +216,6 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
                 }
             }
         }
-    }
-
-    // MARK: - KeyboardSource
-
-    var name: String {
-        return "ResponderRole"
-    }
-
-    func count() -> Int {
-        return roles.count
-    }
-
-    func firstIndex(of value: NSObject) -> Int? {
-        return nil
-    }
-
-    func search(_ query: String?, callback: ((Bool) -> Void)? = nil) {
-        callback?(false)
-    }
-
-    func title(for value: NSObject?) -> String? {
-        guard let value = value as? String else { return nil }
-        return roles.first(where: {$0.rawValue == value})?.description
-    }
-
-    func title(at index: Int) -> String? {
-        return roles[index].description
-    }
-
-    func value(at index: Int) -> NSObject? {
-        return roles[index].rawValue as NSObject
     }
 
     // MARK: - UICollectionViewDataSource
