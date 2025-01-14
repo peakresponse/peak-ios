@@ -102,14 +102,14 @@ PODS:
   - RealmSwift (10.43.1):
     - Realm (= 10.43.1)
   - RMJSONPatch (1.0.4)
-  - RollbarCommon (3.2.0)
-  - RollbarCrash (3.2.0)
-  - RollbarNotifier (3.2.0):
-    - RollbarCommon (~> 3.2.0)
-    - RollbarCrash (~> 3.2.0)
-    - RollbarReport (~> 3.2.0)
-  - RollbarReport (3.2.0):
-    - RollbarCrash (~> 3.2.0)
+  - RollbarCommon (3.3.3)
+  - RollbarCrash (3.3.3)
+  - RollbarNotifier (3.3.3):
+    - RollbarCommon (~> 3.3.3)
+    - RollbarCrash (~> 3.3.3)
+    - RollbarReport (~> 3.3.3)
+  - RollbarReport (3.3.3):
+    - RollbarCrash (~> 3.3.3)
   - RxNormKit (0.1.0):
     - RealmSwift (>= 10.11.0)
   - SNOMEDKit (0.1.0):
@@ -223,10 +223,10 @@ SPEC CHECKSUMS:
   Realm: d97b438de77459e443bd2c8ad5ca0f95107aee4b
   RealmSwift: 6be3f27a7fd3f5cc8f99f4b187cc4e7150299e32
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
-  RollbarCommon: 6813e5b68d77a01dd04e89659de867097f6a476e
-  RollbarCrash: 781e33880338cf8d5fcfbe097baf9077783775c6
-  RollbarNotifier: ce8430ff55a3048b7a8014829d0943fcb9c8f8cf
-  RollbarReport: 70d4cea00abecff10b776214a53ba3d03ccebe6f
+  RollbarCommon: cb87be0f694a09c138f7d51d6f3b48151ca965ab
+  RollbarCrash: 0272cf44b05ebc0f69c17acbd0cffbdaf35b2893
+  RollbarNotifier: 8f57eb355f0fe8a6832d8dff615f2118d78047be
+  RollbarReport: 0e57a3ac73c66dd6d5add5e999a967210753c4c3
   RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
   SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
@@ -238,4 +238,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 2a704a7e4fda58bbaefb694a1c948557bc6fbb6a
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.16.2
