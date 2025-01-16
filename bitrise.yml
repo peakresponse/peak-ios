@@ -9,7 +9,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - cache-pull@2: {}
     - script@1:
         title: Do anything with Script step
@@ -18,7 +18,7 @@ workflows:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
     - cocoapods-install@2: {}
-    - xcode-test@4:
+    - xcode-test@6:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
@@ -33,7 +33,7 @@ workflows:
     steps:
     - activate-ssh-key@4:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@6: {}
+    - git-clone@8: {}
     - cache-pull@2: {}
     - script@1:
         title: Do anything with Script step
@@ -42,7 +42,7 @@ workflows:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
     - cocoapods-install@2: {}
-    - xcode-test@4:
+    - xcode-test@6:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
@@ -61,5 +61,5 @@ app:
     BITRISE_EXPORT_METHOD: development
 meta:
   bitrise.io:
-    stack: osx-xcode-14.3.x-ventura
+    stack: osx-xcode-16.2.x
     machine_type_id: g2-m1.4core
