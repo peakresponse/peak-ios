@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23727" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23721"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -45,7 +45,7 @@
                                 </constraints>
                             </stackView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="odb-1w-YL3">
-                                <rect key="frame" x="169" y="395.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="169" y="403.66666666666669" width="37" height="37"/>
                                 <color key="color" name="Base800"/>
                             </activityIndicatorView>
                         </subviews>
@@ -104,7 +104,7 @@
                                 </connections>
                             </collectionView>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LpL-ms-b5u" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="261" y="664" width="94" height="94"/>
+                                <rect key="frame" x="261" y="630" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="REB-V6-PcC"/>
                                     <constraint firstAttribute="width" secondItem="LpL-ms-b5u" secondAttribute="height" multiplier="1:1" id="pxF-SH-dzi"/>
@@ -382,7 +382,7 @@
                                 </variation>
                             </scrollView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="KIG-iE-Mbe">
-                                <rect key="frame" x="169" y="395.66666666666669" width="37" height="37"/>
+                                <rect key="frame" x="169" y="403.66666666666669" width="37" height="37"/>
                                 <color key="color" name="Base800"/>
                             </activityIndicatorView>
                             <view hidden="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="110" translatesAutoresizingMaskIntoConstraints="NO" id="XTJ-tc-zOc" customClass="CommandFooter" customModule="PRKit">
@@ -448,11 +448,11 @@
                                 <rect key="frame" x="0.0" y="533" width="375" height="279"/>
                                 <subviews>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="large" translatesAutoresizingMaskIntoConstraints="NO" id="k0D-Wk-2Lz">
-                                        <rect key="frame" x="169" y="202.66666666666663" width="37" height="37"/>
+                                        <rect key="frame" x="169" y="185.66666666666663" width="37" height="37"/>
                                         <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </activityIndicatorView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1t1-jN-HJT" customClass="RecordButton" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="22" y="185" width="331" height="72"/>
+                                        <rect key="frame" x="22" y="185" width="331" height="38"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="string" keyPath="RecordState" value="stopAndSave"/>
@@ -730,22 +730,22 @@
             </objects>
             <point key="canvasLocation" x="4777" y="109"/>
         </scene>
-        <!--Scan-->
+        <!--Scan View Controller-->
         <scene sceneID="1m9-9g-6YH">
             <objects>
-                <viewController storyboardIdentifier="Scan" title="Scan" modalPresentationStyle="fullScreen" id="La7-uK-Z3G" customClass="ScanViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Scan" title="Scan" modalPresentationStyle="fullScreen" id="La7-uK-Z3G" userLabel="Scan View Controller" customClass="ScanViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HLj-0I-odH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="e3X-r2-3V5" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="50" width="375" height="0.0"/>
+                                <rect key="frame" x="0.0" y="100" width="375" height="0.0"/>
                                 <connections>
                                     <outlet property="leftBarButtonItem" destination="Arh-EG-noi" id="cdq-p0-kYl"/>
                                 </connections>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="382-TS-wav">
-                                <rect key="frame" x="22" y="50" width="331" height="679"/>
+                                <rect key="frame" x="22" y="100" width="331" height="595"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Y8V-6c-QLu">
                                         <rect key="frame" x="0.0" y="0.0" width="331" height="1"/>
@@ -755,10 +755,10 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="QUX-ia-t7J">
-                                        <rect key="frame" x="0.0" y="1" width="331" height="567"/>
+                                        <rect key="frame" x="0.0" y="1" width="331" height="483"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Te4-Id-h7R">
-                                                <rect key="frame" x="165.66666666666666" y="0.0" width="0.0" height="229"/>
+                                                <rect key="frame" x="165.66666666666666" y="0.0" width="0.0" height="145"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <color key="textColor" name="Base800"/>
                                                 <nil key="highlightedColor"/>
@@ -768,7 +768,7 @@
                                                 </userDefinedRuntimeAttributes>
                                             </label>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mwp-Xv-MRu" customClass="ScanCameraView" customModule="Peak_Response" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="236" width="331" height="331"/>
+                                                <rect key="frame" x="0.0" y="152" width="331" height="331"/>
                                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="mwp-Xv-MRu" secondAttribute="height" multiplier="1:1" id="v21-Ce-p8c"/>
@@ -784,7 +784,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YlH-na-Jb9">
-                                        <rect key="frame" x="0.0" y="568" width="331" height="50"/>
+                                        <rect key="frame" x="0.0" y="484" width="331" height="50"/>
                                         <subviews>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OFE-sO-Hpp" customClass="HorizontalRuleView" customModule="Peak_Response" customModuleProvider="target">
                                                 <rect key="frame" x="0.0" y="24.666666666666629" width="143.66666666666666" height="1"/>
@@ -833,7 +833,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wIq-5J-DeH">
-                                        <rect key="frame" x="0.0" y="618" width="331" height="60"/>
+                                        <rect key="frame" x="0.0" y="534" width="331" height="60"/>
                                         <subviews>
                                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zJw-ro-Oji" userLabel="Pin Field" customClass="TextField" customModule="PRKit">
                                                 <rect key="frame" x="0.0" y="0.0" width="331" height="60"/>
@@ -857,7 +857,7 @@
                                         </constraints>
                                     </view>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dJU-BJ-9TD">
-                                        <rect key="frame" x="0.0" y="678" width="331" height="1"/>
+                                        <rect key="frame" x="0.0" y="594" width="331" height="1"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="1" id="RdY-cr-HSG"/>
@@ -913,60 +913,101 @@
             </objects>
             <point key="canvasLocation" x="407" y="814"/>
         </scene>
+        <!--License Scan View Controller-->
+        <scene sceneID="b11-fC-YVD">
+            <objects>
+                <viewController storyboardIdentifier="LicenseScan" title="Scan" modalPresentationStyle="fullScreen" id="GpE-1Y-ttE" userLabel="License Scan View Controller" customClass="LicenseScanViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MKS-3E-GlC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="111" translatesAutoresizingMaskIntoConstraints="NO" id="vAb-5S-MKU" customClass="CommandHeader" customModule="PRKit">
+                                <rect key="frame" x="0.0" y="100" width="375" height="111"/>
+                                <connections>
+                                    <outlet property="leftBarButtonItem" destination="bmB-M8-IzE" id="zVW-j0-bXO"/>
+                                </connections>
+                            </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="rSj-Pj-k5f">
+                                <rect key="frame" x="22" y="211" width="331" height="484"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OqN-Mp-qzQ">
+                                        <rect key="frame" x="0.0" y="0.0" width="331" height="1"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="1" id="72G-92-xay"/>
+                                        </constraints>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="b2b-6t-zzM">
+                                        <rect key="frame" x="0.0" y="1" width="331" height="483"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dpD-hR-ynt">
+                                                <rect key="frame" x="165.66666666666666" y="0.0" width="0.0" height="145"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <color key="textColor" name="Base800"/>
+                                                <nil key="highlightedColor"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="h4SemiBold"/>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="LicenseScanViewController.scanBarcode"/>
+                                                </userDefinedRuntimeAttributes>
+                                            </label>
+                                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Aqn-Iy-omw" customClass="ScanCameraView" customModule="Peak_Response" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="152" width="331" height="331"/>
+                                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="Aqn-Iy-omw" secondAttribute="height" multiplier="1:1" id="zUZ-iJ-0gv"/>
+                                                </constraints>
+                                            </view>
+                                        </subviews>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstItem="dpD-hR-ynt" firstAttribute="top" secondItem="b2b-6t-zzM" secondAttribute="top" id="UVG-iS-4D9"/>
+                                            <constraint firstItem="Aqn-Iy-omw" firstAttribute="top" secondItem="dpD-hR-ynt" secondAttribute="bottom" constant="7" id="tTj-8Q-tfE"/>
+                                            <constraint firstItem="dpD-hR-ynt" firstAttribute="centerX" secondItem="b2b-6t-zzM" secondAttribute="centerX" id="x7q-Xn-Xkh"/>
+                                            <constraint firstAttribute="bottom" secondItem="Aqn-Iy-omw" secondAttribute="bottom" id="y2K-Hw-rNg"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="b2b-6t-zzM" secondAttribute="bottom" id="Ftn-EF-bFf"/>
+                                    <constraint firstItem="Aqn-Iy-omw" firstAttribute="trailing" secondItem="rSj-Pj-k5f" secondAttribute="trailing" id="Ki1-QJ-7Nn"/>
+                                    <constraint firstItem="Aqn-Iy-omw" firstAttribute="leading" secondItem="rSj-Pj-k5f" secondAttribute="leading" id="xzF-7W-Zfd"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Wz1-cs-g5F"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="vAb-5S-MKU" firstAttribute="trailing" secondItem="Wz1-cs-g5F" secondAttribute="trailing" id="730-8c-9PQ"/>
+                            <constraint firstItem="rSj-Pj-k5f" firstAttribute="top" secondItem="vAb-5S-MKU" secondAttribute="bottom" id="7II-2x-DSM"/>
+                            <constraint firstItem="vAb-5S-MKU" firstAttribute="top" secondItem="Wz1-cs-g5F" secondAttribute="top" id="9Gq-Kq-RFs"/>
+                            <constraint firstItem="vAb-5S-MKU" firstAttribute="leading" secondItem="Wz1-cs-g5F" secondAttribute="leading" id="Wqp-eC-hbR"/>
+                            <constraint firstItem="rSj-Pj-k5f" firstAttribute="trailing" secondItem="Wz1-cs-g5F" secondAttribute="trailing" constant="-22" id="YBW-Gh-kaE"/>
+                            <constraint firstItem="rSj-Pj-k5f" firstAttribute="leading" secondItem="Wz1-cs-g5F" secondAttribute="leading" constant="22" id="y90-ql-0QX"/>
+                        </constraints>
+                    </view>
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="mbq-nf-IiJ">
+                        <barButtonItem key="leftBarButtonItem" id="bmB-M8-IzE">
+                            <userDefinedRuntimeAttributes>
+                                <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="NavigationBar.done"/>
+                            </userDefinedRuntimeAttributes>
+                            <connections>
+                                <action selector="dismissAnimated" destination="GpE-1Y-ttE" id="eFo-zZ-CWw"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="cameraLabel" destination="dpD-hR-ynt" id="jvF-gn-051"/>
+                        <outlet property="cameraView" destination="Aqn-Iy-omw" id="0db-jY-UVj"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1am-no-dRR" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="407" y="814"/>
+        </scene>
     </scenes>
-    <designables>
-        <designable name="6JE-bp-oG9">
-            <size key="intrinsicContentSize" width="375" height="128"/>
-        </designable>
-        <designable name="CUo-VR-EWH">
-            <size key="intrinsicContentSize" width="375" height="106"/>
-        </designable>
-        <designable name="KcX-PN-o40">
-            <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
-        </designable>
-        <designable name="LpL-ms-b5u">
-            <size key="intrinsicContentSize" width="60" height="36"/>
-        </designable>
-        <designable name="Rci-2n-3m4">
-            <size key="intrinsicContentSize" width="374" height="72"/>
-        </designable>
-        <designable name="XT0-Uc-mFf">
-            <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
-        </designable>
-        <designable name="XTJ-tc-zOc">
-            <size key="intrinsicContentSize" width="375" height="110"/>
-        </designable>
-        <designable name="agm-ti-evy">
-            <size key="intrinsicContentSize" width="374" height="56"/>
-        </designable>
-        <designable name="bT0-DY-vi9">
-            <size key="intrinsicContentSize" width="375" height="108"/>
-        </designable>
-        <designable name="cBe-hz-dsJ">
-            <size key="intrinsicContentSize" width="335" height="44"/>
-        </designable>
-        <designable name="geQ-9G-uZG">
-            <size key="intrinsicContentSize" width="375" height="138"/>
-        </designable>
-        <designable name="gop-Rk-4M3">
-            <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
-        </designable>
-        <designable name="jbz-l2-bGF">
-            <size key="intrinsicContentSize" width="147.66666666666666" height="48"/>
-        </designable>
-        <designable name="jui-7z-no6">
-            <size key="intrinsicContentSize" width="414" height="126"/>
-        </designable>
-        <designable name="sCe-rn-mQf">
-            <size key="intrinsicContentSize" width="240" height="128"/>
-        </designable>
-        <designable name="ssB-kE-P5A">
-            <size key="intrinsicContentSize" width="414" height="128"/>
-        </designable>
-        <designable name="zJw-ro-Oji">
-            <size key="intrinsicContentSize" width="4" height="18.666666666666668"/>
-        </designable>
-    </designables>
     <resources>
         <namedColor name="Base500">
             <color red="0.49411764705882355" green="0.61176470588235299" blue="0.66274509803921566" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

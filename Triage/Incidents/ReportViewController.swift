@@ -24,8 +24,8 @@ protocol ReportViewControllerDelegate: AnyObject {
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
-                            KeyboardAwareScrollViewController, LatLngControlDelegate, LocationViewControllerDelegate,
-                            RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
+                            KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
+                            LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -236,7 +236,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     formCount += 1
                 }
             }
-            let button = newButton(bundleImage: "Plus24px", title: "Button.collectSignatures".localized)
+            var button = newButton(bundleImage: "Plus24px", title: "Button.collectSignatures".localized)
             button.addTarget(self, action: #selector(collectSignaturesPressed(_:)), for: .touchUpInside)
             button.tag = tag
             tag += 1000
@@ -257,6 +257,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                          attributeType: .single(EnumKeyboardSource<PatientGender>()),
                          tag: &tag, to: colA)
             section.addArrangedSubview(cols)
+
+            button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
+            button.addTarget(self, action: #selector(scanLicensePressed(_:)), for: .touchUpInside)
+            button.tag = tag
+            tag += 1
+            section.addLastButton(button)
+
             containerView.addArrangedSubview(section)
         }
 
@@ -722,6 +729,22 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         }
     }
 
+    @objc func scanLicensePressed(_ button: PRKit.Button) {
+        if !isEditing {
+            guard let delegate = delegate else { return }
+            delegate.reportViewControllerNeedsEditing(self)
+        }
+        guard newReport != nil else { return }
+        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "LicenseScan")
+        if let vc = vc as? LicenseScanViewController {
+            vc.delegate = self
+        }
+        let navVC = UINavigationController(rootViewController: vc)
+        navVC.modalPresentationStyle = .fullScreen
+        navVC.isNavigationBarHidden = true
+        presentAnimated(navVC)
+    }
+
     @objc func collectSignaturesPressed(_ button: PRKit.Button) {
         if !isEditing {
             guard let delegate = delegate else { return }
@@ -1021,6 +1044,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func latLngControlDidCaptureLocation(_ control: LatLngControl) {
         newReport?.patient?.latLng = control.location
+    }
+
+    // MARK: - LicenseScanViewControllerDelegate
+
+    func licenseScanViewControllerDidScan(_ vc: LicenseScanViewController) {
+        dismissAnimated()
     }
 
     // MARK: - LocationViewControllerDelegate

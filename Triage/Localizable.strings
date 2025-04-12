@@ -183,6 +183,8 @@
 
 "LatLngControl.capturingLocation" = "Capturing location...";
 
+"LicenseScanViewController.scanBarcode" = "Scan ID Barcode";
+
 "Location.capture" = "Capture";
 "Location.viewOnMap" = "View on Map";
 

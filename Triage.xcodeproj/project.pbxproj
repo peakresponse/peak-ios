@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		45150BCE270511C30085132C /* AuthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45150BCD270511C30085132C /* AuthViewController.swift */; };
 		451A178B25364E1E00DC7705 /* ScenePin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451A178A25364E1E00DC7705 /* ScenePin.swift */; };
+		451BE08F2DA9F0A1007BC936 /* LicenseScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451BE08E2DA9F0A1007BC936 /* LicenseScanViewController.swift */; };
 		451F9DC6291ECF8700B5E73A /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DC5291ECF8700B5E73A /* NavigationController.swift */; };
 		451F9DC8291ED03C00B5E73A /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DC7291ED03C00B5E73A /* IconButton.swift */; };
 		451F9DCA291ED09F00B5E73A /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DC9291ED09F00B5E73A /* RoundImageView.swift */; };
@@ -186,6 +187,7 @@
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		45150BCD270511C30085132C /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
 		451A178A25364E1E00DC7705 /* ScenePin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScenePin.swift; sourceTree = "<group>"; };
+		451BE08E2DA9F0A1007BC936 /* LicenseScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LicenseScanViewController.swift; sourceTree = "<group>"; };
 		451F9DC5291ECF8700B5E73A /* NavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		451F9DC7291ED03C00B5E73A /* IconButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconButton.swift; sourceTree = "<group>"; };
 		451F9DC9291ED09F00B5E73A /* RoundImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundImageView.swift; sourceTree = "<group>"; };
@@ -611,6 +613,7 @@
 				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
+				451BE08E2DA9F0A1007BC936 /* LicenseScanViewController.swift */,
 				45C9C70929035685005D0FDD /* LocationViewController.swift */,
 				45E35A3924F09B1E005A8059 /* RecordingViewController.swift */,
 				45C757DB27349FD500386F07 /* ReportContainerViewController.swift */,
@@ -879,9 +882,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -915,9 +922,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1073,6 +1084,7 @@
 				45761BF22B89137B00530E42 /* RespondersViewController.swift in Sources */,
 				452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */,
 				4566F065236CE3B500A04C75 /* Base.swift in Sources */,
+				451BE08F2DA9F0A1007BC936 /* LicenseScanViewController.swift in Sources */,
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
 				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
