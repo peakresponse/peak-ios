@@ -9,6 +9,7 @@
 import Keyboardy
 internal import LLMKit
 internal import LLMKitAWSBedrock
+import MLKitBarcodeScanning
 import PRKit
 import RealmSwift
 import RollbarNotifier
@@ -894,21 +895,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             // some hard-coded field visibility rules, until a more generalized implementation can be designed
             switch attributeKey {
             case "patient.dob":
-                // calculate age
-                if let dob = ISO8601DateFormatter.date(from: field.attributeValue) {
-                    let (years, months, days) = dob.age
-                    if years > 0 {
-                        newReport?.patient?.age = years
-                        newReport?.patient?.ageUnits = PatientAgeUnits.years.rawValue
-                    } else if months > 0 {
-                        newReport?.patient?.age = months
-                        newReport?.patient?.ageUnits = PatientAgeUnits.months.rawValue
-                    } else {
-                        newReport?.patient?.age = days
-                        newReport?.patient?.ageUnits = PatientAgeUnits.days.rawValue
-                    }
-                    refreshFormFieldsAndControls(["patient.ageArray"])
-                }
+                // also calculate and refresh age
+                newReport?.patient?.calculateAge()
+                refreshFormFieldsAndControls(["patient.ageArray"])
             case "time.arrivedAtPatient":
                 // if arrived at patient, set unit disposition to Patient Contact Made automatically if not already set
                 if field.attributeValue != nil, newReport?.disposition?.unitDisposition == nil {
@@ -1048,8 +1037,33 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     // MARK: - LicenseScanViewControllerDelegate
 
-    func licenseScanViewControllerDidScan(_ vc: LicenseScanViewController) {
+    func licenseScanViewController(_ vc: LicenseScanViewController, didScan license: BarcodeDriverLicense) {
         dismissAnimated()
+        newReport?.patient?.firstName = license.firstName
+        newReport?.patient?.lastName = license.lastName
+        if let gender = license.gender {
+            switch gender {
+            case "1":
+                newReport?.patient?.gender = PatientGender.male.rawValue
+            case "2":
+                newReport?.patient?.gender = PatientGender.female.rawValue
+            default:
+                break
+            }
+        }
+        if let birthDate = license.birthDate, let issuingCountry = license.issuingCountry {
+            var dob: String?
+            if issuingCountry == "USA" {
+                let month = birthDate[..<birthDate.index(birthDate.startIndex, offsetBy: 2)]
+                let day = birthDate[birthDate.index(birthDate.startIndex, offsetBy: 2)...birthDate.index(birthDate.startIndex, offsetBy: 3)]
+                let year = birthDate[birthDate.index(birthDate.startIndex, offsetBy: 4)...]
+                dob = "\(year)-\(month)-\(day)"
+            }
+            if let dob = dob {
+                newReport?.patient?.dob = dob
+            }
+        }
+        refreshFormFieldsAndControls(["patient.firstName", "patient.lastName", "patient.gender", "patient.dob", "patient.ageArray"])
     }
 
     // MARK: - LocationViewControllerDelegate

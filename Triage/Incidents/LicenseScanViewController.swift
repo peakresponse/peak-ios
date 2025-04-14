@@ -26,7 +26,7 @@ class LicenseScanCameraView: UIView {
 }
 
 @objc protocol LicenseScanViewControllerDelegate {
-    @objc optional func licenseScanViewController(_ vc: LicenseScanViewController, didScan value: String)
+    @objc optional func licenseScanViewController(_ vc: LicenseScanViewController, didScan license: BarcodeDriverLicense)
 }
 
 class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -202,8 +202,11 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
         var barcodes: [Barcode] = []
         do {
             barcodes = try barcodeScanner.results(in: inputImage)
-            if let barcode = barcodes.first {
-                print("!!!", barcode.rawValue ?? "")
+            if let barcode = barcodes.first, let license = barcode.driverLicense {
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    self.delegate?.licenseScanViewController?(self, didScan: license)
+                }
             }
         } catch let error {
             print("Failed to scan barcodes with error: \(error.localizedDescription).")
