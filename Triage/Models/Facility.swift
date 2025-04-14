@@ -7,7 +7,7 @@
 //
 
 import CoreLocation
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 enum FacilityType: String, CustomStringConvertible {

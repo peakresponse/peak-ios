@@ -7,7 +7,7 @@
 //
 
 import NaturalLanguage
-import RealmSwift
+internal import RealmSwift
 import XCTest
 @testable import Peak_Response
 

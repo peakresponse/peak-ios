@@ -6,7 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+internal import RealmSwift
 import PRKit
 
 enum UnitDisposition: String, StringCaseIterable {

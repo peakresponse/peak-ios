@@ -7,8 +7,8 @@
 //
 
 import PRKit
-import RealmSwift
-import RxNormKit
+internal import RealmSwift
+internal import RxNormKit
 
 class RxNormKeyboardSource: KeyboardSource {
     var name: String {

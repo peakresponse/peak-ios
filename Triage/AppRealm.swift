@@ -8,7 +8,7 @@
 
 import CoreLocation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import Starscream
 
 class RequestOperation: Operation {

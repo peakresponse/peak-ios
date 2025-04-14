@@ -6,7 +6,7 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+internal import RealmSwift
 import UIKit
 import PRKit
 

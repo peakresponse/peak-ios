@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 class Report: BaseVersioned, NemsisBacked, Predictions {
     struct Keys {

@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 enum MedicationAdministrationRoute: String, StringCaseIterable {
     case blowBy = "9927001"

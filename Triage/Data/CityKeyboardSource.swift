@@ -9,7 +9,7 @@
 import CoreLocation
 import Foundation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 class CityKeyboardSource: KeyboardSource {
     var name: String {

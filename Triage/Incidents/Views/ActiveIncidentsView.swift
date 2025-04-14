@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 @objc protocol ActiveIncidentsViewDelegate: AnyObject {

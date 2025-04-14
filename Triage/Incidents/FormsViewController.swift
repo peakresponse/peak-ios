@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 @objc protocol FormsViewControllerDelegate: AnyObject {
     @objc optional func formsViewController(_ vc: FormsViewController, didCollect signatures: [Signature])

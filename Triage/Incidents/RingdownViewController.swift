@@ -8,7 +8,7 @@
 
 import UIKit
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 protocol RingdownViewControllerDelegate: AnyObject {
     func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)

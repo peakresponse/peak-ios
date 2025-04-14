@@ -8,7 +8,7 @@
 
 import CoreLocation
 import Foundation
-import RealmSwift
+internal import RealmSwift
 
 enum ScenePinType: String, CaseIterable, CustomStringConvertible {
     case mgs = "MGS"

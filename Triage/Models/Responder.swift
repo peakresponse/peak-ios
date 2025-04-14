@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RealmSwift
+internal import RealmSwift
 import PRKit
 
 enum ResponderRole: String, StringCaseIterable {

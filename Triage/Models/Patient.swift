@@ -7,7 +7,7 @@
 //
 
 import CoreLocation
-import RealmSwift
+internal import RealmSwift
 import PRKit
 
 // swiftlint:disable file_length

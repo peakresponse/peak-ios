@@ -8,7 +8,7 @@
 
 import AlignedCollectionViewFlowLayout
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,

@@ -9,7 +9,7 @@
 import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 @objc protocol TransportFacilitiesViewControllerDelegate {

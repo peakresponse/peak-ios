@@ -8,7 +8,7 @@
 
 import Foundation
 import Realm
-import RealmSwift
+internal import RealmSwift
 
 let indexExpr = try! NSRegularExpression(pattern: #"([^\[]+)\[(\d+)\]"#, options: [.caseInsensitive])
 

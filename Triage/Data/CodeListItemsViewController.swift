@@ -8,7 +8,7 @@
 
 import UIKit
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 protocol CodeListItemsViewControllerDelegate: AnyObject {
     func codeListItemsViewController(_ vc: CodeListItemsViewController, checkbox: Checkbox, didChange isChecked: Bool)

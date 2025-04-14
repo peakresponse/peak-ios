@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 enum FileDocumentType: String, StringCaseIterable {
     case otherAudioRecording = "4509001"

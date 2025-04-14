@@ -11,7 +11,7 @@ import CoreLocation
 import MLKitBarcodeScanning
 import MLKitVision
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 class LicenseScanCameraView: UIView {

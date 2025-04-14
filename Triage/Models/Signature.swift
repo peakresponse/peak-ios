@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 enum SignatureReason: String, StringCaseIterable {
     case hipaaAcknowledgementRelease = "4513001"

@@ -11,7 +11,7 @@ internal import LLMKit
 internal import LLMKitAWSBedrock
 import MLKitBarcodeScanning
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import RollbarNotifier
 import TranscriptionKit
 import UIKit

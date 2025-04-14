@@ -7,7 +7,7 @@
 //
 
 import CoreLocation
-import RealmSwift
+internal import RealmSwift
 
 class City: Base {
     struct Keys {

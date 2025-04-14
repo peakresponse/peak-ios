@@ -6,7 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+internal import RealmSwift
 
 class History: BaseVersioned, NemsisBacked {
     struct Keys {

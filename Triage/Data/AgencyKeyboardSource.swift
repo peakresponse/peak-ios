@@ -8,7 +8,7 @@
 
 import Foundation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 class AgencyKeyboardSource: KeyboardSource {
     var name: String {

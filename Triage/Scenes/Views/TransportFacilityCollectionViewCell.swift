@@ -8,7 +8,7 @@
 
 import Foundation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 private class CountRow: UIView {

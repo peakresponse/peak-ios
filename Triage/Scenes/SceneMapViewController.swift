@@ -8,7 +8,7 @@
 
 import GoogleMaps
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 class SceneMapViewController: UIViewController, PRKit.FormFieldDelegate {
