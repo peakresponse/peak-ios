@@ -6,6 +6,7 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
+import Foundation
 internal import RealmSwift
 
 class HospitalStatusUpdate: Object {

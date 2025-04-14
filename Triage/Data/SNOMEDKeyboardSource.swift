@@ -8,9 +8,10 @@
 
 import PRKit
 internal import RealmSwift
-import SNOMEDKit
+internal import SNOMEDKit
 
-class SNOMEDKeyboardSource: KeyboardSource {
+@MainActor
+class SNOMEDKeyboardSource: @preconcurrency KeyboardSource {
     var name: String {
         return "SNOMED"
     }

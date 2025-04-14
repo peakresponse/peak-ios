@@ -10,7 +10,8 @@ import PRKit
 internal import RealmSwift
 internal import RxNormKit
 
-class RxNormKeyboardSource: KeyboardSource {
+@MainActor
+class RxNormKeyboardSource: @preconcurrency KeyboardSource {
     var name: String {
         return "RxNorm"
     }

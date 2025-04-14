@@ -10,7 +10,8 @@ internal import ICD10Kit
 import PRKit
 internal import RealmSwift
 
-class ICD10CMKeyboardSource: KeyboardSource {
+@MainActor
+class ICD10CMKeyboardSource: @preconcurrency KeyboardSource {
     var name: String {
         return "ICD-10-CM"
     }
