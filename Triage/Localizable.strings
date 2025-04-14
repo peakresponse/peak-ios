@@ -91,7 +91,7 @@
 "Button.returnToService" = "Return to Service";
 "Button.save" = "Save";
 "Button.scanTag" = "Scan\nTag";
-"Button.scanLicense" = "Scan License";
+"Button.scanLicense" = "Scan ID Barcode";
 "Button.search" = "Search";
 "Button.sendRingdown" = "Send Ringdown";
 "Button.select" = "Select";
