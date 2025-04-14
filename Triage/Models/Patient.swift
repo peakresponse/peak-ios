@@ -231,7 +231,11 @@ class Patient: BaseVersioned {
         return ""
     }
 
-    @Persisted var dob: String?
+    @Persisted var dob: String? {
+        didSet {
+            calculateAge()
+        }
+    }
     @Persisted var complaint: String?
 
     @Persisted var triagePerfusion: String?
@@ -397,6 +401,22 @@ class Patient: BaseVersioned {
                 prediction["status"] = status.rawValue
                 predictions[attribute] = prediction
                 self.predictions = predictions
+            }
+        }
+    }
+
+    func calculateAge() {
+        if let dob = dob, let date = ISO8601DateFormatter.date(from: dob) {
+            let (years, months, days) = date.age
+            if years > 0 {
+                self.age = years
+                self.ageUnits = PatientAgeUnits.years.rawValue
+            } else if months > 0 {
+                self.age = months
+                self.ageUnits = PatientAgeUnits.months.rawValue
+            } else {
+                self.age = days
+                self.ageUnits = PatientAgeUnits.days.rawValue
             }
         }
     }

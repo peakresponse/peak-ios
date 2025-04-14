@@ -20,20 +20,12 @@
       }
     },
     {
-      "identity" : "llama.cpp",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ggerganov/llama.cpp/",
-      "state" : {
-        "revision" : "cda0e4b648dde8fac162b3430b14a99597d3d74f"
-      }
-    },
-    {
       "identity" : "llm.swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/eastriverlee/LLM.swift",
       "state" : {
-        "branch" : "pinned",
-        "revision" : "48546489c46c8d116a320ad6bc031bbd714fd8c0"
+        "branch" : "main",
+        "revision" : "7584d0736fce6ec032ab357ee63a8e7b00c64d96"
       }
     },
     {
@@ -42,7 +34,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-llmkit",
       "state" : {
         "branch" : "main",
-        "revision" : "217e0d4276c607a4dc007aeeb7f5ad7523b456a7"
+        "revision" : "32793ebf9c4fe237c81c1ac48b6559d5f0003acd"
       }
     },
     {
