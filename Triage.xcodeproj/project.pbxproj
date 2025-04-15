@@ -153,6 +153,7 @@
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
 		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
 		45E934E82B9B7DBC007164AC /* TransportCartReportField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */; };
+		45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
 		45F7BAC22739E37300FBD31F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC12739E37300FBD31F /* Report.swift */; };
 		45F7BAC4273AEBE100FBD31F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC3273AEBE100FBD31F /* Response.swift */; };
@@ -366,6 +367,7 @@
 			files = (
 				6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
+				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
 				459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 				459DC4ED2DADCCAA00761142 /* ICD10Kit in Frameworks */,
@@ -1544,6 +1546,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
 			productName = LLMKit;
+		};
+		45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
+			productName = LLMKitAWSBedrock;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
