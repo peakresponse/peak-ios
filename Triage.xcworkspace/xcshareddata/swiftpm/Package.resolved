@@ -1,5 +1,5 @@
 {
-  "originHash" : "2c5ab866ac2ecef7a75470296df1b4c718bd096a4efdd817b6274badd2cce7c2",
+  "originHash" : "17115133dafd0f9c5caa0c774f5921fba8b4ebeedcf670d75e5b18b5ce34aa06",
   "pins" : [
     {
       "identity" : "aws-crt-swift",
@@ -29,12 +29,39 @@
       }
     },
     {
+      "identity" : "peak-ios-icd10kit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/peakresponse/peak-ios-icd10kit",
+      "state" : {
+        "revision" : "144253128758444092718df05ab30b9c44f3cdc1",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "peak-ios-llmkit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-llmkit",
       "state" : {
         "branch" : "main",
         "revision" : "007204aa0d32129a0c5f5aed34339a0b564a7b3a"
+      }
+    },
+    {
+      "identity" : "peak-ios-rxnormkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/peakresponse/peak-ios-rxnormkit",
+      "state" : {
+        "revision" : "b63854e7d4531e6fd1b45f729b09e6458a95c028",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "peak-ios-snomedkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/peakresponse/peak-ios-snomedkit",
+      "state" : {
+        "revision" : "492de45ba6ad6d364b45fa91861560653e8de184",
+        "version" : "1.0.0"
       }
     },
     {
