@@ -127,9 +127,23 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
 
     private func setupCamera() {
         // Get the back-facing camera for capturing videos
-        var captureDevice: AVCaptureDevice! = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: .back)
+        var zoomFactor: CGFloat = 1.0
+        var captureDevice: AVCaptureDevice!
+        captureDevice = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back)
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back)
+            if captureDevice != nil {
+                zoomFactor = 2.0
+            }
+        }
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back)
+        }
         if captureDevice == nil {
             captureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
+        }
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(for: .video)
         }
         guard captureDevice != nil else {
             print("Failed to get the camera device")
@@ -157,6 +171,16 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
             // Start video capture, ideally with ~2 megapixels of image data
             if captureSession.canSetSessionPreset(.hd1920x1080) {
                 captureSession.sessionPreset = .hd1920x1080
+            }
+            if zoomFactor > 1.0 {
+                do {
+                    try captureDevice.lockForConfiguration()
+                    captureDevice.videoZoomFactor = zoomFactor
+                    captureDevice.unlockForConfiguration()
+                } catch {
+                    // no-op
+                    print("Unable to set zoom factor", zoomFactor)
+                }
             }
             start()
         } catch {
