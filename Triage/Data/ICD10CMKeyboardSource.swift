@@ -6,11 +6,12 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import ICD10Kit
+internal import ICD10Kit
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
-class ICD10CMKeyboardSource: KeyboardSource {
+@MainActor
+class ICD10CMKeyboardSource: @preconcurrency KeyboardSource {
     var name: String {
         return "ICD-10-CM"
     }

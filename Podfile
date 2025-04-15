@@ -19,16 +19,12 @@ target 'Triage' do
   pod 'Google-Maps-iOS-Utils'
   pod 'GoogleMaps'
   pod 'GoogleMLKit/BarcodeScanning', '8.0.0'
-  pod 'ICD10Kit'
   pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
-  pod 'RealmSwift', '~> 10.43'
   pod 'RollbarNotifier', '~> 3.2'
-  pod 'RxNormKit'
   pod 'RMJSONPatch', '1.0.4'
   pod 'Starscream'
   pod 'SwiftLint'
   pod 'SwiftPath'
-  pod 'SNOMEDKit'
   pod 'TranscriptionKit', :git => 'https://github.com/peakresponse/peak-ios-transcriptionkit.git', :branch => 'dev'
 
   target 'TriageTests' do

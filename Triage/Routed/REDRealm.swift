@@ -6,7 +6,7 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+internal import RealmSwift
 import Starscream
 
 class REDRealm {

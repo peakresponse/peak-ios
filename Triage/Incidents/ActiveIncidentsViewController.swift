@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 class ActiveIncidentsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!

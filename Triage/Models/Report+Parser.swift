@@ -9,7 +9,7 @@
 import Foundation
 import NaturalLanguage
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 // swiftlint:disable force_try line_length
 private struct Matcher {

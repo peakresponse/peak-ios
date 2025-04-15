@@ -7,7 +7,7 @@
 //
 
 import JSONPatch
-import RealmSwift
+internal import RealmSwift
 
 class Time: BaseVersioned, NemsisBacked {
     struct Keys {

@@ -11,9 +11,9 @@ import Keys
 internal import LLMKitAWSBedrock
 import RollbarNotifier
 import UIKit
-import ICD10Kit
-import RxNormKit
-import SNOMEDKit
+internal import ICD10Kit
+internal import RxNormKit
+internal import SNOMEDKit
 
 @UIApplicationMain
 

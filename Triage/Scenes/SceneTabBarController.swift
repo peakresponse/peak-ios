@@ -8,7 +8,7 @@
 
 import CoreLocation
 import UIKit
-import RealmSwift
+internal import RealmSwift
 import PRKit
 
 class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {

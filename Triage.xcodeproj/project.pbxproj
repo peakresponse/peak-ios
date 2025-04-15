@@ -67,7 +67,6 @@
 		456E5A6B2BCDF971001370BE /* RespondersCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */; };
 		456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04F927ACAA47000CEE42 /* Report+Parser.swift */; };
 		456F04FC27AE081F000CEE42 /* ReportParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FB27AE081F000CEE42 /* ReportParserTests.swift */; };
-		456F04FE27B2E609000CEE42 /* Test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 456F04FD27B2E609000CEE42 /* Test.realm */; };
 		456F050027B5B983000CEE42 /* Base+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */; };
 		456F050227B5E884000CEE42 /* Predictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050127B5E884000CEE42 /* Predictions.swift */; };
 		456F050427BC6D03000CEE42 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050327BC6D03000CEE42 /* File.swift */; };
@@ -99,6 +98,10 @@
 		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
 		45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
+		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
+		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
+		459DC4FB2DADDC1C00761142 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4FA2DADDC1C00761142 /* RealmSwift */; };
+		459DC4FD2DAEB37C00761142 /* test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 459DC4FC2DAEB37C00761142 /* test.realm */; };
 		459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459EF9A32D38203700C5AFC5 /* LLMKit */; };
 		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
@@ -149,6 +152,8 @@
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
 		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
 		45E934E82B9B7DBC007164AC /* TransportCartReportField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */; };
+		45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */; };
+		45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C92DAEEDA700563A0A /* ICD10Kit */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
 		45F7BAC22739E37300FBD31F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC12739E37300FBD31F /* Report.swift */; };
 		45F7BAC4273AEBE100FBD31F /* Response.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC3273AEBE100FBD31F /* Response.swift */; };
@@ -251,7 +256,6 @@
 		456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersCountsHeaderView.swift; sourceTree = "<group>"; };
 		456F04F927ACAA47000CEE42 /* Report+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+Parser.swift"; sourceTree = "<group>"; };
 		456F04FB27AE081F000CEE42 /* ReportParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportParserTests.swift; sourceTree = "<group>"; };
-		456F04FD27B2E609000CEE42 /* Test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Test.realm; sourceTree = "<group>"; };
 		456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+KeyPath.swift"; sourceTree = "<group>"; };
 		456F050127B5E884000CEE42 /* Predictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictions.swift; sourceTree = "<group>"; };
 		456F050327BC6D03000CEE42 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -283,6 +287,7 @@
 		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
 		45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativesKeyboardSource.swift; sourceTree = "<group>"; };
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
+		459DC4FC2DAEB37C00761142 /* test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.realm; sourceTree = "<group>"; };
 		45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+RoutED.swift"; sourceTree = "<group>"; };
@@ -361,7 +366,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */,
+				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
+				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
+				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
 				459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */,
+				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,6 +378,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				459DC4FB2DADDC1C00761142 /* RealmSwift in Frameworks */,
 				4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -480,8 +490,8 @@
 				458CA0D42788EBD90065F324 /* ReportTests.swift */,
 				456F04FB27AE081F000CEE42 /* ReportParserTests.swift */,
 				45F7BAD7273B04BF00FBD31F /* TimeTests.swift */,
+				459DC4FC2DAEB37C00761142 /* test.realm */,
 				4566F038236CCC5700A04C75 /* Info.plist */,
-				456F04FD27B2E609000CEE42 /* Test.realm */,
 			);
 			path = TriageTests;
 			sourceTree = "<group>";
@@ -800,6 +810,10 @@
 			mainGroup = 4566F013236CCC5500A04C75;
 			packageReferences = (
 				459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */,
+				459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */,
+				45EF91C82DAEEDA700563A0A /* XCRemoteSwiftPackageReference "peak-ios-icd10kit" */,
+				45EF91CB2DAEEDC300563A0A /* XCRemoteSwiftPackageReference "peak-ios-snomedkit" */,
+				45EF91CC2DAEEDD600563A0A /* XCRemoteSwiftPackageReference "peak-ios-rxnormkit" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -838,7 +852,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				456F04FE27B2E609000CEE42 /* Test.realm in Resources */,
+				459DC4FD2DAEB37C00761142 /* test.realm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -882,9 +896,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -918,9 +936,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1465,7 +1487,26 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../rxnormkit;
+		};
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../snomedkit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
+		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.11.0;
+			};
+		};
 		459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
@@ -1474,13 +1515,62 @@
 				kind = branch;
 			};
 		};
+		45EF91C82DAEEDA700563A0A /* XCRemoteSwiftPackageReference "peak-ios-icd10kit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-icd10kit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		45EF91CB2DAEEDC300563A0A /* XCRemoteSwiftPackageReference "peak-ios-snomedkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-snomedkit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		45EF91CC2DAEEDD600563A0A /* XCRemoteSwiftPackageReference "peak-ios-rxnormkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-rxnormkit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
+			productName = RxNormKit;
+		};
+		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
+			productName = SNOMEDKit;
+		};
+		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
+		};
 		459EF9A32D38203700C5AFC5 /* LLMKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
 			productName = LLMKit;
+		};
+		45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
+			productName = LLMKitAWSBedrock;
+		};
+		45EF91C92DAEEDA700563A0A /* ICD10Kit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 45EF91C82DAEEDA700563A0A /* XCRemoteSwiftPackageReference "peak-ios-icd10kit" */;
+			productName = ICD10Kit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

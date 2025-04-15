@@ -7,10 +7,11 @@
 //
 
 import PRKit
-import RealmSwift
-import SNOMEDKit
+internal import RealmSwift
+internal import SNOMEDKit
 
-class SNOMEDKeyboardSource: KeyboardSource {
+@MainActor
+class SNOMEDKeyboardSource: @preconcurrency KeyboardSource {
     var name: String {
         return "SNOMED"
     }

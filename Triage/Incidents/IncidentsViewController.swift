@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import UIKit
 
 class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,

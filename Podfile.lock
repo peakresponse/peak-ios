@@ -53,8 +53,6 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (3.5.0)
-  - ICD10Kit (0.1.0):
-    - RealmSwift (>= 10.11.0)
   - Keyboardy (0.2.7)
   - Keys (1.0.1)
   - MLImage (1.0.0-beta7)
@@ -85,11 +83,6 @@ PODS:
     - SVGKit (~> 3.0)
     - SwiftSignatureView (~> 3.2.0)
   - PromisesObjC (2.4.0)
-  - Realm (10.43.1):
-    - Realm/Headers (= 10.43.1)
-  - Realm/Headers (10.43.1)
-  - RealmSwift (10.43.1):
-    - Realm (= 10.43.1)
   - RMJSONPatch (1.0.4)
   - RollbarCommon (3.3.3)
   - RollbarCrash (3.3.3)
@@ -99,10 +92,6 @@ PODS:
     - RollbarReport (~> 3.3.3)
   - RollbarReport (3.3.3):
     - RollbarCrash (~> 3.3.3)
-  - RxNormKit (0.1.0):
-    - RealmSwift (>= 10.11.0)
-  - SNOMEDKit (0.1.0):
-    - RealmSwift (>= 10.11.0)
   - Starscream (4.0.6)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
@@ -116,14 +105,10 @@ DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - GoogleMLKit/BarcodeScanning (= 8.0.0)
-  - ICD10Kit
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
-  - RealmSwift (~> 10.43)
   - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (~> 3.2)
-  - RxNormKit
-  - SNOMEDKit
   - Starscream
   - SwiftLint
   - SwiftPath
@@ -142,7 +127,6 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
-    - ICD10Kit
     - Keyboardy
     - MLImage
     - MLKitBarcodeScanning
@@ -150,15 +134,11 @@ SPEC REPOS:
     - MLKitVision
     - nanopb
     - PromisesObjC
-    - Realm
-    - RealmSwift
     - RMJSONPatch
     - RollbarCommon
     - RollbarCrash
     - RollbarNotifier
     - RollbarReport
-    - RxNormKit
-    - SNOMEDKit
     - Starscream
     - SVGKit
     - SwiftLint
@@ -195,7 +175,6 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  ICD10Kit: d627ff3bfba6604b86fe637547bdcf4bfe47720d
   Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   MLImage: 2ab9c968e75f57911c16f4c9d9e8a8e9604a86a1
@@ -205,15 +184,11 @@ SPEC CHECKSUMS:
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
   PRKit: 27c7ec9e498384b0a49b0274d5c31a52b3120ba6
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
-  Realm: d97b438de77459e443bd2c8ad5ca0f95107aee4b
-  RealmSwift: 6be3f27a7fd3f5cc8f99f4b187cc4e7150299e32
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   RollbarCommon: cb87be0f694a09c138f7d51d6f3b48151ca965ab
   RollbarCrash: 0272cf44b05ebc0f69c17acbd0cffbdaf35b2893
   RollbarNotifier: 8f57eb355f0fe8a6832d8dff615f2118d78047be
   RollbarReport: 0e57a3ac73c66dd6d5add5e999a967210753c4c3
-  RxNormKit: 2927b839b54ea9e7b5320138bf6791d0eb830832
-  SNOMEDKit: 007fc3aee92964d79e06248fc292b86ae96ace39
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
@@ -221,6 +196,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 2db094561e12fea09c195dd1edce71ef78b4747f
+PODFILE CHECKSUM: 37bef0be3f525a624d0bf3ce82a065ba1972b9be
 
 COCOAPODS: 1.16.2

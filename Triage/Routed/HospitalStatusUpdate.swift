@@ -6,7 +6,8 @@
 //  Copyright © 2022 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+import Foundation
+internal import RealmSwift
 
 class HospitalStatusUpdate: Object {
     struct Keys {

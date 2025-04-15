@@ -9,7 +9,7 @@
 import UIKit
 import Keyboardy
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 @objc protocol AssignmentViewControllerDelegate {
     @objc optional func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String)

@@ -6,7 +6,8 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+import Foundation
+internal import RealmSwift
 
 class Base: Object {
     struct Keys {

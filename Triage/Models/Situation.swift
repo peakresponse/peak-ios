@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 enum ComplaintType: String, StringCaseIterable {
     case chief = "2803001"

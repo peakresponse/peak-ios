@@ -8,7 +8,7 @@
 
 import CoreLocation
 import Foundation
-import RealmSwift
+internal import RealmSwift
 
 class Scene: BaseVersioned, NemsisBacked {
     struct Keys {

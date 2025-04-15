@@ -7,7 +7,7 @@
 //
 
 import NaturalLanguage
-import RealmSwift
+internal import RealmSwift
 
 class CodeList: Base {
     struct Keys {

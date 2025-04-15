@@ -8,7 +8,7 @@
 
 import Foundation
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 class NemsisKeyboardViewController: SearchViewController, CodeListSectionsViewControllerDelegate {
     weak var segmentedControl: SegmentedControl!

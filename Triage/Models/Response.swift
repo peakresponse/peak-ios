@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 import JSONPatch
 
 enum ResponseUnitTransportAndEquipmentCapability: String, StringCaseIterable {

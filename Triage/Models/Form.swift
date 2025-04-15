@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import RealmSwift
+internal import RealmSwift
 
 class Form: BaseVersioned {
     struct Keys {

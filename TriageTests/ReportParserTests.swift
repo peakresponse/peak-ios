@@ -7,7 +7,7 @@
 //
 
 import NaturalLanguage
-import RealmSwift
+internal import RealmSwift
 import XCTest
 @testable import Peak_Response
 
@@ -18,8 +18,13 @@ class ReportParserTests: XCTestCase {
 
     override func setUpWithError() throws {
         // comment out the following before runing the testCreateRealmFile
-        let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
-        AppRealm.configure(url: url)
+        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+                                                             appropriateFor: nil, create: false)
+        let mainUrl = documentDirectory?.appendingPathComponent( "test.realm")
+        try? FileManager.default.removeItem(at: mainUrl!)
+
+        let seedUrl = Bundle(for: type(of: self)).url(forResource: "test", withExtension: "realm")
+        AppRealm.configure(seedUrl: seedUrl, mainUrl: mainUrl)
     }
 
     override func tearDownWithError() throws {
@@ -31,23 +36,24 @@ class ReportParserTests: XCTestCase {
     // in the setup above
 //    func testCreateRealmFile() {
 //        let realm = AppRealm.open()
-//        let config = Realm.Configuration(inMemoryIdentifier: "Test.realm")
-//        let testRealm = try! Realm(configuration: config)
-//        try! testRealm.write {
-//            for obj in realm.objects(CodeList.self) {
-//                testRealm.create(CodeList.self, value: obj, update: .all)
-//            }
-//            for obj in realm.objects(CodeListSection.self) {
-//                testRealm.create(CodeListSection.self, value: obj, update: .all)
-//            }
-//            for obj in realm.objects(CodeListItem.self) {
-//                testRealm.create(CodeListItem.self, value: obj, update: .all)
-//            }
-//        }
+//
 //        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
 //                                                             appropriateFor: nil, create: false)
-//        if let url = documentDirectory?.appendingPathComponent( "Test.realm") {
-//            try! testRealm.writeCopy(toFile: url, encryptionKey: nil)
+//        if let url = documentDirectory?.appendingPathComponent( "test.realm") {
+//            try? FileManager.default.removeItem(at: url)
+//            let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: AppRealm.objectTypes)
+//            let testRealm = try! Realm(configuration: config)
+//            try! testRealm.write {
+//                for obj in realm.objects(CodeList.self) {
+//                    testRealm.create(CodeList.self, value: obj, update: .all)
+//                }
+//                for obj in realm.objects(CodeListSection.self) {
+//                    testRealm.create(CodeListSection.self, value: obj, update: .all)
+//                }
+//                for obj in realm.objects(CodeListItem.self) {
+//                    testRealm.create(CodeListItem.self, value: obj, update: .all)
+//                }
+//            }
 //            print(url)
 //        }
 //    }

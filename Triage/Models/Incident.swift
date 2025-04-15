@@ -6,7 +6,8 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import RealmSwift
+import Foundation
+internal import RealmSwift
 
 class Incident: Base {
     struct Keys {

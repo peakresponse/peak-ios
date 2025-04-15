@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import RealmSwift
+internal import RealmSwift
 import PRKit
 
 protocol CodeListViewController: AnyObject {

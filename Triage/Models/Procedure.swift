@@ -7,7 +7,7 @@
 //
 
 import PRKit
-import RealmSwift
+internal import RealmSwift
 
 enum ProcedureResponse: String, StringCaseIterable {
     case improved = "9916001"
