@@ -263,19 +263,11 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-          print("Failed to get image buffer from sample buffer.")
-          return
-        }
-
-        let visionImage = VisionImage(buffer: sampleBuffer)
-        let orientation = imageOrientation(fromDevicePosition: .back)
-        visionImage.orientation = orientation
-
         guard let inputImage = MLImage(sampleBuffer: sampleBuffer) else {
           print("Failed to create MLImage from sample buffer.")
           return
         }
+        let orientation = imageOrientation(fromDevicePosition: .back)
         inputImage.orientation = orientation
 
         var barcodes: [Barcode] = []

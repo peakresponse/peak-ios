@@ -95,7 +95,18 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
 
     private func setupCamera() {
         // Get the back-facing camera for capturing videos
-        var captureDevice: AVCaptureDevice! = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back)
+        var zoomFactor: CGFloat = 1.0
+        var captureDevice: AVCaptureDevice!
+        captureDevice = AVCaptureDevice.default(.builtInTripleCamera, for: .video, position: .back)
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: .back)
+            if captureDevice != nil {
+                zoomFactor = 2.0
+            }
+        }
+        if captureDevice == nil {
+            captureDevice = AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back)
+        }
         if captureDevice == nil {
             captureDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back)
         }
@@ -128,6 +139,16 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
             // Start video capture, ideally with ~2 megapixels of image data
             if captureSession.canSetSessionPreset(.hd1920x1080) {
                 captureSession.sessionPreset = .hd1920x1080
+            }
+            if zoomFactor > 1.0 {
+                do {
+                    try captureDevice.lockForConfiguration()
+                    captureDevice.videoZoomFactor = zoomFactor
+                    captureDevice.unlockForConfiguration()
+                } catch {
+                    // no-op
+                    print("Unable to set zoom factor", zoomFactor)
+                }
             }
             start()
         } catch {
@@ -184,19 +205,11 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
     // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 
     func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else {
-          print("Failed to get image buffer from sample buffer.")
-          return
-        }
-
-        let visionImage = VisionImage(buffer: sampleBuffer)
-        let orientation = imageOrientation(fromDevicePosition: .back)
-        visionImage.orientation = orientation
-
         guard let inputImage = MLImage(sampleBuffer: sampleBuffer) else {
           print("Failed to create MLImage from sample buffer.")
           return
         }
+        let orientation = imageOrientation(fromDevicePosition: .back)
         inputImage.orientation = orientation
 
         var barcodes: [Barcode] = []
@@ -206,6 +219,7 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
                 DispatchQueue.main.async { [weak self] in
                     guard let self = self else { return }
                     self.delegate?.licenseScanViewController?(self, didScan: license)
+                    self.delegate = nil
                 }
             }
         } catch let error {
