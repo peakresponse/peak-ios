@@ -14,8 +14,13 @@ class PatientTests: XCTestCase {
     var metadata = ["provider": "test"]
 
     override func setUpWithError() throws {
-        let url = Bundle(for: type(of: self)).url(forResource: "Test", withExtension: "realm")
-        AppRealm.configure(url: url)
+        let documentDirectory = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask,
+                                                             appropriateFor: nil, create: false)
+        let mainUrl = documentDirectory?.appendingPathComponent( "test.realm")
+        try? FileManager.default.removeItem(at: mainUrl!)
+
+        let seedUrl = Bundle(for: type(of: self)).url(forResource: "test", withExtension: "realm")
+        AppRealm.configure(seedUrl: seedUrl, mainUrl: mainUrl)
     }
 
     override func tearDown() {

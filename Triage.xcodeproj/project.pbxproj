@@ -67,7 +67,6 @@
 		456E5A6B2BCDF971001370BE /* RespondersCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */; };
 		456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04F927ACAA47000CEE42 /* Report+Parser.swift */; };
 		456F04FC27AE081F000CEE42 /* ReportParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FB27AE081F000CEE42 /* ReportParserTests.swift */; };
-		456F04FE27B2E609000CEE42 /* Test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 456F04FD27B2E609000CEE42 /* Test.realm */; };
 		456F050027B5B983000CEE42 /* Base+KeyPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */; };
 		456F050227B5E884000CEE42 /* Predictions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050127B5E884000CEE42 /* Predictions.swift */; };
 		456F050427BC6D03000CEE42 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456F050327BC6D03000CEE42 /* File.swift */; };
@@ -102,9 +101,8 @@
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
 		459DC4ED2DADCCAA00761142 /* ICD10Kit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EC2DADCCAA00761142 /* ICD10Kit */; };
-		459DC4EF2DADCCBA00761142 /* ICD10Kit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EE2DADCCBA00761142 /* ICD10Kit */; };
-		459DC4F12DADCCC000761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4F02DADCCC000761142 /* SNOMEDKit */; };
-		459DC4F32DADCCC400761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4F22DADCCC400761142 /* RxNormKit */; };
+		459DC4FB2DADDC1C00761142 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4FA2DADDC1C00761142 /* RealmSwift */; };
+		459DC4FD2DAEB37C00761142 /* test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 459DC4FC2DAEB37C00761142 /* test.realm */; };
 		459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459EF9A32D38203700C5AFC5 /* LLMKit */; };
 		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
@@ -257,7 +255,6 @@
 		456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersCountsHeaderView.swift; sourceTree = "<group>"; };
 		456F04F927ACAA47000CEE42 /* Report+Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+Parser.swift"; sourceTree = "<group>"; };
 		456F04FB27AE081F000CEE42 /* ReportParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportParserTests.swift; sourceTree = "<group>"; };
-		456F04FD27B2E609000CEE42 /* Test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = Test.realm; sourceTree = "<group>"; };
 		456F04FF27B5B983000CEE42 /* Base+KeyPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Base+KeyPath.swift"; sourceTree = "<group>"; };
 		456F050127B5E884000CEE42 /* Predictions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Predictions.swift; sourceTree = "<group>"; };
 		456F050327BC6D03000CEE42 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
@@ -289,6 +286,7 @@
 		45917FFE25512DDF002E03E7 /* BaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseTests.swift; sourceTree = "<group>"; };
 		45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NemsisNegativesKeyboardSource.swift; sourceTree = "<group>"; };
 		45994121261BDE4D0062D141 /* InterstitialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InterstitialViewController.swift; sourceTree = "<group>"; };
+		459DC4FC2DAEB37C00761142 /* test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.realm; sourceTree = "<group>"; };
 		45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
 		45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+RoutED.swift"; sourceTree = "<group>"; };
@@ -378,10 +376,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				459DC4F12DADCCC000761142 /* SNOMEDKit in Frameworks */,
+				459DC4FB2DADDC1C00761142 /* RealmSwift in Frameworks */,
 				4CC3A1A3FD35CD37D5383F70 /* Pods_TriageTests.framework in Frameworks */,
-				459DC4EF2DADCCBA00761142 /* ICD10Kit in Frameworks */,
-				459DC4F32DADCCC400761142 /* RxNormKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -492,8 +488,8 @@
 				458CA0D42788EBD90065F324 /* ReportTests.swift */,
 				456F04FB27AE081F000CEE42 /* ReportParserTests.swift */,
 				45F7BAD7273B04BF00FBD31F /* TimeTests.swift */,
+				459DC4FC2DAEB37C00761142 /* test.realm */,
 				4566F038236CCC5700A04C75 /* Info.plist */,
-				456F04FD27B2E609000CEE42 /* Test.realm */,
 			);
 			path = TriageTests;
 			sourceTree = "<group>";
@@ -815,6 +811,7 @@
 				459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */,
 				459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */,
 				459DC4E72DADCC6300761142 /* XCLocalSwiftPackageReference "../icd10kit" */,
+				459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -853,7 +850,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				456F04FE27B2E609000CEE42 /* Test.realm in Resources */,
+				459DC4FD2DAEB37C00761142 /* test.realm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1504,6 +1501,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.11.0;
+			};
+		};
 		459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
@@ -1530,20 +1535,10 @@
 			package = 459DC4E72DADCC6300761142 /* XCLocalSwiftPackageReference "../icd10kit" */;
 			productName = ICD10Kit;
 		};
-		459DC4EE2DADCCBA00761142 /* ICD10Kit */ = {
+		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E72DADCC6300761142 /* XCLocalSwiftPackageReference "../icd10kit" */;
-			productName = ICD10Kit;
-		};
-		459DC4F02DADCCC000761142 /* SNOMEDKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
-			productName = SNOMEDKit;
-		};
-		459DC4F22DADCCC400761142 /* RxNormKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
-			productName = RxNormKit;
+			package = 459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 		459EF9A32D38203700C5AFC5 /* LLMKit */ = {
 			isa = XCSwiftPackageProductDependency;
