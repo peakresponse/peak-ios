@@ -107,6 +107,19 @@ class PRApiClient: ApiClient {
         return GET(path: "/api/cities", params: params, completionHandler: completionHandler)
     }
 
+    // MARK: - Events
+
+    func getEvents(filter: String? = nil, search: String? = nil, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        var params: [String: Any] = [:]
+        if let filter = filter, !filter.isEmpty {
+            params["filter"] = filter
+        }
+        if let search = search, !search.isEmpty {
+            params["search"] = search
+        }
+        return GET(path: "/api/events", params: params, completionHandler: completionHandler)
+    }
+
     // MARK: - Forms
 
     func getForms(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {

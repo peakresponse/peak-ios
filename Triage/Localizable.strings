@@ -135,6 +135,9 @@
 "Error.title" = "An error has occurred";
 "Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
 
+"EventsViewController.current" = "Current";
+"EventsViewController.past" = "Past";
+
 "FacilitiesTableViewController.facilityTitle" = "Transporting to Facility";
 "FacilitiesTableViewController.leavingTitle" = "Leaving Independently";
 "FacilitiesTableViewController.selectLabel" = "Select the receiving facility:";
@@ -585,6 +588,8 @@
 
 "SearchBar.placeholder" = "Search";
 
+"Sidebar.item.events" = "Events";
+"Sidebar.item.incidents" = "All Incidents";
 "Sidebar.item.switch" = "Change Unit/Vehicle";
 "Sidebar.item.logOut" = "Log out";
 

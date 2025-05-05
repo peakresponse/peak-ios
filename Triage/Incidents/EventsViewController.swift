@@ -1,34 +1,31 @@
 //
-//  IncidentsViewController.swift
+//  EventsViewController.swift
 //  Triage
 //
-//  Created by Francis Li on 10/27/21.
-//  Copyright © 2021 Francis Li. All rights reserved.
+//  Created by Francis Li on 5/5/25.
+//  Copyright © 2025 Francis Li. All rights reserved.
 //
 
+import Foundation
 import PRKit
 internal import RealmSwift
 import UIKit
 
-class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
-                               UITableViewDataSource, UITableViewDelegate {
+class EventsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+                            UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
     weak var sidebarTableView: SidebarTableView!
     weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     weak var versionLabel: UILabel!
     weak var tableView: UITableView!
-    weak var commandFooter: CommandFooter!
-    weak var activeIncidentsView: ActiveIncidentsView!
-    weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     weak var segmentedControl: SegmentedControl!
 
     var notificationToken: NotificationToken?
-    var results: Results<Incident>?
+    var results: Results<Event>?
     var nextUrl: String?
 
     deinit {
         notificationToken?.invalidate()
-        AppRealm.disconnectIncidents()
     }
 
     override func viewDidLoad() {
@@ -83,7 +80,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         tableView.dataSource = self
         tableView.delegate = self
         tableView.refreshControl = refreshControl
-        tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
+        tableView.register(EventTableViewCell.self, forCellReuseIdentifier: "Event")
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
@@ -94,8 +91,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
         let segmentedControl = SegmentedControl()
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
-        segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
+        segmentedControl.addSegment(title: "EventsViewController.current".localized)
+        segmentedControl.addSegment(title: "EventsViewController.past".localized)
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
         if traitCollection.horizontalSizeClass == .regular {
             commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
@@ -123,55 +120,11 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         }
         self.segmentedControl = segmentedControl
 
-        let commandFooter = CommandFooter()
-        commandFooter.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(commandFooter)
-        NSLayoutConstraint.activate([
-            commandFooter.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            commandFooter.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            commandFooter.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        self.commandFooter = commandFooter
-
-        let newButton = PRKit.Button()
-        newButton.translatesAutoresizingMaskIntoConstraints = false
-        newButton.bundleImage = "Plus24px"
-        newButton.style = .primary
-        newButton.addTarget(self, action: #selector(newPressed(_:)), for: .touchUpInside)
-        newButton.setTitle("Button.newIncident".localized, for: .normal)
-        commandFooter.addSubview(newButton)
-
-        let activeIncidentsView = ActiveIncidentsView()
-        activeIncidentsView.translatesAutoresizingMaskIntoConstraints = false
-        activeIncidentsView.delegate = self
-        view.addSubview(activeIncidentsView)
-        let activeIncidentsViewHeightConstraint = activeIncidentsView.heightAnchor.constraint(equalToConstant: 128)
-        NSLayoutConstraint.activate([
-            activeIncidentsViewHeightConstraint,
-            activeIncidentsView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            activeIncidentsView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            activeIncidentsView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
-        ])
-        self.activeIncidentsView = activeIncidentsView
-        self.activeIncidentsViewHeightConstraint = activeIncidentsViewHeightConstraint
-
         performQuery()
-
-        AppRealm.connectIncidents()
 
         // request an initial location on the list screen, because it can take quite a few seconds, so that
         // an accurate location is ready hopefully by the time the user needs one...
         LocationHelper.instance.requestLocation()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        var contentInset = tableView.contentInset
-        contentInset.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
-        tableView.contentInset = contentInset
-        var scrollIndicatorInsets = tableView.scrollIndicatorInsets
-        scrollIndicatorInsets.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
-        tableView.scrollIndicatorInsets = scrollIndicatorInsets
     }
 
     func setCommandHeaderUser(userId: String?, assignmentId: String?) {
@@ -195,7 +148,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         }
     }
 
-    private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Incident>>) {
+    private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Event>>) {
         switch changes {
         case .initial:
             tableView.reloadData()
@@ -217,26 +170,24 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         notificationToken?.invalidate()
 
         let realm = AppRealm.open()
-        results = realm.objects(Incident.self)
-            .sorted(by: [
-                SortDescriptor(keyPath: "sort", ascending: false),
-                SortDescriptor(keyPath: "createdAt", ascending: false)
-            ])
-        if let vehicleId = AppSettings.vehicleId {
-            if segmentedControl.segmentsCount < 2 {
-                segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
-            }
-            if segmentedControl.selectedIndex == 0 {
-                results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
-            }
-        } else {
-            if segmentedControl.segmentsCount > 1 {
-                segmentedControl.removeSegment(at: 0)
-            }
-        }
+        results = realm.objects(Event.self)
         if let text = commandHeader.searchField.text, !text.isEmpty {
-            results = results?.filter("(number CONTAINS[cd] %@) OR (scene.address1 CONTAINS[cd] %@) OR (scene.address2 CONTAINS[cd] %@)",
-                                      text, text, text)
+            results = results?.filter("name CONTAINS[cd] %@", text)
+        }
+        if segmentedControl.selectedIndex == 0 {
+            results = results?.filter("end >= %@", Date())
+            results = results?.sorted(by: [
+                SortDescriptor(keyPath: "start", ascending: true),
+                SortDescriptor(keyPath: "end", ascending: true),
+                SortDescriptor(keyPath: "name", ascending: true)
+            ])
+        } else {
+            results = results?.filter("end < %@", Date())
+            results = results?.sorted(by: [
+                SortDescriptor(keyPath: "start", ascending: false),
+                SortDescriptor(keyPath: "end", ascending: false),
+                SortDescriptor(keyPath: "name", ascending: true)
+            ])
         }
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
@@ -246,18 +197,12 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
     @objc func refresh() {
         tableView.refreshControl?.beginRefreshing()
-        var vehicleId: String?
-        if segmentedControl.selectedIndex == 0, let assignmentId = AppSettings.assignmentId {
-            let assignment = AppRealm.open().object(ofType: Assignment.self, forPrimaryKey: assignmentId)
-            vehicleId = assignment?.vehicleId
+        AppRealm.getEvents(filter: segmentedControl.selectedIndex == 1 ? "past" : "current", search: commandHeader.searchField.text) { [weak self] (nextUrl, error) in
+            self?.handleResponse(nextUrl: nextUrl, error: error)
         }
-        AppRealm.getIncidents(vehicleId: vehicleId, search: commandHeader.searchField.text,
-                              completionHandler: { [weak self] (nextUrl, error) in
-            self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
-        })
     }
 
-    func handleIncidentsResponse(nextUrl: String?, error: Error?) {
+    func handleResponse(nextUrl: String?, error: Error?) {
         if let error = error {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.refreshControl?.endRefreshing()
@@ -275,36 +220,15 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         }
     }
 
-    func toggleSidebar(completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+    func toggleSidebar() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
             if self?.sidebarTableViewLeadingConstraint.constant == 0 {
                 self?.sidebarTableViewLeadingConstraint.constant = -300
             } else {
                 self?.sidebarTableViewLeadingConstraint.constant = 0
             }
             self?.view.layoutIfNeeded()
-        }, completion: completion)
-    }
-
-    @objc func newPressed(_ sender: PRKit.Button) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
-        presentAnimated(vc)
-    }
-
-    // MARK: - ActiveIncidentsViewDelegate
-
-    func activeIncidentsView(_ view: ActiveIncidentsView, didChangeHeight height: CGFloat) {
-        activeIncidentsViewHeightConstraint.constant = height
-    }
-
-    func activeIncidentsView(_ view: ActiveIncidentsView, didSelectIncident incident: Incident) {
-        incidentPressed(incident)
-    }
-
-    func activeIncidentsViewDidSelectAll(_ view: ActiveIncidentsView) {
-        let vc = ActiveIncidentsViewController()
-        vc.modalPresentationStyle = .fullScreen
-        presentAnimated(vc)
+        }
     }
 
     // MARK: - AssignmentViewControllerDelegate
@@ -333,8 +257,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         if scrollView == tableView && scrollView.contentOffset.y >= scrollView.contentSize.height / 2 {
             if let nextUrl = nextUrl {
                 self.nextUrl = nil
-                AppRealm.getNextIncidents(url: nextUrl) { [weak self] (nextUrl, error) in
-                    self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
+                AppRealm.getNextEvents(url: nextUrl) { [weak self] (nextUrl, error) in
+                    self?.handleResponse(nextUrl: nextUrl, error: error)
                 }
             }
         }
@@ -356,7 +280,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             case 0:
                 cell.textLabel?.text = "Sidebar.item.switch".localized
             case 1:
-                cell.textLabel?.text = "Sidebar.item.events".localized
+                cell.textLabel?.text = "Sidebar.item.incidents".localized
             case 2:
                 cell.textLabel?.text = "Sidebar.item.logOut".localized
             default:
@@ -364,9 +288,9 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             }
             return cell
         }
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
-        if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
-            cell.update(from: incident)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Event", for: indexPath)
+        if let cell = cell as? EventTableViewCell, let event = results?[indexPath.row] {
+            cell.update(from: event)
         }
         return cell
     }
@@ -385,12 +309,10 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                     self?.toggleSidebar()
                 }
             case 1:
-                let vc = EventsViewController()
-                toggleSidebar { _ in
-                    for window in UIApplication.shared.windows where window.isKeyWindow {
-                        window.rootViewController = vc
-                        break
-                    }
+                let vc = IncidentsViewController()
+                for window in UIApplication.shared.windows where window.isKeyWindow {
+                    window.rootViewController = vc
+                    break
                 }
                 break
             case 2:
@@ -400,8 +322,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             }
             return
         }
-        if let incident = results?[indexPath.row] {
-            incidentPressed(incident)
+        if let event = results?[indexPath.row] {
+            // no-op for now
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

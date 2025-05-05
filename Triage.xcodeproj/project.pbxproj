@@ -44,6 +44,10 @@
 		454F9CB328D90B90009F7115 /* Signature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454F9CB228D90B90009F7115 /* Signature.swift */; };
 		4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */; };
 		4552A98A2769714B00BB18FE /* RxNorm.realm in Resources */ = {isa = PBXBuildFile; fileRef = 4552A9892769714B00BB18FE /* RxNorm.realm */; };
+		455588212DC9370700EA21A9 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455588202DC9370700EA21A9 /* EventsViewController.swift */; };
+		455588242DC9389A00EA21A9 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455588232DC9389900EA21A9 /* Event.swift */; };
+		455588262DC93AE000EA21A9 /* Venue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455588252DC93ADF00EA21A9 /* Venue.swift */; };
+		455588282DC9618500EA21A9 /* EventTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455588272DC9618200EA21A9 /* EventTableViewCell.swift */; };
 		455958CB2B893587005962F5 /* ResponderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 455958CA2B893587005962F5 /* ResponderViewController.swift */; };
 		4563C74024DA6FB200217901 /* Barlow-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */; };
 		4563C74124DA6FB200217901 /* Barlow-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4563C73F24DA6FB100217901 /* Barlow-Regular.ttf */; };
@@ -227,6 +231,10 @@
 		454F9CB228D90B90009F7115 /* Signature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Signature.swift; sourceTree = "<group>"; };
 		4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignmentViewController.swift; sourceTree = "<group>"; };
 		4552A9892769714B00BB18FE /* RxNorm.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = RxNorm.realm; sourceTree = "<group>"; };
+		455588202DC9370700EA21A9 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		455588232DC9389900EA21A9 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		455588252DC93ADF00EA21A9 /* Venue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Venue.swift; sourceTree = "<group>"; };
+		455588272DC9618200EA21A9 /* EventTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewCell.swift; sourceTree = "<group>"; };
 		455958CA2B893587005962F5 /* ResponderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderViewController.swift; sourceTree = "<group>"; };
 		4563C73E24DA6FB100217901 /* Barlow-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-SemiBold.ttf"; sourceTree = "<group>"; };
 		4563C73F24DA6FB100217901 /* Barlow-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Barlow-Regular.ttf"; sourceTree = "<group>"; };
@@ -535,6 +543,7 @@
 		4566F061236CE17900A04C75 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				455588252DC93ADF00EA21A9 /* Venue.swift */,
 				452DDBC6243CF3F000A8F1FF /* Agency.swift */,
 				45D3E94527276C8D00E5382D /* Assignment.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
@@ -543,6 +552,7 @@
 				458CA0AD275FD6610065F324 /* CodeList.swift */,
 				45C757D1272CC3A200386F07 /* Dispatch.swift */,
 				45F7BACB273AEC1600FBD31F /* Disposition.swift */,
+				455588232DC9389900EA21A9 /* Event.swift */,
 				452DDBC8243CF40600A8F1FF /* Facility.swift */,
 				456F050327BC6D03000CEE42 /* File.swift */,
 				454F9C9D28D38717009F7115 /* Form.swift */,
@@ -619,6 +629,7 @@
 			children = (
 				45C757CE272CB9CC00386F07 /* Views */,
 				45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */,
+				455588202DC9370700EA21A9 /* EventsViewController.swift */,
 				454F9CA728D3E278009F7115 /* FormViewController.swift */,
 				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
 				45C007C8272A02530072FF18 /* Incidents.storyboard */,
@@ -649,6 +660,7 @@
 			isa = PBXGroup;
 			children = (
 				4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */,
+				455588272DC9618200EA21A9 /* EventTableViewCell.swift */,
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
 				452BD606284D2A3200D6E408 /* LatLngControl.swift */,
 				458CA0D0278673C70065F324 /* ReportCollectionViewCell.swift */,
@@ -896,9 +908,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -932,9 +948,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1003,6 +1023,7 @@
 				45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
 				45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */,
+				455588282DC9618500EA21A9 /* EventTableViewCell.swift in Sources */,
 				45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */,
 				45D422C12B94FB1400E75D7E /* Region.swift in Sources */,
 				4550F6DC2722347A00EEA381 /* AssignmentViewController.swift in Sources */,
@@ -1029,6 +1050,7 @@
 				45C9C70C29077056005D0FDD /* CityKeyboardSource.swift in Sources */,
 				45C207E42BA3E03700150184 /* SceneViewController.swift in Sources */,
 				45C9C70A29035685005D0FDD /* LocationViewController.swift in Sources */,
+				455588262DC93AE000EA21A9 /* Venue.swift in Sources */,
 				454A8BCC2B9959B8003C82D6 /* TransportFacilitiesViewController.swift in Sources */,
 				45C9DAA927D598B20003B44B /* Ringdown.swift in Sources */,
 				4566F069236CE82A00A04C75 /* AppRealm.swift in Sources */,
@@ -1051,6 +1073,7 @@
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */,
+				455588212DC9370700EA21A9 /* EventsViewController.swift in Sources */,
 				45E35A3824F06A8E005A8059 /* RecordButton.swift in Sources */,
 				451F9DC8291ED03C00B5E73A /* IconButton.swift in Sources */,
 				452DDBC9243CF40600A8F1FF /* Facility.swift in Sources */,
@@ -1094,6 +1117,7 @@
 				45C9DAA727D598A70003B44B /* HospitalStatusUpdate.swift in Sources */,
 				45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */,
 				454E17B724FFF5BF00F9EB8B /* User.swift in Sources */,
+				455588242DC9389A00EA21A9 /* Event.swift in Sources */,
 				45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */,
 				45C5AF8727D28E9C003E630E /* REDApiClient.swift in Sources */,
 				45C207DA2B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift in Sources */,
@@ -1480,11 +1504,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1536,12 +1560,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {
