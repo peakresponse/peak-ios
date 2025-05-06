@@ -109,6 +109,10 @@ class PRApiClient: ApiClient {
 
     // MARK: - Events
 
+    func getEvent(id: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/events/\(id)", completionHandler: completionHandler)
+    }
+
     func getEvents(filter: String? = nil, search: String? = nil, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: Any] = [:]
         if let filter = filter, !filter.isEmpty {

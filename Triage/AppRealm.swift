@@ -285,6 +285,20 @@ class AppRealm {
 
     // MARK: - Events
 
+    public static func getEvent(id: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = PRApiClient.shared.getEvent(id: id) { (_, _, records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                AppRealm.handlePayload(data: records)
+                completionHandler(nil)
+            } else {
+                completionHandler(ApiClientError.unexpected)
+            }
+        }
+        task.resume()
+    }
+
     public static func getEvents(filter: String? = nil, search: String? = nil, completionHandler: @escaping (String?, Error?) -> Void) {
         let task = PRApiClient.shared.getEvents(filter: filter, search: search, completionHandler: { (_, response, records, error) in
             if let error = error {

@@ -97,6 +97,11 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
         var eventView: UIView?
         if let eventId = eventId, let event = AppRealm.open().object(ofType: Event.self, forPrimaryKey: eventId) {
+            // start fetching event to get venue facilities, if any
+            AppRealm.getEvent(id: eventId) { _ in
+                // no-op
+            }
+
             eventView = UIView()
             eventView?.translatesAutoresizingMaskIntoConstraints = false
             eventView?.backgroundColor = .background
