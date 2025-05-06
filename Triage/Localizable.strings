@@ -172,6 +172,7 @@
 
 "IncidentsViewController.mine" = "My Dispatches";
 "IncidentsViewController.all" = "All Incidents";
+"IncidentsViewController.event" = "Event: %@";
 
 "ReportContainerViewController.tab.incident" = "Incident";
 "ReportContainerViewController.tab.ringdown" = "Ringdown";

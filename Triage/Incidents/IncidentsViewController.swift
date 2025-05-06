@@ -13,6 +13,7 @@ import UIKit
 class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
+    weak var eventLabel: UILabel?
     weak var sidebarTableView: SidebarTableView!
     weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     weak var versionLabel: UILabel!
@@ -94,6 +95,36 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         ])
         self.tableView = tableView
 
+        var eventView: UIView?
+        if let eventId = eventId, let event = AppRealm.open().object(ofType: Event.self, forPrimaryKey: eventId) {
+            eventView = UIView()
+            eventView?.translatesAutoresizingMaskIntoConstraints = false
+            eventView?.backgroundColor = .background
+            view.addSubview(eventView!)
+            NSLayoutConstraint.activate([
+                eventView!.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                eventView!.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
+                eventView!.widthAnchor.constraint(equalTo: view.widthAnchor)
+            ])
+
+            let eventLabel = UILabel()
+            eventLabel.translatesAutoresizingMaskIntoConstraints = false
+            eventLabel.text = String(format: "IncidentsViewController.event".localized, event.name ?? "")
+            eventLabel.textAlignment = .center
+            eventLabel.lineBreakMode = .byTruncatingTail
+            eventLabel.adjustsFontSizeToFitWidth = false
+            eventLabel.font = .body14Bold
+            eventLabel.textColor = .headingText
+            eventView?.addSubview(eventLabel)
+            NSLayoutConstraint.activate([
+                eventLabel.topAnchor.constraint(equalTo: eventView!.topAnchor),
+                eventLabel.leadingAnchor.constraint(equalTo: eventView!.leadingAnchor, constant: 20),
+                eventLabel.trailingAnchor.constraint(equalTo: eventView!.trailingAnchor, constant: -20),
+                eventView!.bottomAnchor.constraint(equalTo: eventLabel.bottomAnchor, constant: 8)
+            ])
+            self.eventLabel = eventLabel
+        }
+
         let segmentedControl = SegmentedControl()
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
         segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
@@ -104,7 +135,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             commandHeader.stackView.distribution = .fillProportionally
             commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
             commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor).isActive = true
+            tableView.topAnchor.constraint(equalTo: (eventView ?? commandHeader).bottomAnchor).isActive = true
         } else {
             let containerView = UIView()
             containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +143,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             containerView.addSubview(segmentedControl)
             view.addSubview(containerView)
             NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                containerView.topAnchor.constraint(equalTo: (eventView ?? commandHeader).bottomAnchor),
                 containerView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
                 containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
                 containerView.heightAnchor.constraint(equalToConstant: 56),
