@@ -49,6 +49,7 @@ class Facility: Base {
         static let country = "country"
         static let lat = "lat"
         static let lng = "lng"
+        static let inventory = "inventory"
     }
 
     @Persisted var type: String?
@@ -69,6 +70,22 @@ class Facility: Base {
         return nil
     }
     @Persisted var distance: Double = Double.greatestFiniteMagnitude
+    @Persisted var _inventory: Data?
+    @objc var inventory: [String]? {
+        get {
+            if let _inventory = _inventory {
+                return (try? JSONSerialization.jsonObject(with: _inventory, options: []) as? [String]) ?? []
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _inventory = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _inventory = nil
+            }
+        }
+    }
 
     var displayName: String? {
         if let regionFacility = realm?.objects(RegionFacility.self).filter("regionId=%@ && facility=%@", AppSettings.regionId as Any, self).first, let facilityName = regionFacility.facilityName {
@@ -94,6 +111,7 @@ class Facility: Base {
         country = data[Keys.country] as? String
         lat = data[Keys.lat] as? String
         lng = data[Keys.lng] as? String
+        inventory = data[Keys.inventory] as? [String]
     }
 
     // swiftlint:disable:next cyclomatic_complexity
@@ -131,6 +149,9 @@ class Facility: Base {
         }
         if let value = lng {
             data[Keys.lng] = value
+        }
+        if let value = inventory {
+            data[Keys.inventory] = value
         }
         return data
     }

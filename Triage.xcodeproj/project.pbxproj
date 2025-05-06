@@ -543,7 +543,6 @@
 		4566F061236CE17900A04C75 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				455588252DC93ADF00EA21A9 /* Venue.swift */,
 				452DDBC6243CF3F000A8F1FF /* Agency.swift */,
 				45D3E94527276C8D00E5382D /* Assignment.swift */,
 				4566F064236CE3B500A04C75 /* Base.swift */,
@@ -580,6 +579,7 @@
 				45F7BAC5273AEBF100FBD31F /* Time.swift */,
 				454E17B624FFF5BF00F9EB8B /* User.swift */,
 				45D3E943272767A200E5382D /* Vehicle.swift */,
+				455588252DC93ADF00EA21A9 /* Venue.swift */,
 				45F7BAD3273AEC3D00FBD31F /* Vital.swift */,
 			);
 			path = Models;
