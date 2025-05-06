@@ -468,9 +468,9 @@ class AppRealm {
         incidentsSocket = nil
     }
 
-    public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
+    public static func getIncidents(vehicleId: String? = nil, eventId: String? = nil, search: String? = nil,
                                     completionHandler: @escaping (String?, Error?) -> Void) {
-        let task = PRApiClient.shared.getIncidents(vehicleId: vehicleId, search: search) { (_, response, records, error) in
+        let task = PRApiClient.shared.getIncidents(vehicleId: vehicleId, eventId: eventId, search: search) { (_, response, records, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let records = records {

@@ -22,6 +22,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
     weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     weak var segmentedControl: SegmentedControl!
 
+    var eventId: String?
+
     var notificationToken: NotificationToken?
     var results: Results<Incident>?
     var nextUrl: String?
@@ -222,16 +224,23 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                 SortDescriptor(keyPath: "sort", ascending: false),
                 SortDescriptor(keyPath: "createdAt", ascending: false)
             ])
-        if let vehicleId = AppSettings.vehicleId {
-            if segmentedControl.segmentsCount < 2 {
-                segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
-            }
-            if segmentedControl.selectedIndex == 0 {
-                results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+        if let eventId = eventId {
+            results = results?.filter("eventId=%@", eventId)
+            if segmentedControl.selectedIndex == 0, let userId = AppSettings.userId {
+                results = results?.filter("createdById=%@", userId)
             }
         } else {
-            if segmentedControl.segmentsCount > 1 {
-                segmentedControl.removeSegment(at: 0)
+            if let vehicleId = AppSettings.vehicleId {
+                if segmentedControl.segmentsCount < 2 {
+                    segmentedControl.insertSegment(title: "IncidentsViewController.mine".localized, at: 0)
+                }
+                if segmentedControl.selectedIndex == 0 {
+                    results = results?.filter("ANY dispatches.vehicleId=%@", vehicleId)
+                }
+            } else {
+                if segmentedControl.segmentsCount > 1 {
+                    segmentedControl.removeSegment(at: 0)
+                }
             }
         }
         if let text = commandHeader.searchField.text, !text.isEmpty {
@@ -251,7 +260,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             let assignment = AppRealm.open().object(ofType: Assignment.self, forPrimaryKey: assignmentId)
             vehicleId = assignment?.vehicleId
         }
-        AppRealm.getIncidents(vehicleId: vehicleId, search: commandHeader.searchField.text,
+        AppRealm.getIncidents(vehicleId: vehicleId, eventId: eventId, search: commandHeader.searchField.text,
                               completionHandler: { [weak self] (nextUrl, error) in
             self?.handleIncidentsResponse(nextUrl: nextUrl, error: error)
         })
@@ -385,6 +394,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                     self?.toggleSidebar()
                 }
             case 1:
+                AppSettings.eventId = nil
                 let vc = EventsViewController()
                 toggleSidebar { _ in
                     for window in UIApplication.shared.windows where window.isKeyWindow {

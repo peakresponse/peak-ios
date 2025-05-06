@@ -220,15 +220,15 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         }
     }
 
-    func toggleSidebar() {
-        UIView.animate(withDuration: 0.2) { [weak self] in
+    func toggleSidebar(completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
             if self?.sidebarTableViewLeadingConstraint.constant == 0 {
                 self?.sidebarTableViewLeadingConstraint.constant = -300
             } else {
                 self?.sidebarTableViewLeadingConstraint.constant = 0
             }
             self?.view.layoutIfNeeded()
-        }
+        }, completion: completion)
     }
 
     // MARK: - AssignmentViewControllerDelegate
@@ -310,9 +310,12 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
                 }
             case 1:
                 let vc = IncidentsViewController()
-                for window in UIApplication.shared.windows where window.isKeyWindow {
-                    window.rootViewController = vc
-                    break
+                AppSettings.eventId = nil
+                toggleSidebar { _ in
+                    for window in UIApplication.shared.windows where window.isKeyWindow {
+                        window.rootViewController = vc
+                        break
+                    }
                 }
                 break
             case 2:
@@ -323,7 +326,13 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
             return
         }
         if let event = results?[indexPath.row] {
-            // no-op for now
+            let vc = IncidentsViewController()
+            vc.eventId = event.id
+            AppSettings.eventId = event.id
+            for window in UIApplication.shared.windows where window.isKeyWindow {
+                window.rootViewController = vc
+                break
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

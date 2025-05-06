@@ -354,6 +354,8 @@ class Report: BaseVersioned, NemsisBacked, Predictions {
             let newIncident = Incident()
             newIncident.scene = scene
             newIncident.number = response?.incidentNumber
+            newIncident.eventId = AppSettings.eventId
+            newIncident.createdById = AppSettings.userId
             payload["Incident"] = newIncident.asJSON()
             incident = newIncident
         }

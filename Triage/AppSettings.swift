@@ -58,6 +58,11 @@ class AppSettings {
         set { defaults.set(newValue, forKey: "vehicleId") }
     }
 
+    static var eventId: String? {
+        get { return defaults.string(forKey: "eventId") }
+        set { defaults.set(newValue, forKey: "eventId") }
+    }
+
     static var lastPingDate: Date? {
         get { return defaults.object(forKey: "lastPingDate") as? Date }
         set { defaults.set(newValue, forKey: "lastPingDate") }
@@ -94,6 +99,7 @@ class AppSettings {
         AppSettings.agencyId = agencyId
         AppSettings.assignmentId = assignmentId
         AppSettings.vehicleId = vehicleId
+        AppSettings.eventId = nil
         AppSettings.sceneId = sceneId
     }
 
@@ -103,6 +109,7 @@ class AppSettings {
         AppSettings.agencyId = nil
         AppSettings.assignmentId = nil
         AppSettings.vehicleId = nil
+        AppSettings.eventId = nil
         AppSettings.sceneId = nil
         AppSettings.subdomain = nil
         AppSettings.routedUrl = nil

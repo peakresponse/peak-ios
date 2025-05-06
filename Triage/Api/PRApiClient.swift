@@ -132,13 +132,15 @@ class PRApiClient: ApiClient {
         return WS(path: "/incidents", params: ["assignmentId": assignmentId ], completionHandler: completionHandler)
     }
 
-    func getIncidents(vehicleId: String? = nil, search: String? = nil,
+    func getIncidents(vehicleId: String? = nil, eventId: String? = nil, search: String? = nil,
                       completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: Any] = [:]
-        if let vehicleId = vehicleId {
+        if let eventId = eventId, !eventId.isEmpty {
+            params["eventId"] = eventId
+        } else if let vehicleId = vehicleId, !vehicleId.isEmpty {
             params["vehicleId"] = vehicleId
         }
-        if let search = search {
+        if let search = search, !search.isEmpty {
             params["search"] = search
         }
         return GET(path: "/api/incidents", params: params, completionHandler: completionHandler)
