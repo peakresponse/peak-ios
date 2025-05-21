@@ -97,9 +97,17 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
         var eventView: UIView?
         if let eventId = eventId, let event = AppRealm.open().object(ofType: Event.self, forPrimaryKey: eventId) {
-            // start fetching event to get venue facilities, if any
+            // start fetching event to get venue, region, and facilities, if any
             AppRealm.getEvent(id: eventId) { _ in
-                // no-op
+                DispatchQueue.main.async {
+                    if let venue = event.venue, let region = venue.region, let routedUrl = region.routedUrl {
+                        print("Event venue region routed url is", routedUrl)
+                        REDRealm.disconnect()
+                        REDRealm.deleteAll()
+                        REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+                        REDRealm.connect(venue.id)
+                    }
+                }
             }
 
             eventView = UIView()

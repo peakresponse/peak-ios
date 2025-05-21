@@ -49,9 +49,9 @@ class REDRealm {
 
     // MARK: - Websocket
 
-    public static func connect() {
+    public static func connect(_ venueId: String? = nil) {
         userSocket?.disconnect()
-        userSocket = REDApiClient.shared?.connect(completionHandler: { (socket, data, error) in
+        userSocket = REDApiClient.shared?.connect(venueId, completionHandler: { (socket, data, error) in
             guard socket == userSocket else { return }
             if error != nil {
                 // close current connection
@@ -64,7 +64,7 @@ class REDRealm {
                         case .notAnUpgrade(let code, _):
                             if code == 401 {
                                 let task = REDApiClient.shared?.login { (_, _, _) in
-                                    connect()
+                                    connect(venueId)
                                 }
                                 if let task = task {
                                     task.resume()
@@ -75,7 +75,7 @@ class REDRealm {
                             break
                         }
                     }
-                    connect()
+                    connect(venueId)
                 }
             } else if let data = data {
                 let realm = REDRealm.open()
@@ -120,7 +120,7 @@ class REDRealm {
             userSocket.connect()
         } else {
             DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                connect()
+                connect(venueId)
             }
         }
     }

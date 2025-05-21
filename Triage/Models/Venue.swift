@@ -19,6 +19,7 @@ class Venue: Base {
         static let countyId = "countyId"
         static let stateId = "stateId"
         static let zipCode = "zipCode"
+        static let regionId = "regionId"
     }
     @Persisted var type: String?
     @Persisted var name: String?
@@ -28,6 +29,11 @@ class Venue: Base {
     @Persisted var countyId: String?
     @Persisted var stateId: String?
     @Persisted var zipCode: String?
+    @Persisted var regionId: String?
+
+    var region: Region? {
+        regionId != nil ? realm?.object(ofType: Region.self, forPrimaryKey: regionId) : nil
+    }
 
     override func update(from data: [String: Any], with realm: Realm) {
         super.update(from: data, with: realm)
@@ -39,6 +45,7 @@ class Venue: Base {
         countyId = data[Keys.countyId] as? String
         stateId = data[Keys.stateId] as? String
         zipCode = data[Keys.zipCode] as? String
+        regionId = data[Keys.regionId] as? String
     }
 
     override func asJSON() -> [String: Any] {
@@ -51,6 +58,7 @@ class Venue: Base {
         json[Keys.countyId] = countyId ?? NSNull()
         json[Keys.stateId] = stateId ?? NSNull()
         json[Keys.zipCode] = zipCode ?? NSNull()
+        json[Keys.regionId] = regionId ?? NSNull()
         return json
     }
 }
