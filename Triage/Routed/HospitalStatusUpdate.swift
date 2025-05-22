@@ -12,6 +12,8 @@ internal import RealmSwift
 class HospitalStatusUpdate: Object {
     struct Keys {
         static let id = "id"
+        static let organization = "organization"
+        static let type = "type"
         static let hospital = "hospital"
         static let name = "name"
         static let state = "state"
@@ -32,6 +34,19 @@ class HospitalStatusUpdate: Object {
 
     @Persisted(primaryKey: true) var id = UUID().uuidString.lowercased()
     @Persisted var name: String?
+    @Persisted var type: String? {
+        didSet {
+            switch type {
+            case "VENUE":
+                sortType = 1
+            case "HEALTHCARE":
+                sortType = 2
+            default:
+                sortType = Int.max
+            }
+        }
+    }
+    @Persisted var sortType: Int = Int.max
     @Persisted var state: String?
     @Persisted var stateFacilityCode: String?
     @Persisted var sortSequenceNumber: Int?
@@ -58,23 +73,14 @@ class HospitalStatusUpdate: Object {
             if let value = hospital[Keys.id] as? String {
                 id = value
             }
-            if let value = hospital[Keys.name] as? String {
-                name = value
-            }
-            if let value = hospital[Keys.state] as? String {
-                state = value
-            }
-            if let value = hospital[Keys.stateFacilityCode] as? String {
-                stateFacilityCode = value
-            }
-            if let value = hospital[Keys.sortSequenceNumber] as? Int {
-                sortSequenceNumber = value
-            }
-            if let value = hospital[Keys.ambulancesEnRoute] as? Int {
-                ambulancesEnRoute = value
-            }
-            if let value = hospital[Keys.ambulancesOffloading] as? Int {
-                ambulancesOffloading = value
+            name = hospital[Keys.name] as? String
+            state = hospital[Keys.state] as? String
+            stateFacilityCode = hospital[Keys.stateFacilityCode] as? String
+            sortSequenceNumber = hospital[Keys.sortSequenceNumber] as? Int
+            ambulancesEnRoute = hospital[Keys.ambulancesEnRoute] as? Int
+            ambulancesOffloading = hospital[Keys.ambulancesOffloading] as? Int
+            if let org = hospital[Keys.organization] as? [String: Any] {
+                type = org[Keys.type] as? String
             }
         }
         mciRedCapacity = data[Keys.mciRedCapacity] as? Int
