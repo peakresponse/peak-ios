@@ -25,6 +25,8 @@ class HospitalStatusUpdate: Object {
         static let mciUpdateDateTime = "mciUpdateDateTime"
         static let openEdBedCount = "openEdBedCount"
         static let openPsychBedCount = "openPsychBedCount"
+        static let customInventory = "customInventory"
+        static let customInventoryCount = "customInventoryCount"
         static let divertStatus = "divertStatusIndicator"
         static let notes = "additionalServiceAvailabilityNotes"
         static let ambulancesEnRoute = "ambulancesEnRoute"
@@ -56,6 +58,38 @@ class HospitalStatusUpdate: Object {
     @Persisted var mciUpdateDateTime: Date?
     @Persisted var openEdBedCount: Int?
     @Persisted var openPsychBedCount: Int?
+    @Persisted var _customInventory: Data?
+    @objc var customInventory: [String]? {
+        get {
+            if let _customInventory = _customInventory {
+                return (try? JSONSerialization.jsonObject(with: _customInventory, options: []) as? [String]) ?? []
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _customInventory = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _customInventory = nil
+            }
+        }
+    }
+    @Persisted var _customInventoryCount: Data?
+    @objc var customInventoryCount: [Int]? {
+        get {
+            if let _customInventoryCount = _customInventoryCount {
+                return (try? JSONSerialization.jsonObject(with: _customInventoryCount, options: []) as? [Int]) ?? []
+            }
+            return nil
+        }
+        set {
+            if let newValue = newValue {
+                _customInventoryCount = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+            } else {
+                _customInventoryCount = nil
+            }
+        }
+    }
     @Persisted var divertStatus: Bool?
     @Persisted var notes: String?
     @Persisted var ambulancesEnRoute: Int?
@@ -79,6 +113,7 @@ class HospitalStatusUpdate: Object {
             sortSequenceNumber = hospital[Keys.sortSequenceNumber] as? Int
             ambulancesEnRoute = hospital[Keys.ambulancesEnRoute] as? Int
             ambulancesOffloading = hospital[Keys.ambulancesOffloading] as? Int
+            customInventory = hospital[Keys.customInventory] as? [String]
             if let org = hospital[Keys.organization] as? [String: Any] {
                 type = org[Keys.type] as? String
             }
@@ -89,6 +124,7 @@ class HospitalStatusUpdate: Object {
         mciUpdateDateTime = ISO8601DateFormatter.date(from: data[Keys.mciUpdateDateTime])
         openEdBedCount = data[Keys.openEdBedCount] as? Int
         openPsychBedCount = data[Keys.openPsychBedCount] as? Int
+        customInventoryCount = data[Keys.customInventoryCount] as? [Int]
         divertStatus = data[Keys.divertStatus] as? Bool
         notes = data[Keys.notes] as? String
         updatedAt = ISO8601DateFormatter.date(from: data[Keys.updatedAt])

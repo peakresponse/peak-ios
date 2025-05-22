@@ -503,8 +503,8 @@
 "RingdownFacilityView.eta.mins" = " min";
 "RingdownFacilityView.erBeds" = "ER Beds";
 "RingdownFacilityView.psychBeds" = "Behav. Beds";
-"RingdownFacilityView.enroute" = "Amb. En-Route";
-"RingdownFacilityView.waiting" = "Amb. Waiting";
+"RingdownFacilityView.enroute" = "En-Route";
+"RingdownFacilityView.waiting" = "Waiting";
 
 "RingdownStatusView.status.confirmed" = "Confirmed";
 "RingdownStatusView.status.delivered" = "Delivered";

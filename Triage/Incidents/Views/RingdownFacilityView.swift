@@ -79,6 +79,8 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
 
     weak var delegate: RingdownFacilityViewDelegate?
 
+    var id: String?
+
     var isSelected: Bool = false {
         didSet {
             arrivalField.isHidden = !isSelected
@@ -194,53 +196,26 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         self.statsStackView = statsStackView
 
         var countView: RingdownFacilityCountView
-        var hr: PixelRuleView
 
-        countView = RingdownFacilityCountView()
-        countView.translatesAutoresizingMaskIntoConstraints = false
+        countView = addStatCountView()
         countView.labelText = "RingdownFacilityView.erBeds".localized
-        statsStackView.addArrangedSubview(countView)
-        statCountViews.append(countView)
 
-        hr = PixelRuleView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        statsStackView.addArrangedSubview(hr)
+        _ = addStatCountHorizontalRule()
 
-        countView = RingdownFacilityCountView()
-        countView.translatesAutoresizingMaskIntoConstraints = false
+        countView = addStatCountView()
         countView.labelText = "RingdownFacilityView.psychBeds".localized
-        statsStackView.addArrangedSubview(countView)
-        statCountViews.append(countView)
 
-        hr = PixelRuleView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        statsStackView.addArrangedSubview(hr)
+        _ = addStatCountHorizontalRule()
 
-        countView = RingdownFacilityCountView()
-        countView.translatesAutoresizingMaskIntoConstraints = false
+        countView = addStatCountView()
         countView.labelText = "RingdownFacilityView.enroute".localized
-        statsStackView.addArrangedSubview(countView)
-        statCountViews.append(countView)
 
-        hr = PixelRuleView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        statsStackView.addArrangedSubview(hr)
+        _ = addStatCountHorizontalRule()
 
-        countView = RingdownFacilityCountView()
-        countView.translatesAutoresizingMaskIntoConstraints = false
+        countView = addStatCountView()
         countView.labelText = "RingdownFacilityView.waiting".localized
-        statsStackView.addArrangedSubview(countView)
-        statCountViews.append(countView)
 
-        hr = PixelRuleView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        hr.isHidden = true
-        statsStackView.addArrangedSubview(hr)
-        self.notesRule = hr
+        self.notesRule = addStatCountHorizontalRule()
 
         let notesLabel = UILabel()
         notesLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -258,16 +233,81 @@ class RingdownFacilityView: UIView, PRKit.FormFieldDelegate {
         self.notesLabel = notesLabel
     }
 
+    func addStatCountView() -> RingdownFacilityCountView {
+        let countView = RingdownFacilityCountView()
+        countView.translatesAutoresizingMaskIntoConstraints = false
+        statsStackView.addArrangedSubview(countView)
+        statCountViews.append(countView)
+        return countView
+    }
+
+    func addStatCountHorizontalRule() -> PixelRuleView {
+        let hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        statsStackView.addArrangedSubview(hr)
+        return hr
+    }
+
+    func configureStatCountViews(customInventory: [String]? = nil) {
+        statsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        if let customInventory = customInventory {
+            for (i, label) in customInventory.enumerated() {
+                if i < statCountViews.count {
+                    statCountViews[i].labelText = label
+                    statsStackView.addArrangedSubview(statCountViews[i])
+                } else {
+                    let statCountView = addStatCountView()
+                    statCountView.labelText = label
+                }
+                _ = addStatCountHorizontalRule()
+            }
+            for (i, label) in ["RingdownFacilityView.enroute", "RingdownFacilityView.waiting"].enumerated() {
+                if (i + customInventory.count) < statCountViews.count {
+                    statCountViews[i + customInventory.count].labelText = label.localized
+                    statsStackView.addArrangedSubview(statCountViews[i + customInventory.count])
+                } else {
+                    let statCountView = addStatCountView()
+                    statCountView.labelText = label.localized
+                }
+                _ = addStatCountHorizontalRule()
+            }
+        } else {
+            for i in 0..<4 {
+                statCountViews[i].labelText = ["RingdownFacilityView.erBeds", "RingdownFacilityView.psychBeds", "RingdownFacilityView.enroute", "RingdownFacilityView.waiting"][i].localized
+                statsStackView.addArrangedSubview(statCountViews[i])
+                _ = addStatCountHorizontalRule()
+            }
+        }
+        statsStackView.removeArrangedSubview(statsStackView.arrangedSubviews.last!)
+        statsStackView.addArrangedSubview(self.notesRule)
+    }
+
     func update(from update: HospitalStatusUpdate) {
         nameText = update.name
         setUpdatedAt(update.updatedAt)
 
-        statCountViews[0].countText = update.openEdBedCount != nil ? "\(update.openEdBedCount ?? 0)" : "-"
-        statCountViews[1].countText = update.openPsychBedCount != nil ? "\(update.openPsychBedCount ?? 0)" : "-"
-        statCountViews[2].countText = update.ambulancesEnRoute != nil ? "\(update.ambulancesEnRoute ?? 0)" : "-"
-        statCountViews[3].countText = update.ambulancesOffloading != nil ? "\(update.ambulancesOffloading ?? 0)" : "-"
+        if update.id != id {
+            configureStatCountViews(customInventory: update.customInventory)
+            id = update.id
+        }
 
-        if let notes = update.notes {
+        if let customInventory = update.customInventory, customInventory.count > 0 {
+            if let customInventoryCount = update.customInventoryCount {
+                for (i, count) in customInventoryCount.enumerated() {
+                    statCountViews[i].countText = "\(count)"
+                }
+            }
+            statCountViews[customInventory.count].countText = update.ambulancesEnRoute != nil ? "\(update.ambulancesEnRoute ?? 0)" : "-"
+            statCountViews[customInventory.count + 1].countText = update.ambulancesOffloading != nil ? "\(update.ambulancesOffloading ?? 0)" : "-"
+        } else {
+            statCountViews[0].countText = update.openEdBedCount != nil ? "\(update.openEdBedCount ?? 0)" : "-"
+            statCountViews[1].countText = update.openPsychBedCount != nil ? "\(update.openPsychBedCount ?? 0)" : "-"
+            statCountViews[2].countText = update.ambulancesEnRoute != nil ? "\(update.ambulancesEnRoute ?? 0)" : "-"
+            statCountViews[3].countText = update.ambulancesOffloading != nil ? "\(update.ambulancesOffloading ?? 0)" : "-"
+        }
+
+        if let notes = update.notes, !notes.isEmpty {
             notesLabel.text = notes
             notesLabel.isHidden = false
             notesRule.isHidden = false
