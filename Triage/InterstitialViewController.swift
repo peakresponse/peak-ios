@@ -33,11 +33,6 @@ class InterstitialViewController: UIViewController {
                 }
                 return
             }
-            // also attempt log in to RoutED API
-            if let routedUrl = AppSettings.routedUrl {
-                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
-                REDRealm.connect()
-            }
             if let user = user, let agency = agency {
                 // update agency forms in the background
                 AppRealm.getForms()
