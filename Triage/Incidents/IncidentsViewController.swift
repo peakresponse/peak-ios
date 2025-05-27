@@ -101,7 +101,6 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
             AppRealm.getEvent(id: eventId) { _ in
                 DispatchQueue.main.async {
                     if let venue = event.venue, let region = venue.region, let routedUrl = region.routedUrl {
-                        print("Event venue region routed url is", routedUrl)
                         REDRealm.disconnect()
                         REDRealm.deleteAll()
                         REDApiClient.shared = REDApiClient(baseURL: routedUrl)
@@ -136,6 +135,11 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                 eventView!.bottomAnchor.constraint(equalTo: eventLabel.bottomAnchor, constant: 8)
             ])
             self.eventLabel = eventLabel
+        } else if let routedUrl = AppSettings.routedUrl {
+            REDRealm.disconnect()
+            REDRealm.deleteAll()
+            REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+            REDRealm.connect()
         }
 
         let segmentedControl = SegmentedControl()
@@ -439,12 +443,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                 }
             case 1:
                 AppSettings.eventId = nil
-                let vc = EventsViewController()
                 toggleSidebar { _ in
-                    for window in UIApplication.shared.windows where window.isKeyWindow {
-                        window.rootViewController = vc
-                        break
-                    }
+                    AppDelegate.enterEvents()
                 }
                 break
             case 2:

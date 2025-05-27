@@ -19,6 +19,7 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
     weak var versionLabel: UILabel!
     weak var tableView: UITableView!
     weak var segmentedControl: SegmentedControl!
+    var isEventsOnly = false
 
     var notificationToken: NotificationToken?
     var results: Results<Event>?
@@ -30,6 +31,10 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let agencyId = AppSettings.agencyId, let agency = AppRealm.open().object(ofType: Agency.self, forPrimaryKey: agencyId) {
+            isEventsOnly = agency.isEventsOnly ?? false
+        }
 
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
@@ -268,7 +273,7 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView == sidebarTableView {
-            return 3
+            return isEventsOnly ? 2 : 3
         }
         return results?.count ?? 0
     }
@@ -280,7 +285,11 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
             case 0:
                 cell.textLabel?.text = "Sidebar.item.switch".localized
             case 1:
-                cell.textLabel?.text = "Sidebar.item.incidents".localized
+                if isEventsOnly {
+                    fallthrough
+                } else {
+                    cell.textLabel?.text = "Sidebar.item.incidents".localized
+                }
             case 2:
                 cell.textLabel?.text = "Sidebar.item.logOut".localized
             default:
@@ -309,15 +318,12 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
                     self?.toggleSidebar()
                 }
             case 1:
-                let vc = IncidentsViewController()
-                AppSettings.eventId = nil
-                toggleSidebar { _ in
-                    for window in UIApplication.shared.windows where window.isKeyWindow {
-                        window.rootViewController = vc
-                        break
-                    }
+                if isEventsOnly {
+                    fallthrough
+                } else {
+                    AppSettings.eventId = nil
+                    _ = AppDelegate.leaveScene()
                 }
-                break
             case 2:
                 logout()
             default:
@@ -326,13 +332,8 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
             return
         }
         if let event = results?[indexPath.row] {
-            let vc = IncidentsViewController()
-            vc.eventId = event.id
             AppSettings.eventId = event.id
-            for window in UIApplication.shared.windows where window.isKeyWindow {
-                window.rootViewController = vc
-                break
-            }
+            _ = AppDelegate.leaveScene()
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
