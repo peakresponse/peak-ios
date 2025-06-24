@@ -104,8 +104,6 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             AppSettings.subdomain = subdomain
             if let routedUrl = agencies[0]["routedUrl"] as? String {
                 AppSettings.routedUrl = routedUrl
-                REDApiClient.shared = REDApiClient(baseURL: routedUrl)
-                REDRealm.connect()
             }
             // update agency forms in the background
             AppRealm.getForms()

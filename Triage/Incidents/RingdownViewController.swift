@@ -113,7 +113,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
 
         let realm = REDRealm.open()
         results = realm.objects(HospitalStatusUpdate.self)
-            .sorted(by: [SortDescriptor(keyPath: "sortSequenceNumber", ascending: true)])
+            .sorted(by: [
+                SortDescriptor(keyPath: "sortType", ascending: true),
+                SortDescriptor(keyPath: "sortSequenceNumber", ascending: true)
+            ])
         notificationToken = results?.observe { [weak self] (changes) in
             self?.didObserveRealmChanges(changes)
         }

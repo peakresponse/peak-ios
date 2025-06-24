@@ -16,12 +16,14 @@ class Agency: Base {
         static let stateUniqueId = "stateUniqueId"
         static let number = "number"
         static let name = "name"
+        static let isEventsOnly = "isEventsOnly"
     }
     @Persisted var regionId: String?
     @Persisted var stateId: String?
     @Persisted var stateUniqueId: String?
     @Persisted var number: String?
     @Persisted var name: String?
+    @Persisted var isEventsOnly: Bool?
 
     var displayName: String? {
         if let regionAgency = realm?.objects(RegionAgency.self).filter("regionId=%@ && agency=%@", AppSettings.regionId as Any, self).first, let agencyName = regionAgency.agencyName {
@@ -41,6 +43,7 @@ class Agency: Base {
         stateUniqueId = data[Keys.stateUniqueId] as? String
         number = data[Keys.number] as? String
         name = data[Keys.name] as? String
+        isEventsOnly = data[Keys.isEventsOnly] as? Bool
     }
 
     override func asJSON() -> [String: Any] {
@@ -49,7 +52,7 @@ class Agency: Base {
             data[Keys.regionId] = value
         }
         if let value = stateId {
-            data[Keys.stateId] = stateId
+            data[Keys.stateId] = value
         }
         if let value = stateUniqueId {
             data[Keys.stateUniqueId] = value
@@ -60,6 +63,7 @@ class Agency: Base {
         if let value = name {
             data[Keys.name] = value
         }
+        data[Keys.isEventsOnly] = isEventsOnly ?? NSNull()
         return data
     }
 }

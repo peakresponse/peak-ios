@@ -25,18 +25,37 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
         for window in UIApplication.shared.windows where window.isKeyWindow {
             window.rootViewController = vc
+            window.makeKeyAndVisible()
             break
         }
     }
 
     static func leaveScene() -> UIViewController {
         AppSettings.sceneId = nil
-        let vc = IncidentsViewController()
+        var vc: UIViewController!
+        if let eventId = AppSettings.eventId {
+            let incidentsVC = IncidentsViewController()
+            incidentsVC.eventId = eventId
+            vc = incidentsVC
+        } else if let agencyId = AppSettings.agencyId, let agency = AppRealm.open().object(ofType: Agency.self, forPrimaryKey: agencyId), agency.isEventsOnly ?? false {
+            vc = EventsViewController()
+        } else {
+            vc = IncidentsViewController()
+        }
+        for window in UIApplication.shared.windows where window.isKeyWindow {
+            window.rootViewController = vc
+            window.makeKeyAndVisible()
+            break
+        }
+        return vc
+    }
+
+    static func enterEvents() {
+        let vc = EventsViewController()
         for window in UIApplication.shared.windows where window.isKeyWindow {
             window.rootViewController = vc
             break
         }
-        return vc
     }
 
     func application(_ application: UIApplication,

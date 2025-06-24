@@ -107,6 +107,23 @@ class PRApiClient: ApiClient {
         return GET(path: "/api/cities", params: params, completionHandler: completionHandler)
     }
 
+    // MARK: - Events
+
+    func getEvent(id: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        return GET(path: "/api/events/\(id)", completionHandler: completionHandler)
+    }
+
+    func getEvents(filter: String? = nil, search: String? = nil, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        var params: [String: Any] = [:]
+        if let filter = filter, !filter.isEmpty {
+            params["filter"] = filter
+        }
+        if let search = search, !search.isEmpty {
+            params["search"] = search
+        }
+        return GET(path: "/api/events", params: params, completionHandler: completionHandler)
+    }
+
     // MARK: - Forms
 
     func getForms(completionHandler: @escaping (URLRequest, URLResponse?, [[String: Any]]?, Error?) -> Void) -> URLSessionTask {
@@ -119,13 +136,15 @@ class PRApiClient: ApiClient {
         return WS(path: "/incidents", params: ["assignmentId": assignmentId ], completionHandler: completionHandler)
     }
 
-    func getIncidents(vehicleId: String? = nil, search: String? = nil,
+    func getIncidents(vehicleId: String? = nil, eventId: String? = nil, search: String? = nil,
                       completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
         var params: [String: Any] = [:]
-        if let vehicleId = vehicleId {
+        if let eventId = eventId, !eventId.isEmpty {
+            params["eventId"] = eventId
+        } else if let vehicleId = vehicleId, !vehicleId.isEmpty {
             params["vehicleId"] = vehicleId
         }
-        if let search = search {
+        if let search = search, !search.isEmpty {
             params["search"] = search
         }
         return GET(path: "/api/incidents", params: params, completionHandler: completionHandler)

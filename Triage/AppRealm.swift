@@ -85,9 +85,9 @@ class AppRealm {
 
     public static let objectTypes = [
         Agency.self, Assignment.self, City.self, CodeList.self, CodeListSection.self, CodeListItem.self, Dispatch.self,
-        Disposition.self, Facility.self, File.self, Form.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
+        Disposition.self, Event.self, Facility.self, File.self, Form.self, History.self, Incident.self, Medication.self, Narrative.self, Patient.self,
         Procedure.self, Region.self, RegionAgency.self, RegionFacility.self, Report.self, Responder.self, Response.self,
-        Scene.self, ScenePin.self, Signature.self, Situation.self, State.self, Time.self, User.self, Vehicle.self, Vital.self
+        Scene.self, ScenePin.self, Signature.self, Situation.self, State.self, Time.self, User.self, Vehicle.self, Venue.self, Vital.self
     ]
 
     public static func configure(seedUrl: URL?, mainUrl: URL?) {
@@ -141,6 +141,7 @@ class AppRealm {
                 Agency.self,
                 Assignment.self,
                 City.self,
+                Event.self,
                 Facility.self,
                 File.self,
                 Form.self,
@@ -156,6 +157,7 @@ class AppRealm {
                 Time.self,
                 User.self,
                 Vehicle.self,
+                Venue.self,
                 Vital.self,
                 // models with dependencies on above in dependency order
                 Disposition.self,
@@ -278,6 +280,54 @@ class AppRealm {
                 completionHandler(nil)
             }
         })
+        task.resume()
+    }
+
+    // MARK: - Events
+
+    public static func getEvent(id: String, completionHandler: @escaping (Error?) -> Void) {
+        let task = PRApiClient.shared.getEvent(id: id) { (_, _, records, error) in
+            if let error = error {
+                completionHandler(error)
+            } else if let records = records {
+                AppRealm.handlePayload(data: records)
+                completionHandler(nil)
+            } else {
+                completionHandler(ApiClientError.unexpected)
+            }
+        }
+        task.resume()
+    }
+
+    public static func getEvents(filter: String? = nil, search: String? = nil, completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = PRApiClient.shared.getEvents(filter: filter, search: search, completionHandler: { (_, response, records, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let records = records {
+                AppRealm.handlePayload(data: records)
+                var nextUrl: String?
+                if let links = PRApiClient.parseLinkHeader(from: response) {
+                    nextUrl = links["next"]
+                }
+                completionHandler(nextUrl, nil)
+            }
+        })
+        task.resume()
+    }
+
+    public static func getNextEvents(url: String, completionHandler: @escaping (String?, Error?) -> Void) {
+        let task = PRApiClient.shared.GET(path: url, params: nil) { (_, response, records: [String: Any]?, error) in
+            if let error = error {
+                completionHandler(nil, error)
+            } else if let records = records {
+                AppRealm.handlePayload(data: records)
+                var nextUrl: String?
+                if let links = PRApiClient.parseLinkHeader(from: response) {
+                    nextUrl = links["next"]
+                }
+                completionHandler(nextUrl, nil)
+            }
+        }
         task.resume()
     }
 
@@ -432,9 +482,9 @@ class AppRealm {
         incidentsSocket = nil
     }
 
-    public static func getIncidents(vehicleId: String? = nil, search: String? = nil,
+    public static func getIncidents(vehicleId: String? = nil, eventId: String? = nil, search: String? = nil,
                                     completionHandler: @escaping (String?, Error?) -> Void) {
-        let task = PRApiClient.shared.getIncidents(vehicleId: vehicleId, search: search) { (_, response, records, error) in
+        let task = PRApiClient.shared.getIncidents(vehicleId: vehicleId, eventId: eventId, search: search) { (_, response, records, error) in
             if let error = error {
                 completionHandler(nil, error)
             } else if let records = records {

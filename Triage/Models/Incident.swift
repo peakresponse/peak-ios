@@ -11,6 +11,8 @@ internal import RealmSwift
 
 class Incident: Base {
     struct Keys {
+        static let createdById = "createdById"
+        static let eventId = "eventId"
         static let psapId = "psapId"
         static let sceneId = "sceneId"
         static let number = "number"
@@ -19,6 +21,8 @@ class Incident: Base {
         static let dispatchNotifiedAt = "dispatchNotifiedAt"
         static let reportsCount = "reportsCount"
     }
+    @Persisted var createdById: String?
+    @Persisted var eventId: String?
     @Persisted var psapId: String?
     @Persisted var scene: Scene?
     @Persisted var number: String?
@@ -30,6 +34,8 @@ class Incident: Base {
 
     override func update(from data: [String: Any], with realm: Realm) {
         super.update(from: data, with: realm)
+        createdById = data[Keys.createdById] as? String
+        eventId = data[Keys.eventId] as? String
         psapId = data[Keys.psapId] as? String
         if let sceneId = data[Keys.sceneId] as? String {
             scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
@@ -47,6 +53,7 @@ class Incident: Base {
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
+        json[Keys.eventId] = eventId ?? NSNull()
         if let psapId = psapId {
             json[Keys.psapId] = psapId
         }
