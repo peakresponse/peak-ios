@@ -157,6 +157,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
             addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
             section.addArrangedSubview(cols)
+
+            let button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
+            button.addTarget(self, action: #selector(scanLicensePressed(_:)), for: .touchUpInside)
+            button.tag = tag
+            tag += 1
+            section.addLastButton(button)
+
             containerView.addArrangedSubview(section)
         } else {
             let innerCols = newColumns()
