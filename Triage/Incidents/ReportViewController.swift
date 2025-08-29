@@ -448,6 +448,21 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
         addTextField(source: source, target: target,
+                     attributeKey: "vitals[\(i)].pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colA)
+
+        let tempField = TemperatureField()
+        tempField.source = source
+        tempField.target = target
+        tempField.labelText = "Vital.temperature".localized
+        tempField.attributeKey = "vitals[\(i)].temperature"
+        tempField.delegate = self
+        tempField.inputAccessoryView = formInputAccessoryView
+        tempField.tag = tag
+        tag += 2
+        colB.addArrangedSubview(tempField)
+        formComponents[tempField.attributeKey!] = tempField
+
+        addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].cardiacRhythm",
@@ -463,11 +478,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
         addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
+                     attributeKey: "vitals[\(i)].endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colB)
         addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-        addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
+                     attributeKey: "vitals[\(i)].carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colA)
         section.addArrangedSubview(cols)
         return (section, cols, colA, colB)
     }
@@ -1133,6 +1146,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         DispatchQueue.global(qos: .userInteractive).async { [weak self] in
             self?.newReport?.extractValues(from: processedText, fileId: fileId, transcriptId: transcriptId,
                                            metadata: metadata, isFinal: isFinal)
+            print("temperature=", self?.newReport?.lastVital?.temperature ?? "")
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.refreshFormFieldsAndControls()

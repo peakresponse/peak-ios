@@ -390,6 +390,31 @@ class ReportParserTests: XCTestCase {
         }
     }
 
+    func testExtractTemperature() {
+        var samples = [
+            "Temperature 98.7 degrees F",
+            "Tempt 98.7 °F",
+            "Temp 98.7 F"
+        ]
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastVital?.temperatureF, "98.7", "Temperature failed for: \(sample)")
+        }
+
+        samples = [
+            "Temp 37.1 degrees C",
+            "Temperature 37.1 C",
+            "Tempt 37.1 °C",
+            "Temp 37.1 C"
+        ]
+        for sample in samples {
+            let report = Report.newRecord()
+            report.extractValues(from: sample, fileId: fileId, transcriptId: transcriptId, metadata: metadata, isFinal: true)
+            XCTAssertEqual(report.lastVital?.temperature, "37.1", "Temperature failed for: \(sample)")
+        }
+    }
+
     func testExtractTriagePerfusion() {
         var samples = [
             "has pulse",

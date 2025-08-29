@@ -56,9 +56,11 @@ enum VitalCardiacRhythm: String, StringCaseIterable {
 
 class Vital: BaseVersioned, NemsisBacked {
     struct Keys {
+        static let temperatureF = "temperature_f"
         static let data = "data"
         static let dataPatch = "data_patch"
     }
+    @Persisted var temperatureF: String?
     @Persisted var _data: Data?
     var _tmpMigrateData: Data? {
         return _data
@@ -184,6 +186,15 @@ class Vital: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var temperature: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eVitals.TemperatureGroup/eVitals.24")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.TemperatureGroup/eVitals.24")
+        }
+    }
+
     @objc var totalGlasgowComaScore: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")?.text
@@ -195,12 +206,14 @@ class Vital: BaseVersioned, NemsisBacked {
 
     override func asJSON() -> [String: Any] {
         var json = super.asJSON()
+        json[Keys.temperatureF] = temperatureF ?? NSNull()
         json[Keys.data] = data
         return json
     }
 
     override func update(from data: [String: Any], with realm: Realm) {
         super.update(from: data, with: realm)
+        self.temperatureF = data[Keys.temperatureF] as? String
         if data.index(forKey: Keys.data) != nil {
             self.data = data[Keys.data] as? [String: Any] ?? [:]
         }
@@ -208,12 +221,13 @@ class Vital: BaseVersioned, NemsisBacked {
 
     override func changes(from source: BaseVersioned?) -> [String: Any]? {
         guard let source = source as? Vital else { return nil }
-        if let dataPatch = self.dataPatch(from: source) {
-            var json = asJSON()
-            json.removeValue(forKey: Keys.data)
-            json[Keys.dataPatch] = dataPatch
-            return json
+        var json: [String: Any] = [:]
+        if temperatureF != source.temperatureF {
+            json[Keys.temperatureF] = temperatureF ?? NSNull()
         }
-        return nil
+        if let dataPatch = self.dataPatch(from: source) {
+            json[Keys.dataPatch] = dataPatch
+        }
+        return json.isEmpty ?  nil : json
     }
 }
