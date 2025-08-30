@@ -108,8 +108,8 @@ extension FormBuilder {
             for attributeKey in attributeKeys {
                 if let formComponent = formComponents[attributeKey], let target = formComponent.target ?? formComponent.source {
                     formComponent.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let formField = formComponent as? PRKit.FormField, let target = (formField.target ?? formField.source) as? Predictions {
-                        formField.status = target.predictionStatus(for: attributeKey)
+                    if let target = target as? Predictions {
+                        formComponent.status = target.predictionStatus(for: attributeKey)
                     }
                 }
             }
@@ -117,8 +117,8 @@ extension FormBuilder {
             for formComponent in formComponents.values {
                 if let attributeKey = formComponent.attributeKey, let target = formComponent.target ?? formComponent.source {
                     formComponent.attributeValue = target.value(forKeyPath: attributeKey) as? NSObject
-                    if let formField = formComponent as? PRKit.FormField, let target = (formField.target ?? formField.source) as? Predictions {
-                        formField.status = target.predictionStatus(for: attributeKey)
+                    if let target = target as? Predictions {
+                        formComponent.status = target.predictionStatus(for: attributeKey)
                     }
                 }
             }

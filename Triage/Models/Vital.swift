@@ -56,7 +56,7 @@ enum VitalCardiacRhythm: String, StringCaseIterable {
 
 class Vital: BaseVersioned, NemsisBacked {
     struct Keys {
-        static let temperatureF = "temperature_f"
+        static let temperatureF = "temperatureF"
         static let data = "data"
         static let dataPatch = "data_patch"
     }
