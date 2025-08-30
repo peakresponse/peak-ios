@@ -467,8 +467,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         tempField.tag = tag
         tag += 2
         colB.addArrangedSubview(tempField)
+        let obj = source ?? target
+        tempField.cField!.attributeValue = obj?.value(forKeyPath: tempField.cField!.attributeKey!) as? NSObject
+        tempField.fField!.attributeValue = obj?.value(forKeyPath: tempField.fField!.attributeKey!) as? NSObject
+        tempField.cField!.status = obj?.predictionStatus(for: tempField.cField!.attributeKey!) ?? .none
+        tempField.fField!.status = obj?.predictionStatus(for: tempField.fField!.attributeKey!) ?? .none
         formComponents[tempField.fField!.attributeKey!] = tempField.fField!
-        formComponents[tempField.attributeKey!] = tempField
+        formComponents[tempField.cField!.attributeKey!] = tempField.cField!
 
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
