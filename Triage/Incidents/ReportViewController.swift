@@ -430,23 +430,51 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         section.addArrangedSubview(header)
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
-        let innerCols = newColumns()
-        innerCols.distribution = .fillProportionally
-        innerCols.spacing = 5
-        addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
-        let label = UILabel()
-        label.font = .h3SemiBold
-        label.textColor = .base800
-        label.text = "/"
-        innerCols.addArrangedSubview(label)
-        addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
-        colB.addArrangedSubview(innerCols)
+        if UIScreen.current?.bounds.width ?? 320 < 402 {
+            addTextField(source: source, target: target,
+                         attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: colA)
+            addTextField(source: source, target: target,
+                         attributeKey: "vitals[\(i)].bpDiastolic", attributeType: .integer, tag: &tag, to: colB)
+        } else {
+            let innerCols = newColumns()
+            innerCols.distribution = .fillProportionally
+            innerCols.spacing = 5
+            addTextField(source: source, target: target,
+                         attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
+            let label = UILabel()
+            label.font = .h3SemiBold
+            label.textColor = .base800
+            label.text = "/"
+            innerCols.addArrangedSubview(label)
+            addTextField(source: source, target: target,
+                         attributeKey: "vitals[\(i)].bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
+            colB.addArrangedSubview(innerCols)
+        }
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].heartRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colA)
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].respiratoryRate", attributeType: .integer, unitText: " bpm", tag: &tag, to: colB)
+        addTextField(source: source, target: target,
+                     attributeKey: "vitals[\(i)].pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colA)
+
+        let tempField = TemperatureField()
+        tempField.source = source
+        tempField.target = target
+        tempField.labelText = "Vital.temperature".localized
+        tempField.attributeKey = "vitals[\(i)].temperature"
+        tempField.delegate = self
+        tempField.inputAccessoryView = formInputAccessoryView
+        tempField.tag = tag
+        tag += 2
+        colB.addArrangedSubview(tempField)
+        let obj = source ?? target
+        tempField.cField!.attributeValue = obj?.value(forKeyPath: tempField.cField!.attributeKey!) as? NSObject
+        tempField.fField!.attributeValue = obj?.value(forKeyPath: tempField.fField!.attributeKey!) as? NSObject
+        tempField.cField!.status = obj?.predictionStatus(for: tempField.cField!.attributeKey!) ?? .none
+        tempField.fField!.status = obj?.predictionStatus(for: tempField.fField!.attributeKey!) ?? .none
+        formComponents[tempField.fField!.attributeKey!] = tempField.fField!
+        formComponents[tempField.cField!.attributeKey!] = tempField.cField!
+
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].bloodGlucoseLevel", attributeType: .integer, tag: &tag, to: colA)
         addTextField(source: source, target: target,
@@ -463,11 +491,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].totalGlasgowComaScore", attributeType: .integer, tag: &tag, to: colA)
         addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].pulseOximetry", attributeType: .integer, unitText: " %", tag: &tag, to: colB)
+                     attributeKey: "vitals[\(i)].endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colB)
         addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].endTidalCarbonDioxide", attributeType: .decimal, tag: &tag, to: colA)
-        addTextField(source: source, target: target,
-                     attributeKey: "vitals[\(i)].carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colB)
+                     attributeKey: "vitals[\(i)].carbonMonoxide", attributeType: .decimal, unitText: " %", tag: &tag, to: colA)
         section.addArrangedSubview(cols)
         return (section, cols, colA, colB)
     }

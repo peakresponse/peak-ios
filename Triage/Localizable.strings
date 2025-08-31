@@ -753,13 +753,14 @@
 "Vital.vitalSignsTakenAt" = "Vitals Taken At";
 "Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
 "Vital.bpSystolic" = "BP Systolic";
-"Vital.bpDiastolic" = "Diastolic     ";
+"Vital.bpDiastolic" = "BP Diastolic";
 "Vital.heartRate" = "Heart Rate";
 "Vital.pulseOximetry" = "O2";
 "Vital.respiratoryRate" = "Respiratory Rate";
 "Vital.endTidalCarbonDioxide" = "ETCO2";
 "Vital.carbonMonoxide" = "CO";
 "Vital.bloodGlucoseLevel" = "Blood Glucose Level";
+"Vital.temperature" = "Temp.";
 "Vital.totalGlasgowComaScore" = "Total GCS";
 
 "Vital.cardiacRhythm.9901001" = "Agonal/Idioventricular";

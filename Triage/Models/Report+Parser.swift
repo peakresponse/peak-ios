@@ -31,7 +31,8 @@ private struct Matcher {
     }
 }
 
-private let PATTERN_NUMBERS = #"\d+|one|to|too|two|three|four|five|six|seven|eight|nine|zero"#
+private let PATTERN_NUMBERS = #"(?:\d|one|to|too|two|three|four|five|six|seven|eight|nine|zero)+"#
+private let PATTERN_DECIMALS = PATTERN_NUMBERS + #"(?:\."# + PATTERN_NUMBERS + #"+)?"#
 
 private let MAPPINGS_NUMBERS: [String: Any] = [
     "one": "1",
@@ -192,7 +193,9 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is )?(?<lastVital0totalGlasgowComaScore>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0totalGlasgowComaScore": MAPPINGS_NUMBERS
-            ])
+            ]),
+    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperature>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:C|celsius|°C)"#),
+    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperatureF>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:F|fahrenheit|°F)"#)
 ]
 // swiftlint:enable force_try line_length
 
