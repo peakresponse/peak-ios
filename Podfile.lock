@@ -106,7 +106,7 @@ DEPENDENCIES:
   - GoogleMaps
   - GoogleMLKit/BarcodeScanning (= 8.0.0)
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dependencies`)
+  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RMJSONPatch (= 1.0.4)
   - RollbarNotifier (~> 3.2)
   - Starscream
@@ -149,7 +149,7 @@ EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
   PRKit:
-    :branch: dependencies
+    :branch: dev
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :branch: dev
@@ -157,7 +157,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PRKit:
-    :commit: e25a051c6637d216d986d649f1e11f60cf5c1c8a
+    :commit: 9e0ec4932fa5b17c047401fa6a4a5c4067ace390
     :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
@@ -196,6 +196,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: b343498e4ab3a9e228c5be78efbd0548428f7cec
+PODFILE CHECKSUM: 37bef0be3f525a624d0bf3ce82a065ba1972b9be
 
 COCOAPODS: 1.16.2
