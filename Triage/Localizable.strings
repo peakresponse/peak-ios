@@ -755,6 +755,7 @@
 "Vital.bpSystolic" = "BP Systolic";
 "Vital.bpDiastolic" = "BP Diastolic";
 "Vital.heartRate" = "Heart Rate";
+"Vital.levelOfResponsiveness" = "Level of Responsiveness (AVPU)";
 "Vital.pulseOximetry" = "O2";
 "Vital.respiratoryRate" = "Respiratory Rate";
 "Vital.endTidalCarbonDioxide" = "ETCO2";
@@ -801,3 +802,8 @@
 "Vital.cardiacRhythm.9901067" = "Ventricular Fibrillation";
 "Vital.cardiacRhythm.9901069" = "Ventricular Tachycardia (With Pulse)";
 "Vital.cardiacRhythm.9901071" = "Ventricular Tachycardia (Pulseless)";
+
+"Vital.levelOfResponsiveness.3326001" = "Alert";
+"Vital.levelOfResponsiveness.3326003" = "Verbal";
+"Vital.levelOfResponsiveness.3326005" = "Painful";
+"Vital.levelOfResponsiveness.3326007" = "Unresponsive";

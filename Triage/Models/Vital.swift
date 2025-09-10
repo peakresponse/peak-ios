@@ -54,6 +54,17 @@ enum VitalCardiacRhythm: String, StringCaseIterable {
     }
 }
 
+enum VitalLevelOfResponsiveness: String, StringCaseIterable {
+    case alert = "3326001"
+    case verbal = "3326003"
+    case painful = "3326005"
+    case unresponsive = "3326007"
+
+    var description: String {
+        return "Vital.levelOfResponsiveness.\(rawValue)".localized
+    }
+}
+
 class Vital: BaseVersioned, NemsisBacked {
     struct Keys {
         static let temperatureF = "temperatureF"
@@ -186,6 +197,15 @@ class Vital: BaseVersioned, NemsisBacked {
         }
     }
 
+    @objc var totalGlasgowComaScore: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
+        }
+    }
+
     @objc var temperature: String? {
         get {
             return getFirstNemsisValue(forJSONPath: "/eVitals.TemperatureGroup/eVitals.24")?.text
@@ -195,12 +215,12 @@ class Vital: BaseVersioned, NemsisBacked {
         }
     }
 
-    @objc var totalGlasgowComaScore: String? {
+    @objc var levelOfResponsiveness: String? {
         get {
-            return getFirstNemsisValue(forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")?.text
+            return getFirstNemsisValue(forJSONPath: "/eVitals.26")?.text
         }
         set {
-            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.GlasgowScoreGroup/eVitals.23")
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eVitals.26")
         }
     }
 
