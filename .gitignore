@@ -107,3 +107,4 @@ iOSInjectionProject/
 
 .env
 .env.*
+*.mobileprovision
