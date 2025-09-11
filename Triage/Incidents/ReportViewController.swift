@@ -430,6 +430,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         section.addArrangedSubview(header)
         addTextField(source: source, target: target,
                      attributeKey: "vitals[\(i)].vitalSignsTakenAt", attributeType: .datetime, tag: &tag, to: colA)
+        addTextField(source: source, target: target,
+                     attributeKey: "vitals[\(i)].levelOfResponsiveness", attributeType: .single(EnumKeyboardSource<VitalLevelOfResponsiveness>()), tag: &tag, to: colA)
         if UIScreen.current?.bounds.width ?? 320 < 402 {
             addTextField(source: source, target: target,
                          attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: colA)
