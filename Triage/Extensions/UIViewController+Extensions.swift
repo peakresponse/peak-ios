@@ -173,6 +173,7 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
             let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
             if let vc = vc as? ReportsViewController {
                 vc.incident = incident
+                vc.modalPresentationStyle = .overCurrentContext
             }
             present(vc, animated: true)
         }
