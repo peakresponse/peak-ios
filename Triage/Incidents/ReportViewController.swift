@@ -220,6 +220,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             addTextField(source: report, attributeKey: "disposition.reasonForRefusalRelease",
                          attributeType: .multi(EnumKeyboardSource<ReasonForRefusalRelease>()),
                          tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivation",
+                         attributeType: .single(EnumKeyboardSource<HospitalTeamActivation>()),
+                         tag: &tag, to: colA)
+            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivationAt",
+                         attributeType: .datetime,
+                         tag: &tag, to: colB)
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
@@ -763,6 +769,12 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         } else {
             formComponents["disposition.reasonForRefusalRelease"]?.isHidden = true
         }
+        if let hospitalTeamActivation = (newReport ?? report)?.disposition?.hospitalTeamActivation,
+           hospitalTeamActivation != HospitalTeamActivation.no.rawValue {
+            formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = false
+        } else {
+            formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = true
+        }
     }
 
     @objc func scanLicensePressed(_ button: PRKit.Button) {
@@ -957,6 +969,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     newReport?.disposition?.transportDisposition != TransportDisposition.patientRefusedTransport.rawValue {
                     newReport?.disposition?.reasonForRefusalRelease = nil
                     refreshFormFieldsAndControls(["disposition.reasonForRefusalRelease"])
+                }
+                updateFormFieldVisibility()
+            case "disposition.hospitalTeamActivation":
+                if newReport?.disposition?.hospitalTeamActivation == nil ||
+                    newReport?.disposition?.hospitalTeamActivation == HospitalTeamActivation.no.rawValue {
+                    newReport?.disposition?.hospitalTeamActivationAt = nil
+                    refreshFormFieldsAndControls(["disposition.hospitalTeamActivationAt"])
                 }
                 updateFormFieldVisibility()
             default:

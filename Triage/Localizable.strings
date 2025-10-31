@@ -131,6 +131,8 @@
 "Disposition.crewDisposition" = "Crew Disposition";
 "Disposition.transportDisposition" = "Transport Disposition";
 "Disposition.reasonForRefusalRelease" = "Reason for Refusal/Release";
+"Disposition.hospitalTeamActivation" = "Pre-Arrival Alert";
+"Disposition.hospitalTeamActivationAt" = "Pre-Arrival Alert At";
 
 "Error.title" = "An error has occurred";
 "Error.unexpected" = "An unexpected error has occurred. Please try again and contact support if it continues to occur!";
@@ -167,6 +169,17 @@
 "History.medicalSurgicalHistory" = "Medical/Surgical History";
 "History.medicationAllergies" = "Medication Allergies";
 "History.environmentalFoodAllergies" = "Environmental/Food Allergies";
+
+"HospitalTeamActivation.4224001" = "No";
+"HospitalTeamActivation.4224003" = "Adult Trauma";
+"HospitalTeamActivation.4224005" = "Cardiac Arrest";
+"HospitalTeamActivation.4224007" = "Obstetrics";
+"HospitalTeamActivation.4224009" = "Other";
+"HospitalTeamActivation.4224011" = "Pediatric Trauma";
+"HospitalTeamActivation.4224013" = "STEMI";
+"HospitalTeamActivation.4224015" = "Stroke";
+"HospitalTeamActivation.4224017" = "Trauma (General)";
+"HospitalTeamActivation.4224019" = "Sepsis";
 
 "Incident.number" = "Incident #";
 

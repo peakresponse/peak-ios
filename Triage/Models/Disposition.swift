@@ -9,6 +9,23 @@
 internal import RealmSwift
 import PRKit
 
+enum HospitalTeamActivation: String, StringCaseIterable {
+    case no = "4224001"
+    case adultTrauma = "4224003"
+    case cardiacArrest = "4224005"
+    case generalTrauma = "4224017"
+    case obstetrics = "4224007"
+    case pediatricTrauma = "4224011"
+    case sepsis = "4224019"
+    case stemi = "4224013"
+    case stroke = "4224015"
+    case other = "4224009"
+
+    var description: String {
+        return "HospitalTeamActivation.\(self.rawValue)".localized
+    }
+}
+
 enum UnitDisposition: String, StringCaseIterable {
     case patientContactMade = "4227001"
     case noPatientFound = "4227009"
@@ -91,6 +108,24 @@ class Disposition: BaseVersioned, NemsisBacked {
         return _data
     }
     @Persisted var destinationFacility: Facility?
+
+    @objc var hospitalTeamActivation: String? {
+        get {
+            return getFirstNemsisValue(forJSONPath: "/eDisposition.HospitalTeamActivationGroup/eDisposition.24")?.text
+        }
+        set {
+            setNemsisValue(NemsisValue(text: newValue), forJSONPath: "/eDisposition.HospitalTeamActivationGroup/eDisposition.24")
+        }
+    }
+
+    @objc var hospitalTeamActivationAt: Date? {
+        get {
+            return ISO8601DateFormatter.date(from: getFirstNemsisValue(forJSONPath: "/eDisposition.HospitalTeamActivationGroup/eDisposition.25")?.text)
+        }
+        set {
+            setNemsisValue(NemsisValue(text: ISO8601DateFormatter.string(from: newValue)), forJSONPath: "/eDisposition.HospitalTeamActivationGroup/eDisposition.25")
+        }
+    }
 
     @objc var unitDisposition: String? {
         get {
