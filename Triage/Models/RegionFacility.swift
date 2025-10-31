@@ -14,11 +14,24 @@ class RegionFacility: Base {
         static let regionId = "regionId"
         static let facilityId = "facilityId"
         static let facilityName = "facilityName"
+        static let designations = "designations"
         static let position = "position"
     }
     @Persisted var regionId: String?
     @Persisted var facility: Facility?
     @Persisted var facilityName: String?
+    @Persisted var _designations: Data?
+    var designations: [String] {
+        get {
+            if let _designations = _designations {
+                return (try? JSONSerialization.jsonObject(with: _designations, options: []) as? [String]) ?? []
+            }
+            return []
+        }
+        set {
+            _designations = try? JSONSerialization.data(withJSONObject: newValue, options: [])
+        }
+    }
     @Persisted var position: Int?
 
     override var description: String {
@@ -32,6 +45,7 @@ class RegionFacility: Base {
             facility = realm.object(ofType: Facility.self, forPrimaryKey: data[Keys.facilityId] as? String)
         }
         facilityName = data[Keys.facilityName] as? String
+        designations = (data[Keys.designations] as? [String]) ?? []
         position = data[Keys.position] as? Int
     }
 
@@ -40,6 +54,7 @@ class RegionFacility: Base {
         data[Keys.regionId] = regionId ?? NSNull()
         data[Keys.facilityId] = facility?.id ?? NSNull()
         data[Keys.facilityName] = facilityName ?? NSNull()
+        data[Keys.designations] = designations
         data[Keys.position] = position ?? NSNull()
         return data
     }
