@@ -775,6 +775,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         } else {
             formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = true
         }
+        (formInputAccessoryView as? FormInputAccessoryView)?.updateButtons()
     }
 
     @objc func scanLicensePressed(_ button: PRKit.Button) {
