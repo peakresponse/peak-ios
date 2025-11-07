@@ -223,9 +223,14 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             addTextField(source: report, attributeKey: "disposition.hospitalTeamActivation",
                          attributeType: .single(EnumKeyboardSource<HospitalTeamActivation>()),
                          tag: &tag, to: colA)
+
             addTextField(source: report, attributeKey: "disposition.hospitalTeamActivationAt",
                          attributeType: .datetime,
                          tag: &tag, to: colB)
+
+            let hospitalTeamActivationAtField = formComponents["disposition.hospitalTeamActivationAt"] as? PRKit.FormField
+            hospitalTeamActivationAtField?.accessoryButtonImage = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
+            hospitalTeamActivationAtField?.accessoryButton?.addTarget(self, action: #selector(prearrivalPressed), for: .touchUpInside)
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
@@ -914,6 +919,11 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         }))
         modal.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel))
         presentAnimated(modal)
+    }
+
+    @objc func prearrivalPressed() {
+        let vc = CallFacilitiesViewController()
+        present(vc, animated: false)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

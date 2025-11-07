@@ -112,6 +112,8 @@
 "Button.viewScene" = "View Scene";
 "Button.yes" = "Yes";
 
+"CallFacilitiesViewController.baseHospital" = "Base Hospital";
+
 "CloseSceneConfirmation.message" = "Are you sure you want to close the scene?";
 "LeaveSceneConfirmation.message" = "Are you sure you want to leave the scene?";
 
