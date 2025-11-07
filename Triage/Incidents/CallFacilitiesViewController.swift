@@ -49,6 +49,10 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         let contentView = UIView()
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.backgroundColor = .background
+        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        contentView.layer.cornerRadius = 16
+        contentView.addShadow(withOffset: CGSize(width: 0, height: 6), radius: 10, color: .dropShadow, opacity: 0.15)
+
         view.addSubview(contentView)
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor),
@@ -146,7 +150,7 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         super.viewWillAppear(animated)
         contentView.transform = .init(translationX: 0, y: view.frame.height)
         UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.view.backgroundColor = .modalBackdrop.withAlphaComponent(0.6)
+            self?.view.backgroundColor = .modalBackdrop.withAlphaComponent(0.7)
             self?.contentView.transform = .identity
         }
     }
