@@ -14,11 +14,14 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
     weak var contentView: UIView!
     weak var tableView: TableView!
     weak var tableViewHeightConstraint: NSLayoutConstraint!
+    var filterView: UIView!
+    weak var filterControl: SegmentedControl!
 
     var region: Region!
     var filter: HospitalTeamActivation?
     var baseFacility: Facility?
     var results: Results<RegionFacility>?
+    var filteredResults: [RegionFacility] = []
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -55,17 +58,6 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         ])
         self.contentView = contentView
 
-        if let regionId = AppSettings.regionId {
-            let realm = AppRealm.open()
-            region = realm.object(ofType: Region.self, forPrimaryKey: regionId)
-            results = AppRealm.open().objects(RegionFacility.self).filter("regionId = %@", regionId)
-            if let baseHospitalFacilityId = region.baseHospitalFacilityId {
-                baseFacility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: baseHospitalFacilityId)
-                results = results?.filter("facility <> %@", baseFacility ?? NSNull())
-            }
-            results = results?.sorted(by: \.position)
-        }
-
         let tableView = TableView(frame: .zero, style: .insetGrouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(GroupedTableViewSectionHeader.self, forHeaderFooterViewReuseIdentifier: "groupedSectionHeader")
@@ -80,7 +72,7 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
             tableViewHeightConstraint,
             tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20) // stackView.bottomAnchor),
+            tableView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20)
         ])
         self.tableView = tableView
         self.tableViewHeightConstraint = tableViewHeightConstraint
@@ -97,6 +89,44 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
             cancelButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             cancelButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
+
+        filterView = UIView()
+        let filterControl = PRKit.SegmentedControl()
+        filterControl.translatesAutoresizingMaskIntoConstraints = false
+        if let filter = filter {
+            filterControl.addSegment(title: filter.description)
+        }
+        filterControl.addSegment(title: "CallFacilitiesViewController.all".localized)
+        if filterControl.segmentsCount == 1 {
+            filterControl.isUserInteractionEnabled = false
+        }
+        filterControl.addTarget(self, action: #selector(filterValueChanged), for: .valueChanged)
+        filterView.addSubview(filterControl)
+        NSLayoutConstraint.activate([
+            filterControl.topAnchor.constraint(equalTo: filterView.topAnchor),
+            filterControl.leadingAnchor.constraint(equalTo: filterView.leadingAnchor),
+            filterControl.trailingAnchor.constraint(equalTo: filterView.trailingAnchor),
+            filterControl.bottomAnchor.constraint(equalTo: filterView.bottomAnchor, constant: -10)
+        ])
+        self.filterControl = filterControl
+
+        if let regionId = AppSettings.regionId {
+            let realm = AppRealm.open()
+            region = realm.object(ofType: Region.self, forPrimaryKey: regionId)
+            results = AppRealm.open().objects(RegionFacility.self).filter("regionId = %@", regionId)
+            if let baseHospitalFacilityId = region.baseHospitalFacilityId {
+                baseFacility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: baseHospitalFacilityId)
+                results = results?.filter("facility <> %@", baseFacility ?? NSNull())
+            }
+            results = results?.sorted(by: \.position)
+            if let results = results, let filter = filter {
+                for regionFacility in results {
+                    if regionFacility.designations.firstIndex(of: filter.rawValue) != nil {
+                        filteredResults.append(regionFacility)
+                    }
+                }
+            }
+        }
     }
 
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
@@ -136,6 +166,10 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         dismissAnimated()
     }
 
+    @objc func filterValueChanged() {
+        tableView.reloadData()
+    }
+
     // MARK: - UITableViewDataSource
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -146,6 +180,9 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         if section == 0 && baseFacility != nil {
             return 1
         }
+        if filter != nil && filterControl.selectedIndex == 0 {
+            return filteredResults.count
+        }
         return results?.count ?? 0
     }
 
@@ -155,6 +192,8 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
             cell.disclosureImageView.image = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
             if indexPath.section == 0, let baseFacility = baseFacility {
                 cell.label.text = baseFacility.displayName
+            } else if filter != nil && filterControl.selectedIndex == 0 {
+                cell.label.text = filteredResults[indexPath.row].description
             } else {
                 cell.label.text = results?[indexPath.row].description ?? ""
             }
@@ -172,7 +211,7 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
             }
             return header
         }
-        return nil
+        return filterView
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

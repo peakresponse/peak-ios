@@ -923,7 +923,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     @objc func prearrivalPressed() {
         let vc = CallFacilitiesViewController()
-        present(vc, animated: false)
+        vc.filter = HospitalTeamActivation(rawValue: (newReport ?? report)?.disposition?.hospitalTeamActivation ?? "")
+        present(vc)
     }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

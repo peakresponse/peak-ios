@@ -21,7 +21,7 @@ class RegionFacility: Base {
     @Persisted var facility: Facility?
     @Persisted var facilityName: String?
     @Persisted var _designations: Data?
-    var designations: [String] {
+    @objc var designations: [String] {
         get {
             if let _designations = _designations {
                 return (try? JSONSerialization.jsonObject(with: _designations, options: []) as? [String]) ?? []
