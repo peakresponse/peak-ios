@@ -148,6 +148,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
     @objc func savePressed() {
         if let vc = children[0] as? ReportViewController {
+            _ = vc.resignFirstResponder()
             if let report = vc.newReport {
                 // special case handling for MCI reports
                 if let scene = report.scene, scene.isMCI {
