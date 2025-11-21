@@ -248,6 +248,10 @@ class Vital: BaseVersioned, NemsisBacked {
         if let dataPatch = self.dataPatch(from: source) {
             json[Keys.dataPatch] = dataPatch
         }
-        return json.isEmpty ?  nil : json
+        if json.isEmpty {
+            return nil
+        }
+        json.merge(super.asJSON()) { (_, new) in new }
+        return json
     }
 }
