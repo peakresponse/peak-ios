@@ -12,10 +12,13 @@ import Keys
 import PRKit
 import UIKit
 
-class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClientDelegate {
+class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
     weak var commandHeader: CommandHeader!
     weak var localView: UIView!
     weak var remoteView: UIView!
+    weak var statusView: UIView!
+    weak var statusLabel: UILabel!
+    weak var statusSpinner: UIActivityIndicatorView!
     weak var flipButton: RoundButton!
 
     var regionFacility: RegionFacility!
@@ -35,6 +38,12 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
         modalPresentationStyle = .fullScreen
         modalTransitionStyle = .coverVertical
         edgesForExtendedLayout = [.all]
+    }
+
+    deinit {
+        agoraKit.stopPreview()
+        agoraKit.leaveChannel(nil)
+        AgoraRtcEngineKit.destroy()
     }
 
     override func viewDidLoad() {
@@ -83,6 +92,9 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
         let remoteView = UIView()
         remoteView.translatesAutoresizingMaskIntoConstraints = false
         remoteView.backgroundColor = .gray
+        remoteView.layer.masksToBounds = true
+        remoteView.layer.cornerRadius = 8
+        remoteView.isHidden = true
         view.addSubview(remoteView)
         NSLayoutConstraint.activate([
             remoteView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25),
@@ -90,6 +102,47 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
             remoteView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
             remoteView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
+        self.remoteView = remoteView
+
+        let statusView = UIView()
+        statusView.translatesAutoresizingMaskIntoConstraints = false
+        statusView.backgroundColor = .black.withAlphaComponent(0.5)
+        statusView.layer.masksToBounds = true
+        statusView.layer.cornerRadius = 16
+        view.addSubview(statusView)
+        NSLayoutConstraint.activate([
+            statusView.centerXAnchor.constraint(equalTo: localView.centerXAnchor),
+            statusView.centerYAnchor.constraint(equalTo: localView.centerYAnchor),
+            statusView.widthAnchor.constraint(lessThanOrEqualTo: localView.widthAnchor, multiplier: 0.8)
+        ])
+        self.statusView = statusView
+
+        let statusLabel = UILabel()
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        statusLabel.font = .h3SemiBold
+        statusLabel.textColor = .white
+        statusLabel.text = "VideoCallViewController.connecting".localized
+        statusLabel.numberOfLines = 0
+        statusView.addSubview(statusLabel)
+        NSLayoutConstraint.activate([
+            statusLabel.centerXAnchor.constraint(equalTo: statusView.centerXAnchor),
+            statusLabel.topAnchor.constraint(equalTo: statusView.topAnchor, constant: 20),
+            statusLabel.leftAnchor.constraint(greaterThanOrEqualTo: statusView.leftAnchor, constant: 20),
+            statusLabel.rightAnchor.constraint(lessThanOrEqualTo: statusView.rightAnchor, constant: -20)
+        ])
+        self.statusLabel = statusLabel
+
+        let statusSpinner = UIActivityIndicatorView(style: .large)
+        statusSpinner.translatesAutoresizingMaskIntoConstraints = false
+        statusSpinner.color = .white
+        statusSpinner.startAnimating()
+        statusView.addSubview(statusSpinner)
+        NSLayoutConstraint.activate([
+            statusSpinner.centerXAnchor.constraint(equalTo: statusView.centerXAnchor),
+            statusSpinner.topAnchor.constraint(equalTo: statusLabel.bottomAnchor, constant: 10),
+            statusView.bottomAnchor.constraint(equalTo: statusSpinner.bottomAnchor, constant: 20)
+        ])
+        self.statusSpinner = statusSpinner
 
         let flipButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 74, height: 74))
         flipButton.translatesAutoresizingMaskIntoConstraints = false
@@ -107,14 +160,11 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
 
         let keys = TriageKeys()
         agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
-        agoraKit.enableVideo()
-        agoraKit.startPreview()
-
-        let localVideoCanvas = AgoraRtcVideoCanvas()
-        localVideoCanvas.view = localView
-        localVideoCanvas.uid = 0
-        localVideoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(localVideoCanvas)
+        if let userId = AppSettings.userId {
+            print("registering", userId)
+            let result = agoraKit.registerLocalUserAccount(userId, appId: keys.agoraAppId)
+            print("register result", result)
+        }
     }
 
     @objc func cancelPressed() {
@@ -123,5 +173,53 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
 
     @objc func flipPressed() {
         agoraKit.switchCamera()
+    }
+
+    // MARK: - AgoraRtcEngineDelegate
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didLocalUserRegisteredWithUserId uid: UInt, userAccount: String) {
+        print("onLocalUserRegistered", uid, userAccount)
+        let localVideoCanvas = AgoraRtcVideoCanvas()
+        localVideoCanvas.view = localView
+        localVideoCanvas.uid = uid
+        localVideoCanvas.renderMode = .hidden
+        agoraKit.setupLocalVideo(localVideoCanvas)
+        agoraKit.enableVideo()
+        agoraKit.startPreview()
+
+        let channelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
+        let task = PRApiClient.shared.getToken(channelName: channelName) { [weak self] (_, _, data, error) in
+            if let error = error {
+                print(error)
+            } else if let data = data, let token = data["token"] as? String {
+                let channelOptions = AgoraRtcChannelMediaOptions()
+                channelOptions.channelProfile = .communication
+                channelOptions.clientRoleType = .broadcaster
+                channelOptions.publishMicrophoneTrack = true
+                channelOptions.publishCameraTrack = true
+                channelOptions.autoSubscribeAudio = true
+                channelOptions.autoSubscribeVideo = true
+                self?.agoraKit.joinChannel(byToken: token, channelId: channelName, userAccount: userAccount, mediaOptions: channelOptions) { [weak self] (channelName, uid, elapsed) in
+                    print(userAccount, "joined", channelName, "with uid", uid, "in", elapsed)
+                }
+            }
+        }
+        task.resume()
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
+        print("didJoinedOfUid", uid)
+        let remoteVideoCanvas = AgoraRtcVideoCanvas()
+        remoteVideoCanvas.view = remoteView
+        remoteVideoCanvas.uid = uid
+        remoteVideoCanvas.renderMode = .hidden
+        agoraKit.setupRemoteVideo(remoteVideoCanvas)
+        remoteView.isHidden = false
+        statusView.isHidden = true
+    }
+
+    func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
+        print("didOfflineOfUid", uid, reason)
+        dismissAnimated()
     }
 }

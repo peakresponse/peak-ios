@@ -766,6 +766,10 @@
 "User.lastName" = "Last Name";
 "User.position" = "Position/Role";
 
+"VideoCallViewController.connecting" = "Connecting...";
+"VideoCallViewController.ringing" = "Ringing...";
+"VideoCallViewController.tokenError" = "Unable to authenticate with video calling server.";
+
 "Vital.vitalSignsTakenAt" = "Vitals Taken At";
 "Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
 "Vital.bpSystolic" = "BP Systolic";

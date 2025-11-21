@@ -71,6 +71,15 @@ class PRApiClient: ApiClient {
         return GET(path: "/api/agencies", params: params, completionHandler: completionHandler)
     }
 
+    // MARK: - Agora
+
+    func getToken(channelName: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        var params: [String: String] = [
+            "channelName": channelName
+        ]
+        return GET(path: "/api/agora/token", params: params, completionHandler: completionHandler)
+    }
+
     // MARK: - Assignments
 
     func createAssignment(data: [String: Any], completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
