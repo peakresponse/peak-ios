@@ -10,6 +10,10 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
+@objc protocol CallFacilitiesViewControllerDelegate: AnyObject {
+    func callFacilitiesViewController(_ vc: CallFacilitiesViewController, didSelect regionFacility: RegionFacility)
+}
+
 class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     weak var contentView: UIView!
     weak var tableView: TableView!
@@ -17,9 +21,10 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
     var filterView: UIView!
     weak var filterControl: SegmentedControl!
 
+    weak var delegate: CallFacilitiesViewControllerDelegate?
     var region: Region!
     var filter: HospitalTeamActivation?
-    var baseFacility: Facility?
+    var baseFacility: RegionFacility?
     var results: Results<RegionFacility>?
     var filteredResults: [RegionFacility] = []
 
@@ -119,8 +124,8 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
             region = realm.object(ofType: Region.self, forPrimaryKey: regionId)
             results = AppRealm.open().objects(RegionFacility.self).filter("regionId = %@", regionId)
             if let baseHospitalFacilityId = region.baseHospitalFacilityId {
-                baseFacility = AppRealm.open().object(ofType: Facility.self, forPrimaryKey: baseHospitalFacilityId)
-                results = results?.filter("facility <> %@", baseFacility ?? NSNull())
+                baseFacility = results?.first(where: { $0.facility?.id == baseHospitalFacilityId })
+                results = results?.filter("id <> %@", baseFacility?.id ?? NSNull())
             }
             results = results?.sorted(by: \.position)
             if let results = results, let filter = filter {
@@ -155,13 +160,18 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         }
     }
 
-    override func dismissAnimated() {
+    @objc override func dismissAnimated() {
+        dismissAnimated(completion: nil)
+    }
+
+    func dismissAnimated(completion: (() -> Void)? = nil) {
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.view.backgroundColor = .modalBackdrop.withAlphaComponent(0)
             self?.contentView.transform = .init(translationX: 0, y: self?.view.frame.height ?? 0)
         }) { [weak self] _ in
             self?.dismiss(animated: false, completion: { [weak self] in
                 self?.didDismissPresentation()
+                completion?()
             })
         }
     }
@@ -195,7 +205,7 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
         if let cell = cell as? ListItemTableViewCell {
             cell.disclosureImageView.image = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
             if indexPath.section == 0, let baseFacility = baseFacility {
-                cell.label.text = baseFacility.displayName
+                cell.label.text = baseFacility.description
             } else if filter != nil && filterControl.selectedIndex == 0 {
                 cell.label.text = filteredResults[indexPath.row].description
             } else {
@@ -219,7 +229,16 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath)
+        var regionFacility: RegionFacility?
+        if indexPath.section == 0, let baseFacility = baseFacility {
+            regionFacility = baseFacility
+        } else if filter != nil && filterControl.selectedIndex == 0 {
+            regionFacility = filteredResults[indexPath.row]
+        } else {
+            regionFacility = results?[indexPath.row]
+        }
+        if let regionFacility = regionFacility {
+            delegate?.callFacilitiesViewController(self, didSelect: regionFacility)
+        }
     }
-
 }

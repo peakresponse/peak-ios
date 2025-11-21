@@ -26,7 +26,8 @@ let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, opti
 
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
                             KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
-                            LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
+                            LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate,
+                            CallFacilitiesViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -924,6 +925,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     @objc func prearrivalPressed() {
         let vc = CallFacilitiesViewController()
         vc.filter = HospitalTeamActivation(rawValue: (newReport ?? report)?.disposition?.hospitalTeamActivation ?? "")
+        vc.delegate = self
         present(vc)
     }
 
@@ -943,6 +945,16 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         }
         if !isEditing {
             delegate?.reportViewControllerNeedsSave(self)
+        }
+    }
+
+    // MARK: - CallFacilitiesViewControllerDelegate
+
+    func callFacilitiesViewController(_ vc: CallFacilitiesViewController, didSelect regionFacility: RegionFacility) {
+        vc.dismissAnimated { [weak self] in
+            let vc = VideoCallViewController()
+            vc.regionFacility = regionFacility
+            self?.presentAnimated(vc)
         }
     }
 

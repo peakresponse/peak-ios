@@ -1,0 +1,3 @@
+[submodule "Triage/Frameworks"]
+	path = Triage/Frameworks
+	url = git@github.com:peakresponse/peak-ios-deps.git
