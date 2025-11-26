@@ -223,6 +223,7 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
                             let options = AgoraRtmPublishOptions()
                             options.channelType = .user
                             let payload: [String: Any] = [
+                                "id": UUID().uuidString.lowercased(),
                                 "userId": userAccount,
                                 "ringdown": report.asRingdownJSON()
                             ]
