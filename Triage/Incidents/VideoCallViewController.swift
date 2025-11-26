@@ -27,6 +27,11 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
     var rtcKit: AgoraRtcEngineKit!
     var registered = false
 
+    let callId = UUID().uuidString.lowercased()
+    var userId: String!
+    var signalChannelName: String!
+    var callChannelName: String!
+
     init() {
         super.init(nibName: nil, bundle: nil)
         commonInit()
@@ -56,6 +61,10 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        signalChannelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
+        userId = AppSettings.userId
+        callChannelName = userId
 
         view.backgroundColor = .background
 
@@ -167,7 +176,7 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
         ])
 
         let keys = TriageKeys()
-        if let userId = AppSettings.userId {
+        if let userId = userId {
             rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: userId), delegate: self)
             if rtmKit != nil {
                 rtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
@@ -184,6 +193,19 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
     }
 
     @objc func cancelPressed() {
+        if let rtmKit = rtmKit, let userId = userId {
+            let publishOptions = AgoraRtmPublishOptions()
+            publishOptions.channelType = .user
+            let payload: [String: Any] = [
+                "id": callId,
+                "status": "cancelled",
+                "userId": userId,
+                "cancelledAt": Date().asISO8601String()
+            ]
+            if let data = try? JSONSerialization.data(withJSONObject: payload) {
+                rtmKit.publish(channelName: signalChannelName, data: data, option: publishOptions)
+            }
+        }
         dismissAnimated()
     }
 
@@ -219,38 +241,51 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
                             print(error)
                         } else {
                             // "ring" the hospital user
-                            let channelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
-                            let options = AgoraRtmPublishOptions()
-                            options.channelType = .user
-                            let payload: [String: Any] = [
-                                "id": UUID().uuidString.lowercased(),
-                                "userId": userAccount,
-                                "ringdown": report.asRingdownJSON()
-                            ]
-                            if let data = try? JSONSerialization.data(withJSONObject: payload, options: []) {
-                                self.rtmKit.publish(channelName: channelName, data: data, option: options) { [weak self] (_, error) in
-                                    if let error = error {
-                                        // TODO: error handling
-                                        print(error)
-                                        if error.errorCode == .channelReceiverOffline {
+                            let subscribeOptions = AgoraRtmSubscribeOptions()
+                            subscribeOptions.features = [.presence]
+                            self.rtmKit.subscribe(channelName: self.signalChannelName, option: subscribeOptions) { [weak self] (response, error) in
+                                guard let self = self else { return }
+                                if let error = error {
+                                    // TODO: error handling
+                                    print(error)
+                                } else {
+                                    print("response", response)
+                                    let publishOptions = AgoraRtmPublishOptions()
+                                    publishOptions.channelType = .user
+                                    let payload: [String: Any] = [
+                                        "id": callId,
+                                        "status": "ringing",
+                                        "userId": userAccount,
+                                        "ringdown": report.asRingdownJSON(),
+                                        "calledAt": Date().asISO8601String()
+                                    ]
+                                    if let data = try? JSONSerialization.data(withJSONObject: payload, options: []) {
+                                        self.rtmKit.publish(channelName: self.signalChannelName, data: data, option: publishOptions) { [weak self] (_, error) in
+                                            guard let self = self else { return }
+                                            if let error = error {
+                                                // TODO: error handling
+                                                print(error)
+                                                if error.errorCode == .channelReceiverOffline {
 
+                                                }
+                                            } else {
+                                                DispatchQueue.main.async { [weak self] in
+                                                    self?.statusLabel.text = "VideoCallViewController.ringing".localized
+                                                }
+                                                let channelOptions = AgoraRtcChannelMediaOptions()
+                                                channelOptions.channelProfile = .communication
+                                                channelOptions.clientRoleType = .broadcaster
+                                                channelOptions.publishMicrophoneTrack = true
+                                                channelOptions.publishCameraTrack = true
+                                                channelOptions.autoSubscribeAudio = true
+                                                channelOptions.autoSubscribeVideo = true
+                                                self.rtcKit.joinChannel(byToken: token, channelId: self.callChannelName, userAccount: userAccount, mediaOptions: channelOptions)
+                                            }
                                         }
                                     } else {
-                                        DispatchQueue.main.async { [weak self] in
-                                            self?.statusLabel.text = "VideoCallViewController.ringing".localized
-                                        }
-                                        let channelOptions = AgoraRtcChannelMediaOptions()
-                                        channelOptions.channelProfile = .communication
-                                        channelOptions.clientRoleType = .broadcaster
-                                        channelOptions.publishMicrophoneTrack = true
-                                        channelOptions.publishCameraTrack = true
-                                        channelOptions.autoSubscribeAudio = true
-                                        channelOptions.autoSubscribeVideo = true
-                                        self?.rtcKit.joinChannel(byToken: token, channelId: userAccount, userAccount: userAccount, mediaOptions: channelOptions)
+                                        // TODO: error handling
                                     }
                                 }
-                            } else {
-                                // TODO: error handling
                             }
                         }
                     }
@@ -274,5 +309,11 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
     func rtcEngine(_ engine: AgoraRtcEngineKit, didOfflineOfUid uid: UInt, reason: AgoraUserOfflineReason) {
         print("didOfflineOfUid", uid, reason)
         dismissAnimated()
+    }
+
+    // MARK: - AgoraRtmClientDelegate
+
+    func rtmKit(_ rtmKit: AgoraRtmClientKit, didReceivePresenceEvent event: AgoraRtmPresenceEvent) {
+        print("didReceivePresenceEvent", event, "User \(event.publisher) is now \(event.type)")
     }
 }
