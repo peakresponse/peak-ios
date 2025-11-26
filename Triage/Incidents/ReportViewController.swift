@@ -954,6 +954,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         vc.dismissAnimated { [weak self] in
             let vc = VideoCallViewController()
             vc.regionFacility = regionFacility
+            vc.report = self?.newReport ?? self?.report
             self?.presentAnimated(vc)
         }
     }

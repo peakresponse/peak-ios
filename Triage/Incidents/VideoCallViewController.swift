@@ -12,7 +12,7 @@ import Keys
 import PRKit
 import UIKit
 
-class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
+class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClientDelegate {
     weak var commandHeader: CommandHeader!
     weak var localView: UIView!
     weak var remoteView: UIView!
@@ -22,7 +22,10 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
     weak var flipButton: RoundButton!
 
     var regionFacility: RegionFacility!
-    var agoraKit: AgoraRtcEngineKit!
+    var report: Report!
+    var rtmKit: AgoraRtmClientKit!
+    var rtcKit: AgoraRtcEngineKit!
+    var registered = false
 
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -41,9 +44,14 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
     }
 
     deinit {
-        agoraKit.stopPreview()
-        agoraKit.leaveChannel(nil)
+        rtcKit?.stopPreview()
+        rtcKit?.leaveChannel(nil)
+        rtcKit = nil
         AgoraRtcEngineKit.destroy()
+
+        rtmKit?.logout()
+        rtmKit?.destroy()
+        rtmKit = nil
     }
 
     override func viewDidLoad() {
@@ -159,11 +167,19 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
         ])
 
         let keys = TriageKeys()
-        agoraKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
         if let userId = AppSettings.userId {
-            print("registering", userId)
-            let result = agoraKit.registerLocalUserAccount(userId, appId: keys.agoraAppId)
-            print("register result", result)
+            rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: userId), delegate: self)
+            if rtmKit != nil {
+                rtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
+                let result = rtcKit.registerLocalUserAccount(userId, appId: keys.agoraAppId)
+                if result != 0 {
+                    // TODO: error handling
+                }
+            } else {
+                // TODO: error handling
+            }
+        } else {
+            // TODO: error handling
         }
     }
 
@@ -172,39 +188,75 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
     }
 
     @objc func flipPressed() {
-        agoraKit.switchCamera()
+        rtcKit.switchCamera()
     }
 
     // MARK: - AgoraRtcEngineDelegate
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didLocalUserRegisteredWithUserId uid: UInt, userAccount: String) {
-        print("onLocalUserRegistered", uid, userAccount)
-        let localVideoCanvas = AgoraRtcVideoCanvas()
-        localVideoCanvas.view = localView
-        localVideoCanvas.uid = uid
-        localVideoCanvas.renderMode = .hidden
-        agoraKit.setupLocalVideo(localVideoCanvas)
-        agoraKit.enableVideo()
-        agoraKit.startPreview()
+        // for some reason, receiving this callback twice after one register call
+        if !registered {
+            registered = true
+            // start local video preview
+            let localVideoCanvas = AgoraRtcVideoCanvas()
+            localVideoCanvas.view = localView
+            localVideoCanvas.uid = uid
+            localVideoCanvas.renderMode = .hidden
+            rtcKit.setupLocalVideo(localVideoCanvas)
+            rtcKit.enableVideo()
+            rtcKit.startPreview()
+            // get an auth token for a channel named for this user
+            let task = PRApiClient.shared.getToken(channelName: userAccount) { [weak self] (_, _, data, error) in
+                if let error = error {
+                    // TODO: error handling
+                    print(error)
+                } else if let data = data, let token = data["token"] as? String {
+                    // log in to signaling
+                    self?.rtmKit.login(token) { [weak self] (_, error) in
+                        guard let self = self, let regionFacility = self.regionFacility else { return }
+                        if let error = error {
+                            // TODO: error handling
+                            print(error)
+                        } else {
+                            // "ring" the hospital user
+                            let channelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
+                            let options = AgoraRtmPublishOptions()
+                            options.channelType = .user
+                            let payload: [String: Any] = [
+                                "userId": userAccount,
+                                "ringdown": report.asRingdownJSON()
+                            ]
+                            if let data = try? JSONSerialization.data(withJSONObject: payload, options: []) {
+                                self.rtmKit.publish(channelName: channelName, data: data, option: options) { [weak self] (_, error) in
+                                    if let error = error {
+                                        // TODO: error handling
+                                        print(error)
+                                        if error.errorCode == .channelReceiverOffline {
 
-        let channelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
-        let task = PRApiClient.shared.getToken(channelName: channelName) { [weak self] (_, _, data, error) in
-            if let error = error {
-                print(error)
-            } else if let data = data, let token = data["token"] as? String {
-                let channelOptions = AgoraRtcChannelMediaOptions()
-                channelOptions.channelProfile = .communication
-                channelOptions.clientRoleType = .broadcaster
-                channelOptions.publishMicrophoneTrack = true
-                channelOptions.publishCameraTrack = true
-                channelOptions.autoSubscribeAudio = true
-                channelOptions.autoSubscribeVideo = true
-                self?.agoraKit.joinChannel(byToken: token, channelId: channelName, userAccount: userAccount, mediaOptions: channelOptions) { [weak self] (channelName, uid, elapsed) in
-                    print(userAccount, "joined", channelName, "with uid", uid, "in", elapsed)
+                                        }
+                                    } else {
+                                        DispatchQueue.main.async { [weak self] in
+                                            self?.statusLabel.text = "VideoCallViewController.ringing".localized
+                                        }
+                                        let channelOptions = AgoraRtcChannelMediaOptions()
+                                        channelOptions.channelProfile = .communication
+                                        channelOptions.clientRoleType = .broadcaster
+                                        channelOptions.publishMicrophoneTrack = true
+                                        channelOptions.publishCameraTrack = true
+                                        channelOptions.autoSubscribeAudio = true
+                                        channelOptions.autoSubscribeVideo = true
+                                        self?.rtcKit.joinChannel(byToken: token, channelId: userAccount, userAccount: userAccount, mediaOptions: channelOptions)
+                                    }
+                                }
+                            } else {
+                                // TODO: error handling
+                            }
+                        }
+                    }
                 }
             }
+            task.resume()
         }
-        task.resume()
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -213,7 +265,7 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate {
         remoteVideoCanvas.view = remoteView
         remoteVideoCanvas.uid = uid
         remoteVideoCanvas.renderMode = .hidden
-        agoraKit.setupRemoteVideo(remoteVideoCanvas)
+        rtcKit.setupRemoteVideo(remoteVideoCanvas)
         remoteView.isHidden = false
         statusView.isHidden = true
     }
