@@ -266,7 +266,13 @@ class VideoCallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRt
                                                 // TODO: error handling
                                                 print(error)
                                                 if error.errorCode == .channelReceiverOffline {
-
+                                                    DispatchQueue.main.async { [weak self] in
+                                                        self?.statusView.isHidden = true
+                                                        self?.presentAlert(title: "VideoCallViewController.offline.title".localized,
+                                                                           message: "VideoCallViewController.offline.message".localized) { [weak self] in
+                                                            self?.dismissAnimated()
+                                                        }
+                                                    }
                                                 }
                                             } else {
                                                 DispatchQueue.main.async { [weak self] in

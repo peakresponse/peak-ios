@@ -769,6 +769,8 @@
 "VideoCallViewController.connecting" = "Connecting...";
 "VideoCallViewController.ringing" = "Ringing...";
 "VideoCallViewController.tokenError" = "Unable to authenticate with video calling server.";
+"VideoCallViewController.offline.title" = "Receiver Offline";
+"VideoCallViewController.offline.message" = "The receiver you are trying to call is not currently online.";
 
 "Vital.vitalSignsTakenAt" = "Vitals Taken At";
 "Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
