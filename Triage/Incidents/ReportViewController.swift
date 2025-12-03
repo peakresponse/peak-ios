@@ -1208,6 +1208,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.refreshFormFieldsAndControls()
+                self.updateFormFieldVisibility()
                 if isFinal {
                     // update recording field with text
                     var recordingFields: [RecordingField] = []
