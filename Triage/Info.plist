@@ -34,6 +34,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>To scan triage tag barcodes and capture photos of incidents and patients.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>To securely save and retrieve your password for sign in.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>To share your location on scene with other responders.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
@@ -42,13 +44,17 @@
 	<string>To record your observations.</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>To convert your recorded observations into text.</string>
-	<key>NSFaceIDUsageDescription</key>
-	<string>To securely save and retrieve your password for sign in.</string>
+	<key>NSVoIPUsageDescription</key>
+	<string>To call faciliites for consultation and/or pre-arrival alert.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Barlow-Regular.ttf</string>
 		<string>Barlow-Bold.ttf</string>
 		<string>Barlow-SemiBold.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>voip</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

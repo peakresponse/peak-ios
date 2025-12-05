@@ -70,6 +70,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
     weak var delegate: RingdownViewControllerDelegate?
 
     var rtmKit: AgoraRtmClientKit!
+    var callId: UUID?
 
     deinit {
         notificationToken?.invalidate()
@@ -440,19 +441,30 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
 
     func rtmKit(_ rtmClient: AgoraRtmClientKit, didReceiveMessageEvent event: AgoraRtmMessageEvent) {
         print("received", event.message)
-        if let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] {
-            // TODO: use CallKit
-            let vc = ModalViewController()
-            vc.titleText = "Incoming Call"
-            vc.messageText = data["name"] as? String ?? "Unknown"
-            vc.addAction(UIAlertAction(title: "Answer".localized, style: .default, handler: { [weak self] (_) in
-                guard let self = self else { return }
+        if callId == nil, let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] {
+            let callId = UUID()
+            CallHelper.shared.ring(id: callId, from: data["name"] as? String ?? "Unknown", answer: { [weak self] in
+                print("!!! answered, presenting vc?")
                 let vc = CallViewController()
+                vc.callId = callId
                 vc.callName = data["name"] as? String ?? "Unknown"
                 vc.callChannelName = ringdownId
-                presentAnimated(vc)
-            }))
-            presentAnimated(vc)
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAnimated(vc)
+                }
+                self?.callId = nil
+            }, decline: { [weak self] in
+                // TODO: send message back on signal channel
+                self?.callId = nil
+            }) { [weak self] (error) in
+                if let error = error {
+                    print("!!!", error)
+                }
+                self?.callId = nil
+            }
+            self.callId = callId
+        } else {
+            print("second incoming call while one active")
         }
     }
 

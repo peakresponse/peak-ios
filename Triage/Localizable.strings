@@ -115,6 +115,14 @@
 "CallFacilitiesViewController.all" = "All";
 "CallFacilitiesViewController.baseHospital" = "Base Hospital";
 
+"CallViewController.connecting" = "Connecting...";
+"CallViewController.ringing" = "Ringing...";
+"CallViewController.tokenError" = "Unable to authenticate with video calling server.";
+"CallViewController.offline.title" = "Offline";
+"CallViewController.offline.message" = "The facility you are trying to call is not currently online.";
+"CallViewController.ended.title" = "Call Ended";
+"CallViewController.ended.message" = "The call was ended by the other side.";
+
 "CloseSceneConfirmation.message" = "Are you sure you want to close the scene?";
 "LeaveSceneConfirmation.message" = "Are you sure you want to leave the scene?";
 
@@ -765,12 +773,6 @@
 "User.firstName" = "First Name";
 "User.lastName" = "Last Name";
 "User.position" = "Position/Role";
-
-"VideoCallViewController.connecting" = "Connecting...";
-"VideoCallViewController.ringing" = "Ringing...";
-"VideoCallViewController.tokenError" = "Unable to authenticate with video calling server.";
-"VideoCallViewController.offline.title" = "Receiver Offline";
-"VideoCallViewController.offline.message" = "The receiver you are trying to call is not currently online.";
 
 "Vital.vitalSignsTakenAt" = "Vitals Taken At";
 "Vital.cardiacRhythm" = "Cardiac Rhythm/EKG";
