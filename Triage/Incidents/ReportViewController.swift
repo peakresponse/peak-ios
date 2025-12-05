@@ -952,9 +952,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func callFacilitiesViewController(_ vc: CallFacilitiesViewController, didSelect regionFacility: RegionFacility) {
         vc.dismissAnimated { [weak self] in
-            let vc = VideoCallViewController()
-            vc.regionFacility = regionFacility
-            vc.report = self?.newReport ?? self?.report
+            let vc = CallViewController()
+            vc.ring(regionFacility, with: self?.newReport ?? self?.report)
             self?.presentAnimated(vc)
         }
     }

@@ -73,11 +73,18 @@ class PRApiClient: ApiClient {
 
     // MARK: - Agora
 
-    func getToken(channelName: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
-        var params: [String: String] = [
+    func getRtmToken(channelName: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        let params: [String: String] = [
             "channelName": channelName
         ]
-        return GET(path: "/api/agora/token", params: params, completionHandler: completionHandler)
+        return GET(path: "/api/agora/rtm-token", params: params, completionHandler: completionHandler)
+    }
+
+    func getRtcToken(channelName: String, completionHandler: @escaping (URLRequest, URLResponse?, [String: Any]?, Error?) -> Void) -> URLSessionTask {
+        let params: [String: String] = [
+            "channelName": channelName
+        ]
+        return GET(path: "/api/agora/rtc-token", params: params, completionHandler: completionHandler)
     }
 
     // MARK: - Assignments

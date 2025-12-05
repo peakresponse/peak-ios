@@ -14,7 +14,6 @@
 		451F9DC8291ED03C00B5E73A /* IconButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DC7291ED03C00B5E73A /* IconButton.swift */; };
 		451F9DCA291ED09F00B5E73A /* RoundImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DC9291ED09F00B5E73A /* RoundImageView.swift */; };
 		451F9DCC291ED0C500B5E73A /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 451F9DCB291ED0C500B5E73A /* ImageView.swift */; };
-		452A338D2ECFFE1F00D14C05 /* VideoCallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452A338C2ECFFE0B00D14C05 /* VideoCallViewController.swift */; };
 		452A33942ED0296800D14C05 /* Agorafdkaac.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 452A33902ECFFFD200D14C05 /* Agorafdkaac.xcframework */; };
 		452A33952ED0296800D14C05 /* Agorafdkaac.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 452A33902ECFFFD200D14C05 /* Agorafdkaac.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		452A33972ED0296900D14C05 /* Agoraffmpeg.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 452A338E2ECFFF7000D14C05 /* Agoraffmpeg.xcframework */; };
@@ -92,6 +91,7 @@
 		45761BF22B89137B00530E42 /* RespondersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF12B89137B00530E42 /* RespondersViewController.swift */; };
 		45761BF42B89155E00530E42 /* ResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */; };
 		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
+		457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7732EE25E39002B6194 /* CallViewController.swift */; };
 		458B87F02823564300A9C602 /* SceneOverviewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */; };
 		458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0A8275ADC980065F324 /* ICD10CM.realm */; };
 		458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */; };
@@ -237,7 +237,6 @@
 		452A33862ECFFD4D00D14C05 /* AgoraRtcKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AgoraRtcKit.xcframework; path = Triage/Frameworks/AgoraRtcKit.xcframework; sourceTree = "<group>"; };
 		452A33872ECFFD4D00D14C05 /* AgoraRtmKit.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AgoraRtmKit.xcframework; path = Triage/Frameworks/AgoraRtmKit.xcframework; sourceTree = "<group>"; };
 		452A33882ECFFD4D00D14C05 /* aosl.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = aosl.xcframework; path = Triage/Frameworks/aosl.xcframework; sourceTree = "<group>"; };
-		452A338C2ECFFE0B00D14C05 /* VideoCallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallViewController.swift; sourceTree = "<group>"; };
 		452A338E2ECFFF7000D14C05 /* Agoraffmpeg.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Agoraffmpeg.xcframework; path = Triage/Frameworks/Agoraffmpeg.xcframework; sourceTree = "<group>"; };
 		452A33902ECFFFD200D14C05 /* Agorafdkaac.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = Agorafdkaac.xcframework; path = Triage/Frameworks/Agorafdkaac.xcframework; sourceTree = "<group>"; };
 		452A33922ED0004F00D14C05 /* AgoraSoundTouch.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = AgoraSoundTouch.xcframework; path = Triage/Frameworks/AgoraSoundTouch.xcframework; sourceTree = "<group>"; };
@@ -312,6 +311,7 @@
 		45761BF12B89137B00530E42 /* RespondersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersViewController.swift; sourceTree = "<group>"; };
 		45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
+		457CC7732EE25E39002B6194 /* CallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
 		458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewHeaderCell.swift; sourceTree = "<group>"; };
 		458CA0A8275ADC980065F324 /* ICD10CM.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ICD10CM.realm; sourceTree = "<group>"; };
 		458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboardSource.swift; sourceTree = "<group>"; };
@@ -676,6 +676,7 @@
 			children = (
 				45C757CE272CB9CC00386F07 /* Views */,
 				45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */,
+				457CC7732EE25E39002B6194 /* CallViewController.swift */,
 				45AE959E2EB7DF4E006933AC /* CallFacilitiesViewController.swift */,
 				455588202DC9370700EA21A9 /* EventsViewController.swift */,
 				454F9CA728D3E278009F7115 /* FormViewController.swift */,
@@ -691,7 +692,6 @@
 				458CA0CE278527FC0065F324 /* ReportsViewController.swift */,
 				45C757DD2734AFC400386F07 /* RingdownViewController.swift */,
 				4566F081236DE94400A04C75 /* ScanViewController.swift */,
-				452A338C2ECFFE0B00D14C05 /* VideoCallViewController.swift */,
 			);
 			path = Incidents;
 			sourceTree = "<group>";
@@ -964,9 +964,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1000,9 +1004,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1110,7 +1118,6 @@
 				454F9CA428D3D088009F7115 /* FormsViewController.swift in Sources */,
 				45C207D62B9B8A2400150184 /* TransportCartResponderField.swift in Sources */,
 				456F050427BC6D03000CEE42 /* File.swift in Sources */,
-				452A338D2ECFFE1F00D14C05 /* VideoCallViewController.swift in Sources */,
 				454E17BB24FFF5FB00F9EB8B /* TriageViewController.swift in Sources */,
 				454A8BC62B994EB0003C82D6 /* TransportViewController.swift in Sources */,
 				454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */,
@@ -1185,6 +1192,7 @@
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
 				458CA0CC277293580065F324 /* FormBuilder.swift in Sources */,
+				457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
@@ -1554,11 +1562,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1610,12 +1618,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {

@@ -6,6 +6,8 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import AgoraRtmKit
+import Keys
 import UIKit
 import PRKit
 internal import RealmSwift
@@ -15,7 +17,7 @@ protocol RingdownViewControllerDelegate: AnyObject {
 }
 
 class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
-                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate {
+                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -67,9 +69,15 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
 
     weak var delegate: RingdownViewControllerDelegate?
 
+    var rtmKit: AgoraRtmClientKit!
+
     deinit {
         notificationToken?.invalidate()
         ringdownNotificationToken?.invalidate()
+
+        rtmKit?.logout()
+        rtmKit?.destroy()
+        rtmKit = nil
     }
 
     override func viewDidLoad() {
@@ -138,6 +146,24 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                     }
                 }
             }
+            print("logging into agora RTM channelName=", ringdownId)
+            let keys = TriageKeys()
+            rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: ringdownId), delegate: self)
+            let task = PRApiClient.shared.getRtmToken(channelName: ringdownId) { [weak self] (_, _, data, error) in
+                guard let self = self else { return }
+                if let error = error {
+                    // TODO: error handling
+                    print(error)
+                } else if let data = data, let token = data["token"] as? String {
+                    self.rtmKit.login(token) { (_, error) in
+                        if let error = error {
+                            // TODO: error handling
+                            print(error)
+                        }
+                    }
+                }
+            }
+            task.resume()
         }
     }
 
@@ -407,6 +433,26 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
             }
         } else {
             sendRingdown()
+        }
+    }
+
+    // MARK: - AgoraRtmClientDelegate
+
+    func rtmKit(_ rtmClient: AgoraRtmClientKit, didReceiveMessageEvent event: AgoraRtmMessageEvent) {
+        print("received", event.message)
+        if let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] {
+            // TODO: use CallKit
+            let vc = ModalViewController()
+            vc.titleText = "Incoming Call"
+            vc.messageText = data["name"] as? String ?? "Unknown"
+            vc.addAction(UIAlertAction(title: "Answer".localized, style: .default, handler: { [weak self] (_) in
+                guard let self = self else { return }
+                let vc = CallViewController()
+                vc.callName = data["name"] as? String ?? "Unknown"
+                vc.callChannelName = ringdownId
+                presentAnimated(vc)
+            }))
+            presentAnimated(vc)
         }
     }
 
