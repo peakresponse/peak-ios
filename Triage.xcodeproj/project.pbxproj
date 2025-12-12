@@ -967,13 +967,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1007,13 +1003,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1566,11 +1558,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1622,12 +1614,12 @@
 /* Begin XCSwiftPackageProductDependency section */
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {

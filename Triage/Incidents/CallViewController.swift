@@ -19,11 +19,15 @@ enum CallStatus {
 class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClientDelegate {
     weak var commandHeader: CommandHeader!
     weak var localView: UIView!
+    weak var localPlaceholderView: UIView!
     weak var remoteView: UIView!
+    weak var remotePlaceholderView: UIView!
     weak var statusView: UIView!
     weak var statusLabel: UILabel!
     weak var statusSpinner: UIActivityIndicatorView!
     weak var flipButton: RoundButton!
+    weak var audioButton: RoundButton!
+    weak var videoButton: RoundButton!
 
     var rtcKit: AgoraRtcEngineKit!
     var rtmKit: AgoraRtmClientKit!
@@ -104,20 +108,66 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         ])
         self.localView = localView
 
+        let localPlaceholderView = UIView()
+        localPlaceholderView.translatesAutoresizingMaskIntoConstraints = false
+        localPlaceholderView.backgroundColor = .black
+        view.addSubview(localPlaceholderView)
+        NSLayoutConstraint.activate([
+            localPlaceholderView.topAnchor.constraint(equalTo: localView.topAnchor),
+            localPlaceholderView.leftAnchor.constraint(equalTo: localView.leftAnchor),
+            localPlaceholderView.rightAnchor.constraint(equalTo: localView.rightAnchor),
+            localPlaceholderView.bottomAnchor.constraint(equalTo: localView.bottomAnchor)
+        ])
+        self.localPlaceholderView = localPlaceholderView
+
+        let localImageView = UIImageView(image: UIImage(named: "User"))
+        localImageView.translatesAutoresizingMaskIntoConstraints = false
+        localImageView.tintColor = .white
+        localImageView.contentMode = .scaleAspectFit
+        localPlaceholderView.addSubview(localImageView)
+        NSLayoutConstraint.activate([
+            localImageView.centerXAnchor.constraint(equalTo: localPlaceholderView.centerXAnchor),
+            localImageView.centerYAnchor.constraint(equalTo: localPlaceholderView.centerYAnchor),
+            localImageView.widthAnchor.constraint(equalTo: localPlaceholderView.widthAnchor, multiplier: 0.5)
+        ])
+
         let remoteView = UIView()
         remoteView.translatesAutoresizingMaskIntoConstraints = false
-        remoteView.backgroundColor = .gray
-        remoteView.layer.masksToBounds = true
-        remoteView.layer.cornerRadius = 8
+        remoteView.backgroundColor = .black
         remoteView.isHidden = true
+        remoteView.addShadow(withOffset: .zero, radius: 4, color: .white, opacity: 0.3)
         view.addSubview(remoteView)
         NSLayoutConstraint.activate([
             remoteView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.25),
             remoteView.heightAnchor.constraint(equalTo: remoteView.widthAnchor, multiplier: 1.7),
             remoteView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20),
-            remoteView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            remoteView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor, constant: 20)
         ])
         self.remoteView = remoteView
+
+        let remotePlaceholderView = UIView()
+        remotePlaceholderView.translatesAutoresizingMaskIntoConstraints = false
+        remotePlaceholderView.backgroundColor = .black
+        remotePlaceholderView.isHidden = true
+        view.addSubview(remotePlaceholderView)
+        NSLayoutConstraint.activate([
+            remotePlaceholderView.topAnchor.constraint(equalTo: remoteView.topAnchor),
+            remotePlaceholderView.leftAnchor.constraint(equalTo: remoteView.leftAnchor),
+            remotePlaceholderView.rightAnchor.constraint(equalTo: remoteView.rightAnchor),
+            remotePlaceholderView.bottomAnchor.constraint(equalTo: remoteView.bottomAnchor)
+        ])
+        self.remotePlaceholderView = remotePlaceholderView
+
+        let remoteImageView = UIImageView(image: UIImage(named: "User"))
+        remoteImageView.translatesAutoresizingMaskIntoConstraints = false
+        remoteImageView.tintColor = .white
+        remoteImageView.contentMode = .scaleAspectFit
+        remotePlaceholderView.addSubview(remoteImageView)
+        NSLayoutConstraint.activate([
+            remoteImageView.centerXAnchor.constraint(equalTo: remotePlaceholderView.centerXAnchor),
+            remoteImageView.centerYAnchor.constraint(equalTo: remotePlaceholderView.centerYAnchor),
+            remoteImageView.widthAnchor.constraint(equalTo: remotePlaceholderView.widthAnchor, multiplier: 0.5)
+        ])
 
         let statusView = UIView()
         statusView.translatesAutoresizingMaskIntoConstraints = false
@@ -159,19 +209,56 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         ])
         self.statusSpinner = statusSpinner
 
+        let videoButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 74, height: 74))
+        videoButton.translatesAutoresizingMaskIntoConstraints = false
+        videoButton.setImage(UIImage(named: "VidOff40px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
+        videoButton.setImage(UIImage(named: "VidOn40px", in: PRKitBundle.instance, compatibleWith: nil), for: .selected)
+        videoButton.tintColor = .white
+        videoButton.alpha = 0.8
+        videoButton.addTarget(self, action: #selector(videoPressed), for: .touchUpInside )
+        videoButton.isEnabled = false
+        view.addSubview(videoButton)
+        NSLayoutConstraint.activate([
+            videoButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            videoButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            videoButton.widthAnchor.constraint(equalToConstant: 74),
+            videoButton.heightAnchor.constraint(equalToConstant: 74)
+        ])
+        self.videoButton = videoButton
+
         let flipButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 74, height: 74))
         flipButton.translatesAutoresizingMaskIntoConstraints = false
         flipButton.setImage(UIImage(named: "Update40px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
         flipButton.tintColor = .white
         flipButton.alpha = 0.8
         flipButton.addTarget(self, action: #selector(flipPressed), for: .touchUpInside )
+        flipButton.isEnabled = false
         view.addSubview(flipButton)
         NSLayoutConstraint.activate([
-            flipButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-            flipButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
+            flipButton.leftAnchor.constraint(equalTo: videoButton.rightAnchor, constant: 20),
+            flipButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
             flipButton.widthAnchor.constraint(equalToConstant: 74),
             flipButton.heightAnchor.constraint(equalToConstant: 74)
         ])
+        self.flipButton = flipButton
+
+        let audioButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 74, height: 74))
+        audioButton.translatesAutoresizingMaskIntoConstraints = false
+        audioButton.setImage(UIImage(named: "MicOff40px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
+        audioButton.setImage(UIImage(named: "MicOn40px", in: PRKitBundle.instance, compatibleWith: nil), for: .selected)
+        audioButton.tintColor = .white
+        audioButton.alpha = 0.8
+        audioButton.addTarget(self, action: #selector(audioPressed), for: .touchUpInside )
+        audioButton.isEnabled = false
+        audioButton.isSelected = true
+        view.addSubview(audioButton)
+        NSLayoutConstraint.activate([
+            audioButton.rightAnchor.constraint(equalTo: videoButton.leftAnchor, constant: -20),
+            audioButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
+            audioButton.widthAnchor.constraint(equalToConstant: 74),
+            audioButton.heightAnchor.constraint(equalToConstant: 74)
+        ])
+        self.audioButton = audioButton
 
         let keys = TriageKeys()
         rtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
@@ -185,7 +272,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                 channelOptions.channelProfile = .communication
                 channelOptions.clientRoleType = .broadcaster
                 channelOptions.publishMicrophoneTrack = true
-                channelOptions.publishCameraTrack = true
+                channelOptions.publishCameraTrack = false
                 channelOptions.autoSubscribeAudio = true
                 channelOptions.autoSubscribeVideo = true
                 self.rtcKit.joinChannel(byToken: token, channelId: self.callChannelName, uid: 0, mediaOptions: channelOptions)
@@ -286,6 +373,36 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         rtcKit.switchCamera()
     }
 
+    @objc func audioPressed() {
+        audioButton.isSelected = !audioButton.isSelected
+        rtcKit.enableLocalAudio(audioButton.isSelected)
+        updateChannel()
+    }
+
+    @objc func videoPressed() {
+        videoButton.isSelected = !videoButton.isSelected
+        rtcKit.enableLocalVideo(videoButton.isSelected)
+        if videoButton.isSelected {
+            rtcKit.startPreview()
+            localPlaceholderView.isHidden = true
+        } else {
+            rtcKit.stopPreview()
+            localPlaceholderView.isHidden = false
+        }
+        updateChannel()
+    }
+
+    func updateChannel() {
+        let channelOptions = AgoraRtcChannelMediaOptions()
+        channelOptions.channelProfile = .communication
+        channelOptions.clientRoleType = .broadcaster
+        channelOptions.publishMicrophoneTrack = audioButton.isSelected
+        channelOptions.publishCameraTrack = videoButton.isSelected
+        channelOptions.autoSubscribeAudio = true
+        channelOptions.autoSubscribeVideo = true
+        rtcKit.updateChannel(with: channelOptions)
+    }
+
     // MARK: - AgoraRtcEngineDelegate
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinChannel channel: String, withUid uid: UInt, elapsed: Int) {
@@ -295,7 +412,9 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         localVideoCanvas.renderMode = .hidden
         rtcKit.setupLocalVideo(localVideoCanvas)
         rtcKit.enableVideo()
-        rtcKit.startPreview()
+        audioButton.isEnabled = true
+        videoButton.isEnabled = true
+        flipButton.isEnabled = true
     }
 
     func rtcEngine(_ engine: AgoraRtcEngineKit, didJoinedOfUid uid: UInt, elapsed: Int) {
@@ -305,6 +424,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         remoteVideoCanvas.renderMode = .hidden
         rtcKit.setupRemoteVideo(remoteVideoCanvas)
         remoteView.isHidden = false
+        remotePlaceholderView.isHidden = false
         statusView.isHidden = true
         callStatus = .connected
         CallHelper.shared.connected(id: callId)
@@ -315,6 +435,20 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         CallHelper.shared.ended(id: callId, reason: .remoteEnded)
         presentAlert(title: "CallViewController.ended.title".localized, message: "CallViewController.ended.message".localized) { [weak self] in
             self?.dismissAnimated()
+        }
+    }
+
+    func rtcEngine(
+        _ engine: AgoraRtcEngineKit,
+        remoteVideoStateChangedOfUid uid: UInt,
+        state: AgoraVideoRemoteState,
+        reason: AgoraVideoRemoteReason,
+        elapsed: Int
+    ) {
+        if state == .stopped {
+            remotePlaceholderView.isHidden = false
+        } else {
+            remotePlaceholderView.isHidden = true
         }
     }
 }
