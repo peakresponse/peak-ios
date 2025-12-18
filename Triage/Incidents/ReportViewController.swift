@@ -27,7 +27,7 @@ let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, opti
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
                             KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
                             LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate,
-                            CallFacilitiesViewControllerDelegate {
+                            CallFacilitiesViewControllerDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -924,6 +924,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     @objc func prearrivalPressed() {
         let vc = CallFacilitiesViewController()
+        vc.reason = .hospitalTeamActivation
         vc.filter = HospitalTeamActivation(rawValue: (newReport ?? report)?.disposition?.hospitalTeamActivation ?? "")
         vc.delegate = self
         present(vc)
@@ -952,10 +953,28 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     func callFacilitiesViewController(_ vc: CallFacilitiesViewController, didSelect regionFacility: RegionFacility) {
         vc.dismissAnimated { [weak self] in
-            let vc = CallViewController()
-            vc.ring(regionFacility, with: self?.newReport ?? self?.report)
-            self?.presentAnimated(vc)
+            let cvc = CallViewController()
+            cvc.delegate = self
+            cvc.callReason = vc.reason
+            cvc.ring(regionFacility, with: self?.newReport ?? self?.report)
+            self?.presentAnimated(cvc)
         }
+    }
+
+    // MARK: - CallViewControllerDelegate
+
+    func callViewControllerDidFinish(_ vc: CallViewController) {
+        if vc.callReason == .hospitalTeamActivation, (newReport ?? report)?.disposition?.hospitalTeamActivationAt == nil {
+            if !isEditing {
+                newReport = Report(clone: report)
+            }
+            newReport?.disposition?.hospitalTeamActivationAt = vc.callConnectedAt
+            if !isEditing {
+                delegate?.reportViewControllerNeedsSave(self)
+            }
+            refreshFormFieldsAndControls(["disposition.hospitalTeamActivationAt"])
+        }
+        vc.dismiss(animated: true)
     }
 
     // MARK: - FormFieldDelegate

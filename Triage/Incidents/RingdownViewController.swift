@@ -17,7 +17,7 @@ protocol RingdownViewControllerDelegate: AnyObject {
 }
 
 class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
-                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate {
+                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -446,6 +446,8 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
             CallHelper.shared.ring(id: callId, from: data["name"] as? String ?? "Unknown", answer: { [weak self] in
                 print("!!! answered, presenting vc?")
                 let vc = CallViewController()
+                vc.delegate = self
+                vc.callReason = .ringdown
                 vc.callId = callId
                 vc.callName = data["name"] as? String ?? "Unknown"
                 vc.callChannelName = ringdownId
@@ -466,6 +468,12 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         } else {
             print("second incoming call while one active")
         }
+    }
+
+    // MARK: - CallViewControllerDelegate
+
+    func callViewControllerDidFinish(_ vc: CallViewController) {
+        vc.dismiss(animated: true)
     }
 
     // MARK: - CheckboxDelegate

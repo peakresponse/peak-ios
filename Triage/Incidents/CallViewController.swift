@@ -12,8 +12,16 @@ import Keys
 import PRKit
 import UIKit
 
+enum CallReason {
+    case hospitalTeamActivation, medication, procedure, ringdown
+}
+
 enum CallStatus {
     case connecting, ringing, connected, disconnected
+}
+
+@objc protocol CallViewControllerDelegate {
+    func callViewControllerDidFinish(_ vc: CallViewController)
 }
 
 class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClientDelegate {
@@ -32,8 +40,12 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
     var rtcKit: AgoraRtcEngineKit!
     var rtmKit: AgoraRtmClientKit!
 
+    weak var delegate: CallViewControllerDelegate?
+
     var callId = UUID()
+    var callReason: CallReason!
     var callStatus: CallStatus = .connecting
+    var callConnectedAt: Date?
     var callName: String!
     var callChannelName: String!
     var signalChannelName: String!
@@ -325,7 +337,8 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                                     self?.statusView.isHidden = true
                                                     self?.presentAlert(title: "CallViewController.offline.title".localized,
                                                                        message: "CallViewController.offline.message".localized) { [weak self] in
-                                                        self?.dismissAnimated()
+                                                        guard let self = self else { return }
+                                                        self.delegate?.callViewControllerDidFinish(self)
                                                     }
                                                 }
                                             }
@@ -366,7 +379,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                 print(error)
             }
         }
-        dismissAnimated()
+        delegate?.callViewControllerDidFinish(self)
     }
 
     @objc func flipPressed() {
@@ -427,6 +440,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         remotePlaceholderView.isHidden = false
         statusView.isHidden = true
         callStatus = .connected
+        callConnectedAt = Date()
         CallHelper.shared.connected(id: callId)
     }
 
@@ -434,7 +448,8 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         callStatus = .disconnected
         CallHelper.shared.ended(id: callId, reason: .remoteEnded)
         presentAlert(title: "CallViewController.ended.title".localized, message: "CallViewController.ended.message".localized) { [weak self] in
-            self?.dismissAnimated()
+            guard let self = self else { return }
+            self.delegate?.callViewControllerDidFinish(self)
         }
     }
 

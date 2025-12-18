@@ -24,6 +24,7 @@ class CallFacilitiesViewController: UIViewController, UITableViewDataSource, UIT
     weak var delegate: CallFacilitiesViewControllerDelegate?
     var region: Region!
     var filter: HospitalTeamActivation?
+    var reason: CallReason!
     var baseFacility: RegionFacility?
     var results: Results<RegionFacility>?
     var filteredResults: [RegionFacility] = []

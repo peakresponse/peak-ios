@@ -174,7 +174,6 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
                 }
             }
             vc.setEditing(false, animated: true)
-            vc.scrollView.setContentOffset(.zero, animated: true)
         }
         commandHeader.centerBarButtonItem = nil
         commandHeader.rightBarButtonItem = editBarButtonItem
