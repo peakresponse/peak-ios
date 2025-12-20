@@ -456,7 +456,12 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                 }
                 self?.callId = nil
             }, decline: { [weak self] in
-                // TODO: send message back on signal channel
+                let publishOptions = AgoraRtmPublishOptions()
+                publishOptions.channelType = .user
+                var newData = data
+                newData["status"] = "declined" as Any
+                print("!!! declining")
+                self?.rtmKit.publish(channelName: data["userId"] as? String ?? "", data: try! JSONSerialization.data(withJSONObject: newData), option: publishOptions)
                 self?.callId = nil
             }) { [weak self] (error) in
                 if let error = error {
