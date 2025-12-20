@@ -338,6 +338,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                                     self?.presentAlert(title: "CallViewController.offline.title".localized,
                                                                        message: "CallViewController.offline.message".localized) { [weak self] in
                                                         guard let self = self else { return }
+                                                        CallHelper.shared.ended(id: callId, reason: .failed)
                                                         self.delegate?.callViewControllerDidFinish(self)
                                                     }
                                                 }

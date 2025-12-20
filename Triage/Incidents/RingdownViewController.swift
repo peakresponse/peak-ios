@@ -440,8 +440,11 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
     // MARK: - AgoraRtmClientDelegate
 
     func rtmKit(_ rtmClient: AgoraRtmClientKit, didReceiveMessageEvent event: AgoraRtmMessageEvent) {
-        print("received", event.message)
-        if callId == nil, let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] {
+        guard let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] else {
+            return
+        }
+        print("received", data)
+        if callId == nil {
             let callId = UUID()
             CallHelper.shared.ring(id: callId, from: data["name"] as? String ?? "Unknown", answer: { [weak self] in
                 print("!!! answered, presenting vc?")
@@ -450,7 +453,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                 vc.callReason = .ringdown
                 vc.callId = callId
                 vc.callName = data["name"] as? String ?? "Unknown"
-                vc.callChannelName = ringdownId
+                vc.callChannelName = data["userId"] as? String ?? ""
                 DispatchQueue.main.async { [weak self] in
                     self?.presentAnimated(vc)
                 }
