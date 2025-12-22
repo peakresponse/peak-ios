@@ -41,15 +41,17 @@ workflows:
         - project_path: $BITRISE_PROJECT_PATH
     - script@1:
         title: Do anything with Script step
-        content: |
-          asdf install ruby 3.4.8
-          asdf global ruby 3.4.8
-          asdf local ruby 3.4.8
+        inputs:
+          content: |
+            asdf install ruby 3.4.8
+            asdf global ruby 3.4.8
+            asdf local ruby 3.4.8
     - cocoapods-install@2: {}
     - xcode-test@6:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
+        - destination: platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
         - xcodebuild_options: ARCHS=x86_64
     - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
