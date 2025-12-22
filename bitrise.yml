@@ -20,7 +20,7 @@ workflows:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
-        - destination: platform=iOS Simulator,name=iPhone 17 Pro,OS=latest
+        - destination: platform=iOS Simulator,arch=x86_64,name=iPhone 17 Pro,OS=latest
         - xcodebuild_options: ARCHS=x86_64
     - deploy-to-bitrise-io@2: {}
     - cache-push@2: {}
