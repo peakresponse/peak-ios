@@ -35,12 +35,16 @@ workflows:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
     - git-clone@8: {}
     - cache-pull@2: {}
-    - script@1:
-        title: Do anything with Script step
     - certificate-and-profile-installer@1: {}
     - recreate-user-schemes@1:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
+    - script@1:
+        title: Do anything with Script step
+        content: |
+          asdf install ruby 3.4.8
+          asdf global ruby 3.4.8
+          asdf local ruby 3.4.8
     - cocoapods-install@2: {}
     - xcode-test@6:
         inputs:
