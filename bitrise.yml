@@ -15,14 +15,6 @@ workflows:
     - recreate-user-schemes@1:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
-    - script@1:
-        title: Do anything with Script step
-        inputs:
-        - content: |
-            asdf plugin update ruby
-            asdf install ruby 3.4.8
-            asdf global ruby 3.4.8
-            asdf local ruby 3.4.8
     - cocoapods-install@2: {}
     - xcode-test@6:
         inputs:
