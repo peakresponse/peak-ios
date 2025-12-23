@@ -60,6 +60,21 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
+  - opts:
+      is_expand: false
+    AgoraAppId:
+  - opts:
+      is_expand: false
+    ApiClientServerUrl:
+  - opts:
+      is_expand: false
+    GoogleMapsSdkApiKey:
+  - opts:
+      is_expand: false
+    RollbarEnvironment:
+  - opts:
+      is_expand: false
+    RollbarPostClientItemAccessToken:    
 meta:
   bitrise.io:
     stack: osx-xcode-16.3.x
