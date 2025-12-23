@@ -71,10 +71,7 @@ app:
     GoogleMapsSdkApiKey:
   - opts:
       is_expand: false
-    RollbarEnvironment:
-  - opts:
-      is_expand: false
-    RollbarPostClientItemAccessToken:    
+    RollbarEnvironment: test
 meta:
   bitrise.io:
     stack: osx-xcode-16.3.x
