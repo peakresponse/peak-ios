@@ -65,7 +65,7 @@ app:
     AgoraAppId:
   - opts:
       is_expand: false
-    ApiClientServerUrl:
+    ApiClientServerUrl: http://localhost
   - opts:
       is_expand: false
     GoogleMapsSdkApiKey:
