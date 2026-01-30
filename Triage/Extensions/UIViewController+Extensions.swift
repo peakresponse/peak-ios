@@ -67,6 +67,15 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
         }
     }
 
+    func present(_ vc: UIViewController) {
+        if vc as? UIAlertController == nil {
+            vc.presentationController?.delegate = self
+        }
+        present(vc, animated: false, completion: { [weak self] in
+            self?.didPresentAnimated()
+        })
+    }
+
     func presentAnimated(_ vc: UIViewController) {
         if vc as? UIAlertController == nil {
             vc.presentationController?.delegate = self

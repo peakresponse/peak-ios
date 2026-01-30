@@ -21,6 +21,7 @@ extension Report {
         ]
         if let agency = response?.agency, let state = agency.stateId, let stateUniqueId = agency.stateUniqueId, var ambulance = json["ambulance"] as? [String: Any] {
             let organization: [String: Any] = [
+                "name": agency.name ?? NSNull(),
                 "state": state,
                 "stateUniqueId": stateUniqueId
             ]
@@ -69,8 +70,10 @@ extension Report {
             sex = value
         }
         var chiefComplaintDescription: Any = NSNull()
+        var otherObservationNotes: Any = NSNull()
         if let value = situation?.chiefComplaint {
             chiefComplaintDescription = value
+            otherObservationNotes = narrative?.text ?? NSNull()
         } else if let value = narrative?.text {
             chiefComplaintDescription = value
         }
@@ -94,6 +97,7 @@ extension Report {
                 oxygenSaturation = value
             }
         }
+        let hospitalTeamActivation: Any = disposition?.hospitalTeamActivation ?? NSNull()
         json["patient"] = [
             "triageTag": triageTag,
             "triagePriority": triagePriority,
@@ -117,7 +121,8 @@ extension Report {
             "restraintIndicator": false,
             "covid19SuspectedIndicator": false,
             "ivIndicator": false,
-            "otherObservationNotes": NSNull()
+            "otherObservationNotes": otherObservationNotes,
+            "hospitalTeamActivation": hospitalTeamActivation
         ]
         json["patientDelivery"] = [
             "etaMinutes": NSNull()

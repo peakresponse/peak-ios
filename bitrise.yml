@@ -1,54 +1,31 @@
-format_version: "8"
+format_version: "23"
 default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 project_type: ios
 trigger_map:
 - push_branch: '*'
   workflow: primary
 workflows:
-  deploy:
-    steps:
-    - activate-ssh-key@4:
-        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8: {}
-    - cache-pull@2: {}
-    - script@1:
-        title: Do anything with Script step
-    - certificate-and-profile-installer@1: {}
-    - recreate-user-schemes@1:
-        inputs:
-        - project_path: $BITRISE_PROJECT_PATH
-    - cocoapods-install@2: {}
-    - xcode-test@6:
-        inputs:
-        - project_path: $BITRISE_PROJECT_PATH
-        - scheme: $BITRISE_SCHEME
-    - xcode-archive@2:
-        inputs:
-        - project_path: $BITRISE_PROJECT_PATH
-        - scheme: $BITRISE_SCHEME
-        - export_method: $BITRISE_EXPORT_METHOD
-    - deploy-to-bitrise-io@2: {}
-    - cache-push@2: {}
   primary:
     steps:
-    - activate-ssh-key@4:
+    - activate-ssh-key:
         run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
-    - git-clone@8: {}
-    - cache-pull@2: {}
-    - script@1:
-        title: Do anything with Script step
-    - certificate-and-profile-installer@1: {}
-    - recreate-user-schemes@1:
+    - git-clone: {}
+    - certificate-and-profile-installer: {}
+    - recreate-user-schemes:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
-    - cocoapods-install@2: {}
-    - xcode-test@6:
+    - restore-cocoapods-cache: {}
+    - cocoapods-install: {}
+    - save-cocoapods-cache: {}
+    - restore-spm-cache: {}
+    - xcode-test:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
+        - destination: platform=iOS Simulator,arch=x86_64,name=iPhone 16 Pro,OS=18.6
         - xcodebuild_options: ARCHS=x86_64
-    - deploy-to-bitrise-io@2: {}
-    - cache-push@2: {}
+    - save-spm-cache: {}
+    - deploy-to-bitrise-io: {}
 app:
   envs:
   - opts:
@@ -60,7 +37,19 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
+  - opts:
+      is_expand: false
+    AgoraAppId:
+  - opts:
+      is_expand: false
+    ApiClientServerUrl: http://localhost
+  - opts:
+      is_expand: false
+    GoogleMapsSdkApiKey:
+  - opts:
+      is_expand: false
+    RollbarEnvironment: test
 meta:
   bitrise.io:
-    stack: osx-xcode-16.3.x
+    stack: osx-xcode-26.2.x
     machine_type_id: g2-m1.4core

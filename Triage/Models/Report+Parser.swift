@@ -108,6 +108,18 @@ private let MAPPINGS_PRIORITY = [
     "deceased": Priority.dead.rawValue
 ]
 
+private let MAPPINGS_ALERT = [
+    "adult trauma": HospitalTeamActivation.adultTrauma.rawValue,
+    "pediatric trauma": HospitalTeamActivation.pediatricTrauma.rawValue,
+    "trauma": HospitalTeamActivation.adultTrauma.rawValue,
+    "stroke": HospitalTeamActivation.stroke.rawValue,
+    "cardiac arrest": HospitalTeamActivation.cardiacArrest.rawValue,
+    "sepsis": HospitalTeamActivation.sepsis.rawValue,
+    "stemi": HospitalTeamActivation.stemi.rawValue,
+    "OB": HospitalTeamActivation.obstetrics.rawValue,
+    "obstetrics": HospitalTeamActivation.obstetrics.rawValue
+]
+
 private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:patient(?:s|'s)? )?name(?: is)? (?<patient0firstName>[^ .,]+)(?: (?<patient0lastName>[^ .,]+))?"#),
     Matcher(pattern: #"first name(?: is)? (?<patient0firstName>[^ .,]+)"#),
@@ -195,7 +207,11 @@ private let MATCHERS: [Matcher] = [
                 "lastVital0totalGlasgowComaScore": MAPPINGS_NUMBERS
             ]),
     Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperature>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:C|celsius|°C)"#),
-    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperatureF>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:F|fahrenheit|°F)"#)
+    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperatureF>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:F|fahrenheit|°F)"#),
+    Matcher(pattern: #"(?<disposition0hospitalTeamActivation>adult trauma|pediatric trauma|trauma|stroke|cardiac arrest|stemi|sepsis|OB|obstetrics) alert"#,
+            mappings: [
+                "disposition0hospitalTeamActivation": MAPPINGS_ALERT
+            ])
 ]
 // swiftlint:enable force_try line_length
 

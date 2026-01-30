@@ -26,7 +26,8 @@ let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, opti
 
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
                             KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
-                            LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate {
+                            LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate,
+                            CallFacilitiesViewControllerDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -220,6 +221,17 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             addTextField(source: report, attributeKey: "disposition.reasonForRefusalRelease",
                          attributeType: .multi(EnumKeyboardSource<ReasonForRefusalRelease>()),
                          tag: &tag, to: colB)
+            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivation",
+                         attributeType: .single(EnumKeyboardSource<HospitalTeamActivation>()),
+                         tag: &tag, to: colA)
+
+            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivationAt",
+                         attributeType: .datetime,
+                         tag: &tag, to: colB)
+
+            let hospitalTeamActivationAtField = formComponents["disposition.hospitalTeamActivationAt"] as? PRKit.FormField
+            hospitalTeamActivationAtField?.accessoryButtonImage = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
+            hospitalTeamActivationAtField?.accessoryButton?.addTarget(self, action: #selector(prearrivalPressed), for: .touchUpInside)
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
@@ -763,6 +775,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         } else {
             formComponents["disposition.reasonForRefusalRelease"]?.isHidden = true
         }
+        if let hospitalTeamActivation = (newReport ?? report)?.disposition?.hospitalTeamActivation,
+           hospitalTeamActivation != HospitalTeamActivation.no.rawValue {
+            formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = false
+        } else {
+            formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = true
+        }
+        (formInputAccessoryView as? FormInputAccessoryView)?.updateButtons()
     }
 
     @objc func scanLicensePressed(_ button: PRKit.Button) {
@@ -903,6 +922,14 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         presentAnimated(modal)
     }
 
+    @objc func prearrivalPressed() {
+        let vc = CallFacilitiesViewController()
+        vc.reason = .hospitalTeamActivation
+        vc.filter = HospitalTeamActivation(rawValue: (newReport ?? report)?.disposition?.hospitalTeamActivation ?? "")
+        vc.delegate = self
+        present(vc)
+    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? RecordingViewController {
             vc.delegate = self
@@ -920,6 +947,34 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         if !isEditing {
             delegate?.reportViewControllerNeedsSave(self)
         }
+    }
+
+    // MARK: - CallFacilitiesViewControllerDelegate
+
+    func callFacilitiesViewController(_ vc: CallFacilitiesViewController, didSelect regionFacility: RegionFacility) {
+        vc.dismissAnimated { [weak self] in
+            let cvc = CallViewController()
+            cvc.delegate = self
+            cvc.callReason = vc.reason
+            cvc.ring(regionFacility, with: self?.newReport ?? self?.report)
+            self?.presentAnimated(cvc)
+        }
+    }
+
+    // MARK: - CallViewControllerDelegate
+
+    func callViewControllerDidFinish(_ vc: CallViewController) {
+        if vc.callReason == .hospitalTeamActivation, (newReport ?? report)?.disposition?.hospitalTeamActivationAt == nil {
+            if !isEditing {
+                newReport = Report(clone: report)
+            }
+            newReport?.disposition?.hospitalTeamActivationAt = vc.callConnectedAt
+            if !isEditing {
+                delegate?.reportViewControllerNeedsSave(self)
+            }
+            refreshFormFieldsAndControls(["disposition.hospitalTeamActivationAt"])
+        }
+        vc.dismiss(animated: true)
     }
 
     // MARK: - FormFieldDelegate
@@ -957,6 +1012,13 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                     newReport?.disposition?.transportDisposition != TransportDisposition.patientRefusedTransport.rawValue {
                     newReport?.disposition?.reasonForRefusalRelease = nil
                     refreshFormFieldsAndControls(["disposition.reasonForRefusalRelease"])
+                }
+                updateFormFieldVisibility()
+            case "disposition.hospitalTeamActivation":
+                if newReport?.disposition?.hospitalTeamActivation == nil ||
+                    newReport?.disposition?.hospitalTeamActivation == HospitalTeamActivation.no.rawValue {
+                    newReport?.disposition?.hospitalTeamActivationAt = nil
+                    refreshFormFieldsAndControls(["disposition.hospitalTeamActivationAt"])
                 }
                 updateFormFieldVisibility()
             default:
@@ -1164,6 +1226,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.refreshFormFieldsAndControls()
+                self.updateFormFieldVisibility()
                 if isFinal {
                     // update recording field with text
                     var recordingFields: [RecordingField] = []

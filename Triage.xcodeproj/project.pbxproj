@@ -79,6 +79,8 @@
 		45761BF22B89137B00530E42 /* RespondersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF12B89137B00530E42 /* RespondersViewController.swift */; };
 		45761BF42B89155E00530E42 /* ResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */; };
 		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
+		457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7732EE25E39002B6194 /* CallViewController.swift */; };
+		457CC7762EE34EE2002B6194 /* CallHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7752EE34EDF002B6194 /* CallHelper.swift */; };
 		458B87F02823564300A9C602 /* SceneOverviewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */; };
 		458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0A8275ADC980065F324 /* ICD10CM.realm */; };
 		458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */; };
@@ -100,6 +102,8 @@
 		458CA0D52788EBD90065F324 /* ReportTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0D42788EBD90065F324 /* ReportTests.swift */; };
 		45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FF6254E1FB1002E03E7 /* UIResponder+Extensions.swift */; };
 		45917FFF25512DDF002E03E7 /* BaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45917FFE25512DDF002E03E7 /* BaseTests.swift */; };
+		4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 4591A1D62EF87ED80007719A /* RtcBasic */; };
+		4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */ = {isa = PBXBuildFile; productRef = 4591A1D92EF880300007719A /* AgoraRTM */; };
 		45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
@@ -109,6 +113,7 @@
 		459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459EF9A32D38203700C5AFC5 /* LLMKit */; };
 		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
+		45AE959F2EB7DF55006933AC /* CallFacilitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AE959E2EB7DF4E006933AC /* CallFacilitiesViewController.swift */; };
 		45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */; };
 		45B50C8C27D7D5B4002F1674 /* RingdownStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */; };
 		45B7A2D82508330700BCAAAE /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D72508330600BCAAAE /* City.swift */; };
@@ -192,6 +197,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		452A33962ED0296800D14C05 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2A36731B85C534CB922753FF /* Pods-TriageUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TriageUITests.release.xcconfig"; path = "Target Support Files/Pods-TriageUITests/Pods-TriageUITests.release.xcconfig"; sourceTree = "<group>"; };
 		45150BCD270511C30085132C /* AuthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewController.swift; sourceTree = "<group>"; };
@@ -272,6 +290,8 @@
 		45761BF12B89137B00530E42 /* RespondersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersViewController.swift; sourceTree = "<group>"; };
 		45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
+		457CC7732EE25E39002B6194 /* CallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
+		457CC7752EE34EDF002B6194 /* CallHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHelper.swift; sourceTree = "<group>"; };
 		458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewHeaderCell.swift; sourceTree = "<group>"; };
 		458CA0A8275ADC980065F324 /* ICD10CM.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ICD10CM.realm; sourceTree = "<group>"; };
 		458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboardSource.swift; sourceTree = "<group>"; };
@@ -298,6 +318,7 @@
 		459DC4FC2DAEB37C00761142 /* test.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.realm; sourceTree = "<group>"; };
 		45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActiveIncidentsViewController.swift; sourceTree = "<group>"; };
 		45ACBDC7237E718600C99EBB /* AppCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCache.swift; sourceTree = "<group>"; };
+		45AE959E2EB7DF4E006933AC /* CallFacilitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallFacilitiesViewController.swift; sourceTree = "<group>"; };
 		45B50C8927D6D3CB002F1674 /* Report+RoutED.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Report+RoutED.swift"; sourceTree = "<group>"; };
 		45B50C8B27D7D5B4002F1674 /* RingdownStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingdownStatusView.swift; sourceTree = "<group>"; };
 		45B7A2D72508330600BCAAAE /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
@@ -376,7 +397,9 @@
 				6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */,
 				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
+				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
 				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
+				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
 				459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 			);
@@ -472,6 +495,7 @@
 				4566F068236CE82A00A04C75 /* AppRealm.swift */,
 				4566F01F236CCC5500A04C75 /* AppDelegate.swift */,
 				454096A724452CEA00AEE53E /* AppSettings.swift */,
+				457CC7752EE34EDF002B6194 /* CallHelper.swift */,
 				4572BA8C237DD4BB00958A77 /* CameraHelper.swift */,
 				45994121261BDE4D0062D141 /* InterstitialViewController.swift */,
 				454EE967251C62D800EB266A /* LocationHelper.swift */,
@@ -629,6 +653,8 @@
 			children = (
 				45C757CE272CB9CC00386F07 /* Views */,
 				45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */,
+				457CC7732EE25E39002B6194 /* CallViewController.swift */,
+				45AE959E2EB7DF4E006933AC /* CallFacilitiesViewController.swift */,
 				455588202DC9370700EA21A9 /* EventsViewController.swift */,
 				454F9CA728D3E278009F7115 /* FormViewController.swift */,
 				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
@@ -739,6 +765,7 @@
 				4566F01A236CCC5500A04C75 /* Resources */,
 				41170FF1B51A5441BDEE2359 /* [CP] Embed Pods Frameworks */,
 				5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */,
+				452A33962ED0296800D14C05 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -826,6 +853,8 @@
 				45EF91C82DAEEDA700563A0A /* XCRemoteSwiftPackageReference "peak-ios-icd10kit" */,
 				45EF91CB2DAEEDC300563A0A /* XCRemoteSwiftPackageReference "peak-ios-snomedkit" */,
 				45EF91CC2DAEEDD600563A0A /* XCRemoteSwiftPackageReference "peak-ios-rxnormkit" */,
+				4591A1D52EF87ED80007719A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */,
+				4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -1015,6 +1044,7 @@
 				45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
 				45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */,
+				45AE959F2EB7DF55006933AC /* CallFacilitiesViewController.swift in Sources */,
 				455588282DC9618500EA21A9 /* EventTableViewCell.swift in Sources */,
 				45C5AF8527D199C6003E630E /* RingdownFacilityView.swift in Sources */,
 				45D422C12B94FB1400E75D7E /* Region.swift in Sources */,
@@ -1074,6 +1104,7 @@
 				45C9C710291078D7005D0FDD /* CityKeyboard.swift in Sources */,
 				458CA0AE275FD6610065F324 /* CodeList.swift in Sources */,
 				458CA0BC2767DAFB0065F324 /* NemsisValue.swift in Sources */,
+				457CC7762EE34EE2002B6194 /* CallHelper.swift in Sources */,
 				4567E6642C98D54800BBD036 /* MotionHelper.swift in Sources */,
 				4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */,
 				45C207DE2BA0CB9100150184 /* ReunifyViewController.swift in Sources */,
@@ -1127,6 +1158,7 @@
 				454EEA4F2522EEAE00EB266A /* CLLocationCoordinate2D+Extensions.swift in Sources */,
 				45C757DE2734AFC400386F07 /* RingdownViewController.swift in Sources */,
 				458CA0CC277293580065F324 /* FormBuilder.swift in Sources */,
+				457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */,
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
@@ -1507,6 +1539,22 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		4591A1D52EF87ED80007719A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtcEngine_iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
+		4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AgoraIO/AgoraRtm_Apple.git";
+			requirement = {
+				branch = lite_iOS;
+				kind = branch;
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1550,6 +1598,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		4591A1D62EF87ED80007719A /* RtcBasic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4591A1D52EF87ED80007719A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
+			productName = RtcBasic;
+		};
+		4591A1D92EF880300007719A /* AgoraRTM */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */;
+			productName = AgoraRTM;
+		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;

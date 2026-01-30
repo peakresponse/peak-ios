@@ -4,6 +4,7 @@ platform :ios, '15.5'
 plugin 'cocoapods-keys', {
   :project => 'Triage',
   :keys => [
+    'AgoraAppId',
     'ApiClientServerUrl',
     'GoogleMapsSdkApiKey',
     'RollbarEnvironment',

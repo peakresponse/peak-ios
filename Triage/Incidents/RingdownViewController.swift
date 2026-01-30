@@ -6,16 +6,19 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import AgoraRtmKit
+import Keys
 import UIKit
 import PRKit
 internal import RealmSwift
+import RollbarNotifier
 
 protocol RingdownViewControllerDelegate: AnyObject {
     func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)
 }
 
 class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
-                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate {
+                              RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
     @IBOutlet weak var containerView: UIStackView!
@@ -67,9 +70,16 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
 
     weak var delegate: RingdownViewControllerDelegate?
 
+    var rtmKit: AgoraRtmClientKit!
+    var callId: UUID?
+
     deinit {
         notificationToken?.invalidate()
         ringdownNotificationToken?.invalidate()
+
+        rtmKit?.logout()
+        rtmKit?.destroy()
+        rtmKit = nil
     }
 
     override func viewDidLoad() {
@@ -138,6 +148,27 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                     }
                 }
             }
+            let keys = TriageKeys()
+            rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: ringdownId), delegate: self)
+            let task = PRApiClient.shared.getRtmToken(channelName: ringdownId) { [weak self] (_, _, data, error) in
+                guard let self = self else { return }
+                if let error = error {
+                    Rollbar.errorError(error)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentUnexpectedErrorAlert()
+                    }
+                } else if let data = data, let token = data["token"] as? String {
+                    self.rtmKit.login(token) { (_, error) in
+                        if let error = error {
+                            Rollbar.errorError(error)
+                            DispatchQueue.main.async { [weak self] in
+                                self?.presentUnexpectedErrorAlert()
+                            }
+                        }
+                    }
+                }
+            }
+            task.resume()
         }
     }
 
@@ -408,6 +439,53 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         } else {
             sendRingdown()
         }
+    }
+
+    // MARK: - AgoraRtmClientDelegate
+
+    func rtmKit(_ rtmClient: AgoraRtmClientKit, didReceiveMessageEvent event: AgoraRtmMessageEvent) {
+        guard let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] else {
+            return
+        }
+        if callId == nil {
+            let callId = UUID()
+            CallHelper.shared.ring(id: callId, from: data["name"] as? String ?? "Unknown", answer: { [weak self] in
+                let vc = CallViewController()
+                vc.delegate = self
+                vc.callReason = .ringdown
+                vc.callId = callId
+                vc.callName = data["name"] as? String ?? "Unknown"
+                vc.callChannelName = data["userId"] as? String ?? ""
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentAnimated(vc)
+                }
+                self?.callId = nil
+            }, decline: { [weak self] in
+                let publishOptions = AgoraRtmPublishOptions()
+                publishOptions.channelType = .user
+                var newData = data
+                newData["status"] = "declined" as Any
+                self?.rtmKit.publish(channelName: data["userId"] as? String ?? "", data: try! JSONSerialization.data(withJSONObject: newData), option: publishOptions)
+                self?.callId = nil
+            }) { [weak self] (error) in
+                if let error = error {
+                    Rollbar.errorError(error)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentUnexpectedErrorAlert()
+                    }
+                }
+                self?.callId = nil
+            }
+            self.callId = callId
+        } else {
+            // TODO: return a "busy" message
+        }
+    }
+
+    // MARK: - CallViewControllerDelegate
+
+    func callViewControllerDidFinish(_ vc: CallViewController) {
+        vc.dismiss(animated: true)
     }
 
     // MARK: - CheckboxDelegate
