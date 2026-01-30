@@ -11,6 +11,7 @@ import Keys
 import UIKit
 import PRKit
 internal import RealmSwift
+import RollbarNotifier
 
 protocol RingdownViewControllerDelegate: AnyObject {
     func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)
@@ -147,19 +148,22 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                     }
                 }
             }
-            print("logging into agora RTM channelName=", ringdownId)
             let keys = TriageKeys()
             rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: ringdownId), delegate: self)
             let task = PRApiClient.shared.getRtmToken(channelName: ringdownId) { [weak self] (_, _, data, error) in
                 guard let self = self else { return }
                 if let error = error {
-                    // TODO: error handling
-                    print(error)
+                    Rollbar.errorError(error)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentUnexpectedErrorAlert()
+                    }
                 } else if let data = data, let token = data["token"] as? String {
                     self.rtmKit.login(token) { (_, error) in
                         if let error = error {
-                            // TODO: error handling
-                            print(error)
+                            Rollbar.errorError(error)
+                            DispatchQueue.main.async { [weak self] in
+                                self?.presentUnexpectedErrorAlert()
+                            }
                         }
                     }
                 }
@@ -443,11 +447,9 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         guard let ringdownId = ringdown?.id, let rawData = event.message.rawData ?? event.message.stringData?.data(using: .utf8), let data = try? JSONSerialization.jsonObject(with: rawData) as? [String: Any] else {
             return
         }
-        print("received", data)
         if callId == nil {
             let callId = UUID()
             CallHelper.shared.ring(id: callId, from: data["name"] as? String ?? "Unknown", answer: { [weak self] in
-                print("!!! answered, presenting vc?")
                 let vc = CallViewController()
                 vc.delegate = self
                 vc.callReason = .ringdown
@@ -463,18 +465,20 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                 publishOptions.channelType = .user
                 var newData = data
                 newData["status"] = "declined" as Any
-                print("!!! declining")
                 self?.rtmKit.publish(channelName: data["userId"] as? String ?? "", data: try! JSONSerialization.data(withJSONObject: newData), option: publishOptions)
                 self?.callId = nil
             }) { [weak self] (error) in
                 if let error = error {
-                    print("!!!", error)
+                    Rollbar.errorError(error)
+                    DispatchQueue.main.async { [weak self] in
+                        self?.presentUnexpectedErrorAlert()
+                    }
                 }
                 self?.callId = nil
             }
             self.callId = callId
         } else {
-            print("second incoming call while one active")
+            // TODO: return a "busy" message
         }
     }
 

@@ -10,6 +10,7 @@ import AgoraRtcKit
 import AgoraRtmKit
 import Keys
 import PRKit
+import RollbarNotifier
 import UIKit
 
 enum CallReason {
@@ -276,8 +277,10 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         rtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
         let task = PRApiClient.shared.getRtcToken(channelName: callChannelName) { [weak self] (_, _, data, error) in
             if let error = error {
-                // TODO: error handling
-                print(error)
+                Rollbar.errorError(error)
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentUnexpectedErrorAlert()
+                }
             } else if let data = data, let token = data["token"] as? String {
                 guard let self = self else { return }
                 let channelOptions = AgoraRtcChannelMediaOptions()
@@ -302,20 +305,27 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         CallHelper.shared.start(id: callId, to: callName) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
-                print("!!!", error)
+                Rollbar.errorError(error)
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentUnexpectedErrorAlert()
+                }
             } else if let userId = AppSettings.userId {
                 self.rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: userId), delegate: self)
                 let task = PRApiClient.shared.getRtmToken(channelName: userId) { [weak self] (_, _, data, error) in
                     guard let self = self else { return }
                     if let error = error {
-                        // TODO: error handling
-                        print(error)
+                        Rollbar.errorError(error)
+                        DispatchQueue.main.async { [weak self] in
+                            self?.presentUnexpectedErrorAlert()
+                        }
                     } else if let data = data as? [String: String], let token = data["token"] {
                         self.rtmKit.login(token) { [weak self] (_, error) in
                             guard let self = self else { return }
                             if let error = error {
-                                // TODO: error handling
-                                print(error)
+                                Rollbar.errorError(error)
+                                DispatchQueue.main.async { [weak self] in
+                                    self?.presentUnexpectedErrorAlert()
+                                }
                             } else {
                                 let publishOptions = AgoraRtmPublishOptions()
                                 publishOptions.channelType = .user
@@ -330,8 +340,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                     self.rtmKit.publish(channelName: signalChannelName, data: data, option: publishOptions) { [weak self] (_, error) in
                                         guard let self = self else { return }
                                         if let error = error {
-                                            // TODO: error handling
-                                            print(error)
+                                            Rollbar.errorError(error)
                                             if error.errorCode == .channelReceiverOffline {
                                                 DispatchQueue.main.async { [weak self] in
                                                     self?.statusView.isHidden = true
@@ -342,6 +351,10 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                                         self.delegate?.callViewControllerDidFinish(self)
                                                     }
                                                 }
+                                            } else {
+                                                DispatchQueue.main.async { [weak self] in
+                                                    self?.presentUnexpectedErrorAlert()
+                                                }
                                             }
                                         } else {
                                             self.callStatus = .ringing
@@ -351,7 +364,9 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                         }
                                     }
                                 } else {
-                                    // TODO: error handling
+                                    DispatchQueue.main.async { [weak self] in
+                                        self?.presentUnexpectedErrorAlert()
+                                    }
                                 }
                             }
                         }
@@ -377,7 +392,10 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         }
         CallHelper.shared.end(id: callId) { [weak self] (error) in
             if let error = error {
-                print(error)
+                Rollbar.errorError(error)
+                DispatchQueue.main.async { [weak self] in
+                    self?.presentUnexpectedErrorAlert()
+                }
             }
         }
         delegate?.callViewControllerDidFinish(self)
