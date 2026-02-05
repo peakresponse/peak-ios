@@ -340,7 +340,6 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                     self.rtmKit.publish(channelName: signalChannelName, data: data, option: publishOptions) { [weak self] (_, error) in
                                         guard let self = self else { return }
                                         if let error = error {
-                                            Rollbar.errorError(error)
                                             if error.errorCode == .channelReceiverOffline {
                                                 DispatchQueue.main.async { [weak self] in
                                                     self?.statusView.isHidden = true
@@ -352,6 +351,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
                                                     }
                                                 }
                                             } else {
+                                                Rollbar.errorError(error)
                                                 DispatchQueue.main.async { [weak self] in
                                                     self?.presentUnexpectedErrorAlert()
                                                 }
