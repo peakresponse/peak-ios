@@ -1,5 +1,5 @@
 {
-  "originHash" : "de46f081efc6525b320c6fa1c0bf620f161ebeecabe96e7edc2523fe1c0e7d89",
+  "originHash" : "96146e3706c69f0183d5f6b0a95deb6b5d7ae9ebb523301ace1b32a0d2708b20",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-prkit.git",
       "state" : {
-        "branch" : "35-spm",
-        "revision" : "7591d78a45e7b9c2acb41e1cf19cf97cd8b7fb62"
+        "branch" : "main",
+        "revision" : "6ba81d48288745a643d9ca64c5e25d35eb193bbc"
       }
     },
     {
