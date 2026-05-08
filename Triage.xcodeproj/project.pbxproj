@@ -401,10 +401,8 @@
 				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
 				4536D40F2FAE5129001ACA32 /* LLMKit in Frameworks */,
-				4536D40C2FAE4E35001ACA32 /* LLMKitAWSBedrock in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
 				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
-				4536D40A2FAE4E35001ACA32 /* LLMKit in Frameworks */,
 				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
 				4536D4112FAE5129001ACA32 /* LLMKitAWSBedrock in Frameworks */,
 				4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */,
@@ -946,13 +944,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -986,13 +980,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1283,7 +1273,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 124;
+				CURRENT_PROJECT_VERSION = 125;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -1349,7 +1339,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 124;
+				CURRENT_PROJECT_VERSION = 125;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -1541,11 +1531,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1632,14 +1622,6 @@
 			package = 4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */;
 			productName = RollbarNotifier;
 		};
-		4536D4092FAE4E35001ACA32 /* LLMKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LLMKit;
-		};
-		4536D40B2FAE4E35001ACA32 /* LLMKitAWSBedrock */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = LLMKitAWSBedrock;
-		};
 		4536D40E2FAE5129001ACA32 /* LLMKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
@@ -1662,12 +1644,12 @@
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {
