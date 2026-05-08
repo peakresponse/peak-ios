@@ -9,6 +9,7 @@
 import CoreLocation
 internal import RealmSwift
 import PRKit
+import UIKit
 
 // swiftlint:disable file_length
 

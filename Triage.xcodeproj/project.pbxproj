@@ -23,6 +23,7 @@
 		4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D3F32FAE453A001ACA32 /* RollbarNotifier */; };
 		4536D40F2FAE5129001ACA32 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D40E2FAE5129001ACA32 /* LLMKit */; };
 		4536D4112FAE5129001ACA32 /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4102FAE5129001ACA32 /* LLMKitAWSBedrock */; };
+		4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4132FAE5F16001ACA32 /* PRKit */; };
 		4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */; };
 		453D7985284D542100DA7E32 /* ReportMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7984284D542100DA7E32 /* ReportMapViewController.swift */; };
 		453D7987284D5DA400DA7E32 /* SceneMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */; };
@@ -400,6 +401,7 @@
 				6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */,
 				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
+				4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */,
 				4536D40F2FAE5129001ACA32 /* LLMKit in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
 				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
@@ -862,6 +864,7 @@
 				4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */,
 				4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */,
 				4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */,
+				4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -944,9 +947,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -980,9 +987,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1241,7 +1252,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1307,7 +1317,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1531,11 +1540,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1555,6 +1564,14 @@
 			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
 			requirement = {
 				branch = main;
+				kind = branch;
+			};
+		};
+		4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-prkit.git";
+			requirement = {
+				branch = "35-spm";
 				kind = branch;
 			};
 		};
@@ -1632,6 +1649,11 @@
 			package = 4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
 			productName = LLMKitAWSBedrock;
 		};
+		4536D4132FAE5F16001ACA32 /* PRKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */;
+			productName = PRKit;
+		};
 		4591A1D62EF87ED80007719A /* RtcBasic */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4591A1D52EF87ED80007719A /* XCRemoteSwiftPackageReference "AgoraRtcEngine_iOS" */;
@@ -1644,12 +1666,12 @@
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {

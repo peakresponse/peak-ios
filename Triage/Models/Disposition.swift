@@ -6,6 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import Foundation
 internal import RealmSwift
 import PRKit
 
