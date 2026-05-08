@@ -84,14 +84,6 @@ PODS:
     - SwiftSignatureView (~> 3.2.0)
   - PromisesObjC (2.4.0)
   - RMJSONPatch (1.0.4)
-  - RollbarCommon (3.3.3)
-  - RollbarCrash (3.3.3)
-  - RollbarNotifier (3.3.3):
-    - RollbarCommon (~> 3.3.3)
-    - RollbarCrash (~> 3.3.3)
-    - RollbarReport (~> 3.3.3)
-  - RollbarReport (3.3.3):
-    - RollbarCrash (~> 3.3.3)
   - Starscream (4.0.6)
   - SVGKit (3.0.0):
     - CocoaLumberjack (~> 3.0)
@@ -108,7 +100,6 @@ DEPENDENCIES:
   - Keys (from `Pods/CocoaPodsKeys`)
   - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RMJSONPatch (= 1.0.4)
-  - RollbarNotifier (~> 3.2)
   - Starscream
   - SwiftLint
   - SwiftPath
@@ -135,10 +126,6 @@ SPEC REPOS:
     - nanopb
     - PromisesObjC
     - RMJSONPatch
-    - RollbarCommon
-    - RollbarCrash
-    - RollbarNotifier
-    - RollbarReport
     - Starscream
     - SVGKit
     - SwiftLint
@@ -185,10 +172,6 @@ SPEC CHECKSUMS:
   PRKit: 5e33d8ce7eeec85383e22c83758e3533894923a2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
-  RollbarCommon: cb87be0f694a09c138f7d51d6f3b48151ca965ab
-  RollbarCrash: 0272cf44b05ebc0f69c17acbd0cffbdaf35b2893
-  RollbarNotifier: 8f57eb355f0fe8a6832d8dff615f2118d78047be
-  RollbarReport: 0e57a3ac73c66dd6d5add5e999a967210753c4c3
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
@@ -196,6 +179,6 @@ SPEC CHECKSUMS:
   SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 30269cb5ac0e9308cfd7bbc2d015571cde8e83fe
+PODFILE CHECKSUM: 0f583707ceed025a4425751fefc75882f54bf7d0
 
 COCOAPODS: 1.16.2

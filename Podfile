@@ -21,7 +21,6 @@ target 'Triage' do
   pod 'GoogleMaps'
   pod 'GoogleMLKit/BarcodeScanning', '8.0.0'
   pod 'PRKit', :git => 'https://github.com/peakresponse/peak-ios-prkit.git', :branch => 'dev'
-  pod 'RollbarNotifier', '~> 3.2'
   pod 'RMJSONPatch', '1.0.4'
   pod 'Starscream'
   pod 'SwiftLint'

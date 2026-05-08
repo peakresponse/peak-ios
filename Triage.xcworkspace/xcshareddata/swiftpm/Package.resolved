@@ -1,5 +1,5 @@
 {
-  "originHash" : "974946306b6c733f1ad0b21400068588ed994797d7fc55f92bf30f485f068f64",
+  "originHash" : "1be7ae91b8f4f4fc0af62124366ab2e654f506f5bb1ceb7303d03bdbc49e7b3e",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -47,12 +47,12 @@
       }
     },
     {
-      "identity" : "llm.swift",
+      "identity" : "cocoalumberjack",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/eastriverlee/LLM.swift",
+      "location" : "https://github.com/CocoaLumberjack/CocoaLumberjack.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "7584d0736fce6ec032ab357ee63a8e7b00c64d96"
+        "revision" : "a9ed4b6f9bdedce7d77046f43adfb8ce1fd54114",
+        "version" : "3.9.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-icd10kit",
       "state" : {
-        "revision" : "144253128758444092718df05ab30b9c44f3cdc1",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "edcd6167a392aaa7f6401eb71946e46100205f67"
       }
     },
     {
@@ -70,7 +70,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-llmkit",
       "state" : {
         "branch" : "main",
-        "revision" : "007204aa0d32129a0c5f5aed34339a0b564a7b3a"
+        "revision" : "1c2a6b1df7bb32ed758fcb509be378cf9a65ccc5"
       }
     },
     {
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-rxnormkit",
       "state" : {
-        "revision" : "b63854e7d4531e6fd1b45f729b09e6458a95c028",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "a7c9cb35e259279243449a63bf8bdb201c2c36d8"
       }
     },
     {
@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-snomedkit",
       "state" : {
-        "revision" : "492de45ba6ad6d364b45fa91861560653e8de184",
-        "version" : "1.0.0"
+        "branch" : "main",
+        "revision" : "e4eddd1994584d57d4ce32b0bee33576f5015622"
       }
     },
     {
@@ -96,8 +96,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "cccb3ca9e26ec452a29f2f0d4050d1e38b8a3d43",
-        "version" : "14.14.0"
+        "revision" : "4cc46f8607516226e5465062fdacd088fbd94552",
+        "version" : "20.1.4"
       }
     },
     {
@@ -105,8 +105,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "d94d44781167fbb8d7a46fb181e784a6446ca5c1",
-        "version" : "10.54.4"
+        "revision" : "600e187711e5fa4e8e2c0429cacee27e8e44f112",
+        "version" : "20.0.4"
+      }
+    },
+    {
+      "identity" : "rollbar-apple",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rollbar/rollbar-apple",
+      "state" : {
+        "revision" : "e008574c10e9f0e6f88e69d749807fd92ca36172",
+        "version" : "3.4.0"
       }
     },
     {
