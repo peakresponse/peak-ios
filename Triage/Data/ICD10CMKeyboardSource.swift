@@ -6,6 +6,7 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import Foundation
 internal import ICD10Kit
 import PRKit
 internal import RealmSwift

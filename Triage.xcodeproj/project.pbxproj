@@ -21,8 +21,9 @@
 		452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */ = {isa = PBXBuildFile; fileRef = 452FBE0D276D5EE600874DF0 /* SNOMED.realm */; };
 		4532180C2AFC34C400F2891B /* ReportsCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4532180B2AFC34C400F2891B /* ReportsCountsHeaderView.swift */; };
 		4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D3F32FAE453A001ACA32 /* RollbarNotifier */; };
-		4536D40F2FAE5129001ACA32 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D40E2FAE5129001ACA32 /* LLMKit */; };
-		4536D4112FAE5129001ACA32 /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4102FAE5129001ACA32 /* LLMKitAWSBedrock */; };
+		4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4132FAE5F16001ACA32 /* PRKit */; };
+		4536D4A62FAE955E001ACA32 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4A52FAE955E001ACA32 /* LLMKit */; };
+		4536D4A82FAE955E001ACA32 /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4A72FAE955E001ACA32 /* LLMKitAWSBedrock */; };
 		4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */; };
 		453D7985284D542100DA7E32 /* ReportMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7984284D542100DA7E32 /* ReportMapViewController.swift */; };
 		453D7987284D5DA400DA7E32 /* SceneMapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 453D7986284D5DA400DA7E32 /* SceneMapViewController.swift */; };
@@ -113,7 +114,6 @@
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
 		459DC4FB2DADDC1C00761142 /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4FA2DADDC1C00761142 /* RealmSwift */; };
 		459DC4FD2DAEB37C00761142 /* test.realm in Resources */ = {isa = PBXBuildFile; fileRef = 459DC4FC2DAEB37C00761142 /* test.realm */; };
-		459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459EF9A32D38203700C5AFC5 /* LLMKit */; };
 		45A5AD902C66DB10007F63AE /* ActiveIncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45A5AD8F2C66DB10007F63AE /* ActiveIncidentsViewController.swift */; };
 		45ACBDC8237E718600C99EBB /* AppCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45ACBDC7237E718600C99EBB /* AppCache.swift */; };
 		45AE959F2EB7DF55006933AC /* CallFacilitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45AE959E2EB7DF4E006933AC /* CallFacilitiesViewController.swift */; };
@@ -164,7 +164,6 @@
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
 		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
 		45E934E82B9B7DBC007164AC /* TransportCartReportField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */; };
-		45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */; };
 		45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C92DAEEDA700563A0A /* ICD10Kit */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
 		45F7BAC22739E37300FBD31F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC12739E37300FBD31F /* Report.swift */; };
@@ -400,13 +399,12 @@
 				6B845CFDAEE065F78D1056DB /* Pods_Triage.framework in Frameworks */,
 				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
-				4536D40F2FAE5129001ACA32 /* LLMKit in Frameworks */,
+				4536D4A62FAE955E001ACA32 /* LLMKit in Frameworks */,
+				4536D4A82FAE955E001ACA32 /* LLMKitAWSBedrock in Frameworks */,
+				4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
-				45EF91C72DAEEB9300563A0A /* LLMKitAWSBedrock in Frameworks */,
 				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
-				4536D4112FAE5129001ACA32 /* LLMKitAWSBedrock in Frameworks */,
 				4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */,
-				459EF9A42D38203700C5AFC5 /* LLMKit in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -862,6 +860,7 @@
 				4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */,
 				4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */,
 				4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */,
+				4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -944,9 +943,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -980,9 +983,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1241,7 +1248,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1307,7 +1313,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				BUILD_LIBRARY_FOR_DISTRIBUTION = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1531,11 +1536,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1553,6 +1558,14 @@
 		4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-prkit.git";
 			requirement = {
 				branch = main;
 				kind = branch;
@@ -1580,14 +1593,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 20.0.4;
-			};
-		};
-		459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
-			requirement = {
-				branch = main;
-				kind = branch;
 			};
 		};
 		45EF91C82DAEEDA700563A0A /* XCRemoteSwiftPackageReference "peak-ios-icd10kit" */ = {
@@ -1622,12 +1627,17 @@
 			package = 4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */;
 			productName = RollbarNotifier;
 		};
-		4536D40E2FAE5129001ACA32 /* LLMKit */ = {
+		4536D4132FAE5F16001ACA32 /* PRKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */;
+			productName = PRKit;
+		};
+		4536D4A52FAE955E001ACA32 /* LLMKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
 			productName = LLMKit;
 		};
-		4536D4102FAE5129001ACA32 /* LLMKitAWSBedrock */ = {
+		4536D4A72FAE955E001ACA32 /* LLMKitAWSBedrock */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
 			productName = LLMKitAWSBedrock;
@@ -1644,28 +1654,18 @@
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */;
 			productName = RealmSwift;
-		};
-		459EF9A32D38203700C5AFC5 /* LLMKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
-			productName = LLMKit;
-		};
-		45EF91C62DAEEB9300563A0A /* LLMKitAWSBedrock */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 459EF9A22D38203700C5AFC5 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */;
-			productName = LLMKitAWSBedrock;
 		};
 		45EF91C92DAEEDA700563A0A /* ICD10Kit */ = {
 			isa = XCSwiftPackageProductDependency;

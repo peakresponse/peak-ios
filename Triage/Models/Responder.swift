@@ -9,6 +9,7 @@
 import Foundation
 internal import RealmSwift
 import PRKit
+import UIKit
 
 enum ResponderRole: String, StringCaseIterable {
     case mgs = "MGS"

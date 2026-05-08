@@ -1,11 +1,7 @@
 PODS:
-  - AlignedCollectionViewFlowLayout (1.1.2)
   - AWSCore (2.33.4)
   - AWSTranscribeStreaming (2.33.4):
     - AWSCore (= 2.33.4)
-  - CocoaLumberjack (3.9.0):
-    - CocoaLumberjack/Core (= 3.9.0)
-  - CocoaLumberjack/Core (3.9.0)
   - Google-Maps-iOS-Utils (4.1.0):
     - Google-Maps-iOS-Utils/Clustering (= 4.1.0)
     - Google-Maps-iOS-Utils/Geometry (= 4.1.0)
@@ -53,7 +49,6 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (3.5.0)
-  - Keyboardy (0.2.7)
   - Keys (1.0.1)
   - MLImage (1.0.0-beta7)
   - MLKitBarcodeScanning (7.0.0):
@@ -77,19 +72,11 @@ PODS:
     - nanopb/encode (= 3.30910.0)
   - nanopb/decode (3.30910.0)
   - nanopb/encode (3.30910.0)
-  - PRKit (1.0.0):
-    - AlignedCollectionViewFlowLayout
-    - Keyboardy (~> 0.2)
-    - SVGKit (~> 3.0)
-    - SwiftSignatureView (~> 3.2.0)
   - PromisesObjC (2.4.0)
   - RMJSONPatch (1.0.4)
   - Starscream (4.0.6)
-  - SVGKit (3.0.0):
-    - CocoaLumberjack (~> 3.0)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
-  - SwiftSignatureView (3.2.1)
   - TranscriptionKit (0.1.0):
     - AWSTranscribeStreaming (~> 2.33.4)
 
@@ -98,7 +85,6 @@ DEPENDENCIES:
   - GoogleMaps
   - GoogleMLKit/BarcodeScanning (= 8.0.0)
   - Keys (from `Pods/CocoaPodsKeys`)
-  - PRKit (from `https://github.com/peakresponse/peak-ios-prkit.git`, branch `dev`)
   - RMJSONPatch (= 1.0.4)
   - Starscream
   - SwiftLint
@@ -107,10 +93,8 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AlignedCollectionViewFlowLayout
     - AWSCore
     - AWSTranscribeStreaming
-    - CocoaLumberjack
     - Google-Maps-iOS-Utils
     - GoogleDataTransport
     - GoogleMaps
@@ -118,7 +102,6 @@ SPEC REPOS:
     - GoogleToolboxForMac
     - GoogleUtilities
     - GTMSessionFetcher
-    - Keyboardy
     - MLImage
     - MLKitBarcodeScanning
     - MLKitCommon
@@ -127,34 +110,24 @@ SPEC REPOS:
     - PromisesObjC
     - RMJSONPatch
     - Starscream
-    - SVGKit
     - SwiftLint
     - SwiftPath
-    - SwiftSignatureView
 
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
-  PRKit:
-    :branch: dev
-    :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :branch: dev
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 CHECKOUT OPTIONS:
-  PRKit:
-    :commit: 50b063c800ecc22ab9357de2e349a3803b1e6fcb
-    :git: https://github.com/peakresponse/peak-ios-prkit.git
   TranscriptionKit:
     :commit: 06c1c23a3159411dd01243a23207c724a81111cb
     :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
-  AlignedCollectionViewFlowLayout: ee2ef451e741ec08f8e0967d828001e2f051c20a
   AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
   AWSTranscribeStreaming: a48a78cb78cf0aa351f28444826ec643e81bb305
-  CocoaLumberjack: 5644158777912b7de7469fa881f8a3f259c2512a
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
@@ -162,23 +135,19 @@ SPEC CHECKSUMS:
   GoogleToolboxForMac: d1a2cbf009c453f4d6ded37c105e2f67a32206d8
   GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
-  Keyboardy: 5fee785baf2bc8fa95896a31d88b5f49488f839e
   Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   MLImage: 2ab9c968e75f57911c16f4c9d9e8a8e9604a86a1
   MLKitBarcodeScanning: 72c6437f13a900833b400136be53a8a5d86f42fa
   MLKitCommon: 26b779f072a182c1603d4c88a101c350cac837b1
   MLKitVision: fa8dea9012ac59497c79ddbe9ebf32051047ac4c
   nanopb: fad817b59e0457d11a5dfbde799381cd727c1275
-  PRKit: 5e33d8ce7eeec85383e22c83758e3533894923a2
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
-  SVGKit: 1ad7513f8c74d9652f94ed64ddecda1a23864dea
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
-  SwiftSignatureView: b09443ea8359a5bc267202226f4606fc03193173
   TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: 0f583707ceed025a4425751fefc75882f54bf7d0
+PODFILE CHECKSUM: f2053e1183d6ce1917943c0a8e7b06e384ec8d6e
 
 COCOAPODS: 1.16.2
