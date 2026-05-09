@@ -24,8 +24,8 @@ platform :ios do
         return
       end
 
-      # rebuild cocoapods so that env vars get updated
-      cocoapods
+      # rebuild keys with arkana for the environment
+      `bundle exec arkana -e .env.#{ENV["ENV"]}`
 
       # get bundle version of app
       prev_version = get_info_plist_value(path: "./Triage/Info.plist", key: "CFBundleVersion").to_i
