@@ -14,9 +14,6 @@ workflows:
     - recreate-user-schemes:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
-    - restore-cocoapods-cache: {}
-    - cocoapods-install: {}
-    - save-cocoapods-cache: {}
     - restore-spm-cache: {}
     - xcode-test:
         inputs:
