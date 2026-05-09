@@ -642,6 +642,7 @@ class AppRealm {
             AppRealm.handlePayload(data: data)
             var reportIds: [String] = []
             if let records = data?["Report"] as? [[String: Any]] {
+                // swiftlint:disable:next force_cast
                 reportIds.append(contentsOf: records.map { $0["id"] as! String })
             }
             DispatchQueue.main.async {

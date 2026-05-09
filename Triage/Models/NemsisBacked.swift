@@ -11,6 +11,7 @@ import JSONPatch
 import SwiftPath
 
 // map from attribute to (Nemsis element, is multi-select, include system)
+// swiftlint:disable:next identifier_name
 let NemsisBackedPropertyMap: [String: (String, Bool, Bool)] = [
     "situation.primarySymptom": ("eSituation.09", false, false),
     "history.medicalSurgicalHistory": ("eHistory.08", true, false),
@@ -106,7 +107,9 @@ extension NemsisBacked {
                 ])
             }
         }
+        // swiftlint:disable:next force_try
         let patch = try! JSONPatch(jsonArray: patches as NSArray)
+        // swiftlint:disable:next force_try
         _data = try! patch.apply(to: _tmpMigrateData ?? "{}".data(using: .utf8)!)
     }
 
@@ -178,7 +181,9 @@ extension NemsisBacked {
                 ])
             }
         }
+        // swiftlint:disable:next force_try
         let patch = try! JSONPatch(jsonArray: patches as NSArray)
+        // swiftlint:disable:next force_try
         _data = try! patch.apply(to: _tmpMigrateData ?? "{}".data(using: .utf8)!)
     }
 

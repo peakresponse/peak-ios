@@ -49,6 +49,7 @@ class EventTableViewCell: UITableViewCell {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     func commonInit() {
         let isCompact = traitCollection.horizontalSizeClass == .compact
 

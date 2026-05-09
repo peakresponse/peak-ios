@@ -14,16 +14,19 @@ workflows:
     - recreate-user-schemes:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
-    - restore-cocoapods-cache: {}
-    - cocoapods-install: {}
-    - save-cocoapods-cache: {}
     - restore-spm-cache: {}
+    - bundler: {}
+    - script:
+        inputs:
+        - content: |
+            cp example.env .env
+            bundle exec arkana
     - xcode-test:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
         - destination: platform=iOS Simulator,arch=x86_64,name=iPhone 16 Pro,OS=18.6
-        - xcodebuild_options: ARCHS=x86_64
+        - xcodebuild_options: ARCHS=x86_64 -skipPackagePluginValidation
     - save-spm-cache: {}
     - deploy-to-bitrise-io: {}
 app:
@@ -37,18 +40,6 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
-  - opts:
-      is_expand: false
-    AgoraAppId:
-  - opts:
-      is_expand: false
-    ApiClientServerUrl: http://localhost
-  - opts:
-      is_expand: false
-    GoogleMapsSdkApiKey:
-  - opts:
-      is_expand: false
-    RollbarEnvironment: test
 meta:
   bitrise.io:
     stack: osx-xcode-26.4.x

@@ -42,6 +42,7 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         commonInit()
     }
 
+    // swiftlint:disable:next function_body_length
     func commonInit() {
         let selectedBackgroundView = UIView()
         selectedBackgroundView.backgroundColor = .highlight

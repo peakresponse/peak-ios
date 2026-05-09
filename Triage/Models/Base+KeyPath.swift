@@ -10,6 +10,7 @@ import Foundation
 internal import Realm
 internal import RealmSwift
 
+// swiftlint:disable:next force_try
 let indexExpr = try! NSRegularExpression(pattern: #"([^\[]+)\[(\d+)\]"#, options: [.caseInsensitive])
 
 extension Base {

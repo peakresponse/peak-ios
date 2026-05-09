@@ -10,6 +10,7 @@ import Foundation
 import PRKit
 internal import RealmSwift
 
+// swiftlint:disable:next type_body_length
 class Report: BaseVersioned, NemsisBacked, Predictions {
     struct Keys {
         static let data = "data"

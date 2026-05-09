@@ -97,6 +97,7 @@ class NemsisValue: NSObject {
         set { NegativeValue = NemsisNegative(rawValue: newValue ?? "") }
         get { return attributes?["NV"] ?? attributes?["PN"] }
     }
+    // swiftlint:disable:next identifier_name
     var NegativeValue: NemsisNegative? {
         set {
             if let newValue = newValue {

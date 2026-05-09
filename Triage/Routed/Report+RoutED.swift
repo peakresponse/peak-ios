@@ -10,6 +10,7 @@ import Foundation
 import PRKit
 
 extension Report {
+    // swiftlint:disable:next function_body_length
     func asRingdownJSON() -> [String: Any] {
         var json: [String: Any] = [:]
         var ambulanceIdentifier: Any = NSNull()

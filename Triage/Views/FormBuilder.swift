@@ -78,6 +78,7 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
 
     func refreshFormFields(attributeKeys: [String]?)
 
+    // swiftlint:disable:next function_parameter_count
     func addTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
@@ -87,7 +88,9 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
 
     func newButton(bundleImage: String?, title: String?) -> PRKit.Button
     func newColumns() -> UIStackView
+    // swiftlint:disable:next large_tuple
     func newHeader(_ text: String, subheaderText: String?) -> UIView
+    // swiftlint:disable:next large_tuple
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView)
     func newVerticalSpacer(_ height: CGFloat) -> UIView
     func newText(_ text: String) -> UILabel
@@ -95,6 +98,7 @@ public protocol FormBuilder: PRKit.FormFieldDelegate {
     func newRadioGroup(source: NSObject?, target: NSObject?,
                        attributeKey: String) -> PRKit.FormRadioGroup
 
+    // swiftlint:disable:next function_parameter_count
     func newTextField(source: NSObject?, target: NSObject?,
                       attributeKey: String, attributeType: FormFieldAttributeType,
                       keyboardType: UIKeyboardType,
@@ -288,6 +292,7 @@ extension FormBuilder {
         return view
     }
 
+    // swiftlint:disable:next large_tuple
     func newSection() -> (FormSection, UIStackView, UIStackView, UIStackView) {
         let isRegular = traitCollection.horizontalSizeClass == .regular
         let colA = UIStackView()

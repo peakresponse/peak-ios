@@ -7,7 +7,7 @@
 //
 
 import GoogleMaps
-import Keys
+import ArkanaKeys
 internal import LLMKitAWSBedrock
 import RollbarNotifier
 import UIKit
@@ -64,7 +64,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // ensure CallHelper is initialized ASAP after application startup
         _ = CallHelper.shared
 
-        let keys = TriageKeys()
+        let keys = ArkanaKeys.Global()
 
         let rollbarConfig = RollbarConfig.mutableConfig(withAccessToken: keys.rollbarPostClientItemAccessToken)
         rollbarConfig.destination.environment = keys.rollbarEnvironment

@@ -97,6 +97,7 @@ class FormButton: UIControl {
             updateButtonStyles()
         }
     }
+    // swiftlint:disable:next identifier_name
     @IBInspectable var Size: String {
         get { return size.rawValue }
         set { size = FormButtonSize(rawValue: newValue) ?? .small }
@@ -106,6 +107,7 @@ class FormButton: UIControl {
             updateButtonStyles()
         }
     }
+    // swiftlint:disable:next identifier_name
     @IBInspectable var Style: String {
         get { return style.rawValue }
         set { style = FormButtonStyle(rawValue: newValue) ?? .priority }
