@@ -1615,8 +1615,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/googlemaps/google-maps-ios-utils";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 6.1.3;
+				kind = exactVersion;
+				version = 6.1.0;
 			};
 		};
 		4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */ = {
