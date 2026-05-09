@@ -7,7 +7,6 @@ target 'Triage' do
 
   # Pods for Triage
   pod 'RMJSONPatch', '1.0.4'
-  pod 'Starscream'
   pod 'SwiftLint'
   pod 'SwiftPath'
 

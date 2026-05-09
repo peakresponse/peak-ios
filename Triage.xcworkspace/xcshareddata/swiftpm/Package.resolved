@@ -1,5 +1,5 @@
 {
-  "originHash" : "67146344fb206ec8296ed3bddff9ba8e9eaf3fdd875fac7a58bb64083d85fb81",
+  "originHash" : "c4c2543c33f57c8088d42a18d0866a30f989236c14b86b56fabfabb4e4a36d62",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -242,6 +242,15 @@
       "state" : {
         "revision" : "3df71b8c33b21b9a76071c915504a8dfda663c33",
         "version" : "0.203.0"
+      }
+    },
+    {
+      "identity" : "starscream",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/daltoniam/Starscream",
+      "state" : {
+        "revision" : "c6bfd1af48efcc9a9ad203665db12375ba6b145a",
+        "version" : "4.0.8"
       }
     },
     {

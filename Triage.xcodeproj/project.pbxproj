@@ -115,6 +115,7 @@
 		459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 459940382FAFB6E300A1F555 /* GoogleMapsUtils */; };
 		4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */ = {isa = PBXBuildFile; productRef = 4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */; };
 		459940B32FAFD67800A1F555 /* ArkanaKeys in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B22FAFD67800A1F555 /* ArkanaKeys */; };
+		459940B62FAFD82700A1F555 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B52FAFD82700A1F555 /* Starscream */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -418,6 +419,7 @@
 				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
 				459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */,
 				4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */,
+				459940B62FAFD82700A1F555 /* Starscream in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -876,7 +878,8 @@
 				459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */,
 				4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */,
-				459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys" */,
+				459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys/ArkanaKeys" */,
+				459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -959,9 +962,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1543,15 +1550,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys" */ = {
+		459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys/ArkanaKeys" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ArkanaKeys/ArkanaKeys;
 		};
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1628,6 +1635,14 @@
 			requirement = {
 				kind = exactVersion;
 				version = "9.0.0-1";
+			};
+		};
+		459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/daltoniam/Starscream";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.8;
 			};
 		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
@@ -1724,14 +1739,19 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = ArkanaKeys;
 		};
+		459940B52FAFD82700A1F555 /* Starscream */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */;
+			productName = Starscream;
+		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {

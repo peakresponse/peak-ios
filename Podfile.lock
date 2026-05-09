@@ -1,28 +1,24 @@
 PODS:
   - RMJSONPatch (1.0.4)
-  - Starscream (4.0.6)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
 
 DEPENDENCIES:
   - RMJSONPatch (= 1.0.4)
-  - Starscream
   - SwiftLint
   - SwiftPath
 
 SPEC REPOS:
   trunk:
     - RMJSONPatch
-    - Starscream
     - SwiftLint
     - SwiftPath
 
 SPEC CHECKSUMS:
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
-  Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: a0d7808e9c9d0fbef80a8385ca77bbe5e1187ffd
+PODFILE CHECKSUM: 0618454a7fc085bfc8fa2b66199218f728307545
 
 COCOAPODS: 1.16.2
