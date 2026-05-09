@@ -17,8 +17,6 @@ target 'Triage' do
   use_frameworks!
 
   # Pods for Triage
-  pod 'Google-Maps-iOS-Utils'
-  pod 'GoogleMaps'
   pod 'GoogleMLKit/BarcodeScanning', '8.0.0'
   pod 'RMJSONPatch', '1.0.4'
   pod 'Starscream'
