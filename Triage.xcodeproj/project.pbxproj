@@ -117,6 +117,7 @@
 		459940B32FAFD67800A1F555 /* ArkanaKeys in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B22FAFD67800A1F555 /* ArkanaKeys */; };
 		459940B62FAFD82700A1F555 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B52FAFD82700A1F555 /* Starscream */; };
 		459940B92FAFD8DA00A1F555 /* SwiftPath in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B82FAFD8DA00A1F555 /* SwiftPath */; };
+		459940BC2FAFD9EC00A1F555 /* JSONPatch in Frameworks */ = {isa = PBXBuildFile; productRef = 459940BB2FAFD9EC00A1F555 /* JSONPatch */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -420,6 +421,7 @@
 				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
 				459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */,
 				4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */,
+				459940BC2FAFD9EC00A1F555 /* JSONPatch in Frameworks */,
 				459940B62FAFD82700A1F555 /* Starscream in Frameworks */,
 				459940B92FAFD8DA00A1F555 /* SwiftPath in Frameworks */,
 			);
@@ -783,7 +785,6 @@
 				4566F018236CCC5500A04C75 /* Sources */,
 				4566F019236CCC5500A04C75 /* Frameworks */,
 				4566F01A236CCC5500A04C75 /* Resources */,
-				41170FF1B51A5441BDEE2359 /* [CP] Embed Pods Frameworks */,
 				452A33962ED0296800D14C05 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -883,6 +884,7 @@
 				459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys/ArkanaKeys" */,
 				459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */,
 				459940B72FAFD8DA00A1F555 /* XCRemoteSwiftPackageReference "SwiftPath" */,
+				459940BA2FAFD9EC00A1F555 /* XCRemoteSwiftPackageReference "swift-jsonpatch" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -955,27 +957,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		41170FF1B51A5441BDEE2359 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		454EEA682522FF3B00EB266A /* Run Script */ = {
@@ -1656,6 +1637,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		459940BA2FAFD9EC00A1F555 /* XCRemoteSwiftPackageReference "swift-jsonpatch" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/raymccrae/swift-jsonpatch";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.6;
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1759,6 +1748,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459940B72FAFD8DA00A1F555 /* XCRemoteSwiftPackageReference "SwiftPath" */;
 			productName = SwiftPath;
+		};
+		459940BB2FAFD9EC00A1F555 /* JSONPatch */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459940BA2FAFD9EC00A1F555 /* XCRemoteSwiftPackageReference "swift-jsonpatch" */;
+			productName = JSONPatch;
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,5 +1,5 @@
 {
-  "originHash" : "5e42d0de13c04e7974034c13e7f3061afefbb4a49f247d1157a933754294185f",
+  "originHash" : "2afec36116f1ce9839b1b73cde5aa297cd4fbb07236b8aa28dd3a19a2a5d0a71",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -314,6 +314,15 @@
       "state" : {
         "revision" : "45eb0224913ea070ec4fba17291b9e7ecf4749ca",
         "version" : "1.5.1"
+      }
+    },
+    {
+      "identity" : "swift-jsonpatch",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/raymccrae/swift-jsonpatch",
+      "state" : {
+        "revision" : "1eb12363c1ee681712d2a42d2ee6f0322f92cf31",
+        "version" : "1.0.6"
       }
     },
     {

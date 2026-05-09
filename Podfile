@@ -6,7 +6,6 @@ target 'Triage' do
   use_frameworks!
 
   # Pods for Triage
-  pod 'RMJSONPatch', '1.0.4'
   pod 'SwiftLint'
 
   target 'TriageTests' do
