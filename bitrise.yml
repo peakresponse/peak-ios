@@ -15,6 +15,12 @@ workflows:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
     - restore-spm-cache: {}
+    - bundler: {}
+    - script:
+        inputs:
+        - content: |
+            touch .env
+            bundle exec arkana
     - xcode-test:
         inputs:
         - project_path: $BITRISE_PROJECT_PATH
