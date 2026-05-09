@@ -1,7 +1,4 @@
 PODS:
-  - AWSCore (2.33.4)
-  - AWSTranscribeStreaming (2.33.4):
-    - AWSCore (= 2.33.4)
   - Google-Maps-iOS-Utils (4.1.0):
     - Google-Maps-iOS-Utils/Clustering (= 4.1.0)
     - Google-Maps-iOS-Utils/Geometry (= 4.1.0)
@@ -77,8 +74,6 @@ PODS:
   - Starscream (4.0.6)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
-  - TranscriptionKit (0.1.0):
-    - AWSTranscribeStreaming (~> 2.33.4)
 
 DEPENDENCIES:
   - Google-Maps-iOS-Utils
@@ -89,12 +84,9 @@ DEPENDENCIES:
   - Starscream
   - SwiftLint
   - SwiftPath
-  - TranscriptionKit (from `https://github.com/peakresponse/peak-ios-transcriptionkit.git`, branch `dev`)
 
 SPEC REPOS:
   trunk:
-    - AWSCore
-    - AWSTranscribeStreaming
     - Google-Maps-iOS-Utils
     - GoogleDataTransport
     - GoogleMaps
@@ -116,18 +108,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Keys:
     :path: Pods/CocoaPodsKeys
-  TranscriptionKit:
-    :branch: dev
-    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
-
-CHECKOUT OPTIONS:
-  TranscriptionKit:
-    :commit: 06c1c23a3159411dd01243a23207c724a81111cb
-    :git: https://github.com/peakresponse/peak-ios-transcriptionkit.git
 
 SPEC CHECKSUMS:
-  AWSCore: 83e3416d2224ba98b61d8eadcfcb1f90f48fab82
-  AWSTranscribeStreaming: a48a78cb78cf0aa351f28444826ec643e81bb305
   Google-Maps-iOS-Utils: 3343332b18dfd5be8f1f44edd7d481ace3da4d9a
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
   GoogleMaps: 20d7b12be49a14287f797e88e0e31bc4156aaeb4
@@ -146,8 +128,7 @@ SPEC CHECKSUMS:
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
-  TranscriptionKit: 45579df91a9258035febd8ed221e6a6fa1fae4da
 
-PODFILE CHECKSUM: f2053e1183d6ce1917943c0a8e7b06e384ec8d6e
+PODFILE CHECKSUM: 454e13fea358c42d730a35a41c4151a1bbf8c368
 
 COCOAPODS: 1.16.2

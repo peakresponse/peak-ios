@@ -63,7 +63,7 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
             transcriber.recognizer = AWSRecognizer(accessKey: accessKey,
                                                    secretKey: secretKey,
                                                    sessionToken: sessionToken,
-                                                   region: .USWest2)
+                                                   region: "us-west-2")
         }
         transcriber.delegate = self
     }
