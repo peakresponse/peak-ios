@@ -1,5 +1,5 @@
 {
-  "originHash" : "e3e14eebd207a51bf3c9ddaa6e695a133922b060cebef982565e4d625f10aeca",
+  "originHash" : "67146344fb206ec8296ed3bddff9ba8e9eaf3fdd875fac7a58bb64083d85fb81",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -78,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/google-maps-ios-utils",
       "state" : {
-        "revision" : "e3eec96b96ab2aa69c60e154d70edf523b495f82",
-        "version" : "7.1.0"
+        "revision" : "22c6e764d14daaf5de2aa4a3700bc2e9dccae5ac",
+        "version" : "6.1.0"
       }
     },
     {
@@ -123,8 +123,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/ios-maps-sdk",
       "state" : {
-        "revision" : "3105e73b6b157838dbce2407caf89106bd61fc96",
-        "version" : "10.13.0"
+        "revision" : "02f8f144ef266da44d50a68d1562ca051bac27cc",
+        "version" : "9.4.0"
       }
     },
     {
