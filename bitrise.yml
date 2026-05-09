@@ -26,7 +26,7 @@ workflows:
         - project_path: $BITRISE_PROJECT_PATH
         - scheme: $BITRISE_SCHEME
         - destination: platform=iOS Simulator,arch=x86_64,name=iPhone 16 Pro,OS=18.6
-        - xcodebuild_options: ARCHS=x86_64
+        - xcodebuild_options: ARCHS=x86_64 -skipPackagePluginValidation
     - save-spm-cache: {}
     - deploy-to-bitrise-io: {}
 app:
