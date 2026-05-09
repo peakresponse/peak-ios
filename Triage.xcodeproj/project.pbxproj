@@ -111,6 +111,8 @@
 		45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */; };
 		459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459940302FAFA4C600A1F555 /* TranscriptionKit */; };
 		459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */ = {isa = PBXBuildFile; productRef = 459940322FAFA4C600A1F555 /* TranscriptionKitAWS */; };
+		459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 459940352FAFA8B300A1F555 /* GoogleMaps */; };
+		459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 459940382FAFB6E300A1F555 /* GoogleMapsUtils */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -406,6 +408,8 @@
 				4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
 				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
+				459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */,
+				459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */,
 				4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
@@ -772,7 +776,6 @@
 				4566F019236CCC5500A04C75 /* Frameworks */,
 				4566F01A236CCC5500A04C75 /* Resources */,
 				41170FF1B51A5441BDEE2359 /* [CP] Embed Pods Frameworks */,
-				5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */,
 				452A33962ED0296800D14C05 /* Embed Frameworks */,
 			);
 			buildRules = (
@@ -866,6 +869,8 @@
 				4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */,
 				4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */,
 				4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */,
+				459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
+				459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -979,27 +984,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --fix\n";
-		};
-		5143D59A2EEA029C38D2EBA8 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-resources.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		5F0561CF6B0232C999B34857 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1600,6 +1584,22 @@
 				kind = branch;
 			};
 		};
+		459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/ios-maps-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.13.0;
+			};
+		};
+		459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/googlemaps/google-maps-ios-utils";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1674,6 +1674,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */;
 			productName = TranscriptionKitAWS;
+		};
+		459940352FAFA8B300A1F555 /* GoogleMaps */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */;
+			productName = GoogleMaps;
+		};
+		459940382FAFB6E300A1F555 /* GoogleMapsUtils */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */;
+			productName = GoogleMapsUtils;
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
