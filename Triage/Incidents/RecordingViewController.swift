@@ -9,6 +9,7 @@
 import UIKit
 import Accelerate
 import TranscriptionKit
+import TranscriptionKitAWS
 
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
@@ -63,7 +64,7 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
             transcriber.recognizer = AWSRecognizer(accessKey: accessKey,
                                                    secretKey: secretKey,
                                                    sessionToken: sessionToken,
-                                                   region: .USWest2)
+                                                   region: "us-west-2")
         }
         transcriber.delegate = self
     }

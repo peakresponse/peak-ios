@@ -109,6 +109,8 @@
 		4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */ = {isa = PBXBuildFile; productRef = 4591A1D62EF87ED80007719A /* RtcBasic */; };
 		4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */ = {isa = PBXBuildFile; productRef = 4591A1D92EF880300007719A /* AgoraRTM */; };
 		45966D122C71673D005F1762 /* NemsisNegativesKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45966D112C71673D005F1762 /* NemsisNegativesKeyboardSource.swift */; };
+		459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459940302FAFA4C600A1F555 /* TranscriptionKit */; };
+		459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */ = {isa = PBXBuildFile; productRef = 459940322FAFA4C600A1F555 /* TranscriptionKitAWS */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -406,6 +408,8 @@
 				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
 				4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
+				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
+				459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -861,6 +865,7 @@
 				4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */,
 				4536D40D2FAE5129001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-llmkit" */,
 				4536D4122FAE5F16001ACA32 /* XCRemoteSwiftPackageReference "peak-ios-prkit" */,
+				4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -1587,6 +1592,14 @@
 				kind = branch;
 			};
 		};
+		4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/peakresponse/peak-ios-transcriptionkit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1651,6 +1664,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4591A1D82EF880300007719A /* XCRemoteSwiftPackageReference "AgoraRtm_Apple" */;
 			productName = AgoraRTM;
+		};
+		459940302FAFA4C600A1F555 /* TranscriptionKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */;
+			productName = TranscriptionKit;
+		};
+		459940322FAFA4C600A1F555 /* TranscriptionKitAWS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */;
+			productName = TranscriptionKitAWS;
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
