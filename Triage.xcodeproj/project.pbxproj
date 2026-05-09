@@ -113,6 +113,7 @@
 		459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */ = {isa = PBXBuildFile; productRef = 459940322FAFA4C600A1F555 /* TranscriptionKitAWS */; };
 		459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 459940352FAFA8B300A1F555 /* GoogleMaps */; };
 		459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 459940382FAFB6E300A1F555 /* GoogleMapsUtils */; };
+		4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */ = {isa = PBXBuildFile; productRef = 4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -414,6 +415,7 @@
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
 				459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */,
+				4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -871,6 +873,7 @@
 				4599402F2FAFA4C500A1F555 /* XCRemoteSwiftPackageReference "peak-ios-transcriptionkit" */,
 				459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */,
+				4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -1290,6 +1293,10 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1348,6 +1355,10 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				OTHER_LDFLAGS = (
+					"-ObjC",
+					"-all_load",
+				);
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1600,6 +1611,14 @@
 				minimumVersion = 7.0.0;
 			};
 		};
+		4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/d-date/google-mlkit-swiftpm";
+			requirement = {
+				kind = exactVersion;
+				version = "9.0.0-1";
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1684,6 +1703,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */;
 			productName = GoogleMapsUtils;
+		};
+		4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */;
+			productName = MLKitBarcodeScanning;
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,5 +1,5 @@
 {
-  "originHash" : "a4c768372618f2d97b4afc28b3d149e2da471c30db88ac8516bfa2f14408f7ed",
+  "originHash" : "e3e14eebd207a51bf3c9ddaa6e695a133922b060cebef982565e4d625f10aeca",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -83,6 +83,42 @@
       }
     },
     {
+      "identity" : "google-mlkit-swiftpm",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/d-date/google-mlkit-swiftpm",
+      "state" : {
+        "revision" : "49211c8a9ae45bef1d8e46abd77eed505b26c29a",
+        "version" : "9.0.0-1"
+      }
+    },
+    {
+      "identity" : "googledatatransport",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/GoogleDataTransport.git",
+      "state" : {
+        "revision" : "617af071af9aa1d6a091d59a202910ac482128f9",
+        "version" : "10.1.0"
+      }
+    },
+    {
+      "identity" : "googleutilities",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/GoogleUtilities.git",
+      "state" : {
+        "revision" : "60da361632d0de02786f709bdc0c4df340f7613e",
+        "version" : "8.1.0"
+      }
+    },
+    {
+      "identity" : "gtm-session-fetcher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/gtm-session-fetcher.git",
+      "state" : {
+        "revision" : "a2ab612cb980066ee56d90d60d8462992c07f24b",
+        "version" : "3.5.0"
+      }
+    },
+    {
       "identity" : "ios-maps-sdk",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googlemaps/ios-maps-sdk",
@@ -98,6 +134,15 @@
       "state" : {
         "revision" : "16083ab9e90581342609ce342d5e664f0f885d05",
         "version" : "0.2.7"
+      }
+    },
+    {
+      "identity" : "nanopb",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/firebase/nanopb.git",
+      "state" : {
+        "revision" : "b7e1104502eca3a213b46303391ca4d3bc8ddec1",
+        "version" : "2.30910.0"
       }
     },
     {
@@ -152,6 +197,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "06274eb4696ebafdc0d97f63a4cdc205f25e18ea"
+      }
+    },
+    {
+      "identity" : "promises",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/google/promises.git",
+      "state" : {
+        "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
+        "version" : "2.4.0"
       }
     },
     {
