@@ -1,12 +1,10 @@
 PODS:
-  - Keys (1.0.1)
   - RMJSONPatch (1.0.4)
   - Starscream (4.0.6)
   - SwiftLint (0.44.0)
   - SwiftPath (0.3.1)
 
 DEPENDENCIES:
-  - Keys (from `Pods/CocoaPodsKeys`)
   - RMJSONPatch (= 1.0.4)
   - Starscream
   - SwiftLint
@@ -19,17 +17,12 @@ SPEC REPOS:
     - SwiftLint
     - SwiftPath
 
-EXTERNAL SOURCES:
-  Keys:
-    :path: Pods/CocoaPodsKeys
-
 SPEC CHECKSUMS:
-  Keys: a576f4c9c1c641ca913a959a9c62ed3f215a8de9
   RMJSONPatch: 60d351ad27d164352f8ea6b055c07c976f1bd2d1
   Starscream: fb2c4510bebf908c62bd383bcf05e673720e91fd
   SwiftLint: e96c0a8c770c7ebbc4d36c55baf9096bb65c4584
   SwiftPath: 85b093d5618210727cc678c372eb2388abbba8cb
 
-PODFILE CHECKSUM: 9d10dcb8b9e1768cbf55753960ec7c0ae0802553
+PODFILE CHECKSUM: a0d7808e9c9d0fbef80a8385ca77bbe5e1187ffd
 
 COCOAPODS: 1.16.2

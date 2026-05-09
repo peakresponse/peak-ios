@@ -6,12 +6,12 @@
 //  Copyright © 2020 Francis Li. All rights reserved.
 //
 
+import ArkanaKeys
 import CoreLocation
 import Foundation
-import Keys
 import UIKit
 
-private let googleMapsApiKey = TriageKeys().googleMapsSdkApiKey
+private let googleMapsApiKey = ArkanaKeys.Global().googleMapsSdkApiKey
 
 extension CLLocationCoordinate2D {
     func mapImageURL(size: CGSize) -> String {

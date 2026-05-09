@@ -10,4 +10,4 @@ gem "fastlane", "~> 2.144"
 
 gem "cocoapods", "~> 1.9"
 
-gem "cocoapods-keys", "~> 2.2"
+gem "arkana"

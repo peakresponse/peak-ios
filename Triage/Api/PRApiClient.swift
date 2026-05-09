@@ -6,14 +6,14 @@
 //  Copyright © 2019 Francis Li. All rights reserved.
 //
 
+import ArkanaKeys
 import CoreLocation
 import Foundation
-import Keys
 import Starscream
 
 // swiftlint:disable type_body_length file_length
 class PRApiClient: ApiClient {
-    static var shared: PRApiClient = PRApiClient(baseURL: TriageKeys().apiClientServerUrl)! {
+    static var shared: PRApiClient = PRApiClient(baseURL: ArkanaKeys.Global().apiClientServerUrl)! {
         willSet {
             shared.invalidate()
         }

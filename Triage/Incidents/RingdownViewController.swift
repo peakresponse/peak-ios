@@ -7,7 +7,7 @@
 //
 
 import AgoraRtmKit
-import Keys
+import ArkanaKeys
 import UIKit
 import PRKit
 internal import RealmSwift
@@ -148,7 +148,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                     }
                 }
             }
-            let keys = TriageKeys()
+            let keys = ArkanaKeys.Global()
             rtmKit = try? AgoraRtmClientKit(AgoraRtmClientConfig(appId: keys.agoraAppId, userId: ringdownId), delegate: self)
             let task = PRApiClient.shared.getRtmToken(channelName: ringdownId) { [weak self] (_, _, data, error) in
                 guard let self = self else { return }

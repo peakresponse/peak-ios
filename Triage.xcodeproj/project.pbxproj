@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -114,6 +114,7 @@
 		459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 459940352FAFA8B300A1F555 /* GoogleMaps */; };
 		459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 459940382FAFB6E300A1F555 /* GoogleMapsUtils */; };
 		4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */ = {isa = PBXBuildFile; productRef = 4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */; };
+		459940B32FAFD67800A1F555 /* ArkanaKeys in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B22FAFD67800A1F555 /* ArkanaKeys */; };
 		45994122261BDE4D0062D141 /* InterstitialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45994121261BDE4D0062D141 /* InterstitialViewController.swift */; };
 		459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4E82DADCCAA00761142 /* RxNormKit */; };
 		459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */ = {isa = PBXBuildFile; productRef = 459DC4EA2DADCCAA00761142 /* SNOMEDKit */; };
@@ -405,6 +406,7 @@
 				45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */,
 				459DC4E92DADCCAA00761142 /* RxNormKit in Frameworks */,
 				4536D4A62FAE955E001ACA32 /* LLMKit in Frameworks */,
+				459940B32FAFD67800A1F555 /* ArkanaKeys in Frameworks */,
 				4536D4A82FAE955E001ACA32 /* LLMKitAWSBedrock in Frameworks */,
 				4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
@@ -874,6 +876,7 @@
 				459940342FAFA8B300A1F555 /* XCRemoteSwiftPackageReference "ios-maps-sdk" */,
 				459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */,
 				4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */,
+				459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -956,13 +959,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Triage/Pods-Triage-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1544,11 +1543,15 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */ = {
+		459940B12FAFD67800A1F555 /* XCLocalSwiftPackageReference "ArkanaKeys" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ArkanaKeys/ArkanaKeys;
+		};
+		459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../rxnormkit;
 		};
-		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */ = {
+		459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../snomedkit;
 		};
@@ -1717,14 +1720,18 @@
 			package = 4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */;
 			productName = MLKitBarcodeScanning;
 		};
+		459940B22FAFD67800A1F555 /* ArkanaKeys */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ArkanaKeys;
+		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "../rxnormkit" */;
+			package = 459DC4E52DADCC5000761142 /* XCLocalSwiftPackageReference "rxnormkit" */;
 			productName = RxNormKit;
 		};
 		459DC4EA2DADCCAA00761142 /* SNOMEDKit */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "../snomedkit" */;
+			package = 459DC4E62DADCC5A00761142 /* XCLocalSwiftPackageReference "snomedkit" */;
 			productName = SNOMEDKit;
 		};
 		459DC4FA2DADDC1C00761142 /* RealmSwift */ = {

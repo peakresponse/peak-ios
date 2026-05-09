@@ -8,7 +8,7 @@
 
 import AgoraRtcKit
 import AgoraRtmKit
-import Keys
+import ArkanaKeys
 import PRKit
 import RollbarNotifier
 import UIKit
@@ -273,7 +273,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         ])
         self.audioButton = audioButton
 
-        let keys = TriageKeys()
+        let keys = ArkanaKeys.Global()
         rtcKit = AgoraRtcEngineKit.sharedEngine(withAppId: keys.agoraAppId, delegate: self)
         let task = PRApiClient.shared.getRtcToken(channelName: callChannelName) { [weak self] (_, _, data, error) in
             if let error = error {
@@ -301,7 +301,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         callChannelName = AppSettings.userId ?? ""
         signalChannelName = "H-\(regionFacility.facility?.stateId ?? "")-\(regionFacility.facility?.locationCode ?? "")"
         let ringdown: Any = report?.asRingdownJSON() ?? NSNull()
-        let keys = TriageKeys()
+        let keys = ArkanaKeys.Global()
         CallHelper.shared.start(id: callId, to: callName) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
