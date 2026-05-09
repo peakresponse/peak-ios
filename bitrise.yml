@@ -19,7 +19,7 @@ workflows:
     - script:
         inputs:
         - content: |
-            touch .env
+            cp example.env .env
             bundle exec arkana
     - xcode-test:
         inputs:
@@ -40,18 +40,6 @@ app:
   - opts:
       is_expand: false
     BITRISE_EXPORT_METHOD: development
-  - opts:
-      is_expand: false
-    AgoraAppId:
-  - opts:
-      is_expand: false
-    ApiClientServerUrl: http://localhost
-  - opts:
-      is_expand: false
-    GoogleMapsSdkApiKey:
-  - opts:
-      is_expand: false
-    RollbarEnvironment: test
 meta:
   bitrise.io:
     stack: osx-xcode-26.4.x
