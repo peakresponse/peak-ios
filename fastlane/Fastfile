@@ -25,7 +25,7 @@ platform :ios do
       end
 
       # rebuild keys with arkana for the environment
-      `cd ..; bundle exec arkana -c ../.arkana.yml -e ../.env.#{ENV["ENV"]}`
+      `cd ..; bundle exec arkana -e .env.#{ENV["ENV"]}`
 
       # get bundle version of app
       prev_version = get_info_plist_value(path: "./Triage/Info.plist", key: "CFBundleVersion").to_i
