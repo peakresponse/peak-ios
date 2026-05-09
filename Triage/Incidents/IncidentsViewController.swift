@@ -10,6 +10,7 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
+// swiftlint:disable:next type_body_length
 class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
@@ -34,6 +35,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         AppRealm.disconnectIncidents()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 

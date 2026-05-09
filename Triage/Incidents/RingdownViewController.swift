@@ -17,6 +17,7 @@ protocol RingdownViewControllerDelegate: AnyObject {
     func ringdownViewControllerDidSaveReport(_ vc: RingdownViewController)
 }
 
+// swiftlint:disable:next type_body_length
 class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
                               RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
@@ -465,6 +466,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
                 publishOptions.channelType = .user
                 var newData = data
                 newData["status"] = "declined" as Any
+                // swiftlint:disable:next force_try
                 self?.rtmKit.publish(channelName: data["userId"] as? String ?? "", data: try! JSONSerialization.data(withJSONObject: newData), option: publishOptions)
                 self?.callId = nil
             }) { [weak self] (error) in

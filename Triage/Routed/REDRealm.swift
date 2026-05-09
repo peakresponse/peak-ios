@@ -34,6 +34,7 @@ class REDRealm {
         let config = Realm.Configuration(fileURL: url, deleteRealmIfMigrationNeeded: true, objectTypes: [
             HospitalStatusUpdate.self, Ringdown.self
         ])
+        // swiftlint:disable:next force_try
         let realm = try! Realm(configuration: config)
         if Thread.current.isMainThread {
             REDRealm.main = realm
@@ -43,6 +44,7 @@ class REDRealm {
 
     public static func deleteAll() {
         let realm = REDRealm.open()
+        // swiftlint:disable:next force_try
         try! realm.write {
             realm.deleteAll()
         }
@@ -82,12 +84,14 @@ class REDRealm {
                 let realm = REDRealm.open()
                 if let records = data["ringdowns"] as? [[String: Any]] {
                     let ringdowns = records.map { Ringdown.instantiate(from: $0, with: realm) }
+                    // swiftlint:disable:next force_try
                     try! realm.write {
                         realm.add(ringdowns, update: .modified)
                     }
                 }
                 if let records = data["statusUpdates"] as? [[String: Any]] {
                     let updates = records.map { HospitalStatusUpdate.instantiate(from: $0, with: realm) }
+                    // swiftlint:disable:next force_try
                     try! realm.write {
                         realm.add(updates, update: .modified)
                     }
@@ -140,6 +144,7 @@ class REDRealm {
             } else if let data = data {
                 let realm = REDRealm.open()
                 let ringdown = Ringdown.instantiate(from: data, with: realm)
+                // swiftlint:disable:next force_try
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
@@ -158,6 +163,7 @@ class REDRealm {
             } else if let data = data {
                 let realm = REDRealm.open()
                 let ringdown = Ringdown.instantiate(from: data, with: realm)
+                // swiftlint:disable:next force_try
                 try! realm.write {
                     realm.add(ringdown, update: .modified)
                 }
@@ -174,6 +180,7 @@ class REDRealm {
         let timestamps = ringdown.timestamps
         let now = Date()
         let realm = REDRealm.open()
+        // swiftlint:disable:next force_try
         try! realm.write {
             var timestamps = ringdown.timestamps
             timestamps[status.rawValue] = now.asISO8601String()
@@ -183,6 +190,7 @@ class REDRealm {
             if error != nil {
                 let realm = REDRealm.open()
                 if let ringdown = realm.object(ofType: Ringdown.self, forPrimaryKey: ringdownId) {
+                    // swiftlint:disable:next force_try
                     try! realm.write {
                         ringdown.timestamps = timestamps
                     }

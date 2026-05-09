@@ -6,7 +6,6 @@ target 'Triage' do
   use_frameworks!
 
   # Pods for Triage
-  pod 'SwiftLint'
 
   target 'TriageTests' do
     inherit! :search_paths

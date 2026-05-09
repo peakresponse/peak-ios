@@ -781,7 +781,6 @@
 			buildConfigurationList = 4566F046236CCC5700A04C75 /* Build configuration list for PBXNativeTarget "Triage" */;
 			buildPhases = (
 				CED6EC528B4941D251B45C3C /* [CP] Check Pods Manifest.lock */,
-				454EEA682522FF3B00EB266A /* Run Script */,
 				4566F018236CCC5500A04C75 /* Sources */,
 				4566F019236CCC5500A04C75 /* Frameworks */,
 				4566F01A236CCC5500A04C75 /* Resources */,
@@ -790,6 +789,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				459940BF2FAFDBC200A1F555 /* PBXTargetDependency */,
 			);
 			name = Triage;
 			productName = Triage;
@@ -885,6 +885,7 @@
 				459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */,
 				459940B72FAFD8DA00A1F555 /* XCRemoteSwiftPackageReference "SwiftPath" */,
 				459940BA2FAFD9EC00A1F555 /* XCRemoteSwiftPackageReference "swift-jsonpatch" */,
+				459940BD2FAFDB8300A1F555 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */,
 			);
 			productRefGroup = 4566F01D236CCC5500A04C75 /* Products */;
 			projectDirPath = "";
@@ -958,25 +959,6 @@
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
-		};
-		454EEA682522FF3B00EB266A /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			alwaysOutOfDate = 1;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --fix\n";
 		};
 		5F0561CF6B0232C999B34857 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1203,6 +1185,10 @@
 			isa = PBXTargetDependency;
 			target = 4566F01B236CCC5500A04C75 /* Triage */;
 			targetProxy = 4566F03E236CCC5700A04C75 /* PBXContainerItemProxy */;
+		};
+		459940BF2FAFDBC200A1F555 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			productRef = 459940BE2FAFDBC200A1F555 /* SwiftLintBuildToolPlugin */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1645,6 +1631,14 @@
 				minimumVersion = 1.0.6;
 			};
 		};
+		459940BD2FAFDB8300A1F555 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SimplyDanny/SwiftLintPlugins";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.63.2;
+			};
+		};
 		459DC4F72DADDC1C00761142 /* XCRemoteSwiftPackageReference "realm-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/realm/realm-swift.git";
@@ -1753,6 +1747,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459940BA2FAFD9EC00A1F555 /* XCRemoteSwiftPackageReference "swift-jsonpatch" */;
 			productName = JSONPatch;
+		};
+		459940BE2FAFDBC200A1F555 /* SwiftLintBuildToolPlugin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 459940BD2FAFDB8300A1F555 /* XCRemoteSwiftPackageReference "SwiftLintPlugins" */;
+			productName = "plugin:SwiftLintBuildToolPlugin";
 		};
 		459DC4E82DADCCAA00761142 /* RxNormKit */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -24,6 +24,7 @@ protocol ReportViewControllerDelegate: AnyObject {
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
 
+// swiftlint:disable:next type_body_length
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
                             KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
                             LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate,
@@ -69,6 +70,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         unregisterFromKeyboardNotifications()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -431,7 +433,9 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         col.addArrangedSubview(signaturesField)
     }
 
+    // swiftlint:disable:next function_body_length
     func newVitalsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
+                          // swiftlint:disable:next large_tuple
                           tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
         let (section, cols, colA, colB) = newSection()
         section.type = Vital.self
@@ -513,6 +517,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     }
 
     func newProceduresSection(_ i: Int, source: Report? = nil, target: Report? = nil,
+                              // swiftlint:disable:next large_tuple
                               tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
         let (section, cols, colA, colB) = newSection()
         section.type = Procedure.self
@@ -557,6 +562,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     }
 
     func newMedicationsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
+                               // swiftlint:disable:next large_tuple
                                tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
         let (section, cols, colA, colB) = newSection()
         section.type = Medication.self
@@ -1321,4 +1327,5 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             }
         }
     }
+    // swiftlint:disable:next file_length
 }

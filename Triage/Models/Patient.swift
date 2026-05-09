@@ -184,6 +184,7 @@ class Patient: BaseVersioned {
     }
 
     @Persisted var gender: String?
+    // swiftlint:disable:next identifier_name
     var Gender: PatientGender? {
         return PatientGender(rawValue: gender ?? "")
     }
@@ -193,6 +194,7 @@ class Patient: BaseVersioned {
 
     @Persisted var age: Int?
     @Persisted var ageUnits: String?
+    // swiftlint:disable:next identifier_name
     var AgeUnits: PatientAgeUnits? {
         return PatientAgeUnits(rawValue: ageUnits ?? "")
     }

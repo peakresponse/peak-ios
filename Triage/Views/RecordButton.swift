@@ -47,6 +47,7 @@ class RecordButton: UIControl {
     var recordState: RecordButtonState = .record {
         didSet { updateButtonStates() }
     }
+    // swiftlint:disable:next identifier_name
     @IBInspectable var RecordState: String? {
         get { return nil }
         set { recordState = RecordButtonState(rawValue: newValue ?? "") ?? .record }

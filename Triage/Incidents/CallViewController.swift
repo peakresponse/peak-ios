@@ -25,6 +25,7 @@ enum CallStatus {
     func callViewControllerDidFinish(_ vc: CallViewController)
 }
 
+// swiftlint:disable:next type_body_length
 class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClientDelegate {
     weak var commandHeader: CommandHeader!
     weak var localView: UIView!
@@ -78,6 +79,7 @@ class CallViewController: UIViewController, AgoraRtcEngineDelegate, AgoraRtmClie
         rtmKit = nil
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
