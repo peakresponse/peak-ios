@@ -1,5 +1,5 @@
 {
-  "originHash" : "c4c2543c33f57c8088d42a18d0866a30f989236c14b86b56fabfabb4e4a36d62",
+  "originHash" : "5e42d0de13c04e7974034c13e7f3061afefbb4a49f247d1157a933754294185f",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -395,6 +395,15 @@
       "state" : {
         "revision" : "7c6ad0fc39d0763e0b699210e4124afd5041c5df",
         "version" : "1.6.4"
+      }
+    },
+    {
+      "identity" : "swiftpath",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/g-mark/SwiftPath",
+      "state" : {
+        "revision" : "308e9bcc27d0e5ce73710b0b23d40959d9a29fd1",
+        "version" : "1.0.0"
       }
     },
     {

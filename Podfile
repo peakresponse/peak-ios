@@ -8,7 +8,6 @@ target 'Triage' do
   # Pods for Triage
   pod 'RMJSONPatch', '1.0.4'
   pod 'SwiftLint'
-  pod 'SwiftPath'
 
   target 'TriageTests' do
     inherit! :search_paths
