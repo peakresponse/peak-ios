@@ -1,5 +1,5 @@
 {
-  "originHash" : "28612cd8a84fd6e5f4a5e0e704b9a533ffa497258bf9f1283e18e5a4747c31ca",
+  "originHash" : "9e2ed57edb3016ff10ce72a69dbe477cd1f0fcb550746233be4168f51a2aaa02",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -125,6 +125,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "e4eddd1994584d57d4ce32b0bee33576f5015622"
+      }
+    },
+    {
+      "identity" : "peak-ios-transcriptionkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/peakresponse/peak-ios-transcriptionkit.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "06274eb4696ebafdc0d97f63a4cdc205f25e18ea"
       }
     },
     {

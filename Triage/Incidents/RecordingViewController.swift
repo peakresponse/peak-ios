@@ -9,6 +9,7 @@
 import UIKit
 import Accelerate
 import TranscriptionKit
+import TranscriptionKitAWS
 
 @objc protocol RecordingViewControllerDelegate {
     @objc optional func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
