@@ -1,6 +1,7 @@
 global_secrets:
   - AgoraAppId
   - ApiClientServerUrl
+  - AwsBedrockSituationExtractionPromptId
   - GoogleMapsSdkApiKey
   - RollbarEnvironment
   - RollbarPostClientItemAccessToken

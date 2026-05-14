@@ -6,9 +6,10 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import ArkanaKeys
 import Keyboardy
-internal import LLMKit
-internal import LLMKitAWSBedrock
+import LLMKit
+import LLMKitAWSBedrock
 import MLKitBarcodeScanning
 import PRKit
 internal import RealmSwift
@@ -1253,29 +1254,65 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL,
                                  duration: TimeInterval, formattedDuration: String) {
         // check for a chief complaint, if none, dispatch to LLM
-        if newReport?.situation?.chiefComplaint?.isEmpty ?? true, let text = newReport?.narrative?.text, let awsCredentials = AppSettings.awsCredentials {
+        if newReport?.situation?.chiefComplaint?.isEmpty ?? true,
+            let text = newReport?.narrative?.text,
+            let awsCredentials = AppSettings.awsCredentials {
             AWSBedrockBot.configure(region: "us-west-2",
-                                          accessKeyId: awsCredentials["AccessKeyId"] ?? "",
-                                          secretAccessKey: awsCredentials["SecretAccessKey"] ?? "",
-                                          sessionToken: awsCredentials["SessionToken"])
-            if let bot = BotFactory.instantiate(for: Model(type: .awsBedrock,
-                                                           id: "us.meta.llama3-3-70b-instruct-v1:0",
-                                                           name: "AWS Bedrock US Meta Llama 3.3 70B Instruct",
-                                                           template: .llama3("You are an expert medical secretary."))) {
+                                    accessKeyId: awsCredentials["AccessKeyId"] ?? "",
+                                    secretAccessKey: awsCredentials["SecretAccessKey"] ?? "",
+                                    sessionToken: awsCredentials["SessionToken"])
+            let keys = ArkanaKeys.Global()
+            if let bot = BotFactory.instantiate(for: .init(type: .awsBedrock)) as? AWSBedrockBot {
                 Task {
                     do {
-                        let response = try await bot.respond(to: "Extract the chief complaint from the following text and return JSON only: \"\(text)\"", isStreaming: false)
-                        if let json = response.asJSON(), let value = json["chief_complaint"] as? String {
+                        let response = try await bot.invoke(promptId: keys.awsBedrockSituationExtractionPromptId, with: [
+                            "narrative": text,
+                            "current_timestamp": Date().asISO8601String()
+                        ])
+                        if let json = response.asJSON(),
+                            let cc = json["chief_complaint"] as? String,
+                            let symptoms = json["symptoms"] as? [[String: Any]] {
                             await MainActor.run {
-                                newReport?.setValue(value, forKeyPath: "situation.chiefComplaint")
-                                refreshFormFieldsAndControls(["situation.chiefComplaint"])
+                                newReport?.setValue(cc, forKeyPath: "situation.chiefComplaint")
+                                var primarySymptom: NemsisValue?
+                                var otherSymptoms: [NemsisValue] = []
+                                for symptom in symptoms {
+                                    if let value = symptom["value"] as? String {
+                                        if primarySymptom == nil {
+                                            primarySymptom = NemsisValue(text: value)
+                                        } else {
+                                            otherSymptoms.append(NemsisValue(text: value))
+                                        }
+                                    }
+                                }
+                                if primarySymptom != nil {
+                                    newReport?.setValue(primarySymptom, forKeyPath: "situation.primarySymptom")
+                                }
+                                if !otherSymptoms.isEmpty {
+                                    newReport?.setValue(otherSymptoms, forKeyPath: "situation.otherAssociatedSymptoms")
+                                }
+                                refreshFormFieldsAndControls([
+                                    "situation.chiefComplaint",
+                                    "situation.primarySymptom",
+                                    "situation.otherAssociatedSymptoms"
+                                ])
+                                dismissAnimated()
+                            }
+                        } else {
+                            await MainActor.run {
+                                dismissAnimated()
                             }
                         }
                     } catch let error {
                         Rollbar.errorError(error)
+                        await MainActor.run {
+                            dismissAnimated()
+                        }
                     }
                 }
             }
+        } else {
+            dismissAnimated()
         }
 
         let file = File.newRecord()

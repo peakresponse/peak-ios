@@ -8,7 +8,7 @@
 
 import GoogleMaps
 import ArkanaKeys
-internal import LLMKitAWSBedrock
+import LLMKitAWSBedrock
 import RollbarNotifier
 import UIKit
 internal import ICD10Kit
