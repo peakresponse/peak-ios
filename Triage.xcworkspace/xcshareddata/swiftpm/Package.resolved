@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-llmkit",
       "state" : {
-        "branch" : "11-aws-prompts",
-        "revision" : "fc57432eb614b2995d5ba667cfdfd608eb1d75a5"
+        "branch" : "main",
+        "revision" : "ffeb03f54179f957bd93f86114d1ef880ed9a43e"
       }
     },
     {

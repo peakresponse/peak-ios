@@ -1429,7 +1429,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-llmkit";
 			requirement = {
-				branch = "11-aws-prompts";
+				branch = main;
 				kind = branch;
 			};
 		};
