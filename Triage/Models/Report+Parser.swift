@@ -171,8 +171,6 @@ private let MATCHERS: [Matcher] = [
     Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0medicationAllergies>[^.]+)"#),
     Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0environmentalFoodAllergies>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:performed)|(?:applied))(?:,|\.)? (?:a )?(?:an )?(?:is )?(?<lastProcedure0procedure>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:administered))(?:,|\.)? (?:a )?(?:an )?(?:is )?(?<lastMedication0medication>[^.]+)"#),
     Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0respiratoryRate": MAPPINGS_NUMBERS

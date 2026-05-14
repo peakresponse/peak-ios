@@ -89,8 +89,6 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
 
     @IBAction func stopPressed(_ sender: Any) {
         transcriber.stopRecording()
-        delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileId, fileURL: transcriber.fileURL,
-                                           duration: transcriber.recordingLength, formattedDuration: transcriber.recordingLengthFormatted)
         stopButton.layer.opacity = 0
         activityIndicatorView.startAnimating()
     }
@@ -126,7 +124,8 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
     }
 
     func transcriberDidFinishRecognition(_ transcriber: Transcriber, withError error: Error?) {
-        dismissAnimated()
+        delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileId, fileURL: transcriber.fileURL,
+                                           duration: transcriber.recordingLength, formattedDuration: transcriber.recordingLengthFormatted)
     }
 
     func transcriber(_ transcriber: Transcriber, didRequestRecordAuthorization status: TranscriberAuthorizationStatus) {

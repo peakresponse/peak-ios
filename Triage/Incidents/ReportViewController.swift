@@ -6,9 +6,10 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import ArkanaKeys
 import Keyboardy
-internal import LLMKit
-internal import LLMKitAWSBedrock
+import LLMKit
+import LLMKitAWSBedrock
 import MLKitBarcodeScanning
 import PRKit
 internal import RealmSwift
@@ -34,6 +35,8 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     @IBOutlet weak var containerView: UIStackView!
     @IBOutlet weak var commandFooter: CommandFooter!
     @IBOutlet weak var recordButton: RecordButton!
+    weak var addMedicationButton: PRKit.Button!
+    weak var addProcedureButton: PRKit.Button!
     var formInputAccessoryView: UIView!
     var formComponents: [String: PRKit.FormComponent] = [:]
     var destinationFacilityField: PRKit.FormField!
@@ -351,6 +354,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         button.addTarget(self, action: #selector(addProcedurePressed), for: .touchUpInside)
         button.tag = tag
         section.addLastButton(button)
+        addProcedureButton = button
 
         tag += 10000
         for i in 0..<max(1, report.medications.count) {
@@ -361,6 +365,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         button.addTarget(self, action: #selector(addMedicationPressed), for: .touchUpInside)
         button.tag = tag
         section.addLastButton(button)
+        addMedicationButton = button
 
         (recordingsSection, cols, colA, colB) = newSection()
         header = newHeader("ReportViewController.recordings".localized)
@@ -1250,32 +1255,169 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
         }
     }
 
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     func recordingViewController(_ vc: RecordingViewController, didFinishRecording fileId: String, fileURL: URL,
                                  duration: TimeInterval, formattedDuration: String) {
-        // check for a chief complaint, if none, dispatch to LLM
-        if newReport?.situation?.chiefComplaint?.isEmpty ?? true, let text = newReport?.narrative?.text, let awsCredentials = AppSettings.awsCredentials {
+        // dispatch to LLM
+        if let text = newReport?.narrative?.text,
+           let awsCredentials = AppSettings.awsCredentials {
             AWSBedrockBot.configure(region: "us-west-2",
-                                          accessKeyId: awsCredentials["AccessKeyId"] ?? "",
-                                          secretAccessKey: awsCredentials["SecretAccessKey"] ?? "",
-                                          sessionToken: awsCredentials["SessionToken"])
-            if let bot = BotFactory.instantiate(for: Model(type: .awsBedrock,
-                                                           id: "us.meta.llama3-3-70b-instruct-v1:0",
-                                                           name: "AWS Bedrock US Meta Llama 3.3 70B Instruct",
-                                                           template: .llama3("You are an expert medical secretary."))) {
+                                    accessKeyId: awsCredentials["AccessKeyId"] ?? "",
+                                    secretAccessKey: awsCredentials["SecretAccessKey"] ?? "",
+                                    sessionToken: awsCredentials["SessionToken"])
+            let keys = ArkanaKeys.Global()
+            if let bot = BotFactory.instantiate(for: .init(type: .awsBedrock)) as? AWSBedrockBot {
                 Task {
                     do {
-                        let response = try await bot.respond(to: "Extract the chief complaint from the following text and return JSON only: \"\(text)\"", isStreaming: false)
-                        if let json = response.asJSON(), let value = json["chief_complaint"] as? String {
+                        async let situationExtraction = bot.invoke(promptId: keys.awsBedrockSituationExtractionPromptId, with: [
+                            "narrative": text,
+                            "current_timestamp": Date().asISO8601String()
+                        ])
+                        async let historyExtraction = bot.invoke(promptId: keys.awsBedrockHistoryExtractionPromptId, with: [
+                            "narrative": text
+                        ])
+                        async let medicationExtraction = bot.invoke(promptId: keys.awsBedrockMedicationExtractionPromptId, with: [
+                            "narrative": text
+                        ])
+                        async let procedureExtraction = bot.invoke(promptId: keys.awsBedrockProcedureExtractionPromptId, with: [
+                            "narrative": text
+                        ])
+                        let (situationResponse, historyResponse, medicationResponse, procedureResponse) =
+                            try await (situationExtraction, historyExtraction, medicationExtraction, procedureExtraction)
+
+                        if let json = situationResponse.asJSON(),
+                           let cc = json["chief_complaint"] as? String,
+                           let symptoms = json["symptoms"] as? [[String: Any]] {
+                            var primarySymptom: NemsisValue?
+                            var otherSymptoms: [NemsisValue] = []
+                            for symptom in symptoms {
+                                if let value = symptom["value"] as? String {
+                                    if primarySymptom == nil {
+                                        primarySymptom = NemsisValue(text: value)
+                                    } else {
+                                        otherSymptoms.append(NemsisValue(text: value))
+                                    }
+                                }
+                            }
                             await MainActor.run {
-                                newReport?.setValue(value, forKeyPath: "situation.chiefComplaint")
-                                refreshFormFieldsAndControls(["situation.chiefComplaint"])
+                                var fields: [String] = ["situation.chiefComplaint"]
+                                newReport?.setValue(cc, forKeyPath: "situation.chiefComplaint")
+                                if primarySymptom != nil {
+                                    newReport?.setValue(primarySymptom, forKeyPath: "situation.primarySymptom")
+                                    fields.append("situation.primarySymptom")
+                                }
+                                if !otherSymptoms.isEmpty {
+                                    newReport?.setValue(otherSymptoms, forKeyPath: "situation.otherAssociatedSymptoms")
+                                    fields.append("situation.otherAssociatedSymptoms")
+                                }
+                                refreshFormFieldsAndControls(fields)
+                            }
+                        }
+                        if let json = historyResponse.asJSON(),
+                           let history = json["medical_surgical_history"] as? [[String: Any]],
+                           let allergies = json["environmental_food_allergies"] as? [[String: Any]] {
+                            var medicalSurgicalHistory: [NemsisValue] = []
+                            for item in history {
+                                if let value = item["value"] as? String {
+                                    medicalSurgicalHistory.append(NemsisValue(text: value))
+                                }
+                            }
+                            var environmentalFoodAllergies: [NemsisValue] = []
+                            for item in allergies {
+                                if let value = item["value"] as? String {
+                                    environmentalFoodAllergies.append(NemsisValue(text: value))
+                                }
+                            }
+                            await MainActor.run {
+                                var fields: [String] = []
+                                if !medicalSurgicalHistory.isEmpty {
+                                    newReport?.setValue(medicalSurgicalHistory, forKeyPath: "history.medicalSurgicalHistory")
+                                    fields.append("history.medicalSurgicalHistory")
+                                }
+                                if !environmentalFoodAllergies.isEmpty {
+                                    newReport?.setValue(environmentalFoodAllergies, forKeyPath: "history.environmentalFoodAllergies")
+                                    fields.append("history.environmentalFoodAllergies")
+                                }
+                                refreshFormFieldsAndControls(fields)
+                            }
+                        }
+                        if let json = medicationResponse.asJSON(),
+                           let medAllergies = json["medication_allergies"] as? [[String: Any]],
+                           let medsAdministered = json["medication_administered"] as? [[String: Any]] {
+                            var allergies: [NemsisValue] = []
+                            for item in medAllergies {
+                                if let codeType = item["code_type"] as? String, let value = item["value"] as? String {
+                                    let val = NemsisValue(text: value)
+                                    val.attributes = ["CodeType": codeType]
+                                    allergies.append(val)
+                                }
+                            }
+                            await MainActor.run {
+                                var fields: [String] = []
+                                if !allergies.isEmpty {
+                                    newReport?.setValue(allergies, forKeyPath: "history.medicationAllergies")
+                                    fields.append("history.medicationAllergies")
+                                }
+                                var i: Int = (newReport?.medications.count ?? 1) - 1
+                                for item in medsAdministered {
+                                    if let codeType = item["code_type"] as? String, let value = item["value"] as? String {
+                                        newReport?.setValue(Date(), forKeyPath: "medications[\(i)].administeredAt")
+                                        fields.append("medications[\(i)].administeredAt")
+                                        let val = NemsisValue(text: value)
+                                        val.attributes = ["CodeType": codeType]
+                                        newReport?.setValue(val, forKeyPath: "medications[\(i)].medication")
+                                        fields.append("medications[\(i)].medication")
+                                    }
+                                    if let dosage = item["dosage"] as? String {
+                                        newReport?.setValue(dosage, forKeyPath: "medications[\(i)].dosage")
+                                        fields.append("medications[\(i)].dosage")
+                                    }
+                                    if let dosageUnit = item["dosage_unit"] as? String {
+                                        newReport?.setValue(NemsisValue(text: dosageUnit), forKeyPath: "medications[\(i)].dosageUnits")
+                                        fields.append("medications[\(i)].dosageUnits")
+                                    }
+                                    if let route = item["route"] as? String {
+                                        newReport?.setValue(NemsisValue(text: route), forKeyPath: "medications[\(i)].administeredRoute")
+                                        fields.append("medications[\(i)].administeredRoute")
+                                    }
+                                    i += 1
+                                    while i >= (newReport?.medications.count ?? 0) {
+                                        addMedicationPressed(addMedicationButton)
+                                    }
+                                }
+                                refreshFormFieldsAndControls(fields)
+                            }
+                        }
+                        if let json = procedureResponse.asJSON(),
+                           let procedures = json["procedures"] as? [[String: Any]] {
+                            await MainActor.run {
+                                var fields: [String] = []
+                                var i: Int = (newReport?.procedures.count ?? 1) - 1
+                                for item in procedures {
+                                    if let value = item["code"] as? String {
+                                        newReport?.setValue(Date(), forKeyPath: "procedures[\(i)].performedAt")
+                                        newReport?.setValue(NemsisValue(text: value), forKeyPath: "procedures[\(i)].procedure")
+                                        fields.append("procedures[\(i)].performedAt")
+                                        fields.append("procedures[\(i)].procedure")
+                                    }
+                                    i += 1
+                                    while i >= (newReport?.procedures.count ?? 0) {
+                                        addProcedurePressed(addProcedureButton)
+                                    }
+                                }
+                                refreshFormFieldsAndControls(fields)
                             }
                         }
                     } catch let error {
                         Rollbar.errorError(error)
                     }
+                    await MainActor.run {
+                        dismissAnimated()
+                    }
                 }
             }
+        } else {
+            dismissAnimated()
         }
 
         let file = File.newRecord()

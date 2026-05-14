@@ -1,5 +1,5 @@
 {
-  "originHash" : "d67da7bf772478dcaf2427f5145f48a2381fd9fe653bcbe6feec372d6510552b",
+  "originHash" : "ec37218ce288b4cbb347a13d013b82e1ab6df1aadd3c94ba18dc248868417079",
   "pins" : [
     {
       "identity" : "agorainfra_ios",
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/awslabs/aws-sdk-swift",
       "state" : {
-        "revision" : "cff67986b2be6af3a8119bae3cfa391e7233b28e",
-        "version" : "1.6.110"
+        "revision" : "fef30119ec64059fb02f1e7a967e52285b63da04",
+        "version" : "1.6.111"
       }
     },
     {
@@ -160,7 +160,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-llmkit",
       "state" : {
         "branch" : "main",
-        "revision" : "1c2a6b1df7bb32ed758fcb509be378cf9a65ccc5"
+        "revision" : "ffeb03f54179f957bd93f86114d1ef880ed9a43e"
       }
     },
     {
@@ -240,8 +240,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/smithy-lang/smithy-swift",
       "state" : {
-        "revision" : "3df71b8c33b21b9a76071c915504a8dfda663c33",
-        "version" : "0.203.0"
+        "revision" : "f631dd61392316a82f4ee166d5414522b3acaa06",
+        "version" : "0.204.0"
       }
     },
     {
