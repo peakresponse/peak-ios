@@ -269,10 +269,12 @@ class ReportParserTests: XCTestCase {
             "BP 120 over 80",
             "BP is 120/80",
             "BP is 120 over 80",
+            "BP of 120/80",
             "blood pressure 120/80",
             "blood pressure 120 over 80",
             "blood pressure is 120/80",
-            "blood pressure is 120 over 80"
+            "blood pressure is 120 over 80",
+            "blood pressure of 120 over 80",
         ]
 
         for sample in samples {
@@ -362,7 +364,8 @@ class ReportParserTests: XCTestCase {
             "Pulse 80",
             "Pulse is 80",
             "pulse rate 80",
-            "pulse rate is 80"
+            "pulse rate is 80",
+            "pulse of 80",
         ]
 
         for sample in samples {
@@ -377,10 +380,12 @@ class ReportParserTests: XCTestCase {
         let samples = [
             "respiratory rate 20",
             "respiratory rate is 20",
+            "respiratory rate of 20",
             "respiration 20",
             "respiration is 20",
             "respirations 20",
-            "respirations is 20"
+            "respirations is 20",
+            "respirations of 20",
         ]
 
         for sample in samples {
@@ -394,7 +399,8 @@ class ReportParserTests: XCTestCase {
         var samples = [
             "Temperature 98.7 degrees F",
             "Tempt 98.7 °F",
-            "Temp 98.7 F"
+            "Temp 98.7 F",
+            "Temp of 98.7 F",
         ]
         for sample in samples {
             let report = Report.newRecord()
@@ -405,8 +411,9 @@ class ReportParserTests: XCTestCase {
         samples = [
             "Temp 37.1 degrees C",
             "Temperature 37.1 C",
-            "Tempt 37.1 °C",
-            "Temp 37.1 C"
+            "Temp 37.1 °C",
+            "Temp 37.1 C",
+            "Temp of 37.1 C",
         ]
         for sample in samples {
             let report = Report.newRecord()
@@ -503,7 +510,10 @@ class ReportParserTests: XCTestCase {
         let samples = [
             "Blood oxygen 96%",
             "Oxygen saturation 96%",
-            "Pulse oximetry 96%"
+            "Pulse oximetry 96%",
+            "SPO2 96%",
+            "SPO2 of 96%",
+            "SPO2 is 96%",
         ]
 
         for sample in samples {
