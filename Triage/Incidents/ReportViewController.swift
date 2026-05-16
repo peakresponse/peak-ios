@@ -23,6 +23,8 @@ protocol ReportViewControllerDelegate: AnyObject {
 
 // swiftlint:disable:next force_try
 let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, options: [.caseInsensitive])
+// swiftlint:disable:next force_try
+let pausesExpr = try! NSRegularExpression(pattern: #"(^|\s|, |\. )(uh|um)(\. |, |\s)"#, options: [.caseInsensitive])
 
 // swiftlint:disable:next type_body_length
 class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
@@ -1225,8 +1227,15 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     func recordingViewController(_ vc: RecordingViewController, didRecognizeText text: String,
                                  fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
         // fix weird number handling from AWS Transcribe (i.e. one-twenty recognized as "1 20" instead of "120")
-        let processedText = numbersExpr.stringByReplacingMatches(in: text, options: [], range: NSRange(location: 0, length: text.count),
+        var processedText = numbersExpr.stringByReplacingMatches(in: text,
+                                                                 options: [],
+                                                                 range: NSRange(location: 0, length: text.count),
                                                                  withTemplate: "$1$2$3")
+        // remove pauses from the text
+        processedText = pausesExpr.stringByReplacingMatches(in: processedText,
+                                                            options: [],
+                                                            range: NSRange(location: 0, length: processedText.count),
+                                                            withTemplate: " ")
         newReport?.narrative?.text = "\(narrativeText ?? "") \(processedText)".trimmingCharacters(in: .whitespacesAndNewlines)
         let formField = formComponents["narrative.text"]
         formField?.attributeValue = newReport?.narrative?.text as NSObject?

@@ -134,11 +134,11 @@ private let MATCHERS: [Matcher] = [
                 "patient0age": MAPPINGS_NUMBERS,
                 "patient0ageUnits": MAPPINGS_AGE_UNITS
             ]),
-    Matcher(pattern: #"(?:gender (?:is )?)?(?<patient0gender>male|female|trans(?:gender)? male|trans(?:gender)? female)"#,
+    Matcher(pattern: #"(?:gender (?:is |of )?)?(?<patient0gender>male|female|trans(?:gender)? male|trans(?:gender)? female)"#,
             mappings: [
                 "patient0gender": MAPPINGS_GENDER
             ]),
-    Matcher(pattern: #"(?:patient|priority) (?:is )?(?<patient0priority>read|red|immediate|yellow|delayed|expectant|deceased|dead|zebra|minimal|minor|green)"#,
+    Matcher(pattern: #"(?:patient|priority) (?:is |of )?(?<patient0priority>read|red|immediate|yellow|delayed|expectant|deceased|dead|zebra|minimal|minor|green)"#,
             mappings: [
                 "patient0priority": MAPPINGS_PRIORITY
             ]),
@@ -154,7 +154,7 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0triageMentalStatus": MAPPINGS_TRIAGE_MENTAL_STATUS
             ]),
-    Matcher(pattern: #"(?:(?:radial |radio )?(?:pulses?) (?:is )?(?<patient0triagePerfusion>absent|presents?))"#,
+    Matcher(pattern: #"(?:(?:radial |radio )?(?:pulses?) (?:is |of )?(?<patient0triagePerfusion>absent|presents?))"#,
             mappings: [
                 "patient0triagePerfusion": MAPPINGS_TRIAGE_PERFUSION
             ]),
@@ -162,50 +162,50 @@ private let MATCHERS: [Matcher] = [
             mappings: [
                 "patient0triagePerfusion": MAPPINGS_TRIAGE_PERFUSION
             ]),
-    Matcher(pattern: #"(?:capri|(?:temp refill)|(?:tap refill)|(?:cap(?:illary)? refill))(?: time)? (?:is )?(?:less than )?(?<patient0capillaryRefill>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:capri|(?:temp refill)|(?:tap refill)|(?:cap(?:illary)? refill))(?: time)? (?:is |of )?(?:less than )?(?<patient0capillaryRefill>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "patient0capillaryRefill": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0chiefComplaint>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is )?(?<situation0primarySymptom>[^.]+)"#),
-    Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is )?(?<history0medicalSurgicalHistory>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0medicationAllergies>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is )?(?<history0environmentalFoodAllergies>[^.]+)"#),
-    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is |of )?(?<situation0chiefComplaint>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:chief complaint)|(?:complains of)|(?:complaining of))(?:,|\.)? (?:is |of )?(?<situation0primarySymptom>[^.]+)"#),
+    Matcher(pattern: #"(?:history(?: of)?)(?:,|\.)? (?:is |of )?(?<history0medicalSurgicalHistory>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is |of )?(?<history0medicationAllergies>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:allergic to)|(?:allergies)|(?:allergy))(?:,|\.)? (?:is |of )?(?<history0environmentalFoodAllergies>[^.]+)"#),
+    Matcher(pattern: #"(?:(?:respiratory rate)|respirations?)(?:,|\.)? (?:is |of )?(?<lastVital0respiratoryRate>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0respiratoryRate": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:pulse(?: rate)?)|(?:heart rate))(?:,|\.)? (?:is |of )?(?<lastVital0heartRate>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0heartRate": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is )?(?<lastVital0bpSystolic>"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?<lastVital0bpDiastolic>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:blood pressure)|bp)(?:,|\.)? (?:is |of )?(?<lastVital0bpSystolic>"# + PATTERN_NUMBERS + #")(?:/|(?: over ))(?<lastVital0bpDiastolic>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0bpSystolic": MAPPINGS_NUMBERS,
                 "lastVital0bpDiastolic": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:blood sugar(?: levels?)?)|(?:blood glucose(?: levels?)?))(?:,|\.)? (?:is )?(?<lastVital0bloodGlucoseLevel>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:blood sugar(?: levels?)?)|(?:blood glucose(?: levels?)?))(?:,|\.)? (?:is |of )?(?<lastVital0bloodGlucoseLevel>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0bloodGlucoseLevel": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:blood oxygen(?: levels?)?)|(?:oxygen saturation)|(?:pulse oximetry))(?:,|\.)? (?:is )?(?<lastVital0pulseOximetry>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:blood oxygen(?: levels?)?)|(?:oxygen saturation)|(?:pulse oximetry)|spo2)(?:,|\.)? (?:is |of )?(?<lastVital0pulseOximetry>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0pulseOximetry": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:carbon monoxide(?: levels?)?))(?:,|\.)? (?:is )?(?<lastVital0carbonMonoxide>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:carbon monoxide(?: levels?)?))(?:,|\.)? (?:is |of )?(?<lastVital0carbonMonoxide>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0carbonMonoxide": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:(?:end tidal carbon dioxide))(?:,|\.)? (?:is )?(?<lastVital0endTidalCarbonDioxide>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:(?:end tidal carbon dioxide))(?:,|\.)? (?:is |of )?(?<lastVital0endTidalCarbonDioxide>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0endTidalCarbonDioxide": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is )?(?<lastVital0totalGlasgowComaScore>"# + PATTERN_NUMBERS + #")"#,
+    Matcher(pattern: #"(?:total )?(?:(?:glasgow coma scale|score)|(?:gcs(?: score)?)) (?:is |of )?(?<lastVital0totalGlasgowComaScore>"# + PATTERN_NUMBERS + #")"#,
             mappings: [
                 "lastVital0totalGlasgowComaScore": MAPPINGS_NUMBERS
             ]),
-    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperature>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:C|celsius|°C)"#),
-    Matcher(pattern: #"temp(?:t|erature)? (?:is )?(?<lastVital0temperatureF>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:F|fahrenheit|°F)"#),
+    Matcher(pattern: #"temp(?:t|erature)? (?:is |of )?(?<lastVital0temperature>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:C|celsius|°C)"#),
+    Matcher(pattern: #"temp(?:t|erature)? (?:is |of )?(?<lastVital0temperatureF>"# + PATTERN_DECIMALS + #")(?: degrees)? (?:F|fahrenheit|°F)"#),
     Matcher(pattern: #"(?<disposition0hospitalTeamActivation>adult trauma|pediatric trauma|trauma|stroke|cardiac arrest|stemi|sepsis|OB|obstetrics) alert"#,
             mappings: [
                 "disposition0hospitalTeamActivation": MAPPINGS_ALERT
