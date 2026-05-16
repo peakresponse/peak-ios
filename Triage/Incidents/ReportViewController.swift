@@ -6,7 +6,6 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
-import ArkanaKeys
 import Keyboardy
 import LLMKit
 import LLMKitAWSBedrock
@@ -1265,21 +1264,20 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                                     accessKeyId: awsCredentials["AccessKeyId"] ?? "",
                                     secretAccessKey: awsCredentials["SecretAccessKey"] ?? "",
                                     sessionToken: awsCredentials["SessionToken"])
-            let keys = ArkanaKeys.Global()
             if let bot = BotFactory.instantiate(for: .init(type: .awsBedrock)) as? AWSBedrockBot {
                 Task {
                     do {
-                        async let situationExtraction = bot.invoke(promptId: keys.awsBedrockSituationExtractionPromptId, with: [
+                        async let situationExtraction = bot.invoke(promptId: "arn:aws:bedrock:us-west-2:780568202418:prompt/WFLPLJKH5D:2", with: [
                             "narrative": text,
                             "current_timestamp": Date().asISO8601String()
                         ])
-                        async let historyExtraction = bot.invoke(promptId: keys.awsBedrockHistoryExtractionPromptId, with: [
+                        async let historyExtraction = bot.invoke(promptId: "arn:aws:bedrock:us-west-2:780568202418:prompt/DVRCDGUVZG:3", with: [
                             "narrative": text
                         ])
-                        async let medicationExtraction = bot.invoke(promptId: keys.awsBedrockMedicationExtractionPromptId, with: [
+                        async let medicationExtraction = bot.invoke(promptId: "arn:aws:bedrock:us-west-2:780568202418:prompt/VUNJAF2YFN:3", with: [
                             "narrative": text
                         ])
-                        async let procedureExtraction = bot.invoke(promptId: keys.awsBedrockProcedureExtractionPromptId, with: [
+                        async let procedureExtraction = bot.invoke(promptId: "arn:aws:bedrock:us-west-2:780568202418:prompt/32NJ5BRZGB:3", with: [
                             "narrative": text
                         ])
                         let (situationResponse, historyResponse, medicationResponse, procedureResponse) =
