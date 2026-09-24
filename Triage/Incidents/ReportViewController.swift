@@ -1186,10 +1186,10 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     func recordingField(_ field: RecordingField, didPressPlayButton button: UIButton) {
         let startPlaying = !field.isPlaying
         if field != playingRecordingField || field.isPlaying {
-            playingRecordingField?.durationText = player?.recordingLengthFormatted
+            playingRecordingField?.durationText = player?.recordingLength.asTimeIntervalString()
             playingRecordingField?.isPlaying = false
             playingRecordingField = nil
-            player?.stopPressed()
+            player?.stopPlayback()
         }
         if startPlaying {
             if player == nil {
@@ -1208,7 +1208,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                         } else if let url = url {
                             do {
                                 self.player?.fileURL = url
-                                try self.player?.playPressed()
+                                try self.player?.startPlayback()
                                 self.playingRecordingField = field
                                 field.durationText = "00:00:00"
                                 field.isPlaying = true
@@ -1459,22 +1459,42 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
 
     // MARK: - TranscriberDelegate
 
-    func transcriber(_ transcriber: Transcriber, didFinishPlaying successfully: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            if let playingRecordingField = self?.playingRecordingField {
-                playingRecordingField.durationText = transcriber.recordingLengthFormatted
-                playingRecordingField.isPlaying = false
-                self?.playingRecordingField = nil
-            }
+    func transcriberDidPlay(_ transcriber: TranscriptionKit.Transcriber, seconds: TimeInterval) {
+        if let playingRecordingField {
+            playingRecordingField.durationText = seconds.asTimeIntervalString()
         }
     }
 
-    func transcriber(_ transcriber: Transcriber, didPlay seconds: TimeInterval, formattedDuration duration: String) {
-        DispatchQueue.main.async { [weak self] in
-            if let playingRecordingField = self?.playingRecordingField {
-                playingRecordingField.durationText = duration
-            }
+    func transcriberDidFinishPlaying(_ transcriber: TranscriptionKit.Transcriber, successfully: Bool, error: (any Error)?) {
+        if let playingRecordingField {
+            playingRecordingField.durationText = transcriber.recordingLength.asTimeIntervalString()
+            playingRecordingField.isPlaying = false
+            self.playingRecordingField = nil
         }
+    }
+
+    func transcriberDidFailToRecord(_ transcriber: TranscriptionKit.Transcriber, error: any Error) {
+    }
+
+    func transcriberDidRequestRecordAuthorization(_ transcriber: TranscriptionKit.Transcriber,
+                                                  status: TranscriptionKit.TranscriberAuthorizationStatus) {
+    }
+
+    func transcriberDidRecord(_ transcriber: TranscriptionKit.Transcriber, seconds: TimeInterval, data: [Float]) {
+    }
+
+    func transcriberDidFinishRecording(_ transcriber: TranscriptionKit.Transcriber, duration seconds: TimeInterval) {
+    }
+
+    func transcriberDidRequestSpeechAuthorization(_ transcriber: TranscriptionKit.Transcriber,
+                                                  status: TranscriptionKit.TranscriberAuthorizationStatus) {
+    }
+
+    func transcriberDidRecognize(_ transcriber: TranscriptionKit.Transcriber, text: String,
+                                 fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
+    }
+
+    func transcriberDidFinishRecognition(_ transcriber: TranscriptionKit.Transcriber, error: (any Error)?) {
     }
     // swiftlint:disable:next file_length
 }

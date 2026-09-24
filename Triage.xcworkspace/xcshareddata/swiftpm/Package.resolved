@@ -195,8 +195,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-transcriptionkit.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "06274eb4696ebafdc0d97f63a4cdc205f25e18ea"
+        "branch" : "xcode-27",
+        "revision" : "56dfca33e92b3a8f80c18e1575db07a5b520ce99"
       }
     },
     {
