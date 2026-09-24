@@ -173,6 +173,7 @@
 		45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */; };
 		45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */; };
 		45E934E82B9B7DBC007164AC /* TransportCartReportField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */; };
+		45EED6A33065E03A00168C33 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EED6A23065E03500168C33 /* SceneDelegate.swift */; };
 		45EF91CA2DAEEDA700563A0A /* ICD10Kit in Frameworks */ = {isa = PBXBuildFile; productRef = 45EF91C92DAEEDA700563A0A /* ICD10Kit */; };
 		45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */; };
 		45F7BAC22739E37300FBD31F /* Report.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F7BAC12739E37300FBD31F /* Report.swift */; };
@@ -374,6 +375,7 @@
 		45E35A3B24F09B84005A8059 /* UIButton+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extensions.swift"; sourceTree = "<group>"; };
 		45E35A3E24FDD9F9005A8059 /* Scenes.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Scenes.storyboard; sourceTree = "<group>"; };
 		45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportCartReportField.swift; sourceTree = "<group>"; };
+		45EED6A23065E03500168C33 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		45F2190524E5ED100046A39B /* UIBarButtonItem+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+Extensions.swift"; sourceTree = "<group>"; };
 		45F7BAC12739E37300FBD31F /* Report.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Report.swift; sourceTree = "<group>"; };
 		45F7BAC3273AEBE100FBD31F /* Response.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Response.swift; sourceTree = "<group>"; };
@@ -500,6 +502,7 @@
 				45994121261BDE4D0062D141 /* InterstitialViewController.swift */,
 				454EE967251C62D800EB266A /* LocationHelper.swift */,
 				4567E6632C98D54800BBD036 /* MotionHelper.swift */,
+				45EED6A23065E03500168C33 /* SceneDelegate.swift */,
 				4566F025236CCC5500A04C75 /* Main.storyboard */,
 				4566F028236CCC5700A04C75 /* Assets.xcassets */,
 				45E267302418AF340010CDE9 /* Fonts */,
@@ -988,6 +991,7 @@
 				45D422C32B94FB2300E75D7E /* RegionAgency.swift in Sources */,
 				4537DCA62AC4ED2D006A8AAB /* ActiveIncidentsView.swift in Sources */,
 				458CA0CA276D73570065F324 /* SNOMEDKeyboardSource.swift in Sources */,
+				45EED6A33065E03A00168C33 /* SceneDelegate.swift in Sources */,
 				45C9DAA427D57EE40003B44B /* ApiClient.swift in Sources */,
 				458CA0CF278527FC0065F324 /* ReportsViewController.swift in Sources */,
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
