@@ -20,6 +20,7 @@
 		452DDBD3243D628200A8F1FF /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452DDBD2243D628200A8F1FF /* Double+Extensions.swift */; };
 		452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */ = {isa = PBXBuildFile; fileRef = 452FBE0D276D5EE600874DF0 /* SNOMED.realm */; };
 		4532180C2AFC34C400F2891B /* ReportsCountsHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4532180B2AFC34C400F2891B /* ReportsCountsHeaderView.swift */; };
+		45337E053065DBF900328A6A /* MLKitBarcodeScanning in Frameworks */ = {isa = PBXBuildFile; productRef = 45337E043065DBF900328A6A /* MLKitBarcodeScanning */; };
 		4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D3F32FAE453A001ACA32 /* RollbarNotifier */; };
 		4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4132FAE5F16001ACA32 /* PRKit */; };
 		4536D4A62FAE955E001ACA32 /* LLMKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4536D4A52FAE955E001ACA32 /* LLMKit */; };
@@ -113,7 +114,6 @@
 		459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */ = {isa = PBXBuildFile; productRef = 459940322FAFA4C600A1F555 /* TranscriptionKitAWS */; };
 		459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */ = {isa = PBXBuildFile; productRef = 459940352FAFA8B300A1F555 /* GoogleMaps */; };
 		459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */ = {isa = PBXBuildFile; productRef = 459940382FAFB6E300A1F555 /* GoogleMapsUtils */; };
-		4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */ = {isa = PBXBuildFile; productRef = 4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */; };
 		459940B32FAFD67800A1F555 /* ArkanaKeys in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B22FAFD67800A1F555 /* ArkanaKeys */; };
 		459940B62FAFD82700A1F555 /* Starscream in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B52FAFD82700A1F555 /* Starscream */; };
 		459940B92FAFD8DA00A1F555 /* SwiftPath in Frameworks */ = {isa = PBXBuildFile; productRef = 459940B82FAFD8DA00A1F555 /* SwiftPath */; };
@@ -401,13 +401,13 @@
 				4536D4142FAE5F16001ACA32 /* PRKit in Frameworks */,
 				4591A1D72EF87ED80007719A /* RtcBasic in Frameworks */,
 				4591A1DA2EF880300007719A /* AgoraRTM in Frameworks */,
+				45337E053065DBF900328A6A /* MLKitBarcodeScanning in Frameworks */,
 				459940392FAFB6E300A1F555 /* GoogleMapsUtils in Frameworks */,
 				459940362FAFA8B300A1F555 /* GoogleMaps in Frameworks */,
 				4536D3F42FAE453A001ACA32 /* RollbarNotifier in Frameworks */,
 				459DC4EB2DADCCAA00761142 /* SNOMEDKit in Frameworks */,
 				459940332FAFA4C600A1F555 /* TranscriptionKitAWS in Frameworks */,
 				459940312FAFA4C600A1F555 /* TranscriptionKit in Frameworks */,
-				4599403C2FAFBE6800A1F555 /* MLKitBarcodeScanning in Frameworks */,
 				459940BC2FAFD9EC00A1F555 /* JSONPatch in Frameworks */,
 				459940B62FAFD82700A1F555 /* Starscream in Frameworks */,
 				459940B92FAFD8DA00A1F555 /* SwiftPath in Frameworks */,
@@ -432,6 +432,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		45337E013065DBE700328A6A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
@@ -457,6 +464,7 @@
 				4566F01E236CCC5500A04C75 /* Triage */,
 				4566F035236CCC5700A04C75 /* TriageTests */,
 				4566F040236CCC5700A04C75 /* TriageUITests */,
+				45337E013065DBE700328A6A /* Frameworks */,
 				4566F01D236CCC5500A04C75 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -751,6 +759,9 @@
 				459940BF2FAFDBC200A1F555 /* PBXTargetDependency */,
 			);
 			name = Triage;
+			packageProductDependencies = (
+				45337E043065DBF900328A6A /* MLKitBarcodeScanning */,
+			);
 			productName = Triage;
 			productReference = 4566F01C236CCC5500A04C75 /* Peak Response.app */;
 			productType = "com.apple.product-type.application";
@@ -1485,8 +1496,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/d-date/google-mlkit-swiftpm";
 			requirement = {
-				kind = exactVersion;
-				version = 9.0.2;
+				kind = upToNextMinorVersion;
+				minimumVersion = 9.0.2;
 			};
 		};
 		459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */ = {
@@ -1556,6 +1567,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		45337E043065DBF900328A6A /* MLKitBarcodeScanning */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */;
+			productName = MLKitBarcodeScanning;
+		};
 		4536D3F32FAE453A001ACA32 /* RollbarNotifier */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 4536D3F22FAE453A001ACA32 /* XCRemoteSwiftPackageReference "rollbar-apple" */;
@@ -1605,11 +1621,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 459940372FAFB6E300A1F555 /* XCRemoteSwiftPackageReference "google-maps-ios-utils" */;
 			productName = GoogleMapsUtils;
-		};
-		4599403B2FAFBE6800A1F555 /* MLKitBarcodeScanning */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4599403A2FAFBE6800A1F555 /* XCRemoteSwiftPackageReference "google-mlkit-swiftpm" */;
-			productName = MLKitBarcodeScanning;
 		};
 		459940B22FAFD67800A1F555 /* ArkanaKeys */ = {
 			isa = XCSwiftPackageProductDependency;
