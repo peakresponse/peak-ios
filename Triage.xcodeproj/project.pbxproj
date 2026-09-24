@@ -1486,7 +1486,7 @@
 			repositoryURL = "https://github.com/d-date/google-mlkit-swiftpm";
 			requirement = {
 				kind = exactVersion;
-				version = "9.0.0-1";
+				version = 9.0.2;
 			};
 		};
 		459940B42FAFD82700A1F555 /* XCRemoteSwiftPackageReference "Starscream" */ = {
