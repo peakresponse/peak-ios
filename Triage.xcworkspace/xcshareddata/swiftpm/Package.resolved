@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-prkit.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "6ba81d48288745a643d9ca64c5e25d35eb193bbc"
+        "branch" : "40-xcode-27",
+        "revision" : "1bfcbf97bab55a0a7fd616a533d0e3fc0797b6be"
       }
     },
     {
