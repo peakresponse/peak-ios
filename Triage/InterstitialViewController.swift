@@ -6,14 +6,55 @@
 //  Copyright © 2021 Francis Li. All rights reserved.
 //
 
+import PRKit
 import UIKit
 
 class InterstitialViewController: UIViewController {
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var retryButton: FormButton!
+    weak var logoView: UIImageView!
+    weak var activityIndicatorView: UIActivityIndicatorView!
+    weak var retryButton: PRKit.Button!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        view.backgroundColor = .bgBackground
+
+        let logoView = UIImageView()
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        logoView.image = UIImage(named: "Logo")
+        view.addSubview(logoView)
+        NSLayoutConstraint.activate([
+            logoView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            logoView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            logoView.leadingAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 22),
+            logoView.trailingAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -22),
+            logoView.widthAnchor.constraint(lessThanOrEqualToConstant: 332),
+            logoView.heightAnchor.constraint(equalTo: logoView.widthAnchor, multiplier: 88.0 / 332.0)
+        ])
+        self.logoView = logoView
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 75),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor)
+        ])
+        activityIndicatorView.startAnimating()
+        self.activityIndicatorView = activityIndicatorView
+
+        let retryButton = PRKit.Button()
+        retryButton.translatesAutoresizingMaskIntoConstraints = false
+        retryButton.style = .primary
+        retryButton.setTitle("Button.retry".localized, for: .normal)
+        retryButton.isHidden = true
+        view.addSubview(retryButton)
+        NSLayoutConstraint.activate([
+            retryButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            retryButton.centerYAnchor.constraint(equalTo: activityIndicatorView.centerYAnchor)
+        ])
+        self.retryButton = retryButton
+
         checkLoginStatus()
     }
 
