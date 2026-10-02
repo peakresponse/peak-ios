@@ -1476,7 +1476,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-transcriptionkit.git";
 			requirement = {
-				branch = "xcode-27";
+				branch = main;
 				kind = branch;
 			};
 		};
