@@ -168,8 +168,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/peakresponse/peak-ios-prkit.git",
       "state" : {
-        "branch" : "40-xcode-27",
-        "revision" : "1bfcbf97bab55a0a7fd616a533d0e3fc0797b6be"
+        "branch" : "main",
+        "revision" : "f4924aa11c1c553133ea58e60eabb91c7c05f91f"
       }
     },
     {
@@ -427,10 +427,10 @@
     {
       "identity" : "swiftsignatureview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alankarmisra/SwiftSignatureView",
+      "location" : "https://github.com/peakresponse/SwiftSignatureView",
       "state" : {
-        "revision" : "04ce145272c47d9b87657af3cc3d12bd26de6745",
-        "version" : "3.2.1"
+        "branch" : "peak-main",
+        "revision" : "d36afa97de3d65e27eb1b55939517484986f0897"
       }
     }
   ],
