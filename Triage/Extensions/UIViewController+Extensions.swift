@@ -61,10 +61,9 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
     }
 
     func presentLogin() {
-        if let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController() as? AuthViewController {
-            vc.delegate = self
-            presentAnimated(vc)
-        }
+        let vc = AuthViewController()
+        vc.delegate = self
+        presentAnimated(vc)
     }
 
     func present(_ vc: UIViewController) {
@@ -182,7 +181,6 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
             let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
             if let vc = vc as? ReportsViewController {
                 vc.incident = incident
-                vc.modalPresentationStyle = .overCurrentContext
             }
             present(vc, animated: true)
         }

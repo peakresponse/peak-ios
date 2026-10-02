@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="eh9-7l-CQq">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25098" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25073"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -60,61 +57,6 @@
             </objects>
             <point key="canvasLocation" x="385" y="114"/>
         </scene>
-        <!--Interstitial View Controller-->
-        <scene sceneID="Uq8-zb-Snh">
-            <objects>
-                <viewController id="eh9-7l-CQq" customClass="InterstitialViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="0Sn-W2-gcy">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="41s-A0-psR">
-                                <rect key="frame" x="41" y="411" width="332" height="88"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="lessThanOrEqual" constant="332" id="I23-ov-slO"/>
-                                    <constraint firstAttribute="width" secondItem="41s-A0-psR" secondAttribute="height" multiplier="332:88" id="r0b-oe-yRf"/>
-                                </constraints>
-                            </imageView>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="MJL-BI-ndK">
-                                <rect key="frame" x="188.5" y="574" width="37" height="37"/>
-                                <color key="color" name="MainGrey"/>
-                            </activityIndicatorView>
-                            <view hidden="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xiw-Me-j7d" customClass="FormButton" customModule="Peak_Response" customModuleProvider="target">
-                                <rect key="frame" x="87" y="559.5" width="240" height="62"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="cc0-4Y-hSn"/>
-                                </constraints>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.retry"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="retryPressed:" destination="eh9-7l-CQq" eventType="touchUpInside" id="19P-oI-Tvf"/>
-                                </connections>
-                            </view>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="6Fu-hY-Rw9"/>
-                        <color key="backgroundColor" name="BgBackground"/>
-                        <constraints>
-                            <constraint firstItem="41s-A0-psR" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="6Fu-hY-Rw9" secondAttribute="trailing" constant="-22" id="Kx9-JE-A4a"/>
-                            <constraint firstItem="41s-A0-psR" firstAttribute="centerY" secondItem="6Fu-hY-Rw9" secondAttribute="centerY" id="QHj-cd-wvT"/>
-                            <constraint firstItem="41s-A0-psR" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="T0r-Jw-2rl"/>
-                            <constraint firstItem="MJL-BI-ndK" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="Taj-oq-Kw9"/>
-                            <constraint firstItem="Xiw-Me-j7d" firstAttribute="centerY" secondItem="MJL-BI-ndK" secondAttribute="centerY" id="XYc-DO-cZg"/>
-                            <constraint firstItem="Xiw-Me-j7d" firstAttribute="centerX" secondItem="6Fu-hY-Rw9" secondAttribute="centerX" id="czt-jV-D0a"/>
-                            <constraint firstItem="MJL-BI-ndK" firstAttribute="top" secondItem="41s-A0-psR" secondAttribute="bottom" constant="75" id="npF-up-kCG"/>
-                            <constraint firstItem="41s-A0-psR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Fu-hY-Rw9" secondAttribute="leading" constant="22" id="ztI-bf-wP6"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="activityIndicatorView" destination="MJL-BI-ndK" id="63v-yb-sxf"/>
-                        <outlet property="retryButton" destination="Xiw-Me-j7d" id="phl-Z1-ljI"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="qbg-E4-dCP" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1416" y="0.0"/>
-        </scene>
         <!--Scene Tab Bar Controller-->
         <scene sceneID="yl2-sM-qoP">
             <objects>
@@ -143,21 +85,4 @@
             <point key="canvasLocation" x="-529" y="0.0"/>
         </scene>
     </scenes>
-    <designables>
-        <designable name="W28-zg-YXA">
-            <size key="intrinsicContentSize" width="-1" height="83"/>
-        </designable>
-    </designables>
-    <resources>
-        <image name="Logo" width="332" height="88"/>
-        <namedColor name="BgBackground">
-            <color red="0.94499999284744263" green="0.96100002527236938" blue="0.97299998998641968" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="MainGrey">
-            <color red="0.23899999260902405" green="0.31400001049041748" blue="0.3449999988079071" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

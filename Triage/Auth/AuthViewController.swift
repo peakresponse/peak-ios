@@ -16,24 +16,156 @@ import PRKit
 }
 
 class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var emailField: PRKit.TextField!
-    @IBOutlet weak var passwordField: PRKit.PasswordField!
-    @IBOutlet weak var rememberMeCheckbox: PRKit.Checkbox!
-    @IBOutlet weak var signInButton: PRKit.Button!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var versionLabel: UILabel!
+    weak var scrollView: UIScrollView!
+    weak var scrollViewBottomConstraint: NSLayoutConstraint!
+    weak var contentView: UIView!
+    weak var logoView: UIImageView!
+    weak var emailField: PRKit.TextField!
+    weak var passwordField: PRKit.PasswordField!
+    weak var rememberMeCheckbox: PRKit.Checkbox!
+    weak var signInButton: PRKit.Button!
+    weak var activityIndicatorView: UIActivityIndicatorView!
+    weak var versionLabel: UILabel!
 
     weak var delegate: AuthViewControllerDelegate?
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        modalTransitionStyle = .coverVertical
+        modalPresentationStyle = .fullScreen
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        contentView.backgroundColor = .background
-        versionLabel.text = AppSettings.version
+        view.backgroundColor = .background
+
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollViewBottomConstraint
+        ])
+        self.scrollView = scrollView
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
+
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.safeAreaLayoutGuide.topAnchor),
+            scrollView.contentLayoutGuide.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        ])
+        self.contentView = contentView
+
+        let centerView = UIView()
+        centerView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(centerView)
+        let viewWidthConstraint = centerView.widthAnchor.constraint(equalToConstant: 480)
+        viewWidthConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            centerView.centerXAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerXAnchor),
+            centerView.centerYAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerYAnchor),
+            centerView.topAnchor.constraint(greaterThanOrEqualTo: contentView.topAnchor),
+            centerView.leadingAnchor.constraint(greaterThanOrEqualTo: contentView.leadingAnchor, constant: 20),
+            centerView.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -20),
+            viewWidthConstraint,
+            centerView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor)
+        ])
+
+        let logoView = UIImageView()
+        logoView.translatesAutoresizingMaskIntoConstraints = false
+        logoView.image = UIImage(named: "Logo")
+        centerView.addSubview(logoView)
+        NSLayoutConstraint.activate([
+            logoView.widthAnchor.constraint(equalToConstant: 250),
+            logoView.heightAnchor.constraint(equalToConstant: 72),
+            logoView.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
+            logoView.topAnchor.constraint(equalTo: centerView.topAnchor)
+        ])
+        self.logoView = logoView
+
+        let emailField = PRKit.TextField()
+        emailField.translatesAutoresizingMaskIntoConstraints = false
+        emailField.labelText = "AuthViewController.email".localized
+        emailField.placeholderText = "jane.doe@firedepartment.gov"
         emailField.keyboardType = .emailAddress
+        centerView.addSubview(emailField)
+        NSLayoutConstraint.activate([
+            emailField.topAnchor.constraint(equalTo: logoView.bottomAnchor, constant: 28),
+            emailField.leadingAnchor.constraint(equalTo: centerView.leadingAnchor),
+            emailField.trailingAnchor.constraint(equalTo: centerView.trailingAnchor)
+        ])
+        self.emailField = emailField
+
+        let passwordField = PRKit.PasswordField()
+        passwordField.translatesAutoresizingMaskIntoConstraints = false
+        passwordField.labelText = "AuthViewController.password".localized
+        passwordField.placeholderText = "***************"
+        centerView.addSubview(passwordField)
+        NSLayoutConstraint.activate([
+            passwordField.topAnchor.constraint(equalTo: emailField.bottomAnchor, constant: 16),
+            passwordField.leadingAnchor.constraint(equalTo: centerView.leadingAnchor),
+            passwordField.trailingAnchor.constraint(equalTo: centerView.trailingAnchor)
+        ])
+        self.passwordField = passwordField
+
+        let rememberMeCheckbox = PRKit.Checkbox()
+        rememberMeCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        rememberMeCheckbox.labelText = "AuthViewController.rememberMe".localized
+        centerView.addSubview(rememberMeCheckbox)
+        NSLayoutConstraint.activate([
+            rememberMeCheckbox.topAnchor.constraint(equalTo: passwordField.bottomAnchor, constant: 16),
+            rememberMeCheckbox.leadingAnchor.constraint(equalTo: centerView.leadingAnchor),
+            rememberMeCheckbox.trailingAnchor.constraint(equalTo: centerView.trailingAnchor)
+        ])
+        self.rememberMeCheckbox = rememberMeCheckbox
+
+        let signInButton = PRKit.Button()
+        signInButton.translatesAutoresizingMaskIntoConstraints = false
+        signInButton.style = .primary
+        signInButton.setTitle("Button.signIn".localized, for: .normal)
+        signInButton.addTarget(self, action: #selector(signInPressed(_:)), for: .touchUpInside)
+        centerView.addSubview(signInButton)
+        NSLayoutConstraint.activate([
+            signInButton.topAnchor.constraint(equalTo: rememberMeCheckbox.bottomAnchor, constant: 20),
+            signInButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
+            centerView.bottomAnchor.constraint(equalTo: signInButton.bottomAnchor)
+        ])
+        self.signInButton = signInButton
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        centerView.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 16),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor)
+        ])
+        self.activityIndicatorView = activityIndicatorView
+
+        let versionLabel = UILabel()
+        versionLabel.translatesAutoresizingMaskIntoConstraints = false
+        versionLabel.font = .body14Bold
+        versionLabel.text = AppSettings.version
+        versionLabel.textColor = .base500
+        view.addSubview(versionLabel)
+        NSLayoutConstraint.activate([
+            versionLabel.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+        ])
+        self.versionLabel = versionLabel
 
         if let email = AppSettings.email {
             emailField.text = email
@@ -156,7 +288,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
         }
     }
 
-    @IBAction func signInPressed(_ sender: PRKit.Button) {
+    @objc func signInPressed(_ sender: PRKit.Button) {
         let email = emailField.text
         let password = passwordField.text
         if let email = email, let password = password, !email.isEmpty && !password.isEmpty {

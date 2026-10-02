@@ -127,7 +127,7 @@ class RecordButton: UIControl {
             recordButton.style = .primary
             switch recordState {
             case .record, .addRecording:
-                bluetoothButton.isHidden = Transcriber.bluetoothHFPInputs.count == 0
+                bluetoothButton.isHidden = ((try? Transcriber.bluetoothHFPInputs)?.count ?? 0) == 0
                 bluetoothButton.isSelected = bluetoothButton.isHidden || AppSettings.audioInputPortUID != nil
                 recordButton.setImage(UIImage(named: "RecordMic24px", in: PRKitBundle.instance, compatibleWith: nil), for: .normal)
             case .update:
@@ -148,21 +148,24 @@ class RecordButton: UIControl {
             AppSettings.audioInputPortUID = nil
         } else {
             // select Bluetooth input, provide prompt if multiple
-            let inputPorts = Transcriber.bluetoothHFPInputs
-            if inputPorts.count > 1 {
-                let alert = UIAlertController(title: "RecordButton.selectInputLabel".localized, message: nil, preferredStyle: .actionSheet)
-                for inputPort in inputPorts {
-                    alert.addAction(UIAlertAction(title: inputPort.portName, style: .default, handler: { [weak self] (_) in
-                        AppSettings.audioInputPortUID = inputPort.uid
-                        self?.bluetoothButton.isSelected = true
-                    }))
+            let inputPorts = try? Transcriber.bluetoothHFPInputs
+            if let inputPorts {
+                if inputPorts.count > 1 {
+                    let alert = UIAlertController(title: "RecordButton.selectInputLabel".localized,
+                                                  message: nil, preferredStyle: .actionSheet)
+                    for inputPort in inputPorts {
+                        alert.addAction(UIAlertAction(title: inputPort.portName, style: .default, handler: { [weak self] (_) in
+                            AppSettings.audioInputPortUID = inputPort.uid
+                            self?.bluetoothButton.isSelected = true
+                        }))
+                    }
+                    alert.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil))
+                    if let vc = delegate?.recordButton?(self, willPresent: alert) {
+                        vc.presentAnimated(alert)
+                    }
+                } else {
+                    AppSettings.audioInputPortUID = inputPorts[0].uid
                 }
-                alert.addAction(UIAlertAction(title: "Button.cancel".localized, style: .cancel, handler: nil))
-                if let vc = delegate?.recordButton?(self, willPresent: alert) {
-                    vc.presentAnimated(alert)
-                }
-            } else {
-                AppSettings.audioInputPortUID = inputPorts[0].uid
             }
         }
         updateButtonStates()

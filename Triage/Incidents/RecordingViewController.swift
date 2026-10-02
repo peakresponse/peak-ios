@@ -95,37 +95,66 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
 
     // MARK: - TranscriberDelegate
 
-    func transcriber(_ transcriber: Transcriber, didRecognizeText text: String, fileId: String, transcriptId: String,
-                     metadata: [String: Any], isFinal: Bool) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.delegate?.recordingViewController?(self, didRecognizeText: text, fileId: fileId, transcriptId: transcriptId,
-                                                    metadata: metadata, isFinal: isFinal)
+    func transcriberDidPlay(_ transcriber: TranscriptionKit.Transcriber, seconds: TimeInterval) {
+    }
+
+    func transcriberDidFinishPlaying(_ transcriber: TranscriptionKit.Transcriber, successfully: Bool, error: (any Error)?) {
+    }
+
+    func transcriberDidFailToRecord(_ transcriber: TranscriptionKit.Transcriber, error: any Error) {
+        delegate?.recordingViewController?(self, didThrowError: error)
+    }
+
+    func transcriberDidRequestRecordAuthorization(_ transcriber: TranscriptionKit.Transcriber,
+                                                  status: TranscriptionKit.TranscriberAuthorizationStatus) {
+        if status == .granted {
+            startRecording()
+        } else {
+            delegate?.recordingViewController?(self, didThrowError: TranscriberError.recordNotAuthorized)
         }
     }
 
-    func transcriber(_ transcriber: Transcriber, didRecord seconds: TimeInterval, formattedDuration duration: String) {
-        timeLabel.text = duration
-    }
-
-    func transcriber(_ transcriber: Transcriber, didTransformBuffer data: [Float]) {
+    func transcriberDidRecord(_ transcriber: TranscriptionKit.Transcriber, seconds: TimeInterval, data: [Float]) {
+        timeLabel.text = seconds.asTimeIntervalString()
         // decimate the data into number of bars samples
-        let filterLength = data.count / barHeightConstraints.count
-        let filter = [Float](repeating: 16, count: filterLength)
-        var output = [Float](repeating: 0, count: barHeightConstraints.count)
-        vDSP_desamp(data, filterLength, filter, &output, vDSP_Length(output.count), vDSP_Length(filterLength))
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            let barHeightConstraints = self.barHeightConstraints
-            for (i, magnitude) in output.enumerated() {
-                barHeightConstraints[i].constant = 4 + CGFloat(floor(min(1, magnitude) * 36))
+        let barCount = barHeightConstraints.count
+        Task.detached {
+            let filterLength = data.count / barCount
+            let filter = [Float](repeating: 16, count: filterLength)
+            var output = [Float](repeating: 0, count: barCount)
+            vDSP_desamp(data, filterLength, filter, &output, vDSP_Length(output.count), vDSP_Length(filterLength))
+            Task { @MainActor in
+                let barHeightConstraints = self.barHeightConstraints
+                for (i, magnitude) in output.enumerated() {
+                    barHeightConstraints[i].constant = 4 + CGFloat(floor(min(1, magnitude) * 36))
+                }
             }
         }
     }
 
-    func transcriberDidFinishRecognition(_ transcriber: Transcriber, withError error: Error?) {
+    func transcriberDidFinishRecording(_ transcriber: TranscriptionKit.Transcriber, duration seconds: TimeInterval) {
+
+    }
+
+    func transcriberDidRequestSpeechAuthorization(_ transcriber: TranscriptionKit.Transcriber,
+                                                  status: TranscriptionKit.TranscriberAuthorizationStatus) {
+        if status == .granted {
+            startRecording()
+        } else {
+            delegate?.recordingViewController?(self, didThrowError: TranscriberError.speechRecognitionNotAuthorized)
+        }
+    }
+
+    func transcriberDidRecognize(_ transcriber: TranscriptionKit.Transcriber, text: String,
+                                 fileId: String, transcriptId: String, metadata: [String: Any], isFinal: Bool) {
+        delegate?.recordingViewController?(self, didRecognizeText: text, fileId: fileId, transcriptId: transcriptId,
+                                           metadata: metadata, isFinal: isFinal)
+    }
+
+    func transcriberDidFinishRecognition(_ transcriber: Transcriber, error: Error?) {
         delegate?.recordingViewController?(self, didFinishRecording: transcriber.fileId, fileURL: transcriber.fileURL,
-                                           duration: transcriber.recordingLength, formattedDuration: transcriber.recordingLengthFormatted)
+                                           duration: transcriber.recordingLength,
+                                           formattedDuration: transcriber.recordingLength.asTimeIntervalString())
     }
 
     func transcriber(_ transcriber: Transcriber, didRequestRecordAuthorization status: TranscriberAuthorizationStatus) {
@@ -135,17 +164,6 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
                 self.startRecording()
             } else {
                 self.delegate?.recordingViewController?(self, didThrowError: TranscriberError.recordNotAuthorized)
-            }
-        }
-    }
-
-    func transcriber(_ transcriber: Transcriber, didRequestSpeechAuthorization status: TranscriberAuthorizationStatus) {
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            if status == .granted {
-                self.startRecording()
-            } else {
-                self.delegate?.recordingViewController?(self, didThrowError: TranscriberError.speechRecognitionNotAuthorized)
             }
         }
     }

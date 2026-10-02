@@ -191,9 +191,11 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     }
 
     @objc override func newReportCancelled() {
-        view.isHidden = true
-        dismiss(animated: true) { [weak self] in
-            self?.dismiss(animated: false)
+        if (results?.count ?? 0) > 0 {
+            dismiss(animated: true)
+        } else {
+            view.isHidden = true
+            presentingViewController?.dismiss(animated: true)
         }
     }
 

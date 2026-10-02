@@ -87,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/d-date/google-mlkit-swiftpm",
       "state" : {
-        "revision" : "49211c8a9ae45bef1d8e46abd77eed505b26c29a",
-        "version" : "9.0.0-1"
+        "revision" : "f9c5ccb28a372ad0d025e26df094c42771b5cd01",
+        "version" : "9.0.2"
       }
     },
     {
@@ -151,7 +151,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-icd10kit",
       "state" : {
         "branch" : "main",
-        "revision" : "edcd6167a392aaa7f6401eb71946e46100205f67"
+        "revision" : "cddccc76765ce2deffdc526a06b4e33801f33f09"
       }
     },
     {
@@ -169,7 +169,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-prkit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "6ba81d48288745a643d9ca64c5e25d35eb193bbc"
+        "revision" : "f4924aa11c1c553133ea58e60eabb91c7c05f91f"
       }
     },
     {
@@ -178,7 +178,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-rxnormkit",
       "state" : {
         "branch" : "main",
-        "revision" : "a7c9cb35e259279243449a63bf8bdb201c2c36d8"
+        "revision" : "473b6c21f5fc3a7fe11267f24e6a22802a94e291"
       }
     },
     {
@@ -187,7 +187,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-snomedkit",
       "state" : {
         "branch" : "main",
-        "revision" : "e4eddd1994584d57d4ce32b0bee33576f5015622"
+        "revision" : "116dc7d5121e0f5d42729a3ef61866bcc3d322fb"
       }
     },
     {
@@ -196,7 +196,7 @@
       "location" : "https://github.com/peakresponse/peak-ios-transcriptionkit.git",
       "state" : {
         "branch" : "main",
-        "revision" : "06274eb4696ebafdc0d97f63a4cdc205f25e18ea"
+        "revision" : "3485f3e943f8ee67831b3b4679ac90b6957f9a0e"
       }
     },
     {
@@ -213,8 +213,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-core.git",
       "state" : {
-        "revision" : "4cc46f8607516226e5465062fdacd088fbd94552",
-        "version" : "20.1.4"
+        "revision" : "b4192c46305570577c4d08df790fddec5ab3aa04",
+        "version" : "20.1.5"
       }
     },
     {
@@ -222,8 +222,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/realm/realm-swift.git",
       "state" : {
-        "revision" : "600e187711e5fa4e8e2c0429cacee27e8e44f112",
-        "version" : "20.0.4"
+        "revision" : "ca03df491ec5e4bb8af0bca1e9957d08c10ec2da",
+        "version" : "20.0.5"
       }
     },
     {
@@ -427,10 +427,10 @@
     {
       "identity" : "swiftsignatureview",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/alankarmisra/SwiftSignatureView",
+      "location" : "https://github.com/peakresponse/SwiftSignatureView",
       "state" : {
-        "revision" : "04ce145272c47d9b87657af3cc3d12bd26de6745",
-        "version" : "3.2.1"
+        "branch" : "peak-main",
+        "revision" : "d36afa97de3d65e27eb1b55939517484986f0897"
       }
     }
   ],
