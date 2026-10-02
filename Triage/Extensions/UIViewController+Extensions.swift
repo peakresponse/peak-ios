@@ -61,10 +61,9 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
     }
 
     func presentLogin() {
-        if let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController() as? AuthViewController {
-            vc.delegate = self
-            presentAnimated(vc)
-        }
+        let vc = AuthViewController()
+        vc.delegate = self
+        presentAnimated(vc)
     }
 
     func present(_ vc: UIViewController) {

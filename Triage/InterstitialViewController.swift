@@ -47,6 +47,7 @@ class InterstitialViewController: UIViewController {
         retryButton.translatesAutoresizingMaskIntoConstraints = false
         retryButton.style = .primary
         retryButton.setTitle("Button.retry".localized, for: .normal)
+        retryButton.addTarget(self, action: #selector(retryPressed(_:)), for: .touchUpInside)
         retryButton.isHidden = true
         view.addSubview(retryButton)
         NSLayoutConstraint.activate([
@@ -58,14 +59,14 @@ class InterstitialViewController: UIViewController {
         checkLoginStatus()
     }
 
-    @IBAction func retryPressed(_ sender: Any) {
+    @objc func retryPressed(_ sender: Any) {
         checkLoginStatus()
         retryButton.isHidden = true
     }
 
     func checkLoginStatus() {
         // hit the server to check current log-in status
-        AppRealm.me { (user, agency, assignment, vehicle, scene, awsCredentials, error) in
+        AppRealm.me { [weak self] (user, agency, assignment, vehicle, scene, awsCredentials, error) in
             // if an explicit server error, log out to force re-login
             if let error = error as? ApiClientError, error == .unauthorized || error == .forbidden || error == .notFound {
                 DispatchQueue.main.async { [weak self] in
