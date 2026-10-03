@@ -310,10 +310,8 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         if tableView == sidebarTableView {
             switch indexPath.row {
             case 0:
-                let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateViewController(withIdentifier: "Assignment")
-                if let vc = vc as? AssignmentViewController {
-                    vc.delegate = self
-                }
+                let vc = AssignmentViewController()
+                vc.delegate = self
                 present(vc, animated: true) { [weak self] in
                     self?.toggleSidebar()
                 }

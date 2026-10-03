@@ -267,11 +267,8 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
                             // set new login ids, and navigate as needed
                             AppSettings.login(userId: userId, regionId: regionId, agencyId: agencyId, assignmentId: assignmentId, vehicleId: vehicleId, sceneId: sceneId)
                             if assignmentId == nil {
-                                let vc = UIStoryboard(name: "Auth",
-                                                      bundle: nil).instantiateViewController(withIdentifier: "Assignment")
-                                if let vc = vc as? AssignmentViewController {
-                                    vc.delegate = self
-                                }
+                                let vc = AssignmentViewController()
+                                vc.delegate = self
                                 self.presentAnimated(vc)
                             } else if let sceneId = sceneId {
                                 AppDelegate.enterScene(id: sceneId)

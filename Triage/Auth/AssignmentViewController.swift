@@ -17,18 +17,18 @@ internal import RealmSwift
 
 class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate,
                                 PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
-    @IBOutlet weak var welcomeHeader: WelcomeHeader!
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var contentView: UIView!
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var label: UILabel!
-    @IBOutlet weak var otherTextField: PRKit.TextField!
-    @IBOutlet weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
-    @IBOutlet weak var commandFooter: CommandFooter!
-    @IBOutlet weak var continueButton: PRKit.Button!
-    @IBOutlet weak var skipButton: PRKit.Button!
+    weak var welcomeHeader: WelcomeHeader!
+    weak var activityIndicatorView: UIActivityIndicatorView!
+    weak var scrollView: UIScrollView!
+    weak var scrollViewBottomConstraint: NSLayoutConstraint!
+    weak var contentView: UIView!
+    weak var containerView: UIView!
+    weak var label: UILabel!
+    weak var otherTextField: PRKit.TextField!
+    weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
+    weak var commandFooter: CommandFooter!
+    weak var continueButton: PRKit.Button!
+    weak var skipButton: PRKit.Button!
 
     weak var delegate: AssignmentViewControllerDelegate?
 
@@ -36,27 +36,148 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     var notificationToken: NotificationToken?
     var results: Results<Vehicle>?
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        isModalInPresentation = true
+        modalPresentationStyle = .fullScreen
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     deinit {
         notificationToken?.invalidate()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        contentView.backgroundColor = .background
-        containerView.backgroundColor = .background
+        view.backgroundColor = .background
+
+        let welcomeHeader = WelcomeHeader()
+        welcomeHeader.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(welcomeHeader)
+        NSLayoutConstraint.activate([
+            welcomeHeader.topAnchor.constraint(equalTo: view.topAnchor),
+            welcomeHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            welcomeHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        self.welcomeHeader = welcomeHeader
+
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(scrollView)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: welcomeHeader.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        self.scrollView = scrollView
+
+        let contentView = UIView()
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.addSubview(contentView)
+        let contentViewWidthConstraint = contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
+        contentViewWidthConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.leadingAnchor),
+            contentView.trailingAnchor.constraint(lessThanOrEqualTo: scrollView.frameLayoutGuide.trailingAnchor),
+            contentView.centerXAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerXAnchor),
+            contentViewWidthConstraint,
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+        ])
+        self.contentView = contentView
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "AssignmentViewController.select".localized
         label.textColor = .text
+        label.font = .h4SemiBold
+        contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        ])
+        self.label = label
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.color = .base800
+        activityIndicatorView.hidesWhenStopped = true
+        contentView.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 30),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+        activityIndicatorView.startAnimating()
+        self.activityIndicatorView = activityIndicatorView
+
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = .background
+        contentView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: label.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: label.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: label.trailingAnchor)
+        ])
+        self.containerView = containerView
+
+        let otherTextField = PRKit.TextField()
+        otherTextField.translatesAutoresizingMaskIntoConstraints = false
+        otherTextField.isHidden = true
+        otherTextField.labelText = "AssignmentViewController.other".localized
+        contentView.addSubview(otherTextField)
+        let otherTextFieldWidthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+        NSLayoutConstraint.activate([
+            otherTextField.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 30),
+            otherTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            otherTextFieldWidthConstraint,
+            contentView.bottomAnchor.constraint(equalTo: otherTextField.bottomAnchor, constant: 30)
+        ])
+        self.otherTextField = otherTextField
+        self.otherTextFieldWidthConstraint = otherTextFieldWidthConstraint
+
+        let commandFooter = CommandFooter()
+        commandFooter.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(commandFooter)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
+        NSLayoutConstraint.activate([
+            commandFooter.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            commandFooter.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            commandFooter.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollViewBottomConstraint
+        ])
+        self.commandFooter = commandFooter
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
+
+        let skipButton = PRKit.Button()
+        skipButton.style = .secondary
+        skipButton.setTitle("Button.skip".localized, for: .normal)
+        skipButton.addTarget(self, action: #selector(skipPressed), for: .touchUpInside)
+        commandFooter.addSubview(skipButton)
+        self.skipButton = skipButton
+
+        let continueButton = PRKit.Button()
+        continueButton.style = .primary
+        continueButton.isEnabled = false
+        continueButton.setTitle("Button.continue".localized, for: .normal)
+        continueButton.addTarget(self, action: #selector(continuePressed), for: .touchUpInside)
+        commandFooter.addSubview(continueButton)
+        self.continueButton = continueButton
 
         if view.traitCollection.horizontalSizeClass == .regular {
             otherTextFieldWidthConstraint.isActive = false
             let widthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5)
             widthConstraint.isActive = true
-            otherTextFieldWidthConstraint = widthConstraint
+            self.otherTextFieldWidthConstraint = widthConstraint
         }
         commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
-
-        otherTextField.isHidden = true
-        continueButton.isEnabled = false
 
         guard let userId = AppSettings.userId, let agencyId = AppSettings.agencyId else {
             return
@@ -90,9 +211,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
     private func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Vehicle>>) {
         switch changes {
-        case .initial:
-            fallthrough
-        case .update:
+        case .initial, .update:
             addCheckboxes()
         case .error(let error):
             presentAlert(error: error)
@@ -154,11 +273,11 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         unregisterFromKeyboardNotifications()
     }
 
-    @IBAction func skipPressed() {
+    @objc func skipPressed() {
         createAssignment(number: nil, vehicleId: nil)
     }
 
-    @IBAction func continuePressed() {
+    @objc func continuePressed() {
         var number: String?
         var vehicleId: String?
         if let text = otherTextField.text, !text.isEmpty {
