@@ -1452,7 +1452,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/peakresponse/peak-ios-prkit.git";
 			requirement = {
-				branch = main;
+				branch = "iphone-duo";
 				kind = branch;
 			};
 		};
