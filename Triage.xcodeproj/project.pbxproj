@@ -61,7 +61,6 @@
 		4566F029236CCC5700A04C75 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4566F028236CCC5700A04C75 /* Assets.xcassets */; };
 		4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F02A236CCC5700A04C75 /* LaunchScreen.storyboard */; };
 		4566F042236CCC5700A04C75 /* TriageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F041236CCC5700A04C75 /* TriageUITests.swift */; };
-		4566F053236CD05200A04C75 /* Auth.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4566F052236CD05200A04C75 /* Auth.storyboard */; };
 		4566F05C236CD2DB00A04C75 /* PRApiClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F05B236CD2DB00A04C75 /* PRApiClient.swift */; };
 		4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */; };
 		4566F063236CE18E00A04C75 /* Patient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4566F062236CE18E00A04C75 /* Patient.swift */; };
@@ -275,7 +274,6 @@
 		4566F03D236CCC5700A04C75 /* TriageUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TriageUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4566F041236CCC5700A04C75 /* TriageUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TriageUITests.swift; sourceTree = "<group>"; };
 		4566F043236CCC5700A04C75 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4566F052236CD05200A04C75 /* Auth.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Auth.storyboard; sourceTree = "<group>"; };
 		4566F05B236CD2DB00A04C75 /* PRApiClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PRApiClient.swift; sourceTree = "<group>"; };
 		4566F05E236CD57400A04C75 /* UIViewController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extensions.swift"; sourceTree = "<group>"; };
 		4566F062236CE18E00A04C75 /* Patient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Patient.swift; sourceTree = "<group>"; };
@@ -543,7 +541,6 @@
 		4566F04F236CCF5C00A04C75 /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				4566F052236CD05200A04C75 /* Auth.storyboard */,
 				45150BCD270511C30085132C /* AuthViewController.swift */,
 				4550F6DB2722347A00EEA381 /* AssignmentViewController.swift */,
 			);
@@ -876,7 +873,6 @@
 			files = (
 				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
 				452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */,
-				4566F053236CD05200A04C75 /* Auth.storyboard in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,
 				45E35A3F24FDD9F9005A8059 /* Scenes.storyboard in Resources */,
