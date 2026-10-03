@@ -52,8 +52,8 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
         let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             scrollViewBottomConstraint
         ])
         self.scrollView = scrollView
@@ -158,7 +158,6 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
             activityIndicatorView.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 24),
             activityIndicatorView.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor, constant: 2)
         ])
-        activityIndicatorView.startAnimating()
         self.activityIndicatorView = activityIndicatorView
 
         let versionLabel = UILabel()
