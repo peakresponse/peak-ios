@@ -15,6 +15,7 @@ import PRKit
     @objc optional func authViewControllerDidLogin(_ vc: AuthViewController)
 }
 
+// swiftlint:disable:next type_body_length
 class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     weak var scrollView: UIScrollView!
     weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -99,6 +100,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
 
         let emailField = PRKit.TextField()
         emailField.translatesAutoresizingMaskIntoConstraints = false
+        emailField.delegate = self
         emailField.labelText = "AuthViewController.email".localized
         emailField.placeholderText = "jane.doe@firedepartment.gov"
         emailField.keyboardType = .emailAddress
@@ -112,6 +114,7 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
 
         let passwordField = PRKit.PasswordField()
         passwordField.translatesAutoresizingMaskIntoConstraints = false
+        passwordField.delegate = self
         passwordField.labelText = "AuthViewController.password".localized
         passwordField.placeholderText = "***************"
         centerView.addSubview(passwordField)
@@ -142,17 +145,20 @@ class AuthViewController: UIViewController, AssignmentViewControllerDelegate, PR
         NSLayoutConstraint.activate([
             signInButton.topAnchor.constraint(equalTo: rememberMeCheckbox.bottomAnchor, constant: 20),
             signInButton.centerXAnchor.constraint(equalTo: centerView.centerXAnchor),
+            signInButton.widthAnchor.constraint(equalToConstant: 200),
             centerView.bottomAnchor.constraint(equalTo: signInButton.bottomAnchor)
         ])
         self.signInButton = signInButton
 
         let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.color = .white
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         centerView.addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([
-            activityIndicatorView.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 16),
-            activityIndicatorView.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor)
+            activityIndicatorView.leadingAnchor.constraint(equalTo: signInButton.leadingAnchor, constant: 24),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: signInButton.centerYAnchor, constant: 2)
         ])
+        activityIndicatorView.startAnimating()
         self.activityIndicatorView = activityIndicatorView
 
         let versionLabel = UILabel()
