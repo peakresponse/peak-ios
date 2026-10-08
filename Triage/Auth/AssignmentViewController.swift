@@ -256,10 +256,7 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
 
     override func updateFooterConstraints() {
         super.updateFooterConstraints()
-        if traitCollection.horizontalSizeClass == .compact || view.bounds.size.width < view.bounds.size.height {
-            footerViewConstraints.append(commandFooter.stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor))
-            footerViewConstraints.append(commandFooter.stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor))
-        }
+        footerViewConstraints.append(contentsOf: commandFooter.layoutConstraints(for: contentView, in: view))
     }
 
     override func viewWillAppear(_ animated: Bool) {
