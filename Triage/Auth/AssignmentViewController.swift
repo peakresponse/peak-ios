@@ -70,12 +70,12 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
 
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(scrollView)
-        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        mainView.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
             scrollViewBottomConstraint
         ])
         self.scrollView = scrollView
@@ -89,8 +89,8 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
         scrollView.addSubview(label)
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 16),
-            label.leftAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leftAnchor),
-            label.rightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.rightAnchor)
+            label.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            label.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.label = label
 
@@ -101,7 +101,7 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
         scrollView.addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([
             activityIndicatorView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 30),
-            activityIndicatorView.centerXAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerXAnchor)
+            activityIndicatorView.centerXAnchor.constraint(equalTo: label.centerXAnchor)
         ])
         activityIndicatorView.startAnimating()
         self.activityIndicatorView = activityIndicatorView
@@ -142,7 +142,7 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
             commandFooter.topAnchor.constraint(equalTo: footerView.topAnchor),
             commandFooter.leftAnchor.constraint(equalTo: footerView.leftAnchor),
             commandFooter.rightAnchor.constraint(equalTo: footerView.rightAnchor),
-            footerView.bottomAnchor.constraint(equalTo: commandFooter.bottomAnchor),
+            footerView.bottomAnchor.constraint(equalTo: commandFooter.bottomAnchor)
         ])
         self.commandFooter = commandFooter
 
@@ -200,8 +200,8 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
         }
     }
 
-    func addCheckboxes() {
-        let traitCollection = view.traitCollection
+    func addCheckboxes(_ traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? view.traitCollection
 
         otherTextFieldWidthConstraint.isActive = false
         let multiplier = traitCollection.horizontalSizeClass == .regular ? 0.5 : 1.0
@@ -272,13 +272,9 @@ class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.Form
         unregisterFromKeyboardNotifications()
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-    }
-
     override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
-        addCheckboxes()
+        addCheckboxes(newCollection)
     }
 
     @objc func skipPressed() {
