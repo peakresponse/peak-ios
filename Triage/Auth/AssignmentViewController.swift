@@ -15,15 +15,13 @@ internal import RealmSwift
     @objc optional func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String)
 }
 
-class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFooterDelegate,
-                                PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
+class AssignmentViewController: BaseViewController, CheckboxDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController {
     weak var welcomeHeader: WelcomeHeader!
     weak var activityIndicatorView: UIActivityIndicatorView!
     weak var scrollView: UIScrollView!
     weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    weak var contentView: UIView!
-    weak var containerView: UIView!
     weak var label: UILabel!
+    weak var containerView: UIView!
     weak var otherTextField: PRKit.TextField!
     weak var otherTextFieldWidthConstraint: NSLayoutConstraint!
     weak var commandFooter: CommandFooter!
@@ -36,14 +34,14 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     var notificationToken: NotificationToken?
     var results: Results<Vehicle>?
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init() {
+        super.init()
         isModalInPresentation = true
-        modalPresentationStyle = .fullScreen
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+        isModalInPresentation = true
     }
 
     deinit {
@@ -58,50 +56,41 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
         let welcomeHeader = WelcomeHeader()
         welcomeHeader.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(welcomeHeader)
+        welcomeHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(welcomeHeader)
         NSLayoutConstraint.activate([
-            welcomeHeader.topAnchor.constraint(equalTo: view.topAnchor),
-            welcomeHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            welcomeHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            welcomeHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            welcomeHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            welcomeHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: welcomeHeader.bottomAnchor),
+            welcomeHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            welcomeHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.welcomeHeader = welcomeHeader
 
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(scrollView)
+        contentView.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: welcomeHeader.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+            scrollView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollViewBottomConstraint
         ])
         self.scrollView = scrollView
-
-        let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.addSubview(contentView)
-        let contentViewWidthConstraint = contentView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-        contentViewWidthConstraint.priority = .defaultHigh
-        NSLayoutConstraint.activate([
-            contentView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentView.leadingAnchor.constraint(greaterThanOrEqualTo: scrollView.frameLayoutGuide.leadingAnchor),
-            contentView.trailingAnchor.constraint(lessThanOrEqualTo: scrollView.frameLayoutGuide.trailingAnchor),
-            contentView.centerXAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerXAnchor),
-            contentViewWidthConstraint,
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            scrollView.contentLayoutGuide.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-        ])
-        self.contentView = contentView
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
 
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "AssignmentViewController.select".localized
         label.textColor = .text
         label.font = .h4SemiBold
-        contentView.addSubview(label)
+        scrollView.addSubview(label)
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            label.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            label.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+            label.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 16),
+            label.leftAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leftAnchor),
+            label.rightAnchor.constraint(equalTo: scrollView.frameLayoutGuide.rightAnchor)
         ])
         self.label = label
 
@@ -109,10 +98,10 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.color = .base800
         activityIndicatorView.hidesWhenStopped = true
-        contentView.addSubview(activityIndicatorView)
+        scrollView.addSubview(activityIndicatorView)
         NSLayoutConstraint.activate([
             activityIndicatorView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 30),
-            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+            activityIndicatorView.centerXAnchor.constraint(equalTo: scrollView.frameLayoutGuide.centerXAnchor)
         ])
         activityIndicatorView.startAnimating()
         self.activityIndicatorView = activityIndicatorView
@@ -120,11 +109,11 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = .background
-        contentView.addSubview(containerView)
+        scrollView.addSubview(containerView)
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: label.bottomAnchor),
-            containerView.leadingAnchor.constraint(equalTo: label.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: label.trailingAnchor)
+            containerView.leftAnchor.constraint(equalTo: label.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: label.rightAnchor)
         ])
         self.containerView = containerView
 
@@ -132,29 +121,30 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         otherTextField.translatesAutoresizingMaskIntoConstraints = false
         otherTextField.isHidden = true
         otherTextField.labelText = "AssignmentViewController.other".localized
-        contentView.addSubview(otherTextField)
-        let otherTextFieldWidthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor)
+        scrollView.addSubview(otherTextField)
+        let multiplier = view.traitCollection.horizontalSizeClass == .regular ? 0.5 : 1.0
+        let otherTextFieldWidthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor,
+                                                                                  multiplier: multiplier)
         NSLayoutConstraint.activate([
             otherTextField.topAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 30),
-            otherTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            otherTextField.leftAnchor.constraint(equalTo: containerView.leftAnchor),
             otherTextFieldWidthConstraint,
-            contentView.bottomAnchor.constraint(equalTo: otherTextField.bottomAnchor, constant: 30)
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: otherTextField.bottomAnchor, constant: 30)
         ])
         self.otherTextField = otherTextField
         self.otherTextFieldWidthConstraint = otherTextFieldWidthConstraint
 
         let commandFooter = CommandFooter()
         commandFooter.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(commandFooter)
-        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
+        commandFooter.preservesSuperviewLayoutMargins = true
+        footerView.addSubview(commandFooter)
         NSLayoutConstraint.activate([
-            commandFooter.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            commandFooter.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            commandFooter.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            scrollViewBottomConstraint
+            commandFooter.topAnchor.constraint(equalTo: footerView.topAnchor),
+            commandFooter.leftAnchor.constraint(equalTo: footerView.leftAnchor),
+            commandFooter.rightAnchor.constraint(equalTo: footerView.rightAnchor),
+            footerView.bottomAnchor.constraint(equalTo: commandFooter.bottomAnchor),
         ])
         self.commandFooter = commandFooter
-        self.scrollViewBottomConstraint = scrollViewBottomConstraint
 
         let skipButton = PRKit.Button()
         skipButton.style = .secondary
@@ -170,14 +160,6 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         continueButton.addTarget(self, action: #selector(continuePressed), for: .touchUpInside)
         commandFooter.addSubview(continueButton)
         self.continueButton = continueButton
-
-        if view.traitCollection.horizontalSizeClass == .regular {
-            otherTextFieldWidthConstraint.isActive = false
-            let widthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor, multiplier: 0.5)
-            widthConstraint.isActive = true
-            self.otherTextFieldWidthConstraint = widthConstraint
-        }
-        commandFooterDidUpdateLayout(commandFooter, isOverlapping: commandFooter.isOverlapping)
 
         guard let userId = AppSettings.userId, let agencyId = AppSettings.agencyId else {
             return
@@ -219,6 +201,15 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     }
 
     func addCheckboxes() {
+        let traitCollection = view.traitCollection
+
+        otherTextFieldWidthConstraint.isActive = false
+        let multiplier = traitCollection.horizontalSizeClass == .regular ? 0.5 : 1.0
+        let widthConstraint = otherTextField.widthAnchor.constraint(equalTo: containerView.widthAnchor,
+                                                                    multiplier: multiplier)
+        widthConstraint.isActive = true
+        self.otherTextFieldWidthConstraint = widthConstraint
+
         // remove all existing views
         for subview in containerView.subviews {
             subview.removeFromSuperview()
@@ -227,7 +218,7 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
         guard let results = results else { return }
         // re-add all
-        let columns = view.traitCollection.horizontalSizeClass == .regular ? 4 : 2
+        let columns = traitCollection.horizontalSizeClass == .regular ? 4 : 2
         var stackView: UIStackView?
         let count = results.count
         for i in 0..<count {
@@ -263,6 +254,14 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         }
     }
 
+    override func updateFooterConstraints() {
+        super.updateFooterConstraints()
+        if traitCollection.horizontalSizeClass == .compact || view.bounds.size.width < view.bounds.size.height {
+            footerViewConstraints.append(commandFooter.stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor))
+            footerViewConstraints.append(commandFooter.stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor))
+        }
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         registerForKeyboardNotifications(self)
@@ -271,6 +270,15 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         unregisterFromKeyboardNotifications()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        addCheckboxes()
     }
 
     @objc func skipPressed() {
@@ -283,12 +291,10 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
         if let text = otherTextField.text, !text.isEmpty {
             number = text
         } else {
-            for checkbox in checkboxes {
-                if checkbox.isChecked {
-                    let vehicle = results?[checkbox.tag]
-                    vehicleId = vehicle?.id
-                    break
-                }
+            for checkbox in checkboxes where checkbox.isChecked {
+                let vehicle = results?[checkbox.tag]
+                vehicleId = vehicle?.id
+                break
             }
         }
         createAssignment(number: number, vehicleId: vehicleId)
@@ -317,30 +323,13 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
 
     func checkbox(_ checkbox: Checkbox, didChange isChecked: Bool) {
         if isChecked {
-            for otherCheckbox in checkboxes {
-                if otherCheckbox != checkbox {
-                    otherCheckbox.isChecked = false
-                }
+            for otherCheckbox in checkboxes where otherCheckbox != checkbox {
+                otherCheckbox.isChecked = false
             }
             otherTextField.text = nil
             _ = otherTextField.resignFirstResponder()
         }
         continueButton.isEnabled = isChecked
-    }
-
-    // MARK: - CommandFooterDelegate
-
-    func commandFooterDidUpdateLayout(_ commandFooter: CommandFooter, isOverlapping: Bool) {
-        scrollViewBottomConstraint.isActive = false
-        var constraint: NSLayoutConstraint
-        if isOverlapping {
-            constraint = scrollView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
-            constraint.isActive = true
-        } else {
-            constraint = scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-            constraint.isActive = true
-        }
-        scrollViewBottomConstraint = constraint
     }
 
     // MARK: - FormFieldDelegate
@@ -361,7 +350,9 @@ class AssignmentViewController: UIViewController, CheckboxDelegate, CommandFoote
     public func keyboardTransitionAnimation(_ state: KeyboardState) {
         switch state {
         case .activeWithHeight(let height):
-            scrollViewBottomConstraint.constant = -height + (commandFooter.isOverlapping ? commandFooter.frame.height : 0)
+            if height > 0 {
+                scrollViewBottomConstraint.constant = -height
+            }
         case .hidden:
             scrollViewBottomConstraint.constant = 0
         }
