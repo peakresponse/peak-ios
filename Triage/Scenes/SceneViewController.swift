@@ -19,7 +19,7 @@ class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.
         commandHeader.isSearchHidden = false
         commandHeader.searchField.returnKeyType = .done
         commandHeader.searchFieldDelegate = self
-        commandHeader.stackView.spacing = 10
+        commandHeader.contentView.spacing = 10
 
         let sceneButton = PRKit.Button()
         sceneButton.size = .small

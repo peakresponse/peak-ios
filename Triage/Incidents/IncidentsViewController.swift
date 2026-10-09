@@ -11,12 +11,11 @@ internal import RealmSwift
 import UIKit
 
 // swiftlint:disable:next type_body_length
-class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
     weak var eventLabel: UILabel?
     weak var sidebarTableView: SidebarTableView!
-    weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     weak var versionLabel: UILabel!
     weak var tableView: UITableView!
     weak var commandFooter: CommandFooter!
@@ -41,31 +40,33 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
 
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
         commandHeader.delegate = self
         commandHeader.searchFieldDelegate = self
-        view.addSubview(commandHeader)
+        headerView.addSubview(commandHeader)
         NSLayoutConstraint.activate([
-            commandHeader.topAnchor.constraint(equalTo: view.topAnchor),
-            commandHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            commandHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.commandHeader = commandHeader
         setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
 
         let sidebarTableView = SidebarTableView()
         sidebarTableView.translatesAutoresizingMaskIntoConstraints = false
-        sidebarTableView.dataSource = self
         sidebarTableView.delegate = self
+        sidebarTableView.dataSource = self
         view.addSubview(sidebarTableView)
-        let sidebarTableViewLeadingConstraint = sidebarTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -300)
-        NSLayoutConstraint.activate([
-            sidebarTableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-            sidebarTableViewLeadingConstraint,
-            sidebarTableView.widthAnchor.constraint(equalToConstant: 300),
+        var sidebarTableViewConstraints = [
+            sidebarTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
             sidebarTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        ]
+        sidebarTableViewConstraints.append(contentsOf: sidebarTableView.layoutConstraints(in: view))
+        NSLayoutConstraint.activate(sidebarTableViewConstraints)
         self.sidebarTableView = sidebarTableView
-        self.sidebarTableViewLeadingConstraint = sidebarTableViewLeadingConstraint
 
         let versionLabel = UILabel()
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -150,8 +151,8 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
         if traitCollection.horizontalSizeClass == .regular {
-            commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
-            commandHeader.stackView.distribution = .fillProportionally
+            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
+            commandHeader.contentView.distribution = .fillProportionally
             commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
             commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
             tableView.topAnchor.constraint(equalTo: (eventView ?? commandHeader).bottomAnchor).isActive = true
@@ -334,17 +335,6 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
         }
     }
 
-    func toggleSidebar(completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
-            if self?.sidebarTableViewLeadingConstraint.constant == 0 {
-                self?.sidebarTableViewLeadingConstraint.constant = -300
-            } else {
-                self?.sidebarTableViewLeadingConstraint.constant = 0
-            }
-            self?.view.layoutIfNeeded()
-        }, completion: completion)
-    }
-
     @objc func newPressed(_ sender: PRKit.Button) {
         let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
         presentAnimated(vc)
@@ -377,7 +367,7 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
     // MARK: - CommandHeaderDelegate
 
     func commandHeaderDidPressUser(_ header: CommandHeader) {
-        toggleSidebar()
+        sidebarTableView.toggle()
     }
 
     // MARK: - FormFieldDelegate
@@ -439,14 +429,13 @@ class IncidentsViewController: UIViewController, ActiveIncidentsViewDelegate, As
                 let vc = AssignmentViewController()
                 vc.delegate = self
                 present(vc, animated: true) { [weak self] in
-                    self?.toggleSidebar()
+                    self?.sidebarTableView.toggle()
                 }
             case 1:
                 AppSettings.eventId = nil
-                toggleSidebar { _ in
+                sidebarTableView.toggle { _ in
                     AppDelegate.enterEvents()
                 }
-                break
             case 2:
                 logout()
             default:

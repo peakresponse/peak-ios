@@ -100,8 +100,8 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         segmentedControl.addSegment(title: "EventsViewController.past".localized)
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
         if traitCollection.horizontalSizeClass == .regular {
-            commandHeader.stackView.insertArrangedSubview(segmentedControl, at: 1)
-            commandHeader.stackView.distribution = .fillProportionally
+            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
+            commandHeader.contentView.distribution = .fillProportionally
             commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
             commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
             tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor).isActive = true
