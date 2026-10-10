@@ -11,14 +11,14 @@ internal import RealmSwift
 import UIKit
 
 // swiftlint:disable:next type_body_length
-class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
-                               UITableViewDataSource, UITableViewDelegate {
+class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, AssignmentViewControllerDelegate,
+                               CommandHeaderDelegate, PRKit.FormFieldDelegate, UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
     weak var eventLabel: UILabel?
     weak var sidebarTableView: SidebarTableView!
     weak var versionLabel: UILabel!
     weak var tableView: UITableView!
-    weak var commandFooter: CommandFooter!
+    weak var addButton: RoundButton!
     weak var activeIncidentsView: ActiveIncidentsView!
     weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     weak var segmentedControl: SegmentedControl!
@@ -150,6 +150,8 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         segmentedControl.addSegment(title: "IncidentsViewController.mine".localized)
         segmentedControl.addSegment(title: "IncidentsViewController.all".localized)
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
+        self.segmentedControl = segmentedControl
+
         if traitCollection.horizontalSizeClass == .regular {
             commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
             commandHeader.contentView.distribution = .fillProportionally
@@ -174,25 +176,19 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
                 tableView.topAnchor.constraint(equalTo: containerView.bottomAnchor)
             ])
         }
-        self.segmentedControl = segmentedControl
 
-        let commandFooter = CommandFooter()
-        commandFooter.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(commandFooter)
+        let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setTitle("Button.newIncident".localized, for: .normal)
+        addButton.addTarget(self, action: #selector(newPressed(_:)), for: .touchUpInside)
+        view.addSubview(addButton)
         NSLayoutConstraint.activate([
-            commandFooter.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
-            commandFooter.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            commandFooter.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            addButton.widthAnchor.constraint(equalToConstant: 94),
+            addButton.heightAnchor.constraint(equalToConstant: 94),
+            addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
         ])
-        self.commandFooter = commandFooter
-
-        let newButton = PRKit.Button()
-        newButton.translatesAutoresizingMaskIntoConstraints = false
-        newButton.bundleImage = "Plus24px"
-        newButton.style = .primary
-        newButton.addTarget(self, action: #selector(newPressed(_:)), for: .touchUpInside)
-        newButton.setTitle("Button.newIncident".localized, for: .normal)
-        commandFooter.addSubview(newButton)
+        self.addButton = addButton
 
         let activeIncidentsView = ActiveIncidentsView()
         activeIncidentsView.translatesAutoresizingMaskIntoConstraints = false
@@ -203,7 +199,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
             activeIncidentsViewHeightConstraint,
             activeIncidentsView.leadingAnchor.constraint(equalTo: tableView.leadingAnchor),
             activeIncidentsView.trailingAnchor.constraint(equalTo: tableView.trailingAnchor),
-            activeIncidentsView.bottomAnchor.constraint(equalTo: commandFooter.topAnchor)
+            activeIncidentsView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
         self.activeIncidentsView = activeIncidentsView
         self.activeIncidentsViewHeightConstraint = activeIncidentsViewHeightConstraint
@@ -220,10 +216,10 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         var contentInset = tableView.contentInset
-        contentInset.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
+        contentInset.bottom = activeIncidentsViewHeightConstraint.constant + 16
         tableView.contentInset = contentInset
         var scrollIndicatorInsets = tableView.scrollIndicatorInsets
-        scrollIndicatorInsets.bottom = commandFooter.frame.height + activeIncidentsViewHeightConstraint.constant + 16
+        scrollIndicatorInsets.bottom = activeIncidentsViewHeightConstraint.constant + 16
         tableView.scrollIndicatorInsets = scrollIndicatorInsets
     }
 
