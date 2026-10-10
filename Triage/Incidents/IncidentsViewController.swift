@@ -22,6 +22,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
     weak var activeIncidentsView: ActiveIncidentsView!
     weak var activeIncidentsViewHeightConstraint: NSLayoutConstraint!
     weak var segmentedControl: SegmentedControl!
+    var headerConstraints: [NSLayoutConstraint] = []
 
     var eventId: String?
 
@@ -38,6 +39,8 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        headerView.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -48,7 +51,6 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
             commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
             commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
             commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
-            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor),
             commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
             commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
@@ -75,7 +77,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         versionLabel.textColor = .interactiveText
         view.addSubview(versionLabel)
         NSLayoutConstraint.activate([
-            versionLabel.leadingAnchor.constraint(equalTo: sidebarTableView.leadingAnchor, constant: 20),
+            versionLabel.leftAnchor.constraint(equalTo: sidebarTableView.leftAnchor, constant: 20),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         self.versionLabel = versionLabel
@@ -90,60 +92,61 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         tableView.delegate = self
         tableView.refreshControl = refreshControl
         tableView.register(IncidentTableViewCell.self, forCellReuseIdentifier: "Incident")
-        view.addSubview(tableView)
+        mainView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
-            tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
         ])
         self.tableView = tableView
-
-        var eventView: UIView?
-        if let eventId = eventId, let event = AppRealm.open().object(ofType: Event.self, forPrimaryKey: eventId) {
-            // start fetching event to get venue, region, and facilities, if any
-            AppRealm.getEvent(id: eventId) { _ in
-                DispatchQueue.main.async {
-                    if let venue = event.venue, let region = venue.region, let routedUrl = region.routedUrl {
-                        REDRealm.disconnect()
-                        REDRealm.deleteAll()
-                        REDApiClient.shared = REDApiClient(baseURL: routedUrl)
-                        REDRealm.connect(venue.id)
-                    }
-                }
-            }
-
-            eventView = UIView()
-            eventView?.translatesAutoresizingMaskIntoConstraints = false
-            eventView?.backgroundColor = .background
-            view.addSubview(eventView!)
-            NSLayoutConstraint.activate([
-                eventView!.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-                eventView!.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
-                eventView!.widthAnchor.constraint(equalTo: view.widthAnchor)
-            ])
-
-            let eventLabel = UILabel()
-            eventLabel.translatesAutoresizingMaskIntoConstraints = false
-            eventLabel.text = String(format: "IncidentsViewController.event".localized, event.name ?? "")
-            eventLabel.textAlignment = .center
-            eventLabel.lineBreakMode = .byTruncatingTail
-            eventLabel.adjustsFontSizeToFitWidth = false
-            eventLabel.font = .body14Bold
-            eventLabel.textColor = .headingText
-            eventView?.addSubview(eventLabel)
-            NSLayoutConstraint.activate([
-                eventLabel.topAnchor.constraint(equalTo: eventView!.topAnchor),
-                eventLabel.leadingAnchor.constraint(equalTo: eventView!.leadingAnchor, constant: 20),
-                eventLabel.trailingAnchor.constraint(equalTo: eventView!.trailingAnchor, constant: -20),
-                eventView!.bottomAnchor.constraint(equalTo: eventLabel.bottomAnchor, constant: 8)
-            ])
-            self.eventLabel = eventLabel
-        } else if let routedUrl = AppSettings.routedUrl {
-            REDRealm.disconnect()
-            REDRealm.deleteAll()
-            REDApiClient.shared = REDApiClient(baseURL: routedUrl)
-            REDRealm.connect()
-        }
+//
+//        var eventView: UIView?
+//        if let eventId = eventId, let event = AppRealm.open().object(ofType: Event.self, forPrimaryKey: eventId) {
+//            // start fetching event to get venue, region, and facilities, if any
+//            AppRealm.getEvent(id: eventId) { _ in
+//                DispatchQueue.main.async {
+//                    if let venue = event.venue, let region = venue.region, let routedUrl = region.routedUrl {
+//                        REDRealm.disconnect()
+//                        REDRealm.deleteAll()
+//                        REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+//                        REDRealm.connect(venue.id)
+//                    }
+//                }
+//            }
+//
+//            eventView = UIView()
+//            eventView?.translatesAutoresizingMaskIntoConstraints = false
+//            eventView?.backgroundColor = .background
+//            view.addSubview(eventView!)
+//            NSLayoutConstraint.activate([
+//                eventView!.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+//                eventView!.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
+//                eventView!.widthAnchor.constraint(equalTo: view.widthAnchor)
+//            ])
+//
+//            let eventLabel = UILabel()
+//            eventLabel.translatesAutoresizingMaskIntoConstraints = false
+//            eventLabel.text = String(format: "IncidentsViewController.event".localized, event.name ?? "")
+//            eventLabel.textAlignment = .center
+//            eventLabel.lineBreakMode = .byTruncatingTail
+//            eventLabel.adjustsFontSizeToFitWidth = false
+//            eventLabel.font = .body14Bold
+//            eventLabel.textColor = .headingText
+//            eventView?.addSubview(eventLabel)
+//            NSLayoutConstraint.activate([
+//                eventLabel.topAnchor.constraint(equalTo: eventView!.topAnchor),
+//                eventLabel.leadingAnchor.constraint(equalTo: eventView!.leadingAnchor, constant: 20),
+//                eventLabel.trailingAnchor.constraint(equalTo: eventView!.trailingAnchor, constant: -20),
+//                eventView!.bottomAnchor.constraint(equalTo: eventLabel.bottomAnchor, constant: 8)
+//            ])
+//            self.eventLabel = eventLabel
+//        } else if let routedUrl = AppSettings.routedUrl {
+//            REDRealm.disconnect()
+//            REDRealm.deleteAll()
+//            REDApiClient.shared = REDApiClient(baseURL: routedUrl)
+//            REDRealm.connect()
+//        }
 
         let segmentedControl = SegmentedControl()
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
@@ -152,30 +155,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
         self.segmentedControl = segmentedControl
 
-        if traitCollection.horizontalSizeClass == .regular {
-            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
-            commandHeader.contentView.distribution = .fillProportionally
-            commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            tableView.topAnchor.constraint(equalTo: (eventView ?? commandHeader).bottomAnchor).isActive = true
-        } else {
-            let containerView = UIView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            containerView.backgroundColor = .background
-            containerView.addSubview(segmentedControl)
-            view.addSubview(containerView)
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: (eventView ?? commandHeader).bottomAnchor),
-                containerView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
-                containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
-                containerView.heightAnchor.constraint(equalToConstant: 56),
-                segmentedControl.topAnchor.constraint(equalTo: containerView.topAnchor),
-                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-                containerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
-                tableView.topAnchor.constraint(equalTo: containerView.bottomAnchor)
-            ])
-        }
+        updateLayout()
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -221,6 +201,39 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         var scrollIndicatorInsets = tableView.scrollIndicatorInsets
         scrollIndicatorInsets.bottom = activeIncidentsViewHeightConstraint.constant + 16
         tableView.scrollIndicatorInsets = scrollIndicatorInsets
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        updateLayout(for: newCollection)
+    }
+
+    func updateLayout(for traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? view.traitCollection
+
+        segmentedControl.removeFromSuperview()
+        NSLayoutConstraint.deactivate(headerConstraints)
+        headerConstraints.removeAll()
+
+        if traitCollection.horizontalSizeClass == .regular {
+            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
+            commandHeader.contentView.distribution = .fill
+            headerConstraints.append(contentsOf: [
+                headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                segmentedControl.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.55),
+                commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.userButton.widthAnchor)
+            ])
+        } else {
+            commandHeader.contentView.distribution = .fillEqually
+            headerView.addSubview(segmentedControl)
+            headerConstraints.append(contentsOf: [
+                segmentedControl.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                segmentedControl.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                segmentedControl.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                headerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8)
+            ])
+        }
+        NSLayoutConstraint.activate(headerConstraints)
     }
 
     func setCommandHeaderUser(userId: String?, assignmentId: String?) {
