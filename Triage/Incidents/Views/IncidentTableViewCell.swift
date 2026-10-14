@@ -9,16 +9,20 @@
 import UIKit
 import PRKit
 
+// swiftlint:disable:next type_body_length
 class IncidentTableViewCell: UITableViewCell {
     weak var containerView: UIView!
     weak var numberLabel: UILabel!
-    weak var mciChip: Chip!
     weak var addressLabel: UILabel!
     weak var dateLabel: UILabel!
     weak var timeLabel: UILabel!
+    weak var chipStackView: UIStackView!
+    weak var mciChip: Chip!
     weak var reportsCountChip: Chip!
     weak var chevronImageView: UIImageView!
 
+    var layoutTraitCollection: UITraitCollection?
+    var layoutConstraints: [NSLayoutConstraint] = []
     var numberWidthConstraint: NSLayoutConstraint!
     var addressLeftConstraint: NSLayoutConstraint!
     var addressWidthConstraint: NSLayoutConstraint!
@@ -72,25 +76,6 @@ class IncidentTableViewCell: UITableViewCell {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(containerView)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
-                containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 28)
-            ])
-        } else {
-            let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: 860)
-            containerViewWidthConstraint.priority = .defaultHigh
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
-                containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
-                containerViewWidthConstraint,
-                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 22)
-            ])
-        }
         self.containerView = containerView
 
         let numberLabel = UILabel()
@@ -116,6 +101,7 @@ class IncidentTableViewCell: UITableViewCell {
             chevronImageView.centerYAnchor.constraint(equalTo: numberLabel.centerYAnchor, constant: 2),
             chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
+        self.chevronImageView = chevronImageView
 
         let chipStackView = UIStackView()
         chipStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -123,18 +109,7 @@ class IncidentTableViewCell: UITableViewCell {
         chipStackView.alignment = .fill
         chipStackView.spacing = 4
         containerView.addSubview(chipStackView)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
-                chipStackView.topAnchor.constraint(equalTo: chevronImageView.topAnchor, constant: 1),
-                chipStackView.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 10)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
-                chipStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor)
-            ])
-        }
+        self.chipStackView = chipStackView
 
         let reportsCountChip = Chip()
         reportsCountChip.translatesAutoresizingMaskIntoConstraints = false
@@ -160,23 +135,6 @@ class IncidentTableViewCell: UITableViewCell {
         addressLabel.textColor = .text
         addressLabel.numberOfLines = 0
         containerView.addSubview(addressLabel)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                addressLabel.topAnchor.constraint(equalTo: numberLabel.bottomAnchor),
-                addressLabel.leftAnchor.constraint(equalTo: numberLabel.leftAnchor),
-                addressLabel.rightAnchor.constraint(equalTo: chipStackView.leftAnchor, constant: -4)
-            ])
-        } else {
-            numberWidthConstraint = numberLabel.widthAnchor.constraint(equalToConstant: 190)
-            addressLeftConstraint = addressLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 200)
-            addressWidthConstraint = addressLabel.widthAnchor.constraint(equalToConstant: 250)
-            NSLayoutConstraint.activate([
-                numberWidthConstraint,
-                addressLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                addressLeftConstraint,
-                addressWidthConstraint
-            ])
-        }
         self.addressLabel = addressLabel
 
         let dateLabel = UILabel()
@@ -184,18 +142,6 @@ class IncidentTableViewCell: UITableViewCell {
         dateLabel.font = .h4
         dateLabel.textColor = .labelText
         containerView.addSubview(dateLabel)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                dateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor),
-                dateLabel.leftAnchor.constraint(equalTo: addressLabel.leftAnchor)
-            ])
-        } else {
-            dateLeftConstraint = dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 460)
-            NSLayoutConstraint.activate([
-                dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                dateLeftConstraint
-            ])
-        }
         self.dateLabel = dateLabel
 
         let timeLabel = UILabel()
@@ -204,17 +150,6 @@ class IncidentTableViewCell: UITableViewCell {
         timeLabel.textColor = .labelText
         containerView.addSubview(timeLabel)
         self.timeLabel = timeLabel
-        if isCompact {
-            NSLayoutConstraint.activate([
-                timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor),
-                timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
-                timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor)
-            ])
-        }
 
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -227,48 +162,23 @@ class IncidentTableViewCell: UITableViewCell {
             separatorView.heightAnchor.constraint(equalToConstant: 2)
         ])
 
-        if isCompact {
-            NSLayoutConstraint.activate([
-                containerView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: numberLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: addressLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: dateLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: timeLabel.bottomAnchor)
-            ])
-
-            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-            NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged),
-                                                   name: UIDevice.orientationDidChangeNotification, object: nil)
-        }
-
-        orientationChanged()
+        updateLayout()
+        resizeLayout()
     }
 
-    deinit {
-        if traitCollection.horizontalSizeClass == .regular {
-            UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        }
-    }
-
-    @objc func orientationChanged() {
+    func resizeLayout(_ size: CGSize? = nil) {
         guard traitCollection.horizontalSizeClass == .regular else { return }
-        let orientation = UIApplication.interfaceOrientation()
-        switch orientation {
-        case .portrait, .portraitUpsideDown:
+        guard let size = size ?? screen?.bounds.size else { return }
+        if size.width < size.height {
             numberWidthConstraint.constant = 190
             addressLeftConstraint.constant = 200
             addressWidthConstraint.constant = 250
             dateLeftConstraint.constant = 460
-        case .landscapeLeft, .landscapeRight:
+        } else {
             numberWidthConstraint.constant = 220
             addressLeftConstraint.constant = 260
             addressWidthConstraint.constant = 280
             dateLeftConstraint.constant = 580
-        default:
-            break
         }
     }
 
@@ -295,5 +205,66 @@ class IncidentTableViewCell: UITableViewCell {
         mciChip.isHidden = !isMCI
         reportsCountChip.color = isMCI ? .brandSecondary800 : .headingText
         reportsCount = incident.reportsCount
+    }
+
+    func updateLayout(_ traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? self.traitCollection
+        guard traitCollection.horizontalSizeClass != layoutTraitCollection?.horizontalSizeClass else { return }
+        layoutTraitCollection = traitCollection
+
+        NSLayoutConstraint.deactivate(layoutConstraints)
+        layoutConstraints.removeAll()
+
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        if isCompact {
+            layoutConstraints.append(contentsOf: [
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
+                containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 28),
+                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+                chipStackView.topAnchor.constraint(equalTo: chevronImageView.topAnchor, constant: 1),
+                chipStackView.leftAnchor.constraint(equalTo: numberLabel.rightAnchor, constant: 10),
+                addressLabel.topAnchor.constraint(equalTo: numberLabel.bottomAnchor),
+                addressLabel.leftAnchor.constraint(equalTo: numberLabel.leftAnchor),
+                addressLabel.rightAnchor.constraint(equalTo: chipStackView.leftAnchor, constant: -4),
+                dateLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor),
+                dateLabel.leftAnchor.constraint(equalTo: addressLabel.leftAnchor),
+                timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10),
+                containerView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor)
+            ])
+        } else {
+            let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: 860)
+            containerViewWidthConstraint.priority = .defaultHigh
+            numberWidthConstraint = numberLabel.widthAnchor.constraint(equalToConstant: 190)
+            addressLeftConstraint = addressLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 200)
+            addressWidthConstraint = addressLabel.widthAnchor.constraint(equalToConstant: 250)
+            dateLeftConstraint = dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 460)
+            layoutConstraints.append(contentsOf: [
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
+                containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
+                containerViewWidthConstraint,
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 22),
+                chipStackView.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor),
+                chipStackView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                numberWidthConstraint,
+                addressLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+                addressLeftConstraint,
+                addressWidthConstraint,
+                dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+                dateLeftConstraint,
+                timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: numberLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: addressLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: dateLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: timeLabel.bottomAnchor)
+            ])
+        }
+
+        NSLayoutConstraint.activate(layoutConstraints)
     }
 }

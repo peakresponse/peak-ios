@@ -206,6 +206,12 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
     override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
         super.willTransition(to: newCollection, with: coordinator)
         updateLayout(for: newCollection)
+        tableView.visibleCells.forEach { ($0 as? IncidentTableViewCell)?.updateLayout(newCollection) }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        tableView.visibleCells.forEach { ($0 as? IncidentTableViewCell)?.resizeLayout(size) }
     }
 
     func updateLayout(for traitCollection: UITraitCollection? = nil) {
@@ -425,6 +431,8 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         let cell = tableView.dequeueReusableCell(withIdentifier: "Incident", for: indexPath)
         if let cell = cell as? IncidentTableViewCell, let incident = results?[indexPath.row] {
             cell.update(from: incident)
+            cell.updateLayout()
+            cell.resizeLayout()
         }
         return cell
     }
