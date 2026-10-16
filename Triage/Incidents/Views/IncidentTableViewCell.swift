@@ -166,20 +166,9 @@ class IncidentTableViewCell: UITableViewCell {
         resizeLayout()
     }
 
-    func resizeLayout(_ size: CGSize? = nil) {
-        guard traitCollection.horizontalSizeClass == .regular else { return }
-        guard let size = size ?? screen?.bounds.size else { return }
-        if size.width < size.height {
-            numberWidthConstraint.constant = 190
-            addressLeftConstraint.constant = 200
-            addressWidthConstraint.constant = 250
-            dateLeftConstraint.constant = 460
-        } else {
-            numberWidthConstraint.constant = 220
-            addressLeftConstraint.constant = 260
-            addressWidthConstraint.constant = 280
-            dateLeftConstraint.constant = 580
-        }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateLayout()
+        resizeLayout()
     }
 
     func update(from incident: Incident) {
@@ -266,5 +255,21 @@ class IncidentTableViewCell: UITableViewCell {
         }
 
         NSLayoutConstraint.activate(layoutConstraints)
+    }
+
+    func resizeLayout(_ size: CGSize? = nil) {
+        guard layoutTraitCollection?.horizontalSizeClass == .regular else { return }
+        guard let size = size ?? screen?.bounds.size else { return }
+        if size.width < size.height {
+            numberWidthConstraint.constant = 190
+            addressLeftConstraint.constant = 200
+            addressWidthConstraint.constant = 250
+            dateLeftConstraint.constant = 460
+        } else {
+            numberWidthConstraint.constant = 220
+            addressLeftConstraint.constant = 260
+            addressWidthConstraint.constant = 280
+            dateLeftConstraint.constant = 580
+        }
     }
 }
