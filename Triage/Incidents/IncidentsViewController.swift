@@ -63,7 +63,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
         sidebarTableView.dataSource = self
         view.addSubview(sidebarTableView)
         var sidebarTableViewConstraints = [
-            sidebarTableView.topAnchor.constraint(equalTo: headerView.bottomAnchor),
+            sidebarTableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
             sidebarTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ]
         sidebarTableViewConstraints.append(contentsOf: sidebarTableView.layoutConstraints(in: view))

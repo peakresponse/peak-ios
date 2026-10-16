@@ -11,14 +11,16 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
-class EventsViewController: UIViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+// swiftlint:disable:next type_body_length
+class EventsViewController: BaseViewController, AssignmentViewControllerDelegate, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                             UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
     weak var sidebarTableView: SidebarTableView!
-    weak var sidebarTableViewLeadingConstraint: NSLayoutConstraint!
     weak var versionLabel: UILabel!
     weak var tableView: UITableView!
     weak var segmentedControl: SegmentedControl!
+    var headerConstraints: [NSLayoutConstraint] = []
+
     var isEventsOnly = false
 
     var notificationToken: NotificationToken?
@@ -29,8 +31,11 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         notificationToken?.invalidate()
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        headerView.backgroundColor = .background
 
         if let agencyId = AppSettings.agencyId, let agency = AppRealm.open().object(ofType: Agency.self, forPrimaryKey: agencyId) {
             isEventsOnly = agency.isEventsOnly ?? false
@@ -38,31 +43,32 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
 
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
         commandHeader.delegate = self
         commandHeader.searchFieldDelegate = self
-        view.addSubview(commandHeader)
+        headerView.addSubview(commandHeader)
         NSLayoutConstraint.activate([
-            commandHeader.topAnchor.constraint(equalTo: view.topAnchor),
-            commandHeader.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            commandHeader.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.commandHeader = commandHeader
         setCommandHeaderUser(userId: AppSettings.userId, assignmentId: AppSettings.assignmentId)
 
         let sidebarTableView = SidebarTableView()
         sidebarTableView.translatesAutoresizingMaskIntoConstraints = false
-        sidebarTableView.dataSource = self
         sidebarTableView.delegate = self
+        sidebarTableView.dataSource = self
         view.addSubview(sidebarTableView)
-        let sidebarTableViewLeadingConstraint = sidebarTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -300)
-        NSLayoutConstraint.activate([
+        var sidebarTableViewConstraints = [
             sidebarTableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-            sidebarTableViewLeadingConstraint,
-            sidebarTableView.widthAnchor.constraint(equalToConstant: 300),
             sidebarTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+        ]
+        sidebarTableViewConstraints.append(contentsOf: sidebarTableView.layoutConstraints(in: view))
+        NSLayoutConstraint.activate(sidebarTableViewConstraints)
         self.sidebarTableView = sidebarTableView
-        self.sidebarTableViewLeadingConstraint = sidebarTableViewLeadingConstraint
 
         let versionLabel = UILabel()
         versionLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -71,7 +77,7 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         versionLabel.textColor = .interactiveText
         view.addSubview(versionLabel)
         NSLayoutConstraint.activate([
-            versionLabel.leadingAnchor.constraint(equalTo: sidebarTableView.leadingAnchor, constant: 20),
+            versionLabel.leftAnchor.constraint(equalTo: sidebarTableView.leftAnchor, constant: 20),
             versionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         self.versionLabel = versionLabel
@@ -86,11 +92,12 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         tableView.delegate = self
         tableView.refreshControl = refreshControl
         tableView.register(EventTableViewCell.self, forCellReuseIdentifier: "Event")
-        view.addSubview(tableView)
+        mainView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
-            tableView.widthAnchor.constraint(equalTo: view.widthAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
         ])
         self.tableView = tableView
 
@@ -99,37 +106,54 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         segmentedControl.addSegment(title: "EventsViewController.current".localized)
         segmentedControl.addSegment(title: "EventsViewController.past".localized)
         segmentedControl.addTarget(self, action: #selector(performQuery), for: .valueChanged)
-        if traitCollection.horizontalSizeClass == .regular {
-            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
-            commandHeader.contentView.distribution = .fillProportionally
-            commandHeader.userButton.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.widthAnchor, multiplier: 0.25).isActive = true
-            tableView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor).isActive = true
-        } else {
-            let containerView = UIView()
-            containerView.translatesAutoresizingMaskIntoConstraints = false
-            containerView.backgroundColor = .background
-            containerView.addSubview(segmentedControl)
-            view.addSubview(containerView)
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-                containerView.leadingAnchor.constraint(equalTo: sidebarTableView.trailingAnchor),
-                containerView.widthAnchor.constraint(equalTo: view.widthAnchor),
-                containerView.heightAnchor.constraint(equalToConstant: 56),
-                segmentedControl.topAnchor.constraint(equalTo: containerView.topAnchor),
-                segmentedControl.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20),
-                segmentedControl.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20),
-                containerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor),
-                tableView.topAnchor.constraint(equalTo: containerView.bottomAnchor)
-            ])
-        }
         self.segmentedControl = segmentedControl
+
+        updateLayout()
 
         performQuery()
 
         // request an initial location on the list screen, because it can take quite a few seconds, so that
         // an accurate location is ready hopefully by the time the user needs one...
         LocationHelper.instance.requestLocation()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.willTransition(to: newCollection, with: coordinator)
+        updateLayout(for: newCollection)
+//        tableView.visibleCells.forEach { ($0 as? IncidentTableViewCell)?.updateLayout(newCollection) }
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+//        tableView.visibleCells.forEach { ($0 as? IncidentTableViewCell)?.resizeLayout(size) }
+    }
+
+    func updateLayout(for traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? view.traitCollection
+
+        segmentedControl.removeFromSuperview()
+        NSLayoutConstraint.deactivate(headerConstraints)
+        headerConstraints.removeAll()
+
+        if traitCollection.horizontalSizeClass == .regular {
+            commandHeader.contentView.insertArrangedSubview(segmentedControl, at: 1)
+            commandHeader.contentView.distribution = .fill
+            headerConstraints.append(contentsOf: [
+                headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                segmentedControl.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.55),
+                commandHeader.searchField.widthAnchor.constraint(equalTo: commandHeader.userButton.widthAnchor)
+            ])
+        } else {
+            commandHeader.contentView.distribution = .fillEqually
+            headerView.addSubview(segmentedControl)
+            headerConstraints.append(contentsOf: [
+                segmentedControl.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
+                segmentedControl.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                segmentedControl.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+                headerView.bottomAnchor.constraint(equalTo: segmentedControl.bottomAnchor, constant: 8)
+            ])
+        }
+        NSLayoutConstraint.activate(headerConstraints)
     }
 
     func setCommandHeaderUser(userId: String?, assignmentId: String?) {
@@ -225,17 +249,6 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
         }
     }
 
-    func toggleSidebar(completion: ((Bool) -> Void)? = nil) {
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
-            if self?.sidebarTableViewLeadingConstraint.constant == 0 {
-                self?.sidebarTableViewLeadingConstraint.constant = -300
-            } else {
-                self?.sidebarTableViewLeadingConstraint.constant = 0
-            }
-            self?.view.layoutIfNeeded()
-        }, completion: completion)
-    }
-
     // MARK: - AssignmentViewControllerDelegate
 
     func assignmentViewController(_ vc: AssignmentViewController, didCreate assignmentId: String) {
@@ -247,7 +260,7 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
     // MARK: - CommandHeaderDelegate
 
     func commandHeaderDidPressUser(_ header: CommandHeader) {
-        toggleSidebar()
+        sidebarTableView.toggle()
     }
 
     // MARK: - FormFieldDelegate
@@ -313,7 +326,7 @@ class EventsViewController: UIViewController, AssignmentViewControllerDelegate, 
                 let vc = AssignmentViewController()
                 vc.delegate = self
                 present(vc, animated: true) { [weak self] in
-                    self?.toggleSidebar()
+                    self?.sidebarTableView.toggle()
                 }
             case 1:
                 if isEventsOnly {
