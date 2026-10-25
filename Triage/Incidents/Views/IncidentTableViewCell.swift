@@ -9,7 +9,6 @@
 import UIKit
 import PRKit
 
-// swiftlint:disable:next type_body_length
 class IncidentTableViewCell: UITableViewCell {
     weak var containerView: UIView!
     weak var numberLabel: UILabel!
@@ -68,8 +67,6 @@ class IncidentTableViewCell: UITableViewCell {
 
     // swiftlint:disable:next function_body_length
     func commonInit() {
-        let isCompact = traitCollection.horizontalSizeClass == .compact
-
         backgroundView = UIView()
         selectedBackgroundView = UIView()
 

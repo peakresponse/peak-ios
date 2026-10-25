@@ -17,6 +17,8 @@ class EventTableViewCell: UITableViewCell {
     weak var timeLabel: UILabel!
     weak var chevronImageView: UIImageView!
 
+    var layoutTraitCollection: UITraitCollection?
+    var layoutConstraints: [NSLayoutConstraint] = []
     var nameWidthConstraint: NSLayoutConstraint!
     var venueLeftConstraint: NSLayoutConstraint!
     var venueWidthConstraint: NSLayoutConstraint!
@@ -61,25 +63,6 @@ class EventTableViewCell: UITableViewCell {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(containerView)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
-                containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 28)
-            ])
-        } else {
-            let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: 860)
-            containerViewWidthConstraint.priority = .defaultHigh
-            NSLayoutConstraint.activate([
-                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
-                containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-                containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
-                containerViewWidthConstraint,
-                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 22)
-            ])
-        }
         self.containerView = containerView
 
         let nameLabel = UILabel()
@@ -105,6 +88,7 @@ class EventTableViewCell: UITableViewCell {
             chevronImageView.centerYAnchor.constraint(equalTo: nameLabel.centerYAnchor, constant: 2),
             chevronImageView.rightAnchor.constraint(equalTo: containerView.rightAnchor)
         ])
+        self.chevronImageView = chevronImageView
 
         let venueLabel = UILabel()
         venueLabel.translatesAutoresizingMaskIntoConstraints = false
@@ -112,24 +96,6 @@ class EventTableViewCell: UITableViewCell {
         venueLabel.textColor = .text
         venueLabel.numberOfLines = 0
         containerView.addSubview(venueLabel)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                nameLabel.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor, constant: -10),
-                venueLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
-                venueLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
-                venueLabel.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor, constant: -4)
-            ])
-        } else {
-            nameWidthConstraint = nameLabel.widthAnchor.constraint(equalToConstant: 190)
-            venueLeftConstraint = venueLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 200)
-            venueWidthConstraint = venueLabel.widthAnchor.constraint(equalToConstant: 250)
-            NSLayoutConstraint.activate([
-                nameWidthConstraint,
-                venueLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                venueLeftConstraint,
-                venueWidthConstraint
-            ])
-        }
         self.venueLabel = venueLabel
 
         let dateLabel = UILabel()
@@ -137,18 +103,6 @@ class EventTableViewCell: UITableViewCell {
         dateLabel.font = .h4
         dateLabel.textColor = .labelText
         containerView.addSubview(dateLabel)
-        if isCompact {
-            NSLayoutConstraint.activate([
-                dateLabel.topAnchor.constraint(equalTo: venueLabel.bottomAnchor),
-                dateLabel.leftAnchor.constraint(equalTo: venueLabel.leftAnchor)
-            ])
-        } else {
-            dateLeftConstraint = dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 460)
-            NSLayoutConstraint.activate([
-                dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
-                dateLeftConstraint
-            ])
-        }
         self.dateLabel = dateLabel
 
         let timeLabel = UILabel()
@@ -157,17 +111,6 @@ class EventTableViewCell: UITableViewCell {
         timeLabel.textColor = .labelText
         containerView.addSubview(timeLabel)
         self.timeLabel = timeLabel
-        if isCompact {
-            NSLayoutConstraint.activate([
-                timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor),
-                timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
-                timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor)
-            ])
-        }
 
         let separatorView = UIView()
         separatorView.translatesAutoresizingMaskIntoConstraints = false
@@ -180,49 +123,13 @@ class EventTableViewCell: UITableViewCell {
             separatorView.heightAnchor.constraint(equalToConstant: 2)
         ])
 
-        if isCompact {
-            NSLayoutConstraint.activate([
-                containerView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: nameLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: venueLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: dateLabel.bottomAnchor),
-                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: timeLabel.bottomAnchor)
-            ])
-
-            UIDevice.current.beginGeneratingDeviceOrientationNotifications()
-            NotificationCenter.default.addObserver(self, selector: #selector(orientationChanged),
-                                                   name: UIDevice.orientationDidChangeNotification, object: nil)
-        }
-
-        orientationChanged()
+        updateLayout()
+        resizeLayout()
     }
 
-    deinit {
-        if traitCollection.horizontalSizeClass == .regular {
-            UIDevice.current.endGeneratingDeviceOrientationNotifications()
-        }
-    }
-
-    @objc func orientationChanged() {
-        guard traitCollection.horizontalSizeClass == .regular else { return }
-        let orientation = UIApplication.interfaceOrientation()
-        switch orientation {
-        case .portrait, .portraitUpsideDown:
-            nameWidthConstraint.constant = 190
-            venueLeftConstraint.constant = 200
-            venueWidthConstraint.constant = 250
-            dateLeftConstraint.constant = 460
-        case .landscapeLeft, .landscapeRight:
-            nameWidthConstraint.constant = 220
-            venueLeftConstraint.constant = 260
-            venueWidthConstraint.constant = 280
-            dateLeftConstraint.constant = 580
-        default:
-            break
-        }
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        updateLayout()
+        resizeLayout()
     }
 
     func update(from event: Event) {
@@ -230,5 +137,78 @@ class EventTableViewCell: UITableViewCell {
         venue = event.venue?.name
         date = event.start?.asDateString()
         time = event.start?.asTimeString()
+    }
+
+    func updateLayout(_ traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? self.traitCollection
+        guard traitCollection.horizontalSizeClass != layoutTraitCollection?.horizontalSizeClass else { return }
+        layoutTraitCollection = traitCollection
+
+        NSLayoutConstraint.deactivate(layoutConstraints)
+        layoutConstraints.removeAll()
+
+        let isCompact = traitCollection.horizontalSizeClass == .compact
+        if isCompact {
+            layoutConstraints.append(contentsOf: [
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 28),
+                containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 28),
+                nameLabel.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor, constant: -10),
+                venueLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor),
+                venueLabel.leftAnchor.constraint(equalTo: nameLabel.leftAnchor),
+                venueLabel.rightAnchor.constraint(equalTo: chevronImageView.leftAnchor, constant: -4),
+                dateLabel.topAnchor.constraint(equalTo: venueLabel.bottomAnchor),
+                dateLabel.leftAnchor.constraint(equalTo: venueLabel.leftAnchor),
+                timeLabel.firstBaselineAnchor.constraint(equalTo: dateLabel.firstBaselineAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.rightAnchor, constant: 10),
+                containerView.bottomAnchor.constraint(equalTo: dateLabel.bottomAnchor)
+            ])
+        } else {
+            let containerViewWidthConstraint = containerView.widthAnchor.constraint(equalToConstant: 860)
+            containerViewWidthConstraint.priority = .defaultHigh
+            nameWidthConstraint = nameLabel.widthAnchor.constraint(equalToConstant: 190)
+            venueLeftConstraint = venueLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 200)
+            venueWidthConstraint = venueLabel.widthAnchor.constraint(equalToConstant: 250)
+            dateLeftConstraint = dateLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 460)
+            layoutConstraints.append(contentsOf: [
+                containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 22),
+                containerView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+                containerView.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor, constant: 20),
+                containerView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor, constant: -20),
+                containerViewWidthConstraint,
+                contentView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: 22),
+                nameWidthConstraint,
+                venueLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+                venueLeftConstraint,
+                venueWidthConstraint,
+                dateLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+                dateLeftConstraint,
+                timeLabel.topAnchor.constraint(equalTo: dateLabel.bottomAnchor),
+                timeLabel.leftAnchor.constraint(equalTo: dateLabel.leftAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: nameLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: venueLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: dateLabel.bottomAnchor),
+                containerView.bottomAnchor.constraint(greaterThanOrEqualTo: timeLabel.bottomAnchor)
+            ])
+        }
+
+        NSLayoutConstraint.activate(layoutConstraints)
+    }
+
+    func resizeLayout(_ size: CGSize? = nil) {
+        guard layoutTraitCollection?.horizontalSizeClass == .regular else { return }
+        guard let size = size ?? screen?.bounds.size else { return }
+        if size.width < size.height {
+            nameWidthConstraint.constant = 190
+            venueLeftConstraint.constant = 200
+            venueWidthConstraint.constant = 250
+            dateLeftConstraint.constant = 460
+        } else {
+            nameWidthConstraint.constant = 220
+            venueLeftConstraint.constant = 260
+            venueWidthConstraint.constant = 280
+            dateLeftConstraint.constant = 580
+        }
     }
 }
