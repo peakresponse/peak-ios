@@ -358,7 +358,7 @@ class IncidentsViewController: BaseViewController, ActiveIncidentsViewDelegate, 
     }
 
     @objc func newPressed(_ sender: PRKit.Button) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
+        let vc = ReportsViewController()
         presentAnimated(vc)
     }
 

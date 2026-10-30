@@ -44,7 +44,7 @@ class ReportCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(chevronImageView)
         NSLayoutConstraint.activate([
             chevronImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            chevronImageView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            chevronImageView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor),
             chevronImageView.widthAnchor.constraint(equalToConstant: 40)
         ])
 

@@ -178,10 +178,8 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
                 AppDelegate.enterScene(id: sceneId)
             }
         } else {
-            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Reports")
-            if let vc = vc as? ReportsViewController {
-                vc.incident = incident
-            }
+            let vc = ReportsViewController()
+            vc.incident = incident
             present(vc, animated: true)
         }
     }

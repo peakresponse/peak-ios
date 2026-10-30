@@ -10,7 +10,7 @@ import Foundation
 import PRKit
 import UIKit
 
-class SceneViewController: UIViewController, PRKit.CommandHeaderDelegate, PRKit.FormFieldDelegate {
+class SceneViewController: BaseViewController, PRKit.CommandHeaderDelegate, PRKit.FormFieldDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
 
     func initSceneCommandHeader() {

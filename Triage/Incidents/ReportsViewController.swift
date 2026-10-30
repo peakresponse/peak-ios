@@ -24,6 +24,12 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     var filteredResults: Results<Report>?
     var notificationToken: NotificationToken?
 
+    override init() {
+        super.init()
+        tabBarItem.title = "TabBarItem.treat".localized
+        tabBarItem.image = UIImage(named: "Treat", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         tabBarItem.title = "TabBarItem.treat".localized
@@ -37,6 +43,49 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        commandHeader.delegate = self
+        commandHeader.searchFieldDelegate = self
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        mainView.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setTitle("Button.newIncident".localized, for: .normal)
+        addButton.addTarget(self, action: #selector(addPressed(_:)), for: .touchUpInside)
+        view.addSubview(addButton)
+        NSLayoutConstraint.activate([
+            addButton.widthAnchor.constraint(equalToConstant: 94),
+            addButton.heightAnchor.constraint(equalToConstant: 94),
+            addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+        ])
+        self.addButton = addButton
+
         if incident == nil, let sceneId = AppSettings.sceneId {
             scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
             incident = scene?.incident.first
@@ -46,8 +95,6 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         collectionView.refreshControl = refreshControl
-
-        collectionView.backgroundColor = .background
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
             layout.minimumLineSpacing = 0
