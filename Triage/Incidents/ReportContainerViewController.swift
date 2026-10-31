@@ -66,6 +66,7 @@ class ReportContainerViewController: BaseViewController, ReportViewControllerDel
 
         let segmentedControl = SegmentedControl()
         segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged(_:)), for: .valueChanged)
         stackView.addArrangedSubview(segmentedControl)
         let segmentedControlWidthConstraint = segmentedControl.widthAnchor.constraint(equalToConstant: 690)
         segmentedControlWidthConstraint.priority = .defaultHigh
