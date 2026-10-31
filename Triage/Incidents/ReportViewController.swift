@@ -27,7 +27,7 @@ let numbersExpr = try! NSRegularExpression(pattern: #"(^|\s)(\d+)\s(\d+)"#, opti
 let pausesExpr = try! NSRegularExpression(pattern: #"(^|\s|, |\. )(uh|um)(\. |, |\s)"#, options: [.caseInsensitive])
 
 // swiftlint:disable:next type_body_length
-class ReportViewController: UIViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
+class ReportViewController: BaseViewController, FormBuilder, FormViewControllerDelegate, FormsViewControllerDelegate,
                             KeyboardAwareScrollViewController, LatLngControlDelegate, LicenseScanViewControllerDelegate,
                             LocationViewControllerDelegate, RecordingFieldDelegate, RecordingViewControllerDelegate, TranscriberDelegate,
                             CallFacilitiesViewControllerDelegate, CallViewControllerDelegate {
@@ -78,19 +78,51 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .background
+        mainView.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            scrollViewBottomConstraint
+        ])
+        self.scrollView = scrollView
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
 
-        if traitCollection.horizontalSizeClass == .regular {
-            NSLayoutConstraint.activate([
-                containerView.widthAnchor.constraint(equalToConstant: 690)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                containerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
-            ])
-        }
+        let containerView = UIStackView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.axis = .vertical
+        containerView.alignment = .fill
+        containerView.distribution = .fill
+        containerView.spacing = 0
+        scrollView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        self.containerView = containerView
 
+        let commandFooter = CommandFooter()
+        commandFooter.translatesAutoresizingMaskIntoConstraints = false
+        commandFooter.preservesSuperviewLayoutMargins = true
+        footerView.addSubview(commandFooter)
+        NSLayoutConstraint.activate([
+            commandFooter.topAnchor.constraint(equalTo: footerView.topAnchor),
+            commandFooter.leftAnchor.constraint(equalTo: footerView.leftAnchor),
+            commandFooter.rightAnchor.constraint(equalTo: footerView.rightAnchor),
+            footerView.bottomAnchor.constraint(equalTo: commandFooter.bottomAnchor)
+        ])
+        self.commandFooter = commandFooter
+
+        let recordButton = RecordButton()
+        recordButton.translatesAutoresizingMaskIntoConstraints = false
+        commandFooter.addSubview(recordButton)
+        self.recordButton = recordButton
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
         var (section, cols, colA, colB) = newSection()
@@ -174,7 +206,7 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             containerView.addArrangedSubview(section)
         } else {
             let innerCols = newColumns()
-            innerCols.distribution = .fillProportionally
+            innerCols.distribution = .fill
             innerCols.spacing = 10
             addTextField(source: report, attributeKey: "response.incidentNumber",
                          keyboardType: .numbersAndPunctuation, tag: &tag, to: innerCols)
@@ -255,12 +287,10 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
             signaturesSection.addArrangedSubview(cols)
             var prevFormInstanceId: String?
             var formCount = 0
-            for (i, signature) in report.signatures.enumerated() {
-                if signature.formInstanceId != prevFormInstanceId {
-                    addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? colA : colB)
-                    prevFormInstanceId = signature.formInstanceId
-                    formCount += 1
-                }
+            for (i, signature) in report.signatures.enumerated() where signature.formInstanceId != prevFormInstanceId {
+                addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? colA : colB)
+                prevFormInstanceId = signature.formInstanceId
+                formCount += 1
             }
             var button = newButton(bundleImage: "Plus24px", title: "Button.collectSignatures".localized)
             button.addTarget(self, action: #selector(collectSignaturesPressed(_:)), for: .touchUpInside)
@@ -461,15 +491,17 @@ class ReportViewController: UIViewController, FormBuilder, FormViewControllerDel
                          attributeKey: "vitals[\(i)].bpDiastolic", attributeType: .integer, tag: &tag, to: colB)
         } else {
             let innerCols = newColumns()
-            innerCols.distribution = .fillProportionally
+            innerCols.distribution = .fill
             innerCols.spacing = 5
             addTextField(source: source, target: target,
                          attributeKey: "vitals[\(i)].bpSystolic", attributeType: .integer, tag: &tag, to: innerCols)
             let label = UILabel()
+            label.translatesAutoresizingMaskIntoConstraints = false
             label.font = .h3SemiBold
             label.textColor = .base800
             label.text = "/"
             innerCols.addArrangedSubview(label)
+            label.widthAnchor.constraint(equalToConstant: 10).isActive = true
             addTextField(source: source, target: target,
                          attributeKey: "vitals[\(i)].bpDiastolic", attributeType: .integer, tag: &tag, to: innerCols)
             colB.addArrangedSubview(innerCols)

@@ -124,23 +124,21 @@ extension UIViewController: AuthViewControllerDelegate, ReportContainerViewContr
     }
 
     func presentReport(report: Report, animated: Bool = true, completion: (() -> Void)? = nil) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "ReportContainer")
-        if let vc = vc as? ReportContainerViewController {
-            vc.delegate = self
-            vc.incident = report.incident
-            vc.report = report
-            _ = vc.view
-            if report.realm == nil {
-                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
-                                                                     style: .plain,
-                                                                     target: self,
-                                                                     action: #selector(newReportCancelled))
-            } else {
-                vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
-                                                                     style: .plain,
-                                                                     target: self,
-                                                                     action: #selector(dismissAnimated))
-            }
+        let vc = ReportContainerViewController()
+        vc.delegate = self
+        vc.incident = report.incident
+        vc.report = report
+        _ = vc.view
+        if report.realm == nil {
+            vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(newReportCancelled))
+        } else {
+            vc.commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.done".localized,
+                                                                 style: .plain,
+                                                                 target: self,
+                                                                 action: #selector(dismissAnimated))
         }
         let navVC = NavigationController(rootViewController: vc)
         navVC.isNavigationBarHidden = true

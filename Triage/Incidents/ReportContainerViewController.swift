@@ -13,8 +13,9 @@ protocol ReportContainerViewControllerDelegate: NSObject {
     func reportContainerViewControllerDidSave(_ vc: ReportContainerViewController)
 }
 
-class ReportContainerViewController: UIViewController, ReportViewControllerDelegate, RingdownViewControllerDelegate {
+class ReportContainerViewController: BaseViewController, ReportViewControllerDelegate, RingdownViewControllerDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
+    weak var stackView: UIStackView!
     @IBOutlet weak var segmentedControl: SegmentedControl!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
@@ -33,6 +34,65 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 20
+        mainView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            stackView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            stackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.stackView = stackView
+
+        let segmentedControl = SegmentedControl()
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(segmentedControl)
+        let segmentedControlWidthConstraint = segmentedControl.widthAnchor.constraint(equalToConstant: 690)
+        segmentedControlWidthConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            segmentedControl.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor),
+            segmentedControl.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor),
+            segmentedControlWidthConstraint
+        ])
+        self.segmentedControl = segmentedControl
+
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: mainView.rightAnchor)
+        ])
+        self.containerView = containerView
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+        self.activityIndicatorView = activityIndicatorView
 
         view.backgroundColor = .background
 
@@ -197,7 +257,7 @@ class ReportContainerViewController: UIViewController, ReportViewControllerDeleg
         if cachedViewControllers.count > 0 {
             vc = cachedViewControllers[0]
         } else {
-            vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Report")
+            vc = ReportViewController()
             if let vc = vc as? ReportViewController {
                 vc.delegate = self
                 vc.report = report
