@@ -123,16 +123,14 @@ class FormsViewController: BaseViewController, FormViewControllerDelegate, UITab
     // MARK: - UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Form")
-        if let vc = vc as? FormViewController {
-            let backButton = UIBarButtonItem(title: "Button.back".localized, style: .plain, target: self, action: #selector(backPressed))
-            backButton.image = UIImage(named: "ChevronLeft40px", in: PRKitBundle.instance, compatibleWith: nil)
-            vc.navigationItem.leftBarButtonItem = backButton
-            vc.delegate = self
-            vc.form = results?[indexPath.row]
-            vc.report = Report.newRecord()
-            vc.isEditing = true
-        }
+        let vc = FormViewController()
+        let backButton = UIBarButtonItem(title: "Button.back".localized, style: .plain, target: self, action: #selector(backPressed))
+        backButton.image = UIImage(named: "ChevronLeft40px", in: PRKitBundle.instance, compatibleWith: nil)
+        vc.navigationItem.leftBarButtonItem = backButton
+        vc.delegate = self
+        vc.form = results?[indexPath.row]
+        vc.report = Report.newRecord()
+        vc.isEditing = true
         navigationController?.pushViewController(vc, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }

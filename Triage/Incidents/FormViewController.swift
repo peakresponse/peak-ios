@@ -15,7 +15,7 @@ import UIKit
     @objc optional func formViewController(_ vc: FormViewController, didDelete signatures: [Signature])
 }
 
-class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollViewController, CheckboxDelegate {
+class FormViewController: BaseViewController, FormBuilder, KeyboardAwareScrollViewController, CheckboxDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -30,10 +30,52 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
     var report: Report!
     var newReport: Report?
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .background
+        mainView.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            scrollViewBottomConstraint
+        ])
+        self.scrollView = scrollView
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
+
+        let containerView = UIStackView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.axis = .vertical
+        containerView.alignment = .fill
+        containerView.distribution = .fill
+        containerView.spacing = 0
+        scrollView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        self.containerView = containerView
 
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         if isEditing {
@@ -41,17 +83,6 @@ class FormViewController: UIViewController, FormBuilder, KeyboardAwareScrollView
                 commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.delete".localized, style: .plain, target: self, action: #selector(deletePressed))
             }
             commandHeader.rightBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target: self, action: #selector(donePressed))
-        }
-
-        if traitCollection.horizontalSizeClass == .regular {
-            NSLayoutConstraint.activate([
-                containerView.widthAnchor.constraint(equalToConstant: 690)
-            ])
-        } else {
-            NSLayoutConstraint.activate([
-                containerView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-                containerView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
-            ])
         }
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
