@@ -172,16 +172,14 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
 
     @IBAction func editPressed(_ sender: Any) {
         guard let scene = scene else { return }
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
-        if let vc = vc as? LocationViewController {
-            vc.modalPresentationStyle = .fullScreen
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-            vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
-            vc.scene = scene
-            vc.newScene = Scene(clone: scene)
-            _ = vc.view
-            vc.isEditing = true
-        }
+        let vc = LocationViewController()
+        vc.modalPresentationStyle = .fullScreen
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
+        vc.scene = scene
+        vc.newScene = Scene(clone: scene)
+        _ = vc.view
+        vc.isEditing = true
         presentAnimated(vc)
     }
 

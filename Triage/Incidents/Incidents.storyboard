@@ -115,58 +115,6 @@
             </objects>
             <point key="canvasLocation" x="3056.8000000000002" y="-583.00492610837443"/>
         </scene>
-        <!--Location View Controller-->
-        <scene sceneID="w9d-Ue-CwJ">
-            <objects>
-                <viewController storyboardIdentifier="Location" id="03G-gs-gW9" customClass="LocationViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="UEc-t7-zge">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="sCe-rn-mQf" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cHZ-dA-pyd">
-                                <rect key="frame" x="0.0" y="128" width="375" height="684"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="852" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="1QR-8e-ApP">
-                                        <rect key="frame" x="0.66666666666665719" y="4" width="374" height="852"/>
-                                    </stackView>
-                                </subviews>
-                                <constraints>
-                                    <constraint firstItem="1QR-8e-ApP" firstAttribute="bottom" secondItem="qUX-iP-ze1" secondAttribute="bottom" constant="-40" id="Haf-LJ-egj"/>
-                                    <constraint firstItem="1QR-8e-ApP" firstAttribute="centerX" secondItem="cHZ-dA-pyd" secondAttribute="centerX" id="WuH-n5-5fw"/>
-                                    <constraint firstItem="qUX-iP-ze1" firstAttribute="trailing" secondItem="1QR-8e-ApP" secondAttribute="trailing" constant="20" id="hxx-YJ-DXy"/>
-                                    <constraint firstItem="1QR-8e-ApP" firstAttribute="top" secondItem="qUX-iP-ze1" secondAttribute="top" constant="4" id="pHF-MW-Vyw"/>
-                                </constraints>
-                                <viewLayoutGuide key="contentLayoutGuide" id="qUX-iP-ze1"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="mDF-uf-Qyc"/>
-                            </scrollView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="jDA-l7-DE8"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="sCe-rn-mQf" firstAttribute="leading" secondItem="UEc-t7-zge" secondAttribute="leading" id="4fD-8m-ehc"/>
-                            <constraint firstItem="cHZ-dA-pyd" firstAttribute="trailing" secondItem="UEc-t7-zge" secondAttribute="trailing" id="ARs-Jc-353"/>
-                            <constraint firstAttribute="leading" secondItem="cHZ-dA-pyd" secondAttribute="leading" id="TME-1A-33s"/>
-                            <constraint firstItem="cHZ-dA-pyd" firstAttribute="bottom" secondItem="UEc-t7-zge" secondAttribute="bottom" id="b6A-Xv-G4D"/>
-                            <constraint firstItem="cHZ-dA-pyd" firstAttribute="top" secondItem="sCe-rn-mQf" secondAttribute="bottom" id="dbn-wz-zAC"/>
-                            <constraint firstItem="sCe-rn-mQf" firstAttribute="top" secondItem="UEc-t7-zge" secondAttribute="top" id="e1b-ra-fAh"/>
-                            <constraint firstAttribute="trailing" secondItem="sCe-rn-mQf" secondAttribute="trailing" id="iWN-D3-oLY"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="commandHeader" destination="sCe-rn-mQf" id="FSZ-ay-tuj"/>
-                        <outlet property="containerView" destination="1QR-8e-ApP" id="GxT-KH-MRA"/>
-                        <outlet property="scrollView" destination="cHZ-dA-pyd" id="bPW-LR-LMU"/>
-                        <outlet property="scrollViewBottomConstraint" destination="b6A-Xv-G4D" id="G6x-g6-0sX"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dx6-Rg-kSi" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="4777" y="109"/>
-        </scene>
         <!--Scan View Controller-->
         <scene sceneID="1m9-9g-6YH">
             <objects>

@@ -1083,14 +1083,12 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
                     presentAnimated(vc)
                 }
             } else if attributeKey == "scene.address" {
-                let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
-                if let vc = vc as? LocationViewController {
-                    vc.delegate = self
-                    vc.scene = report.scene
-                    vc.newScene = newReport?.scene
-                    _ = vc.view
-                    vc.isEditing = isEditing
-                }
+                let vc = LocationViewController()
+                vc.delegate = self
+                vc.scene = report.scene
+                vc.newScene = newReport?.scene
+                _ = vc.view
+                vc.isEditing = isEditing
                 navigationController?.pushViewController(vc, animated: true)
             }
         }
