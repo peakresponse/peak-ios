@@ -29,7 +29,8 @@ class LicenseScanCameraView: UIView {
     @objc optional func licenseScanViewController(_ vc: LicenseScanViewController, didScan license: BarcodeDriverLicense)
 }
 
-class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+class LicenseScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+    weak var commandHeader: CommandHeader!
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
 
@@ -42,13 +43,59 @@ class LicenseScanViewController: UIViewController, AVCaptureVideoDataOutputSampl
 
     var incident: Incident?
 
+    override init() {
+        super.init()
+        isModalInPresentation = true
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        cameraLabel.textColor = .text
         view.backgroundColor = .background
 
-        isModal = true
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.cancel".localized, style: .done, target: self, action: #selector(dismissAnimated))
+
+        let cameraLabel = UILabel()
+        cameraLabel.translatesAutoresizingMaskIntoConstraints = false
+        cameraLabel.textColor = .text
+        cameraLabel.font = .h4SemiBold
+        cameraLabel.text = "LicenseScanViewController.scanBarcode".localized
+        contentView.addSubview(cameraLabel)
+        NSLayoutConstraint.activate([
+            cameraLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cameraLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+        self.cameraLabel = cameraLabel
+
+        let cameraView = UIView()
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        cameraView.backgroundColor = .black
+        contentView.addSubview(cameraView)
+        NSLayoutConstraint.activate([
+            cameraView.topAnchor.constraint(equalTo: cameraLabel.bottomAnchor, constant: 7),
+            cameraView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            cameraView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor, multiplier: 1.0)
+        ])
+        self.cameraView = cameraView
 
         setupCamera()
     }
