@@ -1071,20 +1071,18 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         if let attributeKey = field.attributeKey {
             if attributeKey.hasPrefix("signatures[") {
                 if let report = newReport ?? report, let signature = report.value(forKeyPath: attributeKey) as? Signature, let form = signature.form {
-                    let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Form")
-                    if let vc = vc as? FormViewController {
-                        vc.modalPresentationStyle = .fullScreen
-                        vc.form = form
-                        let newReport = Report.newRecord()
-                        newReport.signatures.append(objectsIn: report.signatures.filter { $0.formInstanceId == signature.formInstanceId })
-                        vc.report = report
-                        vc.isEditing = isEditing
-                        if !isEditing {
-                            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-                        }
-                        vc.delegate = self
-                        presentAnimated(vc)
+                    let vc = FormViewController()
+                    vc.modalPresentationStyle = .fullScreen
+                    vc.form = form
+                    let newReport = Report.newRecord()
+                    newReport.signatures.append(objectsIn: report.signatures.filter { $0.formInstanceId == signature.formInstanceId })
+                    vc.report = report
+                    vc.isEditing = isEditing
+                    if !isEditing {
+                        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
                     }
+                    vc.delegate = self
+                    presentAnimated(vc)
                 }
             } else if attributeKey == "scene.address" {
                 let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Location")
