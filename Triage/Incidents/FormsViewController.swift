@@ -15,7 +15,7 @@ internal import RealmSwift
     @objc optional func formsViewController(_ vc: FormsViewController, didCollect signatures: [Signature])
 }
 
-class FormsViewController: UIViewController, FormViewControllerDelegate, UITableViewDataSource, UITableViewDelegate {
+class FormsViewController: BaseViewController, FormViewControllerDelegate, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var tableView: UITableView!
 
@@ -30,6 +30,34 @@ class FormsViewController: UIViewController, FormViewControllerDelegate, UITable
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        mainView.addSubview(tableView)
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.tableView = tableView
 
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
                                                           style: .plain,

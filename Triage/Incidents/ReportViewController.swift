@@ -852,10 +852,8 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             delegate.reportViewControllerNeedsEditing(self)
         }
         guard newReport != nil else { return }
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Forms")
-        if let vc = vc as? FormsViewController {
-            vc.delegate = self
-        }
+        let vc = FormsViewController()
+        vc.delegate = self
         let navVC = UINavigationController(rootViewController: vc)
         navVC.modalPresentationStyle = .fullScreen
         navVC.isNavigationBarHidden = true
