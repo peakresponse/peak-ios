@@ -121,6 +121,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
 
         let recordButton = RecordButton()
         recordButton.translatesAutoresizingMaskIntoConstraints = false
+        recordButton.addTarget(self, action: #selector(recordPressed), for: .touchUpInside)
         commandFooter.addSubview(recordButton)
         self.recordButton = recordButton
 
@@ -930,9 +931,11 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             delegate.reportViewControllerNeedsEditing(self)
         }
         narrativeText = newReport?.narrative?.text
-        performSegue(withIdentifier: "Record", sender: self)
+        let vc = RecordingViewController()
+        vc.delegate = self
+        presentAnimated(vc)
     }
-
+ 
     @objc func mciPressed() {
         let modal = ModalViewController()
         modal.isDismissedOnAction = false
@@ -973,12 +976,6 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         vc.filter = HospitalTeamActivation(rawValue: (newReport ?? report)?.disposition?.hospitalTeamActivation ?? "")
         vc.delegate = self
         present(vc)
-    }
-
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let vc = segue.destination as? RecordingViewController {
-            vc.delegate = self
-        }
     }
 
     @objc func triagePriorityChanged(_ sender: TriageControl) {

@@ -33,14 +33,109 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
     private var transcriber: Transcriber!
     private var barHeightConstraints: [NSLayoutConstraint] = []
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        isModalInPresentation = true
+        modalPresentationStyle = .overCurrentContext
+        modalTransitionStyle = .coverVertical
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        isModal = true
-
+        let sheetView = UIView()
+        sheetView.translatesAutoresizingMaskIntoConstraints = false
         sheetView.backgroundColor = .primaryButtonNormal
         sheetView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         sheetView.layer.cornerRadius = 10
+        view.addSubview(sheetView)
+        NSLayoutConstraint.activate([
+            sheetView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            sheetView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            sheetView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.sheetView = sheetView
+
+        let stopButton = RecordButton()
+        stopButton.translatesAutoresizingMaskIntoConstraints = false
+        stopButton.recordState = .stopAndSave
+        sheetView.addSubview(stopButton)
+        NSLayoutConstraint.activate([
+            stopButton.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -22),
+            stopButton.leftAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leftAnchor, constant: 22),
+            stopButton.rightAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.rightAnchor, constant: -22)
+        ])
+        self.stopButton = stopButton
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        activityIndicatorView.color = .white
+        activityIndicatorView.hidesWhenStopped = true
+        sheetView.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: stopButton.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: stopButton.centerYAnchor)
+        ])
+        self.activityIndicatorView = activityIndicatorView
+
+        let spectrumStackView = UIStackView()
+        spectrumStackView.translatesAutoresizingMaskIntoConstraints = false
+        spectrumStackView.axis = .horizontal
+        spectrumStackView.alignment = .bottom
+        spectrumStackView.distribution = .equalSpacing
+        spectrumStackView.spacing = 0
+        sheetView.addSubview(spectrumStackView)
+        NSLayoutConstraint.activate([
+            spectrumStackView.heightAnchor.constraint(equalToConstant: 62),
+            spectrumStackView.bottomAnchor.constraint(equalTo: stopButton.topAnchor, constant: -22),
+            spectrumStackView.leftAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leftAnchor, constant: 38),
+            spectrumStackView.rightAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.rightAnchor, constant: -38)
+        ])
+        self.spectrumStackView = spectrumStackView
+
+        let timeLabel = UILabel()
+        timeLabel.translatesAutoresizingMaskIntoConstraints = false
+        timeLabel.font = .h3SemiBold
+        timeLabel.textColor = .white
+        timeLabel.text = "00:00:00"
+        sheetView.addSubview(timeLabel)
+        NSLayoutConstraint.activate([
+            timeLabel.bottomAnchor.constraint(equalTo: spectrumStackView.topAnchor, constant: -45),
+            timeLabel.leftAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leftAnchor, constant: 38),
+            timeLabel.rightAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.rightAnchor, constant: -38)
+        ])
+        self.timeLabel = timeLabel
+
+        let observationLabel = UILabel()
+        observationLabel.translatesAutoresizingMaskIntoConstraints = false
+        observationLabel.font = .h4SemiBold
+        observationLabel.textColor = .white
+        observationLabel.text = "RecordingViewController.observationLabel".localized
+        sheetView.addSubview(observationLabel)
+        NSLayoutConstraint.activate([
+            observationLabel.topAnchor.constraint(equalTo: sheetView.topAnchor, constant: 14),
+            observationLabel.leftAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.leftAnchor, constant: 38),
+            observationLabel.bottomAnchor.constraint(equalTo: timeLabel.topAnchor)
+        ])
+        self.observationLabel = observationLabel
+
+        let cancelButton = UIButton()
+        cancelButton.translatesAutoresizingMaskIntoConstraints = false
+        cancelButton.setTitle("Button.cancel".localized, for: .normal)
+        cancelButton.titleLabel?.font = .body14Bold
+        cancelButton.titleLabel?.textColor = .white
+        cancelButton.addTarget(self, action: #selector(cancelPressed(_:)), for: .touchUpInside)
+        sheetView.addSubview(cancelButton)
+        NSLayoutConstraint.activate([
+            cancelButton.rightAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.rightAnchor, constant: -22),
+            cancelButton.centerYAnchor.constraint(equalTo: observationLabel.centerYAnchor)
+        ])
+        self.cancelButton = cancelButton
 
         for _ in 0..<26 {
             let barView = UIView()
