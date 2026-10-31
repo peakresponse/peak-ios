@@ -123,6 +123,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         recordButton.translatesAutoresizingMaskIntoConstraints = false
         commandFooter.addSubview(recordButton)
         self.recordButton = recordButton
+
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
         var (section, cols, colA, colB) = newSection()

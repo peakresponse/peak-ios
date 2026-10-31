@@ -18,7 +18,7 @@ protocol RingdownViewControllerDelegate: AnyObject {
 }
 
 // swiftlint:disable:next type_body_length
-class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
+class RingdownViewController: BaseViewController, CheckboxDelegate, FormBuilder, KeyboardAwareScrollViewController,
                               RingdownFacilityViewDelegate, RingdownStatusViewDelegate, AgoraRtmClientDelegate, CallViewControllerDelegate {
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
@@ -83,14 +83,174 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         rtmKit = nil
     }
 
+    // swiftlint:disable:next function_body_length
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = .background
+        mainView.addSubview(scrollView)
+        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            scrollViewBottomConstraint
+        ])
+        self.scrollView = scrollView
+        self.scrollViewBottomConstraint = scrollViewBottomConstraint
 
-        if report.ringdownId == nil {
-            activityIndicatorView.stopAnimating()
+        let containerView = UIStackView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.axis = .vertical
+        containerView.alignment = .fill
+        containerView.distribution = .fill
+        containerView.spacing = 0
+        scrollView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
+            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        self.containerView = containerView
+
+        footerView.isHidden = true
+
+        let commandFooter = CommandFooter()
+        commandFooter.translatesAutoresizingMaskIntoConstraints = false
+        commandFooter.preservesSuperviewLayoutMargins = true
+        footerView.addSubview(commandFooter)
+        NSLayoutConstraint.activate([
+            commandFooter.topAnchor.constraint(equalTo: footerView.topAnchor),
+            commandFooter.leftAnchor.constraint(equalTo: footerView.leftAnchor),
+            commandFooter.rightAnchor.constraint(equalTo: footerView.rightAnchor),
+            footerView.bottomAnchor.constraint(equalTo: commandFooter.bottomAnchor)
+        ])
+        self.commandFooter = commandFooter
+
+        let actionButton = PRKit.Button()
+        actionButton.translatesAutoresizingMaskIntoConstraints = false
+        actionButton.style = .primary
+        commandFooter.addSubview(actionButton)
+        self.actionButton = actionButton
+
+        let activityIndicatorView = UIActivityIndicatorView(style: .large)
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            activityIndicatorView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+        self.activityIndicatorView = activityIndicatorView
+        if report.ringdownId != nil {
+            activityIndicatorView.startAnimating()
         }
+
+        let checkboxesView = UIStackView()
+        checkboxesView.translatesAutoresizingMaskIntoConstraints = false
+        checkboxesView.alignment = .top
+        checkboxesView.distribution = .fillEqually
+        checkboxesView.spacing = 0
+        containerView.addArrangedSubview(checkboxesView)
+        self.checkboxesView = checkboxesView
+
+        var checkboxView = UIView()
+        checkboxView.translatesAutoresizingMaskIntoConstraints = false
+        checkboxesView.addArrangedSubview(checkboxView)
+
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .h4SemiBold
+        label.textColor = .base500
+        label.text = "RingdownViewController.urgency".localized
+        checkboxView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: checkboxView.topAnchor, constant: 16),
+            label.leftAnchor.constraint(equalTo: checkboxView.leftAnchor),
+            label.rightAnchor.constraint(lessThanOrEqualTo: checkboxView.rightAnchor)
+        ])
+
+        let code2Checkbox = Checkbox()
+        code2Checkbox.translatesAutoresizingMaskIntoConstraints = false
+        code2Checkbox.delegate = self
+        code2Checkbox.isRadioButton = true
+        code2Checkbox.labelText = "RingdownViewController.urgency.code2".localized
+        checkboxView.addSubview(code2Checkbox)
+        NSLayoutConstraint.activate([
+            code2Checkbox.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
+            code2Checkbox.leftAnchor.constraint(equalTo: label.leftAnchor),
+            code2Checkbox.rightAnchor.constraint(equalTo: checkboxView.rightAnchor, constant: -20)
+        ])
+        self.code2Checkbox = code2Checkbox
+
+        let code3Checkbox = Checkbox()
+        code3Checkbox.translatesAutoresizingMaskIntoConstraints = false
+        code3Checkbox.delegate = self
+        code3Checkbox.isRadioButton = true
+        code3Checkbox.labelText = "RingdownViewController.urgency.code3".localized
+        checkboxView.addSubview(code3Checkbox)
+        NSLayoutConstraint.activate([
+            code3Checkbox.topAnchor.constraint(equalTo: code2Checkbox.bottomAnchor, constant: 12),
+            code3Checkbox.leftAnchor.constraint(equalTo: code2Checkbox.leftAnchor),
+            code3Checkbox.rightAnchor.constraint(equalTo: code2Checkbox.rightAnchor),
+            checkboxView.bottomAnchor.constraint(equalTo: code3Checkbox.bottomAnchor, constant: 12)
+        ])
+        self.code3Checkbox = code3Checkbox
+
+        checkboxView = UIView()
+        checkboxView.translatesAutoresizingMaskIntoConstraints = false
+        checkboxesView.addArrangedSubview(checkboxView)
+
+        let vr = PixelRuleView()
+        vr.translatesAutoresizingMaskIntoConstraints = false
+        vr.widthAnchor.constraint(equalToConstant: 1).isActive = true
+        checkboxesView.addSubview(vr)
+        NSLayoutConstraint.activate([
+            vr.topAnchor.constraint(equalTo: checkboxView.topAnchor, constant: 16),
+            vr.leftAnchor.constraint(equalTo: checkboxView.leftAnchor),
+            vr.bottomAnchor.constraint(equalTo: checkboxView.bottomAnchor)
+        ])
+
+        label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .h4SemiBold
+        label.textColor = .base500
+        label.text = "RingdownViewController.stability".localized
+        checkboxView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: checkboxView.topAnchor, constant: 16),
+            label.leftAnchor.constraint(equalTo: checkboxView.leftAnchor),
+            label.rightAnchor.constraint(lessThanOrEqualTo: checkboxView.rightAnchor)
+        ])
+
+        let stableCheckbox = Checkbox()
+        stableCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        stableCheckbox.delegate = self
+        stableCheckbox.isRadioButton = true
+        stableCheckbox.labelText = "RingdownViewController.stability.stable".localized
+        checkboxView.addSubview(stableCheckbox)
+        NSLayoutConstraint.activate([
+            stableCheckbox.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 12),
+            stableCheckbox.leftAnchor.constraint(equalTo: label.leftAnchor),
+            stableCheckbox.rightAnchor.constraint(equalTo: checkboxView.rightAnchor, constant: -20)
+        ])
+        self.stableCheckbox = stableCheckbox
+
+        let unstableCheckbox = Checkbox()
+        unstableCheckbox.translatesAutoresizingMaskIntoConstraints = false
+        unstableCheckbox.delegate = self
+        unstableCheckbox.isRadioButton = true
+        unstableCheckbox.labelText = "RingdownViewController.stability.unstable".localized
+        checkboxView.addSubview(unstableCheckbox)
+        NSLayoutConstraint.activate([
+            unstableCheckbox.topAnchor.constraint(equalTo: stableCheckbox.bottomAnchor, constant: 12),
+            unstableCheckbox.leftAnchor.constraint(equalTo: stableCheckbox.leftAnchor),
+            unstableCheckbox.rightAnchor.constraint(equalTo: stableCheckbox.rightAnchor),
+            checkboxView.bottomAnchor.constraint(equalTo: unstableCheckbox.bottomAnchor, constant: 12)
+        ])
+        self.unstableCheckbox = unstableCheckbox
 
         codeCheckboxes = [code2Checkbox, code3Checkbox]
         stabilityCheckboxes = [stableCheckbox, unstableCheckbox]
@@ -255,7 +415,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
             ringdownStatusView.cancelButton.isEnabled = true
             ringdownStatusView.redirectButton.isEnabled = true
         } else {
-            hideCommandFooter()
+            hideFooter()
             for checkbox in codeCheckboxes {
                 checkbox.isEnabled = false
             }
@@ -270,31 +430,18 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
         }
     }
 
-    func showCommandFooter() {
-        commandFooter.isHidden = false
-        let inset = UIEdgeInsets(top: 0, left: 0, bottom: commandFooter.frame.height, right: 0)
-        scrollView.contentInset = inset
-        scrollView.scrollIndicatorInsets = inset
-    }
-
-    func hideCommandFooter() {
-        commandFooter.isHidden = true
-        scrollView.contentInset = .zero
-        scrollView.scrollIndicatorInsets = .zero
-    }
-
     func showRingdown() {
         guard let ringdown = ringdown else { return }
         ringdownStatusView.update(from: ringdown)
         facilitiesSection.isHidden = true
         ringdownSection.isHidden = false
         if isEditing {
-            showCommandFooter()
+            showFooter()
         }
         activityIndicatorView.stopAnimating()
         let timestamps = ringdown.timestamps
         if timestamps[RingdownStatus.returnedToService.rawValue] != nil {
-            hideCommandFooter()
+            hideFooter()
         } else if timestamps[RingdownStatus.offloaded.rawValue] != nil {
             actionButton.setTitle("Button.returnToService".localized, for: .normal)
         } else if timestamps[RingdownStatus.arrived.rawValue] != nil {
@@ -310,7 +457,7 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
             facilityView.isSelected = false
         }
         facilitiesSection.isHidden = false
-        hideCommandFooter()
+        hideFooter()
     }
 
     func validateRingdown() {
@@ -523,10 +670,10 @@ class RingdownViewController: UIViewController, CheckboxDelegate, FormBuilder, K
     func ringdownFacilityView(_ view: RingdownFacilityView, didChangeEta eta: String?) {
         if let eta = eta, Int(eta) != nil {
             actionButton.setTitle("Button.sendRingdown".localized, for: .normal)
-            showCommandFooter()
+            showFooter()
             validateRingdown()
         } else {
-            hideCommandFooter()
+            hideFooter()
         }
     }
 

@@ -309,7 +309,7 @@ class ReportContainerViewController: BaseViewController, ReportViewControllerDel
         if cachedViewControllers.count > 1 {
             vc = cachedViewControllers[1]
         } else {
-            vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Ringdown")
+            vc = RingdownViewController()
             if let vc = vc as? RingdownViewController {
                 vc.delegate = self
                 vc.report = report
