@@ -132,7 +132,6 @@
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
-		45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 45C007C8272A02530072FF18 /* Incidents.storyboard */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
 		45C207D62B9B8A2400150184 /* TransportCartResponderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */; };
 		45C207D82B9BAB7E00150184 /* RegionFacility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207D72B9BAB7E00150184 /* RegionFacility.swift */; };
@@ -332,7 +331,6 @@
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
-		45C007C8272A02530072FF18 /* Incidents.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Incidents.storyboard; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
 		45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportCartResponderField.swift; sourceTree = "<group>"; };
 		45C207D72B9BAB7E00150184 /* RegionFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionFacility.swift; sourceTree = "<group>"; };
@@ -655,7 +653,6 @@
 				455588202DC9370700EA21A9 /* EventsViewController.swift */,
 				454F9CA728D3E278009F7115 /* FormViewController.swift */,
 				454F9CA328D3D088009F7115 /* FormsViewController.swift */,
-				45C007C8272A02530072FF18 /* Incidents.storyboard */,
 				45C007CA272A02640072FF18 /* IncidentsViewController.swift */,
 				451BE08E2DA9F0A1007BC936 /* LicenseScanViewController.swift */,
 				45C9C70929035685005D0FDD /* LocationViewController.swift */,
@@ -868,7 +865,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				45C007C9272A02530072FF18 /* Incidents.storyboard in Resources */,
 				452FBE0E276D5EE600874DF0 /* SNOMED.realm in Resources */,
 				4566F077236D450400A04C75 /* Localizable.strings in Resources */,
 				4566F02C236CCC5700A04C75 /* LaunchScreen.storyboard in Resources */,

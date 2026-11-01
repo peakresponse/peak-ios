@@ -1155,10 +1155,8 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     // MARK: - LatLngControlDelegate
 
     func latLngControlMapPressed(_ control: LatLngControl) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "ReportMap")
-        if let vc = vc as? ReportMapViewController {
-            vc.report = newReport ?? report
-        }
+        let vc = ReportMapViewController()
+        vc.report = newReport ?? report
         presentAnimated(vc)
     }
 
