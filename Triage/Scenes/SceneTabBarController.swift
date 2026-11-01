@@ -38,7 +38,7 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
             TriageViewController(),
             ReportsViewController(),
             RespondersViewController(),
-            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Transport"),
+            TransportViewController(),
             ReunifyViewController()
         ]
 

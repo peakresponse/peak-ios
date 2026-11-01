@@ -26,6 +26,7 @@ protocol TransportCartViewController: UIViewController {
 class TransportViewController: SceneViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
                                TransportFacilitiesViewControllerDelegate, TransportConfirmViewControllerDelegate {
     @IBOutlet weak var segmentedControl: SegmentedControl!
+    weak var stackView: UIStackView!
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var overlayView: UIView!
 
@@ -34,17 +35,86 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
     var incident: Incident?
     var cart = TransportCart()
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    override init() {
+        super.init()
         tabBarItem.title = "TabBarItem.transport".localized
         tabBarItem.image = UIImage(named: "Transport", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .background
+
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        commandHeader.delegate = self
+        commandHeader.searchFieldDelegate = self
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 0
+        mainView.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            stackView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            stackView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.stackView = stackView
+
+        let segmentedControl = SegmentedControl()
+        segmentedControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentedControl.addTarget(self, action: #selector(segmentedControlChanged(_:)), for: .valueChanged)
+        stackView.addArrangedSubview(segmentedControl)
+        let segmentedControlWidthConstraint = segmentedControl.widthAnchor.constraint(equalToConstant: 690)
+        segmentedControlWidthConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            segmentedControl.leftAnchor.constraint(greaterThanOrEqualTo: contentView.leftAnchor),
+            segmentedControl.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor),
+            segmentedControlWidthConstraint
+        ])
+        self.segmentedControl = segmentedControl
+
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.addArrangedSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            containerView.rightAnchor.constraint(equalTo: mainView.rightAnchor)
+        ])
+        self.containerView = containerView
+
+        let overlayView = UIView()
+        overlayView.translatesAutoresizingMaskIntoConstraints = false
         overlayView.backgroundColor = .modalBackdrop
+        overlayView.isHidden = true
+        view.addSubview(overlayView)
+        NSLayoutConstraint.activate([
+            overlayView.topAnchor.constraint(equalTo: view.topAnchor),
+            overlayView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            overlayView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            overlayView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.overlayView = overlayView
 
         initSceneCommandHeader()
 
