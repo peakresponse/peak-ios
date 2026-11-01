@@ -11,7 +11,7 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,
+class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var collectionView: UICollectionView!
@@ -23,10 +23,14 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     var scene: Scene?
     var responders: [Responder]?
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    override init() {
+        super.init()
         tabBarItem.title = "TabBarItem.rolesResources".localized
         tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -42,24 +46,51 @@ class SceneOverviewViewController: UIViewController, CommandHeaderDelegate, PRKi
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.backgroundColor = .background
-
-        commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        commandHeader.delegate = self
         commandHeader.searchFieldDelegate = self
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
 
-        formInputAccessoryView = FormInputAccessoryView(rootView: view)
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = CGSize(width: 372, height: 136)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        collectionView.setCollectionViewLayout(layout, animated: false)
 
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.refreshControl = refreshControl
-
+        collectionView.register(SceneOverviewHeaderCell.self, forCellWithReuseIdentifier: "SceneOverviewHeader")
         collectionView.register(ResponderRoleCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+        mainView.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
+        commandHeader.searchFieldDelegate = self
+
+        formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
         performQuery()
     }
