@@ -295,11 +295,12 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let responder = filteredResults?[indexPath.row] else { return }
         if isEditing && responder.user == nil && responder.vehicle == nil {
-            let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
-            if let vc = vc as? ResponderViewController, let responder = filteredResults?[indexPath.row] {
+            let vc = ResponderViewController()
+            if let responder = filteredResults?[indexPath.row] {
                 vc.delegate = self
                 vc.responder = responder
-                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+                vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain,
+                                                                      target: self, action: #selector(dismissAnimated))
                 vc.isEditing = true
             }
             presentAnimated(vc)
@@ -309,14 +310,16 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         if traitCollection.horizontalSizeClass == .regular {
             return CGSize(width: 372, height: 125)
         }
         return CGSize(width: view.frame.width, height: 125)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: 0, height: 60)
     }
 }
