@@ -31,9 +31,7 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     }
 
     required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        tabBarItem.title = "TabBarItem.treat".localized
-        tabBarItem.image = UIImage(named: "Treat", in: PRKitBundle.instance, compatibleWith: nil)
+        fatalError("init(coder:) has not been implemented")
     }
 
     deinit {

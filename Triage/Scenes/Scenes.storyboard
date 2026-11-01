@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="24128" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="25408" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="24063"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="25406"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -11,113 +11,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Triage View Controller-->
-        <scene sceneID="vSr-FF-QCy">
-            <objects>
-                <viewController storyboardIdentifier="Triage" id="W8o-Cx-Ace" userLabel="Triage View Controller" customClass="TriageViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Gz5-iS-mb5">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="240" placeholderIntrinsicHeight="128" translatesAutoresizingMaskIntoConstraints="NO" id="E9o-ja-RVR" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="128"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="r5Y-cn-9Es">
-                                <rect key="frame" x="0.0" y="128" width="414" height="768"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="20" minimumInteritemSpacing="20" id="O6a-Nu-deA">
-                                    <size key="itemSize" width="50" height="50"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="20" minY="20" maxX="20" maxY="20"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="TriageCounter" id="LME-6G-1lm" customClass="TriageCounterCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="20" y="20" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="zFO-85-aFy">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Xcw-sf-Ybn" customClass="CounterControl" customModule="PRKit">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                                    <connections>
-                                                        <action selector="counterValueChanged:" destination="LME-6G-1lm" eventType="valueChanged" id="BWK-9J-jxu"/>
-                                                    </connections>
-                                                </view>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="Xcw-sf-Ybn" firstAttribute="top" secondItem="zFO-85-aFy" secondAttribute="top" id="0Vo-x5-mas"/>
-                                                <constraint firstAttribute="trailing" secondItem="Xcw-sf-Ybn" secondAttribute="trailing" id="GQh-XN-6Gu"/>
-                                                <constraint firstAttribute="bottom" secondItem="Xcw-sf-Ybn" secondAttribute="bottom" id="RfE-6X-dUd"/>
-                                                <constraint firstItem="Xcw-sf-Ybn" firstAttribute="leading" secondItem="zFO-85-aFy" secondAttribute="leading" id="xZZ-Ap-wX3"/>
-                                            </constraints>
-                                        </collectionViewCellContentView>
-                                        <connections>
-                                            <outlet property="counterControl" destination="Xcw-sf-Ybn" id="gu7-tC-Uvh"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="TriageHeader" id="RCh-Jd-qdd" customClass="TriageHeaderCell" customModule="Peak_Response" customModuleProvider="target">
-                                        <rect key="frame" x="90" y="31.5" width="42" height="27"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="6LV-Hl-TfL">
-                                            <rect key="frame" x="0.0" y="0.0" width="42" height="27"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nat-JE-0PM">
-                                                    <rect key="frame" x="0.0" y="6" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" name="Base800"/>
-                                                    <nil key="highlightedColor"/>
-                                                    <userDefinedRuntimeAttributes>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="customFont" value="h3SemiBold"/>
-                                                        <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="SceneOverviewTriageTotalCell.headerLabel"/>
-                                                    </userDefinedRuntimeAttributes>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="bottom" secondItem="nat-JE-0PM" secondAttribute="bottom" id="Myl-6N-zDo"/>
-                                                <constraint firstItem="nat-JE-0PM" firstAttribute="leading" secondItem="6LV-Hl-TfL" secondAttribute="leading" id="QXW-Xq-qjV"/>
-                                                <constraint firstItem="nat-JE-0PM" firstAttribute="top" secondItem="6LV-Hl-TfL" secondAttribute="top" constant="6" id="btl-vG-6Ff"/>
-                                                <constraint firstAttribute="trailing" secondItem="nat-JE-0PM" secondAttribute="trailing" id="kjH-bY-DFq"/>
-                                            </constraints>
-                                        </collectionViewCellContentView>
-                                        <connections>
-                                            <outlet property="headerLabel" destination="nat-JE-0PM" id="DSy-e2-XL0"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="W8o-Cx-Ace" id="1NR-OL-Ma0"/>
-                                    <outlet property="delegate" destination="W8o-Cx-Ace" id="J9r-Od-vII"/>
-                                </connections>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="r9g-bQ-4Qr"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="E9o-ja-RVR" firstAttribute="leading" secondItem="Gz5-iS-mb5" secondAttribute="leading" id="B54-hg-lXp"/>
-                            <constraint firstItem="r5Y-cn-9Es" firstAttribute="leading" secondItem="Gz5-iS-mb5" secondAttribute="leading" id="BBk-iN-zDv"/>
-                            <constraint firstAttribute="trailing" secondItem="E9o-ja-RVR" secondAttribute="trailing" id="avp-q7-juc"/>
-                            <constraint firstAttribute="bottom" secondItem="r5Y-cn-9Es" secondAttribute="bottom" id="bA5-qV-Rpd"/>
-                            <constraint firstAttribute="trailing" secondItem="r5Y-cn-9Es" secondAttribute="trailing" id="mlc-YA-cCs"/>
-                            <constraint firstItem="E9o-ja-RVR" firstAttribute="top" secondItem="Gz5-iS-mb5" secondAttribute="top" id="vLb-j2-fOD"/>
-                            <constraint firstItem="r5Y-cn-9Es" firstAttribute="top" secondItem="E9o-ja-RVR" secondAttribute="bottom" id="zbj-oS-pYP"/>
-                        </constraints>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Overview" id="0N0-89-CUH"/>
-                    <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
-                    <connections>
-                        <outlet property="collectionView" destination="r5Y-cn-9Es" id="Erx-Li-Ufc"/>
-                        <outlet property="commandHeader" destination="E9o-ja-RVR" id="gwc-oE-DhM"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="w9H-bb-aX4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-471.01449275362324" y="1674.7767857142856"/>
-        </scene>
         <!--Scene Map View Controller-->
         <scene sceneID="MDj-47-IpO">
             <objects>
@@ -236,10 +129,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="100" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="U7k-Pt-zPa">
-                                <rect key="frame" x="20" y="96" width="374" height="100"/>
+                                <rect key="frame" x="20" y="48" width="374" height="100"/>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="rgP-Ya-pzu">
-                                <rect key="frame" x="0.0" y="202" width="414" height="694"/>
+                                <rect key="frame" x="0.0" y="154" width="414" height="742"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="tM5-ut-Gqs">
                                     <size key="itemSize" width="128" height="128"/>
@@ -254,7 +147,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="c9i-vy-ee4" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="300" y="714" width="94" height="94"/>
+                                <rect key="frame" x="300" y="748" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="Xu6-wV-6Jq"/>
                                     <constraint firstAttribute="width" secondItem="c9i-vy-ee4" secondAttribute="height" multiplier="1:1" id="lNB-yP-1Xs"/>
@@ -302,10 +195,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="374" placeholderIntrinsicHeight="100" axis="vertical" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="wWZ-JZ-eVL">
-                                <rect key="frame" x="20" y="96" width="374" height="100"/>
+                                <rect key="frame" x="20" y="48" width="374" height="100"/>
                             </stackView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="74I-1O-Yyb">
-                                <rect key="frame" x="0.0" y="202" width="414" height="694"/>
+                                <rect key="frame" x="0.0" y="154" width="414" height="742"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gsJ-hC-hqj">
                                     <size key="itemSize" width="128" height="128"/>
@@ -320,7 +213,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hCu-dR-eRF" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="300" y="714" width="94" height="94"/>
+                                <rect key="frame" x="300" y="748" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="sI6-FZ-D01"/>
                                     <constraint firstAttribute="width" secondItem="hCu-dR-eRF" secondAttribute="height" multiplier="1:1" id="yYx-hG-OJH"/>
@@ -375,7 +268,7 @@
                                 </connections>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lkj-tn-czz">
-                                <rect key="frame" x="0.0" y="490" width="414" height="406"/>
+                                <rect key="frame" x="0.0" y="524" width="414" height="372"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" placeholderIntrinsicWidth="414" placeholderIntrinsicHeight="44" translatesAutoresizingMaskIntoConstraints="NO" id="thk-xS-Fp9" customClass="CommandHeader" customModule="PRKit">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
@@ -470,7 +363,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Eym-Ue-ZTn" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="300" y="714" width="94" height="94"/>
+                                <rect key="frame" x="300" y="748" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="94" id="9k3-IR-6Q8"/>
                                     <constraint firstAttribute="width" secondItem="Eym-Ue-ZTn" secondAttribute="height" multiplier="1:1" id="oVS-Op-rrP"/>
@@ -533,7 +426,7 @@
                                 </connections>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0nM-Ze-ajC" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="300" y="714" width="94" height="94"/>
+                                <rect key="frame" x="300" y="748" width="94" height="94"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="0nM-Ze-ajC" secondAttribute="height" multiplier="1:1" id="9MF-fJ-yZy"/>
                                     <constraint firstAttribute="width" constant="94" id="Y9j-xr-KQZ"/>
@@ -726,76 +619,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LU9-A6-pSf" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2448" y="1675"/>
-        </scene>
-        <!--Responders View Controller-->
-        <scene sceneID="rC6-u4-ZEo">
-            <objects>
-                <viewController storyboardIdentifier="Responders" id="8Nk-oE-kZt" customClass="RespondersViewController" customModule="Peak_Response" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="39j-Qq-y6N">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="125" translatesAutoresizingMaskIntoConstraints="NO" id="UAi-ty-rOQ" customClass="CommandHeader" customModule="PRKit">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="125"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="boolean" keyPath="isSearchHidden" value="NO"/>
-                                </userDefinedRuntimeAttributes>
-                            </view>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="SRY-eg-ypT">
-                                <rect key="frame" x="0.0" y="125" width="414" height="771"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="QYp-38-qBL">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells/>
-                                <connections>
-                                    <outlet property="dataSource" destination="8Nk-oE-kZt" id="DHS-Zt-3Vm"/>
-                                    <outlet property="delegate" destination="8Nk-oE-kZt" id="pc8-1L-Nsp"/>
-                                </connections>
-                            </collectionView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcm-KX-kHZ" customClass="RoundButton" customModule="PRKit">
-                                <rect key="frame" x="300" y="714" width="94" height="94"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="94" id="ZUl-hQ-dZO"/>
-                                    <constraint firstAttribute="width" secondItem="lcm-KX-kHZ" secondAttribute="height" multiplier="1:1" id="kwH-QT-G6e"/>
-                                </constraints>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="Button"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="l10nKey" value="Button.addUnit"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="addPressed:" destination="8Nk-oE-kZt" eventType="touchUpInside" id="xgB-Ct-1Uf"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="8sl-nQ-7bE"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <constraints>
-                            <constraint firstItem="SRY-eg-ypT" firstAttribute="top" secondItem="UAi-ty-rOQ" secondAttribute="bottom" id="1Ri-MX-yyL"/>
-                            <constraint firstItem="UAi-ty-rOQ" firstAttribute="top" secondItem="39j-Qq-y6N" secondAttribute="top" id="24n-ga-Iwp"/>
-                            <constraint firstItem="UAi-ty-rOQ" firstAttribute="leading" secondItem="39j-Qq-y6N" secondAttribute="leading" id="BxH-SU-9Gh"/>
-                            <constraint firstItem="lcm-KX-kHZ" firstAttribute="trailing" secondItem="8sl-nQ-7bE" secondAttribute="trailing" constant="-20" id="CWa-zT-WT8"/>
-                            <constraint firstItem="lcm-KX-kHZ" firstAttribute="bottom" secondItem="8sl-nQ-7bE" secondAttribute="bottom" constant="-20" id="OOW-m2-hx7"/>
-                            <constraint firstAttribute="bottom" secondItem="SRY-eg-ypT" secondAttribute="bottom" id="YNP-PW-22U"/>
-                            <constraint firstItem="SRY-eg-ypT" firstAttribute="leading" secondItem="39j-Qq-y6N" secondAttribute="leading" id="awC-Ri-VVg"/>
-                            <constraint firstAttribute="trailing" secondItem="SRY-eg-ypT" secondAttribute="trailing" id="fum-m7-mfX"/>
-                            <constraint firstAttribute="trailing" secondItem="UAi-ty-rOQ" secondAttribute="trailing" id="qoa-si-T4o"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="addButton" destination="lcm-KX-kHZ" id="en6-51-1hY"/>
-                        <outlet property="collectionView" destination="SRY-eg-ypT" id="F96-l0-n0I"/>
-                        <outlet property="commandHeader" destination="UAi-ty-rOQ" id="Uwo-HQ-wCU"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="43N-R4-L5k" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3168" y="1675"/>
         </scene>
         <!--Responder View Controller-->
         <scene sceneID="Lfs-eA-UKu">

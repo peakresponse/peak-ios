@@ -9,7 +9,7 @@
 import UIKit
 
 class TriageHeaderCell: UICollectionViewCell {
-    @IBOutlet weak var headerLabel: UILabel!
+    weak var headerLabel: UILabel!
 
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -14,7 +14,7 @@ protocol TriageCounterCellDelegate: AnyObject {
 }
 
 class TriageCounterCell: UICollectionViewCell {
-    @IBOutlet weak var counterControl: CounterControl!
+    weak var counterControl: CounterControl!
 
     weak var delegate: TriageCounterCellDelegate?
 
@@ -84,7 +84,7 @@ class TriageCounterCell: UICollectionViewCell {
         }
     }
 
-    @IBAction func counterValueChanged(_ sender: CounterControl) {
+    @objc func counterValueChanged(_ sender: CounterControl) {
         delegate?.counterCell(self, didChange: sender.count, for: priority)
     }
 }

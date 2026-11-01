@@ -12,7 +12,7 @@ import PRKit
 
 class TriageViewController: SceneViewController, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,
                             TriageCounterCellDelegate {
-    @IBOutlet weak var collectionView: UICollectionView!
+    weak var collectionView: UICollectionView!
 
     private var scene: Scene?
     private var notificationToken: NotificationToken?
