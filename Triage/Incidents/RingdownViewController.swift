@@ -205,6 +205,8 @@ class RingdownViewController: BaseViewController, CheckboxDelegate, FormBuilder,
 
         let vr = PixelRuleView()
         vr.translatesAutoresizingMaskIntoConstraints = false
+        vr.left = true
+        vr.bottom = false
         vr.widthAnchor.constraint(equalToConstant: 1).isActive = true
         checkboxesView.addSubview(vr)
         NSLayoutConstraint.activate([

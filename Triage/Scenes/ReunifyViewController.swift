@@ -151,10 +151,8 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     @IBAction
     func scanPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
-        if let vc = vc as? ScanViewController {
-            vc.delegate = self
-        }
+        let vc = ScanViewController()
+        vc.delegate = self
         presentAnimated(vc)
     }
 

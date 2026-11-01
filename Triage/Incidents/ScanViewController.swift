@@ -29,7 +29,8 @@ class ScanCameraView: UIView {
     @objc optional func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?)
 }
 
-class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate, LocationHelperDelegate, PRKit.FormFieldDelegate {
+class ScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBufferDelegate, LocationHelperDelegate, PRKit.FormFieldDelegate {
+    weak var commandHeader: CommandHeader!
     @IBOutlet weak var cameraLabel: UILabel!
     @IBOutlet weak var cameraView: UIView!
     @IBOutlet weak var pinField: PRKit.TextField!
@@ -44,6 +45,15 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
 
     var incident: Incident?
 
+    override init() {
+        super.init()
+        isModalInPresentation = true
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     deinit {
         removeKeyboardListener()
     }
@@ -51,11 +61,94 @@ class ScanViewController: UIViewController, AVCaptureVideoDataOutputSampleBuffer
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        cameraLabel.textColor = .text
         view.backgroundColor = .background
 
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done,
+                                                          target: self, action: #selector(dismissAnimated))
+
+        let cameraLabel = UILabel()
+        cameraLabel.translatesAutoresizingMaskIntoConstraints = false
+        cameraLabel.text = "ScanViewController.scanPatientTag".localized
+        cameraLabel.textColor = .text
+        cameraLabel.font = .h4SemiBold
+        contentView.addSubview(cameraLabel)
+        NSLayoutConstraint.activate([
+            cameraLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cameraLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+        self.cameraLabel = cameraLabel
+
+        let cameraView = UIView()
+        cameraView.translatesAutoresizingMaskIntoConstraints = false
+        cameraView.backgroundColor = .black
+        contentView.addSubview(cameraView)
+        NSLayoutConstraint.activate([
+            cameraView.topAnchor.constraint(equalTo: cameraLabel.bottomAnchor, constant: 7),
+            cameraView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            cameraView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor, multiplier: 1.0)
+        ])
+        self.cameraView = cameraView
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "ScanViewController.or".localized
+        label.textColor = .base500
+        label.font = .h4SemiBold
+        contentView.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: cameraView.bottomAnchor, constant: 16),
+            label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor)
+        ])
+
+        var hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        contentView.addSubview(hr)
+        NSLayoutConstraint.activate([
+            hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            hr.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+            hr.rightAnchor.constraint(equalTo: label.leftAnchor, constant: -16)
+        ])
+
+        hr = PixelRuleView()
+        hr.translatesAutoresizingMaskIntoConstraints = false
+        hr.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        contentView.addSubview(hr)
+        NSLayoutConstraint.activate([
+            hr.leftAnchor.constraint(equalTo: label.leftAnchor, constant: 16),
+            hr.centerYAnchor.constraint(equalTo: label.centerYAnchor),
+            hr.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+
+        let pinField = PRKit.TextField()
+        pinField.translatesAutoresizingMaskIntoConstraints = false
+        pinField.labelText = "ScanViewController.enterTagCode".localized
+        pinField.attributeType = .integer
+        pinField.delegate = self
+        contentView.addSubview(pinField)
+        NSLayoutConstraint.activate([
+            pinField.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 16),
+            pinField.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            pinField.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+        self.pinField = pinField
+
         addKeyboardListener()
-        isModal = true
 
         let formInputAccessoryView = FormInputAccessoryView(rootView: view)
         pinField.inputAccessoryView = formInputAccessoryView

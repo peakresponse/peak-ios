@@ -75,7 +75,7 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.setTitle("Button.newIncident".localized, for: .normal)
+        addButton.setTitle("Button.addPatient".localized, for: .normal)
         addButton.addTarget(self, action: #selector(addPressed(_:)), for: .touchUpInside)
         view.addSubview(addButton)
         NSLayoutConstraint.activate([
@@ -104,7 +104,8 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
         if isMCI {
             initSceneCommandHeader()
-            collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
+            collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+                                    withReuseIdentifier: "Counts")
             if scene?.isResponder(userId: AppSettings.userId) ?? false {
                 showAddButton()
             }
@@ -112,7 +113,8 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         } else {
             addButton.isHidden = true
             commandHeader.isSearchHidden = true
-            commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain, target: self, action: #selector(dismissAnimated))
+            commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain,
+                                                              target: self, action: #selector(dismissAnimated))
             collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
         }
 
@@ -227,10 +229,8 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     @IBAction
     func addPressed(_ sender: RoundButton) {
         if isMCI {
-            let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
-            if let vc = vc as? ScanViewController {
-                vc.incident = incident
-            }
+            let vc = ScanViewController()
+            vc.incident = incident
             presentAnimated(vc)
         } else {
             presentNewReport(incident: incident)

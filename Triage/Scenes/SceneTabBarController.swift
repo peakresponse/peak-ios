@@ -89,20 +89,6 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
         }
     }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print(segue)
-    }
-
-    // MARK: - CustomTabBarDelegate
-
-    override func customTabBar(_ tabBar: CustomTabBar, didPress button: UIButton) {
-        let vc = UIStoryboard(name: "Incidents", bundle: nil).instantiateViewController(withIdentifier: "Scan")
-        if let vc = vc as? ScanViewController {
-            vc.incident = results?.first?.incident.first
-        }
-        presentAnimated(vc)
-    }
-
     // MARK: - LocationHelperDelegate
 
     func locationHelper(_ helper: LocationHelper, didUpdateLocations locations: [CLLocation]) {
