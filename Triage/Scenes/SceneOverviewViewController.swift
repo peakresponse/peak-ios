@@ -13,9 +13,9 @@ import UIKit
 
 class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionViewBottomConstraint: NSLayoutConstraint!
+    weak var commandHeader: CommandHeader!
+    weak var collectionView: UICollectionView!
+    weak var collectionViewBottomConstraint: NSLayoutConstraint!
     var scrollView: UIScrollView! { return collectionView }
     var scrollViewBottomConstraint: NSLayoutConstraint! { return collectionViewBottomConstraint }
     var formInputAccessoryView: UIView!
@@ -153,7 +153,7 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         _ = AppDelegate.leaveScene()
     }
 
-    @IBAction func closePressed(_ sender: Any) {
+    @objc func closePressed(_ sender: Any) {
         guard let scene = scene else { return }
         let sceneId = scene.id
         if scene.isMgs(userId: AppSettings.userId) {
@@ -201,7 +201,7 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         }
     }
 
-    @IBAction func editPressed(_ sender: Any) {
+    @objc func editPressed(_ sender: Any) {
         guard let scene = scene else { return }
         let vc = LocationViewController()
         vc.modalPresentationStyle = .fullScreen
@@ -271,6 +271,10 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
             if let cell = cell as? SceneOverviewHeaderCell, let scene = scene {
                 cell.configure(from: scene)
+                cell.closeButton.removeTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
+                cell.closeButton.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
+                cell.editButton.removeTarget(self, action: #selector(editPressed(_:)), for: .touchUpInside)
+                cell.editButton.addTarget(self, action: #selector(editPressed(_:)), for: .touchUpInside)
             }
         case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
