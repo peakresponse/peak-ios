@@ -22,6 +22,29 @@ class TriageCounterCell: UICollectionViewCell {
         didSet { updatePriority() }
     }
 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        commonInit()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    func commonInit() {
+        let counterControl = CounterControl()
+        counterControl.translatesAutoresizingMaskIntoConstraints = false
+        counterControl.addTarget(self, action: #selector(counterValueChanged(_:)), for: .valueChanged)
+        contentView.addSubview(counterControl)
+        NSLayoutConstraint.activate([
+            counterControl.topAnchor.constraint(equalTo: contentView.topAnchor),
+            counterControl.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            counterControl.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            counterControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+        ])
+        self.counterControl = counterControl
+    }
+
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
         var frame = attributes.frame

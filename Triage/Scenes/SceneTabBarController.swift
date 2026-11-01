@@ -35,7 +35,7 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
         setValue(placeholder, forKey: "tabBar")
 
         viewControllers = [
-            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Triage"),
+            TriageViewController(),
             ReportsViewController(),
             UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responders"),
             UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Transport"),

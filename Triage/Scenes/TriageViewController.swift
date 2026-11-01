@@ -18,10 +18,14 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     private var notificationToken: NotificationToken?
     private var isExpectantHidden = true
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+    override init() {
+        super.init()
         tabBarItem.title = "TabBarItem.triage".localized
         tabBarItem.image = UIImage(named: "Triage", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     deinit {
@@ -31,8 +35,40 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        commandHeader.delegate = self
+        commandHeader.searchFieldDelegate = self
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.register(TriageCounterCell.self, forCellWithReuseIdentifier: "TriageCounter")
+        collectionView.register(TriageHeaderCell.self, forCellWithReuseIdentifier: "TriageHeader")
+        mainView.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
         initSceneCommandHeader()
+
         commandHeader.searchField.alpha = 0
 
         if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
@@ -101,6 +137,9 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         switch indexPath.section {
         case 0:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TriageHeader", for: indexPath)
+            if let cell = cell as? TriageHeaderCell {
+                cell.headerLabel.text = "SceneOverviewTriageTotalCell.headerLabel".localized
+            }
         case 1:
             cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TriageCounter", for: indexPath)
             if let cell = cell as? TriageCounterCell {

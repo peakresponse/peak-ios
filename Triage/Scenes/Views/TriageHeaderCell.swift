@@ -11,9 +11,24 @@ import UIKit
 class TriageHeaderCell: UICollectionViewCell {
     @IBOutlet weak var headerLabel: UILabel!
 
-    override func awakeFromNib() {
-        super.awakeFromNib()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        let headerLabel = UILabel()
+        headerLabel.translatesAutoresizingMaskIntoConstraints = false
         headerLabel.textColor = .text
+        headerLabel.font = .h3SemiBold
+        contentView.addSubview(headerLabel)
+        NSLayoutConstraint.activate([
+            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
+            headerLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            headerLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: headerLabel.bottomAnchor)
+        ])
+        self.headerLabel = headerLabel
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
