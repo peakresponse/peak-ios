@@ -34,6 +34,8 @@ class ResponderViewController: BaseViewController, FormBuilder, KeyboardAwareScr
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true

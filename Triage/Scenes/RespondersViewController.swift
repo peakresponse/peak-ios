@@ -15,8 +15,8 @@ import UIKit
 class RespondersViewController: SceneViewController, ResponderViewControllerDelegate,
                                 ResponderCollectionViewCellDelegate, RespondersCountsHeaderViewDelegate,
                                 UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: PRKit.RoundButton!
+    weak var collectionView: UICollectionView!
+    weak var addButton: PRKit.RoundButton!
 
     var scene: Scene?
     var results: Results<Responder>?
@@ -214,17 +214,15 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         }
     }
 
-    @IBAction
-    func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
-        if let vc = vc as? ResponderViewController {
-            vc.delegate = self
-            let responder = Responder()
-            responder.scene = scene
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-            vc.responder = responder
-            vc.isEditing = true
-        }
+    @objc func addPressed(_ sender: RoundButton) {
+        let vc = ResponderViewController()
+        vc.delegate = self
+        let responder = Responder()
+        responder.scene = scene
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain,
+                                                              target: self, action: #selector(dismissAnimated))
+        vc.responder = responder
+        vc.isEditing = true
         presentAnimated(vc)
     }
 
