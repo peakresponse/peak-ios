@@ -15,6 +15,14 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
     var results: Results<Scene>?
     var notificationToken: NotificationToken?
 
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
     deinit {
         LocationHelper.instance.removeDelegate(self)
         AppRealm.disconnectScene()
@@ -22,6 +30,18 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
     }
 
     override func viewDidLoad() {
+        let placeholder = CustomTabBarPlaceholder()
+        placeholder.isActionButtonEnabled = false
+        setValue(placeholder, forKey: "tabBar")
+
+        viewControllers = [
+            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Triage"),
+            ReportsViewController(),
+            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responders"),
+            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Transport"),
+            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Reunify")
+        ]
+
         super.viewDidLoad()
 
         let realm = AppRealm.open()

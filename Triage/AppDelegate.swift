@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static func enterScene(id: String) {
         AppSettings.sceneId = id
-        let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ActiveScene")
+        let vc = SceneTabBarController()
         for window in UIApplication.shared.windows where window.isKeyWindow {
             window.rootViewController = vc
             window.makeKeyAndVisible()
