@@ -39,7 +39,7 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
             ReportsViewController(),
             RespondersViewController(),
             UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Transport"),
-            UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Reunify")
+            ReunifyViewController()
         ]
 
         super.viewDidLoad()

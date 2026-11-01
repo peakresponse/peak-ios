@@ -57,11 +57,21 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         ])
         self.commandHeader = commandHeader
 
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .background
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.refreshControl = refreshControl
+        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
+        if let layout = layout {
+            layout.minimumLineSpacing = 0
+            layout.minimumInteritemSpacing = 0
+            layout.sectionHeadersPinToVisibleBounds = true
+        }
         mainView.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
@@ -88,16 +98,6 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
             scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
             incident = scene?.incident.first
             isMCI = scene?.isMCI ?? false
-        }
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        if let layout = layout {
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            layout.sectionHeadersPinToVisibleBounds = true
         }
 
         if isMCI {

@@ -14,8 +14,8 @@ import UIKit
 
 class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegate, ScanViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var scanButton: RoundButton!
+    weak var collectionView: UICollectionView!
+    weak var scanButton: RoundButton!
 
     var incident: Incident?
     var results: Results<Report>?
@@ -25,10 +25,15 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     var filteredResults: Results<Report>?
     var filteredNotificationToken: NotificationToken?
 
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
+
+    override init() {
+        super.init()
         tabBarItem.title = "TabBarItem.reunify".localized
         tabBarItem.image = UIImage(named: "Reunify", in: PRKitBundle.instance, compatibleWith: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     deinit {
@@ -39,28 +44,67 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let commandHeader = CommandHeader()
+        commandHeader.translatesAutoresizingMaskIntoConstraints = false
+        commandHeader.preservesSuperviewLayoutMargins = true
+        commandHeader.delegate = self
+        commandHeader.searchFieldDelegate = self
+        headerView.addSubview(commandHeader)
+        NSLayoutConstraint.activate([
+            commandHeader.topAnchor.constraint(equalTo: headerView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: headerView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: headerView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerView.bottomAnchor.constraint(equalTo: commandHeader.bottomAnchor)
+        ])
+        self.commandHeader = commandHeader
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .background
-
-        if incident == nil, let sceneId = AppSettings.sceneId,
-           let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
-            incident = scene.incident.first
-        }
-
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.refreshControl = refreshControl
+        collectionView.register(ReunifyCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+        collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
         let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
         if let layout = layout {
             layout.minimumLineSpacing = 0
             layout.minimumInteritemSpacing = 0
             layout.sectionHeadersPinToVisibleBounds = true
         }
+        mainView.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        let scanButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        scanButton.translatesAutoresizingMaskIntoConstraints = false
+        scanButton.setTitle("Button.scanTag".localized, for: .normal)
+        scanButton.addTarget(self, action: #selector(scanPressed(_:)), for: .touchUpInside)
+        view.addSubview(scanButton)
+        NSLayoutConstraint.activate([
+            scanButton.widthAnchor.constraint(equalToConstant: 94),
+            scanButton.heightAnchor.constraint(equalToConstant: 94),
+            scanButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            scanButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+        ])
+        self.scanButton = scanButton
+
+        if incident == nil, let sceneId = AppSettings.sceneId,
+           let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
+            incident = scene.incident.first
+        }
 
         initSceneCommandHeader()
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-
-        collectionView.register(ReunifyCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
-        collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
 
         performQuery()
     }
@@ -149,8 +193,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         }
     }
 
-    @IBAction
-    func scanPressed(_ sender: RoundButton) {
+    @objc func scanPressed(_ sender: RoundButton) {
         let vc = ScanViewController()
         vc.delegate = self
         presentAnimated(vc)
