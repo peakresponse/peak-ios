@@ -147,7 +147,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
         if vc == nil {
             switch sender.selectedIndex {
             case 0:
-                vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportReports")
+                vc = TransportReportsViewController()
                 if let vc = vc as? TransportReportsViewController {
                     vc.delegate = self
                     vc.incident = incident

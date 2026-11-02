@@ -20,13 +20,13 @@ import TranscriptionKitAWS
 }
 
 class RecordingViewController: UIViewController, TranscriberDelegate {
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet weak var stopButton: RecordButton!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var spectrumStackView: UIStackView!
-    @IBOutlet weak var observationLabel: UILabel!
-    @IBOutlet weak var timeLabel: UILabel!
-    @IBOutlet weak var sheetView: UIView!
+    weak var activityIndicatorView: UIActivityIndicatorView!
+    weak var stopButton: RecordButton!
+    weak var cancelButton: UIButton!
+    weak var spectrumStackView: UIStackView!
+    weak var observationLabel: UILabel!
+    weak var timeLabel: UILabel!
+    weak var sheetView: UIView!
 
     weak var delegate: RecordingViewControllerDelegate?
 
@@ -64,6 +64,7 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
         let stopButton = RecordButton()
         stopButton.translatesAutoresizingMaskIntoConstraints = false
         stopButton.recordState = .stopAndSave
+        stopButton.addTarget(self, action: #selector(stopPressed(_:)), for: .touchUpInside)
         sheetView.addSubview(stopButton)
         NSLayoutConstraint.activate([
             stopButton.bottomAnchor.constraint(equalTo: sheetView.safeAreaLayoutGuide.bottomAnchor, constant: -22),
@@ -177,12 +178,12 @@ class RecordingViewController: UIViewController, TranscriberDelegate {
         }
     }
 
-    @IBAction func cancelPressed(_ sender: Any) {
+    @objc func cancelPressed(_ sender: Any) {
         transcriber.stopRecording()
         dismissAnimated()
     }
 
-    @IBAction func stopPressed(_ sender: Any) {
+    @objc func stopPressed(_ sender: Any) {
         transcriber.stopRecording()
         stopButton.layer.opacity = 0
         activityIndicatorView.startAnimating()

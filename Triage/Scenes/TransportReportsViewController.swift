@@ -31,13 +31,37 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView.backgroundColor = .background
-
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
 
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.refreshControl = refreshControl
         collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setTitle("Button.scanTag".localized, for: .normal)
+        addButton.addTarget(self, action: #selector(addPressed(_:)), for: .touchUpInside)
+        view.addSubview(addButton)
+        NSLayoutConstraint.activate([
+            addButton.widthAnchor.constraint(equalToConstant: 94),
+            addButton.heightAnchor.constraint(equalToConstant: 94),
+            addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+        ])
+        self.addButton = addButton
 
         isEditing = incident?.scene?.isResponder(userId: AppSettings.userId) ?? false
     }
