@@ -41,23 +41,62 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         super.viewDidLoad()
 
         view.backgroundColor = .background
-        collectionView.backgroundColor = .background
+
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 6
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
+        ])
+        self.stackView = stackView
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        collectionView.setCollectionViewLayout(layout, animated: false)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.refreshControl = refreshControl
+        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 6),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setTitle("Button.scanTag".localized, for: .normal)
+        addButton.addTarget(self, action: #selector(addPressed(_:)), for: .touchUpInside)
+        view.addSubview(addButton)
+        NSLayoutConstraint.activate([
+            addButton.widthAnchor.constraint(equalToConstant: 94),
+            addButton.heightAnchor.constraint(equalToConstant: 94),
+            addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+        ])
+        self.addButton = addButton
+        collectionView.backgroundColor = .background
 
         var contentInset = collectionView.contentInset
         contentInset.bottom += addButton.frame.height
         collectionView.contentInset = contentInset
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-
-        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
 
         let realm = AppRealm.open()
         guard let sceneId = AppSettings.sceneId else { return }

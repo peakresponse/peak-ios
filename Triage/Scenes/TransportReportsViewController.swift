@@ -17,8 +17,8 @@ import UIKit
 
 class TransportReportsViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
                                       UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: RoundButton!
+    weak var collectionView: UICollectionView!
+    weak var addButton: RoundButton!
 
     weak var delegate: TransportReportsViewControllerDelegate?
     var cart: TransportCart?
@@ -126,8 +126,7 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         }
     }
 
-    @IBAction
-    func addPressed(_ sender: RoundButton) {
+    @objc func addPressed(_ sender: RoundButton) {
         let vc = ScanViewController()
         vc.delegate = self
         presentAnimated(vc)
