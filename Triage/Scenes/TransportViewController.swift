@@ -160,7 +160,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
                 }
                 cachedViewControllers[1] = vc
             case 2:
-                vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportFacilities")
+                vc = TransportFacilitiesViewController()
                 if let vc = vc as? TransportFacilitiesViewController {
                     vc.delegate = self
                     vc.incident = incident

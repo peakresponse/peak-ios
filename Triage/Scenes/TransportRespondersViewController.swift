@@ -20,9 +20,9 @@ import UIKit
 class TransportRespondersViewController: UIViewController, ResponderCollectionViewCellDelegate,
                                          TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: PRKit.RoundButton!
+    weak var stackView: UIStackView!
+    weak var collectionView: UICollectionView!
+    weak var addButton: PRKit.RoundButton!
 
     weak var delegate: TransportRespondersViewControllerDelegate?
 
@@ -92,7 +92,6 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
             addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
         ])
         self.addButton = addButton
-        collectionView.backgroundColor = .background
 
         var contentInset = collectionView.contentInset
         contentInset.bottom += addButton.frame.height
@@ -181,8 +180,7 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         }
     }
 
-    @IBAction
-    func addPressed(_ sender: RoundButton) {
+    @objc func addPressed(_ sender: RoundButton) {
         let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
         if let vc = vc as? ResponderViewController {
             vc.delegate = self

@@ -42,25 +42,62 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         super.viewDidLoad()
 
         view.backgroundColor = .background
-        collectionView.backgroundColor = .background
 
-        transportButton.titleLabel?.font = UIFont(name: "Barlow-SemiBold", size: 18) ?? .boldSystemFont(ofSize: 18)
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        stackView.spacing = 6
+        view.addSubview(stackView)
+        NSLayoutConstraint.activate([
+            stackView.topAnchor.constraint(equalTo: view.topAnchor),
+            stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
+        ])
+        self.stackView = stackView
+
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
         let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
         layout.estimatedItemSize = CGSize(width: 372, height: 276)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        collectionView.setCollectionViewLayout(layout, animated: false)
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.backgroundColor = .background
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.refreshControl = refreshControl
+        collectionView.register(TransportFacilityCollectionViewCell.self, forCellWithReuseIdentifier: "Facility")
+        view.addSubview(collectionView)
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 6),
+            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        self.collectionView = collectionView
+
+        let transportButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
+        transportButton.translatesAutoresizingMaskIntoConstraints = false
+        transportButton.titleLabel?.font = UIFont(name: "Barlow-SemiBold", size: 18) ?? .boldSystemFont(ofSize: 18)
+        transportButton.setTitle("Button.transport".localized, for: .normal)
+        transportButton.addTarget(self, action: #selector(transportPressed(_:)), for: .touchUpInside)
+        view.addSubview(transportButton)
+        NSLayoutConstraint.activate([
+            transportButton.widthAnchor.constraint(equalToConstant: 94),
+            transportButton.heightAnchor.constraint(equalToConstant: 94),
+            transportButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
+            transportButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+        ])
+        self.transportButton = transportButton
 
         var contentInset = collectionView.contentInset
         contentInset.bottom += transportButton.frame.height
         collectionView.contentInset = contentInset
-
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
-        collectionView.refreshControl = refreshControl
-
-        collectionView.register(TransportFacilityCollectionViewCell.self, forCellWithReuseIdentifier: "Facility")
 
         // query for Report to populate Transported counts
         reportsNotificationToken?.invalidate()
