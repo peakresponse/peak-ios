@@ -267,11 +267,9 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
     }
 
     func transportFacilitiesViewControllerDidPressTransport(_ vc: TransportFacilitiesViewController) {
-        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "TransportConfirm")
-        if let vc = vc as? TransportConfirmViewController {
-            vc.delegate = self
-            vc.cart = cart
-        }
+        let vc = TransportConfirmViewController()
+        vc.delegate = self
+        vc.cart = cart
         overlayView.alpha = 0
         overlayView.isHidden = false
         UIView.animate(withDuration: 0.25) { [weak self] in
