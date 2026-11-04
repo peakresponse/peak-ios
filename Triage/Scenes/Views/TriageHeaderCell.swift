@@ -19,9 +19,9 @@ class TriageHeaderCell: UICollectionViewCell {
         headerLabel.font = .h3SemiBold
         contentView.addSubview(headerLabel)
         NSLayoutConstraint.activate([
-            headerLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 6),
-            headerLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            headerLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            headerLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 6),
+            headerLabel.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor),
+            headerLabel.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor),
             contentView.bottomAnchor.constraint(equalTo: headerLabel.bottomAnchor)
         ])
         self.headerLabel = headerLabel

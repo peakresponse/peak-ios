@@ -37,10 +37,10 @@ class TriageCounterCell: UICollectionViewCell {
         counterControl.addTarget(self, action: #selector(counterValueChanged(_:)), for: .valueChanged)
         contentView.addSubview(counterControl)
         NSLayoutConstraint.activate([
-            counterControl.topAnchor.constraint(equalTo: contentView.topAnchor),
-            counterControl.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            counterControl.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            counterControl.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            counterControl.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            counterControl.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor),
+            counterControl.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor),
+            counterControl.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor)
         ])
         self.counterControl = counterControl
     }
