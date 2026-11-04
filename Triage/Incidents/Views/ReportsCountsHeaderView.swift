@@ -36,10 +36,10 @@ class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
         countsView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(countsView)
         NSLayoutConstraint.activate([
-            countsView.topAnchor.constraint(equalTo: topAnchor, constant: 0),
-            countsView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            countsView.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
-            bottomAnchor.constraint(equalTo: countsView.bottomAnchor, constant: 10)
+            countsView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
+            countsView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20),
+            countsView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -20),
+            safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: countsView.bottomAnchor, constant: 10)
         ])
 
         countsView.totalButton.isSelected = true
