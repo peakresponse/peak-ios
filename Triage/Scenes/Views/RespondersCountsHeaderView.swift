@@ -46,10 +46,10 @@ class RespondersCountsHeaderView: UICollectionReusableView {
         stackView.spacing = 8
         addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: topAnchor),
-            stackView.leftAnchor.constraint(equalTo: leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor, constant: -20),
-            bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10)
+            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            stackView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20),
+            stackView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -20),
+            safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10)
         ])
         self.stackView = stackView
 

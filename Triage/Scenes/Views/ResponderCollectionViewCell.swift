@@ -55,10 +55,10 @@ class ResponderCollectionViewCell: UICollectionViewCell, CheckboxDelegate {
         row.alignment = .center
         contentView.addSubview(row)
         NSLayoutConstraint.activate([
-            row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            row.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            row.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            row.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
+            row.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -20),
+            row.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
 
         let checkbox = Checkbox()
