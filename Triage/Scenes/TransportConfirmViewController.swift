@@ -15,9 +15,9 @@ import UIKit
     @objc optional func transportConfirmViewControllerDidConfirm(_ vc: TransportConfirmViewController)
 }
 
-class TransportConfirmViewController: UIViewController {
+class TransportConfirmViewController: BaseViewController {
     @IBOutlet weak var backgroundView: UIView!
-    @IBOutlet weak var contentView: UIView!
+    @IBOutlet weak var foregroundView: UIView!
     @IBOutlet weak var commandHeader: CommandHeader!
     @IBOutlet weak var stackView: UIStackView!
     @IBOutlet weak var confirmButton: PRKit.Button!
@@ -25,17 +25,17 @@ class TransportConfirmViewController: UIViewController {
     weak var delegate: TransportConfirmViewControllerDelegate?
     var cart: TransportCart?
 
-    init() {
-        super.init(nibName: nil, bundle: nil)
+    override init() {
+        super.init()
         isModalInPresentation = true
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .coverVertical
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,29 +51,31 @@ class TransportConfirmViewController: UIViewController {
         ])
         self.backgroundView = backgroundView
 
-        let contentView = UIView()
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.backgroundColor = .background
-        contentView.clipsToBounds = true
-        contentView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-        contentView.layer.cornerRadius = 16
-        view.addSubview(contentView)
+        let foregroundView = UIView()
+        foregroundView.translatesAutoresizingMaskIntoConstraints = false
+        foregroundView.backgroundColor = .background
+        foregroundView.clipsToBounds = true
+        foregroundView.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        foregroundView.layer.cornerRadius = 16
+        view.addSubview(foregroundView)
         NSLayoutConstraint.activate([
-            contentView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            contentView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            foregroundView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            foregroundView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            foregroundView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        self.contentView = contentView
+        self.foregroundView = foregroundView
 
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.cancel".localized, style: .plain,
                                                           target: self, action: #selector(cancelPressed))
-        contentView.addSubview(commandHeader)
+        foregroundView.addSubview(commandHeader)
         NSLayoutConstraint.activate([
-            commandHeader.topAnchor.constraint(equalTo: contentView.topAnchor),
-            commandHeader.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            commandHeader.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+            commandHeader.topAnchor.constraint(equalTo: foregroundView.topAnchor),
+            commandHeader.leftAnchor.constraint(equalTo: foregroundView.leftAnchor),
+            commandHeader.rightAnchor.constraint(equalTo: foregroundView.rightAnchor),
+            commandHeader.contentView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            commandHeader.contentView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.commandHeader = commandHeader
 
@@ -83,11 +85,11 @@ class TransportConfirmViewController: UIViewController {
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = 6
-        contentView.addSubview(stackView)
+        foregroundView.addSubview(stackView)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: commandHeader.bottomAnchor),
-            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20)
+            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
         self.stackView = stackView
 
@@ -97,12 +99,12 @@ class TransportConfirmViewController: UIViewController {
         confirmButton.size = .medium
         confirmButton.setTitle("Button.confirm".localized, for: .normal)
         confirmButton.addTarget(self, action: #selector(confirmPressed), for: .touchUpInside)
-        contentView.addSubview(confirmButton)
+        foregroundView.addSubview(confirmButton)
         NSLayoutConstraint.activate([
             confirmButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 40),
-            confirmButton.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            confirmButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            confirmButton.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            confirmButton.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            confirmButton.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            confirmButton.bottomAnchor.constraint(equalTo: foregroundView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
         self.confirmButton = confirmButton
 
