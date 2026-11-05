@@ -35,6 +35,8 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -51,30 +53,30 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         ])
         self.commandHeader = commandHeader
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout = UICollectionViewFlowLayout()
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 16
+        layout.minimumInteritemSpacing = 16
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .background
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.register(TriageCounterCell.self, forCellWithReuseIdentifier: "TriageCounter")
         collectionView.register(TriageHeaderCell.self, forCellWithReuseIdentifier: "TriageHeader")
-        mainView.addSubview(collectionView)
+        contentView.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+            collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            collectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         self.collectionView = collectionView
 
         initSceneCommandHeader()
 
         commandHeader.searchField.alpha = 0
-
-        if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-            layout.itemSize = CGSize(width: UIScreen.main.bounds.width - 40, height: 120)
-            layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        }
 
         guard let sceneId = AppSettings.sceneId else { return }
         let realm = AppRealm.open()
@@ -168,8 +170,8 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
+            return UIEdgeInsets.zero
         }
-        return UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
     }
 }

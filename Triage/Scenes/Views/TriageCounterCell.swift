@@ -47,13 +47,17 @@ class TriageCounterCell: UICollectionViewCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        var frame = attributes.frame
-        if traitCollection.horizontalSizeClass == .compact {
-            frame.size.width = UIScreen.main.bounds.width - 40
-        } else {
-            frame.size.width = 340
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
         }
-        attributes.frame = frame
+        if let bounds = view?.bounds {
+            attributes.frame.size.width = bounds.size.width
+            if priority != nil && traitCollection.horizontalSizeClass == .regular,
+               let layout = (view as? UICollectionView)?.collectionViewLayout as? UICollectionViewFlowLayout {
+                attributes.frame.size.width = floor((bounds.size.width - layout.minimumInteritemSpacing) / 2)
+            }
+        }
         return attributes
     }
 

@@ -11,7 +11,7 @@ import PRKit
 import UIKit
 
 class SceneViewController: BaseViewController, PRKit.CommandHeaderDelegate, PRKit.FormFieldDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
+    weak var commandHeader: CommandHeader!
 
     func initSceneCommandHeader() {
         commandHeader.delegate = self

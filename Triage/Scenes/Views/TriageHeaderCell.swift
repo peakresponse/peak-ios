@@ -33,9 +33,12 @@ class TriageHeaderCell: UICollectionViewCell {
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
         let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
-        let width = UIScreen.main.bounds.width - 40
-        if attributes.frame.size.width < width {
-            attributes.frame.size.width = width
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
+        }
+        if let bounds = view?.bounds {
+            attributes.frame.size.width = bounds.size.width
         }
         return attributes
     }
