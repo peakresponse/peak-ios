@@ -36,9 +36,9 @@ private class CountRow: UIView {
         label.textColor = .labelText
         addSubview(label)
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: topAnchor),
-            label.leftAnchor.constraint(equalTo: leftAnchor),
-            label.rightAnchor.constraint(equalTo: rightAnchor)
+            label.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            label.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+            label.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
         ])
         self.label = label
 
@@ -50,9 +50,9 @@ private class CountRow: UIView {
         addSubview(stackView)
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 4),
-            stackView.leftAnchor.constraint(equalTo: leftAnchor),
-            stackView.rightAnchor.constraint(equalTo: rightAnchor),
-            bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
+            stackView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor),
+            safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
         ])
         self.stackView = stackView
 
@@ -121,8 +121,8 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         checkbox.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         contentView.addSubview(checkbox)
         NSLayoutConstraint.activate([
-            checkbox.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
-            checkbox.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16)
+            checkbox.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 20),
+            checkbox.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 16)
         ])
         self.checkbox = checkbox
 
@@ -133,10 +133,10 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         stackView.alignment = .fill
         contentView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            stackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
             stackView.leftAnchor.constraint(equalTo: checkbox.rightAnchor, constant: 12),
-            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
+            stackView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -20),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
         ])
 
         let facilityLabel = UILabel()
@@ -148,7 +148,9 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         stackView.addArrangedSubview(facilityLabel)
         self.facilityLabel = facilityLabel
 
-        for labelText in ["TransportFacilityCollectionViewCell.row.capacity".localized, "TransportFacilityCollectionViewCell.row.transported".localized, "TransportFacilityCollectionViewCell.row.available".localized] {
+        for labelText in ["TransportFacilityCollectionViewCell.row.capacity".localized,
+                          "TransportFacilityCollectionViewCell.row.transported".localized,
+                          "TransportFacilityCollectionViewCell.row.available".localized] {
             let row = CountRow()
             row.label.text = labelText
             stackView.addArrangedSubview(row)
