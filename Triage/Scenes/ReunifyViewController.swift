@@ -95,7 +95,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
             scanButton.widthAnchor.constraint(equalToConstant: 94),
             scanButton.heightAnchor.constraint(equalToConstant: 94),
             scanButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-            scanButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            scanButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
         self.scanButton = scanButton
 

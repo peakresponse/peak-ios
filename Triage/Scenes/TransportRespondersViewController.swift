@@ -82,14 +82,14 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
-        addButton.setTitle("Button.scanTag".localized, for: .normal)
+        addButton.setTitle("Button.addUnit".localized, for: .normal)
         addButton.addTarget(self, action: #selector(addPressed(_:)), for: .touchUpInside)
         view.addSubview(addButton)
         NSLayoutConstraint.activate([
             addButton.widthAnchor.constraint(equalToConstant: 94),
             addButton.heightAnchor.constraint(equalToConstant: 94),
             addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
         self.addButton = addButton
 
@@ -181,16 +181,15 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     }
 
     @objc func addPressed(_ sender: RoundButton) {
-        let vc = UIStoryboard(name: "Scenes", bundle: nil).instantiateViewController(withIdentifier: "Responder")
-        if let vc = vc as? ResponderViewController {
-            vc.delegate = self
-            let responder = Responder()
-            responder.scene = scene
-            responder.status = true
-            vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-            vc.responder = responder
-            vc.isEditing = true
-        }
+        let vc = ResponderViewController()
+        vc.delegate = self
+        let responder = Responder()
+        responder.scene = scene
+        responder.status = true
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain,
+                                                              target: self, action: #selector(dismissAnimated))
+        vc.responder = responder
+        vc.isEditing = true
         presentAnimated(vc)
     }
 

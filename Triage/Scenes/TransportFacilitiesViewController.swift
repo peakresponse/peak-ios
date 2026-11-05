@@ -91,7 +91,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             transportButton.widthAnchor.constraint(equalToConstant: 94),
             transportButton.heightAnchor.constraint(equalToConstant: 94),
             transportButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-            transportButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            transportButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
         self.transportButton = transportButton
 

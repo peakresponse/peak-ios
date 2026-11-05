@@ -30,10 +30,6 @@ class SceneTabBarController: CustomTabBarController, LocationHelperDelegate {
     }
 
     override func viewDidLoad() {
-        let placeholder = CustomTabBarPlaceholder()
-        placeholder.isActionButtonEnabled = false
-        setValue(placeholder, forKey: "tabBar")
-
         viewControllers = [
             TriageViewController(),
             ReportsViewController(),

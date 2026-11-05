@@ -96,7 +96,7 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
             addButton.widthAnchor.constraint(equalToConstant: 94),
             addButton.heightAnchor.constraint(equalToConstant: 94),
             addButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -16),
-            addButton.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor)
+            addButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -16)
         ])
         self.addButton = addButton
 
