@@ -37,8 +37,11 @@ class TriageHeaderCell: UICollectionViewCell {
         while !(view?.isKind(of: UICollectionView.self) ?? true) {
             view = view?.superview
         }
-        if let bounds = view?.bounds {
-            attributes.frame.size.width = bounds.size.width
+        if let collectionView = view as? UICollectionView,
+           let delegate = collectionView.delegate as? UICollectionViewDelegateFlowLayout,
+           let inset = delegate.collectionView?(collectionView, layout: collectionView.collectionViewLayout, insetForSectionAt: 0) {
+            let bounds = collectionView.bounds
+            attributes.frame.size.width = bounds.size.width - inset.left - inset.right
         }
         return attributes
     }

@@ -68,8 +68,8 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         contentView.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: contentView.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
             collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         self.collectionView = collectionView
@@ -83,6 +83,18 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
         notificationToken = scene?.observe { [weak self] (change) in
             self?.didObserveChange(change)
+        }
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.view.setNeedsLayout()
         }
     }
 
@@ -169,9 +181,13 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        if section == 0 {
-            return UIEdgeInsets.zero
+        var insets: UIEdgeInsets = .zero
+        insets.left = -collectionView.frame.origin.x
+        insets.right = mainView.frame.size.width - contentView.frame.maxX
+        if section > 0 {
+            insets.top = 16
+            insets.bottom = 16
         }
-        return UIEdgeInsets(top: 16, left: 0, bottom: 16, right: 0)
+        return insets
     }
 }
