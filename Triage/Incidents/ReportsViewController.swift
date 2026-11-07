@@ -138,7 +138,7 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     func showAddButton() {
         addButton.isHidden = false
         var contentInset = tableView.contentInset
-        contentInset.bottom = addButton.frame.height + 16
+        contentInset.bottom = addButton.frame.height + 32
         tableView.contentInset = contentInset
     }
 
@@ -146,15 +146,6 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         super.viewDidAppear(animated)
         if incident == nil, isBeingPresented {
             presentNewReport(incident: nil, animated: false)
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if let tableHeaderView = tableView.tableHeaderView {
-            let size = tableHeaderView.systemLayoutSizeFitting(CGSize(width: tableView.bounds.width,
-                                                                      height: CGFloat.greatestFiniteMagnitude))
-            tableHeaderView.frame.size.height = size.height
         }
     }
 

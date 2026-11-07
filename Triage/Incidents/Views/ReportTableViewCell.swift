@@ -58,7 +58,7 @@ class ReportTableViewCell: UITableViewCell {
             containerViewLeftConstraint,
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             containerViewRightConstraint,
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16)
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -18)
         ])
         self.containerView = containerView
 

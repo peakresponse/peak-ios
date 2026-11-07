@@ -131,6 +131,7 @@
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45BC4E4F309E9229000CDD15 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */; };
+		45BC4E51309FAD4D000CDD15 /* ResponderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -330,6 +331,7 @@
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
 		45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
+		45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderTableViewCell.swift; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -438,6 +440,7 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */,
 				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
 				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
 				456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */,
@@ -1015,6 +1018,7 @@
 				45C207DA2B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift in Sources */,
 				45E1215C282AEA2300D8DDBE /* TriageCounterCell.swift in Sources */,
 				45F7BAD0273AEC2B00FBD31F /* Medication.swift in Sources */,
+				45BC4E51309FAD4D000CDD15 /* ResponderTableViewCell.swift in Sources */,
 				4566F05C236CD2DB00A04C75 /* PRApiClient.swift in Sources */,
 				45C9DAAB27D598BD0003B44B /* REDRealm.swift in Sources */,
 				45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */,

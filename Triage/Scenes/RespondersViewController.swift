@@ -6,16 +6,16 @@
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
-import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
 internal import RealmSwift
 import UIKit
 
 class RespondersViewController: SceneViewController, ResponderViewControllerDelegate,
-                                ResponderCollectionViewCellDelegate, RespondersCountsHeaderViewDelegate,
-                                UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    weak var collectionView: UICollectionView!
+                                ResponderTableViewCellDelegate, RespondersCountsHeaderViewDelegate,
+                                UITableViewDataSource, UITableViewDelegate {
+    weak var respondersCountsHeaderView: RespondersCountsHeaderView!
+    weak var tableView: UITableView!
     weak var addButton: PRKit.RoundButton!
 
     var scene: Scene?
@@ -44,6 +44,8 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -60,32 +62,35 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         ])
         self.commandHeader = commandHeader
 
+        let respondersCountsHeaderView = RespondersCountsHeaderView()
+        respondersCountsHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        respondersCountsHeaderView.delegate = self
+        contentView.addSubview(respondersCountsHeaderView)
+        NSLayoutConstraint.activate([
+            respondersCountsHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            respondersCountsHeaderView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            respondersCountsHeaderView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+        self.respondersCountsHeaderView = respondersCountsHeaderView
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .background
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
-        collectionView.register(RespondersCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: "Counts")
-        collectionView.refreshControl = refreshControl
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        if let layout = layout {
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            layout.sectionHeadersPinToVisibleBounds = true
-        }
-        mainView.addSubview(collectionView)
+        let tableView = TableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(ResponderTableViewCell.self, forCellReuseIdentifier: "Responder")
+        contentView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: respondersCountsHeaderView.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        self.collectionView = collectionView
+        self.tableView = tableView
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -100,9 +105,9 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         ])
         self.addButton = addButton
 
-        var contentInset = collectionView.contentInset
-        contentInset.bottom += addButton.frame.height
-        collectionView.contentInset = contentInset
+        var contentInset = tableView.contentInset
+        contentInset.bottom += addButton.frame.height + 32
+        tableView.contentInset = contentInset
 
         initSceneCommandHeader()
 
@@ -117,19 +122,6 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
             addButton.isHidden = false
         } else {
             addButton.isHidden = true
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
-                var sectionInset = layout.sectionInset
-                let inset = max(0, (collectionView.frame.width - 744) / 2)
-                sectionInset.left = inset
-                sectionInset.right = inset
-                layout.sectionInset = sectionInset
-            }
         }
     }
 
@@ -166,7 +158,6 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
             self?.didObserveFilteredRealmChanges(changes)
         }
 
-        collectionView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: false)
         refresh()
     }
 
@@ -175,9 +166,7 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         case .initial:
             fallthrough
         case .update:
-            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? RespondersCountsHeaderView {
-                headerView.configure(from: results)
-            }
+            respondersCountsHeaderView.configure(from: results)
         case .error(let error):
             presentAlert(error: error)
         }
@@ -186,12 +175,12 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
     func didObserveFilteredRealmChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
         switch changes {
         case .initial:
-            collectionView.reloadData()
+            tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
-            collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
@@ -200,16 +189,14 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
 
     @objc func refresh() {
         guard let sceneId = scene?.id else { return }
-        collectionView.reloadData()
-        collectionView.refreshControl?.beginRefreshing()
-        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
+        tableView.refreshControl?.beginRefreshing()
         AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
                 print(error)
             }
             DispatchQueue.main.async { [weak self] in
-                self?.collectionView.refreshControl?.endRefreshing()
+                self?.tableView.refreshControl?.endRefreshing()
             }
         }
     }
@@ -226,9 +213,9 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         presentAnimated(vc)
     }
 
-    // MARK: - ResponderCollectionViewCellDelegate
+    // MARK: - ResponderTableViewCellDelegate
 
-    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
+    func responderTableViewCellDidMarkArrived(_ cell: ResponderTableViewCell, responderId: String?) {
         guard let responderId = responderId else { return }
         AppRealm.markResponderArrived(responderId: responderId) { _ in
         }
@@ -257,40 +244,37 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
         performQuery()
     }
 
-    // MARK: - UICollectionViewDataSource
+    // MARK: - UITableViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredResults?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? ResponderCollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Responder", for: indexPath)
+        if let cell = cell as? ResponderTableViewCell {
             cell.delegate = self
             if indexPath.row < (filteredResults?.count ?? 0), let responder = filteredResults?[indexPath.row] {
-                cell.configure(from: responder, index: indexPath.row)
+                cell.configure(from: responder)
                 cell.button.isEnabled = isEditing
             }
         }
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
-        if let headerView = headerView as? RespondersCountsHeaderView {
-            headerView.delegate = self
-            headerView.configure(from: results)
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ResponderTableViewCell {
+            cell.constrain(to: contentView)
         }
-        return headerView
     }
 
-    // MARK: - UICollectionViewDelegate
+    // MARK: - UITableViewDelegate
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let responder = filteredResults?[indexPath.row] else { return }
         if isEditing && responder.user == nil && responder.vehicle == nil {
             let vc = ResponderViewController()
@@ -303,21 +287,6 @@ class RespondersViewController: SceneViewController, ResponderViewControllerDele
             }
             presentAnimated(vc)
         }
-        collectionView.deselectItem(at: indexPath, animated: true)
-    }
-
-    // MARK: - UICollectionViewDelegateFlowLayout
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 125)
-        }
-        return CGSize(width: view.frame.width, height: 125)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 60)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

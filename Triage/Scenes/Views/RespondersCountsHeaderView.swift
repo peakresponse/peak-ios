@@ -17,7 +17,7 @@ import UIKit
     @objc optional func respondersCountsHeaderView(_ view: RespondersCountsHeaderView, didPressTotal button: Button)
 }
 
-class RespondersCountsHeaderView: UICollectionReusableView {
+class RespondersCountsHeaderView: UIView {
     weak var stackView: UIStackView!
     weak var enrouteButton: Button!
     weak var arrivedButton: Button!
@@ -46,25 +46,34 @@ class RespondersCountsHeaderView: UICollectionReusableView {
         stackView.spacing = 8
         addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            stackView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -20),
-            safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 10)
+            stackView.topAnchor.constraint(equalTo: topAnchor),
+            stackView.leftAnchor.constraint(equalTo: leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: rightAnchor),
+            bottomAnchor.constraint(equalTo: stackView.bottomAnchor)
         ])
         self.stackView = stackView
 
         let enrouteButton = Button()
-        configure(button: enrouteButton, labelColor: TriagePriority.delayed.labelColor, color: TriagePriority.delayed.color, lightenedColor: TriagePriority.delayed.lightenedColor)
+        configure(button: enrouteButton,
+                  labelColor: TriagePriority.delayed.labelColor,
+                  color: TriagePriority.delayed.color,
+                  lightenedColor: TriagePriority.delayed.lightenedColor)
         stackView.addArrangedSubview(enrouteButton)
         self.enrouteButton = enrouteButton
 
         let arrivedButton = Button()
-        configure(button: arrivedButton, labelColor: TriagePriority.minimal.labelColor, color: TriagePriority.minimal.color, lightenedColor: TriagePriority.minimal.lightenedColor)
+        configure(button: arrivedButton,
+                  labelColor: TriagePriority.minimal.labelColor,
+                  color: TriagePriority.minimal.color,
+                  lightenedColor: TriagePriority.minimal.lightenedColor)
         stackView.addArrangedSubview(arrivedButton)
         self.arrivedButton = arrivedButton
 
         let totalButton = Button()
-        configure(button: totalButton, labelColor: .base800, color: .base300, lightenedColor: .white)
+        configure(button: totalButton,
+                  labelColor: .base800,
+                  color: .base300,
+                  lightenedColor: .white)
         totalButton.isSelected = true
         stackView.addArrangedSubview(totalButton)
         self.totalButton = totalButton
