@@ -98,6 +98,11 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
         }
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
     func didObserveChange(_ change: ObjectChange<Scene>) {
         switch change {
         case .change:
@@ -179,7 +184,8 @@ class TriageViewController: SceneViewController, UICollectionViewDataSource, UIC
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
         var insets: UIEdgeInsets = .zero
         insets.left = -collectionView.frame.origin.x
