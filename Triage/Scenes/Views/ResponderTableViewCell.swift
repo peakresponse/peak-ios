@@ -150,35 +150,75 @@ class ResponderTableViewCell: UITableViewCell, CheckboxDelegate {
 
         containerView.addArrangedSubview(checkbox)
 
-        var col = UIStackView()
-        col.translatesAutoresizingMaskIntoConstraints = false
-        col.axis = .vertical
-        col.spacing = 4
-        col.alignment = .fill
-        containerView.addArrangedSubview(col)
+        if traitCollection.horizontalSizeClass == .regular {
+            var view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addArrangedSubview(view)
 
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.heightAnchor.constraint(equalToConstant: 36).isActive = true
-        view.addSubview(unitLabel)
-        NSLayoutConstraint.activate([
-            unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
-            unitLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            unitLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
-        ])
-        col.addArrangedSubview(view)
-        col.addArrangedSubview(agencyLabel)
-        col.addArrangedSubview(timestampLabel)
+            view.addSubview(unitLabel)
+            view.addSubview(agencyLabel)
+            view.addSubview(timestampLabel)
+            NSLayoutConstraint.activate([
+                unitLabel.topAnchor.constraint(equalTo: view.topAnchor),
+                unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+                view.bottomAnchor.constraint(equalTo: unitLabel.bottomAnchor),
+                agencyLabel.leftAnchor.constraint(equalTo: unitLabel.rightAnchor, constant: 16),
+                agencyLabel.centerYAnchor.constraint(equalTo: unitLabel.centerYAnchor),
+                timestampLabel.leftAnchor.constraint(greaterThanOrEqualTo: agencyLabel.rightAnchor, constant: 16),
+                timestampLabel.centerYAnchor.constraint(equalTo: agencyLabel.centerYAnchor),
+                timestampLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
+            ])
 
-        col = UIStackView()
-        col.translatesAutoresizingMaskIntoConstraints = false
-        col.axis = .vertical
-        col.spacing = 4
-        col.alignment = .fill
-        containerView.addArrangedSubview(col)
+            view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            containerView.addArrangedSubview(view)
 
-        col.addArrangedSubview(chip)
-        col.addArrangedSubview(button)
+            let row = UIStackView()
+            row.translatesAutoresizingMaskIntoConstraints = false
+            row.axis = .horizontal
+            row.spacing = 8
+            view.addSubview(row)
+            NSLayoutConstraint.activate([
+                row.topAnchor.constraint(equalTo: view.topAnchor),
+                row.rightAnchor.constraint(equalTo: view.rightAnchor),
+                row.leftAnchor.constraint(greaterThanOrEqualTo: view.leftAnchor),
+                view.bottomAnchor.constraint(equalTo: row.bottomAnchor),
+                view.widthAnchor.constraint(greaterThanOrEqualTo: containerView.widthAnchor, multiplier: 0.33, constant: -8)
+            ])
+
+            row.addArrangedSubview(button)
+            row.addArrangedSubview(chip)
+        } else {
+            var col = UIStackView()
+            col.translatesAutoresizingMaskIntoConstraints = false
+            col.axis = .vertical
+            col.spacing = 4
+            col.alignment = .fill
+            containerView.addArrangedSubview(col)
+
+            let view = UIView()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            view.heightAnchor.constraint(equalToConstant: 36).isActive = true
+            view.addSubview(unitLabel)
+            NSLayoutConstraint.activate([
+                unitLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
+                unitLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                unitLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
+            ])
+            col.addArrangedSubview(view)
+            col.addArrangedSubview(agencyLabel)
+            col.addArrangedSubview(timestampLabel)
+
+            col = UIStackView()
+            col.translatesAutoresizingMaskIntoConstraints = false
+            col.axis = .vertical
+            col.spacing = 8
+            col.alignment = .fill
+            containerView.addArrangedSubview(col)
+
+            col.addArrangedSubview(chip)
+            col.addArrangedSubview(button)
+        }
     }
 
     func constrain(to view: UIView) {
