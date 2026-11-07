@@ -33,6 +33,7 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
 
     func commonInit() {
         let selectedBackgroundView = UIView()
+        selectedBackgroundView.translatesAutoresizingMaskIntoConstraints = false
         selectedBackgroundView.backgroundColor = .highlight
         self.selectedBackgroundView = selectedBackgroundView
 
@@ -43,13 +44,14 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         row.spacing = 20
         contentView.addSubview(row)
         NSLayoutConstraint.activate([
-            row.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            row.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
-            row.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -20),
-            row.bottomAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            row.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20),
+            row.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            row.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
+            row.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
         ])
 
         let checkbox = Checkbox()
+        checkbox.translatesAutoresizingMaskIntoConstraints = false
         checkbox.isUserInteractionEnabled = false
         checkbox.label.superview?.isHidden = true
         checkbox.widthAnchor.constraint(equalToConstant: 40).isActive = true
@@ -57,6 +59,7 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
         self.checkbox = checkbox
 
         let col = UIStackView()
+        col.translatesAutoresizingMaskIntoConstraints = false
         col.axis = .vertical
         col.spacing = 4
         col.alignment = .fill
@@ -140,6 +143,18 @@ class TransportReportCollectionViewCell: UICollectionViewCell {
             hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             hr.heightAnchor.constraint(equalToConstant: 2)
         ])
+    }
+
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
+        }
+        if let collectionView = view as? UICollectionView {
+//            attributes.frame.size.width = collectionView.bounds.size.width
+        }
+        return attributes
     }
 
     func configure(report: Report?, index: Int, selected: Bool) {

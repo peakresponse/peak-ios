@@ -9,12 +9,12 @@
 import UIKit
 import PRKit
 internal import RealmSwift
-import AlignedCollectionViewFlowLayout
 
 class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegate,
-                             UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var addButton: RoundButton!
+                             UITableViewDataSource, UITableViewDelegate {
+    weak var reportsCountsHeaderView: ReportsCountsHeaderView?
+    weak var tableView: UITableView!
+    weak var addButton: RoundButton!
 
     var incident: Incident?
     var scene: Scene?
@@ -41,6 +41,14 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        if incident == nil, let sceneId = AppSettings.sceneId {
+            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
+            incident = scene?.incident.first
+            isMCI = scene?.isMCI ?? false
+        }
+
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -57,29 +65,37 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         ])
         self.commandHeader = commandHeader
 
+        if isMCI {
+            let reportsCountsHeaderView = ReportsCountsHeaderView()
+            reportsCountsHeaderView.translatesAutoresizingMaskIntoConstraints = false
+            reportsCountsHeaderView.delegate = self
+            contentView.addSubview(reportsCountsHeaderView)
+            NSLayoutConstraint.activate([
+                reportsCountsHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
+                reportsCountsHeaderView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+                reportsCountsHeaderView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+            ])
+            self.reportsCountsHeaderView = reportsCountsHeaderView
+        }
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .background
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.refreshControl = refreshControl
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        if let layout = layout {
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            layout.sectionHeadersPinToVisibleBounds = true
-        }
-        mainView.addSubview(collectionView)
+        let tableView = TableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(ReportTableViewCell.self, forCellReuseIdentifier: "Report")
+        contentView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: isMCI ? reportsCountsHeaderView!.bottomAnchor : contentView.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        self.collectionView = collectionView
+        self.tableView = tableView
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -94,26 +110,16 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         ])
         self.addButton = addButton
 
-        if incident == nil, let sceneId = AppSettings.sceneId {
-            scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId)
-            incident = scene?.incident.first
-            isMCI = scene?.isMCI ?? false
-        }
-
         if isMCI {
             initSceneCommandHeader()
-            collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                    withReuseIdentifier: "Counts")
             if scene?.isResponder(userId: AppSettings.userId) ?? false {
                 showAddButton()
             }
-            collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
         } else {
             addButton.isHidden = true
             commandHeader.isSearchHidden = true
             commandHeader.leftBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .plain,
                                                               target: self, action: #selector(dismissAnimated))
-            collectionView.register(ReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
         }
 
         performQuery()
@@ -131,9 +137,9 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     func showAddButton() {
         addButton.isHidden = false
-        var contentInset = collectionView.contentInset
-        contentInset.bottom = addButton.frame.height
-        collectionView.contentInset = contentInset
+        var contentInset = tableView.contentInset
+        contentInset.bottom = addButton.frame.height + 16
+        tableView.contentInset = contentInset
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -145,14 +151,10 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                var sectionInset = layout.sectionInset
-                let inset = max(0, (collectionView.frame.width - 744) / 2)
-                sectionInset.left = inset
-                sectionInset.right = inset
-                layout.sectionInset = sectionInset
-            }
+        if let tableHeaderView = tableView.tableHeaderView {
+            let size = tableHeaderView.systemLayoutSizeFitting(CGSize(width: tableView.bounds.width,
+                                                                      height: CGFloat.greatestFiniteMagnitude))
+            tableHeaderView.frame.size.height = size.height
         }
     }
 
@@ -195,37 +197,33 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     @objc func refresh() {
         guard let incident = incident else { return }
-        collectionView.refreshControl?.beginRefreshing()
-        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
+        tableView.refreshControl?.beginRefreshing()
         AppRealm.getReports(incident: incident) { [weak self] (_, error) in
-            guard let self = self else { return }
+            guard let self else { return }
             if let error = error {
                 print(error)
             }
-            self.collectionView.refreshControl?.endRefreshing()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Report>>) {
         switch changes {
         case .initial:
-            collectionView.reloadData()
+            tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
-            collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
             }, completion: nil)
-            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? ReportsCountsHeaderView {
-                headerView.configure(from: results)
-            }
+            reportsCountsHeaderView?.configure(from: results)
         case .error(let error):
             presentAlert(error: error)
         }
     }
 
-    @IBAction
-    func addPressed(_ sender: RoundButton) {
+    @objc func addPressed(_ sender: RoundButton) {
         if isMCI {
             let vc = ScanViewController()
             vc.incident = incident
@@ -265,59 +263,38 @@ class ReportsViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         performQuery()
     }
 
-    // MARK: - UICollectionViewDataSource
+    // MARK: - UITableViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredResults?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
-        if let cell = cell as? ReportCollectionViewCell {
-            cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row)
-        } else if let cell = cell as? TransportReportCollectionViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Report", for: indexPath)
+        if let cell = cell as? ReportTableViewCell {
             cell.configure(report: filteredResults?[indexPath.row], index: indexPath.row, selected: false)
             cell.checkbox.isHidden = true
         }
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
-        if let headerView = headerView as? ReportsCountsHeaderView {
-            headerView.delegate = self
-            headerView.configure(from: results)
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ReportTableViewCell {
+            cell.constrain(to: contentView)
         }
-        return headerView
     }
 
-    // MARK: - UICollectionViewDelegate
+    // MARK: - UITableViewDelegete
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let report = filteredResults?[indexPath.row] {
             presentReport(report: report, animated: true) {
-                collectionView.deselectItem(at: indexPath, animated: false)
+                tableView.deselectRow(at: indexPath, animated: false)
             }
         }
-    }
-
-    // MARK: - UICollectionViewDelegateFlowLayout
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: isMCI ? 125 : 160)
-        }
-        return CGSize(width: view.frame.width, height: isMCI ? 125 : 160)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        if isMCI {
-            return CGSize(width: 0, height: 118)
-        }
-        return .zero
     }
 }

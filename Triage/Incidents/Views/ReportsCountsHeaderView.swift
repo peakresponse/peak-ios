@@ -17,6 +17,7 @@ protocol ReportsCountsHeaderViewDelegate: AnyObject {
 class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
     weak var delegate: ReportsCountsHeaderViewDelegate?
     var countsView: TriageCounts!
+    var countsViewConstraints: [NSLayoutConstraint] = []
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,14 +36,28 @@ class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
         countsView.delegate = self
         countsView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(countsView)
-        NSLayoutConstraint.activate([
-            countsView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 0),
-            countsView.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 20),
-            countsView.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -20),
-            safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: countsView.bottomAnchor, constant: 10)
-        ])
 
+        let countsViewLeftConstraint = countsView.leftAnchor.constraint(equalTo: leftAnchor)
+        countsViewLeftConstraint.priority = .defaultHigh
+        let countsViewRightConstraint = countsView.rightAnchor.constraint(equalTo: rightAnchor)
+        countsViewRightConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            countsView.topAnchor.constraint(equalTo: topAnchor),
+            countsViewLeftConstraint,
+            countsViewRightConstraint,
+            bottomAnchor.constraint(equalTo: countsView.bottomAnchor)
+        ])
         countsView.totalButton.isSelected = true
+    }
+
+    func constrain(to view: UIView) {
+        NSLayoutConstraint.deactivate(countsViewConstraints)
+        countsViewConstraints.removeAll()
+        countsViewConstraints.append(contentsOf: [
+            countsView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            countsView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        NSLayoutConstraint.activate(countsViewConstraints)
     }
 
     func configure(from results: Results<Report>?) {

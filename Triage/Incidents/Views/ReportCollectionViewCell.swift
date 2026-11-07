@@ -163,6 +163,19 @@ class ReportCollectionViewCell: UICollectionViewCell {
         self.vr = vr
     }
 
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
+        }
+        if let collectionView = view as? UICollectionView {
+            attributes.frame.size.width = collectionView.bounds.size.width
+        }
+        print("final attributes=", attributes)
+        return attributes
+    }
+
     func configure(report: Report?, index: Int) {
         guard let report = report else { return }
         let isMCI = report.scene?.isMCI ?? false
@@ -197,19 +210,25 @@ class ReportCollectionViewCell: UICollectionViewCell {
             ageLabel.isHidden = true
         }
         if let genderString = report.patient?.genderString, !genderString.isEmpty {
-            genderLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.gender".localized): ", text: genderString)
+            genderLabel.setBoldPrefixedText(boldFont: .h4SemiBold,
+                                            prefix: "\("Patient.gender".localized): ",
+                                            text: genderString)
             genderLabel.isHidden = false
         } else {
             genderLabel.isHidden = true
         }
         if let fullName = report.patient?.fullName, !fullName.isEmpty {
-            nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.fullName".localized): ", text: fullName)
+            nameLabel.setBoldPrefixedText(boldFont: .h4SemiBold,
+                                          prefix: "\("Patient.fullName".localized): ",
+                                          text: fullName)
             nameLabel.isHidden = false
         } else {
             nameLabel.isHidden = true
         }
         if let updatedAt = report.updatedAt {
-            updatedAtLabel.setBoldPrefixedText(boldFont: .h4SemiBold, prefix: "\("Patient.updatedAt".localized): ", text: updatedAt.asRelativeString())
+            updatedAtLabel.setBoldPrefixedText(boldFont: .h4SemiBold,
+                                               prefix: "\("Patient.updatedAt".localized): ",
+                                               text: updatedAt.asRelativeString())
             updatedAtLabel.isHidden = false
         } else {
             updatedAtLabel.isHidden = true

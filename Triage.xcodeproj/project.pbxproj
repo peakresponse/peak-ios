@@ -130,6 +130,7 @@
 		45B7A2DA2508331500BCAAAE /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2D92508331500BCAAAE /* State.swift */; };
 		45B7A2DE250E9A7E00BCAAAE /* SceneTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */; };
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
+		45BC4E4F309E9229000CDD15 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -328,6 +329,7 @@
 		45B7A2DD250E9A7E00BCAAAE /* SceneTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneTabBarController.swift; sourceTree = "<group>"; };
 		45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GMSMarker+Extensions.swift"; sourceTree = "<group>"; };
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
+		45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -677,6 +679,7 @@
 		45C757CE272CB9CC00386F07 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */,
 				4537DCA52AC4ED2D006A8AAB /* ActiveIncidentsView.swift */,
 				455588272DC9618200EA21A9 /* EventTableViewCell.swift */,
 				45C757CF272CB9D700386F07 /* IncidentTableViewCell.swift */,
@@ -996,6 +999,7 @@
 				45E12169282B341200D8DDBE /* TriageHeaderCell.swift in Sources */,
 				45C207D82B9BAB7E00150184 /* RegionFacility.swift in Sources */,
 				454F9CA828D3E278009F7115 /* FormViewController.swift in Sources */,
+				45BC4E4F309E9229000CDD15 /* ReportTableViewCell.swift in Sources */,
 				45B7A2D82508330700BCAAAE /* City.swift in Sources */,
 				4532180C2AFC34C400F2891B /* ReportsCountsHeaderView.swift in Sources */,
 				45761BF22B89137B00530E42 /* RespondersViewController.swift in Sources */,
