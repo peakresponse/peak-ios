@@ -6,7 +6,6 @@
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
-import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
 internal import RealmSwift
@@ -20,11 +19,13 @@ import UIKit
 }
 
 class TransportFacilitiesViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate,
-                                         UICollectionViewDataSource, UICollectionViewDelegate {
+                                         UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     weak var contentView: UIView!
     weak var stackView: UIStackView!
     weak var collectionView: UICollectionView!
     weak var transportButton: PRKit.RoundButton!
+
+    var stackViewConstraints: [NSLayoutConstraint] = []
 
     weak var delegate: TransportFacilitiesViewControllerDelegate?
     var cart: TransportCart?
@@ -61,10 +62,10 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = CGSize(width: 372, height: 276)
+        let layout = UICollectionViewFlowLayout()
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
+        layout.minimumInteritemSpacing = 32
 
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -97,7 +98,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         self.transportButton = transportButton
 
         var contentInset = collectionView.contentInset
-        contentInset.bottom += transportButton.frame.height
+        contentInset.bottom += transportButton.frame.height + 32
         collectionView.contentInset = contentInset
 
         // query for Report to populate Transported counts
@@ -121,7 +122,13 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
     }
 
     func constrain(to view: UIView) {
-
+        NSLayoutConstraint.deactivate(stackViewConstraints)
+        stackViewConstraints.removeAll()
+        stackViewConstraints.append(contentsOf: [
+            stackView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        NSLayoutConstraint.activate(stackViewConstraints)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
@@ -294,5 +301,16 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
             guard let cart = cart else { return }
             transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
         }
+    }
+
+    // MARK: - UICollectionViewDelegateFlowLayout
+
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        var insets: UIEdgeInsets = .zero
+        insets.left = contentView.frame.origin.x
+        insets.right = collectionView.frame.size.width - contentView.frame.maxX
+        return insets
     }
 }

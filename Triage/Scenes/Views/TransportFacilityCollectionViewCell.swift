@@ -121,8 +121,8 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         checkbox.label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         contentView.addSubview(checkbox)
         NSLayoutConstraint.activate([
-            checkbox.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            checkbox.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 16)
+            checkbox.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            checkbox.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 12)
         ])
         self.checkbox = checkbox
 
@@ -133,10 +133,10 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
         stackView.alignment = .fill
         contentView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: checkbox.rightAnchor, constant: 12),
-            stackView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            stackView.leftAnchor.constraint(equalTo: checkbox.rightAnchor, constant: 4),
+            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -16)
         ])
 
         let facilityLabel = UILabel()
@@ -157,34 +157,25 @@ class TransportFacilityCollectionViewCell: UICollectionViewCell {
             rows.append(row)
         }
         rows.last?.isHighlighted = true
-
-        let hr = UIView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .disabledBorder
-        contentView.addSubview(hr)
-        NSLayoutConstraint.activate([
-            hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            hr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hr.heightAnchor.constraint(equalToConstant: 2)
-        ])
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        calculatedSize = nil
     }
 
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        if calculatedSize == nil {
-            if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 372, height: 276)
-            } else {
-                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 276)
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
+        }
+        if let collectionView = view as? UICollectionView,
+           let delegate = collectionView.delegate as? UICollectionViewDelegateFlowLayout,
+           let inset = delegate.collectionView?(collectionView, layout: collectionView.collectionViewLayout, insetForSectionAt: 0) {
+            let bounds = collectionView.bounds
+            attributes.frame.size.width = bounds.size.width - inset.left - inset.right
+            if traitCollection.horizontalSizeClass == .regular,
+               let layout = (view as? UICollectionView)?.collectionViewLayout as? UICollectionViewFlowLayout {
+                attributes.frame.size.width = floor((attributes.frame.size.width - layout.minimumInteritemSpacing) / 2)
             }
         }
-        layoutAttributes.size = calculatedSize ?? .zero
-        return layoutAttributes
+        return attributes
     }
 
     func configure(from regionFacility: RegionFacility?, index: Int, isSelected: Bool) {
