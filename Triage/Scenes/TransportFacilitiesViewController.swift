@@ -21,9 +21,10 @@ import UIKit
 
 class TransportFacilitiesViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
-    @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var transportButton: PRKit.RoundButton!
+    weak var contentView: UIView!
+    weak var stackView: UIStackView!
+    weak var collectionView: UICollectionView!
+    weak var transportButton: PRKit.RoundButton!
 
     weak var delegate: TransportFacilitiesViewControllerDelegate?
     var cart: TransportCart?
@@ -228,8 +229,7 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         transportButton.isEnabled = cart.reports.count > 0 && cart.responder != nil && cart.facility != nil
     }
 
-    @IBAction
-    func transportPressed(_ sender: RoundButton) {
+    @objc func transportPressed(_ sender: RoundButton) {
         delegate?.transportFacilitiesViewControllerDidPressTransport?(self)
     }
 

@@ -20,6 +20,7 @@ import UIKit
 class TransportRespondersViewController: UIViewController, ResponderCollectionViewCellDelegate,
                                          TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
                                          UICollectionViewDataSource, UICollectionViewDelegate {
+    weak var contentView: UIView!
     weak var stackView: UIStackView!
     weak var collectionView: UICollectionView!
     weak var addButton: PRKit.RoundButton!

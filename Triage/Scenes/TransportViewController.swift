@@ -18,7 +18,7 @@ struct TransportCart {
 
 protocol TransportCartViewController: UIViewController {
     var cart: TransportCart? { get set }
-    var collectionView: UICollectionView! { get }
+    var contentView: UIView! { get set }
     func updateCart()
     func performQuery(_ searchText: String?)
 }
@@ -173,6 +173,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
         if let vc = vc as? TransportCartViewController {
             addChild(vc)
             containerView.addSubview(vc.view)
+            vc.contentView = contentView
             vc.cart = cart
             vc.updateCart()
             vc.performQuery(nil)

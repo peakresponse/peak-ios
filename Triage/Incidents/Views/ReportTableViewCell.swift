@@ -92,12 +92,14 @@ class ReportTableViewCell: UITableViewCell {
         descLabel.font = .h4
         descLabel.textColor = .labelText
         descLabel.numberOfLines = 1
+        descLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         self.descLabel = descLabel
 
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
         updatedAtLabel.textColor = .labelText
+        updatedAtLabel.setContentHuggingPriority(.required, for: .horizontal)
         self.updatedAtLabel = updatedAtLabel
 
         updateLayout()

@@ -15,9 +15,11 @@ import UIKit
     @objc optional func transportReportsViewController(_ vc: TransportReportsViewController, didSelect report: Report?)
 }
 
-class TransportReportsViewController: UIViewController, TransportCartViewController, PRKit.FormFieldDelegate, ScanViewControllerDelegate,
-                                      UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    weak var collectionView: UICollectionView!
+class TransportReportsViewController: UIViewController, TransportCartViewController,
+                                      PRKit.FormFieldDelegate, ScanViewControllerDelegate,
+                                      UITableViewDataSource, UITableViewDelegate {
+    weak var contentView: UIView!
+    weak var tableView: UITableView!
     weak var addButton: RoundButton!
 
     weak var delegate: TransportReportsViewControllerDelegate?
@@ -34,21 +36,21 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .background
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.refreshControl = refreshControl
-        collectionView.register(TransportReportCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
-        view.addSubview(collectionView)
+        let tableView = TableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(ReportTableViewCell.self, forCellReuseIdentifier: "Report")
+        view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        self.collectionView = collectionView
+        self.tableView = tableView
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -69,8 +71,8 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         addButton.isHidden = !isEditing
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? TransportReportCollectionViewCell {
+        for cell in tableView.visibleCells {
+            if let cell = cell as? ReportTableViewCell {
                 cell.checkbox.isEnabled = isEditing
                 cell.checkbox.isUserInteractionEnabled = false
             }
@@ -102,24 +104,25 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
 
     @objc func refresh() {
         guard let incident = incident else { return }
+        tableView.refreshControl?.beginRefreshing()
         AppRealm.getReports(incident: incident) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
                 print(error)
             }
-            self.collectionView.refreshControl?.endRefreshing()
+            self.tableView.refreshControl?.endRefreshing()
         }
     }
 
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Report>>) {
         switch changes {
         case .initial:
-            collectionView.reloadData()
+            tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
-            collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
@@ -156,28 +159,29 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
                 self.delegate?.transportReportsViewController?(self, didSelect: report)
                 if let index = filteredResults?.firstIndex(of: report) {
                     let indexPath = IndexPath(row: index, section: 0)
-                    collectionView.reloadItems(at: [indexPath])
-                    collectionView.scrollToItem(at: indexPath, at: .centeredVertically, animated: true)
+                    tableView.reloadRows(at: [indexPath], with: .automatic)
+                    tableView.scrollToRow(at: indexPath, at: .middle, animated: true)
                 }
             } else {
-                self.presentAlert(title: "TransportReportsViewController.notFound.title".localized, message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
+                self.presentAlert(title: "TransportReportsViewController.notFound.title".localized,
+                                  message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
             }
         }
     }
 
-    // MARK: - UICollectionViewDataSource
+    // MARK: - UITableViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredResults?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Report", for: indexPath)
-        if let cell = cell as? TransportReportCollectionViewCell, let report = filteredResults?[indexPath.row] {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Report", for: indexPath)
+        if let cell = cell as? ReportTableViewCell, let report = filteredResults?[indexPath.row] {
             cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
             cell.checkbox.isEnabled = isEditing
             cell.checkbox.isUserInteractionEnabled = false
@@ -185,24 +189,21 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         return cell
     }
 
-    // MARK: - UICollectionViewDelegate
-
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
-        if isEditing, let report = filteredResults?[indexPath.row] {
-            delegate?.transportReportsViewController?(self, didSelect: report)
-            if let cell = collectionView.cellForItem(at: indexPath) as? TransportReportCollectionViewCell {
-                cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
-            }
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ReportTableViewCell {
+            cell.constrain(to: contentView)
         }
     }
 
-    // MARK: - UICollectionViewDelegateFlowLayout
+    // MARK: - UITableViewDelegate
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 125)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if isEditing, let report = filteredResults?[indexPath.row] {
+            delegate?.transportReportsViewController?(self, didSelect: report)
+            if let cell = tableView.cellForRow(at: indexPath) as? ReportTableViewCell {
+                cell.configure(report: report, index: indexPath.row, selected: cart?.reports.contains(report) ?? false)
+            }
         }
-        return CGSize(width: view.frame.width, height: 125)
     }
 }

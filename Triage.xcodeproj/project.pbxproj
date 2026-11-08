@@ -80,7 +80,6 @@
 		4572BA8D237DD4BB00958A77 /* CameraHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8C237DD4BB00958A77 /* CameraHelper.swift */; };
 		4572BA8F237DE45400958A77 /* URL+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4572BA8E237DE45400958A77 /* URL+Extensions.swift */; };
 		45761BF22B89137B00530E42 /* RespondersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF12B89137B00530E42 /* RespondersViewController.swift */; };
-		45761BF42B89155E00530E42 /* ResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */; };
 		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
 		457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7732EE25E39002B6194 /* CallViewController.swift */; };
 		457CC7762EE34EE2002B6194 /* CallHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7752EE34EDF002B6194 /* CallHelper.swift */; };
@@ -132,6 +131,7 @@
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45BC4E4F309E9229000CDD15 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */; };
 		45BC4E51309FAD4D000CDD15 /* ResponderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */; };
+		45BC4E53309FEF47000CDD15 /* ResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -292,7 +292,6 @@
 		4572BA8C237DD4BB00958A77 /* CameraHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraHelper.swift; sourceTree = "<group>"; };
 		4572BA8E237DE45400958A77 /* URL+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+Extensions.swift"; sourceTree = "<group>"; };
 		45761BF12B89137B00530E42 /* RespondersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondersViewController.swift; sourceTree = "<group>"; };
-		45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		457CC7732EE25E39002B6194 /* CallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
 		457CC7752EE34EDF002B6194 /* CallHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHelper.swift; sourceTree = "<group>"; };
@@ -332,6 +331,7 @@
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
 		45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
 		45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderTableViewCell.swift; sourceTree = "<group>"; };
+		45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -440,8 +440,8 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */,
 				45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */,
-				45761BF32B89155E00530E42 /* ResponderCollectionViewCell.swift */,
 				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
 				456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
@@ -910,7 +910,6 @@
 				455958CB2B893587005962F5 /* ResponderViewController.swift in Sources */,
 				45917FF7254E1FB1002E03E7 /* UIResponder+Extensions.swift in Sources */,
 				456F04FA27ACAA47000CEE42 /* Report+Parser.swift in Sources */,
-				45761BF42B89155E00530E42 /* ResponderCollectionViewCell.swift in Sources */,
 				45F7BAD4273AEC3D00FBD31F /* Vital.swift in Sources */,
 				4566F07C236D4AC600A04C75 /* HorizontalRuleView.swift in Sources */,
 				45F7BAD2273AEC3500FBD31F /* Procedure.swift in Sources */,
@@ -962,6 +961,7 @@
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				45D422BF2B8D359900E75D7E /* AgencyKeyboardSource.swift in Sources */,
+				45BC4E53309FEF47000CDD15 /* ResponderCollectionViewCell.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */,
