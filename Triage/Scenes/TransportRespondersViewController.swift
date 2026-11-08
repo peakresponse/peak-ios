@@ -6,7 +6,6 @@
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
-import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
 internal import RealmSwift
@@ -17,13 +16,15 @@ import UIKit
     @objc optional func transportRespondersViewController(_ vc: TransportRespondersViewController, didRemove report: Report?)
 }
 
-class TransportRespondersViewController: UIViewController, ResponderCollectionViewCellDelegate,
+class TransportRespondersViewController: UIViewController, ResponderTableViewCellDelegate,
                                          TransportCartViewController, ResponderViewControllerDelegate, PRKit.FormFieldDelegate,
-                                         UICollectionViewDataSource, UICollectionViewDelegate {
+                                         UITableViewDataSource, UITableViewDelegate {
     weak var contentView: UIView!
     weak var stackView: UIStackView!
-    weak var collectionView: UICollectionView!
+    weak var tableView: UITableView!
     weak var addButton: PRKit.RoundButton!
+
+    var stackViewConstraints: [NSLayoutConstraint] = []
 
     weak var delegate: TransportRespondersViewControllerDelegate?
 
@@ -50,36 +51,35 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         stackView.distribution = .fill
         stackView.spacing = 6
         view.addSubview(stackView)
+        let stackViewLeftConstraint = stackView.leftAnchor.constraint(equalTo: view.leftAnchor)
+        stackViewLeftConstraint.priority = .defaultHigh
+        let stackViewRightConstraint = stackView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        stackViewRightConstraint.priority = .defaultHigh
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20)
+            stackViewLeftConstraint,
+            stackViewRightConstraint
         ])
         self.stackView = stackView
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .background
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.refreshControl = refreshControl
-        collectionView.register(ResponderCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
-        view.addSubview(collectionView)
+        let tableView = TableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(ResponderTableViewCell.self, forCellReuseIdentifier: "Responder")
+        view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 6),
-            collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: view.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: stackView.bottomAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-        self.collectionView = collectionView
+        self.tableView = tableView
 
         let addButton = RoundButton(frame: CGRect(x: 0, y: 0, width: 94, height: 94))
         addButton.translatesAutoresizingMaskIntoConstraints = false
@@ -94,36 +94,34 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         ])
         self.addButton = addButton
 
-        var contentInset = collectionView.contentInset
-        contentInset.bottom += addButton.frame.height
-        collectionView.contentInset = contentInset
+        var contentInset = tableView.contentInset
+        contentInset.bottom += addButton.frame.height + 32
+        tableView.contentInset = contentInset
 
         let realm = AppRealm.open()
         guard let sceneId = AppSettings.sceneId else { return }
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
+
         isEditing = scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    func constrain(to view: UIView) {
+        NSLayoutConstraint.deactivate(stackViewConstraints)
+        stackViewConstraints.removeAll()
+        stackViewConstraints.append(contentsOf: [
+            stackView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+        NSLayoutConstraint.activate(stackViewConstraints)
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         addButton.isHidden = !editing
-        for cell in collectionView.visibleCells {
-            if let cell = cell as? ResponderCollectionViewCell {
+        for cell in tableView.visibleCells {
+            if let cell = cell as? ResponderTableViewCell {
                 cell.checkbox.isEnabled = editing
                 cell.button.isEnabled = editing
-            }
-        }
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
-                var sectionInset = layout.sectionInset
-                let inset = max(0, (collectionView.frame.width - 744) / 2)
-                sectionInset.left = inset
-                sectionInset.right = inset
-                layout.sectionInset = sectionInset
             }
         }
     }
@@ -154,12 +152,12 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
         switch changes {
         case .initial:
-            collectionView.reloadData()
+            tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
-            collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 0) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 0) })
+            tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 0) }, with: .automatic)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 0) }, with: .automatic)
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
@@ -169,14 +167,15 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
     @objc func refresh() {
         guard let sceneId = scene?.id else { return }
         // force reload of all cells to update timestamps
-        collectionView.reloadData()
+        tableView.reloadData()
+        tableView.refreshControl?.beginRefreshing()
         AppRealm.getResponders(sceneId: sceneId) { [weak self] (error) in
             guard let self = self else { return }
             if let error = error {
                 print(error)
             }
             DispatchQueue.main.async { [weak self] in
-                self?.collectionView.refreshControl?.endRefreshing()
+                self?.tableView.refreshControl?.endRefreshing()
             }
         }
     }
@@ -231,9 +230,9 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
             indexPaths.append(indexPath)
         }
         for indexPath in indexPaths {
-            if let cell = collectionView.cellForItem(at: indexPath) as? ResponderCollectionViewCell {
+            if let cell = tableView.cellForRow(at: indexPath) as? ResponderTableViewCell {
                 let responder = results?[indexPath.row]
-                cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
+                cell.configure(from: responder, isSelected: responder == cart?.responder)
             }
         }
     }
@@ -256,46 +255,52 @@ class TransportRespondersViewController: UIViewController, ResponderCollectionVi
         dismissAnimated()
     }
 
-    // MARK: - ResponderCollectionViewCellDelegate
+    // MARK: - ResponderTableViewCellDelegate
 
-    func responderCollectionViewCell(_ cell: ResponderCollectionViewCell, didToggle isSelected: Bool) {
-        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+    func responderTableViewCell(_ cell: ResponderTableViewCell, didToggle isSelected: Bool) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
         didToggleItem(at: indexPath)
     }
 
-    func responderCollectionViewCellDidMarkArrived(_ cell: ResponderCollectionViewCell, responderId: String?) {
+    func responderTableViewCellDidMarkArrived(_ cell: ResponderTableViewCell, responderId: String?) {
         guard let responderId = responderId else { return }
         AppRealm.markResponderArrived(responderId: responderId) { _ in
         }
     }
 
-    // MARK: - UICollectionViewDelegate
+    // MARK: - UITableViewDelegate
 
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        collectionView.deselectItem(at: indexPath, animated: true)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
         didToggleItem(at: indexPath)
     }
 
-    // MARK: - UICollectionViewDataSource
+    // MARK: - UITableViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return results?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-        if let cell = cell as? ResponderCollectionViewCell, indexPath.row < (results?.count ?? 0) {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Responder", for: indexPath)
+        if let cell = cell as? ResponderTableViewCell, indexPath.row < (results?.count ?? 0) {
             let responder = results?[indexPath.row]
             cell.delegate = self
             cell.isSelectable = true
-            cell.configure(from: responder, index: indexPath.row, isSelected: responder == cart?.responder)
+            cell.configure(from: responder, isSelected: responder == cart?.responder)
             cell.checkbox.isEnabled = isEditing
             cell.button.isEnabled = isEditing
         }
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ResponderTableViewCell {
+            cell.constrain(to: contentView)
+        }
     }
 }

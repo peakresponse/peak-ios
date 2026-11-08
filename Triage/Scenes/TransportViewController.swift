@@ -19,16 +19,17 @@ struct TransportCart {
 protocol TransportCartViewController: UIViewController {
     var cart: TransportCart? { get set }
     var contentView: UIView! { get set }
+    func constrain(to view: UIView)
     func updateCart()
     func performQuery(_ searchText: String?)
 }
 
 class TransportViewController: SceneViewController, TransportReportsViewControllerDelegate, TransportRespondersViewControllerDelegate,
                                TransportFacilitiesViewControllerDelegate, TransportConfirmViewControllerDelegate {
-    @IBOutlet weak var segmentedControl: SegmentedControl!
+    weak var segmentedControl: SegmentedControl!
     weak var stackView: UIStackView!
-    @IBOutlet weak var containerView: UIView!
-    @IBOutlet weak var overlayView: UIView!
+    weak var containerView: UIView!
+    weak var overlayView: UIView!
 
     var cachedViewControllers: [UIViewController?] = [nil, nil, nil]
 
@@ -139,7 +140,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
         }
     }
 
-    @IBAction func segmentedControlChanged(_ sender: SegmentedControl) {
+    @objc func segmentedControlChanged(_ sender: SegmentedControl) {
         removeCurrentViewController()
         commandHeader.searchField.clearPressed()
         commandHeader.formFieldShouldReturn(commandHeader.searchField)
@@ -149,6 +150,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             case 0:
                 vc = TransportReportsViewController()
                 if let vc = vc as? TransportReportsViewController {
+                    vc.contentView = contentView
                     vc.delegate = self
                     vc.incident = incident
                 }
@@ -156,12 +158,14 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
             case 1:
                 vc = TransportRespondersViewController()
                 if let vc = vc as? TransportRespondersViewController {
+                    vc.contentView = contentView
                     vc.delegate = self
                 }
                 cachedViewControllers[1] = vc
             case 2:
                 vc = TransportFacilitiesViewController()
                 if let vc = vc as? TransportFacilitiesViewController {
+                    vc.contentView = contentView
                     vc.delegate = self
                     vc.incident = incident
                 }
@@ -173,7 +177,7 @@ class TransportViewController: SceneViewController, TransportReportsViewControll
         if let vc = vc as? TransportCartViewController {
             addChild(vc)
             containerView.addSubview(vc.view)
-            vc.contentView = contentView
+            vc.constrain(to: contentView)
             vc.cart = cart
             vc.updateCart()
             vc.performQuery(nil)

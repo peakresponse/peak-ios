@@ -65,7 +65,15 @@ class TransportReportsViewController: UIViewController, TransportCartViewControl
         ])
         self.addButton = addButton
 
+        var contentInset = tableView.contentInset
+        contentInset.bottom += addButton.frame.height + 32
+        tableView.contentInset = contentInset
+
         isEditing = incident?.scene?.isResponder(userId: AppSettings.userId) ?? false
+    }
+
+    func constrain(to view: UIView) {
+
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {

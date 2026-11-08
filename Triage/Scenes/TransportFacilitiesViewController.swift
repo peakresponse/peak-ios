@@ -120,6 +120,10 @@ class TransportFacilitiesViewController: UIViewController, TransportCartViewCont
         isEditing = incident?.scene?.isResponder(userId: AppSettings.userId) ?? false
     }
 
+    func constrain(to view: UIView) {
+
+    }
+
     override func setEditing(_ editing: Bool, animated: Bool) {
         super.setEditing(editing, animated: animated)
         transportButton.isHidden = !editing
