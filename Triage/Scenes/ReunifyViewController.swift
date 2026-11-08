@@ -6,7 +6,6 @@
 //  Copyright © 2024 Francis Li. All rights reserved.
 //
 
-import AlignedCollectionViewFlowLayout
 import Foundation
 import PRKit
 internal import RealmSwift
@@ -14,6 +13,7 @@ import UIKit
 
 class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegate, ScanViewControllerDelegate,
                              UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    weak var reportsCountsHeaderView: ReportsCountsHeaderView!
     weak var collectionView: UICollectionView!
     weak var scanButton: RoundButton!
 
@@ -24,7 +24,6 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     var filterPriority: TriagePriority?
     var filteredResults: Results<Report>?
     var filteredNotificationToken: NotificationToken?
-
 
     override init() {
         super.init()
@@ -44,6 +43,8 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -60,29 +61,38 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         ])
         self.commandHeader = commandHeader
 
+        let reportsCountsHeaderView = ReportsCountsHeaderView()
+        reportsCountsHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        reportsCountsHeaderView.delegate = self
+        contentView.addSubview(reportsCountsHeaderView)
+        NSLayoutConstraint.activate([
+            reportsCountsHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            reportsCountsHeaderView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            reportsCountsHeaderView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+        self.reportsCountsHeaderView = reportsCountsHeaderView
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+        let layout = UICollectionViewFlowLayout()
+        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 8
+
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .background
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.refreshControl = refreshControl
         collectionView.register(ReunifyCollectionViewCell.self, forCellWithReuseIdentifier: "Report")
-        collectionView.register(ReportsCountsHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "Counts")
-        let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout
-        if let layout = layout {
-            layout.minimumLineSpacing = 0
-            layout.minimumInteritemSpacing = 0
-            layout.sectionHeadersPinToVisibleBounds = true
-        }
-        mainView.addSubview(collectionView)
+        contentView.addSubview(collectionView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
+            collectionView.topAnchor.constraint(equalTo: reportsCountsHeaderView.bottomAnchor),
             collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
             collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
         self.collectionView = collectionView
 
@@ -99,6 +109,10 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         ])
         self.scanButton = scanButton
 
+        var contentInset = collectionView.contentInset
+        contentInset.bottom = scanButton.frame.height + 32
+        collectionView.contentInset = contentInset
+
         if incident == nil, let sceneId = AppSettings.sceneId,
            let scene = AppRealm.open().object(ofType: Scene.self, forPrimaryKey: sceneId) {
             incident = scene.incident.first
@@ -111,15 +125,19 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout {
-                var sectionInset = layout.sectionInset
-                let inset = max(0, (collectionView.frame.width - 744) / 2)
-                sectionInset.left = inset
-                sectionInset.right = inset
-                layout.sectionInset = sectionInset
-            }
+        collectionView.collectionViewLayout.invalidateLayout()
+    }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: any UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil) { [weak self] _ in
+            self?.collectionView.collectionViewLayout.invalidateLayout()
         }
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collectionView.collectionViewLayout.invalidateLayout()
     }
 
     @objc override func performQuery() {
@@ -155,7 +173,6 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
     @objc func refresh() {
         guard let incident = incident else { return }
         collectionView.refreshControl?.beginRefreshing()
-        collectionView.setContentOffset(CGPoint(x: 0, y: -(collectionView.refreshControl?.frame.size.height ?? 0)), animated: true)
         AppRealm.getReports(incident: incident) { [weak self] (_, error) in
             guard let self = self else { return }
             if let error = error {
@@ -170,9 +187,7 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         case .initial:
             fallthrough
         case .update:
-            if let headerView = collectionView.supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: IndexPath(row: 0, section: 0)) as? ReportsCountsHeaderView {
-                headerView.configure(from: results)
-            }
+            reportsCountsHeaderView.configure(from: results)
         case .error(let error):
             presentAlert(error: error)
         }
@@ -214,7 +229,8 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
             if let report = report {
                 presentReport(report: report, animated: true)
             } else {
-                self.presentAlert(title: "TransportReportsViewController.notFound.title".localized, message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
+                self.presentAlert(title: "TransportReportsViewController.notFound.title".localized,
+                                  message: String(format: "TransportReportsViewController.notFound.message".localized, pin))
             }
         }
     }
@@ -237,16 +253,6 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
         return cell
     }
 
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "Counts", for: indexPath)
-        if let headerView = headerView as? ReportsCountsHeaderView {
-            headerView.countsView.priorityButtons.last?.isHidden = true
-            headerView.delegate = self
-            headerView.configure(from: results)
-        }
-        return headerView
-    }
-
     // MARK: - UICollectionViewDelegate
 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -259,14 +265,12 @@ class ReunifyViewController: SceneViewController, ReportsCountsHeaderViewDelegat
 
     // MARK: - UICollectionViewDelegateFlowLayout
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        if traitCollection.horizontalSizeClass == .regular {
-            return CGSize(width: 372, height: 213)
-        }
-        return CGSize(width: view.frame.width, height: 213)
-    }
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: 0, height: 118)
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
+        var insets: UIEdgeInsets = .zero
+        insets.left = -collectionView.frame.origin.x
+        insets.right = mainView.frame.size.width - contentView.frame.maxX
+        return insets
     }
 }

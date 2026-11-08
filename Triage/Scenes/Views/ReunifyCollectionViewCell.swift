@@ -14,9 +14,7 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
     weak var reportField: TransportCartReportField!
     weak var responderField: TransportCartResponderField!
     weak var facilityField: TransportCartFacilityField!
-
     weak var updatedAtLabel: UILabel!
-    weak var vr: UIView!
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,10 +39,10 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
         stackView.spacing = 4
         contentView.addSubview(stackView)
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 20),
-            stackView.leftAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leftAnchor, constant: 20),
-            stackView.rightAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.rightAnchor, constant: -20),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
+            stackView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            stackView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            contentView.bottomAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16)
         ])
 
         let reportField = TransportCartReportField()
@@ -79,29 +77,25 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
             view.bottomAnchor.constraint(equalTo: updatedAtLabel.bottomAnchor)
         ])
         self.updatedAtLabel = updatedAtLabel
+    }
 
-        let hr = UIView()
-        hr.translatesAutoresizingMaskIntoConstraints = false
-        hr.backgroundColor = .disabledBorder
-        contentView.addSubview(hr)
-        NSLayoutConstraint.activate([
-            hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            hr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            hr.heightAnchor.constraint(equalToConstant: 2)
-        ])
-
-        let vr = UIView()
-        vr.translatesAutoresizingMaskIntoConstraints = false
-        vr.backgroundColor = .disabledBorder
-        contentView.addSubview(vr)
-        NSLayoutConstraint.activate([
-            vr.topAnchor.constraint(equalTo: contentView.topAnchor),
-            vr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            vr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            vr.widthAnchor.constraint(equalToConstant: 2)
-        ])
-        self.vr = vr
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let attributes = super.preferredLayoutAttributesFitting(layoutAttributes)
+        var view = superview
+        while !(view?.isKind(of: UICollectionView.self) ?? true) {
+            view = view?.superview
+        }
+        if let collectionView = view as? UICollectionView,
+           let delegate = collectionView.delegate as? UICollectionViewDelegateFlowLayout,
+           let inset = delegate.collectionView?(collectionView, layout: collectionView.collectionViewLayout, insetForSectionAt: 0) {
+            let bounds = collectionView.bounds
+            attributes.frame.size.width = bounds.size.width - inset.left - inset.right
+            if traitCollection.horizontalSizeClass == .regular,
+               let layout = (view as? UICollectionView)?.collectionViewLayout as? UICollectionViewFlowLayout {
+                attributes.frame.size.width = floor((attributes.frame.size.width - layout.minimumInteritemSpacing) / 2)
+            }
+        }
+        return attributes
     }
 
     func configure(report: Report?, index: Int) {
@@ -111,7 +105,5 @@ class ReunifyCollectionViewCell: UICollectionViewCell {
         responderField.configure(from: report)
         facilityField.configure(from: report.disposition?.destinationFacility)
         updatedAtLabel.text = report.updatedAt?.asRelativeString()
-
-        vr.isHidden = traitCollection.horizontalSizeClass == .compact || !index.isMultiple(of: 2)
     }
 }
