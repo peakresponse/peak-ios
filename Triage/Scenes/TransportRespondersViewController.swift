@@ -299,7 +299,7 @@ class TransportRespondersViewController: UIViewController, ResponderTableViewCel
     }
 
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        if let cell = cell as? ResponderTableViewCell {
+        if view.superview != nil, let cell = cell as? ResponderTableViewCell {
             cell.constrain(to: contentView)
         }
     }

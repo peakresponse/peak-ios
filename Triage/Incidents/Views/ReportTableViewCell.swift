@@ -72,7 +72,6 @@ class ReportTableViewCell: UITableViewCell {
         let priorityChip = Chip()
         priorityChip.translatesAutoresizingMaskIntoConstraints = false
         priorityChip.isUserInteractionEnabled = false
-        priorityChip.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         self.priorityChip = priorityChip
 
         let tagLabel = UILabel()
@@ -92,14 +91,12 @@ class ReportTableViewCell: UITableViewCell {
         descLabel.font = .h4
         descLabel.textColor = .labelText
         descLabel.numberOfLines = 1
-        descLabel.setContentHuggingPriority(.defaultLow, for: .horizontal)
         self.descLabel = descLabel
 
         let updatedAtLabel = UILabel()
         updatedAtLabel.translatesAutoresizingMaskIntoConstraints = false
         updatedAtLabel.font = .body14Bold
         updatedAtLabel.textColor = .labelText
-        updatedAtLabel.setContentHuggingPriority(.required, for: .horizontal)
         self.updatedAtLabel = updatedAtLabel
 
         updateLayout()
@@ -280,9 +277,10 @@ class ReportTableViewCell: UITableViewCell {
             originalPriorityChipWidthConstraint?.isActive = !originalPriorityChip.isHidden
 
             view.addSubview(descLabel)
-            descLabelRightViewConstraint = descLabel.rightAnchor.constraint(equalTo: view.rightAnchor)
+            descLabelRightViewConstraint = descLabel.rightAnchor.constraint(lessThanOrEqualTo: view.rightAnchor)
             descLabelRightViewConstraint?.isActive = originalPriorityChip.isHidden
-            descLabelRightPriorityChipConstraint = descLabel.rightAnchor.constraint(lessThanOrEqualTo: originalPriorityChip.leftAnchor, constant: -10)
+            descLabelRightPriorityChipConstraint = descLabel.rightAnchor.constraint(lessThanOrEqualTo: originalPriorityChip.leftAnchor,
+                                                                                    constant: -10)
             descLabelRightPriorityChipConstraint?.isActive = !originalPriorityChip.isHidden
             NSLayoutConstraint.activate([
                 descLabel.leftAnchor.constraint(equalTo: view.leftAnchor),
