@@ -11,7 +11,7 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate, KeyboardAwareScrollViewController,
+class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,// KeyboardAwareScrollViewController,
                                    UICollectionViewDataSource, UICollectionViewDelegate {
     weak var commandHeader: CommandHeader!
     weak var collectionView: UICollectionView!
@@ -32,16 +32,16 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerForKeyboardNotifications(self)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterFromKeyboardNotifications()
-    }
+//
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        registerForKeyboardNotifications(self)
+//    }
+//
+//    override func viewWillDisappear(_ animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        unregisterFromKeyboardNotifications()
+//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()

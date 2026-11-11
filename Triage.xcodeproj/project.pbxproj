@@ -34,7 +34,6 @@
 		454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A8BC72B995975003C82D6 /* TransportReportsViewController.swift */; };
 		454A8BCA2B995991003C82D6 /* TransportRespondersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A8BC92B995991003C82D6 /* TransportRespondersViewController.swift */; };
 		454A8BCC2B9959B8003C82D6 /* TransportFacilitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A8BCB2B9959B8003C82D6 /* TransportFacilitiesViewController.swift */; };
-		454A8BCE2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */; };
 		454E17B224FF159C00F9EB8B /* Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B124FF159C00F9EB8B /* Scene.swift */; };
 		454E17B724FFF5BF00F9EB8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B624FFF5BF00F9EB8B /* User.swift */; };
 		454E17B924FFF5C900F9EB8B /* Responder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454E17B824FFF5C900F9EB8B /* Responder.swift */; };
@@ -131,7 +130,6 @@
 		45B7A2E6250EFFB100BCAAAE /* GMSMarker+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B7A2E5250EFFB100BCAAAE /* GMSMarker+Extensions.swift */; };
 		45BC4E4F309E9229000CDD15 /* ReportTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */; };
 		45BC4E51309FAD4D000CDD15 /* ResponderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */; };
-		45BC4E53309FEF47000CDD15 /* ResponderCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
 		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
@@ -240,7 +238,6 @@
 		454A8BC72B995975003C82D6 /* TransportReportsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportReportsViewController.swift; sourceTree = "<group>"; };
 		454A8BC92B995991003C82D6 /* TransportRespondersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportRespondersViewController.swift; sourceTree = "<group>"; };
 		454A8BCB2B9959B8003C82D6 /* TransportFacilitiesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportFacilitiesViewController.swift; sourceTree = "<group>"; };
-		454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportReportCollectionViewCell.swift; sourceTree = "<group>"; };
 		454E17B124FF159C00F9EB8B /* Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scene.swift; sourceTree = "<group>"; };
 		454E17B624FFF5BF00F9EB8B /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		454E17B824FFF5C900F9EB8B /* Responder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Responder.swift; sourceTree = "<group>"; };
@@ -331,7 +328,6 @@
 		45B7A2F325142A5E00BCAAAE /* Peak Response.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Peak Response.entitlements"; sourceTree = "<group>"; };
 		45BC4E4E309E9224000CDD15 /* ReportTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportTableViewCell.swift; sourceTree = "<group>"; };
 		45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderTableViewCell.swift; sourceTree = "<group>"; };
-		45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderCollectionViewCell.swift; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
 		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
@@ -440,7 +436,6 @@
 		454E17B324FF28BF00F9EB8B /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				45BC4E52309FEF47000CDD15 /* ResponderCollectionViewCell.swift */,
 				45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */,
 				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
 				456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */,
@@ -450,7 +445,6 @@
 				45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */,
 				45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */,
 				45C207D92B9BADBF00150184 /* TransportFacilityCollectionViewCell.swift */,
-				454A8BCD2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift */,
 				45E1215B282AEA2300D8DDBE /* TriageCounterCell.swift */,
 				45E12168282B341200D8DDBE /* TriageHeaderCell.swift */,
 			);
@@ -961,7 +955,6 @@
 				45F2190624E5ED100046A39B /* UIBarButtonItem+Extensions.swift in Sources */,
 				456B7C0C24DBB4BC00E42EB8 /* FormButton.swift in Sources */,
 				45D422BF2B8D359900E75D7E /* AgencyKeyboardSource.swift in Sources */,
-				45BC4E53309FEF47000CDD15 /* ResponderCollectionViewCell.swift in Sources */,
 				4566F020236CCC5500A04C75 /* AppDelegate.swift in Sources */,
 				4566F05F236CD57400A04C75 /* UIViewController+Extensions.swift in Sources */,
 				45F7BACC273AEC1600FBD31F /* Disposition.swift in Sources */,
@@ -994,7 +987,6 @@
 				456F050227B5E884000CEE42 /* Predictions.swift in Sources */,
 				45F7BACE273AEC2000FBD31F /* Narrative.swift in Sources */,
 				458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */,
-				454A8BCE2B9A7211003C82D6 /* TransportReportCollectionViewCell.swift in Sources */,
 				458CA0C8276973040065F324 /* RxNormKeyboardSource.swift in Sources */,
 				451F9DCC291ED0C500B5E73A /* ImageView.swift in Sources */,
 				458CA0C6276950290065F324 /* NemsisComboKeyboard.swift in Sources */,

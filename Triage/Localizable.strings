@@ -495,8 +495,6 @@
 "Responder.role.TRIAGE" = "Triage Team";
 "Responder.role.TRIAGE_LEADER" = "Triage Team Leader";
 
-"ResponderCollectionViewCell.arrivedAt" = "Arrived: %@";
-
 "ResponderViewController.alert.agency.title" = "Agency required";
 "ResponderViewController.alert.agency.message" = "Please select an agency for this unit.";
 "ResponderViewController.alert.duplicate.title" = "Duplicate Unit";

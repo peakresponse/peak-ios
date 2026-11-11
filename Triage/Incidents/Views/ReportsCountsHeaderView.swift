@@ -14,7 +14,7 @@ protocol ReportsCountsHeaderViewDelegate: AnyObject {
     func reportsCountsHeaderView(_ view: ReportsCountsHeaderView, didSelect priority: TriagePriority?)
 }
 
-class ReportsCountsHeaderView: UICollectionReusableView, TriageCountsDelegate {
+class ReportsCountsHeaderView: UIView, TriageCountsDelegate {
     weak var delegate: ReportsCountsHeaderViewDelegate?
     var countsView: TriageCounts!
     var countsViewConstraints: [NSLayoutConstraint] = []
