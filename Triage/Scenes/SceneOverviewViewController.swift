@@ -11,37 +11,14 @@ import PRKit
 internal import RealmSwift
 import UIKit
 
-class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,// KeyboardAwareScrollViewController,
-                                   UICollectionViewDataSource, UICollectionViewDelegate {
+class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,
+                                   UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
-    weak var collectionView: UICollectionView!
-    weak var collectionViewBottomConstraint: NSLayoutConstraint!
-    var scrollView: UIScrollView! { return collectionView }
-    var scrollViewBottomConstraint: NSLayoutConstraint! { return collectionViewBottomConstraint }
+    weak var tableView: UITableView!
     var formInputAccessoryView: UIView!
 
     var scene: Scene?
     var responders: [Responder]?
-
-    override init() {
-        super.init()
-        tabBarItem.title = "TabBarItem.rolesResources".localized
-        tabBarItem.image = UIImage(named: "Stage", in: PRKitBundle.instance, compatibleWith: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-//
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        registerForKeyboardNotifications(self)
-//    }
-//
-//    override func viewWillDisappear(_ animated: Bool) {
-//        super.viewWillDisappear(animated)
-//        unregisterFromKeyboardNotifications()
-//    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -65,27 +42,21 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
-        let layout = AlignedCollectionViewFlowLayout(horizontalAlignment: .left, verticalAlignment: .top)
-        layout.estimatedItemSize = CGSize(width: 372, height: 136)
-        layout.minimumLineSpacing = 0
-        layout.minimumInteritemSpacing = 0
-
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .background
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.refreshControl = refreshControl
-        collectionView.register(SceneOverviewHeaderCell.self, forCellWithReuseIdentifier: "SceneOverviewHeader")
-        collectionView.register(ResponderRoleCollectionViewCell.self, forCellWithReuseIdentifier: "Responder")
-        mainView.addSubview(collectionView)
+        let tableView = TableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = .background
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.refreshControl = refreshControl
+        tableView.register(ResponderRoleTableViewCell.self, forCellReuseIdentifier: "Responder")
+        contentView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            collectionView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            collectionView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+            tableView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
         ])
-        self.collectionView = collectionView
+        self.tableView = tableView
 
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         commandHeader.searchFieldDelegate = self
@@ -93,19 +64,6 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
         performQuery()
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        if traitCollection.horizontalSizeClass == .regular {
-            if let layout = collectionView.collectionViewLayout as? AlignedCollectionViewFlowLayout {
-                var sectionInset = layout.sectionInset
-                let inset = max(0, (collectionView.frame.width - 744) / 2)
-                sectionInset.left = inset
-                sectionInset.right = inset
-                layout.sectionInset = sectionInset
-            }
-        }
     }
 
     func performQuery() {
@@ -132,12 +90,12 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
     func didObserveRealmChanges(_ changes: RealmCollectionChange<Results<Responder>>) {
         switch changes {
         case .initial:
-            collectionView.reloadData()
+            tableView.reloadData()
         case .update(_, let deletions, let insertions, let modifications):
-            collectionView.performBatchUpdates({
-                self.collectionView.deleteItems(at: deletions.map { IndexPath(row: $0, section: 1) })
-                self.collectionView.insertItems(at: insertions.map { IndexPath(row: $0, section: 1) })
-                self.collectionView.reloadItems(at: modifications.map { IndexPath(row: $0, section: 1) })
+            tableView.performBatchUpdates({
+                self.tableView.deleteRows(at: deletions.map { IndexPath(row: $0, section: 1) }, with: .automatic)
+                self.tableView.insertRows(at: insertions.map { IndexPath(row: $0, section: 1) }, with: .automatic)
+                self.tableView.reloadRows(at: modifications.map { IndexPath(row: $0, section: 1) }, with: .automatic)
             }, completion: nil)
         case .error(let error):
             presentAlert(error: error)
@@ -145,8 +103,8 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
     }
 
     @objc func refresh() {
-        collectionView.refreshControl?.endRefreshing()
-        collectionView.reloadData()
+        tableView.refreshControl?.endRefreshing()
+        tableView.reloadData()
     }
 
     private func leaveScene() {
@@ -205,8 +163,14 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         guard let scene = scene else { return }
         let vc = LocationViewController()
         vc.modalPresentationStyle = .fullScreen
-        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized, style: .plain, target: self, action: #selector(dismissAnimated))
-        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized, style: .done, target: self, action: #selector(saveScenePressed))
+        vc.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "NavigationBar.cancel".localized,
+                                                              style: .plain,
+                                                              target: self,
+                                                              action: #selector(dismissAnimated))
+        vc.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "NavigationBar.save".localized,
+                                                               style: .done,
+                                                               target: self,
+                                                               action: #selector(saveScenePressed))
         vc.scene = scene
         vc.newScene = Scene(clone: scene)
         _ = vc.view
@@ -234,12 +198,11 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
                 let role = ResponderRole(rawValue: roleValue ?? "")
                 if let responder = field.source as? Responder {
                     AppRealm.assignResponder(responderId: responder.id, role: role)
-                    for cell in collectionView.visibleCells {
-                        if let cell = cell as? ResponderRoleCollectionViewCell,
+                    for cell in tableView.visibleCells {
+                        if let cell = cell as? ResponderRoleTableViewCell,
                            let responderId = cell.responderId,
-                           let responder = responders?.first(where: { $0.id == responderId }),
-                           let index = responders?.firstIndex(of: responder) {
-                            cell.configure(from: responder, index: index)
+                           let responder = responders?.first(where: { $0.id == responderId }) {
+                            cell.configure(from: responder)
                         }
                     }
                 }
@@ -247,47 +210,31 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         }
     }
 
-    // MARK: - UICollectionViewDataSource
+    // MARK: - UITableViewDataSource
 
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 2
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
     }
 
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        switch section {
-        case 0: // overview header
-            return 1
-        case 1: // responders
-            return responders?.count ?? 0
-        default:
-            return 0
-        }
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return responders?.count ?? 0
     }
 
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: UICollectionViewCell
-        switch indexPath.section {
-        case 0:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SceneOverviewHeader", for: indexPath)
-            if let cell = cell as? SceneOverviewHeaderCell, let scene = scene {
-                cell.configure(from: scene)
-                cell.closeButton.removeTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
-                cell.closeButton.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
-                cell.editButton.removeTarget(self, action: #selector(editPressed(_:)), for: .touchUpInside)
-                cell.editButton.addTarget(self, action: #selector(editPressed(_:)), for: .touchUpInside)
-            }
-        case 1:
-            cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Responder", for: indexPath)
-            if let cell = cell as? ResponderRoleCollectionViewCell {
-                let responder = responders?[indexPath.row]
-                cell.configure(from: responder, index: indexPath.row)
-                cell.roleSelector.delegate = self
-                cell.roleSelector.inputAccessoryView = formInputAccessoryView
-                cell.roleSelector.isEnabled = scene?.isResponder(userId: AppSettings.userId) ?? false
-            }
-        default:
-            cell = UICollectionViewCell()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Responder", for: indexPath)
+        if let cell = cell as? ResponderRoleTableViewCell {
+            let responder = responders?[indexPath.row]
+            cell.configure(from: responder)
+            cell.roleSelector.delegate = self
+            cell.roleSelector.inputAccessoryView = formInputAccessoryView
+            cell.roleSelector.isEnabled = scene?.isResponder(userId: AppSettings.userId) ?? false
         }
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if let cell = cell as? ResponderRoleTableViewCell {
+            cell.constrain(to: contentView)
+        }
     }
 }
