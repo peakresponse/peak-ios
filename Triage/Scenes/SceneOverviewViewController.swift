@@ -14,6 +14,7 @@ import UIKit
 class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PRKit.FormFieldDelegate,
                                    UITableViewDataSource, UITableViewDelegate {
     weak var commandHeader: CommandHeader!
+    weak var sceneOverviewHeaderView: SceneOverviewHeaderView!
     weak var tableView: UITableView!
     var formInputAccessoryView: UIView!
 
@@ -39,6 +40,20 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         ])
         self.commandHeader = commandHeader
 
+        let sceneOverviewHeaderView = SceneOverviewHeaderView()
+        sceneOverviewHeaderView.translatesAutoresizingMaskIntoConstraints = false
+        sceneOverviewHeaderView.closeButton.addTarget(self, action: #selector(closePressed(_:)), for: .touchUpInside)
+        sceneOverviewHeaderView.editButton.addTarget(self, action: #selector(editPressed(_:)), for: .touchUpInside)
+        contentView.addSubview(sceneOverviewHeaderView)
+        NSLayoutConstraint.activate([
+            sceneOverviewHeaderView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            sceneOverviewHeaderView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            sceneOverviewHeaderView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            sceneOverviewHeaderView.containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            sceneOverviewHeaderView.containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
+        ])
+        self.sceneOverviewHeaderView = sceneOverviewHeaderView
+
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
 
@@ -51,7 +66,7 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         tableView.register(ResponderRoleTableViewCell.self, forCellReuseIdentifier: "Responder")
         contentView.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            tableView.topAnchor.constraint(equalTo: sceneOverviewHeaderView.bottomAnchor),
             tableView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
@@ -72,6 +87,9 @@ class SceneOverviewViewController: BaseViewController, CommandHeaderDelegate, PR
         scene = realm.object(ofType: Scene.self, forPrimaryKey: sceneId)
 
         guard let scene = scene else { return }
+
+        sceneOverviewHeaderView.configure(from: scene)
+
         var results = scene.responders.filter("user<>%@ AND departedAt=%@", NSNull(), NSNull())
         if let text = commandHeader.searchField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             results = results.filter("(vehicle.number CONTAINS[cd] %@) OR (user.firstName CONTAINS[cd] %@) OR (user.lastName CONTAINS[cd] %@)",

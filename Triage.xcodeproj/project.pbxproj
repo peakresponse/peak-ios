@@ -82,7 +82,7 @@
 		45777ABB2790AD5A0030BFD6 /* HistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */; };
 		457CC7742EE25E3D002B6194 /* CallViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7732EE25E39002B6194 /* CallViewController.swift */; };
 		457CC7762EE34EE2002B6194 /* CallHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 457CC7752EE34EDF002B6194 /* CallHelper.swift */; };
-		458B87F02823564300A9C602 /* SceneOverviewHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */; };
+		458B87F02823564300A9C602 /* SceneOverviewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458B87EF2823564300A9C602 /* SceneOverviewHeaderView.swift */; };
 		458CA0A9275ADC980065F324 /* ICD10CM.realm in Resources */ = {isa = PBXBuildFile; fileRef = 458CA0A8275ADC980065F324 /* ICD10CM.realm */; };
 		458CA0AC275ADCFF0065F324 /* ICD10CMKeyboardSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */; };
 		458CA0AE275FD6610065F324 /* CodeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 458CA0AD275FD6610065F324 /* CodeList.swift */; };
@@ -293,7 +293,7 @@
 		45777ABA2790AD5A0030BFD6 /* HistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTests.swift; sourceTree = "<group>"; };
 		457CC7732EE25E39002B6194 /* CallViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallViewController.swift; sourceTree = "<group>"; };
 		457CC7752EE34EDF002B6194 /* CallHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallHelper.swift; sourceTree = "<group>"; };
-		458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewHeaderCell.swift; sourceTree = "<group>"; };
+		458B87EF2823564300A9C602 /* SceneOverviewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewHeaderView.swift; sourceTree = "<group>"; };
 		458CA0A8275ADC980065F324 /* ICD10CM.realm */ = {isa = PBXFileReference; lastKnownFileType = file; path = ICD10CM.realm; sourceTree = "<group>"; };
 		458CA0AB275ADCFF0065F324 /* ICD10CMKeyboardSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ICD10CMKeyboardSource.swift; sourceTree = "<group>"; };
 		458CA0AD275FD6610065F324 /* CodeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeList.swift; sourceTree = "<group>"; };
@@ -443,7 +443,7 @@
 				456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */,
 				45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
-				458B87EF2823564300A9C602 /* SceneOverviewHeaderCell.swift */,
+				458B87EF2823564300A9C602 /* SceneOverviewHeaderView.swift */,
 				45C207E12BA0D2B900150184 /* TransportCartFacilityField.swift */,
 				45E934E72B9B7DBC007164AC /* TransportCartReportField.swift */,
 				45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */,
@@ -984,7 +984,7 @@
 				45E35A3C24F09B84005A8059 /* UIButton+Extensions.swift in Sources */,
 				45F7BAC22739E37300FBD31F /* Report.swift in Sources */,
 				45F7BACA273AEC0800FBD31F /* History.swift in Sources */,
-				458B87F02823564300A9C602 /* SceneOverviewHeaderCell.swift in Sources */,
+				458B87F02823564300A9C602 /* SceneOverviewHeaderView.swift in Sources */,
 				458CA0B8276040980065F324 /* CodeListItemsViewController.swift in Sources */,
 				452BD607284D2A3200D6E408 /* LatLngControl.swift in Sources */,
 				458CA0B0275FF9CE0065F324 /* NemsisKeyboard.swift in Sources */,

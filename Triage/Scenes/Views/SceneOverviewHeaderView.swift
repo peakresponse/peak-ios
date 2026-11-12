@@ -9,27 +9,45 @@
 import UIKit
 import PRKit
 
-class SceneOverviewHeaderCell: UICollectionViewCell {
-    @IBOutlet weak var incidentNumberLabel: UILabel!
-    @IBOutlet weak var addressLabel: UILabel!
-    @IBOutlet weak var timestampLabel: UILabel!
-    @IBOutlet weak var closeButton: PRKit.Button!
-    @IBOutlet weak var editButton: PRKit.Button!
-    @IBOutlet weak var hr: UIView!
+class SceneOverviewHeaderView: UIView {
+    weak var containerView: UIView!
+    weak var incidentNumberLabel: UILabel!
+    weak var addressLabel: UILabel!
+    weak var timestampLabel: UILabel!
+    weak var closeButton: PRKit.Button!
+    weak var editButton: PRKit.Button!
+    weak var hr: UIView!
 
     var calculatedSize: CGSize?
 
     override init(frame: CGRect) {
         super.init(frame: frame)
 
+        backgroundColor = .background
+
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerView)
+        let containerViewLeftConstraint = containerView.leftAnchor.constraint(equalTo: leftAnchor)
+        containerViewLeftConstraint.priority = .defaultHigh
+        let containerViewRightConstraint = containerView.rightAnchor.constraint(equalTo: rightAnchor)
+        containerViewRightConstraint.priority = .defaultHigh
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: topAnchor),
+            containerViewLeftConstraint,
+            containerViewRightConstraint,
+            bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
+        ])
+        self.containerView = containerView
+
         let incidentNumberLabel = UILabel()
         incidentNumberLabel.translatesAutoresizingMaskIntoConstraints = false
         incidentNumberLabel.font = .h2Bold
         incidentNumberLabel.textColor = .text
-        contentView.addSubview(incidentNumberLabel)
+        containerView.addSubview(incidentNumberLabel)
         NSLayoutConstraint.activate([
-            incidentNumberLabel.topAnchor.constraint(equalTo: contentView.topAnchor),
-            incidentNumberLabel.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20)
+            incidentNumberLabel.topAnchor.constraint(equalTo: containerView.topAnchor),
+            incidentNumberLabel.leftAnchor.constraint(equalTo: containerView.leftAnchor)
         ])
         self.incidentNumberLabel = incidentNumberLabel
 
@@ -37,7 +55,7 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         addressLabel.translatesAutoresizingMaskIntoConstraints = false
         addressLabel.font = .h4SemiBold
         addressLabel.textColor = .labelText
-        contentView.addSubview(addressLabel)
+        containerView.addSubview(addressLabel)
         NSLayoutConstraint.activate([
             addressLabel.topAnchor.constraint(equalTo: incidentNumberLabel.bottomAnchor),
             addressLabel.leftAnchor.constraint(equalTo: incidentNumberLabel.leftAnchor)
@@ -48,11 +66,11 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         timestampLabel.translatesAutoresizingMaskIntoConstraints = false
         timestampLabel.font = .body14Bold
         timestampLabel.textColor = .labelText
-        contentView.addSubview(timestampLabel)
+        containerView.addSubview(timestampLabel)
         NSLayoutConstraint.activate([
             timestampLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor),
             timestampLabel.leftAnchor.constraint(equalTo: addressLabel.leftAnchor),
-            contentView.bottomAnchor.constraint(greaterThanOrEqualTo: timestampLabel.bottomAnchor, constant: 10)
+            containerView.bottomAnchor.constraint(greaterThanOrEqualTo: timestampLabel.bottomAnchor, constant: 8)
         ])
         self.timestampLabel = timestampLabel
 
@@ -60,13 +78,13 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         closeButton.translatesAutoresizingMaskIntoConstraints = false
         closeButton.style = .destructive
         closeButton.size = .small
-        contentView.addSubview(closeButton)
+        containerView.addSubview(closeButton)
         NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: contentView.topAnchor),
-            closeButton.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20),
-            incidentNumberLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -10),
-            addressLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -10),
-            timestampLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -10)
+            closeButton.topAnchor.constraint(equalTo: containerView.topAnchor),
+            closeButton.rightAnchor.constraint(equalTo: containerView.rightAnchor),
+            incidentNumberLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -8),
+            addressLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -8),
+            timestampLabel.rightAnchor.constraint(lessThanOrEqualTo: closeButton.leftAnchor, constant: -8)
         ])
         self.closeButton = closeButton
 
@@ -75,12 +93,12 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         editButton.style = .secondary
         editButton.size = .small
         editButton.setTitle("Button.editScene".localized, for: .normal)
-        contentView.addSubview(editButton)
+        containerView.addSubview(editButton)
         NSLayoutConstraint.activate([
-            editButton.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10),
+            editButton.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 8),
             editButton.leftAnchor.constraint(equalTo: closeButton.leftAnchor),
             editButton.rightAnchor.constraint(equalTo: closeButton.rightAnchor),
-            contentView.bottomAnchor.constraint(greaterThanOrEqualTo: editButton.bottomAnchor, constant: 10)
+            containerView.bottomAnchor.constraint(greaterThanOrEqualTo: editButton.bottomAnchor, constant: 18)
         ])
         self.editButton = editButton
 
@@ -88,34 +106,21 @@ class SceneOverviewHeaderCell: UICollectionViewCell {
         hr.translatesAutoresizingMaskIntoConstraints = false
         hr.backgroundColor = .disabledBorder
         hr.heightAnchor.constraint(equalToConstant: 2).isActive = true
-        contentView.addSubview(hr)
+        addSubview(hr)
         NSLayoutConstraint.activate([
-            hr.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            hr.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            hr.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            hr.leftAnchor.constraint(equalTo: leftAnchor),
+            hr.rightAnchor.constraint(equalTo: rightAnchor),
+            hr.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
         self.hr = hr
+
+        let heightConstraint = heightAnchor.constraint(equalToConstant: 0)
+        heightConstraint.priority = .defaultLow
+        heightConstraint.isActive = true
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        calculatedSize = nil
-    }
-
-    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        if calculatedSize == nil {
-            if traitCollection.horizontalSizeClass == .regular {
-                calculatedSize = CGSize(width: 372, height: 136)
-            } else {
-                calculatedSize = CGSize(width: superview?.frame.width ?? 375, height: 136)
-            }
-        }
-        layoutAttributes.size = calculatedSize ?? .zero
-        return layoutAttributes
     }
 
     func configure(from scene: Scene) {
