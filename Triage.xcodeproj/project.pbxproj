@@ -132,7 +132,6 @@
 		45BC4E51309FAD4D000CDD15 /* ResponderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */; };
 		45BC4E5530A5211E000CDD15 /* ResponderRoleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BC4E5430A52118000CDD15 /* ResponderRoleTableViewCell.swift */; };
 		45BD803828440C5A00BD6F92 /* SceneOverviewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */; };
-		45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */; };
 		45C007CB272A02640072FF18 /* IncidentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C007CA272A02640072FF18 /* IncidentsViewController.swift */; };
 		45C207D62B9B8A2400150184 /* TransportCartResponderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */; };
 		45C207D82B9BAB7E00150184 /* RegionFacility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45C207D72B9BAB7E00150184 /* RegionFacility.swift */; };
@@ -331,7 +330,6 @@
 		45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderTableViewCell.swift; sourceTree = "<group>"; };
 		45BC4E5430A52118000CDD15 /* ResponderRoleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleTableViewCell.swift; sourceTree = "<group>"; };
 		45BD803728440C5A00BD6F92 /* SceneOverviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneOverviewViewController.swift; sourceTree = "<group>"; };
-		45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponderRoleCollectionViewCell.swift; sourceTree = "<group>"; };
 		45C007CA272A02640072FF18 /* IncidentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncidentsViewController.swift; sourceTree = "<group>"; };
 		45C207D52B9B8A2400150184 /* TransportCartResponderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransportCartResponderField.swift; sourceTree = "<group>"; };
 		45C207D72B9BAB7E00150184 /* RegionFacility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionFacility.swift; sourceTree = "<group>"; };
@@ -439,7 +437,6 @@
 			isa = PBXGroup;
 			children = (
 				45BC4E5430A52118000CDD15 /* ResponderRoleTableViewCell.swift */,
-				45BD8039284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift */,
 				456E5A6A2BCDF971001370BE /* RespondersCountsHeaderView.swift */,
 				45BC4E50309FAD46000CDD15 /* ResponderTableViewCell.swift */,
 				45C207DF2BA0D23700150184 /* ReunifyCollectionViewCell.swift */,
@@ -1031,7 +1028,6 @@
 				45F7BAC8273AEBFD00FBD31F /* Situation.swift in Sources */,
 				454A8BC82B995975003C82D6 /* TransportReportsViewController.swift in Sources */,
 				45B50C8A27D6D3CB002F1674 /* Report+RoutED.swift in Sources */,
-				45BD803A284418E000BD6F92 /* ResponderRoleCollectionViewCell.swift in Sources */,
 				458CA0C027680BFF0065F324 /* NemsisBacked.swift in Sources */,
 				454F9CB328D90B90009F7115 /* Signature.swift in Sources */,
 				454096A824452CEA00AEE53E /* AppSettings.swift in Sources */,
