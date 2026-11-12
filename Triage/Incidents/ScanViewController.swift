@@ -29,11 +29,13 @@ class ScanCameraView: UIView {
     @objc optional func scanViewController(_ vc: ScanViewController, didScan pin: String, report: Report?)
 }
 
+// swiftlint:disable:next type_body_length
 class ScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBufferDelegate, LocationHelperDelegate, PRKit.FormFieldDelegate {
     weak var commandHeader: CommandHeader!
-    @IBOutlet weak var cameraLabel: UILabel!
-    @IBOutlet weak var cameraView: UIView!
-    @IBOutlet weak var pinField: PRKit.TextField!
+    weak var cameraLabel: UILabel!
+    weak var cameraView: UIView!
+    weak var pinField: PRKit.TextField!
+    var cameraViewConstraints: [NSLayoutConstraint] = []
 
     weak var delegate: ScanViewControllerDelegate?
 
@@ -98,8 +100,7 @@ class ScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBuff
         contentView.addSubview(cameraView)
         NSLayoutConstraint.activate([
             cameraView.topAnchor.constraint(equalTo: cameraLabel.bottomAnchor, constant: 7),
-            cameraView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            cameraView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor, multiplier: 1.0)
         ])
         self.cameraView = cameraView
@@ -148,12 +149,33 @@ class ScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBuff
         ])
         self.pinField = pinField
 
+        updateLayout()
         addKeyboardListener()
 
         let formInputAccessoryView = FormInputAccessoryView(rootView: view)
         pinField.inputAccessoryView = formInputAccessoryView
 
         setupCamera()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
+        updateLayout(newCollection)
+    }
+
+    func updateLayout(_ traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? self.traitCollection
+        NSLayoutConstraint.deactivate(cameraViewConstraints)
+        cameraViewConstraints.removeAll()
+        if traitCollection.horizontalSizeClass == .regular {
+            cameraViewConstraints.append(contentsOf: [
+                cameraView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5)
+            ])
+        } else {
+            cameraViewConstraints.append(contentsOf: [
+                cameraView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1)
+            ])
+        }
+        NSLayoutConstraint.activate(cameraViewConstraints)
     }
 
     func start() {
@@ -281,7 +303,7 @@ class ScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBuff
         }
     }
 
-    @IBAction func didTap(_ sender: Any) {
+    @objc func didTap(_ sender: Any) {
         pinField.clearPressed()
         _ = pinField.resignFirstResponder()
     }

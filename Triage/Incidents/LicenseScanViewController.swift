@@ -31,8 +31,9 @@ class LicenseScanCameraView: UIView {
 
 class LicenseScanViewController: BaseViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     weak var commandHeader: CommandHeader!
-    @IBOutlet weak var cameraLabel: UILabel!
-    @IBOutlet weak var cameraView: UIView!
+    weak var cameraLabel: UILabel!
+    weak var cameraView: UIView!
+    var cameraViewConstraints: [NSLayoutConstraint] = []
 
     weak var delegate: LicenseScanViewControllerDelegate?
 
@@ -91,13 +92,33 @@ class LicenseScanViewController: BaseViewController, AVCaptureVideoDataOutputSam
         contentView.addSubview(cameraView)
         NSLayoutConstraint.activate([
             cameraView.topAnchor.constraint(equalTo: cameraLabel.bottomAnchor, constant: 7),
-            cameraView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            cameraView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
+            cameraView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor, multiplier: 1.0)
         ])
         self.cameraView = cameraView
 
+        updateLayout()
         setupCamera()
+    }
+
+    override func willTransition(to newCollection: UITraitCollection, with coordinator: any UIViewControllerTransitionCoordinator) {
+        updateLayout(newCollection)
+    }
+
+    func updateLayout(_ traitCollection: UITraitCollection? = nil) {
+        let traitCollection = traitCollection ?? self.traitCollection
+        NSLayoutConstraint.deactivate(cameraViewConstraints)
+        cameraViewConstraints.removeAll()
+        if traitCollection.horizontalSizeClass == .regular {
+            cameraViewConstraints.append(contentsOf: [
+                cameraView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5)
+            ])
+        } else {
+            cameraViewConstraints.append(contentsOf: [
+                cameraView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1)
+            ])
+        }
+        NSLayoutConstraint.activate(cameraViewConstraints)
     }
 
     func start() {
