@@ -14,11 +14,9 @@ import UIKit
     @objc optional func responderViewControllerDidSave(_ vc: ResponderViewController)
 }
 
-class ResponderViewController: BaseViewController, FormBuilder, KeyboardAwareScrollViewController, CheckboxDelegate {
+class ResponderViewController: BaseViewController, FormBuilder, CheckboxDelegate {
     weak var commandHeader: CommandHeader!
-    weak var scrollView: UIScrollView!
-    weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    weak var containerView: UIStackView!
+    weak var formScrollView: FormScrollView!
 
     var rightBarButtonItem: UIBarButtonItem!
 
@@ -50,100 +48,85 @@ class ResponderViewController: BaseViewController, FormBuilder, KeyboardAwareScr
         ])
         self.commandHeader = commandHeader
 
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .background
-        mainView.addSubview(scrollView)
-        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        let formScrollView = FormScrollView()
+        formScrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(formScrollView)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            scrollViewBottomConstraint
+            formScrollView.frameLayoutGuide.topAnchor.constraint(equalTo: contentView.topAnchor),
+            formScrollView.frameLayoutGuide.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            formScrollView.frameLayoutGuide.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            formScrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            formScrollView.contentStackView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            formScrollView.contentStackView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
-        self.scrollView = scrollView
-        self.scrollViewBottomConstraint = scrollViewBottomConstraint
-
-        let containerView = UIStackView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.axis = .vertical
-        containerView.alignment = .fill
-        containerView.distribution = .fill
-        containerView.spacing = 0
-        scrollView.addSubview(containerView)
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        self.containerView = containerView
+        self.formScrollView = formScrollView
 
         rightBarButtonItem = UIBarButtonItem(title: "Button.done".localized, style: .done, target: self, action: #selector(donePressed))
 
         commandHeader.leftBarButtonItem = navigationItem.leftBarButtonItem
         commandHeader.rightBarButtonItem = rightBarButtonItem
 
-        formInputAccessoryView = FormInputAccessoryView(rootView: view)
+        let formSectionView = formScrollView.addSection()
 
-        let (section, cols, colA, colB) = newSection()
+        formInputAccessoryView = FormInputAccessoryView(rootView: view)
         var tag = 1
 
-        addTextField(source: responder, attributeKey: "agency",
-                     attributeType: .single(AgencyKeyboardSource()), tag: &tag, to: colA)
-        addTextField(source: responder, attributeKey: "unitNumber",
-                     attributeType: .integer, tag: &tag, to: colB)
-        addTextField(source: responder, attributeKey: "callSign",
-                     attributeType: .text, tag: &tag, to: colB)
+        var textField = newTextField(source: responder,
+                                     attributeKey: "agency",
+                                     attributeType: .single(AgencyKeyboardSource()),
+                                     tag: &tag)
+        textField.formGridSpan = 2
+        formComponents["agency"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+        textField = newTextField(source: responder,
+                                 attributeKey: "unitNumber",
+                                 attributeType: .integer,
+                                 tag: &tag)
+        formComponents["unitNumber"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+        textField = newTextField(source: responder,
+                                 attributeKey: "callSign",
+                                 attributeType: .text,
+                                 tag: &tag)
+        formComponents["callSign"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
 
         let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
         stackView.alignment = .top
 
         var radioGroup = newRadioGroup(source: responder, attributeKey: "status")
-        radioGroup.addRadioButton(labelText: "Responder.status.arrived".localized, value: true as NSObject)
-        radioGroup.addRadioButton(labelText: "Responder.status.enroute".localized, value: false as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.status.arrived".localized,
+                                  value: true as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.status.enroute".localized,
+                                  value: false as NSObject)
         stackView.addArrangedSubview(radioGroup)
         formComponents["status"] = radioGroup
 
         radioGroup = newRadioGroup(source: responder, attributeKey: "capability")
         radioGroup.isDeselectable = true
-        radioGroup.addRadioButton(labelText: "Responder.capability.2207015".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue as NSObject)
-        radioGroup.addRadioButton(labelText: "Responder.capability.2207017".localized, value: ResponseUnitTransportAndEquipmentCapability.groundTransportBls.rawValue as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.capability.2207015".localized,
+                                  value: ResponseUnitTransportAndEquipmentCapability.groundTransportAls.rawValue as NSObject)
+        radioGroup.addRadioButton(labelText: "Responder.capability.2207017".localized,
+                                  value: ResponseUnitTransportAndEquipmentCapability.groundTransportBls.rawValue as NSObject)
         stackView.addArrangedSubview(radioGroup)
         formComponents["capability"] = radioGroup
 
-        colA.addArrangedSubview(stackView)
+        formSectionView.formGridView.addArrangedSubview(stackView)
 
         let doneButton = newButton(title: "Button.done".localized)
+        doneButton.translatesAutoresizingMaskIntoConstraints = false
         doneButton.size = .medium
         doneButton.addTarget(self, action: #selector(donePressed), for: .touchUpInside)
-        colB.addArrangedSubview(UIView())
-        colB.addArrangedSubview(doneButton)
         self.doneButton = doneButton
 
-        section.addArrangedSubview(cols)
+        formSectionView.formGridView.addArrangedSubview(doneButton)
 
-        containerView.addArrangedSubview(section)
+        formScrollView.updateLayout()
+
         setEditing(isEditing, animated: false)
-    }
-
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        for formField in formComponents.values {
-            formField.updateStyle()
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerForKeyboardNotifications(self)
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterFromKeyboardNotifications()
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
