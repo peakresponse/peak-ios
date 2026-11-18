@@ -15,11 +15,9 @@ protocol LocationViewControllerDelegate: AnyObject {
     func locationViewControllerDidChange(_ vc: LocationViewController)
 }
 
-class LocationViewController: BaseViewController, FormBuilder, KeyboardAwareScrollViewController, LocationHelperDelegate {
-    @IBOutlet weak var commandHeader: CommandHeader!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var scrollViewBottomConstraint: NSLayoutConstraint!
-    @IBOutlet weak var containerView: UIStackView!
+class LocationViewController: BaseViewController, FormBuilder, LocationHelperDelegate {
+    weak var commandHeader: CommandHeader!
+    weak var formScrollView: FormScrollView!
 
     var formInputAccessoryView: UIView!
     var formComponents: [String: PRKit.FormComponent] = [:]
@@ -43,6 +41,8 @@ class LocationViewController: BaseViewController, FormBuilder, KeyboardAwareScro
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        view.backgroundColor = .background
+
         let commandHeader = CommandHeader()
         commandHeader.translatesAutoresizingMaskIntoConstraints = false
         commandHeader.preservesSuperviewLayoutMargins = true
@@ -57,34 +57,18 @@ class LocationViewController: BaseViewController, FormBuilder, KeyboardAwareScro
         ])
         self.commandHeader = commandHeader
 
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.backgroundColor = .background
-        mainView.addSubview(scrollView)
-        let scrollViewBottomConstraint = scrollView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor)
+        let formScrollView = FormScrollView()
+        formScrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(formScrollView)
         NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            scrollView.leftAnchor.constraint(equalTo: mainView.leftAnchor),
-            scrollView.rightAnchor.constraint(equalTo: mainView.rightAnchor),
-            scrollViewBottomConstraint
+            formScrollView.frameLayoutGuide.topAnchor.constraint(equalTo: contentView.topAnchor),
+            formScrollView.frameLayoutGuide.leftAnchor.constraint(equalTo: mainView.leftAnchor),
+            formScrollView.frameLayoutGuide.rightAnchor.constraint(equalTo: mainView.rightAnchor),
+            formScrollView.frameLayoutGuide.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            formScrollView.contentStackView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
+            formScrollView.contentStackView.rightAnchor.constraint(equalTo: contentView.rightAnchor)
         ])
-        self.scrollView = scrollView
-        self.scrollViewBottomConstraint = scrollViewBottomConstraint
-
-        let containerView = UIStackView()
-        containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.axis = .vertical
-        containerView.alignment = .fill
-        containerView.distribution = .fill
-        containerView.spacing = 0
-        scrollView.addSubview(containerView)
-        NSLayoutConstraint.activate([
-            containerView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor),
-            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor),
-            scrollView.contentLayoutGuide.bottomAnchor.constraint(equalTo: containerView.bottomAnchor)
-        ])
-        self.containerView = containerView
+        self.formScrollView = formScrollView
 
         if let leftBarButtonItem = navigationItem.leftBarButtonItem {
             commandHeader.leftBarButtonItem = leftBarButtonItem
@@ -120,31 +104,32 @@ class LocationViewController: BaseViewController, FormBuilder, KeyboardAwareScro
 
         formInputAccessoryView = FormInputAccessoryView(rootView: view)
 
-        let (section, cols, colA, colB) = newSection()
+        let formSectionView = formScrollView.addSection()
         var tag = 1
 
-        addTextField(source: scene, attributeKey: "address1", keyboardType: .default, tag: &tag, to: colA)
-        addTextField(source: scene, attributeKey: "address2", keyboardType: .default, tag: &tag, to: colB)
-        addTextField(source: scene, attributeKey: "zip", keyboardType: .numbersAndPunctuation, tag: &tag, to: colA)
-        addTextField(source: scene, attributeKey: "cityId",
-                     attributeType: .custom(CityKeyboard()),
-                     tag: &tag, to: colA)
-        addTextField(source: scene, attributeKey: "stateId",
-                     attributeType: .custom(SearchKeyboard(source: StateKeyboardSource(), isMultiSelect: false)),
-                     tag: &tag, to: colB)
+        var textField = newTextField(source: scene, attributeKey: "address1", keyboardType: .default, tag: &tag)
+        formComponents["address1"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
 
-        section.addArrangedSubview(cols)
-        containerView.addArrangedSubview(section)
-    }
+        textField = newTextField(source: scene, attributeKey: "address2", keyboardType: .default, tag: &tag)
+        formComponents["address2"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        registerForKeyboardNotifications(self)
-    }
+        textField = newTextField(source: scene, attributeKey: "cityId", attributeType: .custom(CityKeyboard()), tag: &tag)
+        formComponents["cityId"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        unregisterFromKeyboardNotifications()
+        textField = newTextField(source: scene, attributeKey: "stateId",
+                                 attributeType: .custom(SearchKeyboard(source: StateKeyboardSource(), isMultiSelect: false)),
+                                 tag: &tag)
+        formComponents["stateId"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: scene, attributeKey: "zip", keyboardType: .numbersAndPunctuation, tag: &tag)
+        formComponents["zip"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        formScrollView.updateLayout()
     }
 
     @objc func backPressed() {
