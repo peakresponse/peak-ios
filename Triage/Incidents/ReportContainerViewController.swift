@@ -163,7 +163,7 @@ class ReportContainerViewController: BaseViewController, ReportViewControllerDel
         if let vc = children[0] as? ReportViewController {
             vc.setEditing(false, animated: true)
             vc.resetFormFields()
-            vc.scrollView.setContentOffset(.zero, animated: true)
+            vc.formScrollView.setContentOffset(.zero, animated: true)
         }
     }
 
@@ -177,8 +177,8 @@ class ReportContainerViewController: BaseViewController, ReportViewControllerDel
         }
         commandHeader.rightBarButtonItem = saveBarButtonItem
         if let vc = children[0] as? ReportViewController {
-            if vc.scrollView.contentOffset.y > (segmentedControl.frame.height + 20) {
-                vc.scrollView.contentOffset.y -= segmentedControl.frame.height + 20
+            if vc.formScrollView.contentOffset.y > (segmentedControl.frame.height + 20) {
+                vc.formScrollView.contentOffset.y -= segmentedControl.frame.height + 20
             }
             vc.setEditing(true, animated: true)
         }
