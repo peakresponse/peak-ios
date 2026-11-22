@@ -43,7 +43,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     var incidentNumberSpinner: UIActivityIndicatorView?
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
-    var recordingsSection: FormSection!
+    var recordingsSection: FormSectionView!
     var signaturesSection: FormSection!
     var narrativeText: String?
 
@@ -410,16 +410,13 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         formSectionView.addArrangedSubview(button)
         addMedicationButton = button
 
-/*
-        (recordingsSection, cols, colA, colB) = newSection()
-        header = newHeader("ReportViewController.recordings".localized)
-        recordingsSection.addArrangedSubview(header)
+        recordingsSection = FormSectionView()
+        recordingsSection.addHeader(text: "ReportViewController.recordings".localized)
         for i in 0..<report.files.count {
-            addRecordingField(i, source: report, to: i.isMultiple(of: 2) ? colA : colB)
+            addRecordingField(i, source: report)
         }
-        recordingsSection.addArrangedSubview(cols)
-        containerView.addArrangedSubview(recordingsSection)
-*/
+        formScrollView.contentStackView.addArrangedSubview(recordingsSection)
+
         formScrollView.updateLayout()
 
         updateFormFieldVisibility()
@@ -449,7 +446,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         }
     }
 
-    func addRecordingField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
+    func addRecordingField(_ i: Int, source: Report? = nil, target: Report? = nil) {
         let report = target ?? source
         let file = report?.files[i]
         let recordingField = RecordingField()
@@ -468,7 +465,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
                 }
             }
         }
-        col.addArrangedSubview(recordingField)
+        recordingsSection.formGridView.addArrangedSubview(recordingField)
     }
 
     func addSignaturesField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
@@ -1522,7 +1519,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             let i = newReport.files.count
             newReport.files.append(file)
             AppRealm.uploadFile(fileURL: fileURL)
-            addRecordingField(i, target: newReport, to: i.isMultiple(of: 2) ? recordingsSection.colA : recordingsSection.colB)
+            addRecordingField(i, target: newReport)
         }
     }
 
