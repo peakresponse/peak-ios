@@ -399,18 +399,18 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         formSectionView.addArrangedSubview(button)
         addProcedureButton = button
 
-        /*
         tag += 10000
         for i in 0..<max(1, report.medications.count) {
-            (section, cols, colA, colB) = newMedicationsSection(i, source: report, tag: &tag)
-            containerView.addArrangedSubview(section)
+            formSectionView = newMedicationsSection(i, source: report, tag: &tag)
+            formScrollView.contentStackView.addArrangedSubview(formSectionView)
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addMedication".localized)
         button.addTarget(self, action: #selector(addMedicationPressed), for: .touchUpInside)
         button.tag = tag
-        section.addLastButton(button)
+        formSectionView.addArrangedSubview(button)
         addMedicationButton = button
 
+/*
         (recordingsSection, cols, colA, colB) = newSection()
         header = newHeader("ReportViewController.recordings".localized)
         recordingsSection.addArrangedSubview(header)
@@ -643,64 +643,81 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     }
 
     func newMedicationsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
-                               // swiftlint:disable:next large_tuple
-                               tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
-        let (section, cols, colA, colB) = newSection()
-        section.type = Medication.self
-        section.index = i
+                               tag: inout Int) -> FormSectionView {
+        let formSectionView = FormSectionView()
+        formSectionView.type = Medication.self
+        formSectionView.index = i
+        formSectionView.addHeader(text: "ReportViewController.medications".localized,
+                                  secondaryText: "ReportViewController.optional".localized)
 
-        let header = newHeader("ReportViewController.medications".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-        section.addArrangedSubview(header)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].administeredAt", attributeType: .datetime, tag: &tag, to: colA)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].medication",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        field: "eMedications.03",
-                        sources: [RxNormKeyboardSource(includeSystem: true)],
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
-                            .refused, .unabletoComplete, .orderCriteriaNotMet
-                        ],
-                        isNegativeExclusive: false,
-                        includeSystem: true)),
-                     tag: &tag, to: colA)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].administeredRoute",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        source: EnumKeyboardSource<MedicationAdministrationRoute>(),
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable,
-                            .unabletoComplete
-                        ])),
-                     tag: &tag, to: colB)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].dosage",
-                     attributeType: .decimal,
-                     tag: &tag, to: colB)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].dosageUnits",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        source: EnumKeyboardSource<MedicationDosageUnits>(),
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable
-                        ])),
-                     tag: &tag, to: colB)
-        addTextField(source: source, target: target,
-                     attributeKey: "medications[\(i)].responseToMedication",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        source: EnumKeyboardSource<MedicationResponse>(),
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable
-                        ])),
-                     tag: &tag, to: colA)
-        section.addArrangedSubview(cols)
-        return (section, cols, colA, colB)
+        var textField: PRKit.TextField!
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].administeredAt", attributeType: .datetime, tag: &tag)
+        formComponents["medications[\(i)].administeredAt"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].medication",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    field: "eMedications.03",
+                                    sources: [RxNormKeyboardSource(includeSystem: true)],
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable, .contraindicationNoted, .deniedByOrder, .medicationAllergy, .medicationAlreadyTaken,
+                                        .refused, .unabletoComplete, .orderCriteriaNotMet
+                                    ],
+                                    isNegativeExclusive: false,
+                                    includeSystem: true)),
+                                 tag: &tag)
+        formComponents["medications[\(i)].medication"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].administeredRoute",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    source: EnumKeyboardSource<MedicationAdministrationRoute>(),
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable,
+                                        .unabletoComplete
+                                    ])),
+                                 tag: &tag)
+        formComponents["medications[\(i)].administeredRoute"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].dosage",
+                                 attributeType: .decimal,
+                                 tag: &tag)
+        formComponents["medications[\(i)].dosage"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].dosageUnits",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    source: EnumKeyboardSource<MedicationDosageUnits>(),
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable
+                                    ])),
+                                 tag: &tag)
+        formComponents["medications[\(i)].dosageUnits"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "medications[\(i)].responseToMedication",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    source: EnumKeyboardSource<MedicationResponse>(),
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable
+                                    ])),
+                                 tag: &tag)
+        formComponents["medications[\(i)].responseToMedication"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        return formSectionView
     }
 
     override func viewDidLayoutSubviews() {
@@ -710,9 +727,6 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         }
         destinationFacilityField.updateStyle()
         agencyField?.updateStyle()
-//        var contentInset = scrollView.contentInset
-//        contentInset.bottom = commandFooter.frame.height + 16
-//        scrollView.contentInset = contentInset
     }
 
     func removeSections(type: AnyClass, greaterThan count: Int) {
@@ -955,15 +969,17 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         let i = newReport.medications.count
         var tag = button.tag
         newReport.medications.append(medication)
-//
-//        guard let prevSection = FormSection.parent(of: button) else { return }
-//        guard let prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
-//
-//        let (section, _, _, _) = newMedicationsSection(i, target: newReport, tag: &tag)
-//        containerView.insertArrangedSubview(section, at: prevIndex + 1)
-//        button.tag = tag
-//        button.removeFromSuperview()
-//        section.addLastButton(button)
+
+        guard let prevFormSectionView = button.firstParentView(of: FormSectionView.self) as? FormSectionView else { return }
+        guard let prevIndex = formScrollView.contentStackView.arrangedSubviews.firstIndex(of: prevFormSectionView) else { return }
+
+        let formSectionView = newMedicationsSection(i, target: newReport, tag: &tag)
+        formScrollView.contentStackView.insertArrangedSubview(formSectionView, at: prevIndex + 1)
+        button.tag = tag
+        button.removeFromSuperview()
+        formSectionView.addArrangedSubview(button)
+
+        formSectionView.updateLayout()
     }
 
     @objc func recordPressed() {
