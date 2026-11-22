@@ -387,18 +387,19 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         button.addTarget(self, action: #selector(newVitalsPressed(_:)), for: .touchUpInside)
         button.tag = tag
         formSectionView.addArrangedSubview(button)
-/*
+
         tag += 10000
         for i in 0..<max(1, report.procedures.count) {
-            (section, cols, colA, colB) = newProceduresSection(i, source: report, tag: &tag)
-            containerView.addArrangedSubview(section)
+            formSectionView = newProceduresSection(i, source: report, tag: &tag)
+            formScrollView.contentStackView.addArrangedSubview(formSectionView)
         }
         button = newButton(bundleImage: "Plus24px", title: "Button.addProcedure".localized)
         button.addTarget(self, action: #selector(addProcedurePressed), for: .touchUpInside)
         button.tag = tag
-        section.addLastButton(button)
+        formSectionView.addArrangedSubview(button)
         addProcedureButton = button
 
+        /*
         tag += 10000
         for i in 0..<max(1, report.medications.count) {
             (section, cols, colA, colB) = newMedicationsSection(i, source: report, tag: &tag)
@@ -485,7 +486,6 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
 
     // swiftlint:disable:next function_body_length
     func newVitalsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
-                          // swiftlint:disable:next large_tuple
                           tag: inout Int) -> FormSectionView {
         let formSectionView = FormSectionView()
         formSectionView.type = Vital.self
@@ -587,48 +587,59 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     }
 
     func newProceduresSection(_ i: Int, source: Report? = nil, target: Report? = nil,
-                              // swiftlint:disable:next large_tuple
-                              tag: inout Int) -> (FormSection, UIStackView, UIStackView, UIStackView) {
-        let (section, cols, colA, colB) = newSection()
-        section.type = Procedure.self
-        section.index = i
+                              tag: inout Int) -> FormSectionView {
+        let formSectionView = FormSectionView()
+        formSectionView.type = Procedure.self
+        formSectionView.index = i
+        formSectionView.addHeader(text: "ReportViewController.procedures".localized,
+                                  secondaryText: "ReportViewController.optional".localized)
 
-        let header = newHeader("ReportViewController.procedures".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-        section.addArrangedSubview(header)
-        addTextField(source: source, target: target,
-                     attributeKey: "procedures[\(i)].performedAt", attributeType: .datetime, tag: &tag, to: colA)
-        addTextField(source: source, target: target,
-                     attributeKey: "procedures[\(i)].procedure",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        field: "eProcedures.03",
-                        sources: [SNOMEDKeyboardSource()],
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
-                        ],
-                        isNegativeExclusive: false)),
-                     tag: &tag, to: colB)
-        addTextField(source: source, target: target,
-                     attributeKey: "procedures[\(i)].successful",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        source: EnumKeyboardSource<NemsisBoolean>(),
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable
-                        ])),
-                     tag: &tag, to: colB)
-        addTextField(source: source, target: target,
-                     attributeKey: "procedures[\(i)].responseToProcedure",
-                     attributeType: .custom(NemsisComboKeyboard(
-                        source: EnumKeyboardSource<ProcedureResponse>(),
-                        isMultiSelect: false,
-                        negatives: [
-                            .notApplicable
-                        ])),
-                     tag: &tag, to: colB)
-        section.addArrangedSubview(cols)
-        return (section, cols, colA, colB)
+        var textField: PRKit.TextField!
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "procedures[\(i)].performedAt", attributeType: .datetime, tag: &tag)
+        formComponents["procedures[\(i)].performedAt"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "procedures[\(i)].procedure",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    field: "eProcedures.03",
+                                    sources: [SNOMEDKeyboardSource()],
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable, .contraindicationNoted, .deniedByOrder, .refused, .unabletoComplete, .orderCriteriaNotMet
+                                    ],
+                                    isNegativeExclusive: false)),
+                                 tag: &tag)
+        formComponents["procedures[\(i)].procedure"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "procedures[\(i)].successful",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    source: EnumKeyboardSource<NemsisBoolean>(),
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable
+                                    ])),
+                                 tag: &tag)
+        formComponents["procedures[\(i)].successful"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        textField = newTextField(source: source, target: target,
+                                 attributeKey: "procedures[\(i)].responseToProcedure",
+                                 attributeType: .custom(NemsisComboKeyboard(
+                                    source: EnumKeyboardSource<ProcedureResponse>(),
+                                    isMultiSelect: false,
+                                    negatives: [
+                                        .notApplicable
+                                    ])),
+                                 tag: &tag)
+        formComponents["procedures[\(i)].responseToProcedure"] = textField
+        formSectionView.formGridView.addArrangedSubview(textField)
+
+        return formSectionView
     }
 
     func newMedicationsSection(_ i: Int, source: Report? = nil, target: Report? = nil,
@@ -921,15 +932,17 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         let i = newReport.procedures.count
         var tag = button.tag
         newReport.procedures.append(procedure)
-//
-//        guard let prevSection = FormSection.parent(of: button) else { return }
-//        guard let prevIndex = containerView.arrangedSubviews.firstIndex(of: prevSection) else { return }
-//
-//        let (section, _, _, _) = newProceduresSection(i, target: newReport, tag: &tag)
-//        containerView.insertArrangedSubview(section, at: prevIndex + 1)
-//        button.tag = tag
-//        button.removeFromSuperview()
-//        section.addLastButton(button)
+
+        guard let prevFormSectionView = button.firstParentView(of: FormSectionView.self) as? FormSectionView else { return }
+        guard let prevIndex = formScrollView.contentStackView.arrangedSubviews.firstIndex(of: prevFormSectionView) else { return }
+
+        let formSectionView = newProceduresSection(i, target: newReport, tag: &tag)
+        formScrollView.contentStackView.insertArrangedSubview(formSectionView, at: prevIndex + 1)
+        button.tag = tag
+        button.removeFromSuperview()
+        formSectionView.addArrangedSubview(button)
+
+        formSectionView.updateLayout()
     }
 
     @objc func addMedicationPressed(_ button: PRKit.Button) {
