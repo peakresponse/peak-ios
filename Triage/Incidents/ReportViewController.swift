@@ -204,31 +204,33 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             button.formGridBreak = true
             formSectionView.formGridView.addArrangedSubview(button)
         } else {
-/*
-            let innerCols = newColumns()
+            let innerCols = UIStackView()
+            innerCols.axis = .horizontal
             innerCols.distribution = .fill
             innerCols.spacing = 10
-            addTextField(source: report, attributeKey: "response.incidentNumber",
-                         keyboardType: .numbersAndPunctuation, tag: &tag, to: innerCols)
-            if let incidentNumberField = formComponents["response.incidentNumber"] as? PRKit.TextField {
-                let incidentNumberSpinner = UIActivityIndicatorView.withMediumStyle()
-                incidentNumberSpinner.translatesAutoresizingMaskIntoConstraints = false
-                incidentNumberSpinner.color = .base500
-                incidentNumberSpinner.hidesWhenStopped = true
-                incidentNumberField.contentView.addSubview(incidentNumberSpinner)
-                NSLayoutConstraint.activate([
-                    incidentNumberSpinner.leftAnchor.constraint(equalTo: incidentNumberField.textView.leftAnchor),
-                    incidentNumberSpinner.centerYAnchor.constraint(equalTo: incidentNumberField.textView.centerYAnchor)
-                ])
-                self.incidentNumberSpinner = incidentNumberSpinner
-            }
+            textField = newTextField(source: report, attributeKey: "response.incidentNumber",
+                                     keyboardType: .numbersAndPunctuation, tag: &tag)
+            formComponents["response.incidentNumber"] = textField
+            innerCols.addArrangedSubview(textField)
+
+            let incidentNumberSpinner = UIActivityIndicatorView.withMediumStyle()
+            incidentNumberSpinner.translatesAutoresizingMaskIntoConstraints = false
+            incidentNumberSpinner.color = .base500
+            incidentNumberSpinner.hidesWhenStopped = true
+            textField.contentView.addSubview(incidentNumberSpinner)
+            NSLayoutConstraint.activate([
+                incidentNumberSpinner.leftAnchor.constraint(equalTo: textField.textView.leftAnchor),
+                incidentNumberSpinner.centerYAnchor.constraint(equalTo: textField.textView.centerYAnchor)
+            ])
+            self.incidentNumberSpinner = incidentNumberSpinner
+
             let alertButton = PRKit.Button()
             alertButton.style = .destructiveSecondary
             alertButton.setTitle("Button.redAlert".localized, for: .normal)
             alertButton.addTarget(self, action: #selector(mciPressed), for: .touchUpInside)
             alertButton.widthAnchor.constraint(equalToConstant: 110).isActive = true
             innerCols.addArrangedSubview(alertButton)
-            colA.addArrangedSubview(innerCols)
+            formSectionView.formGridView.addArrangedSubview(innerCols)
 
             let addressField = CellField()
             addressField.source = report
@@ -237,50 +239,81 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             addressField.delegate = self
             addressField.text = report?.scene?.address
             formComponents["scene.address"] = addressField
-            colA.addArrangedSubview(addressField)
+            formSectionView.formGridView.addArrangedSubview(addressField)
 
-            addTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "response.callSign", keyboardType: .default, tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "narrative.text", tag: &tag, to: colA)
-            addTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.unitDisposition",
-                         attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.patientEvaluationCare",
-                         attributeType: .single(EnumKeyboardSource<PatientEvaluationCare>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.crewDisposition",
-                         attributeType: .single(EnumKeyboardSource<CrewDisposition>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.transportDisposition",
-                         attributeType: .single(EnumKeyboardSource<TransportDisposition>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.reasonForRefusalRelease",
-                         attributeType: .multi(EnumKeyboardSource<ReasonForRefusalRelease>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivation",
-                         attributeType: .single(EnumKeyboardSource<HospitalTeamActivation>()),
-                         tag: &tag, to: colA)
+            textField = newTextField(source: report, attributeKey: "response.unitNumber", keyboardType: .numbersAndPunctuation, tag: &tag)
+            formComponents["response.unitNumber"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
 
-            addTextField(source: report, attributeKey: "disposition.hospitalTeamActivationAt",
-                         attributeType: .datetime,
-                         tag: &tag, to: colB)
+            textField = newTextField(source: report, attributeKey: "response.callSign", keyboardType: .default, tag: &tag)
+            formComponents["response.callSign"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
 
-            let hospitalTeamActivationAtField = formComponents["disposition.hospitalTeamActivationAt"] as? PRKit.FormField
-            hospitalTeamActivationAtField?.accessoryButtonImage = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
-            hospitalTeamActivationAtField?.accessoryButton?.addTarget(self, action: #selector(prearrivalPressed), for: .touchUpInside)
+            textField = newTextField(source: report, attributeKey: "narrative.text", tag: &tag)
+            formComponents["narrative.text"] = textField
+            textField.formGridSpan = 2
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "time.unitNotifiedByDispatch", attributeType: .datetime, tag: &tag)
+            formComponents["time.unitNotifiedByDispatch"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "time.arrivedAtPatient", attributeType: .datetime, tag: &tag)
+            formComponents["time.arrivedAtPatient"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.unitDisposition",
+                                     attributeType: .single(EnumKeyboardSource<UnitDisposition>()),
+                                     tag: &tag)
+            formComponents["disposition.unitDisposition"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.patientEvaluationCare",
+                                     attributeType: .single(EnumKeyboardSource<PatientEvaluationCare>()),
+                                     tag: &tag)
+            formComponents["disposition.patientEvaluationCare"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.crewDisposition",
+                                     attributeType: .single(EnumKeyboardSource<CrewDisposition>()),
+                                     tag: &tag)
+            formComponents["disposition.crewDisposition"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.transportDisposition",
+                                     attributeType: .single(EnumKeyboardSource<TransportDisposition>()),
+                                     tag: &tag)
+            formComponents["disposition.transportDisposition"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.reasonForRefusalRelease",
+                                     attributeType: .multi(EnumKeyboardSource<ReasonForRefusalRelease>()),
+                                     tag: &tag)
+            formComponents["disposition.reasonForRefusalRelease"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.hospitalTeamActivation",
+                                     attributeType: .single(EnumKeyboardSource<HospitalTeamActivation>()),
+                                     tag: &tag)
+            formComponents["disposition.hospitalTeamActivation"] = textField
+            textField.formGridBreak = true
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "disposition.hospitalTeamActivationAt",
+                                     attributeType: .datetime,
+                                     tag: &tag)
+            textField.accessoryButtonImage = UIImage(named: "Phone40px", in: PRKitBundle.instance, compatibleWith: nil)
+            textField.accessoryButton?.addTarget(self, action: #selector(prearrivalPressed), for: .touchUpInside)
+            formComponents["disposition.hospitalTeamActivationAt"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
 
             var zero = 0
             destinationFacilityField = newTextField(source: report, attributeKey: "disposition.destinationFacility", tag: &zero)
             destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
-            colB.addArrangedSubview(destinationFacilityField)
-
-            section.addArrangedSubview(cols)
-            containerView.addArrangedSubview(section)
-
+            formSectionView.formGridView.addArrangedSubview(destinationFacilityField)
+/*
             (signaturesSection, cols, colA, colB) = newSection()
             header = newHeader("ReportViewController.signatures".localized)
             signaturesSection.addArrangedSubview(header)
@@ -298,30 +331,41 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             tag += 1000
             signaturesSection.addLastButton(button)
             containerView.addArrangedSubview(signaturesSection)
+*/
+            formSectionView = formScrollView.addSection()
+            formSectionView.addHeader(text: "ReportViewController.patientInformation".localized,
+                                      secondaryText: "ReportViewController.optional".localized)
 
-            (section, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.patientInformation".localized,
-                               subheaderText: "ReportViewController.optional".localized)
-            section.addArrangedSubview(header)
-            addTextField(source: report, attributeKey: "patient.firstName", tag: &tag, to: colA)
-            addTextField(source: report, attributeKey: "patient.lastName", tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag, to: colA)
-            addTextField(source: report, attributeKey: "patient.ageArray",
-                         attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
-                         tag: &tag, to: colB)
-            addTextField(source: report, attributeKey: "patient.gender",
-                         attributeType: .single(EnumKeyboardSource<PatientGender>()),
-                         tag: &tag, to: colA)
-            section.addArrangedSubview(cols)
+            textField = newTextField(source: report, attributeKey: "patient.firstName", tag: &tag)
+            formComponents["patient.firstName"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
 
-            button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
+            textField = newTextField(source: report, attributeKey: "patient.lastName", tag: &tag)
+            formComponents["patient.lastName"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "patient.dob", attributeType: .date, tag: &tag)
+            formComponents["patient.dob"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "patient.ageArray",
+                                     attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
+                                     tag: &tag)
+            formComponents["patient.ageArray"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            textField = newTextField(source: report, attributeKey: "patient.gender",
+                                     attributeType: .single(EnumKeyboardSource<PatientGender>()),
+                                     tag: &tag)
+            formComponents["patient.gender"] = textField
+            formSectionView.formGridView.addArrangedSubview(textField)
+
+            let button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
             button.addTarget(self, action: #selector(scanLicensePressed(_:)), for: .touchUpInside)
             button.tag = tag
             tag += 1
-            section.addLastButton(button)
-
-            containerView.addArrangedSubview(section)
- */
+            button.formGridBreak = true
+            formSectionView.formGridView.addArrangedSubview(button)
         }
 
         formSectionView = formScrollView.addSection()
@@ -330,6 +374,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
 
         textField = newTextField(source: report, attributeKey: "situation.chiefComplaint", tag: &tag)
         formComponents["situation.chiefComplaint"] = textField
+        textField.formGridSpan = 2
         formSectionView.formGridView.addArrangedSubview(textField)
 
         textField = newTextField(source: report, attributeKey: "situation.primarySymptom",
