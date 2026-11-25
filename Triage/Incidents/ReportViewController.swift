@@ -103,7 +103,6 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
 
         var formSectionView = formScrollView.addSection()
         var textField: PRKit.TextField!
-        var header: UIView
         var tag = 1
 
         let isMCI = report.scene?.isMCI ?? false
@@ -117,6 +116,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             destinationFacilityField.attributeValue = report.disposition?.destinationFacility?.displayName as? NSObject
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
+            destinationFacilityField.formGridOffset = 1
             formSectionView.formGridView.addArrangedSubview(destinationFacilityField)
 
             agencyField = newTextField(source: report, attributeKey: "response.agency", tag: &zero)
@@ -136,6 +136,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             let triageControl = TriageControl()
             triageControl.priority = TriagePriority(rawValue: report.patient?.priority ?? -1)
             triageControl.addTarget(self, action: #selector(triagePriorityChanged(_:)), for: .valueChanged)
+            triageControl.formGridBreak = true
             formSectionView.formGridView.addArrangedSubview(triageControl)
             self.triageControl = triageControl
 
@@ -143,6 +144,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
                                      attributeType: .integerWithUnit(EnumKeyboardSource<PatientAgeUnits>()),
                                      tag: &tag)
             formComponents["patient.ageArray"] = textField
+            textField.formGridOffset = 1
             formSectionView.formGridView.addArrangedSubview(textField)
 
             textField = newTextField(source: report, attributeKey: "patient.gender",
@@ -153,6 +155,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
 
             textField = newTextField(source: report, attributeKey: "narrative.text", tag: &tag)
             formComponents["narrative.text"] = textField
+            textField.formGridSpan = 2
             formSectionView.formGridView.addArrangedSubview(textField)
 
             let locationField = newTextField(source: report, attributeKey: "patient.location", tag: &tag)
@@ -198,6 +201,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             button.addTarget(self, action: #selector(scanLicensePressed(_:)), for: .touchUpInside)
             button.tag = tag
             tag += 1
+            button.formGridBreak = true
             formSectionView.formGridView.addArrangedSubview(button)
         } else {
 /*
@@ -880,6 +884,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             formComponents["disposition.hospitalTeamActivationAt"]?.isHidden = true
         }
         (formInputAccessoryView as? FormInputAccessoryView)?.updateButtons()
+        formScrollView.updateLayout()
     }
 
     @objc func scanLicensePressed(_ button: PRKit.Button) {
