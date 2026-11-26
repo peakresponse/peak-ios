@@ -128,32 +128,39 @@ class ReportTableViewCell: UITableViewCell {
 
         checkbox.isChecked = selected
 
-        if let pin = report.pin, !pin.isEmpty {
-            tagLabel.text = "#\(pin)"
-        }
+        if report.scene?.isMCI ?? false {
+            tagLabel.isHidden = false
+            if let pin = report.pin, !pin.isEmpty {
+                tagLabel.text = "#\(pin)"
+            }
 
-        let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
-        priorityChip.color = priority.color
-        priorityChip.setTitle(priority.description, for: .normal)
+            let priority = TriagePriority(rawValue: report.filterPriority ?? -1) ?? .unknown
+            priorityChip.isHidden = false
+            priorityChip.color = priority.color
+            priorityChip.setTitle(priority.description, for: .normal)
 
-        if priority == .transported {
-            let originalPriority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
-            originalPriorityChip.color = originalPriority.color
-            originalPriorityChip.setTitle(originalPriority.description, for: .normal)
-            originalPriorityChip.isHidden = false
-            checkbox.isHidden = true
+            if priority == .transported {
+                let originalPriority = TriagePriority(rawValue: report.patient?.priority ?? -1) ?? .unknown
+                originalPriorityChip.color = originalPriority.color
+                originalPriorityChip.setTitle(originalPriority.description, for: .normal)
+                originalPriorityChip.isHidden = false
+                checkbox.isHidden = true
 
-            originalPriorityChipWidthConstraint?.isActive = true
-            descLabelRightViewConstraint?.isActive = false
-            descLabelRightPriorityChipConstraint?.isActive = true
+                originalPriorityChipWidthConstraint?.isActive = true
+                descLabelRightViewConstraint?.isActive = false
+                descLabelRightPriorityChipConstraint?.isActive = true
+            } else {
+                originalPriorityChip.isHidden = true
+
+                originalPriorityChipWidthConstraint?.isActive = false
+                descLabelRightPriorityChipConstraint?.isActive = false
+                descLabelRightViewConstraint?.isActive = true
+
+                checkbox.isHidden = false
+            }
         } else {
-            originalPriorityChip.isHidden = true
-
-            originalPriorityChipWidthConstraint?.isActive = false
-            descLabelRightPriorityChipConstraint?.isActive = false
-            descLabelRightViewConstraint?.isActive = true
-
-            checkbox.isHidden = false
+            tagLabel.isHidden = true
+            priorityChip.isHidden = true
         }
 
         descLabel.text = report.description
