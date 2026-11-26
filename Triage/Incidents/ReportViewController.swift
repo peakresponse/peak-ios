@@ -774,37 +774,37 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     }
 
     func removeSections(type: AnyClass, greaterThan count: Int) {
-//        var lastSection: FormSection?
-//        for view in containerView.arrangedSubviews {
-//            if let section = view as? FormSection, section.type == type {
-//                if section.index ?? 0 >= count {
-//                    for formField in FormSection.fields(in: section) {
-//                        if let attributeKey = formField.attributeKey {
-//                            formComponents.removeValue(forKey: attributeKey)
-//                        }
-//                    }
-//                    if let button = section.findLastButton() {
-//                        button.removeFromSuperview()
-//                        lastSection?.addLastButton(button)
-//                    }
-//                    section.removeFromSuperview()
-//                } else {
-//                    lastSection = section
-//                }
-//            }
-//        }
+        var lastSectionView: FormSectionView?
+        for view in formScrollView.contentStackView.arrangedSubviews {
+            if let sectionView = view as? FormSectionView, sectionView.type == type {
+                if sectionView.index ?? 0 >= count {
+                    for subview in sectionView.formGridView.arrangedSubviews {
+                        if let subview = subview as? PRKit.FormField, let attributeKey = subview.attributeKey {
+                            formComponents.removeValue(forKey: attributeKey)
+                        }
+                    }
+                    if let button = sectionView.arrangedSubviews.last as? PRKit.Button {
+                        button.removeFromSuperview()
+                        lastSectionView?.addArrangedSubview(button)
+                    }
+                    sectionView.removeFromSuperview()
+                } else {
+                    lastSectionView = sectionView
+                }
+            }
+        }
     }
 
     func disableEditing() {
         commandFooter.isHidden = true
         triageControl?.updateButton.isEnabled = false
-//        for view in containerView.arrangedSubviews {
-//            if let section = view as? FormSection {
-//                if let button = section.findLastButton() {
-//                    button.isHidden = true
-//                }
-//            }
-//        }
+        for view in formScrollView.contentStackView.arrangedSubviews {
+            if let view = view as? FormSectionView {
+                if let button = view.arrangedSubviews.last as? PRKit.Button {
+                    button.isHidden = true
+                }
+            }
+        }
     }
 
     override func setEditing(_ editing: Bool, animated: Bool) {
