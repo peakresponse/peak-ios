@@ -471,6 +471,16 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         setEditing(isEditing, animated: false)
     }
 
+    override func keyboardWillShow(_ notification: Notification) {
+        hideFooter()
+        super.keyboardWillShow(notification)
+    }
+
+    override func keyboardDidHide(_ notification: Notification) {
+        super.keyboardDidHide(notification)
+        showFooter()
+    }
+
     func observeReport() {
         notificationToken?.invalidate()
         if report.response?.incidentNumber?.isEmpty ?? true {
