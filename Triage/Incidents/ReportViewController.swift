@@ -472,7 +472,10 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     }
 
     override func keyboardWillShow(_ notification: Notification) {
-        hideFooter()
+        guard let frame = notification.userInfo?["UIKeyboardFrameEndUserInfoKey"] as? CGRect, frame.height > 0 else { return }
+        if !isKeyboardShowing {
+            footerView.isHidden = true
+        }
         super.keyboardWillShow(notification)
     }
 
