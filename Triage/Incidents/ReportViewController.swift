@@ -44,7 +44,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
     var latLngControl: LatLngControl?
     var triageControl: TriageControl?
     var recordingsSection: FormSectionView!
-    var signaturesSection: FormSection!
+    var signaturesSection: FormSectionView!
     var narrativeText: String?
 
     var report: Report! {
@@ -313,15 +313,13 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             destinationFacilityField.isEnabled = false
             destinationFacilityField.isEditing = false
             formSectionView.formGridView.addArrangedSubview(destinationFacilityField)
-/*
-            (signaturesSection, cols, colA, colB) = newSection()
-            header = newHeader("ReportViewController.signatures".localized)
-            signaturesSection.addArrangedSubview(header)
-            signaturesSection.addArrangedSubview(cols)
+
+            signaturesSection = FormSectionView()
+            signaturesSection.addHeader(text: "ReportViewController.signatures".localized)
             var prevFormInstanceId: String?
             var formCount = 0
             for (i, signature) in report.signatures.enumerated() where signature.formInstanceId != prevFormInstanceId {
-                addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? colA : colB)
+                addSignaturesField(i, source: report)
                 prevFormInstanceId = signature.formInstanceId
                 formCount += 1
             }
@@ -329,9 +327,9 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             button.addTarget(self, action: #selector(collectSignaturesPressed(_:)), for: .touchUpInside)
             button.tag = tag
             tag += 1000
-            signaturesSection.addLastButton(button)
-            containerView.addArrangedSubview(signaturesSection)
-*/
+            signaturesSection.addArrangedSubview(button)
+            formScrollView.contentStackView.addArrangedSubview(signaturesSection)
+
             formSectionView = formScrollView.addSection()
             formSectionView.addHeader(text: "ReportViewController.patientInformation".localized,
                                       secondaryText: "ReportViewController.optional".localized)
@@ -360,7 +358,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             formComponents["patient.gender"] = textField
             formSectionView.formGridView.addArrangedSubview(textField)
 
-            let button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
+            button = newButton(bundleImage: "Camera24px", title: "Button.scanLicense".localized)
             button.addTarget(self, action: #selector(scanLicensePressed(_:)), for: .touchUpInside)
             button.tag = tag
             tag += 1
@@ -517,7 +515,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         recordingsSection.formGridView.addArrangedSubview(recordingField)
     }
 
-    func addSignaturesField(_ i: Int, source: Report? = nil, target: Report? = nil, to col: UIStackView) {
+    func addSignaturesField(_ i: Int, source: Report? = nil, target: Report? = nil) {
         let report = target ?? source
         let signature = report?.signatures[i]
         let signaturesField = CellField()
@@ -527,7 +525,7 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         signaturesField.attributeKey = "signatures[\(i)]"
         signaturesField.delegate = self
         signaturesField.text = signature?.form?.title
-        col.addArrangedSubview(signaturesField)
+        signaturesSection.formGridView.addArrangedSubview(signaturesField)
     }
 
     // swiftlint:disable:next function_body_length
@@ -836,24 +834,22 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             }
             if newReport.signatures.count != report.signatures.count {
                 // signatures can be deleted, so brute force reconstruct this section
-                var signatureFields: [CellField] = []
-                FormSection.subviews(&signatureFields, in: signaturesSection)
-                for signatureField in signatureFields {
-                    signatureField.removeFromSuperview()
+                for view in signaturesSection.formGridView.arrangedSubviews {
+                    view.removeFromSuperview()
                 }
-                let button = signaturesSection.findLastButton()
+                let button = signaturesSection.arrangedSubviews.last as? PRKit.Button
                 button?.removeFromSuperview()
                 var prevFormInstanceId: String?
                 var formCount = 0
                 for (i, signature) in report.signatures.enumerated() {
                     if signature.formInstanceId != prevFormInstanceId {
-                        addSignaturesField(i, source: report, to: formCount.isMultiple(of: 2) ? signaturesSection.colA : signaturesSection.colB)
+                        addSignaturesField(i, source: report)
                         prevFormInstanceId = signature.formInstanceId
                         formCount += 1
                     }
                 }
                 if let button = button {
-                    signaturesSection.addLastButton(button)
+                    signaturesSection.addArrangedSubview(button)
                 }
             }
             self.newReport = nil
@@ -1216,10 +1212,9 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
         guard let formInstanceId = signatures.first?.formInstanceId else { return }
         if let newReport = newReport {
             // remove the corresponding field
-            var cellFields: [CellField] = []
-            FormSection.subviews(&cellFields, in: signaturesSection)
-            for cellField in cellFields {
-                if let attributeKey = cellField.attributeKey,
+            for view in signaturesSection.formGridView.arrangedSubviews {
+                if let cellField = view as? CellField,
+                   let attributeKey = cellField.attributeKey,
                    let signature = newReport.value(forKeyPath: attributeKey) as? Signature,
                    signature.formInstanceId == formInstanceId {
                     cellField.removeFromSuperview()
@@ -1243,20 +1238,20 @@ class ReportViewController: BaseViewController, FormBuilder, FormViewControllerD
             let i = newReport.signatures.count
             var formCount = 0
             var prevFormInstanceId: String?
-            for signature in newReport.signatures {
-                if signature.formInstanceId != prevFormInstanceId {
-                    prevFormInstanceId = signature.formInstanceId
-                    formCount += 1
-                }
+            for signature in newReport.signatures where signature.formInstanceId != prevFormInstanceId {
+                prevFormInstanceId = signature.formInstanceId
+                formCount += 1
             }
             newReport.signatures.append(objectsIn: signatures)
 
-            let button = signaturesSection.findLastButton()
+            let button = signaturesSection.arrangedSubviews.last as? PRKit.Button
             button?.removeFromSuperview()
-            addSignaturesField(i, source: report, target: newReport, to: formCount.isMultiple(of: 2) ? signaturesSection.colA : signaturesSection.colB)
+            addSignaturesField(i, source: report, target: newReport)
             if let button = button {
-                signaturesSection.addLastButton(button)
+                signaturesSection.addArrangedSubview(button)
             }
+
+            signaturesSection.updateLayout()
         }
     }
 
